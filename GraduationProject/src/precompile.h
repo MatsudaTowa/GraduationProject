@@ -32,8 +32,8 @@
 #include "useful.h"
 
 //マクロ定義
-#define SCREEN_WIDTH	(1920) //ウィンドウの幅
-#define SCREEN_HEIGHT	(1080) //ウィンドウの高さ
+#define SCREEN_WIDTH	(1280) //ウィンドウの幅
+#define SCREEN_HEIGHT	(720) //ウィンドウの高さ
 #define FVF_VERTEX_2D	(D3DFVF_XYZRHW | D3DFVF_DIFFUSE |D3DFVF_TEX1) //座標とカラーとテクスチャ
 #define FVF_VERTEX_3D	(D3DFVF_XYZ |D3DFVF_NORMAL| D3DFVF_DIFFUSE |D3DFVF_TEX1) //座標とカラーとテクスチャ
 

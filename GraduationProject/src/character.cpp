@@ -97,8 +97,8 @@ void My::CCharacter::Update()
 		m_apModel[nCnt]->SetOldPos({ m_apModel[nCnt]->GetMtxWorld()._41,m_apModel[nCnt]->GetMtxWorld()._42,m_apModel[nCnt]->GetMtxWorld()._43 });
 	}
 
-	//d—Íˆ—
-	Gravity();
+	////d—Íˆ—
+	//Gravity();
 
 	//ˆÊ’uæ“¾
 	D3DXVECTOR3 pos = GetPos();
