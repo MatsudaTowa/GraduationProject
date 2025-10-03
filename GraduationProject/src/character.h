@@ -280,7 +280,6 @@ namespace My
 		static constexpr int START_LIFE = 10;				//!<最初の体力
 		static constexpr int START_ENERGY = 1;				//!<最初のエナジー
 		static constexpr int MAX_ENERGY = 99;				//!<エナジー最大値
-		static constexpr int ENERGY_UP_FRAME = 3 * 60;		//!<エナジーが上がるまでのフレーム数 TODO:今後のカードによっては変数に昇格するかも
 
 		static constexpr float SHADOW_POS_Y = 0.5f;	 //!<影のY座標(地面から少し浮かす)
 
@@ -293,7 +292,6 @@ namespace My
 		D3DXVECTOR3 m_ShadowSize;	//!<影のサイズ
 
 		Status m_status;			//!ステータス
-		CCount* m_pEnergyUpCount;	//!エナジーを増やすまでのカウント
 
 		CShadow* m_pShadow;			//!<影
 
@@ -345,11 +343,6 @@ namespace My
 		};
 
 		MotionData m_motion_data;	//!<モーション読み込みデータ
-
-		/**
-		 * @brief エナジーを上げる処理
-		 */
-		void EnergyUp();
 	};
 }
 

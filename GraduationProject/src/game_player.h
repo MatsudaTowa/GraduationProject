@@ -77,7 +77,14 @@ namespace My
 		}
 
 private:
-		static constexpr D3DXVECTOR3 SHADOW_SIZE;	 //!<影のサイズ
+		static constexpr int ENERGY_UP_FRAME = 3 * 60;		//!<エナジーが上がるまでのフレーム数 TODO:今後のカードによっては変数に昇格するかも
+
+		CCount* m_pEnergyUpCount;	//!エナジーを増やすまでのカウント
+
+		/**
+		 * @brief エナジーを上げる処理
+		 */
+		void EnergyUp();
 
 		/**
 		 * @brief 入力処理

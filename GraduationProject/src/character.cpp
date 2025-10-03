@@ -14,7 +14,6 @@
 //=============================================
 My::CCharacter::CCharacter(int nPriority) :CObjectX(nPriority),
 m_status(),														//ステータス初期化
-m_pEnergyUpCount(nullptr),										//エナジー計測カウント
 m_PartsCnt(INT_ZERO),											//パーツ数
 m_pMotionFrameCnt(nullptr),										//モーションのフレーム数
 m_nKeySetCnt(INT_ZERO),											//キーの個数
@@ -53,13 +52,6 @@ HRESULT My::CCharacter::Init()
 		m_pShadow->SetSize({ m_ShadowSize });
 	}
 
-	if (m_pEnergyUpCount == nullptr)
-	{
-		m_pEnergyUpCount = new CCount;
-		m_pEnergyUpCount->SetCnt(INT_ZERO);
-		m_pEnergyUpCount->SetFrame(ENERGY_UP_FRAME);
-	}
-
 	if (m_pMotionFrameCnt == nullptr)
 	{
 		m_pMotionFrameCnt = new CCount;
@@ -95,11 +87,6 @@ void My::CCharacter::Uninit()
 		delete m_pMotionFrameCnt;
 		m_pMotionFrameCnt = nullptr;
 	}
-	if (m_pEnergyUpCount != nullptr)
-	{
-		delete m_pEnergyUpCount;
-		m_pEnergyUpCount = nullptr;
-	}
 	if (m_pShadow != nullptr)
 	{
 		m_pShadow->Uninit();
@@ -115,8 +102,6 @@ void My::CCharacter::Uninit()
 void My::CCharacter::Update()
 {
 	m_pShadow->SetisDraw(GetisDraw());
-
-	EnergyUp();
 
 	for (int nCnt = 0; nCnt < m_PartsCnt; nCnt++)
 	{
@@ -143,27 +128,6 @@ void My::CCharacter::Draw()
 {
 	CObjectX::Draw();
 }
-
-//=============================================
-//エナジー上げる処理
-//=============================================
-void My::CCharacter::EnergyUp()
-{
-	if (m_pEnergyUpCount == nullptr)
-	{
-		return;
-	}
-
-	if (!m_pEnergyUpCount->CountUp())
-	{
-		return;
-	}
-
-	//エナジー増加
-	++m_status.energy;
-	m_pEnergyUpCount->SetCnt(INT_ZERO);
-}
-
 
 //=============================================
 //モーション用の描画

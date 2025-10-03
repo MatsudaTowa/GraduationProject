@@ -11,7 +11,8 @@
 // コンストラクタ
 //=============================================
 My::CGamePlayer::CGamePlayer(int nPriority):CPlayer(nPriority),
-m_pState(nullptr)		//ステート初期化
+m_pEnergyUpCount(nullptr),										//エナジー計測カウント
+m_pState(nullptr)												//ステート初期化
 {
 }
 
@@ -32,6 +33,13 @@ HRESULT My::CGamePlayer::Init()
 		m_pState = new CNeutralState;
 	}
 
+	if (m_pEnergyUpCount == nullptr)
+	{
+		m_pEnergyUpCount = new CCount;
+		m_pEnergyUpCount->SetCnt(INT_ZERO);
+		m_pEnergyUpCount->SetFrame(ENERGY_UP_FRAME);
+	}
+
 	//親クラスの初期化実行
 	CPlayer::Init();
 
@@ -45,6 +53,11 @@ HRESULT My::CGamePlayer::Init()
 //=============================================
 void My::CGamePlayer::Uninit()
 {
+	if (m_pEnergyUpCount != nullptr)
+	{
+		delete m_pEnergyUpCount;
+		m_pEnergyUpCount = nullptr;
+	}
 	//親クラスの終了処理
 	CPlayer::Uninit();
 }
@@ -58,6 +71,8 @@ void My::CGamePlayer::Update()
 	{
 		m_pState->Neutral(this);
 	}
+
+	EnergyUp();
 
 	//親クラスの更新
 	CPlayer::Update();
@@ -83,6 +98,28 @@ void My::CGamePlayer::ChangeState(CGamePlayerState* state)
 		delete m_pState;
 		m_pState = state;
 	}
+}
+
+//=============================================
+//エナジー上げる処理
+//=============================================
+void My::CGamePlayer::EnergyUp()
+{
+	if (m_pEnergyUpCount == nullptr)
+	{
+		return;
+	}
+
+	if (!m_pEnergyUpCount->CountUp())
+	{
+		return;
+	}
+
+	int energy = GetEnergy();
+	//エナジー増加
+	++energy;
+	SetEnergy(energy);
+	m_pEnergyUpCount->SetCnt(INT_ZERO);
 }
 
 //=============================================
