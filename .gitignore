@@ -416,4 +416,6 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
-/GraduationProject/GraduationProject.vcxproj.filters
+
+# Visual Studio project filters
+*.vcxproj.filters
