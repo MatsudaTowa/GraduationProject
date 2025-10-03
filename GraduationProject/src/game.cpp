@@ -12,7 +12,7 @@
 
 namespace
 {
-	const D3DXVECTOR3 FIELD_SIZE = { 1000.0f,0.0f,1000.0f };
+	const D3DXVECTOR3 FIELD_SIZE = { 200.0f,0.0f,200.0f };
 	const int COOL_TIME = 1;
 	const int DELAY_FRAME = 90;
 }

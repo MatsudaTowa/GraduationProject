@@ -58,8 +58,6 @@
 
 // マネージャー関係
 #define GET_MANAGER				(My::CManager::GetInstance())								// マネージャーインスタンス取得
-#define GET_SCENE				(GET_MANAGER->GetScene())									// シーン取得
-#define GET_SCORE				(GET_MANAGER->GetScore())									// スコア取得
 #define GET_CAMERA(idx)			(GET_MANAGER->GetCamera(idx))								// カメラ取得
 #define ERASE_CAMERA(idx)		(GET_MANAGER->EraseCamera(idx))								// 指定されたカメラ削除
 #define CREATE_CAMERA(camera)	(GET_MANAGER->CreateCamera(camera))							// カメラ生成

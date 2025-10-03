@@ -40,16 +40,8 @@ namespace My
 		*/
 		virtual void BirdView(CCamera* camera)override;
 	private:
-		/**
-		* @brief 視点、注視点算出処理
-		* @param [in]プレイヤーのポインタ
-		* @param [in][out]注視点
-		* @param [in][out]視点
-		* @param [in][out]方向
-		*/
-		void CalculateCameraView(CPlayer* pPlayer, D3DXVECTOR3& posR, D3DXVECTOR3& posV, D3DXVECTOR3& rot);
 		//バードビュー時のYの距離	
-		static constexpr float LENGTH_Y = 550.0f;
+		static constexpr float LENGTH_Y = 580.0f;
 	};
 }
 #endif // !_CAMERA_STATE_H
