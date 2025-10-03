@@ -43,6 +43,9 @@
     <Filter Include="scene">
       <UniqueIdentifier>{d6ffae13-065d-4b60-aaf7-d342d4baa3eb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="scene\game">
+      <UniqueIdentifier>{6963246c-f6b9-40f8-98d7-18ddefe4a2bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\useful.cpp">
@@ -153,16 +156,7 @@
     <ClCompile Include="src\scene.cpp">
       <Filter>scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\game.cpp">
-      <Filter>scene</Filter>
-    </ClCompile>
     <ClCompile Include="src\result.cpp">
-      <Filter>scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game_manager.cpp">
-      <Filter>scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game_state.cpp">
       <Filter>scene</Filter>
     </ClCompile>
     <ClCompile Include="src\game_player_state.cpp">
@@ -173,6 +167,15 @@
     </ClCompile>
     <ClCompile Include="src\particle.cpp">
       <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game.cpp">
+      <Filter>scene\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game_manager.cpp">
+      <Filter>scene\game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game_state.cpp">
+      <Filter>scene\game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -290,15 +293,6 @@
     <ClInclude Include="src\result.h">
       <Filter>scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\game.h">
-      <Filter>scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game_manager.h">
-      <Filter>scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game_state.h">
-      <Filter>scene</Filter>
-    </ClInclude>
     <ClInclude Include="src\game_player_state.h">
       <Filter>object\character\player</Filter>
     </ClInclude>
@@ -307,6 +301,15 @@
     </ClInclude>
     <ClInclude Include="src\particle.h">
       <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game.h">
+      <Filter>scene\game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game_manager.h">
+      <Filter>scene\game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game_state.h">
+      <Filter>scene\game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
