@@ -13,19 +13,14 @@
 //コンストラクタ
 //=============================================
 My::CCharacter::CCharacter(int nPriority) :CObjectX(nPriority),
-m_bLanding(false),												//着地しているか
-m_move(VEC3_RESET_ZERO),										//移動量
-m_nLife(INT_ZERO),												//体力
-m_oldpos(VEC3_RESET_ZERO),										//過去の位置
+m_status(),														//ステータス初期化
+m_pEnergyUpCount(nullptr),										//エナジー計測カウント
 m_PartsCnt(INT_ZERO),											//パーツ数
-m_nMotionFrameCnt(INT_ZERO),									//モーションのフレーム数
+m_pMotionFrameCnt(nullptr),										//モーションのフレーム数
 m_nKeySetCnt(INT_ZERO),											//キーの個数
 m_Motion(INT_ZERO),												//モーション情報
 m_isLoopFinish(),												//ループが終わったか
-m_Speed(),														//スピード
-m_Jump(),														//ジャンプ力
-m_motion_data(),													//モーション設定
-m_nJumpCnt(INT_ZERO),											//ジャンプ数
+m_motion_data(),												//モーション設定
 m_pShadow(),													//影のポインタ
 m_ShadowSize(VEC3_RESET_ZERO)									//影のサイズ
 {//イニシャライザーでプライオリティ設定、各メンバ変数初期化
@@ -53,15 +48,34 @@ HRESULT My::CCharacter::Init()
 	if (m_pShadow == nullptr)
 	{
 		m_pShadow = CShadow::Create({ GetPos().x,SHADOW_POS_Y,GetPos().z }, m_ShadowSize);
+
+		//影のサイズ設定
+		m_pShadow->SetSize({ m_ShadowSize });
 	}
 
-	//影のサイズ設定
-	m_pShadow->SetSize({ m_ShadowSize });
+	if (m_pEnergyUpCount == nullptr)
+	{
+		m_pEnergyUpCount = new CCount;
+		m_pEnergyUpCount->SetCnt(INT_ZERO);
+		m_pEnergyUpCount->SetFrame(ENERGY_UP_FRAME);
+	}
 
+	if (m_pMotionFrameCnt == nullptr)
+	{
+		m_pMotionFrameCnt = new CCount;
+		m_pMotionFrameCnt->SetCnt(INT_ZERO);
+	}
 	//最初どのモーションでもない値を代入
 	m_Motion = -1;
 	//ループモーション終わってる判定に
 	m_isLoopFinish = true;
+
+	//ステータス設定
+	m_status.deckSize = START_DECK;
+	m_status.hand = START_HAND;
+	m_status.life = START_LIFE;
+	m_status.energy = START_ENERGY;
+	m_status.trash = INT_ZERO;
 
 	//親クラスの初期化
 	CObjectX::Init();
@@ -76,6 +90,16 @@ HRESULT My::CCharacter::Init()
 //=============================================
 void My::CCharacter::Uninit()
 {
+	if (m_pMotionFrameCnt != nullptr)
+	{
+		delete m_pMotionFrameCnt;
+		m_pMotionFrameCnt = nullptr;
+	}
+	if (m_pEnergyUpCount != nullptr)
+	{
+		delete m_pEnergyUpCount;
+		m_pEnergyUpCount = nullptr;
+	}
 	if (m_pShadow != nullptr)
 	{
 		m_pShadow->Uninit();
@@ -92,28 +116,16 @@ void My::CCharacter::Update()
 {
 	m_pShadow->SetisDraw(GetisDraw());
 
+	EnergyUp();
+
 	for (int nCnt = 0; nCnt < m_PartsCnt; nCnt++)
 	{
 		m_apModel[nCnt]->SetOldPos({ m_apModel[nCnt]->GetMtxWorld()._41,m_apModel[nCnt]->GetMtxWorld()._42,m_apModel[nCnt]->GetMtxWorld()._43 });
 	}
 
-	////重力処理
-	//Gravity();
-
 	//位置取得
 	D3DXVECTOR3 pos = GetPos();
 
-	if (m_bLanding)
-	{
-		//移動量を更新(減速）
-		m_move *= FLOAT_ONE - MOVE_FRICTION;
-	}
-
-	//過去の位置に今の位置を代入
-	m_oldpos = pos;
-
-	//移動量追加
-	pos += m_move;
 	//座標を更新
 	SetPos(pos);
 
@@ -122,19 +134,6 @@ void My::CCharacter::Update()
 
 	//影の位置設定
 	m_pShadow->SetPos({ GetPos().x,SHADOW_POS_Y,GetPos().z });
-
-	//最大最小値取得
-	D3DXVECTOR3 minpos = GetMinPos();
-	D3DXVECTOR3 maxpos = GetMaxPos();
-
-	if (m_bLanding)
-	{//着地してるなら
-		//ジャンプ数リセット
-		m_nJumpCnt = INT_ZERO;
-	}
-
-	//床との接触処理
-	HitField();
 }
 
 //=============================================
@@ -144,6 +143,27 @@ void My::CCharacter::Draw()
 {
 	CObjectX::Draw();
 }
+
+//=============================================
+//エナジー上げる処理
+//=============================================
+void My::CCharacter::EnergyUp()
+{
+	if (m_pEnergyUpCount == nullptr)
+	{
+		return;
+	}
+
+	if (!m_pEnergyUpCount->CountUp())
+	{
+		return;
+	}
+
+	//エナジー増加
+	++m_status.energy;
+	m_pEnergyUpCount->SetCnt(INT_ZERO);
+}
+
 
 //=============================================
 //モーション用の描画
@@ -201,15 +221,13 @@ void My::CCharacter::Load_Parts(const char* FileName)
 
 	File.read(reinterpret_cast<char*>(&m_motion_data), sizeof(CCharacter::MotionData));
 
-	m_Speed = m_motion_data.s_speed;
-	m_Jump = m_motion_data.s_jump;
-	m_PartsCnt = m_motion_data.s_parts;
+	m_PartsCnt = m_motion_data.parts;
 
-	for (int nCnt = 0; nCnt < m_motion_data.s_parts; ++nCnt)
+	for (int nCnt = 0; nCnt < m_motion_data.parts; ++nCnt)
 	{
-		m_apModel[nCnt] = CModel_Parts::Create(VEC3_RESET_ZERO, VEC3_RESET_ZERO, &m_motion_data.s_path[nCnt][0]);
-		m_apModel[nCnt]->SetIdx(m_motion_data.s_idx[nCnt]);
-		m_apModel[nCnt]->SetIdxParent(m_motion_data.s_parent[nCnt]);
+		m_apModel[nCnt] = CModel_Parts::Create(VEC3_RESET_ZERO, VEC3_RESET_ZERO, &m_motion_data.path[nCnt][0]);
+		m_apModel[nCnt]->SetIdx(m_motion_data.idx[nCnt]);
+		m_apModel[nCnt]->SetIdxParent(m_motion_data.parent[nCnt]);
 
 		//親を設定
 		if (m_apModel[nCnt]->GetIdxParent() == -1)
@@ -221,8 +239,8 @@ void My::CCharacter::Load_Parts(const char* FileName)
 			m_apModel[nCnt]->SetParent(m_apModel[m_apModel[nCnt]->GetIdxParent()]);
 		}
 
-		m_apModel[nCnt]->SetPos(m_motion_data.s_parts_pos[nCnt]);
-		m_apModel[nCnt]->SetRot(m_motion_data.s_parts_rot[nCnt]);
+		m_apModel[nCnt]->SetPos(m_motion_data.parts_pos[nCnt]);
+		m_apModel[nCnt]->SetRot(m_motion_data.parts_rot[nCnt]);
 
 		m_apModel[nCnt]->SetTPos(m_apModel[nCnt]->GetPos());
 		m_apModel[nCnt]->SetTRot(m_apModel[nCnt]->GetRot());
@@ -239,13 +257,21 @@ void My::CCharacter::Motion()
 	D3DXVECTOR3 MovePos[MAX_PARTS];
 	D3DXVECTOR3 MoveRot[MAX_PARTS];
 
-	int nNextKey = (m_nKeySetCnt + INT_ONE) % m_motion_data.s_motion_set[m_Motion].s_nNumKey;
+	int nNextKey = (m_nKeySetCnt + INT_ONE) % m_motion_data.motion_set[m_Motion].nNumKey;
 
 	for (int nMotionCnt = INT_ZERO; nMotionCnt < GetNumParts(); nMotionCnt++)
 	{
-		MovePos[nMotionCnt] = (m_motion_data.s_motion_set[m_Motion].s_keySet[nNextKey].s_key[nMotionCnt].s_pos - m_motion_data.s_motion_set[m_Motion].s_keySet[m_nKeySetCnt].s_key[nMotionCnt].s_pos) / (float)m_motion_data.s_motion_set[m_Motion].s_keySet[m_nKeySetCnt].s_nFrame;
-		MoveRot[nMotionCnt] = (m_motion_data.s_motion_set[m_Motion].s_keySet[nNextKey].s_key[nMotionCnt].s_rot - m_motion_data.s_motion_set[m_Motion].s_keySet[m_nKeySetCnt].s_key[nMotionCnt].s_rot) / (float)m_motion_data.s_motion_set[m_Motion].s_keySet[m_nKeySetCnt].s_nFrame;
+		D3DXVECTOR3 current_pos = m_motion_data.motion_set[m_Motion].keySet[m_nKeySetCnt].key[nMotionCnt].pos;
+		D3DXVECTOR3 next_pos = m_motion_data.motion_set[m_Motion].keySet[nNextKey].key[nMotionCnt].pos;
 
+		D3DXVECTOR3 current_rot = m_motion_data.motion_set[m_Motion].keySet[m_nKeySetCnt].key[nMotionCnt].rot;
+		D3DXVECTOR3 next_rot = m_motion_data.motion_set[m_Motion].keySet[nNextKey].key[nMotionCnt].rot;
+
+		float frame = (float)m_motion_data.motion_set[m_Motion].keySet[m_nKeySetCnt].nFrame;
+
+		//現在との差を計算
+		MovePos[nMotionCnt] = (next_pos - current_pos) / frame;
+		MoveRot[nMotionCnt] = (next_rot - current_rot) / frame;
 		D3DXVECTOR3 pos = m_apModel[nMotionCnt]->GetPos();
 		D3DXVECTOR3 rot = m_apModel[nMotionCnt]->GetRot();
 
@@ -256,16 +282,14 @@ void My::CCharacter::Motion()
 		m_apModel[nMotionCnt]->SetRot(rot);
 	}
 
-	m_nMotionFrameCnt++;
-
-	if (m_nMotionFrameCnt > m_motion_data.s_motion_set[m_Motion].s_keySet[m_nKeySetCnt].s_nFrame)
+	if (m_pMotionFrameCnt->CountMeasure() > m_motion_data.motion_set[m_Motion].keySet[m_nKeySetCnt].nFrame)
 	{
 
-		m_nMotionFrameCnt = INT_ZERO;
-		m_nKeySetCnt = (m_nKeySetCnt + INT_ONE) % m_motion_data.s_motion_set[m_Motion].s_nNumKey;
+		m_pMotionFrameCnt->SetCnt(INT_ZERO);
+		m_nKeySetCnt = (m_nKeySetCnt + INT_ONE) % m_motion_data.motion_set[m_Motion].nNumKey;
 		if (m_nKeySetCnt == INT_ZERO)
 		{
-			if (m_motion_data.s_motion_set[m_Motion].s_nLoop == INT_ZERO)
+			if (m_motion_data.motion_set[m_Motion].nLoop == INT_ZERO)
 			{
 				//終わった判定
 				m_isLoopFinish = true;
@@ -273,7 +297,7 @@ void My::CCharacter::Motion()
 			}
 			for (int nCntParts = INT_ZERO; nCntParts < m_PartsCnt; nCntParts++)
 			{
-				m_apModel[nCntParts]->SetRot(m_motion_data.s_motion_set[m_Motion].s_keySet[0].s_key[nCntParts].s_rot);
+				m_apModel[nCntParts]->SetRot(m_motion_data.motion_set[m_Motion].keySet[0].key[nCntParts].rot);
 			}
 		}
 	}
@@ -293,12 +317,12 @@ void My::CCharacter::SetMotion(int Motion)
 	m_Motion = Motion;
 
 	//フレームリセット
-	m_nMotionFrameCnt = INT_ZERO;
+	m_pMotionFrameCnt->SetCnt(INT_ZERO);
 
 	//キーカウントリセット
 	m_nKeySetCnt = INT_ZERO;
 
-	if (m_motion_data.s_motion_set[m_Motion].s_nLoop == INT_ZERO)
+	if (m_motion_data.motion_set[m_Motion].nLoop == INT_ZERO)
 	{
 		//終わった判定
 		m_isLoopFinish = false;
@@ -309,103 +333,7 @@ void My::CCharacter::SetMotion(int Motion)
 		m_apModel[nCntParts]->SetPos(m_apModel[nCntParts]->GetTPos());
 		m_apModel[nCntParts]->SetRot(m_apModel[nCntParts]->GetTRot());
 
-		m_apModel[nCntParts]->SetRot(m_motion_data.s_motion_set[Motion].s_keySet[0].s_key[nCntParts].s_rot);
-	}
-}
-
-
-//=============================================
-//重力処理
-//=============================================
-void My::CCharacter::Gravity()
-{
-	if (m_move.y < GRAVITY_MAX)
-	{
-		m_move.y -= GRAVITY_MOVE;
-	}
-}
-
-//=============================================
-//ジャンプ処理
-//=============================================
-void My::CCharacter::Jump()
-{
-	m_move.y = m_Jump; //ジャンプ力代入
-	m_bLanding = false; //空中状態
-}
-
-//=============================================
-//床との接触判定
-//=============================================
-void My::CCharacter::HitField()
-{
-	D3DXVECTOR3 CharacterPos = GetPos();
-
-	//サイズ取得
-	D3DXVECTOR3 CharacterMin = GetMinPos();
-	D3DXVECTOR3 CharacterMax = GetMaxPos();
-	//敵との当たり判定
-	for (int i = 0; i < PRI_MAX; i++)
-	{
-		CObject* pObj = CObject::GetTopObject(i);	//先頭取得
-
-		//最大数が不明なのでwhileを使用
-		while (pObj != nullptr)
-		{
-			CObject* pNext = pObj->GetNext();	//次のポインタを取得
-
-			//敵を見つけて速度を上げる
-			if (pObj->GetType() == CObject::OBJECT_TYPE_FIELD)
-			{
-				CField* pField = dynamic_cast<CField*>(pObj);
-
-				//床との当たり判定
-				CColision::COLISION colision = CManager::GetInstance()->GetColision()->CheckColision_Y(m_oldpos, CharacterPos, CharacterMin, CharacterMax, pField->GetPos(), pField->GetSize());
-
-				if (colision == CColision::COLISION::COLISON_TOP_Y)
-				{//y(上)方向に当たってたら
-					CharacterPos.y = m_oldpos.y;
-					m_move.y = FLOAT_ZERO;
-					m_bLanding = true; //着地
-				}
-				else
-				{
-					m_bLanding = false; //着地
-				}
-
-				if (m_oldpos.x > pField->GetPos().x - pField->GetSize().x
-					&& CharacterPos.x <= pField->GetPos().x - pField->GetSize().x)
-				{
-					CharacterPos.x = m_oldpos.x;
-					m_move.x = FLOAT_ZERO;
-				}
-
-				if (m_oldpos.x < pField->GetPos().x + pField->GetSize().x
-					&& CharacterPos.x >= pField->GetPos().x + pField->GetSize().x)
-				{
-					CharacterPos.x = m_oldpos.x;
-					m_move.x = FLOAT_ZERO;
-				}
-
-				if (m_oldpos.z > pField->GetPos().z - pField->GetSize().z
-					&& CharacterPos.z <= pField->GetPos().z - pField->GetSize().z)
-				{
-					CharacterPos.z = m_oldpos.z;
-					m_move.x = FLOAT_ZERO;
-				}
-
-				if (m_oldpos.z < pField->GetPos().z + pField->GetSize().z
-					&& CharacterPos.z >= pField->GetPos().z + pField->GetSize().z)
-				{
-					CharacterPos.z = m_oldpos.z;
-					m_move.x = FLOAT_ZERO;
-				}
-				SetPos(CharacterPos);
-
-			}
-			pObj = pNext;							//ポインタを進める
-
-		}
+		m_apModel[nCntParts]->SetRot(m_motion_data.motion_set[Motion].keySet[0].key[nCntParts].rot);
 	}
 }
 

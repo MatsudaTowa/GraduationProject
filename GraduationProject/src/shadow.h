@@ -18,7 +18,7 @@ namespace My
 	{
 	public:
 
-		static const int SHADOW_PRIORITY = 23; //!<描画順
+		static constexpr int SHADOW_PRIORITY = 23; //!<描画順
 
 		/**
 		 * @brief コンストラクタ

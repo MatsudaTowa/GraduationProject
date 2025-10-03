@@ -118,7 +118,6 @@ void My::CGame::Uninit()
 
 	//マネージャーで管理しているオブジェクトをここで削除
 	//NOTE: オブジェクトのReleaseAll前に消すことで二重で削除することを防止
-	//NOTE: 紙は上のステート変更される際に消される
 	CGameManager::GetInstance()->GetPlayer()->Uninit();
 	CGameManager::GetInstance()->SetPlayer(nullptr);
 	CGameManager::GetInstance()->GetField()->Uninit();

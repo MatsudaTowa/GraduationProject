@@ -17,7 +17,7 @@ namespace My
 	class CLight
 	{
 	public:
-		static const int MAX_LIGHT = 3; //ライト最大数
+		static constexpr int MAX_LIGHT = 3; //ライト最大数
 		CLight();
 		~CLight();
 		HRESULT Init();

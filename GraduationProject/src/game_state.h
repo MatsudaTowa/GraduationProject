@@ -38,7 +38,7 @@ namespace My
 	class CNormal :public CGameState
 	{
 	public:
-		static const int SPECIAL_TIME = 30;	//必殺技状態に移る時間
+		static constexpr int SPECIAL_TIME = 30;	//必殺技状態に移る時間
 		/**
 		* @brief ニュートラル処理
 		* @param [in]ゲームプレイヤーポインタ

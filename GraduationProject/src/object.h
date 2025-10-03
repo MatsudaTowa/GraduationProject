@@ -16,9 +16,9 @@ namespace My
 	class CObject
 	{
 	public:
-		static const int MAX_OBJECT = 8192; //オブジェクトの最大数
+		static constexpr int MAX_OBJECT = 8192; //オブジェクトの最大数
 
-		static const int PRI_MAX = 30; //プライオリティの最大値
+		static constexpr int PRI_MAX = 30; //プライオリティの最大値
 
 		enum OBJECT_TYPE
 		{

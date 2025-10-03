@@ -32,7 +32,7 @@ namespace My
 			FADE_MAX,		//!<フェードのマックス
 		};
 
-		static const int FADE_PRIORITY = 29;  //!<描画順
+		static constexpr int FADE_PRIORITY = 29;  //!<描画順
 
 		/**
 		 * @brief コンストラクタ

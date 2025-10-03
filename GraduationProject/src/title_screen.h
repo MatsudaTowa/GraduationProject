@@ -20,7 +20,7 @@ namespace My
 	class CTitle_Screen : public CObject2D
 	{
 	public:
-		static const int TITLE_SCREEN_PRIORITY = 10;  //!<描画順
+		static constexpr int TITLE_SCREEN_PRIORITY = 10;  //!<描画順
 
 		/**
 		 * @brief コンストラクタ

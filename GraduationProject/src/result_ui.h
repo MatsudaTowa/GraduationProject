@@ -20,7 +20,7 @@ namespace My
 	class CResult_Ui : public CObject2D
 	{
 	public:
-		static const int RESULT_SCREEN_PRIORITY = 21;	//!<描画順
+		static constexpr int RESULT_SCREEN_PRIORITY = 21;	//!<描画順
 
 		/**
 		 * @brief コンストラクタ

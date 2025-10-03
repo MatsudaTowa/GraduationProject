@@ -16,7 +16,7 @@ namespace My
 	class CTexture
 	{
 	public:
-		static const int MAX_TEX = 256; //テクスチャの数
+		static constexpr int MAX_TEX = 256; //テクスチャの数
 		CTexture();
 		~CTexture();
 		void Unload(); //テクスチャ破棄

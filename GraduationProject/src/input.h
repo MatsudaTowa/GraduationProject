@@ -29,7 +29,7 @@ namespace My
 	class CInputKeyboard :public CInput
 	{
 	public:
-		static const int NUM_KEY_MAX = 256; //キーボードのキー数
+		static constexpr int NUM_KEY_MAX = 256; //キーボードのキー数
 		CInputKeyboard();
 		~CInputKeyboard();
 		HRESULT Init(HINSTANCE hInstance, HWND hWnd) override;
@@ -63,7 +63,7 @@ namespace My
 	class CInputMouse :public CInput
 	{
 	public:
-		static const int NUM_MOUSE_MAX = 3; //マウスのキー数
+		static constexpr int NUM_MOUSE_MAX = 3; //マウスのキー数
 
 		enum ANGLE
 		{
@@ -195,8 +195,8 @@ namespace My
 		};
 
 		//マクロ定義
-		static const int JOYPAD_ZONE = 1;
-		static const int JOYPAD_SPEED = 15;
+		static constexpr int JOYPAD_ZONE = 1;
+		static constexpr int JOYPAD_SPEED = 15;
 
 		CInputPad();
 		~CInputPad();

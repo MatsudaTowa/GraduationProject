@@ -20,12 +20,10 @@ namespace My
 	class CPlayer :public CCharacter
 	{
 	public:
-		static const int PLAYER_LIFE = 150;			//!<体力
-		static const int PLAYER_PRIORITY = 8;		//!<描画順
+		static constexpr int PLAYER_PRIORITY = 8;		//!<描画順
 
 		static const D3DXVECTOR3 PLAYER_SPAWN_POS;	//!<スポーン位置
 		static const D3DXVECTOR3 PLAYER_SPAWN_ROT;	//!<スポーン方向
-		static const float CORRECTION_VALUE_BELT;	//!<ベルトの補正値
 
 		/** @brief モーションの種類列挙*/
 		enum Motion_Type
@@ -85,16 +83,8 @@ namespace My
 		 */
 		void Input();
 	private:
-		static const D3DXVECTOR3 SHADOW_SIZE;	 //!<影のサイズ
-
-		//プレイヤーの移動関連
-		static const float DAMPING_COEFFICIENT;		//!<移動抵抗
-		static const int MAX_JUMPCNT;				//!<ジャンプ回数
-
-		/**
-		 * @brief リスポーン
-		 */
-		void ReSpawn();
+		static constexpr float SHADOW_SIZE_X = 20.0f;	 //!<影のサイズ
+		static constexpr float SHADOW_SIZE_Z = 20.0f;	 //!<影のサイズ
 
 		/**
 		 * @brief プレイヤーのデバッグ表示

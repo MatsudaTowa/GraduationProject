@@ -21,7 +21,7 @@ namespace My
 	{
 	public:
 
-		static const int FIELD_PRIORITY = 3; //!<描画順
+		static constexpr int FIELD_PRIORITY = 3; //!<描画順
 
 		/**
 		 * @brief コンストラクタ

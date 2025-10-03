@@ -26,7 +26,6 @@ My::CModel_Parts::~CModel_Parts()
 //=============================================
 void My::CModel_Parts::Unload()
 {
-	//TODO: ƒ‚ƒfƒ‹‚Ìî•ñŠÇ—‚ğ‚±‚±‚Å‚·‚é‚ÈIObjectX‚à‚Á‚Ä‚é‚Ì‚ÅÁ‚¹I
 	for (int nCnt = 0; nCnt < MAX_MODEL; nCnt++)
 	{
 		if (m_ModelInfo[nCnt].s_pBuffMat != nullptr)

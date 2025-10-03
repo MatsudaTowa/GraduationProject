@@ -52,7 +52,7 @@ namespace My
 		 */
 		void Draw()override;
 	private:
-		static const std::string TEXTURE_NAME;	//!<テクスチャの名前
+		static constexpr std::string TEXTURE_NAME;	//!<テクスチャの名前
 	};
 }
 

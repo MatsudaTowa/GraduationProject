@@ -16,7 +16,7 @@ namespace My
 	class CModel
 	{
 	public:
-		static const int MAX_MODEL = 256; //モデルの数
+		static constexpr int MAX_MODEL = 256; //モデルの数
 
 		//モデル情報構造体定義
 		struct MODEL_INFO

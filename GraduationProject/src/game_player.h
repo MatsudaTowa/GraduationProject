@@ -21,8 +21,8 @@ namespace My
 	class CGamePlayer :public CPlayer
 	{
 	public:
-		static const D3DXVECTOR3 PLAYER_SPAWN_POS;	//!<スポーン位置
-		static const D3DXVECTOR3 PLAYER_SPAWN_ROT;	//!<スポーン方向
+		static constexpr D3DXVECTOR3 PLAYER_SPAWN_POS;	//!<スポーン位置
+		static constexpr D3DXVECTOR3 PLAYER_SPAWN_ROT;	//!<スポーン方向
 
 		/**
 		 * @brief コンストラクタ
@@ -77,7 +77,7 @@ namespace My
 		}
 
 private:
-		static const D3DXVECTOR3 SHADOW_SIZE;	 //!<影のサイズ
+		static constexpr D3DXVECTOR3 SHADOW_SIZE;	 //!<影のサイズ
 
 		/**
 		 * @brief 入力処理

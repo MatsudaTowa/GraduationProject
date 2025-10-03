@@ -17,7 +17,7 @@ namespace My
 	class CObjectX : public CObject
 	{
 	public:
-		static const int MAX_TEX = 256; //テクスチャの数
+		static constexpr int MAX_TEX = 256; //テクスチャの数
 
 		CObjectX(int nPriority);
 		~CObjectX()override;

@@ -21,7 +21,7 @@ namespace My
 	class CParticle : public CBillboard_Anim
 	{
 	public:
-		static const int PRIORITY = 21;		//!<描画順
+		static constexpr int PRIORITY = 21;		//!<描画順
 
 		/**
 		 * @brief コンストラクタ
