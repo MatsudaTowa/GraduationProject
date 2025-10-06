@@ -13,7 +13,7 @@
 
 namespace My
 {
-	class CCard :public CBillboard
+	class CCard :public CObjectX
 	{
 	public:
 
@@ -29,8 +29,19 @@ namespace My
 		~CCard()override;
 
 		/**
+		 * @brief ‰Šú‰»
+		 */
+		HRESULT Init();
+
+		/**
 		 * @brief •`‰æ
 		 */
 		void Draw()override;
+
+		/**
+		 * @brief ¶¬
+		 * @param [in]ˆÊ’u
+		 */
+		static CCard* Create();
 	};
 }

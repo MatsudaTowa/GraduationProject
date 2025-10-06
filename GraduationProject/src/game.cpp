@@ -10,6 +10,7 @@
 #include "game_camera.h"
 #include "game_manager.h"
 #include "enemy.h"
+#include "card.h"
 
 namespace
 {
@@ -89,6 +90,8 @@ HRESULT My::CGame::Init()
 
 	//ƒvƒŒƒCƒ„[¶¬
 	CPlayer::Create(new CGamePlayer);
+
+	CCard::Create();
 
 	return S_OK;
 }
