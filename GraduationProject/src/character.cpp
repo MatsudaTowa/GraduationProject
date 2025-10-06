@@ -101,7 +101,15 @@ void My::CCharacter::Uninit()
 //=============================================
 void My::CCharacter::Update()
 {
-	m_pShadow->SetisDraw(GetisDraw());
+	if (m_pShadow != nullptr)
+	{
+		m_pShadow->SetisDraw(GetisDraw());
+
+		//影のサイズ設定
+		m_pShadow->SetSize(m_ShadowSize);
+		//影の位置設定
+		m_pShadow->SetPos({ GetPos().x,SHADOW_POS_Y,GetPos().z });
+	}
 
 	for (int nCnt = 0; nCnt < m_PartsCnt; nCnt++)
 	{
@@ -113,12 +121,6 @@ void My::CCharacter::Update()
 
 	//座標を更新
 	SetPos(pos);
-
-	//影のサイズ設定
-	m_pShadow->SetSize(m_ShadowSize);
-
-	//影の位置設定
-	m_pShadow->SetPos({ GetPos().x,SHADOW_POS_Y,GetPos().z });
 }
 
 //=============================================

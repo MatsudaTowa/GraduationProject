@@ -12,10 +12,10 @@
 #include "camera_state.h"
 
 //スポーン位置
-const D3DXVECTOR3 My::CPlayer::PLAYER_SPAWN_POS = { 0.0f, 0.0f, 0.0f };
+const D3DXVECTOR3 My::CPlayer::PLAYER_SPAWN_POS = { 0.0f, 0.0f, -200.0f };
 
 //スポーン方向
-const D3DXVECTOR3 My::CPlayer::PLAYER_SPAWN_ROT = { 0.0f, 0.0f, 0.0f};
+const D3DXVECTOR3 My::CPlayer::PLAYER_SPAWN_ROT = { 0.0f, 3.14f, 0.0f};
 
 //=============================================
 //コンストラクタ

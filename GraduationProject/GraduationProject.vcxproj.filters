@@ -177,6 +177,12 @@
     <ClCompile Include="src\game_state.cpp">
       <Filter>scene\game</Filter>
     </ClCompile>
+    <ClCompile Include="src\enemy.cpp">
+      <Filter>object\character</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enemy_manager.cpp">
+      <Filter>object\character</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\useful.h">
@@ -310,6 +316,12 @@
     </ClInclude>
     <ClInclude Include="src\game_state.h">
       <Filter>scene\game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\enemy.h">
+      <Filter>object\character</Filter>
+    </ClInclude>
+    <ClInclude Include="src\enemy_manager.h">
+      <Filter>object\character</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

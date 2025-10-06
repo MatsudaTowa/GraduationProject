@@ -160,6 +160,8 @@
     <ClCompile Include="src\camera_state.cpp" />
     <ClCompile Include="src\character.cpp" />
     <ClCompile Include="src\colision.cpp" />
+    <ClCompile Include="src\enemy.cpp" />
+    <ClCompile Include="src\enemy_manager.cpp" />
     <ClCompile Include="src\fade.cpp" />
     <ClCompile Include="src\field.cpp" />
     <ClCompile Include="src\game.cpp" />
@@ -209,6 +211,8 @@
     <ClInclude Include="src\character.h" />
     <ClInclude Include="src\colision.h" />
     <ClInclude Include="src\count.h" />
+    <ClInclude Include="src\enemy.h" />
+    <ClInclude Include="src\enemy_manager.h" />
     <ClInclude Include="src\fade.h" />
     <ClInclude Include="src\field.h" />
     <ClInclude Include="src\game.h" />

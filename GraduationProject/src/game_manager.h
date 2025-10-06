@@ -12,6 +12,7 @@
 #include "game_player.h"
 #include "game_state.h"
 #include "field.h"
+#include "enemy_manager.h"
 
 /** @brief My 名前空間 */
 namespace My
@@ -44,6 +45,12 @@ namespace My
 			static CGameManager instance;
 			return &instance;
 		}
+
+		/**
+		 * @brief エネミーリスト取得
+		 * @return エネミーリスト
+		 */
+		CEnemyManager* GetEnemyManager() { return m_pEnemyManager; }
 
 		/**
 		 * @brief プレイヤーの設定
@@ -117,6 +124,7 @@ namespace My
 			return m_isFinish;
 		}
 	private:
+		CEnemyManager* m_pEnemyManager;
 		CGameState* m_pState;				//!<ゲームのステート状態
 		CGamePlayer* m_pPlayer;				//!<プレイヤー
 		CField* m_pField;					//!<床

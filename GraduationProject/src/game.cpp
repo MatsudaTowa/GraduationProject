@@ -9,6 +9,7 @@
 #include "game_player.h"
 #include "game_camera.h"
 #include "game_manager.h"
+#include "enemy.h"
 
 namespace
 {
@@ -39,6 +40,9 @@ My::CGame::~CGame()
 //=============================================
 HRESULT My::CGame::Init()
 {
+	CEnemy::Create({ 300.0f,0.0f,00.0f }, { 0.0f,1.75f,0.f });
+	CEnemy::Create({ -300.0f,0.0f,00.0f }, { 0.0f,-1.75f,0.f });
+	CEnemy::Create({ 0.0f,0.0f,250.0f }, { 0.0f,0.0f,0.f });
 	for (int i = 0; i < CAMERA_MAX; ++i)
 	{
 		CREATE_CAMERA(new CGameCamera);

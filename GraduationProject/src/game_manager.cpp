@@ -11,10 +11,14 @@
 //=============================================
 My::CGameManager::CGameManager():
 m_pState(nullptr),			//ゲームのステート
+m_pEnemyManager(),			//エネミーマネージャー
 m_pPlayer(nullptr),			//プレイヤーのポインタ
 m_pField(nullptr),			//床のポインタ
 m_isFinish(false)
 {
+	//エネミーマネージャーの生成
+	m_pEnemyManager = new CEnemyManager();		//メモリ確保
+	m_pEnemyManager->Init();					//初期設定
 }
 
 //=============================================
@@ -22,6 +26,14 @@ m_isFinish(false)
 //=============================================
 My::CGameManager::~CGameManager()
 {
+	//エネミーマネージャーの破棄
+	if (m_pEnemyManager != nullptr)
+	{
+		//終了処理後に開放
+		m_pEnemyManager->Uninit();
+		delete m_pEnemyManager;
+		m_pEnemyManager = nullptr;
+	}
 }
 
 //=============================================
