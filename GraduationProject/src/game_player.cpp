@@ -105,6 +105,16 @@ void My::CGamePlayer::ChangeState(CGamePlayerState* state)
 //=============================================
 void My::CGamePlayer::EnergyUp()
 {
+	int energy = GetEnergy();
+
+#ifdef _DEBUG
+	if (GET_INPUT_KEYBOARD->GetTrigger(DIK_1))
+	{
+		energy += 10;
+		SetEnergy(energy);
+	}
+#endif // _DEBUG
+
 	if (m_pEnergyUpCount == nullptr)
 	{
 		return;
@@ -115,7 +125,6 @@ void My::CGamePlayer::EnergyUp()
 		return;
 	}
 
-	int energy = GetEnergy();
 	//エナジー増加
 	++energy;
 	SetEnergy(energy);

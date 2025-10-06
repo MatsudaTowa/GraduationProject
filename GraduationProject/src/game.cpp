@@ -150,7 +150,7 @@ void My::CGame::Update()
 		CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;
 		CInputMouse* pMouse = GET_INPUT_MOUSE;
 
-		if (pKeyboard->GetTrigger(DIK_RETURN) || pMouse->GetTrigger(0))
+		if (pKeyboard->GetTrigger(DIK_RETURN))
 		{
 			GET_FADE->SetFade(CScene::MODE::MODE_RESULT);
 		}
