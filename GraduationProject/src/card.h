@@ -31,7 +31,17 @@ namespace My
 		/**
 		 * @brief ‰Šú‰»
 		 */
-		HRESULT Init();
+		HRESULT Init()override;
+
+		/**
+		 * @brief I—¹
+		 */
+		void Uninit()override;
+
+		/**
+		 * @brief XV
+		 */
+		void Update()override;
 
 		/**
 		 * @brief •`‰æ
