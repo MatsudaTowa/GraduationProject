@@ -12,8 +12,8 @@ namespace
 	const int NUM_TEXTURE = 2;
 	const std::string TEXTURE_NAME[NUM_TEXTURE]
 	{
-		 "data\\TEXTURE\\number_000.png",
-		 "data\\TEXTURE\\number_001.png"
+		 "data\\TEXTURE\\number000.png",
+		 "data\\TEXTURE\\number000.png"
 	};
 }
 
@@ -167,7 +167,7 @@ void My::CNumber_2D::NumberVtx()
 }
 
 //texパス
-const std::string My::CNumber_3D::TEXTURE_NAME = "data\\TEXTURE\\number_000.png";
+const std::string My::CNumber_3D::TEXTURE_NAME = "data\\TEXTURE\\number000.png";
 
 //=============================================
 //コンストラクタ

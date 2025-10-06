@@ -10,6 +10,7 @@
 #include "game_camera.h"
 #include "game_manager.h"
 #include "enemy.h"
+#include "card.h"
 
 namespace
 {
@@ -90,6 +91,8 @@ HRESULT My::CGame::Init()
 	//ƒvƒŒƒCƒ„[¶¬
 	CPlayer::Create(new CGamePlayer);
 
+	CCard::Create();
+
 	return S_OK;
 }
 
@@ -150,7 +153,7 @@ void My::CGame::Update()
 		CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;
 		CInputMouse* pMouse = GET_INPUT_MOUSE;
 
-		if (pKeyboard->GetTrigger(DIK_RETURN) || pMouse->GetTrigger(0))
+		if (pKeyboard->GetTrigger(DIK_RETURN))
 		{
 			GET_FADE->SetFade(CScene::MODE::MODE_RESULT);
 		}

@@ -33,6 +33,12 @@ HRESULT My::CGamePlayer::Init()
 		m_pState = new CNeutralState;
 	}
 
+	if (GetLifeUI() == nullptr)
+	{
+		CLife_UI* pLifeUI = CLife_UI::Create({600.0f,600.0f,0.0f});
+		SetLifeUI(pLifeUI);
+	}
+
 	if (m_pEnergyUpCount == nullptr)
 	{
 		m_pEnergyUpCount = new CCount;
@@ -72,6 +78,20 @@ void My::CGamePlayer::Update()
 		m_pState->Neutral(this);
 	}
 
+#ifdef _DEBUG
+	int life = GetLife();
+	if (GET_INPUT_KEYBOARD->GetTrigger(DIK_L))
+	{
+		++life;
+	}
+	else if (GET_INPUT_KEYBOARD->GetTrigger(DIK_K))
+	{
+		--life;
+	}
+	SetLife(life);
+#endif // _DEBUG
+
+
 	EnergyUp();
 
 	//親クラスの更新
@@ -105,6 +125,16 @@ void My::CGamePlayer::ChangeState(CGamePlayerState* state)
 //=============================================
 void My::CGamePlayer::EnergyUp()
 {
+	int energy = GetEnergy();
+
+#ifdef _DEBUG
+	if (GET_INPUT_KEYBOARD->GetTrigger(DIK_1))
+	{
+		energy += 10;
+		SetEnergy(energy);
+	}
+#endif // _DEBUG
+
 	if (m_pEnergyUpCount == nullptr)
 	{
 		return;
@@ -115,7 +145,6 @@ void My::CGamePlayer::EnergyUp()
 		return;
 	}
 
-	int energy = GetEnergy();
 	//エナジー増加
 	++energy;
 	SetEnergy(energy);
@@ -139,8 +168,8 @@ void My::CGamePlayer::Debug()
 	RECT rect = { 0,0,SCREEN_WIDTH,SCREEN_HEIGHT };
 	char aStr[256];
 
-	sprintf(&aStr[0], "\n\n[player]\npos:%.1f,%.1f,%.1f\nrot:%.1f,%.1f,%.1f\nエナジー:%d"
-		, GetPos().x, GetPos().y, GetPos().z, GetRot().x, GetRot().y, GetRot().z,GetEnergy());
+	sprintf(&aStr[0], "\n\n[player]\npos:%.1f,%.1f,%.1f\nrot:%.1f,%.1f,%.1f\nエナジー:%d\n体力:%d Kで減少 Jで増加"
+		, GetPos().x, GetPos().y, GetPos().z, GetRot().x, GetRot().y, GetRot().z,GetEnergy(),GetLife());
 	//テキストの描画
 	pFont->DrawText(NULL, &aStr[0], -1, &rect, DT_LEFT, D3DCOLOR_RGBA(255, 0, 0, 255));
 #endif // _DEBUG

@@ -173,6 +173,7 @@
     <ClCompile Include="src\game_player_state.cpp" />
     <ClCompile Include="src\game_state.cpp" />
     <ClCompile Include="src\input.cpp" />
+    <ClCompile Include="src\life_UI.cpp" />
     <ClCompile Include="src\light.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\manager.cpp" />
@@ -225,6 +226,7 @@
     <ClInclude Include="src\game_player_state.h" />
     <ClInclude Include="src\game_state.h" />
     <ClInclude Include="src\input.h" />
+    <ClInclude Include="src\life_UI.h" />
     <ClInclude Include="src\light.h" />
     <ClInclude Include="src\main.h" />
     <ClInclude Include="src\manager.h" />

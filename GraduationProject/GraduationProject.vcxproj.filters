@@ -186,6 +186,9 @@
     <ClCompile Include="src\card.cpp">
       <Filter>object</Filter>
     </ClCompile>
+    <ClCompile Include="src\life_UI.cpp">
+      <Filter>object\2D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\useful.h">
@@ -328,6 +331,9 @@
     </ClInclude>
     <ClInclude Include="src\card.h">
       <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\life_UI.h">
+      <Filter>object\2D</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
