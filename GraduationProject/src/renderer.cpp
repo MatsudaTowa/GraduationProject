@@ -113,9 +113,6 @@ HRESULT My::CRenderer::Init(HWND hWnd, BOOL bWindow)
 	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
 	m_pD3DDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CURRENT);
 
-	// マウスカーソルの非表示
-	ShowCursor(FALSE);
-
 	D3DXCreateFont(m_pD3DDevice, 18, 0, 0, 0,
 		FALSE, SHIFTJIS_CHARSET,
 		OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH,

@@ -183,6 +183,9 @@
     <ClCompile Include="src\enemy_manager.cpp">
       <Filter>object\character</Filter>
     </ClCompile>
+    <ClCompile Include="src\card.cpp">
+      <Filter>object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\useful.h">
@@ -322,6 +325,9 @@
     </ClInclude>
     <ClInclude Include="src\enemy_manager.h">
       <Filter>object\character</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card.h">
+      <Filter>object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -158,6 +158,7 @@
     <ClCompile Include="src\billboard.cpp" />
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\camera_state.cpp" />
+    <ClCompile Include="src\card.cpp" />
     <ClCompile Include="src\character.cpp" />
     <ClCompile Include="src\colision.cpp" />
     <ClCompile Include="src\enemy.cpp" />
@@ -208,6 +209,7 @@
     <ClInclude Include="src\billboard.h" />
     <ClInclude Include="src\camera.h" />
     <ClInclude Include="src\camera_state.h" />
+    <ClInclude Include="src\card.h" />
     <ClInclude Include="src\character.h" />
     <ClInclude Include="src\colision.h" />
     <ClInclude Include="src\count.h" />
