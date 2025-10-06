@@ -13,6 +13,7 @@
 #include "shadow.h"
 #include "count.h"
 #include "useful.h"
+#include "life_UI.h"
 
 /** @brief My 名前空間 */
 namespace My
@@ -158,6 +159,15 @@ namespace My
 		}
 
 		/**
+		 * @brief 体力UIの設定
+		 * @param [in]体力UIのポインタ
+		 */
+		inline void SetLifeUI(CLife_UI* plifeUI)
+		{
+			m_pLifeUI = plifeUI;
+		}
+
+		/**
 		 * @brief ステータス取得
 		 * @return ステータス
 		 */
@@ -274,12 +284,22 @@ namespace My
 		{
 			return m_apModel[idx];
 		}
+
+		/**
+		 * @brief 体力UIの取得
+		 * @return [in]体力UIのポインタ
+		 */
+		inline CLife_UI* GetLifeUI()
+		{
+			return m_pLifeUI;
+		}
 	private:
 		static constexpr int START_DECK = 40;				//!<最初のデッキ枚数
 		static constexpr int START_HAND = 3;				//!<最初の手札枚数
 		static constexpr int START_LIFE = 10;				//!<最初の体力
 		static constexpr int START_ENERGY = 1;				//!<最初のエナジー
 		static constexpr int MAX_ENERGY = 99;				//!<エナジー最大値
+		static constexpr int MAX_LIFE = 99;					//!<体力最大値
 
 		static constexpr float SHADOW_POS_Y = 0.5f;	 //!<影のY座標(地面から少し浮かす)
 
@@ -294,6 +314,8 @@ namespace My
 		Status m_status;			//!ステータス
 
 		CShadow* m_pShadow;			//!<影
+
+		CLife_UI* m_pLifeUI;		//!<体力UI TODO:UIのインスタンスをキャラクターで持たせないように改良
 
 		CModel_Parts* m_apModel[MAX_PARTS]; 		//!<パーツ
 

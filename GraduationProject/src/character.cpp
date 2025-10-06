@@ -82,6 +82,11 @@ HRESULT My::CCharacter::Init()
 //=============================================
 void My::CCharacter::Uninit()
 {
+	if (m_pLifeUI != nullptr)
+	{
+		m_pLifeUI->Uninit();
+		m_pLifeUI = nullptr;
+	}
 	if (m_pMotionFrameCnt != nullptr)
 	{
 		delete m_pMotionFrameCnt;
@@ -101,6 +106,18 @@ void My::CCharacter::Uninit()
 //=============================================
 void My::CCharacter::Update()
 {
+	if (m_pLifeUI != nullptr)
+	{
+		if (m_status.life > MAX_LIFE)
+		{
+			SetLife(MAX_LIFE);
+		}
+		if (m_status.life < INT_ZERO)
+		{
+			SetLife(INT_ZERO);
+		}
+		m_pLifeUI->SetNumber(m_status.life);
+	}
 	if (m_pShadow != nullptr)
 	{
 		m_pShadow->SetisDraw(GetisDraw());

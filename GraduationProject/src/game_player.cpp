@@ -33,6 +33,12 @@ HRESULT My::CGamePlayer::Init()
 		m_pState = new CNeutralState;
 	}
 
+	if (GetLifeUI() == nullptr)
+	{
+		CLife_UI* pLifeUI = CLife_UI::Create({600.0f,600.0f,0.0f});
+		SetLifeUI(pLifeUI);
+	}
+
 	if (m_pEnergyUpCount == nullptr)
 	{
 		m_pEnergyUpCount = new CCount;
@@ -71,6 +77,20 @@ void My::CGamePlayer::Update()
 	{
 		m_pState->Neutral(this);
 	}
+
+#ifdef _DEBUG
+	int life = GetLife();
+	if (GET_INPUT_KEYBOARD->GetTrigger(DIK_L))
+	{
+		++life;
+	}
+	else if (GET_INPUT_KEYBOARD->GetTrigger(DIK_K))
+	{
+		--life;
+	}
+	SetLife(life);
+#endif // _DEBUG
+
 
 	EnergyUp();
 
