@@ -34,6 +34,14 @@ HRESULT My::CCard::Init()
 
 	CObjectX::Init();
 
+	// スケール
+	D3DXVECTOR3 scale = GetScale();
+
+	scale.x *= 1.2f;
+	//scale *= 0.5f;
+
+	SetScale(scale);
+
 	return S_OK;
 }
 
@@ -51,9 +59,13 @@ void My::CCard::Uninit()
 void My::CCard::Update()
 {
 	// カメラの位置と角度に合わせる
-	CCamera* pcamera = CManager::GetInstance()->GetCamera(CGame::GAME_CAMERA);
-	SetPos({ pcamera->GetPosV().x,pcamera->GetPosV().y - 100.0f,pcamera->GetPosV().z + 30.0f });
-	SetRot(pcamera->GetRot());
+	CCamera* pCamera = CManager::GetInstance()->GetCamera(CGame::GAME_CAMERA);
+	SetPos({ pCamera->GetPosV().x,pCamera->GetPosV().y - 100.0f,pCamera->GetPosV().z + 30.0f });
+
+	D3DXVECTOR3 rot = pCamera->GetRot();
+	rot.x += 0.3f;
+
+	SetRot(rot);
 }
 
 //===========================================================================================================

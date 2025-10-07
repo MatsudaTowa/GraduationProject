@@ -159,6 +159,7 @@
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\camera_state.cpp" />
     <ClCompile Include="src\card.cpp" />
+    <ClCompile Include="src\card_state.cpp" />
     <ClCompile Include="src\character.cpp" />
     <ClCompile Include="src\colision.cpp" />
     <ClCompile Include="src\enemy.cpp" />
@@ -172,6 +173,7 @@
     <ClCompile Include="src\game_player.cpp" />
     <ClCompile Include="src\game_player_state.cpp" />
     <ClCompile Include="src\game_state.cpp" />
+    <ClCompile Include="src\hand.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\life_UI.cpp" />
     <ClCompile Include="src\light.cpp" />
@@ -211,6 +213,7 @@
     <ClInclude Include="src\camera.h" />
     <ClInclude Include="src\camera_state.h" />
     <ClInclude Include="src\card.h" />
+    <ClInclude Include="src\card_state.h" />
     <ClInclude Include="src\character.h" />
     <ClInclude Include="src\colision.h" />
     <ClInclude Include="src\count.h" />
@@ -225,6 +228,7 @@
     <ClInclude Include="src\game_player.h" />
     <ClInclude Include="src\game_player_state.h" />
     <ClInclude Include="src\game_state.h" />
+    <ClInclude Include="src\hand.h" />
     <ClInclude Include="src\input.h" />
     <ClInclude Include="src\life_UI.h" />
     <ClInclude Include="src\light.h" />
