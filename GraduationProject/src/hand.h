@@ -27,7 +27,7 @@ namespace My
 		* @param ŠJn‚ÌèD
 		* @param èD‚ÌãŒÀ–‡”
 		*/
-		static unsigned const int START_HANDS = 2;
+		static unsigned const int START_HANDS = 1;
 		static unsigned const int MAX_HANDSCARD = 10;
 
 		/**

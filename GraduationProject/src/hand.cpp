@@ -83,6 +83,9 @@ void My::CHand::HandDraw(int drawnum)
 	}
 }
 
+//===========================================================================================================
+// 生成
+//===========================================================================================================
 My::CHand* My::CHand::Create()
 {
 	CHand* pHand = new CHand();
@@ -92,38 +95,34 @@ My::CHand* My::CHand::Create()
 	return pHand;
 }
 
+//===========================================================================================================
+// 手札のカードの座標設定
+//===========================================================================================================
 void My::CHand::SetHandCardPos()
 {
-	float posInterbal = 20.0f;
-
-
 	D3DXVECTOR3 firstpos;	// 一番左側の位置(手札の最初の位置)
-	float xpos;
-	xpos = m_CenterPos.x - (m_TotalNum* posInterbal);
-	int a = 0;
+	float posInterbal = 10.0f;	// 手札に表示されている時のカードの間隔
+	float xpos;	// 一枚目のカードのx座標
 
-	if (m_TotalNum == 0)
-	{
-		a = 0;
-	}
-	else
-	{
-		a = 1;
-	}
+	// x座標の設定 = センター - (現在の合計枚数 * カードの間隔の半分)
+	xpos = m_CenterPos.x - (m_TotalNum* posInterbal*0.5f);
 
 	for (int i = 0; i <= m_TotalNum; i++)
 	{
+		// 一枚目のカードの座標
 		firstpos = { xpos,m_CenterPos.y,m_CenterPos.z };
 
+		// カードの座標の設定
 		if (i != 0)
 		{
 			m_pCard[i]->SetPos({ m_pCard[i - 1]->GetPos().x+posInterbal, m_pCard[i - 1]->GetPos().y, m_pCard[i - 1]->GetPos().z });
 		}
 		else
 		{
-			m_pCard[0]->SetPos({ firstpos.x + (a * (posInterbal * -0.5f)), firstpos.y, firstpos.z });
+			m_pCard[0]->SetPos(firstpos);
 		}
 		
-		xpos += posInterbal;
+		// 間隔を開ける
+		xpos += posInterbal*0.5f;
 	}
 }
