@@ -14,6 +14,7 @@
 #include "count.h"
 #include "useful.h"
 #include "life_UI.h"
+#include "energy_UI.h"
 
 /** @brief My 名前空間 */
 namespace My
@@ -168,6 +169,15 @@ namespace My
 		}
 
 		/**
+		 * @brief エナジーUIの設定
+		 * @param [in]エナジーUIのポインタ
+		 */
+		inline void SetEnergyUI(CEnergy_UI* pEnergyUI)
+		{
+			m_pEneryUI = pEnergyUI;
+		}
+
+		/**
 		 * @brief ステータス取得
 		 * @return ステータス
 		 */
@@ -293,6 +303,15 @@ namespace My
 		{
 			return m_pLifeUI;
 		}
+
+		/**
+		 * @brief エナジーUIの取得
+		 * @return [in]エナジーUIのポインタ
+		 */
+		inline CEnergy_UI* GetEnergyUI()
+		{
+			return m_pEneryUI;
+		}
 	private:
 		static constexpr int START_DECK = 40;				//!<最初のデッキ枚数
 		static constexpr int START_HAND = 3;				//!<最初の手札枚数
@@ -316,6 +335,7 @@ namespace My
 		CShadow* m_pShadow;			//!<影
 
 		CLife_UI* m_pLifeUI;		//!<体力UI TODO:UIのインスタンスをキャラクターで持たせないように改良
+		CEnergy_UI* m_pEneryUI;		//!エナジーUI TODO:UIのインスタンスをキャラクターで持たせないように改良
 
 		CModel_Parts* m_apModel[MAX_PARTS]; 		//!<パーツ
 

@@ -1,10 +1,10 @@
 //=============================================
 //
-//ライフUI処理「life_UI.cpp」
+//エナジーUI処理「energy_UI.cpp」
 // Author松田永久
 //
 //=============================================
-#include "life_UI.h"
+#include "energy_UI.h"
 
 namespace
 {
@@ -16,7 +16,7 @@ namespace
 //=============================================
 // コンストラクタ
 //=============================================
-My::CLife_UI::CLife_UI():
+My::CEnergy_UI::CEnergy_UI():
 	m_num_pos(VEC3_RESET_ZERO)
 {
 	m_pNumber.clear();
@@ -25,14 +25,14 @@ My::CLife_UI::CLife_UI():
 //=============================================
 // デストラクタ
 //=============================================
-My::CLife_UI::~CLife_UI()
+My::CEnergy_UI::~CEnergy_UI()
 {
 }
 
 //=============================================
 // 初期化
 //=============================================
-HRESULT My::CLife_UI::Init()
+HRESULT My::CEnergy_UI::Init()
 {
 	for (int nCnt = 0; nCnt < NUM_DIGIT; nCnt++)
 	{
@@ -48,7 +48,7 @@ HRESULT My::CLife_UI::Init()
 //=============================================
 // 終了
 //=============================================
-void My::CLife_UI::Uninit()
+void My::CEnergy_UI::Uninit()
 {
 	for (auto& itr : m_pNumber)
 	{
@@ -66,10 +66,10 @@ void My::CLife_UI::Uninit()
 //=============================================
 // 生成
 //=============================================
-My::CLife_UI* My::CLife_UI::Create(D3DXVECTOR3 pos)
+My::CEnergy_UI* My::CEnergy_UI::Create(D3DXVECTOR3 pos)
 {
-	CLife_UI* ui = new CLife_UI;
-	if(ui == nullptr)
+	CEnergy_UI* ui = new CEnergy_UI;
+	if (ui == nullptr)
 	{
 		return nullptr;
 	}
@@ -79,9 +79,9 @@ My::CLife_UI* My::CLife_UI::Create(D3DXVECTOR3 pos)
 }
 
 //=============================================
-// 数字設定
+// エナジーの数字設定
 //=============================================
-void My::CLife_UI::SetLifeNumber(int life)
+void My::CEnergy_UI::SetEnergyNumber(int energy)
 {
 	//桁数取得
 	int num_digit = m_pNumber.size();
@@ -93,14 +93,14 @@ void My::CLife_UI::SetLifeNumber(int life)
 	int nCnt;
 	for (nCnt = 0; nCnt < num_digit; nCnt++)
 	{
-		pos_texU.push_back(life / nDigit % 10);
+		pos_texU.push_back(energy / nDigit % 10);
 
 		//桁を進める
 		nDigit *= 10;
 	}
 
 	EraseDigit(pos_texU, num_digit);
-	AddDigit(pos_texU, num_digit, life);
+	AddDigit(pos_texU, num_digit, energy);
 
 	for (nCnt = num_digit - 1; nCnt >= 0; nCnt--)
 	{
@@ -119,11 +119,11 @@ void My::CLife_UI::SetLifeNumber(int life)
 //=============================================
 // 桁追加
 //=============================================
-void My::CLife_UI::AddDigit(std::vector<int>& pos_texU, int& num_digit, int life)
+void My::CEnergy_UI::AddDigit(std::vector<int>& pos_texU, int& num_digit, int energy)
 {
 	if (pos_texU[num_digit - 1] == INT_ZERO)
 	{//桁を増やす
-		if (num_digit <= 0 || life <= 0)
+		if (num_digit <= 0 || energy <= 0)
 		{
 			return;
 		}
@@ -140,7 +140,7 @@ void My::CLife_UI::AddDigit(std::vector<int>& pos_texU, int& num_digit, int life
 		int nDigit = 1;
 		for (int nCnt = 0; nCnt < num_digit; nCnt++)
 		{
-			pos_texU.push_back(life / nDigit % 10);
+			pos_texU.push_back(energy / nDigit % 10);
 
 			//桁を進める
 			nDigit *= 10;
@@ -151,11 +151,11 @@ void My::CLife_UI::AddDigit(std::vector<int>& pos_texU, int& num_digit, int life
 //=============================================
 // 桁削除
 //=============================================
-void My::CLife_UI::EraseDigit(std::vector<int> pos_texU, int& num_digit)
+void My::CEnergy_UI::EraseDigit(std::vector<int> pos_texU, int& num_digit)
 {
 	if (pos_texU[num_digit - 1] == INT_ZERO)
 	{//桁を減らす
-		if (num_digit - 1 == 0 )
+		if (num_digit - 1 == 0)
 		{
 			return;
 		}

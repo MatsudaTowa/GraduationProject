@@ -21,6 +21,8 @@ m_Motion(INT_ZERO),												//モーション情報
 m_isLoopFinish(),												//ループが終わったか
 m_motion_data(),												//モーション設定
 m_pShadow(),													//影のポインタ
+m_pLifeUI(nullptr),												//体力UIのポインタ
+m_pEneryUI(nullptr),											//エナジーUIのポインタ
 m_ShadowSize(VEC3_RESET_ZERO)									//影のサイズ
 {//イニシャライザーでプライオリティ設定、各メンバ変数初期化
 }
@@ -87,6 +89,11 @@ void My::CCharacter::Uninit()
 		m_pLifeUI->Uninit();
 		m_pLifeUI = nullptr;
 	}
+	if (m_pEneryUI != nullptr)
+	{
+		m_pEneryUI->Uninit();
+		m_pEneryUI = nullptr;
+	}
 	if (m_pMotionFrameCnt != nullptr)
 	{
 		delete m_pMotionFrameCnt;
@@ -116,7 +123,19 @@ void My::CCharacter::Update()
 		{
 			SetLife(INT_ZERO);
 		}
-		m_pLifeUI->SetNumber(m_status.life);
+		m_pLifeUI->SetLifeNumber(m_status.life);
+	}
+	if (m_pEneryUI != nullptr)
+	{
+		if (m_status.energy > MAX_ENERGY)
+		{
+			SetEnergy(MAX_LIFE);
+		}
+		if (m_status.energy < INT_ZERO)
+		{
+			SetEnergy(INT_ZERO);
+		}
+		m_pEneryUI->SetEnergyNumber(m_status.energy);
 	}
 	if (m_pShadow != nullptr)
 	{
