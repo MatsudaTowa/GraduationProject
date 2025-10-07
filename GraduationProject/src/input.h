@@ -65,7 +65,7 @@ namespace My
 	public:
 		static constexpr int NUM_MOUSE_MAX = 3; //マウスのキー数
 
-		enum ANGLE
+		enum AREA
 		{
 			UP = 0,
 			DOWN,
@@ -115,16 +115,16 @@ namespace My
 			return m_MouseMove;
 		}
 
-		//移動方向取得
-		inline bool GetMouseAngle(ANGLE angle)
+		//エリア取得
+		inline AREA GetArea(void)
 		{
-			return m_isAngle[angle];
+			return m_area;
 		}
 
 		void Debug();
 	private:
-		void UpdateAngle();
 		void DebugAngle();
+		void SetMouseArea();
 
 		DIMOUSESTATE m_KeyStateTrigger; //マウスのトリガー情報
 		DIMOUSESTATE m_KeyStateRelease; //マウスのリリース情報
@@ -132,7 +132,7 @@ namespace My
 		DIMOUSESTATE m_zdiMouseMove; //マウスムーブ
 		D3DXVECTOR3 m_MousePos;
 		D3DXVECTOR3 m_MouseMove;
-		bool m_isAngle[MAX]; //スティックの入力情報
+		AREA m_area; //ウィンドウを四分割してエリアを判断する変数
 #ifdef _DEBUG
 		D3DXVECTOR3 m_faster_move; //最速のスピード(デバッグ用)
 #endif // _DEBUG

@@ -126,6 +126,11 @@ namespace My
 		 */
 		CFade* GetFade();
 
+		HWND GetHwnd()
+		{
+			return m_hWnd;
+		}
+
 		/**
 		 * @brief カメラ生成
 		 * @param [in]カメラのポインタ
@@ -156,6 +161,7 @@ namespace My
 		CModel* m_pModel;
 		CColision* m_pColision;
 		CFade* m_pFade;
+		HWND m_hWnd;
 	};
 }
 

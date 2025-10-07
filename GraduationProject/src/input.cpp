@@ -144,7 +144,7 @@ void My::CInputKeyboard::Update()
 /**
  * @brief コンストラクタ
  */
-My::CInputMouse::CInputMouse()
+My::CInputMouse::CInputMouse():m_area()
 {
 #ifdef _DEBUG
 	m_faster_move = VEC3_RESET_ZERO;
@@ -239,25 +239,7 @@ void My::CInputMouse::Update()
 		m_MouseMove.x = (float)zdiMouseState.lX;
 		m_MouseMove.y = (float)zdiMouseState.lY;
 
-#ifdef _DEBUG
-		float x = m_MouseMove.x;
-		float y = m_MouseMove.y;
-
-		std::abs(x);
-		std::abs(y);
-		if (m_faster_move.x < x)
-		{
-			m_faster_move.x = x;
-		}
-		if (m_faster_move.y < y)
-		{
-			m_faster_move.y = y;
-		}
-#endif // _DEBUG
-
-
-
-		UpdateAngle();
+		SetMouseArea();
 	}
 	else
 	{
@@ -267,70 +249,46 @@ void My::CInputMouse::Update()
 }
 
 /**
- * @brief 方向更新
+ * @brief マウスのエリア設定
  */
-void My::CInputMouse::UpdateAngle()
+void My::CInputMouse::SetMouseArea()
 {
-	float x = m_MouseMove.x;
-	float y = m_MouseMove.y;
+	//マウス座標を取得してクライアント座標に変換
+	POINT mouse;
+	GetCursorPos(&mouse);
+	ScreenToClient(GET_HWND, &mouse);
 
-	// 方向を調べる
-	if (y > 0)
+	//クライアントサイズを取得
+	RECT rc;
+	GetClientRect(GET_HWND, &rc);
+	float width = (float)(rc.right - rc.left);
+	float height = (float)(rc.bottom - rc.top);
+
+	//対角線の傾き
+	float slope = height / width;
+
+	float x = (float)mouse.x;
+	float y = (float)mouse.y;
+
+	float diagonalLeft = slope * x;           // 左上→右下
+	float diagonalRight = -slope * x + height; // 右上→左下
+
+	//エリア判定
+	if (y < diagonalLeft && y < diagonalRight)
 	{
-		//方向入力フラグを初期化
-		for (int i = 0; i < MAX; ++i)
-		{
-			m_isAngle[i] = false;
-		}
-
-		if (x > 0)
-		{ // 右上
-			m_isAngle[RIGHT] = true;
-			m_isAngle[DOWN] = true;
-		}
-		else if (x < 0)
-		{ // 左上
-			m_isAngle[LEFT] = true;
-			m_isAngle[DOWN] = true;
-		}
-		else
-		{ // 上
-			m_isAngle[DOWN] = true;
-		}
+		m_area = UP;
 	}
-	else if (y < 0)
+	else if (y > diagonalLeft && y > diagonalRight)
 	{
-		//方向入力フラグを初期化
-		for (int i = 0; i < MAX; ++i)
-		{
-			m_isAngle[i] = false;
-		}
-		if (x > 0)
-		{ // 右下
-			m_isAngle[RIGHT] = true;
-			m_isAngle[UP] = true;
-		}
-		else if (x < 0)
-		{ // 左下
-			m_isAngle[LEFT] = true;
-			m_isAngle[UP] = true;
-		}
-		else
-		{ // 下
-			m_isAngle[UP] = true;
-
-		}
+		m_area = DOWN;
 	}
-	else
+	else if (y > diagonalLeft && y < diagonalRight) 
 	{
-		if (x > 0)
-		{ // 右
-			m_isAngle[RIGHT] = true;
-		}
-		else if (x < 0)
-		{ // 左
-			m_isAngle[LEFT] = true;
-		}
+		m_area = LEFT;
+	}
+	else if (y < diagonalLeft && y > diagonalRight)
+	{
+		m_area = RIGHT;
 	}
 }
 
@@ -346,6 +304,7 @@ void My::CInputMouse::Debug()
 
 	POINT pMouseMove;
 	GetCursorPos(&pMouseMove);
+	ScreenToClient(GET_HWND, &pMouseMove);
 	sprintf(&aStr[0], "[mouse]\nmove:%.1f,%.1f,%.1f\n最速値:%.1f,%.1f\n\npos:%d,%d"
 		, m_MouseMove.x, m_MouseMove.y, m_MouseMove.z,m_faster_move.x,m_faster_move.y ,pMouseMove.x, pMouseMove.y);
 
@@ -366,14 +325,29 @@ void My::CInputMouse::DebugAngle()
 	RECT rect = { 0,0,SCREEN_WIDTH,SCREEN_HEIGHT };
 	char aStr[256];
 
-	sprintf(&aStr[0], "\n\n\n上:%d 右:%d 左:%d 下:%d"
-		,m_isAngle[UP],m_isAngle[RIGHT],m_isAngle[LEFT],m_isAngle[DOWN]);
+	switch (m_area)
+	{
+	case RIGHT:
+		sprintf(&aStr[0], "\n\n\n右");
+		break;
+	case LEFT:
+		sprintf(&aStr[0], "\n\n\n左");
+		break;
+	case UP:
+		sprintf(&aStr[0], "\n\n\n上");
+		break;
+	case DOWN:
+		sprintf(&aStr[0], "\n\n\n下");
+		break;
+	default:
+		break;
+	}
+
 
 	//テキストの描画
 	pFont->DrawText(NULL, &aStr[0], -1, &rect, DT_RIGHT, D3DCOLOR_RGBA(255, 0, 0, 255));
 #endif // _DEBUG
 }
-
 
 //↓からpad
 
