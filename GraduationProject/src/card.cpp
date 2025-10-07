@@ -38,7 +38,7 @@ HRESULT My::CCard::Init()
 	D3DXVECTOR3 scale = GetScale();
 
 	scale.x *= 1.2f;
-	//scale *= 0.5f;
+	scale *= 0.8f;
 
 	SetScale(scale);
 
@@ -60,7 +60,7 @@ void My::CCard::Update()
 {
 	// ƒJƒƒ‰‚ÌˆÊ’u‚ÆŠp“x‚É‡‚í‚¹‚é
 	CCamera* pCamera = CManager::GetInstance()->GetCamera(CGame::GAME_CAMERA);
-	SetPos({ pCamera->GetPosV().x,pCamera->GetPosV().y - 100.0f,pCamera->GetPosV().z + 30.0f });
+	//SetPos({ pCamera->GetPosV().x,pCamera->GetPosV().y - 100.0f,pCamera->GetPosV().z + 30.0f });
 
 	D3DXVECTOR3 rot = pCamera->GetRot();
 	rot.x += 0.3f;

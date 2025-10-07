@@ -51,11 +51,7 @@ HRESULT My::CGamePlayer::Init()
 	{
 		m_pHand = CHand::Create();
 
-		/*
-		* @brief 開始
-		* TODO : 今だけここにおいている。のちにゲーム開始時に呼び出す
-		*/
-		m_pHand->Start();
+		
 	}
 
 	//親クラスの初期化実行
@@ -110,6 +106,17 @@ void My::CGamePlayer::Update()
 	SetLife(life);
 #endif // _DEBUG
 
+	/*
+		* @brief 開始
+		* TODO : 今だけここにおいている。のちにゲーム開始時に呼び出す
+		*/
+	m_pHand->Start();
+
+	CInputKeyboard* pkeyboad = CManager::GetInstance()->GetKeyboard();
+	if (pkeyboad->GetTrigger(DIK_SPACE))
+	{
+		m_pHand->HandDraw(1);
+	}
 
 	EnergyUp();
 
