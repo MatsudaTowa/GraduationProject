@@ -7,9 +7,7 @@
 #ifndef _CARD_H_
 #define _CARD_H_
 #include "main.h"
-#include "billboard.h"
-
-#endif // !CARD_H_
+#include "objectX.h"
 
 namespace My
 {
@@ -65,4 +63,6 @@ namespace My
 		 */
 
 	};
-}
+};
+
+#endif // !CARD_H_

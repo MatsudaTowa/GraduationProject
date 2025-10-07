@@ -8,14 +8,38 @@
 #define _HAND_H_
 #include "main.h"
 
+
+/** @brief My 名前空間 */
 namespace My
 {
+	// 前方宣言
+	class CCard;
+
+
 	/**
 	* @brief 手札のクラス
 	*/
 	class CHand
 	{
 	public:
+		/**
+		* @brief [ 定数 ]
+		* @param 開始時の手札
+		* @param 手札の上限枚数
+		*/
+		static unsigned const int START_HANDS = 3;
+		static unsigned const int MAX_HANDSCARD = 10;
+
+		/**
+		* @brief コンストラクタ
+		*/
+		CHand();
+
+		/**
+		* @brief デストラクタ
+		*/
+		~CHand();
+
 		/**
 		* @brief 初期化
 		*/
@@ -37,10 +61,28 @@ namespace My
 		*/
 		void HandDraw(int drawnum);
 
-
+		/**
+		* @brief 手札を引く
+		* @param [in]ドロー数
+		*/
+		static CHand* Create();
 
 	private:
+		/*
+		* @brief 
+		* TODO : いったん配列で管理。のちにリスト構造などの構造で管理予定
+		*/ 
+		My::CCard* m_pCard[MAX_HANDSCARD];
 
+		/*
+		* @brief 現在持っているカード枚数
+		*/
+		int m_TotalNum;
+
+		/*
+		* @brief 選択番号(手札を左から見た順番)
+		*/
+		int m_SelectNum;
 	};
 }
 

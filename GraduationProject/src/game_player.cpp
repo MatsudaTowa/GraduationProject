@@ -6,6 +6,7 @@
 //=============================================
 #include "game_player.h"
 #include "game_manager.h"
+#include "hand.h"
 
 //=============================================
 // コンストラクタ
@@ -46,6 +47,17 @@ HRESULT My::CGamePlayer::Init()
 		m_pEnergyUpCount->SetFrame(ENERGY_UP_FRAME);
 	}
 
+	if (m_pHand == nullptr)
+	{
+		m_pHand = CHand::Create();
+
+		/*
+		* @brief 開始
+		* TODO : 今だけここにおいている。のちにゲーム開始時に呼び出す
+		*/
+		m_pHand->Start();
+	}
+
 	//親クラスの初期化実行
 	CPlayer::Init();
 
@@ -64,6 +76,13 @@ void My::CGamePlayer::Uninit()
 		delete m_pEnergyUpCount;
 		m_pEnergyUpCount = nullptr;
 	}
+
+	if (m_pHand != nullptr)
+	{
+		delete m_pHand;
+		m_pHand = nullptr;
+	}
+
 	//親クラスの終了処理
 	CPlayer::Uninit();
 }

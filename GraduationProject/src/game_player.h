@@ -10,6 +10,8 @@
 #include "main.h"
 #include "player.h"
 #include "game_player_state.h"
+#include "hand.h"
+
 
 /** @brief My 名前空間 */
 namespace My
@@ -97,6 +99,7 @@ private:
 		void Debug()override;
 
 		CGamePlayerState* m_pState;						//!プレイヤーのステート
+		CHand* m_pHand;	// 手札
 	};
 }
 #endif
