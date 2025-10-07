@@ -53,5 +53,16 @@ namespace My
 		 * @param [in]位置
 		 */
 		static CCard* Create();
+
+	private:
+		/**
+		 * @brief カードを選択しているか否か(trueだったら選択している)
+		 */
+		bool m_IsChoice;
+
+		/**
+		 * @brief 描画
+		 */
+
 	};
 }

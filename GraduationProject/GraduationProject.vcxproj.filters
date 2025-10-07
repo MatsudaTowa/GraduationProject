@@ -46,9 +46,6 @@
     <Filter Include="scene\game">
       <UniqueIdentifier>{6963246c-f6b9-40f8-98d7-18ddefe4a2bb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="scene\result">
-      <UniqueIdentifier>{3d688359-5b5d-487f-8898-e19929ab1627}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\useful.cpp">
@@ -159,6 +156,9 @@
     <ClCompile Include="src\scene.cpp">
       <Filter>scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\result.cpp">
+      <Filter>scene</Filter>
+    </ClCompile>
     <ClCompile Include="src\game_player_state.cpp">
       <Filter>object\character\player</Filter>
     </ClCompile>
@@ -189,8 +189,11 @@
     <ClCompile Include="src\life_UI.cpp">
       <Filter>object\2D</Filter>
     </ClCompile>
-    <ClCompile Include="src\result.cpp">
-      <Filter>scene\result</Filter>
+    <ClCompile Include="src\card_state.cpp">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hand.cpp">
+      <Filter>object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -305,6 +308,9 @@
     <ClInclude Include="src\title.h">
       <Filter>scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\result.h">
+      <Filter>scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\game_player_state.h">
       <Filter>object\character\player</Filter>
     </ClInclude>
@@ -335,8 +341,11 @@
     <ClInclude Include="src\life_UI.h">
       <Filter>object\2D</Filter>
     </ClInclude>
-    <ClInclude Include="src\result.h">
-      <Filter>scene\result</Filter>
+    <ClInclude Include="src\card_state.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="src\hand.h">
+      <Filter>object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
