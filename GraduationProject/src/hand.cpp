@@ -101,7 +101,7 @@ My::CHand* My::CHand::Create()
 void My::CHand::SetHandCardPos()
 {
 	D3DXVECTOR3 firstpos;	// 一番左側の位置(手札の最初の位置)
-	float posInterbal = 10.0f;	// 手札に表示されている時のカードの間隔
+	float posInterbal = 20.0f - (20 * m_TotalNum * 0.07f);	// 手札に表示されている時のカードの間隔
 	float xpos;	// 一枚目のカードのx座標
 
 	// x座標の設定 = センター - (現在の合計枚数 * カードの間隔の半分)
