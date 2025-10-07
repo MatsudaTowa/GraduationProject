@@ -145,10 +145,6 @@ void My::CGame::Update()
 		//ポーズのカウントアップ
 		m_pPauseCnt->CountUp();
 
-		GET_CAMERA(GET_CAMERA_IDX)->SetCamera();
-		GET_CAMERA(BOARD_GENERATE_CAMERA)->SetCamera();
-		GET_CAMERA(BOARD_GENERATE_CAMERA)->ChangeCameraState(new CBirdView);
-
 #ifdef _DEBUG
 		//インプット取得
 		CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;

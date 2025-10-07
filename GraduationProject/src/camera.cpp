@@ -47,11 +47,6 @@ HRESULT My::CCamera::Init()
 		m_pCameraState = new CBirdView;
 	}
 
-	//自由旋回処理
-	if (m_pCameraState != nullptr)
-	{
-		m_pCameraState->BirdView(this);
-	}
 
 	m_posV = D3DXVECTOR3(VEC3_RESET_ZERO);		//視点
 	m_posR = D3DXVECTOR3(VEC3_RESET_ZERO);		 //注視
@@ -70,7 +65,6 @@ HRESULT My::CCamera::Init()
 	//対角線の角度を算出する
 	m_fAngle = atan2f(vecCamera.y, vecCamera.z);
 
-
 	m_ViewPort.Width = SCREEN_WIDTH;
 	m_ViewPort.Height = SCREEN_HEIGHT;
 
@@ -81,6 +75,18 @@ HRESULT My::CCamera::Init()
 	m_ViewPort.MaxZ = 1.0f;
 
 	GET_DEVICE->SetViewport(&m_ViewPort);
+
+	//自由旋回処理
+	if (m_pCameraState != nullptr)
+	{
+		m_pCameraState->BirdView(this);
+	}
+	//視点位置算出
+	m_posV = m_posR + D3DXVECTOR3(-m_fLength * cosf(m_rot.x) * sinf(m_rot.y),
+		m_fLength * sinf(m_rot.x),
+		-m_fLength * cosf(m_rot.x) * cosf(m_rot.y));
+
+	SetCamera();
 
 	return S_OK;
 }
