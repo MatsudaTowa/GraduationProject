@@ -64,7 +64,7 @@ void My::CCard::Uninit()
 void My::CCard::Update()
 {
 	// ƒJƒƒ‰‚ÌˆÊ’u‚ÆŠp“x‚É‡‚í‚¹‚é
-	CCamera* pCamera = CManager::GetInstance()->GetCamera(CGame::GAME_CAMERA);
+	CCamera* pCamera = CManager::GetInstance()->GetCamera(0);
 	//SetPos({ pCamera->GetPosV().x,pCamera->GetPosV().y - 100.0f,pCamera->GetPosV().z + 30.0f });
 
 	D3DXVECTOR3 rot = pCamera->GetRot();

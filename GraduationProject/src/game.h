@@ -23,14 +23,6 @@ namespace My
 	class CGame :public CScene
 	{
 	public:
-		enum CAMERA_TYPE
-		{
-			GAME_CAMERA = 0,
-			EVENT_CAMERA_000,
-			EVENT_CAMERA_001,
-			BOARD_GENERATE_CAMERA,
-			CAMERA_MAX,
-		};
 		/**
 		 * @brief コンストラクタ
 		 */

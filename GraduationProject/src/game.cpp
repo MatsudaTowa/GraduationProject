@@ -41,28 +41,12 @@ My::CGame::~CGame()
 //=============================================
 HRESULT My::CGame::Init()
 {
-	for (int i = 0; i < CAMERA_MAX; ++i)
-	{
-		CREATE_CAMERA(new CGameCamera);
-		switch (i)
-		{
-		case GAME_CAMERA:
-			GET_CAMERA(i)->ChangeCameraState(new CBirdView);
-			break;
-		case EVENT_CAMERA_000:
-			GET_CAMERA(i)->ChangeCameraState(new CBirdView);
-			break;
-		case EVENT_CAMERA_001:
-			GET_CAMERA(i)->ChangeCameraState(new CBirdView);
-			break;
-		case BOARD_GENERATE_CAMERA:
-			GET_CAMERA(i)->ChangeCameraState(new CBirdView);
-			break;
-		default:
-			break;
-		}
-	}
-	SET_CAMERA_IDX(GAME_CAMERA);
+
+	CREATE_CAMERA(new CGameCamera);
+
+	GET_CAMERA(0)->ChangeCameraState(new CBirdView);
+
+	SET_CAMERA_IDX(0);
 
 	CGameState* current_state = CGameManager::GetInstance()->GetState();
 	if (current_state == nullptr)
@@ -140,8 +124,8 @@ void My::CGame::Update()
 	{
 		//ポーズのカウントアップ
 		m_pPauseCnt->CountUp();
-
-#ifdef _DEBUG
+//
+//#ifdef _DEBUG
 		//インプット取得
 		CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;
 		CInputMouse* pMouse = GET_INPUT_MOUSE;
@@ -150,7 +134,7 @@ void My::CGame::Update()
 		{
 			GET_FADE->SetFade(CScene::MODE::MODE_RESULT);
 		}
-#endif // _DEBUG
+//#endif // _DEBUG
 
 
 		CGameManager::GetInstance()->GameStateExecution(this);
@@ -197,5 +181,4 @@ void My::CGame::StopObject(bool isStop)
 void My::CGame::Draw()
 {
 	GET_CAMERA(GET_CAMERA_IDX)->SetCamera();
-	GET_CAMERA(BOARD_GENERATE_CAMERA)->SetCamera();
 }

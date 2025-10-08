@@ -341,9 +341,6 @@
     <ClInclude Include="src\enemy.h">
       <Filter>object\character</Filter>
     </ClInclude>
-    <ClInclude Include="src\enemy_manager.h">
-      <Filter>object\character</Filter>
-    </ClInclude>
     <ClInclude Include="src\card.h">
       <Filter>object</Filter>
     </ClInclude>
@@ -367,6 +364,9 @@
     </ClInclude>
     <ClInclude Include="src\area.h">
       <Filter>object\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="src\enemy_manager.h">
+      <Filter>object\X</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -41,7 +41,7 @@ void My::CHand::Init()
 
 
 	// ƒJƒƒ‰‚ÌˆÊ’u‚ÆŠp“x‚É‡‚í‚¹‚é
-	CCamera* pCamera = CManager::GetInstance()->GetCamera(CGame::GAME_CAMERA);
+	CCamera* pCamera = CManager::GetInstance()->GetCamera(0);
 	m_CenterPos = { pCamera->GetPosV().x, pCamera->GetPosV().y - 100.0f, pCamera->GetPosV().z + 30.0f };
 }
 
