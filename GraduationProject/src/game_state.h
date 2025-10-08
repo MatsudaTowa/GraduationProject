@@ -47,7 +47,7 @@ namespace My
 	private:
 	};
 
-	/** @brief 状態処理クラス */
+	/** @brief ポーズ状態処理クラス */
 	class CPause :public CGameState
 	{
 	public:

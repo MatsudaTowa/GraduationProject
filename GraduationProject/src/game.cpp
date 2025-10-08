@@ -85,6 +85,26 @@ HRESULT My::CGame::Init()
 	//地面生成
 	CField::Create(VEC3_RESET_ZERO, FIELD_SIZE,new CGameField);
 
+	//エリア生成
+	CreateArea();
+
+	//プレイヤー生成
+	CPlayer::Create(new CGamePlayer);
+
+	CEnemy::Create({ 300.0f,0.0f,00.0f }, { 0.0f,1.75f,0.f });
+	CEnemy::Create({ -300.0f,0.0f,00.0f }, { 0.0f,-1.75f,0.f });
+	CEnemy::Create({ 0.0f,0.0f,250.0f }, { 0.0f,0.0f,0.f });
+
+	CCard::Create();
+
+	return S_OK;
+}
+
+//=============================================
+//エリアの生成
+//=============================================
+void My::CGame::CreateArea()
+{
 	for (int i = 0; i < CInputMouse::AREA::MAX - 1; ++i)
 	{
 		CArea* area = CGameManager::GetInstance()->GetArea(i);
@@ -123,17 +143,6 @@ HRESULT My::CGame::Init()
 
 		CGameManager::GetInstance()->SetArea(area, i);
 	}
-
-	//プレイヤー生成
-	CPlayer::Create(new CGamePlayer);
-
-	CEnemy::Create({ 300.0f,0.0f,00.0f }, { 0.0f,1.75f,0.f });
-	CEnemy::Create({ -300.0f,0.0f,00.0f }, { 0.0f,-1.75f,0.f });
-	CEnemy::Create({ 0.0f,0.0f,250.0f }, { 0.0f,0.0f,0.f });
-
-	CCard::Create();
-
-	return S_OK;
 }
 
 //=============================================

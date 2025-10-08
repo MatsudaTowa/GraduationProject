@@ -99,7 +99,7 @@ void My::CObject::UpdateAll()
 
 			if (pObj->m_isStop)
 			{
-				continue;
+				break;
 			}
 
 			pObj->Update();				//XVˆ—
