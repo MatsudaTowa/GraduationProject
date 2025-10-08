@@ -124,6 +124,8 @@ namespace My
 
 		void Debug();
 	private:
+		static constexpr float CENTER_RADIUS = 15.0f;
+
 		void DebugAngle();
 		void SetMouseArea();
 

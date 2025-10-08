@@ -273,7 +273,7 @@ void My::CInputMouse::SetMouseArea()
 	float diagonalLeft = slope * x;           // ¶ã¨‰E‰º
 	float diagonalRight = -slope * x + height; // ‰Eã¨¶‰º
 
-	if (GET_COLISION->CheckColisionCircle({ x,y,0.0f }, 15.0f, { width * HALF,height * HALF,0.0f }).colision)
+	if (GET_COLISION->CheckColisionCircle({ x,y,0.0f }, CENTER_RADIUS, { width * HALF,height * HALF,0.0f }).colision)
 	{
 		m_area = CENTER;
 		return;
