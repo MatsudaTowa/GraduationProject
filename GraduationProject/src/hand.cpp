@@ -9,7 +9,7 @@
 #include "game.h"
 
 My::CHand::CHand() :
-	m_SelectNum(0),
+	m_SelectNum(-1),
 	m_TotalNum(0),
 	m_IsPassStart(false)
 {
@@ -28,7 +28,8 @@ My::CHand::~CHand()
 //===========================================================================================================
 void My::CHand::Init()
 {
-	m_SelectNum = 0;
+	// メンバ変数初期化
+	m_SelectNum = -1;
 	m_TotalNum = 0;
 	m_IsPassStart = false;
 
@@ -36,6 +37,8 @@ void My::CHand::Init()
 	{
 		m_pCard[i] = nullptr;
 	}
+
+
 	// カメラの位置と角度に合わせる
 	CCamera* pCamera = CManager::GetInstance()->GetCamera(CGame::GAME_CAMERA);
 	m_CenterPos = { pCamera->GetPosV().x, pCamera->GetPosV().y - 100.0f, pCamera->GetPosV().z + 30.0f };
@@ -50,8 +53,29 @@ void My::CHand::Start()
 	if (m_IsPassStart)
 		return;
 
+	// スタート時のカードの枚数分ドローする
 	HandDraw(START_HANDS);
+
+	// スタートを通ったら、この試合ではスタートを通らない
 	m_IsPassStart = true;
+}
+
+//===========================================================================================================
+// 更新処理
+//===========================================================================================================
+void My::CHand::Update()
+{
+	// キーボード取得
+	CInputKeyboard* pkeyboad = CManager::GetInstance()->GetKeyboard();
+
+	// 手札ドロー
+	if (pkeyboad->GetTrigger(DIK_SPACE))
+	{
+		HandDraw(1);
+	}
+
+	// 手札選択
+	Select();
 }
 
 //===========================================================================================================
@@ -59,6 +83,39 @@ void My::CHand::Start()
 //===========================================================================================================
 void My::CHand::Select()
 {
+	// キーボード取得
+	// TODO : マウスDE操作
+	CInputKeyboard* pKeyboad = CManager::GetInstance()->GetKeyboard();
+
+	// キーボードで選択
+	if (pKeyboad->GetTrigger(DIK_RIGHTARROW))
+	{// 右選択
+
+		m_SelectNum++;
+		if (m_SelectNum >= m_TotalNum)
+		{
+			m_SelectNum = 0;
+		}
+	}
+	if (pKeyboad->GetTrigger(DIK_LEFTARROW))
+	{// 左選択
+
+		m_SelectNum--;
+		if (m_SelectNum < 0)
+		{
+			m_SelectNum = m_TotalNum - 1;
+		}
+	}
+
+	for (int i = 0; i < m_TotalNum; i++)
+	{
+		m_pCard[i]->SetScale({ 0.8f*1.2f, 0.8f, 0.8f });
+	}
+
+	if (m_SelectNum <= -1)
+		return;
+
+	m_pCard[m_SelectNum]->SetScale({1.2f,1.0f, 1.0f});	
 }
 
 //===========================================================================================================
@@ -109,16 +166,15 @@ void My::CHand::SetHandCardPos()
 
 	for (int i = 0; i <= m_TotalNum; i++)
 	{
-		// 一枚目のカードの座標
-		firstpos = { xpos,m_CenterPos.y,m_CenterPos.z };
-
 		// カードの座標の設定
 		if (i != 0)
-		{
+		{// 一枚目以外は前の手札の位置を参照して "Interbal" 分横にずらす
 			m_pCard[i]->SetPos({ m_pCard[i - 1]->GetPos().x+posInterbal, m_pCard[i - 1]->GetPos().y, m_pCard[i - 1]->GetPos().z });
 		}
 		else
 		{
+			// 一枚目のカードの座標(基準となる)
+			firstpos = { xpos,m_CenterPos.y,m_CenterPos.z };
 			m_pCard[0]->SetPos(firstpos);
 		}
 		

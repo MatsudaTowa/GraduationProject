@@ -38,7 +38,7 @@ HRESULT My::CCard::Init()
 	D3DXVECTOR3 scale = GetScale();
 
 	scale.x *= 1.2f;
-	scale *= 0.8f;
+	scale *= 0.8f;                                                                                                                                             
 
 	SetScale(scale);
 

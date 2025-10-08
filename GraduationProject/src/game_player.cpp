@@ -112,11 +112,7 @@ void My::CGamePlayer::Update()
 		*/
 	m_pHand->Start();
 
-	CInputKeyboard* pkeyboad = CManager::GetInstance()->GetKeyboard();
-	if (pkeyboad->GetTrigger(DIK_SPACE))
-	{
-		m_pHand->HandDraw(1);
-	}
+	m_pHand->Update();
 
 	EnergyUp();
 

@@ -47,6 +47,11 @@ namespace My
 		void Draw()override;
 
 		/**
+		 * @brief UŒ‚‘Ò‹@ŠÔ
+		 */
+		void StandbyAttack();
+
+		/**
 		 * @brief ¶¬
 		 * @param [in]ˆÊ’u
 		 */
