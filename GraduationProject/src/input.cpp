@@ -273,6 +273,12 @@ void My::CInputMouse::SetMouseArea()
 	float diagonalLeft = slope * x;           // 左上→右下
 	float diagonalRight = -slope * x + height; // 右上→左下
 
+	if (GET_COLISION->CheckColisionCircle({ x,y,0.0f }, 15.0f, { width * HALF,height * HALF,0.0f }).colision)
+	{
+		m_area = CENTER;
+		return;
+	}
+
 	//エリア判定
 	if (y < diagonalLeft && y < diagonalRight)
 	{
@@ -338,6 +344,9 @@ void My::CInputMouse::DebugAngle()
 		break;
 	case DOWN:
 		sprintf(&aStr[0], "\n\n\n下");
+		break;
+	case CENTER:
+		sprintf(&aStr[0], "\n\n\n中心");
 		break;
 	default:
 		break;
