@@ -65,6 +65,7 @@ void My::CObjectX::Uninit()
 	{
 		if (m_pTexture[nCnt] != nullptr)
 		{
+			m_pTexture[nCnt]->Release();
 			m_pTexture[nCnt] = nullptr;
 		}
 	}

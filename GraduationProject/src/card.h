@@ -11,6 +11,8 @@
 
 namespace My
 {
+	class CCardState;
+
 	class CCard :public CObjectX
 	{
 	public:
@@ -57,6 +59,11 @@ namespace My
 		 */
 		static CCard* Create();
 
+		/**
+		* @brief 状態を変更する
+		*/
+		void ChangeState(CCardState*state);
+
 	private:
 		/**
 		 * @brief カードを選択しているか否か(trueだったら選択している)
@@ -64,9 +71,9 @@ namespace My
 		bool m_IsChoice;
 
 		/**
-		 * @brief 描画
+		 * @brief カードの状態
 		 */
-
+		CCardState* m_pState;
 	};
 };
 

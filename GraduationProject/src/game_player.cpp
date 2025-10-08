@@ -13,7 +13,8 @@
 //=============================================
 My::CGamePlayer::CGamePlayer(int nPriority):CPlayer(nPriority),
 m_pEnergyUpCount(nullptr),										//エナジー計測カウント
-m_pState(nullptr)												//ステート初期化
+m_pState(nullptr),												//ステート初期化
+m_pHand(nullptr)												// 手札初期化
 {
 }
 
@@ -110,10 +111,14 @@ void My::CGamePlayer::Update()
 		* @brief 開始
 		* TODO : 今だけここにおいている。のちにゲーム開始時に呼び出す
 		*/
-	m_pHand->Start();
 
-	m_pHand->Update();
+	if (m_pHand != nullptr)
+	{
+		m_pHand->Start();
 
+		m_pHand->Update();
+	}
+	
 	EnergyUp();
 
 	//親クラスの更新

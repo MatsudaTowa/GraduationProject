@@ -6,11 +6,14 @@
 //===========================================================================================================================================================
 #include "card.h"
 #include "game.h"
+#include "card_state.h"
 
 //===========================================================================================================
 // コンストラクタ
 //===========================================================================================================
-My::CCard::CCard(int nPriority):CObjectX(nPriority)
+My::CCard::CCard(int nPriority):CObjectX(nPriority),
+	m_pState(nullptr),
+	m_IsChoice(false)
 {
 }
 
@@ -42,6 +45,8 @@ HRESULT My::CCard::Init()
 
 	SetScale(scale);
 
+	m_pState = new CCardStateNeutral();
+
 	return S_OK;
 }
 
@@ -65,6 +70,8 @@ void My::CCard::Update()
 	D3DXVECTOR3 rot = pCamera->GetRot();
 	rot.x += 0.3f;
 
+	m_pState->Update(this);
+
 	SetRot(rot);
 }
 
@@ -85,6 +92,23 @@ My::CCard* My::CCard::Create()
 	pCard->Init();
 
 	return pCard;
+}
+
+//===========================================================================================================
+// ステートを変更する
+//===========================================================================================================
+void My::CCard::ChangeState(CCardState* state)
+{
+	if (m_pState != nullptr)
+	{
+		//m_pState->Uninit();
+		delete m_pState;
+		//m_pState = nullptr;
+		m_pState = state;
+	}
+	
+	
+	//m_pState->Copy(this);
 }
 
 

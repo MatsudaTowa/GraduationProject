@@ -6,6 +6,7 @@
 //===========================================================================================================================================================
 #include "hand.h"
 #include "card.h"
+#include "card_state.h"
 #include "game.h"
 
 My::CHand::CHand() :
@@ -76,6 +77,8 @@ void My::CHand::Update()
 
 	// ŽèŽD‘I‘ð
 	Select();
+
+	
 }
 
 //===========================================================================================================
@@ -107,15 +110,21 @@ void My::CHand::Select()
 		}
 	}
 
-	for (int i = 0; i < m_TotalNum; i++)
-	{
-		m_pCard[i]->SetScale({ 0.8f*1.2f, 0.8f, 0.8f });
-	}
+	//for (int i = 0; i < m_TotalNum; i++)
+	//{
+	//	//m_pCard[i]->SetScale({ 0.8f*1.2f, 0.8f, 0.8f });
 
-	if (m_SelectNum <= -1)
-		return;
+	//	if (m_pCard[i] != nullptr)
+	//		m_pCard[i]->ChangeState(new CCardStateNeutral);
+	//}
 
-	m_pCard[m_SelectNum]->SetScale({1.2f,1.0f, 1.0f});	
+	//if (m_SelectNum <= -1)
+	//	return;
+
+	////m_pCard[m_SelectNum]->SetScale({1.2f,1.0f, 1.0f});	
+
+	//if (m_pCard[m_SelectNum] != nullptr)
+	//	m_pCard[m_SelectNum]->ChangeState(new CCardStatePickup);	
 }
 
 //===========================================================================================================
