@@ -50,7 +50,7 @@ HRESULT My::CGamePlayer::Init()
 
 	if (m_pHand == nullptr)
 	{
-		m_pHand = CHand::Create();
+		//m_pHand = CHand::Create();
 
 		
 	}
@@ -79,7 +79,11 @@ void My::CGamePlayer::Uninit()
 		delete m_pHand;
 		m_pHand = nullptr;
 	}
-
+	if (m_pState != nullptr)
+	{
+		delete m_pState;
+		m_pState = nullptr;
+	}
 	//親クラスの終了処理
 	CPlayer::Uninit();
 }
