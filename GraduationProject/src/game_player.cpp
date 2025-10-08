@@ -149,6 +149,10 @@ void My::CGamePlayer::ChangeState(CGamePlayerState* state)
 		delete m_pState;
 		m_pState = state;
 	}
+	else if (m_pState == nullptr)
+	{
+		delete state;
+	}
 }
 
 //=============================================

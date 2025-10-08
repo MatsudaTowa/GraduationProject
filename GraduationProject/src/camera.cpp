@@ -102,6 +102,7 @@ void My::CCamera::Uninit()
 		delete m_pCameraState;
 		m_pCameraState = nullptr;
 	}
+
 }
 
 /**
@@ -306,6 +307,10 @@ void My::CCamera::ChangeCameraState(CCameraState* state)
 	{
 		delete m_pCameraState;
 		m_pCameraState = state;
+	}
+	if (m_pCameraState == nullptr)
+	{
+		delete state;
 	}
 }
 
