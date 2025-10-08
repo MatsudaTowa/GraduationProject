@@ -119,8 +119,19 @@ namespace My
 
 			m_pState->Normal(game);
 			m_pState->Pause(game);
+			m_pState->CardCast(game);
 		}
-	
+
+		/**
+		 * @brief エリアを生成
+		 */
+		void CreateArea();
+
+		/**
+		 * @brief エリアの選択
+		 */
+		void SelectArea();
+
 		/**
 		 * @brief 終了設定
 		 * @param [in]終了させるか

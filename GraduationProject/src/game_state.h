@@ -32,6 +32,12 @@ namespace My
 		* @param [in]ゲームポインタ
 		*/
 		virtual void Pause([[maybe_unused]] CGame* game) {};
+
+		/**
+		* @brief ポーズ状態処理(親では何もしない)
+		* @param [in]ゲームポインタ
+		*/
+		virtual void CardCast([[maybe_unused]] CGame* game) {};
 	};
 
 	/** @brief 通常クラス */
@@ -59,6 +65,26 @@ namespace My
 		void Pause(CGame* game) override;
 	private:
 		static constexpr float THRESHOLD = 10.0f; // 距離が定数以下なら到達とする（必要に応じて調整）
+	};
+
+	/** @brief カードキャスト処理クラス */
+	class CCardCast :public CGameState
+	{
+	public:
+		/**
+		 * @brief コンストラクタ
+		 */
+		CCardCast();
+		/**
+		 * @brief デストラクタ
+		 */
+		~CCardCast()override;
+		/**
+		* @brief カード状態処理
+		* @param [in]ゲームポインタ
+		*/
+		void CardCast(CGame* game) override;
+	private:
 	};
 }
 #endif // !_GAME_PLAYER_STATE_H_

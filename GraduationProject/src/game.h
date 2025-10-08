@@ -58,16 +58,6 @@ namespace My
 		void Update() override;
 
 		/**
-		 * @brief エリアを生成
-		 */
-		void CreateArea();
-
-		/**
-		 * @brief エリアの選択
-		 */
-		void SelectArea();
-
-		/**
 		 * @brief オブジェクトの更新を行うか決定
 		 * @param [in]止めるかどうか
 		 */
