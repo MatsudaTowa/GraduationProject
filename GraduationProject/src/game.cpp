@@ -229,7 +229,7 @@ void My::CGame::SelectArea()
 	for (int i = 0; i < CInputMouse::AREA::MAX - 1; ++i)
 	{
 		CGameManager::GetInstance()->GetArea(i)->SetSelect(false);
-		if (area != CInputMouse::CENTER) { continue; }
+		if (area == CInputMouse::CENTER) { continue; }
 
 		//‘I‘ð‚³‚ê‚Ä‚¢‚é‚Æ‚±‚ë‚Í–¾‚é‚­
 		CGameManager::GetInstance()->GetArea(area)->SetSelect(true);
