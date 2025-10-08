@@ -93,14 +93,8 @@ HRESULT My::CGame::Init()
 		//三角形の頂点座標を指定
 		D3DXVECTOR2 triangle_vtx[CObject2D_Triangle::NUM_VERTEX];
 
-		//クライアントサイズを取得
-		RECT rc;
-		GetClientRect(GET_HWND, &rc);
-		float width = (float)(rc.right - rc.left);
-		float height = (float)(rc.bottom - rc.top);
-
 		//ウィンドウの中心にを必ず頂点に
-		D3DXVECTOR2 center = { width * HALF,height * HALF };
+		D3DXVECTOR2 center = { SCREEN_WIDTH * HALF,SCREEN_HEIGHT * HALF };
 		triangle_vtx[1] = center;
 
 		//それぞれの頂点位置を指定

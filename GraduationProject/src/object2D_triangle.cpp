@@ -49,7 +49,7 @@ void My::CObject2D_Triangle::Draw()
     pDevice->SetStreamSource(0, vtxBuff, 0, sizeof(VERTEX_2D));
     pDevice->SetFVF(FVF_VERTEX_2D);
 
-    pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 1);
+    pDevice->DrawPrimitive(D3DPT_TRIANGLELIST, 0, 1);
 
     SetVtxBuff(vtxBuff);
 }
