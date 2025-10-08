@@ -46,7 +46,12 @@ void My::CGameManager::Uninit()
 		delete m_pState;
 		m_pState = nullptr;
 	}
-
+	for (int i = 0; i < CInputMouse::AREA::MAX - 1; ++i)
+	{
+		if (m_pArea[i] == nullptr) { continue; }
+		m_pArea[i]->Uninit();
+		m_pArea[i] = nullptr;
+	}
 	if (m_pPlayer != nullptr)
 	{
 		m_pPlayer->Uninit();

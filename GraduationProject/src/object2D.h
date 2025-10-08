@@ -62,7 +62,7 @@ namespace My
 		}
 
 		//頂点座標の代入
-		void SetVtx();
+		virtual void SetVtx();
 
 		//頂点座標(拡縮、回転)の代入
 		void SetVtx(float fAngle, float fLength);

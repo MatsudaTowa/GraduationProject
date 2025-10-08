@@ -13,6 +13,7 @@
 #include "game_state.h"
 #include "field.h"
 #include "enemy_manager.h"
+#include "area.h"
 
 /** @brief My 名前空間 */
 namespace My
@@ -63,6 +64,20 @@ namespace My
 		 * @return プレイヤーのポインタ
 		 */		
 		CGamePlayer* GetPlayer() { return m_pPlayer; }
+
+		/**
+		 * @brief エリアの設定
+		 * @param [in]エリアのポインタ
+		 * @param [in]どこのエリアか
+		 */
+		void SetArea(CArea* area,int idx) { m_pArea[idx] = area; }
+
+		/**
+		 * @brief エリアの取得
+		 * @param [in]エリア番号
+		 * @return エリアのポインタ
+		 */
+		CArea* GetArea(int idx) { return m_pArea[idx]; }
 
 		/**
 		 * @brief 床の設定
@@ -125,6 +140,7 @@ namespace My
 		}
 	private:
 		CEnemyManager* m_pEnemyManager;
+		CArea* m_pArea[CInputMouse::AREA::MAX - 1]; //真ん中のエリア以外に三角形を生成
 		CGameState* m_pState;				//!<ゲームのステート状態
 		CGamePlayer* m_pPlayer;				//!<プレイヤー
 		CField* m_pField;					//!<床

@@ -85,6 +85,51 @@ HRESULT My::CGame::Init()
 	//地面生成
 	CField::Create(VEC3_RESET_ZERO, FIELD_SIZE,new CGameField);
 
+	for (int i = 0; i < CInputMouse::AREA::MAX - 1; ++i)
+	{
+		CArea* area = CGameManager::GetInstance()->GetArea(i);
+		if (area != nullptr) { continue; }
+
+		//三角形の頂点座標を指定
+		D3DXVECTOR2 triangle_vtx[CObject2D_Triangle::NUM_VERTEX];
+
+		//クライアントサイズを取得
+		RECT rc;
+		GetClientRect(GET_HWND, &rc);
+		float width = (float)(rc.right - rc.left);
+		float height = (float)(rc.bottom - rc.top);
+
+		//ウィンドウの中心にを必ず頂点に
+		D3DXVECTOR2 center = { width * HALF,height * HALF };
+		triangle_vtx[1] = center;
+
+		//それぞれの頂点位置を指定
+		switch (i)
+		{
+		case CInputMouse::AREA::UP:
+			triangle_vtx[0] = { SCREEN_WIDTH,FLOAT_ZERO };
+			triangle_vtx[2] = { VEC2_RESET_ZERO };
+			break;
+		case CInputMouse::AREA::DOWN:
+			triangle_vtx[0] = { FLOAT_ZERO,SCREEN_HEIGHT };
+			triangle_vtx[2] = { SCREEN_WIDTH,SCREEN_HEIGHT };
+			break;
+		case CInputMouse::AREA::LEFT:
+			triangle_vtx[0] = { FLOAT_ZERO,FLOAT_ZERO };
+			triangle_vtx[2] = { FLOAT_ZERO,SCREEN_HEIGHT };
+			break;
+		case CInputMouse::AREA::RIGHT:
+			triangle_vtx[0] = { SCREEN_WIDTH,SCREEN_HEIGHT };
+			triangle_vtx[2] = { SCREEN_WIDTH,FLOAT_ZERO };
+			break;
+		default:
+			break;
+		}
+		area = CArea::Create(triangle_vtx);
+
+		CGameManager::GetInstance()->SetArea(area, i);
+	}
+
 	//プレイヤー生成
 	CPlayer::Create(new CGamePlayer);
 
@@ -130,6 +175,7 @@ void My::CGame::Uninit()
 	CGameManager::GetInstance()->SetPlayer(nullptr);
 	CGameManager::GetInstance()->GetField()->Uninit();
 	CGameManager::GetInstance()->SetField(nullptr);
+	CGameManager::GetInstance()->Uninit();
 
 	CObject::ReleaseAll();
 	CGameManager::GetInstance()->Uninit();
@@ -142,6 +188,9 @@ void My::CGame::Update()
 {
 	if (!CGameManager::GetInstance()->GetFinish())
 	{
+		//TODO:ゲームステートでカードを持っているときにこの関数を実行
+		SelectArea();
+
 		//ポーズのカウントアップ
 		m_pPauseCnt->CountUp();
 
@@ -170,6 +219,22 @@ void My::CGame::Update()
 	GET_FADE->SetFade(CScene::MODE::MODE_RESULT);
 }
 
+//=============================================
+//エリアの選択
+//=============================================
+void My::CGame::SelectArea()
+{
+	CInputMouse::AREA area = GET_INPUT_MOUSE->GetArea();
+
+	for (int i = 0; i < CInputMouse::AREA::MAX - 1; ++i)
+	{
+		CGameManager::GetInstance()->GetArea(i)->SetSelect(false);
+		if (area != CInputMouse::CENTER) { continue; }
+
+		//選択されているところは明るく
+		CGameManager::GetInstance()->GetArea(area)->SetSelect(true);
+	}
+}
 
 //=============================================
 //オブジェクトの更新を行うか決定
