@@ -7,10 +7,13 @@
 #include "title_screen.h"
 #include "manager.h"
 #include "object.h"
-
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
 namespace
 {
-	const std::string TEX_NAME = "data\\TEXTURE\\002.png";
+	const std::string TEX_NAME = "data\\TEXTURE\\card_test.png";
 	const D3DXVECTOR2 SCREEN_SIZE = {512.0f,256.0f };
 }
 

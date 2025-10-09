@@ -32,13 +32,6 @@ m_ShadowSize(VEC3_RESET_ZERO)									//âeÇÃÉTÉCÉY
 //=============================================
 My::CCharacter::~CCharacter()
 {
-	for (int i = INT_ZERO; i < MAX_PARTS; i++)
-	{
-		if (m_apModel[i] != nullptr)
-		{
-			m_apModel[i]->Unload();
-		}
-	}
 }
 
 //=============================================
@@ -103,6 +96,13 @@ void My::CCharacter::Uninit()
 	{
 		m_pShadow->Uninit();
 		m_pShadow = nullptr;
+	}
+	for (int i = INT_ZERO; i < MAX_PARTS; i++)
+	{
+		if (m_apModel[i] != nullptr)
+		{
+			m_apModel[i]->Unload();
+		}
 	}
 
 	CObjectX::Uninit();
@@ -227,6 +227,7 @@ void My::CCharacter::Load_Parts(const char* FileName)
 
 	for (int nCnt = 0; nCnt < m_motion_data.parts; ++nCnt)
 	{
+		if (m_apModel[nCnt] != nullptr) { continue; }
 		m_apModel[nCnt] = CModel_Parts::Create(VEC3_RESET_ZERO, VEC3_RESET_ZERO, &m_motion_data.path[nCnt][0]);
 		m_apModel[nCnt]->SetIdx(m_motion_data.idx[nCnt]);
 		m_apModel[nCnt]->SetIdxParent(m_motion_data.parent[nCnt]);

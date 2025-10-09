@@ -16,6 +16,11 @@
 #pragma	comment(lib,"winmm.lib")
 #pragma comment(lib,"dinput8.lib")
 #pragma comment(lib,"xinput.lib")
+// leak_test.cpp
+#ifdef _DEBUG
+#include <stdlib.h>
+#include <crtdbg.h>
+#endif
 
 //’¸“_î•ñ(2D)‚Ì\‘¢‘Ì‚ğ’è‹`
 struct VERTEX_2D

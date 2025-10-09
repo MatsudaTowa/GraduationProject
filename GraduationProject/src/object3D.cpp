@@ -45,11 +45,6 @@ HRESULT My::CObject3D::Init()
  */
 void My::CObject3D::Uninit()
 {
-	if (m_pTexture != nullptr)
-	{
-		m_pTexture = nullptr;
-	}
-
 	//頂点バッファの破棄
 	if (m_pVtxBuff != nullptr)
 	{

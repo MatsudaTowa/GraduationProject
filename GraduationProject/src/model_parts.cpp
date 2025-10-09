@@ -10,7 +10,7 @@
 //=============================================
 //コンストラクタ
 //=============================================
-My::CModel_Parts::CModel_Parts():m_oldpos()
+My::CModel_Parts::CModel_Parts():m_oldpos(),m_ModelInfo()
 {
 }
 
@@ -26,6 +26,14 @@ My::CModel_Parts::~CModel_Parts()
 //=============================================
 void My::CModel_Parts::Unload()
 {
+	for (int nCntMat = 0; nCntMat < (int)m_ModelInfo->s_dwNumMat; nCntMat++)
+	{
+		if (m_pTexture[nCntMat] != nullptr)
+		{
+			m_pTexture[nCntMat]->Release();
+			m_pTexture[nCntMat] = nullptr;
+		}
+	}
 	for (int nCnt = 0; nCnt < MAX_MODEL; nCnt++)
 	{
 		if (m_ModelInfo[nCnt].s_pBuffMat != nullptr)
@@ -52,6 +60,7 @@ void My::CModel_Parts::Unload()
 	}
 	
 	m_nNumAll = 0;
+	delete this;
 }
 
 //=============================================

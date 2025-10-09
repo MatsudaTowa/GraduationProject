@@ -42,9 +42,6 @@ HRESULT My::CResult::Init()
     //地面生成
     CField::Create(VEC3_RESET_ZERO, FIELD_SIZE, new CField);
 
-    //プレイヤー生成
-    CPlayer::Create(new CResultPlayer);
-
     CResult_Screen::Create(D3DXVECTOR3(SCREEN_WIDTH * HALF, SCREEN_HEIGHT * HALF, 0.0f));
 
    //CResult_Ui::Create(D3DXVECTOR3(SCREEN_WIDTH * HALF, SCREEN_HEIGHT * HALF + 250.0f, 0.0f));

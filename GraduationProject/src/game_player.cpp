@@ -35,11 +35,11 @@ HRESULT My::CGamePlayer::Init()
 		m_pState = new CNeutralState;
 	}
 
-	if (GetLifeUI() == nullptr)
-	{
-		CLife_UI* pLifeUI = CLife_UI::Create({600.0f,600.0f,0.0f});
-		SetLifeUI(pLifeUI);
-	}
+	//if (GetLifeUI() == nullptr)
+	//{
+	//	CLife_UI* pLifeUI = CLife_UI::Create({600.0f,600.0f,0.0f});
+	//	SetLifeUI(pLifeUI);
+	//}
 
 	if (m_pEnergyUpCount == nullptr)
 	{

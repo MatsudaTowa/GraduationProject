@@ -33,6 +33,8 @@ RECT g_windowRect;// ウィンドウを切り替えるための変数
 //=============================================
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hInstancePrev, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
+	//_CrtSetBreakAlloc(209); // 必ずプログラムの最初に実行する
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	DWORD dwCurrentTime; //現在時刻
 	DWORD dwExecLastTime; //最後に処理したときの時刻
 	DWORD dwFrameCnt; //フレームカウント
@@ -134,6 +136,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hInstancePrev, _
 	//_CrtDumpMemoryLeaks(); // この一行を追加する
 	//ウィンドウクラスの登録を解除
 	UnregisterClass(CLASS_NAME, wcex.hInstance);
+	_CrtDumpMemoryLeaks();
 	return(int)msg.wParam;
 }
 

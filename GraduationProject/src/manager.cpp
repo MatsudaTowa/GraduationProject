@@ -160,6 +160,12 @@ void My::CManager::Uninit()
 		m_pScene = nullptr;
 	}
 
+	if (m_pColision != nullptr)
+	{
+		delete m_pColision;
+		m_pColision = nullptr;
+	}
+
 	ClearCamera();
 
 	//キーボードの終了処理

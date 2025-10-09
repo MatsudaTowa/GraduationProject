@@ -39,9 +39,6 @@ HRESULT My::CTitle::Init()
     //地面生成
     CField::Create(VEC3_RESET_ZERO, FIELD_SIZE,new CField);
 
-	//プレイヤー生成
-	CPlayer::Create(new CPlayer);
-
     CTitle_Screen::Create({ SCREEN_WIDTH * 0.5f,250.0f,0.0f });
 
     return S_OK;

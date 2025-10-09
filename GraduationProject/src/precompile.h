@@ -31,6 +31,7 @@
 #include "Xinput.h"
 #include "useful.h"
 
+
 //マクロ定義
 #define SCREEN_WIDTH	(1280) //ウィンドウの幅
 #define SCREEN_HEIGHT	(720) //ウィンドウの高さ
