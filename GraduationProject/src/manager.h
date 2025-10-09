@@ -140,6 +140,7 @@ namespace My
 			CCamera* pCamera = camera;
 			if (pCamera == nullptr)
 			{
+				delete camera;
 				return;
 			}
 			pCamera->Init();

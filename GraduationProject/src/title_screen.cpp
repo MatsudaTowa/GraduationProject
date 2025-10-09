@@ -7,10 +7,6 @@
 #include "title_screen.h"
 #include "manager.h"
 #include "object.h"
-#define _CRTDBG_MAP_ALLOC
-#include <stdlib.h>
-#include <crtdbg.h>
-#define new new(_NORMAL_BLOCK, __FILE__, __LINE__)
 namespace
 {
 	const std::string TEX_NAME = "data\\TEXTURE\\card_test.png";
@@ -90,7 +86,7 @@ void My::CTitle_Screen::Draw()
 My::CTitle_Screen* My::CTitle_Screen::Create(D3DXVECTOR3 pos)
 {
 	CTexture* pTexture = GET_TEXTURE;
-	CTitle_Screen* pTitle_Screen = new CTitle_Screen;
+	CTitle_Screen* pTitle_Screen = NEW CTitle_Screen;
 
 	//null‚È‚çnull‚ð•Ô‚·
 	if (pTitle_Screen == nullptr) {return nullptr;}

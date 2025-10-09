@@ -44,7 +44,7 @@ HRESULT My::CCamera::Init()
 {
 	if (m_pCameraState == nullptr)
 	{
-		m_pCameraState = new CBirdView;
+		m_pCameraState = NEW CBirdView;
 	}
 
 
