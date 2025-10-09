@@ -49,12 +49,12 @@ HRESULT My::CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	//生成＆初期化
 	if (m_pRenderer == nullptr)
 	{
-		m_pRenderer = NEW CRenderer();
+		m_pRenderer = new CRenderer();
 		m_pRenderer->Init(hWnd,bWindow);
 	}
 	if (m_pKeyboard == nullptr)
 	{
-		m_pKeyboard = NEW CInputKeyboard();
+		m_pKeyboard = new CInputKeyboard();
 
 		//キーボードの初期化処理
 		if (FAILED(m_pKeyboard->Init(hInstance, hWnd)))
@@ -64,7 +64,7 @@ HRESULT My::CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	}
 	if (m_pMouse == nullptr)
 	{
-		m_pMouse = NEW CInputMouse();
+		m_pMouse = new CInputMouse();
 
 		//マウスの初期化処理
 		if (FAILED(m_pMouse->Init(hInstance, hWnd)))
@@ -74,7 +74,7 @@ HRESULT My::CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	}
 	if (m_pPad == nullptr)
 	{
-		m_pPad = NEW CInputPad();
+		m_pPad = new CInputPad();
 
 		//マウスの初期化処理
 		if (FAILED(m_pPad->Init(hInstance, hWnd)))
@@ -86,7 +86,7 @@ HRESULT My::CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	//シーン生成
 	if (m_pScene == nullptr)
 	{
-		m_pScene = NEW CScene();
+		m_pScene = new CScene();
 		m_pScene->Init();
 
 	}
@@ -94,26 +94,26 @@ HRESULT My::CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	//ライト生成
 	if (m_pLight == nullptr)
 	{
-		m_pLight = NEW CLight();
+		m_pLight = new CLight();
 		m_pLight->Init();
 	}
 
 	//テクスチャ生成
 	if (m_pTexture == nullptr)
 	{
-		m_pTexture = NEW CTexture();
+		m_pTexture = new CTexture();
 	}
 
 	//モデル生成
 	if (m_pModel == nullptr)
 	{
-		m_pModel = NEW CModel();
+		m_pModel = new CModel();
 	}
 
 	//当たり判定生成
 	if (m_pColision == nullptr)
 	{
-		m_pColision = NEW CColision();
+		m_pColision = new CColision();
 	}
 
 	//最初のシーン設定
