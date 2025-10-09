@@ -36,7 +36,6 @@ void My::CTexture::Unload()
 	{
 		if (m_apTexture[nCnt] != nullptr)
 		{
-
 			m_apTexture[nCnt]->Release();
 			m_apTexture[nCnt] = nullptr;
 			m_texName[nCnt] = nullptr;
