@@ -23,7 +23,10 @@
 #include <cmath>
 
 //#define new ::new(_NORMAL_BLOCK, __FILE__, __LINE__)
-
+# include <memory.h>
+#ifdef _DEBUG
+#define NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#endif
 #define DIRECTINPUT_VERSION (0x0800) //警告対処用
 #include "dinput.h" //入力処理に必要
 #include "d3dx9.h" //描画処理に必要

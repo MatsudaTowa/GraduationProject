@@ -410,6 +410,7 @@ void My::CInputPad::Uninit()
 {
 	//XInputのステートを設定(無効にする)
 	XInputEnable(false);
+	CInput::Uninit();
 }
 
 /**

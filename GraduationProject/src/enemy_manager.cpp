@@ -8,7 +8,6 @@
 //ヘッダーのインクルード
 #include "enemy_manager.h"
 #include "manager.h"
-
 //============================
 //コンストラクタ
 //============================
@@ -23,7 +22,6 @@ My::CEnemyManager::CEnemyManager() :
 //============================
 My::CEnemyManager::~CEnemyManager()
 {
-
 }
 
 //============================
