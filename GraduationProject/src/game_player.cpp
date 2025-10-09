@@ -49,10 +49,8 @@ HRESULT My::CGamePlayer::Init()
 	}
 
 	if (m_pHand == nullptr)
-	{
-		//m_pHand = CHand::Create();
-
-		
+	{// 手札生成
+		m_pHand = CHand::Create();
 	}
 
 	//親クラスの初期化実行
