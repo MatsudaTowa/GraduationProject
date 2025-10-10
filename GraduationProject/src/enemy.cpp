@@ -44,17 +44,17 @@ HRESULT My::CEnemy::Init()
 
 	D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), GetPos()); //スクリーン座標に変換
 
-	//if (GetLifeUI() == nullptr)
-	//{
-	//	CLife_UI* pLifeUI = CLife_UI::Create(screen_pos);
-	//	SetLifeUI(pLifeUI);
-	//}
+	if (GetLifeUI() == nullptr)
+	{
+		CLife_UI* pLifeUI = CLife_UI::Create(screen_pos);
+		SetLifeUI(pLifeUI);
+	}
 
-	//if (GetEnergyUI() == nullptr)
-	//{
-	//	CEnergy_UI* pEnergyUI = CEnergy_UI::Create({screen_pos.x + 100.0f,screen_pos.y,screen_pos.z});
-	//	SetEnergyUI(pEnergyUI);
-	//}
+	if (GetEnergyUI() == nullptr)
+	{
+		CEnergy_UI* pEnergyUI = CEnergy_UI::Create({screen_pos.x + 100.0f,screen_pos.y,screen_pos.z});
+		SetEnergyUI(pEnergyUI);
+	}
 
 	return S_OK;
 }

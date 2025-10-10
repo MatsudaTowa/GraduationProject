@@ -211,11 +211,6 @@ void My::CManager::Update()
 	m_pMouse->Update();
 	m_pPad->Update();
 
-	if (m_pFade != nullptr)
-	{
-		m_pFade->Update();
-	}
-
 	//シーンの更新
 	if (m_pScene != nullptr)
 	{
