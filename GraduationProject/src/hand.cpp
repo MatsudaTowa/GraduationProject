@@ -39,7 +39,6 @@ void My::CHand::Init()
 		m_pCard[i] = nullptr;
 	}
 
-
 	// カメラの位置と角度に合わせる
 	CCamera* pCamera = CManager::GetInstance()->GetCamera(0);
 	m_CenterPos = { pCamera->GetPosV().x, pCamera->GetPosV().y - 100.0f, pCamera->GetPosV().z + 30.0f };
@@ -77,8 +76,6 @@ void My::CHand::Update()
 
 	// 手札選択
 	Select();
-
-	
 }
 
 //===========================================================================================================
@@ -110,21 +107,23 @@ void My::CHand::Select()
 		}
 	}
 
-	//for (int i = 0; i < m_TotalNum; i++)
-	//{
-	//	//m_pCard[i]->SetScale({ 0.8f*1.2f, 0.8f, 0.8f });
+	// すべてのカードを選ばれていない状態にする
+	for (int i = 0; i < m_TotalNum; i++)
+	{// 今持っている枚数分
+		if (m_pCard[i] != nullptr)
+		{
+			m_pCard[i]->ChangeState(new CCardStateNeutral);
+		}
+	}
 
-	//	if (m_pCard[i] != nullptr)
-	//		m_pCard[i]->ChangeState(new CCardStateNeutral);
-	//}
+	if (m_SelectNum <= -1)
+		return;
 
-	//if (m_SelectNum <= -1)
-	//	return;
-
-	////m_pCard[m_SelectNum]->SetScale({1.2f,1.0f, 1.0f});	
-
-	//if (m_pCard[m_SelectNum] != nullptr)
-	//	m_pCard[m_SelectNum]->ChangeState(new CCardStatePickup);	
+	// 選択中のカードのステートを変える
+	if (m_pCard[m_SelectNum] != nullptr)
+	{
+		m_pCard[m_SelectNum]->ChangeState(new CCardStatePickup);
+	}		
 }
 
 //===========================================================================================================
