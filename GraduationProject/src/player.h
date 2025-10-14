@@ -8,7 +8,7 @@
 
 #define _PLAYER_H_
 #include "main.h"
-#include "character.h"
+#include "active_scene_character.h"
 
 /** @brief My 名前空間 */
 namespace My
@@ -17,7 +17,7 @@ namespace My
 	 * @brief プレイヤークラス
 	 * @copydoc CCharacter
 	 */	
-	class CPlayer :public CCharacter
+	class CPlayer :public CActiveSceneCharacter
 	{
 	public:
 		static constexpr int PLAYER_PRIORITY = 8;		//!<描画順

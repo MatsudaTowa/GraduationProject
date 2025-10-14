@@ -20,7 +20,7 @@ const D3DXVECTOR3 My::CPlayer::PLAYER_SPAWN_ROT = { 0.0f, 3.14f, 0.0f};
 //=============================================
 //コンストラクタ
 //=============================================
-My::CPlayer::CPlayer(int nPriority) :CCharacter(nPriority)
+My::CPlayer::CPlayer(int nPriority) :CActiveSceneCharacter(nPriority)
 {//イニシャライザーでメンバ変数初期化
 }
 
@@ -36,7 +36,7 @@ My::CPlayer::~CPlayer()
 //=============================================
 HRESULT My::CPlayer::Init()
 {
-	CCharacter::Init();
+	CActiveSceneCharacter::Init();
 
 	Load_Parts("data\\MOTION\\motion_Karateka.bin"); //パーツ読み込み
 
@@ -60,7 +60,7 @@ HRESULT My::CPlayer::Init()
 void My::CPlayer::Uninit()
 {
 	//親クラスの終了処理を呼ぶ
-	CCharacter::Uninit();
+	CActiveSceneCharacter::Uninit();
 }
 
 //=============================================
@@ -68,7 +68,7 @@ void My::CPlayer::Uninit()
 //=============================================
 void My::CPlayer::Update()
 {
-	CCharacter::Update();
+	CActiveSceneCharacter::Update();
 	
 	Motion(); //モーション処理
 }

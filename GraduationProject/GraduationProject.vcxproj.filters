@@ -171,7 +171,7 @@
     <ClCompile Include="src\game.cpp">
       <Filter>scene\game</Filter>
     </ClCompile>
-    <ClCompile Include="src\game_manager.cpp">
+    <ClCompile Include="src\active_manager.cpp">
       <Filter>scene\game</Filter>
     </ClCompile>
     <ClCompile Include="src\game_state.cpp">
@@ -206,6 +206,9 @@
     </ClCompile>
     <ClCompile Include="src\area.cpp">
       <Filter>object\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="src\active_scene_character.cpp">
+      <Filter>object\character</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -332,7 +335,7 @@
     <ClInclude Include="src\game.h">
       <Filter>scene\game</Filter>
     </ClInclude>
-    <ClInclude Include="src\game_manager.h">
+    <ClInclude Include="src\active_manager.h">
       <Filter>scene\game</Filter>
     </ClInclude>
     <ClInclude Include="src\game_state.h">
@@ -367,6 +370,9 @@
     </ClInclude>
     <ClInclude Include="src\enemy_manager.h">
       <Filter>object\X</Filter>
+    </ClInclude>
+    <ClInclude Include="src\active_scene_character.h">
+      <Filter>object\character</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

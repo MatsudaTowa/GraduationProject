@@ -5,7 +5,7 @@
 //
 //=============================================
 #include "game_player.h"
-#include "game_manager.h"
+#include "active_manager.h"
 #include "hand.h"
 
 //=============================================

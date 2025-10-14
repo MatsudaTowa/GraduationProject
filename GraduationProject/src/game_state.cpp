@@ -6,7 +6,7 @@
 //=============================================
 #include "game_state.h"
 #include "game.h"
-#include "game_manager.h"
+#include "active_manager.h"
 
 //=============================================
 // í èÌ

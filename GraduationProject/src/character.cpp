@@ -13,7 +13,6 @@
 //コンストラクタ
 //=============================================
 My::CCharacter::CCharacter(int nPriority) :CObjectX(nPriority),
-m_status(),														//ステータス初期化
 m_PartsCnt(INT_ZERO),											//パーツ数
 m_pMotionFrameCnt(nullptr),										//モーションのフレーム数
 m_nKeySetCnt(INT_ZERO),											//キーの個数
@@ -21,8 +20,6 @@ m_Motion(INT_ZERO),												//モーション情報
 m_isLoopFinish(),												//ループが終わったか
 m_motion_data(),												//モーション設定
 m_pShadow(),													//影のポインタ
-m_pLifeUI(nullptr),												//体力UIのポインタ
-m_pEneryUI(nullptr),											//エナジーUIのポインタ
 m_ShadowSize(VEC3_RESET_ZERO)									//影のサイズ
 {//イニシャライザーでプライオリティ設定、各メンバ変数初期化
 }
@@ -57,13 +54,6 @@ HRESULT My::CCharacter::Init()
 	//ループモーション終わってる判定に
 	m_isLoopFinish = true;
 
-	//ステータス設定
-	m_status.deckSize = START_DECK;
-	m_status.hand = START_HAND;
-	m_status.life = START_LIFE;
-	m_status.energy = START_ENERGY;
-	m_status.trash = INT_ZERO;
-
 	//親クラスの初期化
 	CObjectX::Init();
 
@@ -77,16 +67,6 @@ HRESULT My::CCharacter::Init()
 //=============================================
 void My::CCharacter::Uninit()
 {
-	if (m_pLifeUI != nullptr)
-	{
-		m_pLifeUI->Uninit();
-		m_pLifeUI = nullptr;
-	}
-	if (m_pEneryUI != nullptr)
-	{
-		m_pEneryUI->Uninit();
-		m_pEneryUI = nullptr;
-	}
 	if (m_pMotionFrameCnt != nullptr)
 	{
 		delete m_pMotionFrameCnt;
@@ -113,30 +93,6 @@ void My::CCharacter::Uninit()
 //=============================================
 void My::CCharacter::Update()
 {
-	if (m_pLifeUI != nullptr)
-	{
-		if (m_status.life > MAX_LIFE)
-		{
-			SetLife(MAX_LIFE);
-		}
-		if (m_status.life < INT_ZERO)
-		{
-			SetLife(INT_ZERO);
-		}
-		m_pLifeUI->SetLifeNumber(m_status.life);
-	}
-	if (m_pEneryUI != nullptr)
-	{
-		if (m_status.energy > MAX_ENERGY)
-		{
-			SetEnergy(MAX_LIFE);
-		}
-		if (m_status.energy < INT_ZERO)
-		{
-			SetEnergy(INT_ZERO);
-		}
-		m_pEneryUI->SetEnergyNumber(m_status.energy);
-	}
 	if (m_pShadow != nullptr)
 	{
 		m_pShadow->SetisDraw(GetisDraw());

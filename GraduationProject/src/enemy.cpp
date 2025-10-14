@@ -5,7 +5,7 @@
 //
 //=============================================
 #include "enemy.h"
-#include "game_manager.h"
+#include "active_manager.h"
 
 //=============================================
 // コンストラクタ
@@ -33,7 +33,7 @@ My::CEnemy::~CEnemy()
 //=============================================
 HRESULT My::CEnemy::Init()
 {
-	CCharacter::Init();
+	CActiveSceneCharacter::Init();
 
 	Load_Parts("data\\MOTION\\motion_Karateka.bin"); //パーツ読み込み
 
@@ -65,7 +65,7 @@ HRESULT My::CEnemy::Init()
 void My::CEnemy::Uninit()
 {
 	//親クラスの終了処理を呼ぶ
-	CCharacter::Uninit();
+	CActiveSceneCharacter::Uninit();
 }
 
 //=============================================
@@ -73,7 +73,7 @@ void My::CEnemy::Uninit()
 //=============================================
 void My::CEnemy::Update()
 {
-	CCharacter::Update();
+	CActiveSceneCharacter::Update();
 
 	Motion(); //モーション処理
 }

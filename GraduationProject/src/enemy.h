@@ -8,16 +8,16 @@
 
 #define _ENEMY_H_
 #include "main.h"
-#include "character.h"
+#include "active_scene_character.h"
 
 /** @brief My 名前空間 */
 namespace My
 {
 	/**
 	 * @brief プレイヤークラス
-	 * @copydoc CCharacter
+	 * @copydoc CActiveSceneCharacter
 	 */
-	class CEnemy :public CCharacter
+	class CEnemy :public CActiveSceneCharacter
 	{
 	public:
 		static constexpr int PRIORITY = 8;		//!<描画順
