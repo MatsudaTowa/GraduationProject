@@ -17,7 +17,7 @@ namespace My
 	class CNumber_2D :public CObject2D
 	{
 	public:
-		static const int NUMBER_PRIORITY = 29;  //•`‰æ‡
+		static const int NUMBER_PRIORITY = 28;  //•`‰æ‡
 
 		enum TEX_TYPE
 		{

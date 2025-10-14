@@ -211,13 +211,13 @@ void My::CManager::Update()
 	m_pMouse->Update();
 	m_pPad->Update();
 
+	CObject::UpdateAll();
+
 	//シーンの更新
 	if (m_pScene != nullptr)
 	{
 		m_pScene->Update();
 	}
-
-	CObject::UpdateAll();
 }
 
 /**

@@ -39,7 +39,10 @@ void My::CEnemyManager::Uninit()
 {
 	for (auto& itr : m_apManager)
 	{
-		if (itr == nullptr) { continue; }
+		if (itr == nullptr) 
+		{
+			continue; 
+		}
 		itr->Uninit();
 		itr = nullptr;
 	}

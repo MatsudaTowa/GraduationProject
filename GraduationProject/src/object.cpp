@@ -99,7 +99,8 @@ void My::CObject::UpdateAll()
 
 			if (pObj->m_isStop)
 			{
-				break;
+				pObj = pNext;					//ポインタを進める
+				continue;
 			}
 
 			pObj->Update();				//更新処理
