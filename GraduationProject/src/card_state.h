@@ -13,14 +13,30 @@ namespace My
 	// 前方宣言
 	class CCard;
 
+	namespace CARD_STATE
+	{
+
+	}
+
 	/** 
 	* @brief カードのステートクラス 
 	*/
 	class CCardState
 	{
 	public:
+		enum CARD_STATE
+		{
+			CARD_NEUTRAL = 0,
+			CARD_PICKUP,
+			CARD_CAST,
+			CARD_STAY,
+			CARD_PLAY,
+			CARD_MAX
+		};
+
 		/** @brief 初期化 */
 		virtual void Init() {};
+		virtual void Init(CCard* cpy) {};
 
 		/** @brief 終了 */
 		virtual void Uninit();
@@ -43,9 +59,6 @@ namespace My
 	class CCardStateNeutral :public CCardState
 	{
 	public:
-		/** @brief 終了 */
-		void Uninit()override;
-
 		/** @brief 更新 */
 		void Update(CCard* cpy)override;
 	};
@@ -57,9 +70,6 @@ namespace My
 	class CCardStatePickup :public CCardState
 	{
 	public:
-		/** @brief 終了 */
-		void Uninit()override;
-
 		/** @brief 更新 */
 		void Update(CCard* cpy)override;
 	};
@@ -67,21 +77,35 @@ namespace My
 	class CCardStateCast :public CCardState
 	{
 	public:
-		/** @brief 終了 */
-		void Uninit()override;
+		/** @brief 初期化 */
+		void Init(CCard* cpy) override;
 
 		/** @brief 更新 */
-		void Update(CCard* cpy)override;
+		void Update(CCard* cpy) override;
 	};
 
 	class CCardStateStay :public CCardState
 	{
+	public:
+		/** @brief 初期化 */
+		void Init() override;
 
+		/** @brief 更新 */
+		void Update(CCard* cpy)override;
+
+	private:
+		/** @brief 待機カウント */
+		unsigned int m_Staycount;
+
+		/** @brief 設定された待機時間 */
+		const unsigned int STAY_TIME = ONE_SECOND * 3;
 	};
 
 	class CCardStatePlay :public CCardState
 	{
-
+	public:
+		/** @brief 初期化 */
+		void Init(CCard* cpy) override;
 	};
 }
 

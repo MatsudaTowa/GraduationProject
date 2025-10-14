@@ -7,6 +7,7 @@
 #include "card.h"
 #include "game.h"
 #include "card_state.h"
+#include <typeinfo>
 
 //===========================================================================================================
 // コンストラクタ
@@ -46,6 +47,7 @@ HRESULT My::CCard::Init()
 	SetScale(scale);
 
 	m_pState = new CCardStateNeutral();
+	m_pState->Init();
 
 	return S_OK;
 }
@@ -101,14 +103,67 @@ void My::CCard::ChangeState(CCardState* state)
 {
 	if (m_pState != nullptr)
 	{
-		//m_pState->Uninit();
+		//// 型名取得
+		//const type_info& cur_state_id = typeid(m_pState);	// 現在のステートのID
+		//const type_info& next_state_id = typeid(state);		// 次のステートのID
+
+		//const char* cur_state_name = cur_state_id.name();
+		//const char* next_state_name = next_state_id.name();
+
 		delete m_pState;
-		//m_pState = nullptr;
 		m_pState = state;
+
+		m_pState->Init(this);
+		m_pState->Init();
 	}
-	
-	
-	//m_pState->Copy(this);
 }
+
+//===========================================================================================================
+// ステートを変更する
+//===========================================================================================================
+void My::CCard::ChangeState(CCardState::CARD_STATE state)
+{
+	if (m_pState != nullptr)
+	{
+		if (m_StateNum == state)
+			return;
+
+		delete m_pState;
+		m_pState = nullptr;
+
+		switch (state)
+		{
+		case CCardState::CARD_NEUTRAL:
+			m_pState = new CCardStateNeutral();
+			break;
+
+		case CCardState::CARD_PICKUP:
+			m_pState = new CCardStatePickup();
+			break;
+
+		case CCardState::CARD_CAST:
+			m_pState = new CCardStateCast();
+			break;
+
+		case CCardState::CARD_STAY:
+			m_pState = new CCardStateStay();
+			break;
+
+		case CCardState::CARD_PLAY:
+			m_pState = new CCardStatePlay();
+			break;
+
+		default:
+			assert(1);
+			break;
+		}
+
+		m_StateNum = state;
+
+		m_pState->Init(this);
+		m_pState->Init();
+	}
+}
+
 
 

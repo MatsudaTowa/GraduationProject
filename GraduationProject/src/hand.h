@@ -73,14 +73,19 @@ namespace My
 
 	private:
 		/**
-		* @brief 手札の真ん中
-		*/
-		D3DXVECTOR3 m_CenterPos;
-
-		/**
 		* @brief 手札のカードの位置設定
 		*/
 		void SetHandCardPos();
+
+		/**
+		* @brief 手札のカードの状態変更
+		*/
+		void SelectStateSet();
+
+		/**
+		* @brief 手札の真ん中
+		*/
+		D3DXVECTOR3 m_CenterPos;
 
 		//===========================================================================================================
 		// メンバ変数
@@ -98,6 +103,9 @@ namespace My
 
 		/* @brief 選択番号(手札を左から見た順番) */
 		int m_SelectNum;
+
+		/* @brief 選択番号(手札を左から見た順番) */
+		int m_FrontSelectNum;
 
 		/* @brief スタートを通ったかどうか */
 		bool m_IsPassStart;

@@ -8,10 +8,11 @@
 #define _CARD_H_
 #include "main.h"
 #include "objectX.h"
+#include "card_state.h"
 
 namespace My
 {
-	class CCardState;
+	//class CCardState;
 
 	class CCard :public CObjectX
 	{
@@ -63,6 +64,12 @@ namespace My
 		* @brief 状態を変更する
 		*/
 		void ChangeState(CCardState*state);
+		void ChangeState(CCardState::CARD_STATE state);
+
+		/**
+		* @brief ステート取得
+		*/
+		inline CCardState* GetState() { return m_pState; }
 
 	private:
 		/**
@@ -74,6 +81,11 @@ namespace My
 		 * @brief カードの状態
 		 */
 		CCardState* m_pState;
+
+		/**
+		 * @brief カードの状態列挙
+		 */
+		My::CCardState::CARD_STATE m_StateNum;
 	};
 };
 

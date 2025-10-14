@@ -12,7 +12,8 @@
 My::CHand::CHand() :
 	m_SelectNum(-1),
 	m_TotalNum(0),
-	m_IsPassStart(false)
+	m_IsPassStart(false),
+	m_FrontSelectNum(-1)
 {
 	for (int i = 0; i < MAX_HANDSCARD; i++)
 	{
@@ -76,6 +77,12 @@ void My::CHand::Update()
 
 	// 手札選択
 	Select();
+
+	if (pkeyboad->GetTrigger(DIK_J))
+	{
+		if (m_SelectNum >= 0)
+			m_pCard[m_SelectNum]->ChangeState(CCardState::CARD_STATE::CARD_CAST);
+	}
 }
 
 //===========================================================================================================
@@ -87,10 +94,13 @@ void My::CHand::Select()
 	// TODO : マウスDE操作
 	CInputKeyboard* pKeyboad = CManager::GetInstance()->GetKeyboard();
 
+	// 選択番号が変わっているか否か
+	bool IsChangeSelect = false;
+
 	// キーボードで選択
 	if (pKeyboad->GetTrigger(DIK_RIGHTARROW))
 	{// 右選択
-
+		IsChangeSelect = true;
 		m_SelectNum++;
 		if (m_SelectNum >= m_TotalNum)
 		{
@@ -99,7 +109,7 @@ void My::CHand::Select()
 	}
 	if (pKeyboad->GetTrigger(DIK_LEFTARROW))
 	{// 左選択
-
+		IsChangeSelect = true;
 		m_SelectNum--;
 		if (m_SelectNum < 0)
 		{
@@ -107,12 +117,24 @@ void My::CHand::Select()
 		}
 	}
 
+	// 番号が変わっていない場合チェンジステートをしない
+	if (!IsChangeSelect)
+		return;
+
+	SelectStateSet();
+}
+
+//===========================================================================================================
+// 手札のカードの状態変更
+//===========================================================================================================
+void My::CHand::SelectStateSet()
+{
 	// すべてのカードを選ばれていない状態にする
 	for (int i = 0; i < m_TotalNum; i++)
 	{// 今持っている枚数分
 		if (m_pCard[i] != nullptr)
 		{
-			m_pCard[i]->ChangeState(new CCardStateNeutral);
+			m_pCard[i]->ChangeState(CCardState::CARD_STATE::CARD_NEUTRAL);
 		}
 	}
 
@@ -122,8 +144,8 @@ void My::CHand::Select()
 	// 選択中のカードのステートを変える
 	if (m_pCard[m_SelectNum] != nullptr)
 	{
-		m_pCard[m_SelectNum]->ChangeState(new CCardStatePickup);
-	}		
+		m_pCard[m_SelectNum]->ChangeState(CCardState::CARD_STATE::CARD_PICKUP);
+	}
 }
 
 //===========================================================================================================
@@ -189,4 +211,5 @@ void My::CHand::SetHandCardPos()
 		// 間隔を開ける
 		xpos += posInterbal*0.5f;
 	}
+	
 }
