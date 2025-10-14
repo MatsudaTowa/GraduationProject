@@ -74,6 +74,9 @@ void My::CCardStatePickup::Update(CCard* cpy)
 // 
 //===========================================================================================================
 
+//=======================================================================================
+// 初期化
+//=======================================================================================
 void My::CCardStateCast::Init(CCard* cpy)
 {
 	if (cpy == nullptr)
@@ -89,13 +92,16 @@ void My::CCardStateCast::Init(CCard* cpy)
 	CGameManager::GetInstance()->ChangeState(new CCardCast());	
 }
 
+//=======================================================================================
+// 更新
+//=======================================================================================
 void My::CCardStateCast::Update(CCard* cpy)
 {
 	// キーボードを取得
 	CInputKeyboard* pKeyboard = CManager::GetInstance()->GetKeyboard();
 	bool IsSelectPlayer = false;	// プレイヤーを選択した
 
-	// TODO : 一旦ここで判別をしている
+	// TODO : 一旦ここで判別をしている。
 	if (pKeyboard->GetTrigger(DIK_1))
 	{
 		IsSelectPlayer = true;
@@ -113,6 +119,11 @@ void My::CCardStateCast::Update(CCard* cpy)
 		cpy->ChangeState(CCardState::CARD_STATE::CARD_STAY);
 }
 
+//===========================================================================================================
+// 
+// ピックアップステート
+// 
+//===========================================================================================================
 void My::CCardStateStay::Init()
 {
 	// カウントを初期化
@@ -126,13 +137,13 @@ void My::CCardStateStay::Update(CCard* cpy)
 
 	if (m_Staycount >= STAY_TIME)
 	{
-		cpy->ChangeState(CCardState::CARD_STATE::CARD_PLAY);
+		cpy->ChangeState(CCardState::CARD_STATE::CARD_TRIGGER);
 	}
 
 	m_Staycount++;
 }
 
-void My::CCardStatePlay::Init(CCard* cpy)
+void My::CCardStateTrigger::Init(CCard* cpy)
 {
 	if (cpy == nullptr)
 		return;

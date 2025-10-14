@@ -30,7 +30,7 @@ namespace My
 			CARD_PICKUP,
 			CARD_CAST,
 			CARD_STAY,
-			CARD_PLAY,
+			CARD_TRIGGER,
 			CARD_MAX
 		};
 
@@ -101,7 +101,7 @@ namespace My
 		const unsigned int STAY_TIME = ONE_SECOND * 3;
 	};
 
-	class CCardStatePlay :public CCardState
+	class CCardStateTrigger :public CCardState
 	{
 	public:
 		/** @brief èâä˙âª */

@@ -149,8 +149,8 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state)
 			m_pState = new CCardStateStay();
 			break;
 
-		case CCardState::CARD_PLAY:
-			m_pState = new CCardStatePlay();
+		case CCardState::CARD_TRIGGER:
+			m_pState = new CCardStateTrigger();
 			break;
 
 		default:
