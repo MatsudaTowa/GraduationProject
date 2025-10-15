@@ -8,6 +8,7 @@
 #define _GAME_PLAYER_STATE_H_
 
 #include "character.h"
+#include "active_scene_character_state.h"
 
 /** @brief My 名前空間 */
 namespace My
@@ -17,26 +18,8 @@ namespace My
 	//=============================================
 	class CGamePlayer;
 
-	/** @brief プレイヤーのステートクラス */
-	class CGamePlayerState
-	{
-	public:
-		CGamePlayerState() {};
-		virtual ~CGamePlayerState() {};
-		/**
-		* @brief ロビー処理(親では何もしない)
-		* @param [in]ゲームプレイヤーポインタ
-		*/
-		virtual void Lobby([[maybe_unused]] CGamePlayer* player) {};
-		/**
-		* @brief デュエル処理(親では何もしない)
-		* @param [in]ゲームプレイヤーポインタ
-		*/
-		virtual void Duel([[maybe_unused]] CGamePlayer* player) {};
-	};
-
 	/** @brief プレイヤーのデュエルクラス */
-	class CLobbyState :public CGamePlayerState
+	class CLobbyState :public CActiveSceneCharacterState
 	{
 	public:
 		/**
@@ -49,13 +32,13 @@ namespace My
 		~CLobbyState() override;
 		/**
 		* @brief デュエル処理
-		* @param [in]ゲームプレイヤーポインタ
+		* @param [in]キャラクターポインタ
 		*/
-		void Lobby(CGamePlayer* player) override;
+		void Lobby(CActiveSceneCharacter* character) override;
 	};
 
 	/** @brief プレイヤーのデュエルクラス */
-	class CDuelState :public CGamePlayerState
+	class CDuelState :public CActiveSceneCharacterState
 	{
 	public:
 		/**
@@ -68,9 +51,9 @@ namespace My
 		~CDuelState() override;
 		/**
 		* @brief デュエル処理
-		* @param [in]ゲームプレイヤーポインタ
+		* @param [in]キャラクターポインタ
 		*/
-		void Duel(CGamePlayer* player) override;
+		void Duel(CActiveSceneCharacter* character) override;
 	private:
 		static constexpr int ENERGY_UP_FRAME = 3 * 60;		//!<エナジーが上がるまでのフレーム数 TODO:今後のカードによっては変数に昇格するかも
 

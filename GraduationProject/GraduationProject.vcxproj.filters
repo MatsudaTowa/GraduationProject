@@ -210,6 +210,9 @@
     <ClCompile Include="src\active_scene_character.cpp">
       <Filter>object\character</Filter>
     </ClCompile>
+    <ClCompile Include="src\enemy_state.cpp">
+      <Filter>object\character</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\useful.h">
@@ -372,6 +375,12 @@
       <Filter>object\X</Filter>
     </ClInclude>
     <ClInclude Include="src\active_scene_character.h">
+      <Filter>object\character</Filter>
+    </ClInclude>
+    <ClInclude Include="src\active_scene_character_state.h">
+      <Filter>object\character</Filter>
+    </ClInclude>
+    <ClInclude Include="src\enemy_state.h">
       <Filter>object\character</Filter>
     </ClInclude>
   </ItemGroup>

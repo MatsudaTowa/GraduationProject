@@ -166,6 +166,7 @@
     <ClCompile Include="src\colision.cpp" />
     <ClCompile Include="src\enemy.cpp" />
     <ClCompile Include="src\enemy_manager.cpp" />
+    <ClCompile Include="src\enemy_state.cpp" />
     <ClCompile Include="src\energy_UI.cpp" />
     <ClCompile Include="src\fade.cpp" />
     <ClCompile Include="src\field.cpp" />
@@ -214,6 +215,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\active_scene_character.h" />
+    <ClInclude Include="src\active_scene_character_state.h" />
     <ClInclude Include="src\area.h" />
     <ClInclude Include="src\billboard.h" />
     <ClInclude Include="src\camera.h" />
@@ -225,6 +227,7 @@
     <ClInclude Include="src\count.h" />
     <ClInclude Include="src\enemy.h" />
     <ClInclude Include="src\enemy_manager.h" />
+    <ClInclude Include="src\enemy_state.h" />
     <ClInclude Include="src\energy_UI.h" />
     <ClInclude Include="src\fade.h" />
     <ClInclude Include="src\field.h" />

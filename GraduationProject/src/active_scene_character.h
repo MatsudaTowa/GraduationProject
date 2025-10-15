@@ -9,7 +9,7 @@
 #define _ACTIVE_SCENE_CHARACTER_H_
 #include "main.h"
 #include "character.h"
-
+#include "active_scene_character_state.h"
 /** @brief My 名前空間 */
 namespace My
 {
@@ -61,6 +61,21 @@ namespace My
 		 * @brief 描画
 		 */
 		void Draw() override;
+
+		/**
+		 * @brief ステート変更
+		 * @param [in]次のステート
+		 */
+		void ChangeState(CActiveSceneCharacterState* state);
+
+		/**
+		 * @brief ステート取得
+		 * @return ステートポインタ
+		 */
+		inline CActiveSceneCharacterState* GetState()
+		{
+			return m_pState;
+		}
 
 		/**
 		 * @brief プレイヤー番号代入
@@ -235,8 +250,9 @@ namespace My
 
 		int m_playerIdx = -1;
 
-		CLife_UI* m_pLifeUI;		//!<体力UI TODO:UIのインスタンスをキャラクターで持たせないように改良
-		CEnergy_UI* m_pEneryUI;		//!エナジーUI TODO:UIのインスタンスをキャラクターで持たせないように改良
+		CLife_UI* m_pLifeUI;			//!<体力UI TODO:UIのインスタンスをキャラクターで持たせないように改良
+		CEnergy_UI* m_pEneryUI;			//!エナジーUI TODO:UIのインスタンスをキャラクターで持たせないように改良
+		CActiveSceneCharacterState* m_pState;	//!ステート
 	};
 }
 #endif
