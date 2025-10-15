@@ -8,6 +8,8 @@
 #include "game.h"
 #include "active_manager.h"
 #include "game_field.h"
+#include "energy_charge.h"
+#include "energy_gauge.h"
 
 //=============================================
 // ロビー
@@ -24,6 +26,10 @@ void My::CLobby::Lobby(CGame* game)
 		CGameManager::GetInstance()->GetPlayer()->ChangeState(new CDuelState);
 		//地面生成
 		CField::Create(VEC3_RESET_ZERO, { FIELD_SIZE,0.0f,FIELD_SIZE }, new CGameField);
+
+		//エナジーUI枠表示
+		CEnergy_Gauge::CreateEnergy();
+
 		CGameManager::GetInstance()->ChangeState(new CDuel);
 	}
 }
@@ -50,6 +56,10 @@ void My::CDuel::Duel(CGame* game)
 {
 	//オブジェクトのアップデートを許可する
 	game->StopObject(false);
+
+	//ゲージ用チャージの更新
+	CEnergy_Charge* pCharge = CEnergy_Charge::GetInstance();
+	pCharge->Update();
 
 	//入力デバイス取得
 	CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;

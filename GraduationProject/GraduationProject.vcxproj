@@ -166,6 +166,9 @@
     <ClCompile Include="src\colision.cpp" />
     <ClCompile Include="src\enemy.cpp" />
     <ClCompile Include="src\enemy_manager.cpp" />
+    <ClCompile Include="src\energy_charge.cpp" />
+    <ClCompile Include="src\energy_frame.cpp" />
+    <ClCompile Include="src\energy_gauge.cpp" />
     <ClCompile Include="src\energy_UI.cpp" />
     <ClCompile Include="src\fade.cpp" />
     <ClCompile Include="src\field.cpp" />
@@ -225,6 +228,9 @@
     <ClInclude Include="src\count.h" />
     <ClInclude Include="src\enemy.h" />
     <ClInclude Include="src\enemy_manager.h" />
+    <ClInclude Include="src\energy_charge.h" />
+    <ClInclude Include="src\energy_frame.h" />
+    <ClInclude Include="src\energy_gauge.h" />
     <ClInclude Include="src\energy_UI.h" />
     <ClInclude Include="src\fade.h" />
     <ClInclude Include="src\field.h" />

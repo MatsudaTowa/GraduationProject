@@ -210,6 +210,15 @@
     <ClCompile Include="src\active_scene_character.cpp">
       <Filter>object\character</Filter>
     </ClCompile>
+    <ClCompile Include="src\energy_charge.cpp">
+      <Filter>object\2D\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\energy_frame.cpp">
+      <Filter>object\2D\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\energy_gauge.cpp">
+      <Filter>object\2D\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\useful.h">
@@ -373,6 +382,15 @@
     </ClInclude>
     <ClInclude Include="src\active_scene_character.h">
       <Filter>object\character</Filter>
+    </ClInclude>
+    <ClInclude Include="src\energy_charge.h">
+      <Filter>object\2D\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\energy_frame.h">
+      <Filter>object\2D\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\energy_gauge.h">
+      <Filter>object\2D\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -10,6 +10,7 @@
 #include "active_manager.h"
 #include "enemy.h"
 #include "card.h"
+#include "energy_charge.h"
 
 namespace
 {
@@ -95,6 +96,9 @@ void My::CGame::Uninit()
 		delete m_pPauseCnt;
 		m_pPauseCnt = nullptr;
 	}
+
+	CEnergy_Charge* pCharge = CEnergy_Charge::GetInstance();
+	pCharge->Uninit();
 
 	//ステート初期化
 	CGameManager::GetInstance()->ChangeState(new CLobby);
