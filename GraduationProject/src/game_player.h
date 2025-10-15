@@ -59,11 +59,6 @@ namespace My
 		void Draw() override;
 
 		/**
-		 * @brief BGMが切れた時の処理
-		 */
-		void Play_Sound_BGM_000();
-
-		/**
 		 * @brief ステート変更
 		 * @param [in]次のステート
 		 */
@@ -78,16 +73,25 @@ namespace My
 			return m_pState;
 		}
 
-private:
-		static constexpr int ENERGY_UP_FRAME = 3 * 60;		//!<エナジーが上がるまでのフレーム数 TODO:今後のカードによっては変数に昇格するかも
-
-		CCount* m_pEnergyUpCount;	//!エナジーを増やすまでのカウント
+		/**
+		 * @brief 手札取得
+		 * @return 手札
+		 */
+		inline CHand* GetHand()
+		{
+			return m_pHand;
+		}
 
 		/**
-		 * @brief エナジーを上げる処理
+		 * @brief 手札設定
+		 * @param [in]pHand
 		 */
-		void EnergyUp();
+		inline void SetHand(CHand* pHand)
+		{
+			m_pHand = pHand;
+		}
 
+private:
 		/**
 		 * @brief 入力処理
 		 */

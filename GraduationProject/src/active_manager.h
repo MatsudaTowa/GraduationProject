@@ -10,7 +10,7 @@
 
 //ヘッダーのインクルード
 #include "game_player.h"
-#include "game_state.h"
+#include "active_scene_state.h"
 #include "field.h"
 #include "enemy_manager.h"
 #include "area.h"
@@ -95,19 +95,19 @@ namespace My
 		 * @brief ゲームのステートの設定
 		 * @param [in]ゲームのステートのポインタ
 		 */
-		void SetState(CGameState* state) { m_pState = state; }
+		void SetState(CActiveSceneState* state) { m_pState = state; }
 
 		/**
 		 * @brief ゲームのステート取得
 		 * @return ゲームのステートポインタ
 		 */
-		CGameState* GetState() { return m_pState; }
+		CActiveSceneState* GetState() { return m_pState; }
 
 		/**
 		 * @brief ステート変更
 		 * @param [in]次のステート
 		 */
-		void ChangeState(CGameState* state);
+		void ChangeState(CActiveSceneState* state);
 
 		/**
 		 * @brief ステート実行処理
@@ -117,7 +117,8 @@ namespace My
 		{
 			if (m_pState == nullptr) { return; }
 
-			m_pState->Normal(game);
+			m_pState->Lobby(game);
+			m_pState->Duel(game);
 			m_pState->Pause(game);
 			m_pState->CardCast(game);
 		}
@@ -152,7 +153,7 @@ namespace My
 	private:
 		CEnemyManager* m_pEnemyManager;
 		CArea* m_pArea[CInputMouse::AREA::MAX - 1]; //真ん中のエリア以外に三角形を生成
-		CGameState* m_pState;				//!<ゲームのステート状態
+		CActiveSceneState* m_pState;				//!<ゲームのステート状態
 		CGamePlayer* m_pPlayer;				//!<プレイヤー
 		CField* m_pField;					//!<床
 		bool m_isFinish;					//!ゲームの処理を終わらせるか

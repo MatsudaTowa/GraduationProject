@@ -174,7 +174,7 @@
     <ClCompile Include="src\active_manager.cpp">
       <Filter>scene\game</Filter>
     </ClCompile>
-    <ClCompile Include="src\game_state.cpp">
+    <ClCompile Include="src\active_scene_state.cpp">
       <Filter>scene\game</Filter>
     </ClCompile>
     <ClCompile Include="src\enemy.cpp">
@@ -338,7 +338,7 @@
     <ClInclude Include="src\active_manager.h">
       <Filter>scene\game</Filter>
     </ClInclude>
-    <ClInclude Include="src\game_state.h">
+    <ClInclude Include="src\active_scene_state.h">
       <Filter>scene\game</Filter>
     </ClInclude>
     <ClInclude Include="src\enemy.h">

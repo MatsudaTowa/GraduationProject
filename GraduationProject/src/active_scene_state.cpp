@@ -1,23 +1,62 @@
 //=============================================
 //
-//ゲームのステートパターン[game_state.cpp]
+//ゲームのステートパターン[active_scene_state.cpp]
 //Author Matsuda Towa
 //
 //=============================================
-#include "game_state.h"
+#include "active_scene_state.h"
 #include "game.h"
 #include "active_manager.h"
+#include "game_field.h"
 
 //=============================================
-// 通常
+// ロビー
 //=============================================
-void My::CNormal::Normal(CGame* game)
+void My::CLobby::Lobby(CGame* game)
+{
+	CGameManager::GetInstance()->GetEnemyManager()->GetList().size();
+
+	//入力デバイス取得
+	CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;
+	if (pKeyboard->GetTrigger(DIK_RETURN) && game->GetPauseKey())
+	{
+		game->ResetPauseCnt();
+		CGameManager::GetInstance()->GetPlayer()->ChangeState(new CDuelState);
+		//地面生成
+		CField::Create(VEC3_RESET_ZERO, { FIELD_SIZE,0.0f,FIELD_SIZE }, new CGameField);
+		CGameManager::GetInstance()->ChangeState(new CDuel);
+	}
+}
+
+//=============================================
+// コンストラクタ
+//=============================================
+My::CDuel::CDuel()
+{
+
+}
+
+//=============================================
+// デストラクタ
+//=============================================
+My::CDuel::~CDuel()
+{
+}
+
+//=============================================
+// デュエル
+//=============================================
+void My::CDuel::Duel(CGame* game)
 {
 	//オブジェクトのアップデートを許可する
 	game->StopObject(false);
 
 	//入力デバイス取得
 	CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;
+	if (pKeyboard->GetTrigger(DIK_RETURN) && game->GetPauseKey())
+	{
+		GET_FADE->SetFade(CScene::MODE::MODE_RESULT);
+	}
 #ifdef _DEBUG
 	if (pKeyboard->GetTrigger(DIK_C) && game->GetPauseKey())
 	{
@@ -26,7 +65,6 @@ void My::CNormal::Normal(CGame* game)
 		CGameManager::GetInstance()->ChangeState(new CCardCast);
 	}
 #endif
-
 
 	//ポーズ移行
 	if (pKeyboard->GetTrigger(DIK_P) && game->GetPauseKey())
@@ -58,7 +96,7 @@ void My::CPause::Pause(CGame* game)
 	if (pKeyboard->GetTrigger(DIK_P) && game->GetPauseKey())
 	{
 		game->ResetPauseCnt();
-		CGameManager::GetInstance()->ChangeState(new CNormal);
+		CGameManager::GetInstance()->ChangeState(new CDuel);
 		return;
 	}
 }
@@ -98,7 +136,8 @@ void My::CCardCast::CardCast(CGame* game)
 	if (pKeyboard->GetTrigger(DIK_C) && game->GetPauseKey())
 	{
 		game->ResetPauseCnt();
-		CGameManager::GetInstance()->ChangeState(new CNormal);
+		CGameManager::GetInstance()->ChangeState(new CDuel);
 	}
 #endif
 }
+

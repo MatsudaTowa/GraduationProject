@@ -67,9 +67,9 @@ void My::CGameManager::Uninit()
 //=============================================
 //ステート変更
 //=============================================
-void My::CGameManager::ChangeState(CGameState* state)
+void My::CGameManager::ChangeState(CActiveSceneState* state)
 {
-	CGameState* current_state = CGameManager::GetInstance()->GetState();
+	CActiveSceneState* current_state = CGameManager::GetInstance()->GetState();
 	//今のステートを消し引数のステートに切り替える
 	if (current_state != nullptr)
 	{

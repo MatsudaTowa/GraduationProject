@@ -5,7 +5,6 @@
 //
 //=============================================
 #include "game.h"
-#include "game_field.h"
 #include "game_player.h"
 #include "game_camera.h"
 #include "active_manager.h"
@@ -14,7 +13,6 @@
 
 namespace
 {
-	const D3DXVECTOR3 FIELD_SIZE = { 200.0f,0.0f,200.0f };
 	const int COOL_TIME = 1;
 	const int DELAY_FRAME = 90;
 }
@@ -47,10 +45,10 @@ HRESULT My::CGame::Init()
 
 	SET_CAMERA_IDX(0);
 
-	CGameState* current_state = CGameManager::GetInstance()->GetState();
+	CActiveSceneState* current_state = CGameManager::GetInstance()->GetState();
 	if (current_state == nullptr)
 	{
-		current_state = new CNormal;
+		current_state = new CLobby;
 	}		
 	CGameManager::GetInstance()->SetState(current_state);
 
@@ -65,15 +63,9 @@ HRESULT My::CGame::Init()
 		m_pDelayCnt = new CCount;
 		m_pDelayCnt->SetFrame(DELAY_FRAME);
 	}
-	//地面生成
-	CField::Create(VEC3_RESET_ZERO, FIELD_SIZE,new CGameField);
 
 	//プレイヤー生成
 	CPlayer::Create(new CGamePlayer);
-
-	CEnemy::Create({ 300.0f,0.0f,00.0f }, { 0.0f,1.75f,0.f });
-	CEnemy::Create({ -300.0f,0.0f,00.0f }, { 0.0f,-1.75f,0.f });
-	CEnemy::Create({ 0.0f,0.0f,250.0f }, { 0.0f,0.0f,0.f });
 
 	//CCard::Create();
 
@@ -105,7 +97,7 @@ void My::CGame::Uninit()
 	}
 
 	//ステート初期化
-	CGameManager::GetInstance()->ChangeState(new CNormal);
+	CGameManager::GetInstance()->ChangeState(new CLobby);
 
 	//マネージャーで管理しているオブジェクトをここで削除
 	//NOTE: オブジェクトのReleaseAll前に消すことで二重で削除することを防止
@@ -123,18 +115,6 @@ void My::CGame::Update()
 	{
 		//ポーズのカウントアップ
 		m_pPauseCnt->CountUp();
-//
-//#ifdef _DEBUG
-		//インプット取得
-		CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;
-		CInputMouse* pMouse = GET_INPUT_MOUSE;
-
-		if (pKeyboard->GetTrigger(DIK_RETURN))
-		{
-			GET_FADE->SetFade(CScene::MODE::MODE_RESULT);
-		}
-//#endif // _DEBUG
-
 
 		CGameManager::GetInstance()->GameStateExecution(this);
 		return;
@@ -145,7 +125,7 @@ void My::CGame::Update()
 		return;
 	}
 	//ステート初期化
-	CGameManager::GetInstance()->ChangeState(new CNormal);
+	CGameManager::GetInstance()->ChangeState(new CLobby);
 	GET_FADE->SetFade(CScene::MODE::MODE_RESULT);
 }
 

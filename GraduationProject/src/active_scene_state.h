@@ -1,6 +1,6 @@
 //=============================================
 //
-//ゲームのステートパターン[game_state.h]
+//ゲームのステートパターン[active_scene_state.h]
 //Author Matsuda Towa
 //
 //=============================================
@@ -16,16 +16,24 @@ namespace My
 	class CGame;
 
 	/** @brief ゲームのステートクラス */
-	class CGameState
+	class CActiveSceneState
 	{
 	public:
-		CGameState() {};
-		virtual ~CGameState() {};
+		CActiveSceneState() {};
+		virtual ~CActiveSceneState() {};
+
 		/**
-		* @brief 通常処理(親では何もしない)
+		* @brief ロビー処理(親では何もしない)
 		* @param [in]ゲームポインタ
 		*/
-		virtual void Normal([[maybe_unused]] CGame* game) {};
+		virtual void Lobby([[maybe_unused]] CGame* game) {};
+
+
+		/**
+		* @brief デュエル処理(親では何もしない)
+		* @param [in]ゲームポインタ
+		*/
+		virtual void Duel([[maybe_unused]] CGame* game) {};
 
 		/**
 		* @brief ポーズ状態処理(親では何もしない)
@@ -40,21 +48,38 @@ namespace My
 		virtual void CardCast([[maybe_unused]] CGame* game) {};
 	};
 
-	/** @brief 通常クラス */
-	class CNormal :public CGameState
+	/** @brief ロビークラス */
+	class CLobby :public CActiveSceneState
 	{
 	public:
 		static constexpr int SPECIAL_TIME = 30;	//必殺技状態に移る時間
 		/**
-		* @brief ニュートラル処理
+		* @brief ロビー処理
 		* @param [in]ゲームプレイヤーポインタ
 		*/
-		void Normal(CGame* game) override;
+		void Lobby(CGame* game) override;
+	private:
+		//正方形なのでサイズは統一
+		static constexpr float FIELD_SIZE = 200.0f;
+	};
+
+	/** @brief デュエルクラス */
+	class CDuel :public CActiveSceneState
+	{
+	public:
+		CDuel();
+		~CDuel() override;
+		static constexpr int SPECIAL_TIME = 30;	//必殺技状態に移る時間
+		/**
+		* @brief デュエル処理
+		* @param [in]ゲームプレイヤーポインタ
+		*/
+		void Duel(CGame* game) override;
 	private:
 	};
 
 	/** @brief ポーズ状態処理クラス */
-	class CPause :public CGameState
+	class CPause :public CActiveSceneState
 	{
 	public:
 		~CPause()override;
@@ -68,7 +93,7 @@ namespace My
 	};
 
 	/** @brief カードキャスト処理クラス */
-	class CCardCast :public CGameState
+	class CCardCast :public CActiveSceneState
 	{
 	public:
 		/**

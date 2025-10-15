@@ -12,7 +12,6 @@
 // コンストラクタ
 //=============================================
 My::CGamePlayer::CGamePlayer(int nPriority):CPlayer(nPriority),
-m_pEnergyUpCount(nullptr),										//エナジー計測カウント
 m_pState(nullptr),												//ステート初期化
 m_pHand(nullptr)												// 手札初期化
 {
@@ -32,19 +31,7 @@ HRESULT My::CGamePlayer::Init()
 {
 	if (m_pState == nullptr)
 	{
-		m_pState = new CNeutralState;
-	}
-
-	if (m_pEnergyUpCount == nullptr)
-	{
-		m_pEnergyUpCount = new CCount;
-		m_pEnergyUpCount->SetCnt(INT_ZERO);
-		m_pEnergyUpCount->SetFrame(ENERGY_UP_FRAME);
-	}
-
-	if (m_pHand == nullptr)
-	{// 手札生成
-		m_pHand = CHand::Create();
+		m_pState = new CLobbyState;
 	}
 
 	//親クラスの初期化実行
@@ -52,19 +39,7 @@ HRESULT My::CGamePlayer::Init()
 
 	//ゲームのマネージャに自分を代入
 	CGameManager::GetInstance()->SetPlayer(this);
-	D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), GetPos()); //スクリーン座標に変換
 
-	if (GetLifeUI() == nullptr)
-	{
-		CLife_UI* pLifeUI = CLife_UI::Create(screen_pos);
-		SetLifeUI(pLifeUI);
-	}
-
-	if (GetEnergyUI() == nullptr)
-	{
-		CEnergy_UI* pEnergyUI = CEnergy_UI::Create({ screen_pos.x + 100.0f,screen_pos.y,screen_pos.z });
-		SetEnergyUI(pEnergyUI);
-	}
 	return S_OK;
 }
 
@@ -73,12 +48,6 @@ HRESULT My::CGamePlayer::Init()
 //=============================================
 void My::CGamePlayer::Uninit()
 {
-	if (m_pEnergyUpCount != nullptr)
-	{
-		delete m_pEnergyUpCount;
-		m_pEnergyUpCount = nullptr;
-	}
-
 	if (m_pHand != nullptr)
 	{
 		delete m_pHand;
@@ -100,7 +69,9 @@ void My::CGamePlayer::Update()
 {
 	if (m_pState != nullptr)
 	{
-		m_pState->Neutral(this);
+		m_pState->Lobby(this);
+
+		m_pState->Duel(this);
 	}
 
 #ifdef _DEBUG
@@ -115,20 +86,6 @@ void My::CGamePlayer::Update()
 	}
 	SetLife(life);
 #endif // _DEBUG
-
-	/*
-		* @brief 開始
-		* TODO : 今だけここにおいている。のちにゲーム開始時に呼び出す
-		*/
-
-	if (m_pHand != nullptr)
-	{
-		m_pHand->Start();
-
-		m_pHand->Update();
-	}
-	
-	EnergyUp();
 
 	//親クラスの更新
 	CPlayer::Update();
@@ -158,37 +115,6 @@ void My::CGamePlayer::ChangeState(CGamePlayerState* state)
 	{
 		delete state;
 	}
-}
-
-//=============================================
-//エナジー上げる処理
-//=============================================
-void My::CGamePlayer::EnergyUp()
-{
-	int energy = GetEnergy();
-
-#ifdef _DEBUG
-	if (GET_INPUT_KEYBOARD->GetTrigger(DIK_1))
-	{
-		energy += 10;
-		SetEnergy(energy);
-	}
-#endif // _DEBUG
-
-	if (m_pEnergyUpCount == nullptr)
-	{
-		return;
-	}
-
-	if (!m_pEnergyUpCount->CountUp())
-	{
-		return;
-	}
-
-	//エナジー増加
-	++energy;
-	SetEnergy(energy);
-	m_pEnergyUpCount->SetCnt(INT_ZERO);
 }
 
 //=============================================

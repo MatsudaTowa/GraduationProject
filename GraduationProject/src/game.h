@@ -10,7 +10,7 @@
 #include "main.h"
 #include "scene.h"
 #include "player.h"
-#include "game_state.h"
+#include "active_scene_state.h"
 #include "count.h"
 
 /** @brief My –¼‘O‹óŠÔ */

@@ -63,6 +63,15 @@ namespace My
 		void Draw() override;
 
 		/**
+		 * @brief プレイヤー番号代入
+		 * @param [in]playerIdx
+		 */
+		inline void SetPlayerIdx(int playerIdx)
+		{
+			m_playerIdx = playerIdx;
+		}
+
+		/**
 		* @brief ステータス設定
 		* @param [in]ステータス
 		*/
@@ -189,6 +198,15 @@ namespace My
 		}
 
 		/**
+		 * @brief プレイヤーの番号取得
+		 * @return idx
+		 */
+		inline int GetPlayerIdx()
+		{
+			return m_playerIdx;
+		}
+
+		/**
 		 * @brief 体力UIの取得
 		 * @return [in]体力UIのポインタ
 		 */
@@ -214,6 +232,8 @@ namespace My
 		static constexpr int MAX_LIFE = 99;					//!<体力最大値
 
 		Status m_status;			//!ステータス
+
+		int m_playerIdx = -1;
 
 		CLife_UI* m_pLifeUI;		//!<体力UI TODO:UIのインスタンスをキャラクターで持たせないように改良
 		CEnergy_UI* m_pEneryUI;		//!エナジーUI TODO:UIのインスタンスをキャラクターで持たせないように改良

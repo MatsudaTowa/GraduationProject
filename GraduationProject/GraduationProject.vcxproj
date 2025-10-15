@@ -175,7 +175,7 @@
     <ClCompile Include="src\active_manager.cpp" />
     <ClCompile Include="src\game_player.cpp" />
     <ClCompile Include="src\game_player_state.cpp" />
-    <ClCompile Include="src\game_state.cpp" />
+    <ClCompile Include="src\active_scene_state.cpp" />
     <ClCompile Include="src\hand.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\life_UI.cpp" />
@@ -234,7 +234,7 @@
     <ClInclude Include="src\active_manager.h" />
     <ClInclude Include="src\game_player.h" />
     <ClInclude Include="src\game_player_state.h" />
-    <ClInclude Include="src\game_state.h" />
+    <ClInclude Include="src\active_scene_state.h" />
     <ClInclude Include="src\hand.h" />
     <ClInclude Include="src\input.h" />
     <ClInclude Include="src\life_UI.h" />
