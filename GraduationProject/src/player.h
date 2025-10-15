@@ -22,9 +22,6 @@ namespace My
 	public:
 		static constexpr int PLAYER_PRIORITY = 8;		//!<描画順
 
-		static const D3DXVECTOR3 PLAYER_SPAWN_POS;	//!<スポーン位置
-		static const D3DXVECTOR3 PLAYER_SPAWN_ROT;	//!<スポーン方向
-
 		/** @brief モーションの種類列挙*/
 		enum Motion_Type
 		{
@@ -69,9 +66,12 @@ namespace My
 		/**
 		 * @brief 生成
 		 * @param [in]プレイヤーポインタ
+		 * @param [in]pos
+		 * @param [in]rot
+		 * @param [in]id
 		 * @return プレイヤーポインタ
 		 */
-		static CPlayer* Create(CPlayer* player);
+		static CPlayer* Create(CPlayer* player, D3DXVECTOR3 pos, D3DXVECTOR3 rot, int id);
 
 		/**
 		 * @brief 方向のリセット

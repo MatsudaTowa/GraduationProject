@@ -65,12 +65,6 @@ HRESULT My::CGame::Init()
 		m_pDelayCnt->SetFrame(DELAY_FRAME);
 	}
 
-	//ƒvƒŒƒCƒ„[¶¬
-	CPlayer::Create(new CGamePlayer);
-
-	CEnemy::Create({ 300.0f,0.0f,00.0f }, { 0.0f,1.75f,0.f });
-	CEnemy::Create({ -300.0f,0.0f,00.0f }, { 0.0f,-1.75f,0.f });
-	CEnemy::Create({ 0.0f,0.0f,250.0f }, { 0.0f,0.0f,0.f });
 	//CCard::Create();
 
 	return S_OK;

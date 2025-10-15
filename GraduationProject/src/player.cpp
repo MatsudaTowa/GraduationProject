@@ -11,12 +11,6 @@
 #include "camera.h"
 #include "camera_state.h"
 
-//スポーン位置
-const D3DXVECTOR3 My::CPlayer::PLAYER_SPAWN_POS = { 0.0f, 0.0f, -200.0f };
-
-//スポーン方向
-const D3DXVECTOR3 My::CPlayer::PLAYER_SPAWN_ROT = { 0.0f, 3.14f, 0.0f};
-
 //=============================================
 //コンストラクタ
 //=============================================
@@ -39,10 +33,6 @@ HRESULT My::CPlayer::Init()
 	CActiveSceneCharacter::Init();
 
 	Load_Parts("data\\MOTION\\motion_Karateka.bin"); //パーツ読み込み
-
-	//スポーン時の設定
-	SetPos(CPlayer::PLAYER_SPAWN_POS);
-	SetRot(CPlayer::PLAYER_SPAWN_ROT);
 
 	//初期モーション設定
 	SetMotion(MOTION_NEUTRAL);
@@ -88,7 +78,7 @@ void My::CPlayer::Draw()
 //=============================================
 //生成
 //=============================================
-My::CPlayer* My::CPlayer::Create(CPlayer* player)
+My::CPlayer* My::CPlayer::Create(CPlayer* player, D3DXVECTOR3 pos, D3DXVECTOR3 rot, int id)
 {
 	CModel* pModel = GET_MODEL;
 
@@ -98,6 +88,9 @@ My::CPlayer* My::CPlayer::Create(CPlayer* player)
 	if (pPlayer == nullptr) { return nullptr; }
 
 	pPlayer->Init(); //初期化処理
+	pPlayer->SetPos(pos);
+	pPlayer->SetRot(rot);
+	pPlayer->SetPlayerIdx(id);
 
 	pPlayer->SetType(OBJECT_TYPE_PLAYER); //タイプ設定
 

@@ -23,9 +23,6 @@ namespace My
 	class CGamePlayer :public CPlayer
 	{
 	public:
-		static constexpr D3DXVECTOR3 PLAYER_SPAWN_POS;	//!<スポーン位置
-		static constexpr D3DXVECTOR3 PLAYER_SPAWN_ROT;	//!<スポーン方向
-
 		/**
 		 * @brief コンストラクタ
 		 * @param プライオリティ

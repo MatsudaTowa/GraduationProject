@@ -82,12 +82,13 @@ void My::CEnemy::Draw()
 //=============================================
 // ¶¬
 //=============================================
-My::CEnemy* My::CEnemy::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
+My::CEnemy* My::CEnemy::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot,int id)
 {
 	CEnemy* pEnemy = new CEnemy;
 	if (pEnemy == nullptr) { return nullptr; }
 	pEnemy->SetPos(pos);
 	pEnemy->SetRot(rot);
+	pEnemy->SetPlayerIdx(id);
 	pEnemy->Init();
 	return pEnemy;
 }

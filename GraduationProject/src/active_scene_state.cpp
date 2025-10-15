@@ -1,6 +1,6 @@
-//=============================================
+ï»¿//=============================================
 //
-//ƒQ[ƒ€‚ÌƒXƒe[ƒgƒpƒ^[ƒ“[active_scene_state.cpp]
+//ã‚²ãƒ¼ãƒ ã®ã‚¹ãƒ†ãƒ¼ãƒˆãƒ‘ã‚¿ãƒ¼ãƒ³[active_scene_state.cpp]
 //Author Matsuda Towa
 //
 //=============================================
@@ -12,15 +12,22 @@
 #include "energy_gauge.h"
 #include "enemy_state.h"
 
+int My::CLobby::m_characterIdx = -1;
+
 //=============================================
-// ƒƒr[
+// ãƒ­ãƒ“ãƒ¼
 //=============================================
 void My::CLobby::Lobby(CGame* game)
 {
 	std::list<CEnemy*> enemy = CGameManager::GetInstance()->GetEnemyManager()->GetList();
 
-	//“ü—ÍƒfƒoƒCƒXæ“¾
+	//å…¥åŠ›ãƒ‡ãƒã‚¤ã‚¹å–å¾—
 	CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;
+	bool retflag;
+
+	//TODO:ç”Ÿæˆã¯æ¥ç¶šã•ã‚ŒãŸã‚‰è¡Œã†ã‚«ã‚¿ãƒã«ãªã‚‹
+	CreatePlayers(pKeyboard, enemy);
+
 	if (pKeyboard->GetTrigger(DIK_RETURN) && game->GetPauseKey())
 	{
 		for (auto& itr : enemy)
@@ -32,11 +39,15 @@ void My::CLobby::Lobby(CGame* game)
 			itr->ChangeState(new CEnemyDuelState);
 		}
 		game->ResetPauseCnt();
-		CGameManager::GetInstance()->GetPlayer()->ChangeState(new CPlayerDuelState);
-		//’n–Ê¶¬
+
+		if (CGameManager::GetInstance()->GetPlayer() != nullptr)
+		{
+			CGameManager::GetInstance()->GetPlayer()->ChangeState(new CPlayerDuelState);
+		}
+		//åœ°é¢ç”Ÿæˆ
 		CField::Create(VEC3_RESET_ZERO, { FIELD_SIZE,0.0f,FIELD_SIZE }, new CGameField);
 
-		//ƒGƒiƒW[UI˜g•\¦
+		//ã‚¨ãƒŠã‚¸ãƒ¼UIæ è¡¨ç¤º
 		CEnergy_Gauge::CreateEnergy();
 
 		CGameManager::GetInstance()->ChangeState(new CDuel);
@@ -44,7 +55,103 @@ void My::CLobby::Lobby(CGame* game)
 }
 
 //=============================================
-// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ç”Ÿæˆ
+//=============================================
+void My::CLobby::CreatePlayers(My::CInputKeyboard* pKeyboard, std::list<My::CEnemy*>& enemy)
+{
+	if (pKeyboard->GetTrigger(DIK_1))
+	{
+		if (enemy.size() < 3)
+		{
+			++m_characterIdx;
+			CEnemy::Create(VEC3_RESET_ZERO, VEC3_RESET_ZERO, m_characterIdx);
+			// é…ç½®ã‚’æ›´æ–°
+			ArrangePlayerClockwise(VEC3_RESET_ZERO, 200.0f);
+		}
+		else
+		{
+			if (CGameManager::GetInstance()->GetPlayer() != nullptr) { return; }
+			++m_characterIdx;
+
+			CPlayer::Create(new CGamePlayer, VEC3_RESET_ZERO, VEC3_RESET_ZERO, m_characterIdx);
+
+			// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ç”Ÿæˆæ™‚ã«ã‚‚å†é…ç½®
+			ArrangePlayerClockwise(VEC3_RESET_ZERO, 200.0f);
+		}
+	}
+	else if (pKeyboard->GetTrigger(DIK_2))
+	{
+		if (CGameManager::GetInstance()->GetPlayer() != nullptr) { return; }
+		++m_characterIdx;
+
+		CPlayer::Create(new CGamePlayer, VEC3_RESET_ZERO, VEC3_RESET_ZERO, m_characterIdx);
+
+		// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ç”Ÿæˆæ™‚ã«ã‚‚å†é…ç½®
+		ArrangePlayerClockwise(VEC3_RESET_ZERO, 200.0f);
+	}
+}
+
+//=============================================
+// æ™‚è¨ˆå›ã‚Šã«é…ç½®
+//=============================================
+void My::CLobby::ArrangePlayerClockwise(const D3DXVECTOR3 center, float radius)
+{
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ä¸­å¿ƒã«é…ç½®
+	CPlayer* player = CGameManager::GetInstance()->GetPlayer();
+	if (player == nullptr)
+	{
+		return;
+	}
+	// æ•µä¸€è¦§ã‚’å–å¾—
+	std::list<CEnemy*> enemy = CGameManager::GetInstance()->GetEnemyManager()->GetList();
+
+	int total = (int)enemy.size() + 1; // ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼å«ã‚€
+
+	if (total < 0)
+	{
+		return;
+	}
+
+	// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’ä¸‹ã«å›ºå®š
+	float baseAngle = D3DX_PI;
+	float step = -D3DX_PI * 2.0f / total; // æ™‚è¨ˆå›ã‚Š
+
+	float angle = baseAngle;
+	D3DXVECTOR3 pos;
+	pos.x = radius * sinf(angle);
+	pos.y = 0.0f;
+	pos.z = radius * cosf(angle);
+
+	player->SetPos(pos);
+
+	// ä¸­å¿ƒã‚’å‘ã
+	D3DXVECTOR3 dir = center - pos;
+	float rotY = atan2f(-dir.x, -dir.z); // ä¸­å¿ƒæ–¹å‘
+	player->SetRot({ 0.0f, rotY, 0.0f });
+
+	int i = 0;
+	for (auto& itr : enemy)
+	{
+		float angle = baseAngle + step * (i + 1);
+		D3DXVECTOR3 pos;
+		pos.x = radius * sinf(angle);
+		pos.y = 0.0f;
+		pos.z = radius * cosf(angle);
+
+
+		// ä¸­å¿ƒæ–¹å‘ã‚’å‘ã
+		D3DXVECTOR3 dir = center - pos;
+		float rotY = atan2f(-dir.x, -dir.z);
+
+		itr->SetPos(pos);
+		itr->SetRot({ 0.0f, rotY, 0.0f });
+
+		++i;
+	}
+}
+
+//=============================================
+// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 //=============================================
 My::CDuel::CDuel()
 {
@@ -52,25 +159,25 @@ My::CDuel::CDuel()
 }
 
 //=============================================
-// ƒfƒXƒgƒ‰ƒNƒ^
+// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 //=============================================
 My::CDuel::~CDuel()
 {
 }
 
 //=============================================
-// ƒfƒ…ƒGƒ‹
+// ãƒ‡ãƒ¥ã‚¨ãƒ«
 //=============================================
 void My::CDuel::Duel(CGame* game)
 {
-	//ƒIƒuƒWƒFƒNƒg‚ÌƒAƒbƒvƒf[ƒg‚ğ‹–‰Â‚·‚é
+	//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆã‚’è¨±å¯ã™ã‚‹
 	game->StopObject(false);
 
-	//ƒQ[ƒW—pƒ`ƒƒ[ƒW‚ÌXV
+	//ã‚²ãƒ¼ã‚¸ç”¨ãƒãƒ£ãƒ¼ã‚¸ã®æ›´æ–°
 	CEnergy_Charge* pCharge = CEnergy_Charge::GetInstance();
 	pCharge->Update();
 
-	//“ü—ÍƒfƒoƒCƒXæ“¾
+	//å…¥åŠ›ãƒ‡ãƒã‚¤ã‚¹å–å¾—
 	CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;
 	if (pKeyboard->GetTrigger(DIK_RETURN) && game->GetPauseKey())
 	{
@@ -85,7 +192,7 @@ void My::CDuel::Duel(CGame* game)
 	}
 #endif
 
-	//ƒ|[ƒYˆÚs
+	//ãƒãƒ¼ã‚ºç§»è¡Œ
 	if (pKeyboard->GetTrigger(DIK_P) && game->GetPauseKey())
 	{
 		game->ResetPauseCnt();
@@ -95,21 +202,21 @@ void My::CDuel::Duel(CGame* game)
 }
 
 //=============================================
-// ƒfƒXƒgƒ‰ƒNƒ^
+// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 //=============================================
 My::CPause::~CPause()
 {
 }
 
 //=============================================
-// ƒ|[ƒY
+// ãƒãƒ¼ã‚º
 //=============================================
 void My::CPause::Pause(CGame* game)
 {
-	//ƒIƒuƒWƒFƒNƒg‚ÌƒAƒbƒvƒf[ƒg‚ğ~‚ß‚é
+	//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ãƒˆã‚’æ­¢ã‚ã‚‹
 	game->StopObject(true);
 
-	//“ü—ÍƒfƒoƒCƒXæ“¾
+	//å…¥åŠ›ãƒ‡ãƒã‚¤ã‚¹å–å¾—
 	CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;
 
 	if (pKeyboard->GetTrigger(DIK_P) && game->GetPauseKey())
@@ -121,7 +228,7 @@ void My::CPause::Pause(CGame* game)
 }
 
 //=============================================
-// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 //=============================================
 My::CCardCast::CCardCast()
 {
@@ -129,7 +236,7 @@ My::CCardCast::CCardCast()
 }
 
 //=============================================
-// ƒfƒXƒgƒ‰ƒNƒ^
+// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 //=============================================
 My::CCardCast::~CCardCast()
 {
@@ -144,13 +251,13 @@ My::CCardCast::~CCardCast()
 }
 
 //=============================================
-// ƒJ[ƒhƒLƒƒƒXƒg
+// ã‚«ãƒ¼ãƒ‰ã‚­ãƒ£ã‚¹ãƒˆ
 //=============================================
 void My::CCardCast::CardCast(CGame* game)
 {
 	CGameManager::GetInstance()->SelectArea();
 #ifdef _DEBUG
-	//“ü—ÍƒfƒoƒCƒXæ“¾
+	//å…¥åŠ›ãƒ‡ãƒã‚¤ã‚¹å–å¾—
 	CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;
 	if (pKeyboard->GetTrigger(DIK_C) && game->GetPauseKey())
 	{

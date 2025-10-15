@@ -14,6 +14,7 @@ namespace My
 	//前方宣言
 	//=============================================
 	class CGame;
+	class CEnemy;
 
 	/** @brief ゲームのステートクラス */
 	class CActiveSceneState
@@ -58,9 +59,26 @@ namespace My
 		* @param [in]ゲームプレイヤーポインタ
 		*/
 		void Lobby(CGame* game) override;
+		/**
+		 * @brief プレイヤー生成
+		 * @param [in]pKeyboard
+		 * @param [in]enemy
+		 */
+		void CreatePlayers(My::CInputKeyboard* pKeyboard, std::list<My::CEnemy*>& enemy);
 	private:
 		//正方形なのでサイズは統一
 		static constexpr float FIELD_SIZE = 200.0f;
+
+		static constexpr int NUM_PLAYER = 4;
+		static constexpr float RADIUS = 300.0f;
+
+		/**
+		 * @brief 時計回りに配置
+		 * @param [in]center
+		 * @param [in]radius
+		 */
+		void ArrangePlayerClockwise(const D3DXVECTOR3 center, float radius);
+		static int m_characterIdx; //ID TODO:サーバーから自身のID取得するから疑似的にオフラインで再現するためにstaticにしてます。
 	};
 
 	/** @brief デュエルクラス */

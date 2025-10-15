@@ -67,9 +67,10 @@ namespace My
 		 * @brief 生成
 		 * @param [in]位置
 		 * @param [in]方向
+		 * @param [in]ID
 		 * @return エネミーポインタ
 		 */
-		static CEnemy* Create(D3DXVECTOR3 pos,D3DXVECTOR3 rot);
+		static CEnemy* Create(D3DXVECTOR3 pos,D3DXVECTOR3 rot,int id);
 	private:
 	};
 }
