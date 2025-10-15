@@ -59,19 +59,24 @@ namespace My
 		* @param [in]ゲームプレイヤーポインタ
 		*/
 		void Lobby(CGame* game) override;
-		/**
-		 * @brief プレイヤー生成
-		 * @param [in]pKeyboard
-		 * @param [in]enemy
-		 */
-		void CreatePlayers(My::CInputKeyboard* pKeyboard, std::list<My::CEnemy*>& enemy);
 	private:
 		//正方形なのでサイズは統一
 		static constexpr float FIELD_SIZE = 200.0f;
 
 		static constexpr int NUM_PLAYER = 4;
 		static constexpr float RADIUS = 300.0f;
-
+		/**
+		 * @brief 足りていないプレイヤーを生成
+		 * @param [in]total
+		 * @param [in]enemy
+		 */
+		void FillEmptyPlayer(int& total, std::list<My::CEnemy*>& enemy);
+		/**
+		 * @brief プレイヤー生成
+		 * @param [in]pKeyboard
+		 * @param [in]enemy
+		 */
+		void CreatePlayers(My::CInputKeyboard* pKeyboard, std::list<My::CEnemy*>& enemy);
 		/**
 		 * @brief 時計回りに配置
 		 * @param [in]center

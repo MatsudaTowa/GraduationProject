@@ -30,6 +30,11 @@ void My::CLobby::Lobby(CGame* game)
 
 	if (pKeyboard->GetTrigger(DIK_RETURN) && game->GetPauseKey())
 	{
+		int total = (int)enemy.size() + 1; // プレイヤー含む
+
+		//足りてないプレイヤーを生成
+		FillEmptyPlayer(total, enemy);
+	
 		for (auto& itr : enemy)
 		{
 			if (itr == nullptr)
@@ -51,6 +56,29 @@ void My::CLobby::Lobby(CGame* game)
 		CEnergy_Gauge::CreateEnergy();
 
 		CGameManager::GetInstance()->ChangeState(new CDuel);
+	}
+}
+
+//=============================================
+// 足りていないプレイヤーを生成
+//=============================================
+void My::CLobby::FillEmptyPlayer(int& total, std::list<My::CEnemy*>& enemy)
+{
+	while (total < NUM_PLAYER)
+	{
+		if (CGameManager::GetInstance()->GetPlayer() == nullptr)
+		{
+			++m_characterIdx;
+			CPlayer::Create(new CGamePlayer, VEC3_RESET_ZERO, VEC3_RESET_ZERO, m_characterIdx);
+			ArrangePlayerClockwise(VEC3_RESET_ZERO, 200.0f);
+			continue;
+		}
+		++m_characterIdx;
+		CEnemy::Create(VEC3_RESET_ZERO, VEC3_RESET_ZERO, m_characterIdx);
+		enemy = CGameManager::GetInstance()->GetEnemyManager()->GetList();
+		total = (int)enemy.size() + 1; // プレイヤー含む
+									   // 配置を更新
+		ArrangePlayerClockwise(VEC3_RESET_ZERO, 200.0f);
 	}
 }
 
