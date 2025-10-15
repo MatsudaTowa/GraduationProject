@@ -15,7 +15,9 @@ namespace
 // コンストラクタ
 //=============================================
 My::CArea::CArea(int nPriority):CObject2D_Triangle(nPriority),
-m_isSelect(false)
+m_isSelect(false),
+m_isActive(false),
+m_pCharacter(nullptr)
 {
 }
 
@@ -52,13 +54,29 @@ void My::CArea::Update()
 {
 	SetVtx();
 
-	if (!m_isSelect)
+	if (!m_isActive)
+	{
+		SetColor(COLOR_NONE);
+		return;
+	}
+
+	if (!m_isSelect || m_pCharacter == nullptr)
 	{
 		SetColor(DEFAULT_COLOR);
 		return;
 	}
 
 	SetColor(COLOR_NONE);
+
+	if (GET_INPUT_MOUSE->GetTrigger(0))
+	{
+		int life = m_pCharacter->GetLife();
+		if (life > 0)
+		{
+			--life;
+		}
+		m_pCharacter->SetLife(life);
+	}
 }
 
 //=============================================

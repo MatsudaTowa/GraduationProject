@@ -83,6 +83,13 @@ namespace My
 		 * @param [in]radius
 		 */
 		void ArrangePlayerClockwise(const D3DXVECTOR3 center, float radius);
+
+		/**
+		 * @brief キャラクターのエリアを判断
+		 * @param [in]angle
+		 * @return エリア
+		 */
+		CInputMouse::AREA CharacterArea(float angle);
 		static int m_characterIdx; //ID TODO:サーバーから自身のID取得するから疑似的にオフラインで再現するためにstaticにしてます。
 	};
 

@@ -9,6 +9,7 @@
 #define _AREA_H_
 #include "main.h"
 #include "object2D_triangle.h"
+#include "active_scene_character.h"
 
 /** @brief My 名前空間 */
 namespace My
@@ -78,8 +79,46 @@ namespace My
 		{
 			m_isSelect = isSelect;
 		}
+
+		/**
+		 * @brief 選択しているか取得
+		 * @return
+		 */
+		inline bool GetActive()
+		{
+			return m_isActive;
+		}
+
+		/**
+		 * @brief 選択されているか設定
+		 * @param [in]isSelect
+		 */
+		inline void SetActive(bool isActive)
+		{
+			m_isActive = isActive;
+		}
+
+		/**
+		 * @brief 選択しているか取得
+		 * @return m_pCharacter
+		 */
+		inline CActiveSceneCharacter* GetCharacter()
+		{
+			return m_pCharacter;
+		}
+
+		/**
+		 * @brief 選択されているか設定
+		 * @param [in]isSelect
+		 */
+		inline void SetCharacter(CActiveSceneCharacter* character)
+		{
+			m_pCharacter = character;
+		}
 	private:
 		bool m_isSelect; //選択されているか
+		bool m_isActive; //実行するか
+		CActiveSceneCharacter* m_pCharacter;
 	};
 }
 

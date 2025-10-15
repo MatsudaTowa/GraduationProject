@@ -151,6 +151,11 @@ void My::CLobby::ArrangePlayerClockwise(const D3DXVECTOR3 center, float radius)
 	pos.z = radius * cosf(angle);
 
 	player->SetPos(pos);
+	CArea* area = CGameManager::GetInstance()->GetArea(CInputMouse::DOWN);
+	if (area != nullptr)
+	{
+		area->SetCharacter(player);
+	}
 
 	// 中心を向く
 	D3DXVECTOR3 dir = center - pos;
@@ -174,7 +179,36 @@ void My::CLobby::ArrangePlayerClockwise(const D3DXVECTOR3 center, float radius)
 		itr->SetPos(pos);
 		itr->SetRot({ 0.0f, rotY, 0.0f });
 
+		CArea* area = CGameManager::GetInstance()->GetArea(CharacterArea(angle));
+		if (area != nullptr)
+		{
+			area->SetCharacter(itr);
+		}
 		++i;
+	}
+}
+
+//=============================================
+// キャラクターのエリアを判断
+//=============================================
+My::CInputMouse::AREA My::CLobby::CharacterArea(float angle)
+{
+	// 基準（Z+が前＝UP、Z-が下＝DOWN）と対応づけ
+	if (angle >= -D3DX_PI * 0.25f && angle < D3DX_PI * 0.25f)
+	{
+		return CInputMouse::AREA::UP;
+	}
+	else if (angle >= D3DX_PI * 0.25f && angle < D3DX_PI * 0.75f)
+	{
+		return CInputMouse::AREA::RIGHT;
+	}
+	else if (angle >= -D3DX_PI * 0.75f && angle < -D3DX_PI * 0.25f)
+	{
+		return CInputMouse::AREA::LEFT;
+	}
+	else
+	{
+		return CInputMouse::AREA::DOWN;
 	}
 }
 
@@ -260,7 +294,12 @@ void My::CPause::Pause(CGame* game)
 //=============================================
 My::CCardCast::CCardCast()
 {
-	CGameManager::GetInstance()->CreateArea();
+	for (int i = 0; i < CInputMouse::AREA::MAX - 1; ++i)
+	{
+		CArea* area = CGameManager::GetInstance()->GetArea(i);
+		if (area == nullptr) { continue; }
+		area->SetActive(true);
+	}
 }
 
 //=============================================
@@ -272,9 +311,7 @@ My::CCardCast::~CCardCast()
 	{
 		CArea* area = CGameManager::GetInstance()->GetArea(i);
 		if (area == nullptr) { continue; }
-		area->Uninit();
-		area = nullptr;
-		CGameManager::GetInstance()->SetArea(area, i);
+		area->SetActive(false);
 	}
 }
 

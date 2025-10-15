@@ -65,6 +65,8 @@ HRESULT My::CGame::Init()
 		m_pDelayCnt->SetFrame(DELAY_FRAME);
 	}
 
+	CGameManager::GetInstance()->CreateArea();
+
 	//CCard::Create();
 
 	return S_OK;
@@ -81,6 +83,14 @@ void My::CGame::Uninit()
 	//	delete CJson::GetJson();
 	//	CJson::GetJson() = nullptr;
 	//}
+	for (int i = 0; i < CInputMouse::AREA::MAX - 1; ++i)
+	{
+		CArea* area = CGameManager::GetInstance()->GetArea(i);
+		if (area == nullptr) { continue; }
+		area->Uninit();
+		area = nullptr;
+		CGameManager::GetInstance()->SetArea(area, i);
+	}
 
 	if (m_pDelayCnt != nullptr)
 	{

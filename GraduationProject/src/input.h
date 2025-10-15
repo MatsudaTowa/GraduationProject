@@ -64,7 +64,6 @@ namespace My
 	{
 	public:
 		static constexpr int NUM_MOUSE_MAX = 3; //マウスのキー数
-
 		enum AREA
 		{
 			UP = 0,
