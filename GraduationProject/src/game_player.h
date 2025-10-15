@@ -58,20 +58,6 @@ namespace My
 		 */
 		void Draw() override;
 
-		/**
-		 * @brief ステート変更
-		 * @param [in]次のステート
-		 */
-		void ChangeState(CGamePlayerState* state);
-		
-		/**
-		 * @brief ステート取得
-		 * @return ステートポインタ
-		 */
-		inline CGamePlayerState* GetState()
-		{
-			return m_pState;
-		}
 
 		/**
 		 * @brief 手札取得
@@ -102,7 +88,6 @@ private:
 		 */
 		void Debug()override;
 
-		CGamePlayerState* m_pState;						//!プレイヤーのステート
 		CHand* m_pHand;	// 手札
 	};
 }

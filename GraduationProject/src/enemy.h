@@ -14,7 +14,7 @@
 namespace My
 {
 	/**
-	 * @brief プレイヤークラス
+	 * @brief エネミークラス
 	 * @copydoc CActiveSceneCharacter
 	 */
 	class CEnemy :public CActiveSceneCharacter

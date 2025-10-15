@@ -26,8 +26,13 @@ My::CLobbyState::~CLobbyState()
 //=============================================
 // ロビー処理
 //=============================================
-void My::CLobbyState::Lobby(CGamePlayer* player)
+void My::CLobbyState::Lobby(CActiveSceneCharacter* character)
 {
+	if (typeid(*character) != typeid(CGamePlayer))
+	{
+		return;
+	}
+	CGamePlayer* player = dynamic_cast<CGamePlayer*>(character);
 	//モーション設定
 	player->SetMotion(CPlayer::MOTION_NEUTRAL);
 }
@@ -60,8 +65,13 @@ My::CDuelState::~CDuelState()
 //=============================================
 // デュエル処理
 //=============================================
-void My::CDuelState::Duel(CGamePlayer* player)
+void My::CDuelState::Duel(CActiveSceneCharacter* character)
 {
+	if (typeid(*character) != typeid(CGamePlayer))
+	{
+		return;
+	}
+	CGamePlayer* player = dynamic_cast<CGamePlayer*>(character);
 	//UIが生成されてなければ生成される
 	CreateDuelUI(player);
 	//モーション設定

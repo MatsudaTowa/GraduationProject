@@ -12,7 +12,6 @@
 // コンストラクタ
 //=============================================
 My::CGamePlayer::CGamePlayer(int nPriority):CPlayer(nPriority),
-m_pState(nullptr),												//ステート初期化
 m_pHand(nullptr)												// 手札初期化
 {
 }
@@ -29,9 +28,9 @@ My::CGamePlayer::~CGamePlayer()
 //=============================================
 HRESULT My::CGamePlayer::Init()
 {
-	if (m_pState == nullptr)
+	if (GetState() == nullptr)
 	{
-		m_pState = new CLobbyState;
+		ChangeState(new CLobbyState);
 	}
 
 	//親クラスの初期化実行
@@ -53,11 +52,6 @@ void My::CGamePlayer::Uninit()
 		delete m_pHand;
 		m_pHand = nullptr;
 	}
-	if (m_pState != nullptr)
-	{
-		delete m_pState;
-		m_pState = nullptr;
-	}
 	//親クラスの終了処理
 	CPlayer::Uninit();
 }
@@ -67,13 +61,6 @@ void My::CGamePlayer::Uninit()
 //=============================================
 void My::CGamePlayer::Update()
 {
-	if (m_pState != nullptr)
-	{
-		m_pState->Lobby(this);
-
-		m_pState->Duel(this);
-	}
-
 #ifdef _DEBUG
 	int life = GetLife();
 	if (GET_INPUT_KEYBOARD->GetTrigger(DIK_L))
@@ -98,23 +85,6 @@ void My::CGamePlayer::Draw()
 {
 	//親クラスの描画
 	CPlayer::Draw();
-}
-
-//=============================================
-// ステート変更
-//=============================================
-void My::CGamePlayer::ChangeState(CGamePlayerState* state)
-{
-	//今のステートを消し引数のステートに切り替える
-	if (m_pState != nullptr)
-	{
-		delete m_pState;
-		m_pState = state;
-	}
-	else if (m_pState == nullptr)
-	{
-		delete state;
-	}
 }
 
 //=============================================

@@ -218,6 +218,8 @@
     </ClCompile>
     <ClCompile Include="src\energy_gauge.cpp">
       <Filter>object\2D\UI</Filter>
+    <ClCompile Include="src\enemy_state.cpp">
+      <Filter>object\character</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -391,6 +393,11 @@
     </ClInclude>
     <ClInclude Include="src\energy_gauge.h">
       <Filter>object\2D\UI</Filter>
+    <ClInclude Include="src\active_scene_character_state.h">
+      <Filter>object\character</Filter>
+    </ClInclude>
+    <ClInclude Include="src\enemy_state.h">
+      <Filter>object\character</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

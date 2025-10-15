@@ -16,12 +16,20 @@
 //=============================================
 void My::CLobby::Lobby(CGame* game)
 {
-	CGameManager::GetInstance()->GetEnemyManager()->GetList().size();
+	std::list<CEnemy*> enemy = CGameManager::GetInstance()->GetEnemyManager()->GetList();
 
 	//入力デバイス取得
 	CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;
 	if (pKeyboard->GetTrigger(DIK_RETURN) && game->GetPauseKey())
 	{
+		for (auto& itr : enemy)
+		{
+			if (itr == nullptr)
+			{
+				continue;
+			}
+			itr->ChangeState(new CDuelState);
+		}
 		game->ResetPauseCnt();
 		CGameManager::GetInstance()->GetPlayer()->ChangeState(new CDuelState);
 		//地面生成
