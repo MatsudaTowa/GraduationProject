@@ -41,6 +41,9 @@ My::CEnergy_Charge::~CEnergy_Charge()
 //======================================================================
 HRESULT My::CEnergy_Charge::Init()
 {
+	m_fTimeSpend = FLOAT_ZERO;
+	m_fChargeSpeed = SPEED_DEF;
+	m_fChargeTime = CHARGE_DEF;
 	return S_OK;
 }
 //======================================================================
