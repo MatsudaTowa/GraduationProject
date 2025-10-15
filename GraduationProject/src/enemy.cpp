@@ -6,6 +6,7 @@
 //=============================================
 #include "enemy.h"
 #include "active_manager.h"
+#include "enemy_state.h"
 
 //=============================================
 // コンストラクタ
@@ -35,7 +36,7 @@ HRESULT My::CEnemy::Init()
 {
 	if (GetState() == nullptr)
 	{
-		ChangeState(new CLobbyState);
+		ChangeState(new CEnemyLobbyState);
 	}
 
 	CActiveSceneCharacter::Init();

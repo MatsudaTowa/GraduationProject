@@ -19,17 +19,17 @@ namespace My
 	class CGamePlayer;
 
 	/** @brief プレイヤーのデュエルクラス */
-	class CLobbyState :public CActiveSceneCharacterState
+	class CPlayerLobbyState :public CActiveSceneCharacterState
 	{
 	public:
 		/**
 		 * @brief コンストラクタ
 		 */
-		CLobbyState();
+		CPlayerLobbyState();
 		/**
 		 * @brief デストラクタ
 		 */
-		~CLobbyState() override;
+		~CPlayerLobbyState() override;
 		/**
 		* @brief デュエル処理
 		* @param [in]キャラクターポインタ
@@ -38,17 +38,17 @@ namespace My
 	};
 
 	/** @brief プレイヤーのデュエルクラス */
-	class CDuelState :public CActiveSceneCharacterState
+	class CPlayerDuelState :public CActiveSceneCharacterState
 	{
 	public:
 		/**
 		 * @brief コンストラクタ
 		 */
-		CDuelState();
+		CPlayerDuelState();
 		/**
 		 * @brief デストラクタ
 		 */
-		~CDuelState() override;
+		~CPlayerDuelState() override;
 		/**
 		* @brief デュエル処理
 		* @param [in]キャラクターポインタ

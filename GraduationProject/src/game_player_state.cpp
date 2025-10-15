@@ -12,21 +12,21 @@
 //=============================================
 // コンストラクタ
 //=============================================
-My::CLobbyState::CLobbyState()
+My::CPlayerLobbyState::CPlayerLobbyState()
 {
 }
 
 //=============================================
 // デストラクタ
 //=============================================
-My::CLobbyState::~CLobbyState()
+My::CPlayerLobbyState::~CPlayerLobbyState()
 {
 }
 
 //=============================================
 // ロビー処理
 //=============================================
-void My::CLobbyState::Lobby(CActiveSceneCharacter* character)
+void My::CPlayerLobbyState::Lobby(CActiveSceneCharacter* character)
 {
 	if (typeid(*character) != typeid(CGamePlayer))
 	{
@@ -40,7 +40,7 @@ void My::CLobbyState::Lobby(CActiveSceneCharacter* character)
 //=============================================
 // コンストラクタ
 //=============================================
-My::CDuelState::CDuelState():m_pEnergyUpCount(nullptr)
+My::CPlayerDuelState::CPlayerDuelState():m_pEnergyUpCount(nullptr)
 {
 	if (m_pEnergyUpCount == nullptr)
 	{
@@ -53,7 +53,7 @@ My::CDuelState::CDuelState():m_pEnergyUpCount(nullptr)
 //=============================================
 // デストラクタ
 //=============================================
-My::CDuelState::~CDuelState()
+My::CPlayerDuelState::~CPlayerDuelState()
 {
 	if (m_pEnergyUpCount != nullptr)
 	{
@@ -65,7 +65,7 @@ My::CDuelState::~CDuelState()
 //=============================================
 // デュエル処理
 //=============================================
-void My::CDuelState::Duel(CActiveSceneCharacter* character)
+void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 {
 	if (typeid(*character) != typeid(CGamePlayer))
 	{
@@ -96,7 +96,7 @@ void My::CDuelState::Duel(CActiveSceneCharacter* character)
 //=============================================
 // UI設定
 //=============================================
-void My::CDuelState::CreateDuelUI(CGamePlayer* player)
+void My::CPlayerDuelState::CreateDuelUI(CGamePlayer* player)
 {
 	if (player->GetHand() == nullptr)
 	{// 手札生成
@@ -122,7 +122,7 @@ void My::CDuelState::CreateDuelUI(CGamePlayer* player)
 //=============================================
 //エナジー上げる処理
 //=============================================
-void My::CDuelState::EnergyUp(CGamePlayer* player)
+void My::CPlayerDuelState::EnergyUp(CGamePlayer* player)
 {
 	int energy = player->GetEnergy();
 

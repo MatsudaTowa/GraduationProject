@@ -30,7 +30,7 @@ HRESULT My::CGamePlayer::Init()
 {
 	if (GetState() == nullptr)
 	{
-		ChangeState(new CLobbyState);
+		ChangeState(new CPlayerLobbyState);
 	}
 
 	//親クラスの初期化実行

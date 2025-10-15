@@ -10,6 +10,7 @@
 #include "game_field.h"
 #include "energy_charge.h"
 #include "energy_gauge.h"
+#include "enemy_state.h"
 
 //=============================================
 // ÉçÉrÅ[
@@ -28,10 +29,10 @@ void My::CLobby::Lobby(CGame* game)
 			{
 				continue;
 			}
-			itr->ChangeState(new CDuelState);
+			itr->ChangeState(new CEnemyDuelState);
 		}
 		game->ResetPauseCnt();
-		CGameManager::GetInstance()->GetPlayer()->ChangeState(new CDuelState);
+		CGameManager::GetInstance()->GetPlayer()->ChangeState(new CPlayerDuelState);
 		//ínñ ê∂ê¨
 		CField::Create(VEC3_RESET_ZERO, { FIELD_SIZE,0.0f,FIELD_SIZE }, new CGameField);
 
