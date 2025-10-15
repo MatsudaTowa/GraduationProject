@@ -68,6 +68,7 @@ void My::CArea::Update()
 
 	SetColor(COLOR_NONE);
 
+	//TODO:ここに選択されたカードの処理を！
 	if (GET_INPUT_MOUSE->GetTrigger(0))
 	{
 		int life = m_pCharacter->GetLife();
