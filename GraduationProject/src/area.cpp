@@ -60,7 +60,13 @@ void My::CArea::Update()
 		return;
 	}
 
-	if (!m_isSelect || m_pCharacter == nullptr)
+	if (m_pCharacter == nullptr)
+	{
+		SetColor(DEFAULT_COLOR);
+		return;
+	}
+
+	if (!m_isSelect || m_pCharacter->GetLife() <= INT_ZERO)
 	{
 		SetColor(DEFAULT_COLOR);
 		return;
@@ -72,7 +78,7 @@ void My::CArea::Update()
 	if (GET_INPUT_MOUSE->GetTrigger(0))
 	{
 		int life = m_pCharacter->GetLife();
-		if (life > 0)
+		if (life > INT_ZERO)
 		{
 			--life;
 		}
