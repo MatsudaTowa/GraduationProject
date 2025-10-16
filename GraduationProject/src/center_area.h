@@ -59,7 +59,26 @@ namespace My
 		 * @return エリアのポインタ
 		 */
 		static CCenterArea* Create();
+
+		/**
+		 * @brief 選択しているか取得
+		 * @return
+		 */
+		inline bool GetSelect()
+		{
+			return m_isSelect;
+		}
+
+		/**
+		 * @brief 選択されているか設定
+		 * @param [in]isSelect
+		 */
+		inline void SetSelect(bool isSelect)
+		{
+			m_isSelect = isSelect;
+		}
 	private:
+		bool m_isSelect; //選択されているか
 	};
 }
 

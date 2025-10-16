@@ -8,13 +8,15 @@
 #include "active_manager.h"
 namespace
 {
-	const std::string TEX_NAME = "data\\TEXTURE\\play.png";
+	const std::string TEX_NAME = "data\\TEXTURE\\cancel.png";
+	const D3DXCOLOR DEFAULT_COLOR = { 0.2f,0.2f,0.2f,1.0f };
 }
 
 //=============================================
 // コンストラクタ
 //=============================================
-My::CCenterArea::CCenterArea(int nPriority):CObject2D(nPriority)
+My::CCenterArea::CCenterArea(int nPriority):CObject2D(nPriority),
+m_isSelect(false)
 {
 }
 
@@ -71,7 +73,20 @@ void My::CCenterArea::Update()
 		SetColor(COLOR_NONE);
 		return;
 	}
+
+	if (!m_isSelect)
+	{
+		SetColor(DEFAULT_COLOR);
+		return;
+	}
+
 	SetColor(COLOR_WHITE);
+
+	//TODO:カードを離したらに変更予定
+	if (GET_INPUT_MOUSE->GetTrigger(0))
+	{
+		CGameManager::GetInstance()->ChangeState(new CDuel);
+	}
 }
 
 //=============================================
