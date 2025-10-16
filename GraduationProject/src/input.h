@@ -64,7 +64,7 @@ namespace My
 	{
 	public:
 		static constexpr int NUM_MOUSE_MAX = 3; //マウスのキー数
-		static constexpr float CENTER_RADIUS = 45.0f;
+		static constexpr float CENTER_RADIUS = 90.0f;
 
 		enum AREA
 		{

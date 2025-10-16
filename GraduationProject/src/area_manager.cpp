@@ -102,12 +102,27 @@ void My::CAreaManager::SelectArea()
 {
 	CInputMouse::AREA area = GET_INPUT_MOUSE->GetArea();
 
-	for (int i = 0; i < CInputMouse::AREA::MAX - 1; ++i)
+	if (area == CInputMouse::AREA::CENTER)
 	{
-		m_pArea[i]->SetSelect(false);
-		if (area == CInputMouse::CENTER) { continue; }
+		m_pCenterArea->SetSelect(true);
+	}
+	else
+	{
+		m_pArea[area]->SetSelect(true);	
+	}
 
-		//選択されているところは明るく
-		m_pArea[area]->SetSelect(true);
+	for (int i = 0; i < CInputMouse::AREA::MAX; ++i)
+	{
+		if (i != area)
+		{//選択されているエリア以外の
+			if (i == CInputMouse::AREA::CENTER)
+			{//真ん中だったら
+				m_pCenterArea->SetSelect(false);
+			}
+			else
+			{//三角形だったら
+				m_pArea[i]->SetSelect(false);
+			}
+		}
 	}
 }
