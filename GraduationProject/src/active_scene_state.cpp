@@ -151,7 +151,7 @@ void My::CLobby::ArrangePlayerClockwise(const D3DXVECTOR3 center, float radius)
 	pos.z = radius * cosf(angle);
 
 	player->SetPos(pos);
-	CArea* area = CGameManager::GetInstance()->GetArea(CInputMouse::DOWN);
+	CArea* area = CGameManager::GetInstance()->GetAreaManager()->GetArea(CInputMouse::DOWN);
 	if (area != nullptr)
 	{
 		area->SetCharacter(player);
@@ -179,7 +179,7 @@ void My::CLobby::ArrangePlayerClockwise(const D3DXVECTOR3 center, float radius)
 		itr->SetPos(pos);
 		itr->SetRot({ 0.0f, rotY, 0.0f });
 
-		CArea* area = CGameManager::GetInstance()->GetArea(CharacterArea(angle));
+		CArea* area = CGameManager::GetInstance()->GetAreaManager()->GetArea(CharacterArea(angle));
 		if (area != nullptr)
 		{
 			area->SetCharacter(itr);
@@ -249,7 +249,6 @@ void My::CDuel::Duel(CGame* game)
 	if (pKeyboard->GetTrigger(DIK_C) && game->GetPauseKey())
 	{
 		game->ResetPauseCnt();
-
 		CGameManager::GetInstance()->ChangeState(new CCardCast);
 	}
 #endif
@@ -294,12 +293,8 @@ void My::CPause::Pause(CGame* game)
 //=============================================
 My::CCardCast::CCardCast()
 {
-	for (int i = 0; i < CInputMouse::AREA::MAX - 1; ++i)
-	{
-		CArea* area = CGameManager::GetInstance()->GetArea(i);
-		if (area == nullptr) { continue; }
-		area->SetActive(true);
-	}
+	CAreaManager* area_manager = CGameManager::GetInstance()->GetAreaManager();
+	area_manager->SetActive(true);
 }
 
 //=============================================
@@ -307,12 +302,9 @@ My::CCardCast::CCardCast()
 //=============================================
 My::CCardCast::~CCardCast()
 {
-	for (int i = 0; i < CInputMouse::AREA::MAX - 1; ++i)
-	{
-		CArea* area = CGameManager::GetInstance()->GetArea(i);
-		if (area == nullptr) { continue; }
-		area->SetActive(false);
-	}
+	CAreaManager* area_manager = CGameManager::GetInstance()->GetAreaManager();
+	if (area_manager == nullptr) { return; }
+	area_manager->SetActive(false);
 }
 
 //=============================================
@@ -320,7 +312,7 @@ My::CCardCast::~CCardCast()
 //=============================================
 void My::CCardCast::CardCast(CGame* game)
 {
-	CGameManager::GetInstance()->SelectArea();
+	CGameManager::GetInstance()->GetAreaManager()->SelectArea();
 #ifdef _DEBUG
 	//入力デバイス取得
 	CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;

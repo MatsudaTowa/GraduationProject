@@ -1,55 +1,68 @@
 //=============================================
 //
-//エリア[area.cpp]
+//中央エリア[center_area.h]
 //Author Matsuda Towa
 //
 //=============================================
-#include "area.h"
+#include "center_area.h"
 #include "active_manager.h"
 namespace
 {
-	const D3DXCOLOR DEFAULT_COLOR = { 0.0f,0.0f,0.0f,0.7f };
+	const std::string TEX_NAME = "data\\TEXTURE\\play.png";
 }
 
 //=============================================
 // コンストラクタ
 //=============================================
-My::CArea::CArea(int nPriority):CObject2D_Triangle(nPriority),
-m_isSelect(false),
-m_pCharacter(nullptr)
+My::CCenterArea::CCenterArea(int nPriority):CObject2D(nPriority)
 {
 }
 
 //=============================================
 // デストラクタ
 //=============================================
-My::CArea::~CArea()
+My::CCenterArea::~CCenterArea()
 {
 }
 
 //=============================================
 // 初期化
 //=============================================
-HRESULT My::CArea::Init()
+HRESULT My::CCenterArea::Init()
 {
-	CObject2D_Triangle::Init();
-	SetColor(DEFAULT_COLOR);
+	CObject2D::Init();
+
+	SetPos({SCREEN_WIDTH * HALF,SCREEN_HEIGHT * HALF,0.0f});
+
+	SetSize({ CInputMouse::CENTER_RADIUS,CInputMouse::CENTER_RADIUS});
+
+	D3DXCOLOR col = GetColor();
+	col = COLOR_WHITE;
+	SetColor(col);
+
+	//テクスチャ登録
+	CTexture* pTexture = CManager::GetInstance()->GetTexture();
+	CObject2D::BindTexture(pTexture->GetAddress(pTexture->Regist(&TEX_NAME)));//テクスチャ設定
+
+	SetTexPos(VEC2_RESET_ONE);
+
 	SetVtx();
+
 	return S_OK;
 }
 
 //=============================================
 // 終了
 //=============================================
-void My::CArea::Uninit()
+void My::CCenterArea::Uninit()
 {
-	CObject2D_Triangle::Uninit();
+	CObject2D::Uninit();
 }
 
 //=============================================
 // 更新
 //=============================================
-void My::CArea::Update()
+void My::CCenterArea::Update()
 {
 	SetVtx();
 
@@ -58,55 +71,25 @@ void My::CArea::Update()
 		SetColor(COLOR_NONE);
 		return;
 	}
-
-	if (m_pCharacter == nullptr)
-	{
-		SetColor(DEFAULT_COLOR);
-		return;
-	}
-
-	if (!m_isSelect || m_pCharacter->GetLife() <= INT_ZERO)
-	{
-		SetColor(DEFAULT_COLOR);
-		return;
-	}
-
-	SetColor(COLOR_NONE);
-
-	//TODO:ここに選択されたカードの処理を！
-	if (GET_INPUT_MOUSE->GetTrigger(0))
-	{
-		int life = m_pCharacter->GetLife();
-		if (life > INT_ZERO)
-		{
-			--life;
-		}
-		m_pCharacter->SetLife(life);
-	}
+	SetColor(COLOR_WHITE);
 }
 
 //=============================================
 // 描画
 //=============================================
-void My::CArea::Draw()
+void My::CCenterArea::Draw()
 {
-	CObject2D_Triangle::Draw();
+	CObject2D::Draw();
 }
 
 //=============================================
 // 生成
 //=============================================
-My::CArea* My::CArea::Create(D3DXVECTOR2 triangle_vtx[NUM_VERTEX])
+My::CCenterArea* My::CCenterArea::Create()
 {
-	CArea* area = new CArea;
-	if (area == nullptr)
-	{
-		return nullptr;
-	}
-	for (int i = 0; i < NUM_VERTEX; ++i)
-	{
-		area->SetTriangleVtx(triangle_vtx[i], i);
-	}
+	CCenterArea* area = new CCenterArea;
+	if (area == nullptr) { return nullptr; }
+
 	area->Init();
 	return area;
 }

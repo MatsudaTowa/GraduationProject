@@ -1,403 +1,127 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="ソース ファイル">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="ヘッダー ファイル">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="リソース ファイル">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="system">
-      <UniqueIdentifier>{9a3ad76a-59bc-48dc-bf6c-0de7add5f312}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="object">
-      <UniqueIdentifier>{5cd1c635-8424-440d-a0d1-e02815edde5a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="object\2D">
-      <UniqueIdentifier>{79b2a6e8-f507-488b-bd3f-009c98d0465a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="object\3D">
-      <UniqueIdentifier>{c91be72d-3973-4cdf-8d25-0874cf4dd5da}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="object\X">
-      <UniqueIdentifier>{74fa6cf1-bb95-4cbe-b8eb-95478671063d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="object\character">
-      <UniqueIdentifier>{57d4c2a7-803d-4088-b8d9-95d934f53497}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="object\character\player">
-      <UniqueIdentifier>{f9a389ef-0e0d-40c4-b489-717a8ee0c66e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="object\3D\field">
-      <UniqueIdentifier>{67f93f2a-9de3-4f89-9b4f-167247543e2f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="camera">
-      <UniqueIdentifier>{b8b10f3f-e33b-406a-9731-ef33980b9805}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="scene">
-      <UniqueIdentifier>{d6ffae13-065d-4b60-aaf7-d342d4baa3eb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="scene\game">
-      <UniqueIdentifier>{6963246c-f6b9-40f8-98d7-18ddefe4a2bb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="object\2D\UI">
-      <UniqueIdentifier>{9051d7a5-456e-4285-8d69-26c42260338d}</UniqueIdentifier>
-    </Filter>
+    <ClCompile Include="src\active_scene_character.cpp" />
+    <ClCompile Include="src\area.cpp" />
+    <ClCompile Include="src\billboard.cpp" />
+    <ClCompile Include="src\camera.cpp" />
+    <ClCompile Include="src\camera_state.cpp" />
+    <ClCompile Include="src\card.cpp" />
+    <ClCompile Include="src\card_state.cpp" />
+    <ClCompile Include="src\character.cpp" />
+    <ClCompile Include="src\colision.cpp" />
+    <ClCompile Include="src\enemy.cpp" />
+    <ClCompile Include="src\enemy_manager.cpp" />
+    <ClCompile Include="src\energy_charge.cpp" />
+    <ClCompile Include="src\energy_frame.cpp" />
+    <ClCompile Include="src\energy_gauge.cpp" />
+    <ClCompile Include="src\enemy_state.cpp" />
+    <ClCompile Include="src\energy_UI.cpp" />
+    <ClCompile Include="src\fade.cpp" />
+    <ClCompile Include="src\field.cpp" />
+    <ClCompile Include="src\game.cpp" />
+    <ClCompile Include="src\game_camera.cpp" />
+    <ClCompile Include="src\game_field.cpp" />
+    <ClCompile Include="src\active_manager.cpp" />
+    <ClCompile Include="src\game_player.cpp" />
+    <ClCompile Include="src\game_player_state.cpp" />
+    <ClCompile Include="src\active_scene_state.cpp" />
+    <ClCompile Include="src\hand.cpp" />
+    <ClCompile Include="src\input.cpp" />
+    <ClCompile Include="src\life_UI.cpp" />
+    <ClCompile Include="src\light.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\manager.cpp" />
+    <ClCompile Include="src\model.cpp" />
+    <ClCompile Include="src\model_parts.cpp" />
+    <ClCompile Include="src\number.cpp" />
+    <ClCompile Include="src\object.cpp" />
+    <ClCompile Include="src\object2D.cpp" />
+    <ClCompile Include="src\object2D_anim.cpp" />
+    <ClCompile Include="src\object3D.cpp" />
+    <ClCompile Include="src\object3D_anim.cpp" />
+    <ClCompile Include="src\objectX.cpp" />
+    <ClCompile Include="src\object2D_triangle.cpp" />
+    <ClCompile Include="src\particle.cpp" />
+    <ClCompile Include="src\player.cpp" />
+    <ClCompile Include="src\precompile.cpp" />
+    <ClCompile Include="src\renderer.cpp" />
+    <ClCompile Include="src\result.cpp" />
+    <ClCompile Include="src\result_camera.cpp" />
+    <ClCompile Include="src\result_player.cpp" />
+    <ClCompile Include="src\result_screen.cpp" />
+    <ClCompile Include="src\result_ui.cpp" />
+    <ClCompile Include="src\scene.cpp" />
+    <ClCompile Include="src\shadow.cpp" />
+    <ClCompile Include="src\texture.cpp" />
+    <ClCompile Include="src\title.cpp" />
+    <ClCompile Include="src\title_camera.cpp" />
+    <ClCompile Include="src\title_screen.cpp" />
+    <ClCompile Include="src\useful.cpp" />
+    <ClCompile Include="src\center_area.cpp" />
+    <ClCompile Include="src\area_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\useful.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
-    <ClCompile Include="src\precompile.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
-    <ClCompile Include="src\renderer.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
-    <ClCompile Include="src\input.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
-    <ClCompile Include="src\light.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
-    <ClCompile Include="src\main.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
-    <ClCompile Include="src\manager.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
-    <ClCompile Include="src\colision.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
-    <ClCompile Include="src\texture.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
-    <ClCompile Include="src\model.cpp">
-      <Filter>system</Filter>
-    </ClCompile>
-    <ClCompile Include="src\billboard.cpp">
-      <Filter>object</Filter>
-    </ClCompile>
-    <ClCompile Include="src\shadow.cpp">
-      <Filter>object\3D</Filter>
-    </ClCompile>
-    <ClCompile Include="src\title_screen.cpp">
-      <Filter>object\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="src\result_screen.cpp">
-      <Filter>object\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="src\object2D.cpp">
-      <Filter>object\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="src\object2D_anim.cpp">
-      <Filter>object\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="src\fade.cpp">
-      <Filter>object\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="src\object3D_anim.cpp">
-      <Filter>object\3D</Filter>
-    </ClCompile>
-    <ClCompile Include="src\object3D.cpp">
-      <Filter>object\3D</Filter>
-    </ClCompile>
-    <ClCompile Include="src\model_parts.cpp">
-      <Filter>object\X</Filter>
-    </ClCompile>
-    <ClCompile Include="src\objectX.cpp">
-      <Filter>object\X</Filter>
-    </ClCompile>
-    <ClCompile Include="src\character.cpp">
-      <Filter>object\character</Filter>
-    </ClCompile>
-    <ClCompile Include="src\player.cpp">
-      <Filter>object\character\player</Filter>
-    </ClCompile>
-    <ClCompile Include="src\field.cpp">
-      <Filter>object\3D\field</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game_field.cpp">
-      <Filter>object\3D\field</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game_player.cpp">
-      <Filter>object\character\player</Filter>
-    </ClCompile>
-    <ClCompile Include="src\result_player.cpp">
-      <Filter>object\character\player</Filter>
-    </ClCompile>
-    <ClCompile Include="src\object.cpp">
-      <Filter>object</Filter>
-    </ClCompile>
-    <ClCompile Include="src\camera.cpp">
-      <Filter>camera</Filter>
-    </ClCompile>
-    <ClCompile Include="src\camera_state.cpp">
-      <Filter>camera</Filter>
-    </ClCompile>
-    <ClCompile Include="src\result_camera.cpp">
-      <Filter>camera</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game_camera.cpp">
-      <Filter>camera</Filter>
-    </ClCompile>
-    <ClCompile Include="src\title_camera.cpp">
-      <Filter>camera</Filter>
-    </ClCompile>
-    <ClCompile Include="src\title.cpp">
-      <Filter>scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\scene.cpp">
-      <Filter>scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\result.cpp">
-      <Filter>scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game_player_state.cpp">
-      <Filter>object\character\player</Filter>
-    </ClCompile>
-    <ClCompile Include="src\number.cpp">
-      <Filter>object</Filter>
-    </ClCompile>
-    <ClCompile Include="src\particle.cpp">
-      <Filter>object</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game.cpp">
-      <Filter>scene\game</Filter>
-    </ClCompile>
-    <ClCompile Include="src\active_manager.cpp">
-      <Filter>scene\game</Filter>
-    </ClCompile>
-    <ClCompile Include="src\active_scene_state.cpp">
-      <Filter>scene\game</Filter>
-    </ClCompile>
-    <ClCompile Include="src\enemy.cpp">
-      <Filter>object\character</Filter>
-    </ClCompile>
-    <ClCompile Include="src\enemy_manager.cpp">
-      <Filter>object\character</Filter>
-    </ClCompile>
-    <ClCompile Include="src\card.cpp">
-      <Filter>object</Filter>
-    </ClCompile>
-    <ClCompile Include="src\card_state.cpp">
-      <Filter>object</Filter>
-    </ClCompile>
-    <ClCompile Include="src\hand.cpp">
-      <Filter>object</Filter>
-    </ClCompile>
-    <ClCompile Include="src\life_UI.cpp">
-      <Filter>object\2D\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\result_ui.cpp">
-      <Filter>object\2D\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\energy_UI.cpp">
-      <Filter>object\2D\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\object2D_triangle.cpp">
-      <Filter>object\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="src\area.cpp">
-      <Filter>object\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="src\active_scene_character.cpp">
-      <Filter>object\character</Filter>
-    </ClCompile>
-    <ClCompile Include="src\energy_charge.cpp">
-      <Filter>object\2D\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\energy_frame.cpp">
-      <Filter>object\2D\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\energy_gauge.cpp">
-      <Filter>object\2D\UI</Filter>
-    <ClCompile Include="src\enemy_state.cpp">
-      <Filter>object\character</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\useful.h">
-      <Filter>system</Filter>
-    </ClInclude>
-    <ClInclude Include="src\renderer.h">
-      <Filter>system</Filter>
-    </ClInclude>
-    <ClInclude Include="src\precompile.h">
-      <Filter>system</Filter>
-    </ClInclude>
-    <ClInclude Include="src\manager.h">
-      <Filter>system</Filter>
-    </ClInclude>
-    <ClInclude Include="src\light.h">
-      <Filter>system</Filter>
-    </ClInclude>
-    <ClInclude Include="src\main.h">
-      <Filter>system</Filter>
-    </ClInclude>
-    <ClInclude Include="src\input.h">
-      <Filter>system</Filter>
-    </ClInclude>
-    <ClInclude Include="src\count.h">
-      <Filter>system</Filter>
-    </ClInclude>
-    <ClInclude Include="src\colision.h">
-      <Filter>system</Filter>
-    </ClInclude>
-    <ClInclude Include="src\texture.h">
-      <Filter>system</Filter>
-    </ClInclude>
-    <ClInclude Include="src\model.h">
-      <Filter>system</Filter>
-    </ClInclude>
-    <ClInclude Include="src\billboard.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="src\shadow.h">
-      <Filter>object\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="src\title_screen.h">
-      <Filter>object\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="src\result_screen.h">
-      <Filter>object\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="src\object2D.h">
-      <Filter>object\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="src\object2D_anim.h">
-      <Filter>object\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="src\fade.h">
-      <Filter>object\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="src\object3D_anim.h">
-      <Filter>object\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="src\object3D.h">
-      <Filter>object\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="src\model_parts.h">
-      <Filter>object\X</Filter>
-    </ClInclude>
-    <ClInclude Include="src\objectX.h">
-      <Filter>object\X</Filter>
-    </ClInclude>
-    <ClInclude Include="src\character.h">
-      <Filter>object\character</Filter>
-    </ClInclude>
-    <ClInclude Include="src\player.h">
-      <Filter>object\character\player</Filter>
-    </ClInclude>
-    <ClInclude Include="src\field.h">
-      <Filter>object\3D\field</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game_field.h">
-      <Filter>object\3D\field</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game_player.h">
-      <Filter>object\character\player</Filter>
-    </ClInclude>
-    <ClInclude Include="src\result_player.h">
-      <Filter>object\character\player</Filter>
-    </ClInclude>
-    <ClInclude Include="src\object.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="src\title_camera.h">
-      <Filter>camera</Filter>
-    </ClInclude>
-    <ClInclude Include="src\result_camera.h">
-      <Filter>camera</Filter>
-    </ClInclude>
-    <ClInclude Include="src\camera.h">
-      <Filter>camera</Filter>
-    </ClInclude>
-    <ClInclude Include="src\camera_state.h">
-      <Filter>camera</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game_camera.h">
-      <Filter>camera</Filter>
-    </ClInclude>
-    <ClInclude Include="src\scene.h">
-      <Filter>scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\title.h">
-      <Filter>scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\result.h">
-      <Filter>scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game_player_state.h">
-      <Filter>object\character\player</Filter>
-    </ClInclude>
-    <ClInclude Include="src\number.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="src\particle.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game.h">
-      <Filter>scene\game</Filter>
-    </ClInclude>
-    <ClInclude Include="src\active_manager.h">
-      <Filter>scene\game</Filter>
-    </ClInclude>
-    <ClInclude Include="src\active_scene_state.h">
-      <Filter>scene\game</Filter>
-    </ClInclude>
-    <ClInclude Include="src\enemy.h">
-      <Filter>object\character</Filter>
-    </ClInclude>
-    <ClInclude Include="src\card.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="src\card_state.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="src\hand.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="src\life_UI.h">
-      <Filter>object\2D\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\result_ui.h">
-      <Filter>object\2D\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\energy_UI.h">
-      <Filter>object\2D\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\object2D_triangle.h">
-      <Filter>object\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="src\area.h">
-      <Filter>object\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="src\enemy_manager.h">
-      <Filter>object\X</Filter>
-    </ClInclude>
-    <ClInclude Include="src\active_scene_character.h">
-      <Filter>object\character</Filter>
-    </ClInclude>
-    <ClInclude Include="src\energy_charge.h">
-      <Filter>object\2D\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\energy_frame.h">
-      <Filter>object\2D\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\energy_gauge.h">
-      <Filter>object\2D\UI</Filter>
-    <ClInclude Include="src\active_scene_character_state.h">
-      <Filter>object\character</Filter>
-    </ClInclude>
-    <ClInclude Include="src\enemy_state.h">
-      <Filter>object\character</Filter>
-    </ClInclude>
+    <ClInclude Include="src\active_scene_character.h" />
+    <ClInclude Include="src\active_scene_character_state.h" />
+    <ClInclude Include="src\area.h" />
+    <ClInclude Include="src\billboard.h" />
+    <ClInclude Include="src\camera.h" />
+    <ClInclude Include="src\camera_state.h" />
+    <ClInclude Include="src\card.h" />
+    <ClInclude Include="src\card_state.h" />
+    <ClInclude Include="src\character.h" />
+    <ClInclude Include="src\colision.h" />
+    <ClInclude Include="src\count.h" />
+    <ClInclude Include="src\enemy.h" />
+    <ClInclude Include="src\enemy_manager.h" />
+    <ClInclude Include="src\energy_charge.h" />
+    <ClInclude Include="src\energy_frame.h" />
+    <ClInclude Include="src\energy_gauge.h" />
+    <ClInclude Include="src\enemy_state.h" />
+    <ClInclude Include="src\energy_UI.h" />
+    <ClInclude Include="src\fade.h" />
+    <ClInclude Include="src\field.h" />
+    <ClInclude Include="src\game.h" />
+    <ClInclude Include="src\game_camera.h" />
+    <ClInclude Include="src\game_field.h" />
+    <ClInclude Include="src\active_manager.h" />
+    <ClInclude Include="src\game_player.h" />
+    <ClInclude Include="src\game_player_state.h" />
+    <ClInclude Include="src\active_scene_state.h" />
+    <ClInclude Include="src\hand.h" />
+    <ClInclude Include="src\input.h" />
+    <ClInclude Include="src\life_UI.h" />
+    <ClInclude Include="src\light.h" />
+    <ClInclude Include="src\main.h" />
+    <ClInclude Include="src\manager.h" />
+    <ClInclude Include="src\model.h" />
+    <ClInclude Include="src\model_parts.h" />
+    <ClInclude Include="src\number.h" />
+    <ClInclude Include="src\object.h" />
+    <ClInclude Include="src\object2D.h" />
+    <ClInclude Include="src\object2D_anim.h" />
+    <ClInclude Include="src\object3D.h" />
+    <ClInclude Include="src\object3D_anim.h" />
+    <ClInclude Include="src\objectX.h" />
+    <ClInclude Include="src\object2D_triangle.h" />
+    <ClInclude Include="src\particle.h" />
+    <ClInclude Include="src\player.h" />
+    <ClInclude Include="src\precompile.h" />
+    <ClInclude Include="src\renderer.h" />
+    <ClInclude Include="src\result.h" />
+    <ClInclude Include="src\result_camera.h" />
+    <ClInclude Include="src\result_player.h" />
+    <ClInclude Include="src\result_screen.h" />
+    <ClInclude Include="src\result_ui.h" />
+    <ClInclude Include="src\scene.h" />
+    <ClInclude Include="src\shadow.h" />
+    <ClInclude Include="src\texture.h" />
+    <ClInclude Include="src\title.h" />
+    <ClInclude Include="src\title_camera.h" />
+    <ClInclude Include="src\title_screen.h" />
+    <ClInclude Include="src\useful.h" />
+    <ClInclude Include="src\center_area.h" />
+    <ClInclude Include="src\area_manager.h" />
   </ItemGroup>
 </Project>

@@ -64,6 +64,8 @@ namespace My
 	{
 	public:
 		static constexpr int NUM_MOUSE_MAX = 3; //マウスのキー数
+		static constexpr float CENTER_RADIUS = 45.0f;
+
 		enum AREA
 		{
 			UP = 0,
@@ -123,7 +125,6 @@ namespace My
 
 		void Debug();
 	private:
-		static constexpr float CENTER_RADIUS = 15.0f;
 
 		void DebugAngle();
 		void SetMouseArea();

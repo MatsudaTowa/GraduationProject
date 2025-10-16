@@ -13,7 +13,7 @@
 #include "active_scene_state.h"
 #include "field.h"
 #include "enemy_manager.h"
-#include "area.h"
+#include "area_manager.h"
 
 /** @brief My 名前空間 */
 namespace My
@@ -54,6 +54,23 @@ namespace My
 		CEnemyManager* GetEnemyManager() { return m_pEnemyManager; }
 
 		/**
+		 * @brief エリアマネージャ取得
+		 * @return エリアマネージャ
+		 */
+		CAreaManager* GetAreaManager() { return m_pAreaManager; }
+
+		/**
+		 * @brief エネミーリスト設定
+		 * @param [in]エネミーリスト
+		 */
+		void SetEnemyManager(CEnemyManager* enemy_manager) { m_pEnemyManager = enemy_manager; }
+		/**
+		 * @brief エリアマネージャ設定
+		 * @param [in]エリアマネージャ
+		 */
+		void SetAreaManager(CAreaManager* area_manager) { m_pAreaManager = area_manager; }
+
+		/**
 		 * @brief プレイヤーの設定
 		 * @param [in]プレイヤーのポインタ
 		 */		
@@ -64,20 +81,6 @@ namespace My
 		 * @return プレイヤーのポインタ
 		 */		
 		CGamePlayer* GetPlayer() { return m_pPlayer; }
-
-		/**
-		 * @brief エリアの設定
-		 * @param [in]エリアのポインタ
-		 * @param [in]どこのエリアか
-		 */
-		void SetArea(CArea* area,int idx) { m_pArea[idx] = area; }
-
-		/**
-		 * @brief エリアの取得
-		 * @param [in]エリア番号
-		 * @return エリアのポインタ
-		 */
-		CArea* GetArea(int idx) { return m_pArea[idx]; }
 
 		/**
 		 * @brief 床の設定
@@ -124,16 +127,6 @@ namespace My
 		}
 
 		/**
-		 * @brief エリアを生成
-		 */
-		void CreateArea();
-
-		/**
-		 * @brief エリアの選択
-		 */
-		void SelectArea();
-
-		/**
 		 * @brief 終了設定
 		 * @param [in]終了させるか
 		 */
@@ -152,7 +145,7 @@ namespace My
 		}
 	private:
 		CEnemyManager* m_pEnemyManager;
-		CArea* m_pArea[CInputMouse::AREA::MAX - 1]; //真ん中のエリア以外に三角形を生成
+		CAreaManager* m_pAreaManager;
 		CActiveSceneState* m_pState;				//!<ゲームのステート状態
 		CGamePlayer* m_pPlayer;				//!<プレイヤー
 		CField* m_pField;					//!<床

@@ -11,6 +11,7 @@
 #include "enemy.h"
 #include "card.h"
 #include "energy_charge.h"
+#include "center_area.h"
 
 namespace
 {
@@ -46,6 +47,21 @@ HRESULT My::CGame::Init()
 
 	SET_CAMERA_IDX(0);
 
+	CEnemyManager* enemy_manager = CGameManager::GetInstance()->GetEnemyManager();
+	if (enemy_manager == nullptr)
+	{
+		enemy_manager = new CEnemyManager;
+		CGameManager::GetInstance()->SetEnemyManager(enemy_manager);
+	}
+
+	CAreaManager* area_manager = CGameManager::GetInstance()->GetAreaManager();
+	if (area_manager == nullptr)
+	{
+		area_manager = new CAreaManager;
+		CGameManager::GetInstance()->SetAreaManager(area_manager);
+		area_manager->CreateArea();
+	}
+
 	CActiveSceneState* current_state = CGameManager::GetInstance()->GetState();
 	if (current_state == nullptr)
 	{
@@ -65,8 +81,6 @@ HRESULT My::CGame::Init()
 		m_pDelayCnt->SetFrame(DELAY_FRAME);
 	}
 
-	CGameManager::GetInstance()->CreateArea();
-
 	//CCard::Create();
 
 	return S_OK;
@@ -83,14 +97,6 @@ void My::CGame::Uninit()
 	//	delete CJson::GetJson();
 	//	CJson::GetJson() = nullptr;
 	//}
-	for (int i = 0; i < CInputMouse::AREA::MAX - 1; ++i)
-	{
-		CArea* area = CGameManager::GetInstance()->GetArea(i);
-		if (area == nullptr) { continue; }
-		area->Uninit();
-		area = nullptr;
-		CGameManager::GetInstance()->SetArea(area, i);
-	}
 
 	if (m_pDelayCnt != nullptr)
 	{
@@ -107,14 +113,14 @@ void My::CGame::Uninit()
 	CEnergy_Charge* pCharge = CEnergy_Charge::GetInstance();
 	pCharge->Uninit();
 
-	//ステート初期化
-	CGameManager::GetInstance()->ChangeState(new CLobby);
-
 	//マネージャーで管理しているオブジェクトをここで削除
 	//NOTE: オブジェクトのReleaseAll前に消すことで二重で削除することを防止
 	CGameManager::GetInstance()->Uninit();
 
 	CObject::ReleaseAll();
+
+	//ステート初期化
+	CGameManager::GetInstance()->ChangeState(new CLobby);
 }
 
 //=============================================

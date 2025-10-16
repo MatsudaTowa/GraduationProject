@@ -392,7 +392,7 @@ My::CColision::CIRCLE My::CColision::CheckColisionCircle(D3DXVECTOR3 Apos, float
 
 	circle.CenterDistance = sqrtf((Length.x * Length.x) + (Length.y * Length.y) + (Length.z * Length.z));
 
-	if (circle.CenterDistance <= Radius*Radius)
+	if (circle.CenterDistance <= Radius)
 	{
 		circle.colision = COLISION_CIRCLE;
 	}

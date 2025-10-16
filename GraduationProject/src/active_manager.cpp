@@ -12,13 +12,11 @@
 My::CGameManager::CGameManager():
 m_pState(nullptr),			//ゲームのステート
 m_pEnemyManager(),			//エネミーマネージャー
+m_pAreaManager(),			//エリアマネージャー
 m_pPlayer(nullptr),			//プレイヤーのポインタ
 m_pField(nullptr),			//床のポインタ
 m_isFinish(false)
 {
-	//エネミーマネージャーの生成
-	m_pEnemyManager = new CEnemyManager();		//メモリ確保
-	m_pEnemyManager->Init();					//初期設定
 }
 
 //=============================================
@@ -26,6 +24,19 @@ m_isFinish(false)
 //=============================================
 My::CGameManager::~CGameManager()
 {
+}
+
+//=============================================
+// 終了
+//=============================================
+void My::CGameManager::Uninit()
+{
+	if (m_pAreaManager != nullptr)
+	{
+		m_pAreaManager->Uninit();
+		delete m_pAreaManager;
+		m_pAreaManager = nullptr;
+	}
 	//エネミーマネージャーの破棄
 	if (m_pEnemyManager != nullptr)
 	{
@@ -34,23 +45,10 @@ My::CGameManager::~CGameManager()
 		delete m_pEnemyManager;
 		m_pEnemyManager = nullptr;
 	}
-}
-
-//=============================================
-// 終了
-//=============================================
-void My::CGameManager::Uninit()
-{
 	if (m_pState != nullptr)
 	{
 		delete m_pState;
 		m_pState = nullptr;
-	}
-	for (int i = 0; i < CInputMouse::AREA::MAX - 1; ++i)
-	{
-		if (m_pArea[i] == nullptr) { continue; }
-		m_pArea[i]->Uninit();
-		m_pArea[i] = nullptr;
 	}
 	if (m_pPlayer != nullptr)
 	{
@@ -82,65 +80,5 @@ void My::CGameManager::ChangeState(CActiveSceneState* state)
 
 		current_state = state;
 		CGameManager::GetInstance()->SetState(current_state);
-	}
-}
-
-//=============================================
-//エリア生成
-//=============================================
-void My::CGameManager::CreateArea()
-{
-	for (int i = 0; i < CInputMouse::AREA::MAX - 1; ++i)
-	{
-		if (m_pArea[i] != nullptr) { continue; }
-
-		//三角形の頂点座標を指定
-		D3DXVECTOR2 triangle_vtx[CObject2D_Triangle::NUM_VERTEX];
-
-		//ウィンドウの中心にを必ず頂点に
-		D3DXVECTOR2 center = { SCREEN_WIDTH * HALF,SCREEN_HEIGHT * HALF };
-		triangle_vtx[1] = center;
-
-		//それぞれの頂点位置を指定
-		switch (i)
-		{
-		case CInputMouse::AREA::UP:
-			triangle_vtx[0] = { SCREEN_WIDTH,FLOAT_ZERO };
-			triangle_vtx[2] = { VEC2_RESET_ZERO };
-			break;
-		case CInputMouse::AREA::DOWN:
-			triangle_vtx[0] = { FLOAT_ZERO,SCREEN_HEIGHT };
-			triangle_vtx[2] = { SCREEN_WIDTH,SCREEN_HEIGHT };
-			break;
-		case CInputMouse::AREA::LEFT:
-			triangle_vtx[0] = { FLOAT_ZERO,FLOAT_ZERO };
-			triangle_vtx[2] = { FLOAT_ZERO,SCREEN_HEIGHT };
-			break;
-		case CInputMouse::AREA::RIGHT:
-			triangle_vtx[0] = { SCREEN_WIDTH,SCREEN_HEIGHT };
-			triangle_vtx[2] = { SCREEN_WIDTH,FLOAT_ZERO };
-			break;
-		default:
-			break;
-		}
-
-		m_pArea[i] = CArea::Create(triangle_vtx);
-	}
-}
-
-//=============================================
-//エリア選択
-//=============================================
-void My::CGameManager::SelectArea()
-{
-	CInputMouse::AREA area = GET_INPUT_MOUSE->GetArea();
-
-	for (int i = 0; i < CInputMouse::AREA::MAX - 1; ++i)
-	{
-		m_pArea[i]->SetSelect(false);
-		if (area == CInputMouse::CENTER) { continue; }
-
-		//選択されているところは明るく
-		m_pArea[area]->SetSelect(true);
 	}
 }

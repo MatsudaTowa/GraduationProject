@@ -22,11 +22,6 @@ My::CEnemy::CEnemy(int nPriority)
 //=============================================
 My::CEnemy::~CEnemy()
 {
-	//マネージャーから削除
-	if (CGameManager::GetInstance()->GetEnemyManager() != nullptr)
-	{
-		CGameManager::GetInstance()->GetEnemyManager()->Erase(this);
-	}
 }
 
 //=============================================

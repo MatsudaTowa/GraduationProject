@@ -21,7 +21,7 @@ namespace My
 	class CArea : public CObject2D_Triangle
 	{
 	public:
-		static constexpr int PRIORITY = 20;  //!<描画順
+		static constexpr int PRIORITY = 25;  //!<描画順
 
 		/**
 		 * @brief コンストラクタ
@@ -82,24 +82,6 @@ namespace My
 
 		/**
 		 * @brief 選択しているか取得
-		 * @return
-		 */
-		inline bool GetActive()
-		{
-			return m_isActive;
-		}
-
-		/**
-		 * @brief 選択されているか設定
-		 * @param [in]isSelect
-		 */
-		inline void SetActive(bool isActive)
-		{
-			m_isActive = isActive;
-		}
-
-		/**
-		 * @brief 選択しているか取得
 		 * @return m_pCharacter
 		 */
 		inline CActiveSceneCharacter* GetCharacter()
@@ -117,7 +99,6 @@ namespace My
 		}
 	private:
 		bool m_isSelect; //選択されているか
-		bool m_isActive; //実行するか
 		CActiveSceneCharacter* m_pCharacter;
 	};
 }
