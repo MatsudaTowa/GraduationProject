@@ -78,11 +78,15 @@ void My::CHand::Update()
 	// 手札選択
 	Select();
 
+	// カードをキャストする
 	if (pkeyboad->GetTrigger(DIK_J))
 	{
 		if (m_SelectNum >= 0)
 			m_pCard[m_SelectNum]->ChangeState(CCardState::CARD_STATE::CARD_CAST);
 	}
+
+	// カード除去
+	DeleteCard();
 }
 
 //===========================================================================================================
@@ -121,6 +125,8 @@ void My::CHand::Select()
 	if (!IsChangeSelect)
 		return;
 
+	SetHandCardPos();
+
 	SelectStateSet();
 }
 
@@ -149,6 +155,43 @@ void My::CHand::SelectStateSet()
 }
 
 //===========================================================================================================
+// カード消去
+//===========================================================================================================
+void My::CHand::DeleteCard()
+{
+	// カード番号(-1 で初期化)
+	int num = -1;
+
+	// トリガーされたカードを調べる
+	for (int i = 0; i < m_TotalNum; i++)
+	{
+		if (m_pCard[i]->GetStateNum() == CCardState::CARD_STATE::CARD_TRIGGER)
+		{
+			num = i;
+		}
+	}
+
+	// -1以下だったら通さない
+	if (num < 0)
+		return;
+
+	// トリガーカード除去
+	m_pCard[num]->Uninit();
+
+	// 次の番号のカードの情報を前に移していく
+	for (int ii = num; ii < m_TotalNum; ii++)
+	{
+		m_pCard[ii] = m_pCard[ii + 1];
+	}
+
+	// 手札総数を減らす
+	m_TotalNum--;
+
+	// 手札の位置をセットする
+	SetHandCardPos();
+}
+
+//===========================================================================================================
 // 手札を引く
 //===========================================================================================================
 void My::CHand::HandDraw(int drawnum)
@@ -165,8 +208,8 @@ void My::CHand::HandDraw(int drawnum)
 	for (int i = 0; i < drawnum; i++)
 	{
 		m_pCard[m_TotalNum] = CCard::Create();
-		SetHandCardPos();
 		m_TotalNum++;	// 手札の総数を増やす
+		SetHandCardPos();
 	}
 }
 
@@ -192,9 +235,9 @@ void My::CHand::SetHandCardPos()
 	float xpos;	// 一枚目のカードのx座標
 
 	// x座標の設定 = センター - (現在の合計枚数 * カードの間隔の半分)
-	xpos = m_CenterPos.x - (m_TotalNum* posInterbal*0.5f);
+	xpos = (m_CenterPos.x) - ((m_TotalNum-1)* posInterbal*0.5f);
 
-	for (int i = 0; i <= m_TotalNum; i++)
+	for (int i = 0; i < m_TotalNum; i++)
 	{
 		// カードの座標の設定
 		if (i != 0)

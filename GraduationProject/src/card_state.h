@@ -13,18 +13,21 @@ namespace My
 	// 前方宣言
 	class CCard;
 
-	namespace CARD_STATE
-	{
-
-	}
-
 	/** 
 	* @brief カードのステートクラス 
 	*/
 	class CCardState
 	{
 	public:
-		enum CARD_STATE
+		/**
+		* @brief カードのステート列挙
+		* @param 何もされていない状態
+		* @param カードが選択されている状態
+		* @param カードを呼び出す状態
+		* @param カードの発動待機時間
+		* @param カードの効果を発動する
+		*/
+		typedef enum
 		{
 			CARD_NEUTRAL = 0,
 			CARD_PICKUP,
@@ -32,7 +35,7 @@ namespace My
 			CARD_STAY,
 			CARD_TRIGGER,
 			CARD_MAX
-		};
+		}CARD_STATE;
 
 		/** @brief 初期化 */
 		virtual void Init() {};

@@ -83,6 +83,11 @@ namespace My
 		void SelectStateSet();
 
 		/**
+		* @brief 手札のカードの状態変更
+		*/
+		void DeleteCard();
+
+		/**
 		* @brief 手札の真ん中
 		*/
 		D3DXVECTOR3 m_CenterPos;

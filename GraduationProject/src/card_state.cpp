@@ -88,8 +88,8 @@ void My::CCardStateCast::Init(CCard* cpy)
 
 	cpy->SetPos(pos);
 
-	// ゲームのステートをキャスト状態に変える
-	CGameManager::GetInstance()->ChangeState(new CCardCast());	
+	//// ゲームのステートをキャスト状態に変える
+	//CGameManager::GetInstance()->ChangeState(new CCardCast());	
 }
 
 //=======================================================================================

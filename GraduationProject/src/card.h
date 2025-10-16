@@ -50,11 +50,6 @@ namespace My
 		void Draw()override;
 
 		/**
-		 * @brief 攻撃待機時間
-		 */
-		void StandbyAttack();
-
-		/**
 		 * @brief 生成
 		 * @param [in]位置
 		 */
@@ -70,8 +65,18 @@ namespace My
 		* @brief ステート取得
 		*/
 		inline CCardState* GetState() { return m_pState; }
+		inline CCardState::CARD_STATE GetStateNum() { return m_StateNum; }
+
+		//inline CCard* GetTop() { return m_pTop; }
+		//inline CCard* GetPrev() { return m_pPrev; }
 
 	private:
+		//static CCard* m_pTop;	//先頭のオブジェクトポインタ
+		//static CCard* m_pCur;	//現在（最後尾）のポインタ
+		//CCard* m_pPrev;			//前のオブジェクトのポインタ
+		//CCard* m_pNext;			//次のオブジェクトのポインタ
+
+
 		/**
 		 * @brief カードを選択しているか否か(trueだったら選択している)
 		 */
@@ -86,6 +91,8 @@ namespace My
 		 * @brief カードの状態列挙
 		 */
 		My::CCardState::CARD_STATE m_StateNum;
+
+		D3DXVECTOR3 m_outpos;
 	};
 };
 
