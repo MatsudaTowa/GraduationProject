@@ -177,7 +177,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data\\TEXTURE\\card_test.png";
+    "../asetto/card_frame/card_frame.png";
    }
   }
  }
