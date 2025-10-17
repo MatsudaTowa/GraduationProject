@@ -1,5 +1,6 @@
 #include <iostream>
 #include <windows.h>
+#include <conio.h>  // _kbhit, _getch 用
 extern "C" {
 #include "lua.h"
 #include "lauxlib.h"
@@ -27,5 +28,20 @@ int main() {
     }
 
     lua_close(L);
+
+    std::cout << "ESCキーで終了します。" << std::endl;
+    // メインループ（ESC押すまで続く）
+    while (true)
+    {
+        if (_kbhit())  // キーが押されたら
+        {
+            int key = _getch();
+            if (key == 27)  // 27 は ESC のASCIIコード
+            {
+                std::cout << "ESCキーが押されたので終了します。" << std::endl;
+                break;
+            }
+        }
+    }
     return 0;
 }
