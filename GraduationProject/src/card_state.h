@@ -77,6 +77,9 @@ namespace My
 		void Update(CCard* cpy)override;
 	};
 
+	/**
+	* @brief g—pó‘Ô
+	*/
 	class CCardStateCast :public CCardState
 	{
 	public:
@@ -87,6 +90,9 @@ namespace My
 		void Update(CCard* cpy) override;
 	};
 
+	/**
+	* @brief ”­“®‘Ò‹@ó‘Ô
+	*/
 	class CCardStateStay :public CCardState
 	{
 	public:
@@ -104,6 +110,9 @@ namespace My
 		const unsigned int STAY_TIME = ONE_SECOND * 3;
 	};
 
+	/**
+	* @brief ”­“®ó‘Ô
+	*/
 	class CCardStateTrigger :public CCardState
 	{
 	public:
