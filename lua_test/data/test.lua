@@ -7,7 +7,7 @@ function generateText()
     -- このLuaファイルと同じ場所のcard_test.jsonを読む
     local script_path = debug.getinfo(1, "S").source:match("@(.*[\\/])")
     local file = io.open(script_path .. "card_test.json", "r")
-    if not file then
+    if (not file) then
         return "カードデータが見つかりません。(" .. tostring(script_path .. "card_test.json") .. ")"
     end
 
@@ -15,15 +15,25 @@ function generateText()
     file:close()
 
     local obj, pos, err = json.decode(jsonText)
-    if err then
+    if (err) then
         return "JSONの解析に失敗: " .. err
     end
 
     local action = obj.action
     local card = obj.card
-    local effectMap = { ["攻撃"]="ダメージ", ["回復"]="回復" }
+    local effectMap = { ["攻撃"]="ダメージ"}-- 言葉の変換
+    -- 変換されたものを使うかjson内のdoをそのまま出力するか
     local effectText = effectMap[action["do"]] or action["do"]
-
-    return string.format("%sが%sで%sに%d%sの%s", 
+	if(action["do"] == "回復") then
+		if(action.target == "あなた") then
+			return string.format("%sが%sで%d%s", 
+        	action.who, card.name, action.many, effectText)
+        else
+    		return string.format("%sが%sで%sに%d%s", 
+        	action.who, card.name, action.target, action.many, effectText)
+		end
+	else
+	  	return string.format("%sが%sで%sに%d%sの%s", 
         action.who, card.name, action.target, action.many, effectText, action["do"])
+	end
 end
