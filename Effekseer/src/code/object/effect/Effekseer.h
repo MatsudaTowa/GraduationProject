@@ -23,18 +23,34 @@ namespace My
 		void Update();		// 更新
 		void Draw();		// 描画
 
-		//void SetPos(::D3DXVECTOR3 pos);
+		bool Load(const std::string sFilepas, D3DXVECTOR3 pos);
+		void SetPos(D3DXVECTOR3 pos);	// 位置の設定
+		void SetRot(D3DXVECTOR3 rot);	// 向きの設定(ラジアン)
+		void SetScl(D3DXVECTOR3 scl);	// スケールの設定
+		void SetCol(D3DXCOLOR col);
+		void SetLoop(bool bLoop) { m_bIsLoop = bLoop; }
+
+		void AddPos(D3DXVECTOR3 pos);	// 位置の加算
+		void AddRot(D3DXVECTOR3 rot);	// 向きの加算(ラジアン)
+		void AddScl(D3DXVECTOR3 scl);	// スケールの加算
+		void AddCol(D3DXCOLOR col);
+
 
 		static Effect* create(const std::string sFilepas);
 	private:
-		Effekseer::EffectRef g_effectRef = nullptr;
-		Effekseer::Handle g_handle;
+		// エフェクト実態
+		Effekseer::EffectRef g_effectRef = nullptr;	// エフェクト
+		Effekseer::Handle g_handle = 0;	// ハンドル
 
 		// 変数
-		const int	EffectPlayInterval = 300;					// エフェクトを再生する周期
-
-		// 今回の動作でにみ必要な変数
-		int		playCount;			// 周期敵に再生するためのカウント
+		std::string m_sFilepas;	// ファイルパス
+		D3DXVECTOR3 m_pos;	// 位置
+		D3DXVECTOR3 m_rot;	// 向き(現在未使用)
+		D3DXVECTOR3 m_scl;	// スケール
+		D3DXCOLOR m_col;
+		int m_nLoopInterval = 300;					// エフェクトを再生する周期
+		int m_nLoopCount;			// 周期敵に再生するためのカウント
+		bool m_bIsLoop;
 	};
 
 }

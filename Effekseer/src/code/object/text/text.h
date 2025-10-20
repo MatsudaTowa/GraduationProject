@@ -6,13 +6,10 @@
 //===========================================
 #ifndef _TEXT_H_
 #define _TEXT_H_
-#include "../object.h"
-//#include "../../system/pch.h"	// プリコンパイル
+#include "../object.h"	// オブジェクト
 
-namespace My
-{
-
-	class CText :public CObject
+namespace My{
+	class CText : public CObject
 	{
 	public:
 		typedef enum {
@@ -87,6 +84,5 @@ namespace My
 		static const LPD3DXFONT s_pFont;// フォントのポインタ
 		static const string	s_aText;	// テキスト
 	};
-
 }
 #endif // !_TEXT_H_

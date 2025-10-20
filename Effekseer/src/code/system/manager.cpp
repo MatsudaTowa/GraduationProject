@@ -6,7 +6,6 @@
 //===========================================
 #include "manager.h"	// マネージャー
 #include "../object/object.h"	// オブジェクト基底
-#include "../object/2D/text.h"	// テキスト
 #include "../object/effect/EffekseerManager.h"	// エフェクトマネージャー
 
 namespace My
@@ -22,11 +21,10 @@ namespace My
 		m_pRenderer = nullptr;			// レンダラー
 		m_pLight = nullptr;				// ライト
 		m_pCamera = nullptr;			// カメラ
-		m_pFog = nullptr;				// フォグ
 
-		//m_pInkey = nullptr;				// キーボード
-		//m_pInMouse = nullptr;			// マウス
-		//m_pJoiKey = nullptr;			// ジョイパッド
+		m_pInkey = nullptr;				// キーボード
+		m_pInMouse = nullptr;			// マウス
+		m_pJoiKey = nullptr;			// ジョイパッド
 
 		m_pSceneManager = nullptr;		// シーンマネージャー
 
@@ -65,11 +63,6 @@ namespace My
 			m_pCamera = new CCamera;
 			m_pCamera->Init();
 		}
-		// フォグ
-		if (m_pFog == nullptr)
-		{
-			m_pFog = CFog::create();
-		}
 		// エフェクシアマネージャー
 		if (!m_pEffekseerManager)
 		{
@@ -105,8 +98,6 @@ namespace My
 		{
 			m_pDebugText = CText::create();
 			m_pDebugText->SetReleaseScene(false);
-
-
 		}
 
 		return S_OK;

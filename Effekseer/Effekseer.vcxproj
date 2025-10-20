@@ -170,21 +170,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\code\engin\audio\sound.h" />
     <ClInclude Include="src\code\engin\camera\camera.h" />
-    <ClInclude Include="src\code\engin\fog\fog.h" />
     <ClInclude Include="src\code\engin\light\light.h" />
-    <ClInclude Include="src\code\object\2D\object_2D.h" />
-    <ClInclude Include="src\code\object\2D\object_fade.h" />
-    <ClInclude Include="src\code\object\2D\text.h" />
     <ClInclude Include="src\code\object\3D\object_3D.h" />
     <ClInclude Include="src\code\object\3D\object_billboard.h" />
-    <ClInclude Include="src\code\object\character\character.h" />
-    <ClInclude Include="src\code\object\character\motion.h" />
     <ClInclude Include="src\code\object\effect\Effekseer.h" />
     <ClInclude Include="src\code\object\effect\EffekseerManager.h" />
-    <ClInclude Include="src\code\object\FBX\object_FBX.h" />
     <ClInclude Include="src\code\object\object.h" />
+    <ClInclude Include="src\code\object\text\text.h" />
     <ClInclude Include="src\code\object\X\object_X.h" />
     <ClInclude Include="src\code\scene\common_data.h" />
     <ClInclude Include="src\code\scene\scene_base.h" />
@@ -198,21 +191,14 @@
     <ClInclude Include="src\code\scene\scene_effekseer.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\code\engin\audio\sound.cpp" />
     <ClCompile Include="src\code\engin\camera\camera.cpp" />
-    <ClCompile Include="src\code\engin\fog\fog.cpp" />
     <ClCompile Include="src\code\engin\light\light.cpp" />
-    <ClCompile Include="src\code\object\2D\object_2D.cpp" />
-    <ClCompile Include="src\code\object\2D\object_fade.cpp" />
-    <ClCompile Include="src\code\object\2D\text.cpp" />
     <ClCompile Include="src\code\object\3D\object_3D.cpp" />
     <ClCompile Include="src\code\object\3D\object_billboard.cpp" />
-    <ClCompile Include="src\code\object\character\character.cpp" />
-    <ClCompile Include="src\code\object\character\motion.cpp" />
     <ClCompile Include="src\code\object\effect\Effekseer.cpp" />
     <ClCompile Include="src\code\object\effect\EffekseerManager.cpp" />
-    <ClCompile Include="src\code\object\FBX\object_FBX.cpp" />
     <ClCompile Include="src\code\object\object.cpp" />
+    <ClCompile Include="src\code\object\text\text.cpp" />
     <ClCompile Include="src\code\object\X\object_X.cpp" />
     <ClCompile Include="src\code\scene\scene_maneger.cpp" />
     <ClCompile Include="src\code\system\calculation.cpp" />

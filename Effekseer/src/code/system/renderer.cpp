@@ -10,7 +10,7 @@
 
 
 #include "../object/object.h"		// オブジェクト
-#include "../object/2D/text.h"		// テキストクラス
+#include "../object/text/text.h"	// テキスト
 
 namespace My
 {

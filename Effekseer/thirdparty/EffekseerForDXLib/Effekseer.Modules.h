@@ -1226,36 +1226,36 @@ private:
 	 * 
 	 * const vector<double>& knot : ノット列
 	 * unsigned int j : ノット列の開始番号
-	 * unsigned int p : 次数
+	 * unsigned int m_pEffect : 次数
 	 * double t : 計算対象の独立変数
 	 * 
 	 * ノット列は昇順である必要があるが、そのチェックは行わない
 	 * 
 	 * 戻り値 : 計算結果
 	 */
-	double CalcBSplineBasisFunc(const std::vector<double>& knot, unsigned int j, unsigned int p, double t)
+	double CalcBSplineBasisFunc(const std::vector<double>& knot, unsigned int j, unsigned int m_pEffect, double t)
 	{
 		if (knot.size() == 0)
 			return std::numeric_limits<double>::quiet_NaN();
 
 		// ノット列のデータ長が充分でない場合は nan を返す
 		unsigned int m = static_cast<unsigned int>(knot.size()) - 1;
-		if (m < j + p + 1)
+		if (m < j + m_pEffect + 1)
 			return std::numeric_limits<double>::quiet_NaN();
 
 		// 正値をとる範囲外ならゼロを返す
-		if ((t < knot[j]) || (t > knot[j + p + 1]))
+		if ((t < knot[j]) || (t > knot[j + m_pEffect + 1]))
 			return (0);
-		// p = 0 かつ knot[j] <= t <= knot[j + p + 1] なら 1 を返す
-		if (p == 0)
+		// m_pEffect = 0 かつ knot[j] <= t <= knot[j + m_pEffect + 1] なら 1 を返す
+		if (m_pEffect == 0)
 			return (1);
-		// p = 1 の場合、三角の頂点の値は特別扱い
-		if (p == 1 && t == knot[j + 1])
+		// m_pEffect = 1 の場合、三角の頂点の値は特別扱い
+		if (m_pEffect == 1 && t == knot[j + 1])
 			return (1);
 
 		// 漸化式の計算
-		double d1 = (knot[j + p] == knot[j]) ? 0 : (t - knot[j]) * CalcBSplineBasisFunc(knot, j, p - 1, t) / (knot[j + p] - knot[j]);
-		double d2 = (knot[j + p + 1] == knot[j + 1]) ? 0 : (knot[j + p + 1] - t) * CalcBSplineBasisFunc(knot, j + 1, p - 1, t) / (knot[j + p + 1] - knot[j + 1]);
+		double d1 = (knot[j + m_pEffect] == knot[j]) ? 0 : (t - knot[j]) * CalcBSplineBasisFunc(knot, j, m_pEffect - 1, t) / (knot[j + m_pEffect] - knot[j]);
+		double d2 = (knot[j + m_pEffect + 1] == knot[j + 1]) ? 0 : (knot[j + m_pEffect + 1] - t) * CalcBSplineBasisFunc(knot, j + 1, m_pEffect - 1, t) / (knot[j + m_pEffect + 1] - knot[j + 1]);
 
 		return (d1 + d2);
 	}
@@ -1270,54 +1270,54 @@ public:
 		uint8_t* pData = new uint8_t[size];
 		memcpy(pData, data, size);
 
-		uint8_t* p = (uint8_t*)pData;
+		uint8_t* m_pEffect = (uint8_t*)pData;
 
 		// load converter version
 		int converter_version = 0;
-		memcpy(&converter_version, p, sizeof(int32_t));
-		p += sizeof(int32_t);
+		memcpy(&converter_version, m_pEffect, sizeof(int32_t));
+		m_pEffect += sizeof(int32_t);
 
 		// load controll point count
-		memcpy(&mControllPointCount, p, sizeof(int32_t));
-		p += sizeof(int32_t);
+		memcpy(&mControllPointCount, m_pEffect, sizeof(int32_t));
+		m_pEffect += sizeof(int32_t);
 
 		// load controll points
 		for (int i = 0; i < mControllPointCount; i++)
 		{
 			dVector4 value;
-			memcpy(&value, p, sizeof(dVector4));
-			p += sizeof(dVector4);
+			memcpy(&value, m_pEffect, sizeof(dVector4));
+			m_pEffect += sizeof(dVector4);
 			mControllPoint.push_back(value);
 		}
 
 		// load knot count
-		memcpy(&mKnotCount, p, sizeof(int32_t));
-		p += sizeof(int32_t);
+		memcpy(&mKnotCount, m_pEffect, sizeof(int32_t));
+		m_pEffect += sizeof(int32_t);
 
 		// load knot values
 		for (int i = 0; i < mKnotCount; i++)
 		{
 			double value;
-			memcpy(&value, p, sizeof(double));
-			p += sizeof(double);
+			memcpy(&value, m_pEffect, sizeof(double));
+			m_pEffect += sizeof(double);
 			mKnotValue.push_back(value);
 		}
 
 		// load order
-		memcpy(&mOrder, p, sizeof(int32_t));
-		p += sizeof(int32_t);
+		memcpy(&mOrder, m_pEffect, sizeof(int32_t));
+		m_pEffect += sizeof(int32_t);
 
 		// load step
-		memcpy(&mStep, p, sizeof(int32_t));
-		p += sizeof(int32_t);
+		memcpy(&mStep, m_pEffect, sizeof(int32_t));
+		m_pEffect += sizeof(int32_t);
 
 		// load type
-		memcpy(&mType, p, sizeof(int32_t));
-		p += sizeof(int32_t);
+		memcpy(&mType, m_pEffect, sizeof(int32_t));
+		m_pEffect += sizeof(int32_t);
 
 		// load dimension
-		memcpy(&mDimension, p, sizeof(int32_t));
-		p += sizeof(int32_t);
+		memcpy(&mDimension, m_pEffect, sizeof(int32_t));
+		m_pEffect += sizeof(int32_t);
 
 		// calc curve length
 		mLength = 0;
@@ -1348,7 +1348,7 @@ public:
 				static_cast<float>(mControllPoint[0].Z * magnification)};
 		}
 
-		int p = mOrder; // 次数
+		int m_pEffect = mOrder; // 次数
 
 		std::vector<double> bs(mControllPointCount); // B-Spline 基底関数の計算結果(重み値を積算)
 
@@ -1361,7 +1361,7 @@ public:
 		double wSum = 0; // bs の合計
 		for (int j = 0; j < mControllPointCount; ++j)
 		{
-			bs[j] = mControllPoint[j].W * CalcBSplineBasisFunc(knot, j, p, t * (t_rate));
+			bs[j] = mControllPoint[j].W * CalcBSplineBasisFunc(knot, j, m_pEffect, t * (t_rate));
 
 			if (!std::isnan(bs[j]))
 			{

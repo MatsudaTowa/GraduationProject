@@ -585,9 +585,9 @@ class RefPtr
 public:
 	RefPtr() = default;
 
-	explicit RefPtr(T* p)
+	explicit RefPtr(T* m_pEffect)
 	{
-		ptr_ = p;
+		ptr_ = m_pEffect;
 	}
 
 	RefPtr(std::nullptr_t)
@@ -680,15 +680,15 @@ public:
 		return ptr_;
 	}
 
-	static void Unpin(void* p)
+	static void Unpin(void* m_pEffect)
 	{
-		auto ptr = reinterpret_cast<T*>(p);
+		auto ptr = reinterpret_cast<T*>(m_pEffect);
 		SafeRelease(ptr);
 	}
 
-	static RefPtr<T> FromPinned(void* p)
+	static RefPtr<T> FromPinned(void* m_pEffect)
 	{
-		auto ptr = reinterpret_cast<T*>(p);
+		auto ptr = reinterpret_cast<T*>(m_pEffect);
 		SafeAddRef(ptr);
 		return RefPtr<T>(ptr);
 	}
@@ -1244,9 +1244,9 @@ struct CustomAllocator
 	{
 		return reinterpret_cast<T*>(GetMallocFunc()(sizeof(T) * static_cast<uint32_t>(n)));
 	}
-	void deallocate(T* p, std::size_t n)
+	void deallocate(T* m_pEffect, std::size_t n)
 	{
-		GetFreeFunc()(p, sizeof(T) * static_cast<uint32_t>(n));
+		GetFreeFunc()(m_pEffect, sizeof(T) * static_cast<uint32_t>(n));
 	}
 };
 
@@ -1268,9 +1268,9 @@ struct CustomAlignedAllocator
 	{
 		return reinterpret_cast<T*>(GetAlignedMallocFunc()(sizeof(T) * static_cast<uint32_t>(n), 16));
 	}
-	void deallocate(T* p, std::size_t n)
+	void deallocate(T* m_pEffect, std::size_t n)
 	{
-		GetAlignedFreeFunc()(p, sizeof(T) * static_cast<uint32_t>(n));
+		GetAlignedFreeFunc()(m_pEffect, sizeof(T) * static_cast<uint32_t>(n));
 	}
 
 	bool operator==(const CustomAlignedAllocator<T>&)

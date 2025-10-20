@@ -211,6 +211,21 @@ namespace My {
 		}
 		return false;
 	}
+	std::list<int> CInputKeyboard::GetPlessType()
+	{
+		std::list<int>i;
+
+		for (int nCnt = 0; nCnt < NUM_KEY_MAX; nCnt++)
+		{
+			if ((m_aPless[nCnt] & 0x80) != 0)
+			{
+				i.push_back(nCnt);
+			}
+		}
+
+
+		return i;
+	}
 	//============================================
 	// コンスト(マウス)
 	//============================================
@@ -284,12 +299,12 @@ namespace My {
 	void CInputMouse::Update()
 	{
 		D3DXVECTOR2 PosOld = m_MousePos;	// 1フレーム前位置保存用
-		POINT p;	// 現在位置保存用
-		GetCursorPos(&p);
-		ScreenToClient(FindWindowA(CLASS_NAME, nullptr), &p);
+		POINT m_pEffect;	// 現在位置保存用
+		GetCursorPos(&m_pEffect);
+		ScreenToClient(FindWindowA(CLASS_NAME, nullptr), &m_pEffect);
 
-		m_MousePos.x = (float)p.x;
-		m_MousePos.y = (float)p.y;
+		m_MousePos.x = (float)m_pEffect.x;
+		m_MousePos.y = (float)m_pEffect.y;
 
 
 		m_MouseMove.x = m_MousePos.x - PosOld.x;

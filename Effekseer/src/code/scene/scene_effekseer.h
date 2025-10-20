@@ -24,7 +24,12 @@ namespace My
 			virtual void Draw() const override;
 			bool GetPose()override;
 			CObject3D* firld;
-			My::Effect* p;
+			My::Effect* m_pEffect;
+
+			const float m_move = 10.0f;
+			const float m_rol = 1.0f;
+			const float m_scl = 0.1f;
+			const float m_col = 0.1f;
 	
 		};
 

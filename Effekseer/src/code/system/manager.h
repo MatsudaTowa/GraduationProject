@@ -11,13 +11,11 @@
 #include "input.h"						// 入力
 #include "../engin/light/light.h"		// ライト
 #include "../engin/camera/camera.h"		// カメラ
-#include "../engin/fog/fog.h"			// フォグ
-#include "../object/2D/object_fade.h"	// フェード
 #include "../object/effect/EffekseerManager.h"	// エフェクシアマネージャー
 
 #include "../scene/scene_maneger.h"		// シーンマネージャー
 
-//#include "../collision/collision_manager.h"	// コリジョンマネージャー
+#include "../object/text/text.h"	// テキスト
 
 #define MAX_TXT	(0x400)
 
@@ -44,7 +42,6 @@ namespace My
 		CRenderer* GetRenderer() { return m_pRenderer; };	// レンダラー取得
 		CLight* GetLight() { return m_pLight; }				// ライト取得
 		CCamera* GetCamera() { return m_pCamera; }			// カメラ取得
-		CFog* GetFog() { return m_pFog; }					// フォグ
 
 		CInputKeyboard* GetInKey() { return m_pInkey; }	// キーボード取得
 		CInputMouse* GetMouse() { return m_pInMouse; }	// マウス取得
@@ -69,7 +66,6 @@ namespace My
 
 		CLight* m_pLight;		// ライト
 		CCamera* m_pCamera;		// カメラ
-		CFog* m_pFog;			// フォグ
 
 		CEffekseerManager* m_pEffekseerManager;	// エフェクトマネージャー
 
@@ -77,7 +73,6 @@ namespace My
 
 		CText* m_pDebugText;				// デバッグ用テキスト
 
-		//CCollisionManager* m_pCollisionManager;	// コリジョンマネージャー
 
 		static bool m_bEnd;	// 終了フラグ
 	};

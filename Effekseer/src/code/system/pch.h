@@ -10,17 +10,17 @@
 // インクルード
 // WindowsSDK
 #include <Windows.h>
-#include <string>	// 文字列型
-#include <iostream>	// インアウトストリーム
 
 
 #include "d3d9.h"	 // 描画に必要
 #include "d3dx9.h"	 // 描画に必要
-#include <d3dx9core.h>
 #include "dinput.h" //入力処理に必要
 #include "xaudio2.h"
 #include "Xinput.h"
+#include <dinput.h>
 
+#include <string>	// 文字列型
+#include <iostream>	// インアウトストリーム
 
 // C++ テキスト
 using namespace std;

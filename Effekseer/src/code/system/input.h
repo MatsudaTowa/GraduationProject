@@ -3,8 +3,8 @@
 // 入力[input.cpp]
 // Author:Uedakou
 // 
-//============================================
 
+#include <list>
 #ifndef _INPUT_H_
 #define _INPUT_H_
 
@@ -44,6 +44,7 @@ namespace My {
 		bool GetTrigger(int Key) { return (m_aTrigger[Key] & 0x80) != 0; }	// トリガー取得
 		bool GetRepeat(int Key) { return (m_aRepeat[Key] & 0x80) != 0; }	// リピート取得
 		bool GetRelease(int Key) { return (m_aRelease[Key] & 0x80) != 0; }	// リリース取得
+		std::list<int> GetPlessType();
 	private:
 		BYTE m_aPless[NUM_KEY_MAX];		// プレス
 		BYTE m_aTrigger[NUM_KEY_MAX];	// トリガー
