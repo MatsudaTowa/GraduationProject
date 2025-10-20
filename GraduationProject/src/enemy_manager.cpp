@@ -61,7 +61,7 @@ void My::CEnemyManager::Regist(CEnemy* enemy)
 //============================
 //íœˆ—
 //============================
-void My::CEnemyManager::Erase(CEnemy* enemy)
+void My::CEnemyManager::Remove(CEnemy* enemy)
 {
 	//ƒTƒCƒY‚ª0‚È‚ç”²‚¯‚é
 	if (m_apManager.size() == 0)

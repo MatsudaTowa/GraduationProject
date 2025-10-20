@@ -12,6 +12,8 @@
 My::CActiveSceneCharacter::CActiveSceneCharacter(int nPriority):CCharacter(nPriority),
 m_pState(nullptr),												//ステート初期化
 m_status(),
+m_isHost(false),
+m_playerIdx(-1),
 m_pEneryUI(nullptr),
 m_pLifeUI(nullptr)
 {

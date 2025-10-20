@@ -161,6 +161,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\active_scene_character.cpp" />
+    <ClCompile Include="src\active_scene_character_state.cpp" />
     <ClCompile Include="src\area.cpp" />
     <ClCompile Include="src\area_manager.cpp" />
     <ClCompile Include="src\billboard.cpp" />

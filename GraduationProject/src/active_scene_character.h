@@ -248,7 +248,8 @@ namespace My
 
 		Status m_status;			//!ステータス
 
-		int m_playerIdx = -1;
+		int m_playerIdx = -1;		//!自分自身のID(接続順)
+		bool m_isHost = false;		//!ホストかどうか
 
 		CLife_UI* m_pLifeUI;			//!<体力UI TODO:UIのインスタンスをキャラクターで持たせないように改良
 		CEnergy_UI* m_pEneryUI;			//!エナジーUI TODO:UIのインスタンスをキャラクターで持たせないように改良

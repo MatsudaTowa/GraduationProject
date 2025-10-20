@@ -62,6 +62,7 @@
     <ClCompile Include="src\area_manager.cpp" />
     <ClCompile Include="src\client.cpp" />
     <ClCompile Include="src\raknet.cpp" />
+    <ClCompile Include="src\active_scene_character_state.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\active_scene_character.h" />

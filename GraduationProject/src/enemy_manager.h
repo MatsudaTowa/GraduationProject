@@ -25,7 +25,7 @@ namespace My
 		HRESULT Init();				//‰Šú‰»
 		void Uninit();				//I—¹
 		void Regist(CEnemy* enemy);	//“o˜^
-		void Erase(CEnemy* enemy);	//íœ
+		void Remove(CEnemy* enemy);	//íœ
 
 		//ƒŠƒXƒg‚Ìæ“¾
 		std::list<CEnemy*> GetList() { return m_apManager; }

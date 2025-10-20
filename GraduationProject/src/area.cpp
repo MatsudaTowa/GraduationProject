@@ -6,6 +6,7 @@
 //=============================================
 #include "area.h"
 #include "active_manager.h"
+#include "enemy.h"
 namespace
 {
 	const D3DXCOLOR DEFAULT_COLOR = { 0.0f,0.0f,0.0f,0.7f };
@@ -77,11 +78,23 @@ void My::CArea::Update()
 	if (GET_INPUT_MOUSE->GetTrigger(0))
 	{
 		int life = m_pCharacter->GetLife();
+
 		if (life > INT_ZERO)
 		{
 			--life;
+		//}
+		//else
+		//{
+			if (typeid(*m_pCharacter) == typeid(CEnemy))
+			{
+				CEnemy* pEnemy = dynamic_cast<CEnemy*>(m_pCharacter);
+				CGameManager::GetInstance()->GetEnemyManager()->Remove(pEnemy);
+				pEnemy->Uninit();
+
+				m_pCharacter = nullptr;
+			}
 		}
-		m_pCharacter->SetLife(life);
+		//m_pCharacter->SetLife(life);
 	}
 }
 

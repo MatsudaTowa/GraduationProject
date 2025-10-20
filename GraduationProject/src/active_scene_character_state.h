@@ -34,5 +34,25 @@ namespace My
 		*/
 		virtual void Duel([[maybe_unused]] CActiveSceneCharacter* character) {};
 	};
+
+	class CLobbyCharacter :public CActiveSceneCharacterState
+	{
+	public:
+		struct SEND_DATA
+		{
+			bool isDuel;
+
+		};
+		void Lobby(CActiveSceneCharacter* character) override;
+	private:
+
+	};
+
+	class CDuelCharacter :public CActiveSceneCharacterState
+	{
+	public:
+		void Duel(CActiveSceneCharacter* character) override;
+	private:
+	};
 }
 #endif // !_ACTIVE_SCENE_CHARACTER_STATE_H_
