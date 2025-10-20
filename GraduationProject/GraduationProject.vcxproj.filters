@@ -60,6 +60,8 @@
     <ClCompile Include="src\useful.cpp" />
     <ClCompile Include="src\center_area.cpp" />
     <ClCompile Include="src\area_manager.cpp" />
+    <ClCompile Include="src\client.cpp" />
+    <ClCompile Include="src\raknet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\active_scene_character.h" />
@@ -123,5 +125,7 @@
     <ClInclude Include="src\useful.h" />
     <ClInclude Include="src\center_area.h" />
     <ClInclude Include="src\area_manager.h" />
+    <ClInclude Include="src\client.h" />
+    <ClInclude Include="src\raknet.h" />
   </ItemGroup>
 </Project>

@@ -9,6 +9,7 @@
 #include"player.h"
 #include "field.h"
 #include "title_camera.h"
+#include "raknet.h"
 
 namespace
 {
@@ -66,6 +67,16 @@ void My::CTitle::Update()
     {
 		//チュートリアルに遷移
 		GET_FADE->SetFade(CScene::MODE::MODE_GAME);
+    }
+
+    //左シフト押したらオンライン
+    if (pKeyboard->GetPress(DIK_LSHIFT))
+    {
+        //オンライン
+        CRakNet::GetInstance()->SetOnline(true);
+
+        //チュートリアルに遷移
+        GET_FADE->SetFade(CScene::MODE::MODE_GAME);
     }
 }
 

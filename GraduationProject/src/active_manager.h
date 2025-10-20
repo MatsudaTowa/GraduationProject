@@ -124,6 +124,7 @@ namespace My
 			m_pState->Duel(game);
 			m_pState->Pause(game);
 			m_pState->CardCast(game);
+			m_pState->Connect(game);
 		}
 
 		/**

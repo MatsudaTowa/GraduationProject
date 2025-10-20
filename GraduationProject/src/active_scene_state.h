@@ -47,6 +47,12 @@ namespace My
 		* @param [in]ゲームポインタ
 		*/
 		virtual void CardCast([[maybe_unused]] CGame* game) {};
+
+		/**
+		* @brief 通信処理(親では何もしない)
+		* @param [in]ゲームポインタ
+		*/
+		virtual void Connect([[maybe_unused]] CGame* game) {};
 	};
 
 	/** @brief ロビークラス */
@@ -59,6 +65,11 @@ namespace My
 		* @param [in]ゲームプレイヤーポインタ
 		*/
 		void Lobby(CGame* game) override;
+		/**
+		* @brief 通信処理
+		* @param [in]ゲームポインタ
+		*/
+		void Connect(CGame* game) override;
 	private:
 		//正方形なのでサイズは統一
 		static constexpr float FIELD_SIZE = 200.0f;
@@ -105,6 +116,11 @@ namespace My
 		* @param [in]ゲームプレイヤーポインタ
 		*/
 		void Duel(CGame* game) override;
+		/**
+		* @brief 通信処理
+		* @param [in]ゲームポインタ
+		*/
+		void Connect(CGame* game) override;
 	private:
 	};
 
@@ -118,6 +134,11 @@ namespace My
 		* @param [in]ゲームポインタ
 		*/
 		void Pause(CGame* game) override;
+		/**
+		* @brief 通信処理
+		* @param [in]ゲームポインタ
+		*/
+		void Connect(CGame* game) override;
 	private:
 		static constexpr float THRESHOLD = 10.0f; // 距離が定数以下なら到達とする（必要に応じて調整）
 	};
@@ -139,6 +160,11 @@ namespace My
 		* @param [in]ゲームポインタ
 		*/
 		void CardCast(CGame* game) override;
+		/**
+		* @brief 通信処理
+		* @param [in]ゲームポインタ
+		*/
+		void Connect(CGame* game) override;
 	private:
 	};
 }

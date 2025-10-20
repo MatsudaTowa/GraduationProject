@@ -12,6 +12,7 @@
 #include "card.h"
 #include "energy_charge.h"
 #include "center_area.h"
+#include "raknet.h"
 
 namespace
 {
@@ -27,6 +28,7 @@ m_pPauseCnt(nullptr),				//ポーズのキーを有効化するためのカウント
 m_pDelayCnt(nullptr)				//リザルトに遷移するまでのディレイカウント
 {
 	CGameManager::GetInstance()->SetFinish(false);
+	CRakNet::GetInstance()->Init();
 }
 
 //=============================================
@@ -34,6 +36,7 @@ m_pDelayCnt(nullptr)				//リザルトに遷移するまでのディレイカウント
 //=============================================
 My::CGame::~CGame()
 {
+	CRakNet::GetInstance()->Uninit();
 }
 
 //=============================================

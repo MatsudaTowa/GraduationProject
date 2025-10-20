@@ -6,6 +6,7 @@
 //=============================================
 #ifndef PRECOMPILE_H_
 #define PRECOMPILE_H_
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <string.h>
 #include<Mmsystem.h>
@@ -41,6 +42,7 @@
 #define FVF_VERTEX_2D	(D3DFVF_XYZRHW | D3DFVF_DIFFUSE |D3DFVF_TEX1) //座標とカラーとテクスチャ
 #define FVF_VERTEX_3D	(D3DFVF_XYZ |D3DFVF_NORMAL| D3DFVF_DIFFUSE |D3DFVF_TEX1) //座標とカラーとテクスチャ
 
+#pragma comment(lib, "ws2_32.lib")
 
 #endif // PRECOMPILE_H_
 
