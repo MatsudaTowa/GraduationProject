@@ -5,6 +5,7 @@
 // 
 //================================
 #include "area_manager.h"
+#include "active_manager.h"
 
 //================================
 // コンストラクタ
@@ -105,11 +106,52 @@ void My::CAreaManager::SelectArea()
 	if (area == CInputMouse::AREA::CENTER)
 	{
 		m_pCenterArea->SetSelect(true);
+
+		//TODO:カードを離したらに変更予定
+		if (GET_INPUT_MOUSE->GetTrigger(0))
+		{
+			CGameManager::GetInstance()->ChangeState(new CDuel);
+		}
 	}
 	else
 	{
 		m_pArea[area]->SetSelect(true);	
+
+		//TODO:ここに選択されたカードの処理を！
+		if (GET_INPUT_MOUSE->GetTrigger(0))
+		{
+			//登録されているキャラクターを取得
+			CGamePlayer* player = CGameManager::GetInstance()->GetPlayer();
+			std::list<CEnemy*> enemy_list = CGameManager::GetInstance()->GetEnemyManager()->GetList();
+			int life;
+			if (player->GetArea() == area)
+			{
+				life = player->GetLife();
+				if (life > INT_ZERO)
+				{
+					--life;
+				}
+				player->SetLife(life);
+			}
+
+			for (auto& itr : enemy_list)
+			{
+				if (itr == nullptr) { continue; }
+
+				if (itr->GetArea() != area) { continue; }
+				
+				life = itr->GetLife();
+				if (life > INT_ZERO)
+				{
+					--life;
+				}
+				itr->SetLife(life);
+				
+			}
+		}
 	}
+
+	
 
 	for (int i = 0; i < CInputMouse::AREA::MAX; ++i)
 	{

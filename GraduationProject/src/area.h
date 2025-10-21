@@ -79,27 +79,8 @@ namespace My
 		{
 			m_isSelect = isSelect;
 		}
-
-		/**
-		 * @brief ‘I‘ğ‚µ‚Ä‚¢‚é‚©æ“¾
-		 * @return m_pCharacter
-		 */
-		inline CActiveSceneCharacter* GetCharacter()
-		{
-			return m_pCharacter;
-		}
-
-		/**
-		 * @brief ‘I‘ğ‚³‚ê‚Ä‚¢‚é‚©İ’è
-		 * @param [in]isSelect
-		 */
-		inline void SetCharacter(CActiveSceneCharacter* character)
-		{
-			m_pCharacter = character;
-		}
 	private:
 		bool m_isSelect; //‘I‘ğ‚³‚ê‚Ä‚¢‚é‚©
-		CActiveSceneCharacter* m_pCharacter;
 	};
 }
 

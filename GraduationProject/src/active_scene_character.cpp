@@ -15,7 +15,8 @@ m_status(),
 m_isHost(false),
 m_playerIdx(-1),
 m_pEneryUI(nullptr),
-m_pLifeUI(nullptr)
+m_pLifeUI(nullptr),
+m_area()
 {
 }
 

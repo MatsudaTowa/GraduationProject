@@ -159,6 +159,15 @@ namespace My
 		}
 
 		/**
+		 * @brief エリアの代入
+		 * @param [in]area
+		 */
+		inline void SetArea(CInputMouse::AREA area)
+		{
+			m_area = area;
+		}
+
+		/**
 		 * @brief ステータス取得
 		 * @return ステータス
 		 */
@@ -238,6 +247,11 @@ namespace My
 		{
 			return m_pEneryUI;
 		}
+
+		inline CInputMouse::AREA GetArea()
+		{
+			return m_area;
+		}
 	private:
 		static constexpr int START_DECK = 40;				//!<最初のデッキ枚数
 		static constexpr int START_HAND = 3;				//!<最初の手札枚数
@@ -247,6 +261,8 @@ namespace My
 		static constexpr int MAX_LIFE = 99;					//!<体力最大値
 
 		Status m_status;			//!ステータス
+
+		CInputMouse::AREA m_area;	//!自分がどこのエリアか
 
 		int m_playerIdx = -1;		//!自分自身のID(接続順)
 		bool m_isHost = false;		//!ホストかどうか

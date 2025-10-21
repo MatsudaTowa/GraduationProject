@@ -152,11 +152,7 @@ void My::CLobby::ArrangePlayerClockwise(const D3DXVECTOR3 center, float radius)
 	pos.z = radius * cosf(angle);
 
 	player->SetPos(pos);
-	CArea* area = CGameManager::GetInstance()->GetAreaManager()->GetArea(CInputMouse::DOWN);
-	if (area != nullptr)
-	{
-		area->SetCharacter(player);
-	}
+	player->SetArea(CInputMouse::AREA::DOWN);
 
 	// 中心を向く
 	D3DXVECTOR3 dir = center - pos;
@@ -180,11 +176,7 @@ void My::CLobby::ArrangePlayerClockwise(const D3DXVECTOR3 center, float radius)
 		itr->SetPos(pos);
 		itr->SetRot({ 0.0f, rotY, 0.0f });
 
-		CArea* area = CGameManager::GetInstance()->GetAreaManager()->GetArea(CharacterArea(angle));
-		if (area != nullptr)
-		{
-			area->SetCharacter(itr);
-		}
+		itr->SetArea(CharacterArea(angle));
 		++i;
 	}
 }

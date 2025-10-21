@@ -83,6 +83,17 @@ void My::CGamePlayer::Update()
 
 	//親クラスの更新
 	CPlayer::Update();
+
+	if (GetLife() <= INT_ZERO)
+	{
+		SetisDelete(true);
+
+		// ゲームマネージャーに登録されているプレイヤーにnullptrを代入してあげる
+		if (CGameManager::GetInstance()->GetPlayer() != nullptr)
+		{
+			CGameManager::GetInstance()->SetPlayer(nullptr);
+		}
+	}
 }
 
 //=============================================
