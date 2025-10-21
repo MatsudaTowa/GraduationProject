@@ -14,7 +14,7 @@ namespace My
 {
 	//class CCardState;
 
-	class CCard :public CObjectX
+	class CCard :public CObject3D
 	{
 	public:
 
@@ -75,7 +75,6 @@ namespace My
 		//static CCard* m_pCur;	//現在（最後尾）のポインタ
 		//CCard* m_pPrev;			//前のオブジェクトのポインタ
 		//CCard* m_pNext;			//次のオブジェクトのポインタ
-
 
 		/**
 		 * @brief カードを選択しているか否か(trueだったら選択している)

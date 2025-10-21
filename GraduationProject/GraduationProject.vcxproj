@@ -168,6 +168,7 @@
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\camera_state.cpp" />
     <ClCompile Include="src\card.cpp" />
+    <ClCompile Include="src\card_frame.cpp" />
     <ClCompile Include="src\card_state.cpp" />
     <ClCompile Include="src\center_area.cpp" />
     <ClCompile Include="src\character.cpp" />
@@ -235,6 +236,7 @@
     <ClInclude Include="src\camera.h" />
     <ClInclude Include="src\camera_state.h" />
     <ClInclude Include="src\card.h" />
+    <ClInclude Include="src\card_frame.h" />
     <ClInclude Include="src\card_state.h" />
     <ClInclude Include="src\center_area.h" />
     <ClInclude Include="src\character.h" />

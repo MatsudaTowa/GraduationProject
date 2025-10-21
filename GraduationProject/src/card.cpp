@@ -7,12 +7,13 @@
 #include "card.h"
 #include "game.h"
 #include "card_state.h"
+#include "card_frame.h"
 #include <typeinfo>
 
 //===========================================================================================================
 // コンストラクタ
 //===========================================================================================================
-My::CCard::CCard(int nPriority):CObjectX(nPriority),
+My::CCard::CCard(int nPriority):CObject3D(nPriority),
 	m_pState(nullptr),
 	m_IsChoice(false),
 	m_outpos({0,0,0}),
@@ -46,25 +47,33 @@ My::CCard::~CCard()
 //===========================================================================================================
 HRESULT My::CCard::Init()
 {
-	// モデル設定
-	CModel*pModel= CManager::GetInstance()->GetModel();
-	int Idx = pModel->Regist("data\\model\\card_traial_002.x");
-	CModel::MODEL_INFO mi = pModel->GetModelInfo(Idx);
-	BindXFile(mi.pBuffMat, mi.dwNumMat, mi.pMesh);
+	//// モデル設定
+	//CModel*pModel= CManager::GetInstance()->GetModel();
+	//int Idx = pModel->Regist("data\\model\\card_traial_002.x");
+	//CModel::MODEL_INFO mi = pModel->GetModelInfo(Idx);
+	//BindXFile(mi.pBuffMat, mi.dwNumMat, mi.pMesh);
 
-	CObjectX::Init();
+	CObject3D::Init();
 
-	// スケール
-	D3DXVECTOR3 scale = GetScale();
+	//// スケール
+	//D3DXVECTOR3 scale = GetScale();
 
-	scale.x *= 1.2f;
-	scale *= 1.0f;                                                                                                                                             
+	//scale.x *= 1.2f;
+	//scale *= 1.0f;
 
-	SetScale(scale);
+	//SetScale(scale);
 
 	m_pState = new CCardStateNeutral();
 	m_pState->Init();
 	m_StateNum = CCardState::CARD_NEUTRAL;
+
+	// カードフレーム生成
+	CCardFrame::Create(CCardFrame::FRAMETYPE::FRAMETYPE_BASE, this);	// 基盤
+	CCardFrame::Create(CCardFrame::FRAMETYPE::FRAMETYPE_ILLUST, this);	// コストアイコン
+	CCardFrame::Create(CCardFrame::FRAMETYPE::FRAMETYPE_NAME, this);	// ネーム
+
+	//CFrameBase::Create(CCardFrame::FRAMETYPE::FRAMETYPE_BASE, this);
+	//CFrameillust::Create(CCardFrame::FRAMETYPE::FRAMETYPE_ILLUST, this);
 
 	return S_OK;
 }
@@ -74,7 +83,7 @@ HRESULT My::CCard::Init()
 //===========================================================================================================
 void My::CCard::Uninit()
 {
-	CObjectX::Uninit();
+	CObject3D::Uninit();
 }
 
 //===========================================================================================================
@@ -90,7 +99,17 @@ void My::CCard::Update()
 	//SetPos({ pCamera->GetPosV().x,pCamera->GetPosV().y - 100.0f,pCamera->GetPosV().z + 30.0f });
 
 	D3DXVECTOR3 rot = pCamera->GetRot();
-	rot.x += 0.3f;
+	rot.x += -0.6f;
+
+	CInputKeyboard* pKeyboad = CManager::GetInstance()->GetKeyboard();
+	if (pKeyboad->GetTrigger(DIK_A))
+	{
+		CFrameBase::Create(CCardFrame::FRAMETYPE::FRAMETYPE_BASE, this);
+	}
+	if (pKeyboad->GetTrigger(DIK_D))
+	{
+		CFrameillust::Create(CCardFrame::FRAMETYPE::FRAMETYPE_ILLUST, this);
+	}
 
 	// TODO : マウスを実装しようとしました
 
@@ -138,7 +157,7 @@ void My::CCard::Update()
 //===========================================================================================================
 void My::CCard::Draw()
 {
-	CObjectX::Draw();
+	//CObject3D::Draw();
 
 	POINT mouse;
 	GetCursorPos(&mouse);
