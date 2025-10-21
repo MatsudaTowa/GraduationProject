@@ -46,7 +46,7 @@ void My::CCardStateNeutral::Update(CCard* cpy)
 	if (cpy == nullptr)
 		return;
 
-	cpy->SetSize({ 0.8f * 1.2f, 0.8f, 0.8f });
+	cpy->SetSize({ 1.0f * 1.2f, 1.0f, 1.0f });
 }
 
 
@@ -64,7 +64,7 @@ void My::CCardStatePickup::Update(CCard* cpy)
 	if (cpy == nullptr)
 		return;
 
-	cpy->SetSize({ 1.2f,1.0f, 1.0f });
+	cpy->SetSize({ 1.2f * 1.2f,1.2f, 1.2f });
 }
 
 

@@ -41,8 +41,8 @@ namespace My
 			FRAMETYPE_MAX
 		}FRAMETYPE;
 
-		const float CARD_WIDTH = 10.0f;
-		const float CARD_HEIGHT = 15.0f;
+		static const float CARD_WIDTH;
+		static const float CARD_HEIGHT;
 
 		/** 
 		* @brief カードフレームの情報構造体

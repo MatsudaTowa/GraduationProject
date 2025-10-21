@@ -68,9 +68,14 @@ HRESULT My::CCard::Init()
 	m_StateNum = CCardState::CARD_NEUTRAL;
 
 	// カードフレーム生成
-	CCardFrame::Create(CCardFrame::FRAMETYPE::FRAMETYPE_BASE, this);	// 基盤
-	CCardFrame::Create(CCardFrame::FRAMETYPE::FRAMETYPE_ILLUST, this);	// コストアイコン
-	CCardFrame::Create(CCardFrame::FRAMETYPE::FRAMETYPE_NAME, this);	// ネーム
+	for (int i = 0; i < CCardFrame::FRAMETYPE_MAX; i++)
+	{
+		CCardFrame::Create((CCardFrame::FRAMETYPE)i, this);
+	}
+
+	//CCardFrame::Create(CCardFrame::FRAMETYPE::FRAMETYPE_BASE, this);	// 基盤
+	//CCardFrame::Create(CCardFrame::FRAMETYPE::FRAMETYPE_ILLUST, this);	// コストアイコン
+	//CCardFrame::Create(CCardFrame::FRAMETYPE::FRAMETYPE_NAME, this);	// ネーム
 
 	//CFrameBase::Create(CCardFrame::FRAMETYPE::FRAMETYPE_BASE, this);
 	//CFrameillust::Create(CCardFrame::FRAMETYPE::FRAMETYPE_ILLUST, this);

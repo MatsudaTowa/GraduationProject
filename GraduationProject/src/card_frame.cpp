@@ -3,6 +3,12 @@
 // 静的メンバ初期化
 
 /**
+* @brief カードの基本サイズ
+*/
+const float My::CCardFrame::CARD_WIDTH = 12.0f;
+const float My::CCardFrame::CARD_HEIGHT = 15.0f;
+
+/**
 * @brief カードフレームまでの相対パス
 */
 std::string My::CCardFrame::FramePass = "../asetto/card_frame/";
@@ -11,12 +17,12 @@ std::string My::CCardFrame::FramePass = "../asetto/card_frame/";
 * @brief カードフレームの情報構造体の配列
 */
 My::CCardFrame::CardFrameInfo My::CCardFrame::m_FrameInfo[My::CCardFrame::FRAMETYPE::FRAMETYPE_MAX] = {
-	{"../asetto/card_frame/card_frame.png",		{0,0,0},	{15,15,15}},
-	{"../asetto/card_frame/card_illustframe.png",{0,0,0},	{15,7,7}},
-	{"../asetto/card_frame/card_textframe.png",	{0,0,0},	{15,7,7}},
-	{"../asetto/card_frame/card_nameframe.png",	{0,0,0},	{5,10,5}},
-	{"../asetto/card_frame/card_typeframe.png",	{0,0,0},	{30,30,10}},
-	{"../asetto/card_frame/card_costframe.png",	{-20,20,6},	{5,5,5}}
+	{"../asetto/card_frame/card_frame.png",		{0,0,0},	{CARD_WIDTH, 1.0f, CARD_HEIGHT} },
+	{"../asetto/card_frame/card_illustframe.png",{0,0,5},	{CARD_WIDTH-2.0f, 1.0f, 7.0f}},
+	{"../asetto/card_frame/card_textframe.png",	{0,0,-7},	{CARD_WIDTH-2.0f, 1.0f, 7.0f}},
+	{"../asetto/card_frame/card_nameframe.png",	{0,0,0},	{CARD_WIDTH+2.0f, 1.0f, 4.0f}},
+	{"../asetto/card_frame/card_typeframe.png",	{12.0f,0,10.0f},	{5.0f, 1.0f, 5.0f}},
+	{"../asetto/card_frame/card_costframe.png",	{-12.0f,0.0f,12.0f},	{5,5,5}}
 };
 
 //===========================================================================================================
@@ -71,12 +77,13 @@ void My::CCardFrame::Update()
 	D3DXVECTOR3 offsetpos = m_pParent->GetPos() + m_FrameInfo[m_type].offset;
 
 	SetPos(offsetpos);
-	SetRot(m_pParent->GetRot());
+	//SetRot(-m_pParent->GetRot());
+	SetRot({0,0,0});
 
 	// 親のスケールからサイズを設定している
 	D3DXVECTOR3 size = {
 		m_FrameInfo[m_type].size.x * m_pParent->GetSize().x,
-		m_FrameInfo[m_type].size.y * m_pParent->GetSize().y,
+		m_FrameInfo[m_type].size.y /** m_pParent->GetSize().y*/,
 		m_FrameInfo[m_type].size.z * m_pParent->GetSize().z,
 	};
 
@@ -92,7 +99,26 @@ void My::CCardFrame::Update()
 //===========================================================================================================
 void My::CCardFrame::Draw()
 {
+	CRenderer* pRender = GET_RENDERER;
+	LPDIRECT3DDEVICE9 pDevice = pRender->GetDevice();
+
+	// Zの比較方法
+	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_ALWAYS);
+	// Zバッファに書き込まない
+	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
+
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	pDevice->SetRenderState(D3DRS_ALPHAREF, 0);
+	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+
 	CObject3D::Draw();
+
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+
+	// Zの比較方法
+	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
+	// Zバッファに書き込む
+	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 }
 
 //===========================================================================================================
@@ -100,7 +126,7 @@ void My::CCardFrame::Draw()
 //===========================================================================================================
 My::CCardFrame* My::CCardFrame::Create(FRAMETYPE type, CObject3D* pObj)
 {
-	CCardFrame* pCardFrame = new CCardFrame();
+	CCardFrame* pCardFrame = new CCardFrame(type+4);
 
 	// タイプ設定
 	pCardFrame->m_type = type;
