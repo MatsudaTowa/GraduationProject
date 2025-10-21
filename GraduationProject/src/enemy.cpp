@@ -23,7 +23,7 @@ My::CEnemy::CEnemy(int nPriority)
 My::CEnemy::~CEnemy()
 {
 	//NOTE:Removeは呼ばない ReleseAllなどで要素数いじった後に全削除してしまうため
-	//一個ずつ消していくにはUninit呼んだ後にエネミーマネージャーのRemoveを呼ぶように
+	//一個ずつ消していくにはSetisDeleteでtrue代入後にエネミーマネージャーのRemoveを呼ぶように
 }
 
 //=============================================

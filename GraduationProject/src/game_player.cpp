@@ -52,8 +52,15 @@ void My::CGamePlayer::Uninit()
 		delete m_pHand;
 		m_pHand = nullptr;
 	}
+
+	// ゲームマネージャーに登録されているプレイヤーにnullptrを代入してあげる
+	if (CGameManager::GetInstance()->GetPlayer() != nullptr)
+	{
+		CGameManager::GetInstance()->SetPlayer(nullptr);
+	}
 	//親クラスの終了処理
 	CPlayer::Uninit();
+
 }
 
 //=============================================

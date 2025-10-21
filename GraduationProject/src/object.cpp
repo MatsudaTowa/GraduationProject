@@ -122,7 +122,7 @@ void My::CObject::UpdateAll()
 			//死亡フラグが立っていたらRelease
 			if (pObj->m_isDelete)
 			{
-				pObj->Release();
+				pObj->Uninit();
 			}
 
 			pObj = pNext;	//ポインタを進める

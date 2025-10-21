@@ -6,7 +6,6 @@
 //=============================================
 #include "area.h"
 #include "active_manager.h"
-#include "enemy.h"
 namespace
 {
 	const D3DXCOLOR DEFAULT_COLOR = { 0.0f,0.0f,0.0f,0.7f };
@@ -60,6 +59,15 @@ void My::CArea::Update()
 		return;
 	}
 
+	if (m_pCharacter != nullptr)
+	{
+		if (m_pCharacter->GetIsDelete())
+		{
+			m_pCharacter = nullptr;
+			return;
+		}
+	}
+
 	if (m_pCharacter == nullptr)
 	{
 		SetColor(DEFAULT_COLOR);
@@ -78,23 +86,26 @@ void My::CArea::Update()
 	if (GET_INPUT_MOUSE->GetTrigger(0))
 	{
 		int life = m_pCharacter->GetLife();
-
 		if (life > INT_ZERO)
 		{
 			--life;
-		//}
-		//else
-		//{
+		}
+		m_pCharacter->SetLife(life);
+
+		//NOTE:キャラクター削除方法の例
+		//SetisDeleteにtrueを代入することでobject側でUniit()が呼ばれる
+		//エネミーはマネージャーに登録されているリストから削除してあげないと最終の全削除でサイズ数と実際の要素数が合わずに落ちるので必ずRemoveで削除してください
+		if (life <= 0)
+		{
+			m_pCharacter->SetisDelete(true);
 			if (typeid(*m_pCharacter) == typeid(CEnemy))
 			{
-				CEnemy* pEnemy = dynamic_cast<CEnemy*>(m_pCharacter);
-				CGameManager::GetInstance()->GetEnemyManager()->Remove(pEnemy);
-				pEnemy->Uninit();
-
-				m_pCharacter = nullptr;
+				CEnemy* enemy = dynamic_cast<CEnemy*>(m_pCharacter);
+				CGameManager::GetInstance()->GetEnemyManager()->Remove(enemy);
 			}
+
+			m_pCharacter = nullptr;
 		}
-		//m_pCharacter->SetLife(life);
 	}
 }
 
