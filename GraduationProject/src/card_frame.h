@@ -21,6 +21,12 @@ namespace My
 	{
 	public:
 		/**
+		* @brief カードの基本サイズ
+		*/
+		static const float CARD_WIDTH;	// 横
+		static const float CARD_HEIGHT;	// 縦
+
+		/**
 		* @brief フレームのタイプ列挙 |
 		*  命名規則 -> FRAMETYPE_name
 		* @param name = BASE [基盤]
@@ -40,9 +46,6 @@ namespace My
 			FRAMETYPE_COST,
 			FRAMETYPE_MAX
 		}FRAMETYPE;
-
-		static const float CARD_WIDTH;
-		static const float CARD_HEIGHT;
 
 		/** 
 		* @brief カードフレームの情報構造体
@@ -83,9 +86,6 @@ namespace My
 		/* @brief 親設定 */
 		inline void SetType(CCardFrame::FRAMETYPE type) { m_type = type; }
 		inline FRAMETYPE GetType() { return m_type; }
-
-	protected:
-		CardFrameInfo m_CardFrameInfo;
 
 	private:
 		/** @brief カードフレームまでの相対パス */
