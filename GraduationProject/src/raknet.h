@@ -41,6 +41,7 @@ public:
 	void Accept();		//接続待ち受け処理
 	void Uninit();		//終了処理
 	static void Communication(RakNet::RakPeerInterface* peer);		//通信処理
+	static void DuelComunication(RakNet::RakPeerInterface* peer);	//対戦中の通信処理
 
 	//設定と取得
 	RakNet::RakPeerInterface* GetPeer() { return m_pPeer; }	//ピアの取得

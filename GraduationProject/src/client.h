@@ -34,6 +34,7 @@ public:
 
 	//’ÊM—pŠÖ”
 	void Regist(RakNet::Packet* packet);	//“o˜^ˆ—
+	void Delete(RakNet::Packet* packet);	//íœˆ—
 
 private:
 

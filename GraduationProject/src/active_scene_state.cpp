@@ -216,7 +216,7 @@ My::CInputMouse::AREA My::CLobby::CharacterArea(float angle)
 //=============================================
 //通信処理
 //=============================================
-void My::CLobby::Connect(CGame* game)
+void My::CLobby::Connect(CGame* /*game*/)
 {
 	if (!CRakNet::GetInstance()->GetOnline()) return;
 
@@ -277,7 +277,7 @@ void My::CDuel::Duel(CGame* game)
 //=============================================
 //通信処理
 //=============================================
-void My::CDuel::Connect(CGame* game)
+void My::CDuel::Connect(CGame* /*game*/)
 {
 	if (!CRakNet::GetInstance()->GetOnline()) return;
 
@@ -314,7 +314,7 @@ void My::CPause::Pause(CGame* game)
 //=============================================
 //通信処理
 //=============================================
-void My::CPause::Connect(CGame* game)
+void My::CPause::Connect(CGame* /*game*/)
 {
 	if (!CRakNet::GetInstance()->GetOnline()) return;
 
@@ -361,7 +361,7 @@ void My::CCardCast::CardCast(CGame* game)
 //=============================================
 //通信処理
 //=============================================
-void My::CCardCast::Connect(CGame* game)
+void My::CCardCast::Connect(CGame* /*game*/)
 {
 	if (!CRakNet::GetInstance()->GetOnline()) return;
 
