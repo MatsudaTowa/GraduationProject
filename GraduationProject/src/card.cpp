@@ -101,16 +101,6 @@ void My::CCard::Update()
 	D3DXVECTOR3 rot = pCamera->GetRot();
 	rot.x += -0.6f;
 
-	CInputKeyboard* pKeyboad = CManager::GetInstance()->GetKeyboard();
-	if (pKeyboad->GetTrigger(DIK_A))
-	{
-		CFrameBase::Create(CCardFrame::FRAMETYPE::FRAMETYPE_BASE, this);
-	}
-	if (pKeyboad->GetTrigger(DIK_D))
-	{
-		CFrameillust::Create(CCardFrame::FRAMETYPE::FRAMETYPE_ILLUST, this);
-	}
-
 	// TODO : ƒ}ƒEƒX‚ðŽÀ‘•‚µ‚æ‚¤‚Æ‚µ‚Ü‚µ‚½
 
 	//POINT mouse;

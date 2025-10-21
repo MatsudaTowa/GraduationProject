@@ -11,10 +11,10 @@ std::string My::CCardFrame::FramePass = "../asetto/card_frame/";
 * @brief カードフレームの情報構造体の配列
 */
 My::CCardFrame::CardFrameInfo My::CCardFrame::m_FrameInfo[My::CCardFrame::FRAMETYPE::FRAMETYPE_MAX] = {
-	{"../asetto/card_frame/card_frame.png",		{0,0,0},	{10,10,10}},
-	{"../asetto/card_frame/card_illustframe.png",{0,0,0},	{30,10,10}},
-	{"../asetto/card_frame/card_textframe.png",	{0,0,0},	{30,10,10}},
-	{"../asetto/card_frame/card_nameframe.png",	{0,0,0},	{30,10,10}},
+	{"../asetto/card_frame/card_frame.png",		{0,0,0},	{15,15,15}},
+	{"../asetto/card_frame/card_illustframe.png",{0,0,0},	{15,7,7}},
+	{"../asetto/card_frame/card_textframe.png",	{0,0,0},	{15,7,7}},
+	{"../asetto/card_frame/card_nameframe.png",	{0,0,0},	{5,10,5}},
 	{"../asetto/card_frame/card_typeframe.png",	{0,0,0},	{30,30,10}},
 	{"../asetto/card_frame/card_costframe.png",	{-20,20,6},	{5,5,5}}
 };
@@ -122,119 +122,3 @@ void My::CCardFrame::SetParent(CObject3D* pObj)
 	m_pParent = pObj;
 }
 
-
-
-
-
-My::CFrameBase::CFrameBase()
-{
-}
-
-My::CFrameBase::~CFrameBase()
-{
-}
-
-HRESULT My::CFrameBase::Init()
-{
-	m_CardFrameInfo = {
-		"card_frame.png",	{0,0,0},	{10,10,10}
-	};
-	CCardFrame::Init();
-	return S_OK;
-}
-
-void My::CFrameBase::Uninit()
-{
-	CCardFrame::Uninit();
-}
-
-void My::CFrameBase::Update()
-{
-	CCardFrame::Update();
-}
-
-void My::CFrameBase::Draw()
-{
-	CCardFrame::Draw();
-}
-
-My::CFrameBase* My::CFrameBase::Create(FRAMETYPE type, CObject3D* pObj)
-{
-	CFrameBase* pCardFrame = new CFrameBase();
-
-	//// テクスチャ設定
-	//CTexture* pTex = GET_TEXTURE;
-
-	//// ファイルパス設定( 相対ファイルパス ＋ Textureパス )
-	//std::string str = pCardFrame->FramePass + pCardFrame->m_FrameInfo[type].pass;
-	//pCardFrame->BindTexture(pTex->GetAddress(pTex->Regist(&str)));
-
-	// タイプ設定
-	pCardFrame->SetType(type);
-
-	// 親設定
-	pCardFrame->SetParent(pObj);
-
-	// 初期化設定
-	pCardFrame->Init();
-
-	return pCardFrame;
-}
-
-
-
-
-My::CFrameillust::CFrameillust()
-{
-}
-
-My::CFrameillust::~CFrameillust()
-{
-}
-
-HRESULT My::CFrameillust::Init()
-{
-	m_CardFrameInfo = {
-		"card_illustframe.png",	{0,10,0},	{10,10,10}
-	};
-	CCardFrame::Init();
-	return S_OK;
-}
-
-void My::CFrameillust::Uninit()
-{
-	CCardFrame::Uninit();
-}
-
-void My::CFrameillust::Update()
-{
-	CCardFrame::Update();
-}
-
-void My::CFrameillust::Draw()
-{
-	CCardFrame::Draw();
-}
-
-My::CFrameillust* My::CFrameillust::Create(FRAMETYPE type, CObject3D* pObj)
-{
-	CFrameillust* pCardFrame = new CFrameillust();
-
-	//// テクスチャ設定
-	//CTexture* pTex = GET_TEXTURE;
-
-	//// ファイルパス設定( 相対ファイルパス ＋ Textureパス )
-	//std::string str = pCardFrame->FramePass + pCardFrame->m_FrameInfo[type].pass;
-	//pCardFrame->BindTexture(pTex->GetAddress(pTex->Regist(&str)));
-
-	// タイプ設定
-	pCardFrame->SetType(type);
-
-	// 親設定
-	pCardFrame->SetParent(pObj);
-
-	// 初期化設定
-	pCardFrame->Init();
-
-	return pCardFrame;
-}

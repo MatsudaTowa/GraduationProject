@@ -41,6 +41,9 @@ namespace My
 			FRAMETYPE_MAX
 		}FRAMETYPE;
 
+		const float CARD_WIDTH = 10.0f;
+		const float CARD_HEIGHT = 15.0f;
+
 		/** 
 		* @brief カードフレームの情報構造体
 		* @param pass : 画像ファイルのパス
@@ -85,7 +88,6 @@ namespace My
 		CardFrameInfo m_CardFrameInfo;
 
 	private:
-
 		/** @brief カードフレームまでの相対パス */
 		static std::string FramePass;
 
