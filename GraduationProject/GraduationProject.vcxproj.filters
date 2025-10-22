@@ -96,6 +96,9 @@
     <ClCompile Include="src\ready_txt.cpp">
       <Filter>active_scene\lobby</Filter>
     </ClCompile>
+    <ClCompile Include="src\card_attack.cpp" />
+    <ClCompile Include="src\card_deffence.cpp" />
+    <ClCompile Include="src\card_assist.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -194,6 +197,9 @@
     <ClInclude Include="src\ready_txt.h">
       <Filter>active_scene\lobby</Filter>
     </ClInclude>
+    <ClInclude Include="src\card_attack.h" />
+    <ClInclude Include="src\card_deffence.h" />
+    <ClInclude Include="src\card_assist.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">

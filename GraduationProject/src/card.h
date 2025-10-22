@@ -18,12 +18,12 @@ namespace My
 	{
 	public:
 
-	/**
-	* @brief カードタイプの列挙型
-	* @param 攻撃カード
-	* @param 防御カード
-	* @param 補助カード
-	*/
+		/**
+		* @brief カードタイプの列挙型
+		* @param 攻撃カード
+		* @param 防御カード
+		* @param 補助カード
+		*/
 		typedef enum
 		{
 			TYPE_ATTACK=0,
@@ -65,7 +65,7 @@ namespace My
 
 		/**
 		 * @brief 生成
-		 * @param [in]位置
+		 * @param [in]カードタイプ
 		 */
 		static CCard* Create(CCard::CARDTYPE_ type);
 
