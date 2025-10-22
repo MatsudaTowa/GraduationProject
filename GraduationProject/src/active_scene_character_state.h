@@ -87,6 +87,15 @@ namespace My
 		{
 			return m_data.isReady;
 		}
+
+		/**
+		 * @brief €”õUIæ“¾
+		 * @return €”õUI
+		 */
+		inline CReadyUI* GetReadyUI()
+		{
+			return m_pReadyUI;
+		}
 	private:
 		LobbyData m_data;
 		CReadyUI* m_pReadyUI;			//!<€”õUI

@@ -37,7 +37,30 @@ void My::CPlayerLobbyState::Lobby(CActiveSceneCharacter* character)
 	//モーション設定
 	player->SetMotion(CPlayer::MOTION_NEUTRAL);
 
-	if (GET_INPUT_KEYBOARD->GetTrigger(DIK_SPACE))
+	//マウス座標を取得してクライアント座標に変換
+	POINT mouse;
+	GetCursorPos(&mouse);
+	ScreenToClient(GET_HWND, &mouse);
+
+	CReadyTxt* pTxt = GetReadyUI()->GetReadyTxt();
+
+	//クライアントサイズを取得
+	RECT rc;
+	GetClientRect(GET_HWND, &rc);
+	float width = (float)(rc.right - rc.left);
+	float height = (float)(rc.bottom - rc.top);
+
+	float x = (float)mouse.x;
+	float y = (float)mouse.y;
+
+	if (!GET_COLISION->Check2DPolygonColision({ x * SCREEN_WIDTH / width,y * SCREEN_HEIGHT / height,0.0f }, { 3.0f,3.0f }, { pTxt->GetPos().x,pTxt->GetPos().y,0.0f }, pTxt->GetSize()))
+	{
+		pTxt->SetColor({ 0.2f,0.2f,0.2f,1.0f });
+		return;
+	}
+
+	pTxt->SetColor(COLOR_WHITE);
+	if (GET_INPUT_MOUSE->GetTrigger(0))
 	{
 		bool isReady = GetIsReady();
 		isReady = isReady ? false : true;
