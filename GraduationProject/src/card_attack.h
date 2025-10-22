@@ -22,6 +22,26 @@ namespace My
 		 * @brief デストラクタ
 		 */
 		~CCardAttack()override;
+
+		/**
+		 * @brief 初期化
+		 */
+		HRESULT Init()override;
+
+		/**
+		 * @brief 終了
+		 */
+		void Uninit()override;
+
+		/**
+		 * @brief 更新
+		 */
+		void Update()override;
+
+		/**
+		 * @brief 描画
+		 */
+		void Draw()override;
 	};
 }
 

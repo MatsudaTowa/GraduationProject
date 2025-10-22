@@ -84,6 +84,7 @@ namespace My
 		/**
 		* @brief カードタイプ取得
 		*/
+		inline void SetCardType(CCard::CARDTYPE_ type) { m_CardType = type; }
 		inline CARDTYPE_ GetCardType() { return m_CardType; }
 
 		//inline CCard* GetTop() { return m_pTop; }

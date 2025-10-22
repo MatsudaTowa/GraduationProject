@@ -7,6 +7,9 @@
 #include "hand.h"
 #include "card.h"
 #include "card_state.h"
+#include "card_attack.h"
+#include "card_deffence.h"
+#include "card_assist.h"
 #include "game.h"
 
 My::CHand::CHand() :
@@ -198,6 +201,27 @@ void My::CHand::DeleteCard()
 }
 
 //===========================================================================================================
+// ÉJÅ[Éhê›íË
+//===========================================================================================================
+void My::CHand::SetCard(CCard::CARDTYPE_ type)
+{
+	switch (type)
+	{
+	case CCard::CARDTYPE_::TYPE_ATTACK:
+		m_pCard[m_TotalNum] = CCardAttack::Create(type);
+		break;
+
+	case CCard::CARDTYPE_::TYPE_DEFFENCE:
+		m_pCard[m_TotalNum] = CCardDeffence::Create(type);
+		break;
+
+	case CCard::CARDTYPE_::TYPE_ASSIST:
+		m_pCard[m_TotalNum] = CCardAssist::Create(type);
+		break;
+	}
+}
+
+//===========================================================================================================
 // éËéDÇà¯Ç≠
 //===========================================================================================================
 void My::CHand::HandDraw(int drawnum)
@@ -217,7 +241,7 @@ void My::CHand::HandDraw(int drawnum)
 		int rundom;
 		rundom = Rundom(CCard::CARDTYPE_::TYPE_ATTACK, CCard::CARDTYPE_::TYPE_MAX);
 
-		m_pCard[m_TotalNum] = CCard::Create((CCard::CARDTYPE_)rundom);
+		SetCard((CCard::CARDTYPE_)rundom);
 		m_TotalNum++;	// éËéDÇÃëçêîÇëùÇ‚Ç∑
 		SetHandCardPos();
 	}

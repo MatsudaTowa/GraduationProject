@@ -7,15 +7,12 @@
 #ifndef _HAND_H_
 #define _HAND_H_
 #include "main.h"
+#include "card.h"
 
 
 /** @brief My 名前空間 */
 namespace My
 {
-	// 前方宣言
-	class CCard;
-
-
 	/**
 	* @brief 手札のクラス
 	*/
@@ -86,16 +83,20 @@ namespace My
 		* @brief 手札のカードの状態変更
 		*/
 		void DeleteCard();
-
+		
 		/**
-		* @brief 手札の真ん中
+		* @brief カードタイプ別生成
 		*/
-		D3DXVECTOR3 m_CenterPos;
+		void SetCard(CCard::CARDTYPE_ type);
 
 		//===========================================================================================================
 		// メンバ変数
 		//===========================================================================================================
 
+		/**
+		* @brief 手札の真ん中
+		*/
+		D3DXVECTOR3 m_CenterPos;
 
 		/*
 		* @brief 手札の配列
