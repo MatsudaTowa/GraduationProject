@@ -86,15 +86,12 @@ void My::CLobby::FillEmptyPlayer(int& total, std::list<My::CEnemy*>& enemy)
 		{
 			++m_characterIdx;
 			CPlayer::Create(new CGamePlayer, VEC3_RESET_ZERO, VEC3_RESET_ZERO, m_characterIdx);
-			ArrangePlayerClockwise(VEC3_RESET_ZERO, 200.0f);
 			continue;
 		}
 		++m_characterIdx;
 		CEnemy::Create(VEC3_RESET_ZERO, VEC3_RESET_ZERO, m_characterIdx);
 		enemy = CGameManager::GetInstance()->GetEnemyManager()->GetList();
 		total = (int)enemy.size() + 1; // プレイヤー含む
-									   // 配置を更新
-		ArrangePlayerClockwise(VEC3_RESET_ZERO, 200.0f);
 	}
 }
 
@@ -109,8 +106,6 @@ void My::CLobby::CreatePlayers(My::CInputKeyboard* pKeyboard, std::list<My::CEne
 		{
 			++m_characterIdx;
 			CEnemy::Create(VEC3_RESET_ZERO, VEC3_RESET_ZERO, m_characterIdx);
-			// 配置を更新
-			ArrangePlayerClockwise(VEC3_RESET_ZERO, 200.0f);
 		}
 		else
 		{
@@ -118,9 +113,6 @@ void My::CLobby::CreatePlayers(My::CInputKeyboard* pKeyboard, std::list<My::CEne
 			++m_characterIdx;
 
 			CPlayer::Create(new CGamePlayer, VEC3_RESET_ZERO, VEC3_RESET_ZERO, m_characterIdx);
-
-			// プレイヤー生成時にも再配置
-			ArrangePlayerClockwise(VEC3_RESET_ZERO, 200.0f);
 		}
 	}
 	else if (pKeyboard->GetTrigger(DIK_2))
@@ -129,16 +121,76 @@ void My::CLobby::CreatePlayers(My::CInputKeyboard* pKeyboard, std::list<My::CEne
 		++m_characterIdx;
 
 		CPlayer::Create(new CGamePlayer, VEC3_RESET_ZERO, VEC3_RESET_ZERO, m_characterIdx);
+	}
+}
 
-		// プレイヤー生成時にも再配置
-		ArrangePlayerClockwise(VEC3_RESET_ZERO, 200.0f);
+//=============================================
+//通信処理
+//=============================================
+void My::CLobby::Connect(CGame* /*game*/)
+{
+	if (!CRakNet::GetInstance()->GetOnline()) return;
+
+	//通信処理
+	CRakNet::GetInstance()->Communication(CRakNet::GetInstance()->GetPeer());
+}
+
+//=============================================
+// コンストラクタ
+//=============================================
+My::CDuel::CDuel()
+{
+	GET_CAMERA(GET_CAMERA_IDX)->ChangeCameraState(new CBirdView);
+}
+
+//=============================================
+// デストラクタ
+//=============================================
+My::CDuel::~CDuel()
+{
+}
+
+//=============================================
+// デュエル
+//=============================================
+void My::CDuel::Duel(CGame* game)
+{
+	//オブジェクトのアップデートを許可する
+	game->StopObject(false);
+
+	ArrangePlayerClockwise(VEC3_RESET_ZERO, 200.0f);
+
+	//ゲージ用チャージの更新
+	CEnergy_Charge* pCharge = CEnergy_Charge::GetInstance();
+	pCharge->Update();
+
+	//入力デバイス取得
+	CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;
+	if (pKeyboard->GetTrigger(DIK_RETURN) && game->GetPauseKey())
+	{
+		GET_FADE->SetFade(CScene::MODE::MODE_RESULT);
+	}
+#ifdef _DEBUG
+	if (pKeyboard->GetTrigger(DIK_C) && game->GetPauseKey())
+	{
+		game->ResetPauseCnt();
+		CGameManager::GetInstance()->ChangeState(new CCardCast);
+	}
+#endif
+
+	//ポーズ移行
+	if (pKeyboard->GetTrigger(DIK_P) && game->GetPauseKey())
+	{
+		game->ResetPauseCnt();
+		CGameManager::GetInstance()->ChangeState(new CPause);
+		return;
 	}
 }
 
 //=============================================
 // 時計回りに配置
 //=============================================
-void My::CLobby::ArrangePlayerClockwise(const D3DXVECTOR3 center, float radius)
+void My::CDuel::ArrangePlayerClockwise(const D3DXVECTOR3 center, float radius)
 {
 	// プレイヤーを中心に配置
 	CPlayer* player = CGameManager::GetInstance()->GetPlayer();
@@ -199,7 +251,7 @@ void My::CLobby::ArrangePlayerClockwise(const D3DXVECTOR3 center, float radius)
 //=============================================
 // キャラクターのエリアを判断
 //=============================================
-My::CInputMouse::AREA My::CLobby::CharacterArea(float angle)
+My::CInputMouse::AREA My::CDuel::CharacterArea(float angle)
 {
 	// 基準（Z+が前＝UP、Z-が下＝DOWN）と対応づけ
 	if (angle >= -D3DX_PI * 0.25f && angle < D3DX_PI * 0.25f)
@@ -217,67 +269,6 @@ My::CInputMouse::AREA My::CLobby::CharacterArea(float angle)
 	else
 	{
 		return CInputMouse::AREA::DOWN;
-	}
-}
-
-//=============================================
-//通信処理
-//=============================================
-void My::CLobby::Connect(CGame* /*game*/)
-{
-	if (!CRakNet::GetInstance()->GetOnline()) return;
-
-	//通信処理
-	CRakNet::GetInstance()->Communication(CRakNet::GetInstance()->GetPeer());
-}
-
-//=============================================
-// コンストラクタ
-//=============================================
-My::CDuel::CDuel()
-{
-	GET_CAMERA(GET_CAMERA_IDX)->ChangeCameraState(new CBirdView);
-}
-
-//=============================================
-// デストラクタ
-//=============================================
-My::CDuel::~CDuel()
-{
-}
-
-//=============================================
-// デュエル
-//=============================================
-void My::CDuel::Duel(CGame* game)
-{
-	//オブジェクトのアップデートを許可する
-	game->StopObject(false);
-
-	//ゲージ用チャージの更新
-	CEnergy_Charge* pCharge = CEnergy_Charge::GetInstance();
-	pCharge->Update();
-
-	//入力デバイス取得
-	CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;
-	if (pKeyboard->GetTrigger(DIK_RETURN) && game->GetPauseKey())
-	{
-		GET_FADE->SetFade(CScene::MODE::MODE_RESULT);
-	}
-#ifdef _DEBUG
-	if (pKeyboard->GetTrigger(DIK_C) && game->GetPauseKey())
-	{
-		game->ResetPauseCnt();
-		CGameManager::GetInstance()->ChangeState(new CCardCast);
-	}
-#endif
-
-	//ポーズ移行
-	if (pKeyboard->GetTrigger(DIK_P) && game->GetPauseKey())
-	{
-		game->ResetPauseCnt();
-		CGameManager::GetInstance()->ChangeState(new CPause);
-		return;
 	}
 }
 
