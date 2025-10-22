@@ -67,7 +67,7 @@ namespace My
 		 * @brief ¶¬
 		 * @param [in]ˆÊ’u
 		 */
-		static CCard* Create();
+		static CCard* Create(CCard::CARDTYPE_ type);
 
 		/**
 		* @brief ó‘Ô‚ğ•ÏX‚·‚é

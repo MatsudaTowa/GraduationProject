@@ -213,7 +213,11 @@ void My::CHand::HandDraw(int drawnum)
 	
 	for (int i = 0; i < drawnum; i++)
 	{
-		m_pCard[m_TotalNum] = CCard::Create();
+		// TODO : ˆê’U‚±‚±‚Åƒ‰ƒ“ƒ_ƒ€‚É’Š‘I‚·‚é
+		int rundom;
+		rundom = Rundom(CCard::CARDTYPE_::TYPE_ATTACK, CCard::CARDTYPE_::TYPE_MAX);
+
+		m_pCard[m_TotalNum] = CCard::Create((CCard::CARDTYPE_)rundom);
 		m_TotalNum++;	// ŽèŽD‚Ì‘”‚ð‘‚â‚·
 		SetHandCardPos();
 	}
