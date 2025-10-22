@@ -20,6 +20,10 @@ namespace My
 	class CReadyUI
 	{
 	public:
+
+		static constexpr int NUM_TEX = 2;
+
+		static const std::string TEX_NAME[NUM_TEX];
 		/**
 		 * @brief コンストラクタ
 		 */
@@ -44,9 +48,10 @@ namespace My
 		void Update();
 		/**
 		 * @brief 現在のスモークUI設定
-		 * @param [in]キャラクターのポインタ
+		 * @param [in]2D座標変換後
+		 * @param [in]準備OKか
 		 */
-		void SetCurrentReady_UI(CActiveSceneCharacter* character);
+		void SetCurrentReady_UI(D3DXVECTOR3 screen_pos,bool isReady);
 
 		/**
 		 * @brief リセット

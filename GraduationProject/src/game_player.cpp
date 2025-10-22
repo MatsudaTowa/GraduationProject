@@ -28,13 +28,10 @@ My::CGamePlayer::~CGamePlayer()
 //=============================================
 HRESULT My::CGamePlayer::Init()
 {
-	if (GetState() == nullptr)
-	{
-		ChangeState(new CPlayerLobbyState);
-	}
-
 	//親クラスの初期化実行
 	CPlayer::Init();
+
+	ChangeState(new CPlayerLobbyState(this));
 
 	//ゲームのマネージャに自分を代入
 	CGameManager::GetInstance()->SetPlayer(this);

@@ -50,7 +50,7 @@ namespace My
 		 * @brief ロビー
 		 * @param [in]character
 		 */
-		void Lobby(CActiveSceneCharacter* character) override;
+		virtual void Lobby(CActiveSceneCharacter* character) override;
 
 		/**
 		 * @brief データ設定
@@ -62,12 +62,30 @@ namespace My
 		}
 
 		/**
+		 * @brief 準備OKか
+		 * @param [in]isReady
+		 */
+		inline void SetIsReady(bool isReady)
+		{
+			m_data.isReady = isReady;
+		}
+
+		/**
 		 * @brief ロビーデータ取得
 		 * @return ロビーデータ
 		 */
 		inline LobbyData GetLobbyData()
 		{
 			return m_data;
+		}
+
+		/**
+		 * @brief 準備OKか取得
+		 * @return 準備OK
+		 */
+		inline bool GetIsReady()
+		{
+			return m_data.isReady;
 		}
 	private:
 		LobbyData m_data;

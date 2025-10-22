@@ -31,13 +31,10 @@ My::CEnemy::~CEnemy()
 //=============================================
 HRESULT My::CEnemy::Init()
 {
-	if (GetState() == nullptr)
-	{
-		ChangeState(new CEnemyLobbyState);
-	}
-
 	CActiveSceneCharacter::Init();
 
+	ChangeState(new CEnemyLobbyState);
+	
 	Load_Parts("data\\MOTION\\motion_Karateka.bin"); //パーツ読み込み
 
 	//初期モーション設定

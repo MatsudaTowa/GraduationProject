@@ -9,7 +9,7 @@
 //===============================================================================
 // コンストラクタ
 //===============================================================================
-My::CLobbyCharacter::CLobbyCharacter(CActiveSceneCharacter* character):m_pReadyUI(nullptr)
+My::CLobbyCharacter::CLobbyCharacter(CActiveSceneCharacter* character):m_pReadyUI(nullptr),m_data()
 {
 	if (m_pReadyUI != nullptr) { return; }
 	m_pReadyUI = new CReadyUI;
@@ -34,7 +34,8 @@ void My::CLobbyCharacter::Lobby(CActiveSceneCharacter* character)
 {
 	if (m_pReadyUI != nullptr)
 	{
-		m_pReadyUI->SetCurrentReady_UI(character);
+		D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), character->GetPos()); //スクリーン座標に変換
+		m_pReadyUI->SetCurrentReady_UI(screen_pos,m_data.isReady);
 	}
 }
 

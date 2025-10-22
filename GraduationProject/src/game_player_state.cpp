@@ -12,7 +12,7 @@
 //=============================================
 // コンストラクタ
 //=============================================
-My::CPlayerLobbyState::CPlayerLobbyState()
+My::CPlayerLobbyState::CPlayerLobbyState(CActiveSceneCharacter* character):CLobbyCharacter(character)
 {
 }
 
@@ -28,6 +28,7 @@ My::CPlayerLobbyState::~CPlayerLobbyState()
 //=============================================
 void My::CPlayerLobbyState::Lobby(CActiveSceneCharacter* character)
 {
+	CLobbyCharacter::Lobby(character);
 	if (typeid(*character) != typeid(CGamePlayer))
 	{
 		return;
@@ -35,6 +36,13 @@ void My::CPlayerLobbyState::Lobby(CActiveSceneCharacter* character)
 	CGamePlayer* player = dynamic_cast<CGamePlayer*>(character);
 	//モーション設定
 	player->SetMotion(CPlayer::MOTION_NEUTRAL);
+
+	if (GET_INPUT_KEYBOARD->GetTrigger(DIK_SPACE))
+	{
+		bool isReady = GetIsReady();
+		isReady = isReady ? false : true;
+		SetIsReady(isReady);
+	}
 }
 
 //=============================================

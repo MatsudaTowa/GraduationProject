@@ -19,13 +19,13 @@ namespace My
 	class CGamePlayer;
 
 	/** @brief プレイヤーのデュエルクラス */
-	class CPlayerLobbyState :public CActiveSceneCharacterState
+	class CPlayerLobbyState :public CLobbyCharacter
 	{
 	public:
 		/**
 		 * @brief コンストラクタ
 		 */
-		CPlayerLobbyState();
+		CPlayerLobbyState(CActiveSceneCharacter* character);
 		/**
 		 * @brief デストラクタ
 		 */

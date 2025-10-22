@@ -6,6 +6,12 @@
 //=============================================
 #include "ready_UI.h"
 
+const std::string My::CReadyUI::TEX_NAME[My::CReadyUI::NUM_TEX] = 
+{ 
+	"data\\TEXTURE\\not_leady.png",
+	"data\\TEXTURE\\leady.png"
+};
+
 //=============================================
 // コンストラクタ
 //=============================================
@@ -55,12 +61,12 @@ void My::CReadyUI::Update()
 //=============================================
 // UI設定
 //=============================================
-void My::CReadyUI::SetCurrentReady_UI(CActiveSceneCharacter* character)
+void My::CReadyUI::SetCurrentReady_UI(D3DXVECTOR3 screen_pos, bool isReady)
 {
-	D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), character->GetPos()); //スクリーン座標に変換
 	if (m_pReady_txt != nullptr)
 	{
 		m_pReady_txt->SetPos(screen_pos);
+		m_pReady_txt->BindTexture(GET_TEXTURE->GetAddress(GET_TEXTURE->Regist(&TEX_NAME[isReady])));
 	}
 }
 
