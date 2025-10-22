@@ -1,31 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="src\active_scene_character.cpp" />
-    <ClCompile Include="src\area.cpp" />
     <ClCompile Include="src\billboard.cpp" />
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\camera_state.cpp" />
     <ClCompile Include="src\card.cpp" />
     <ClCompile Include="src\card_state.cpp" />
-    <ClCompile Include="src\character.cpp" />
     <ClCompile Include="src\colision.cpp" />
-    <ClCompile Include="src\enemy.cpp" />
-    <ClCompile Include="src\enemy_manager.cpp" />
     <ClCompile Include="src\energy_charge.cpp" />
     <ClCompile Include="src\energy_frame.cpp" />
     <ClCompile Include="src\energy_gauge.cpp" />
-    <ClCompile Include="src\enemy_state.cpp" />
     <ClCompile Include="src\energy_UI.cpp" />
     <ClCompile Include="src\fade.cpp" />
     <ClCompile Include="src\field.cpp" />
-    <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\game_camera.cpp" />
     <ClCompile Include="src\game_field.cpp" />
-    <ClCompile Include="src\active_manager.cpp" />
-    <ClCompile Include="src\game_player.cpp" />
-    <ClCompile Include="src\game_player_state.cpp" />
-    <ClCompile Include="src\active_scene_state.cpp" />
     <ClCompile Include="src\hand.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\life_UI.cpp" />
@@ -59,40 +48,71 @@
     <ClCompile Include="src\title_screen.cpp" />
     <ClCompile Include="src\useful.cpp" />
     <ClCompile Include="src\center_area.cpp" />
-    <ClCompile Include="src\area_manager.cpp" />
     <ClCompile Include="src\client.cpp" />
     <ClCompile Include="src\raknet.cpp" />
-    <ClCompile Include="src\active_scene_character_state.cpp" />
     <ClCompile Include="src\card_frame.cpp" />
+    <ClCompile Include="src\active_scene_character.cpp">
+      <Filter>character</Filter>
+    </ClCompile>
+    <ClCompile Include="src\active_scene_character_state.cpp">
+      <Filter>character</Filter>
+    </ClCompile>
+    <ClCompile Include="src\character.cpp">
+      <Filter>character</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enemy.cpp">
+      <Filter>character</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enemy_manager.cpp">
+      <Filter>character</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enemy_state.cpp">
+      <Filter>character</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game_player.cpp">
+      <Filter>character</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game_player_state.cpp">
+      <Filter>character</Filter>
+    </ClCompile>
+    <ClCompile Include="src\active_manager.cpp">
+      <Filter>active_scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\active_scene_state.cpp">
+      <Filter>active_scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\game.cpp">
+      <Filter>active_scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\area.cpp">
+      <Filter>active_scene\area</Filter>
+    </ClCompile>
+    <ClCompile Include="src\area_manager.cpp">
+      <Filter>active_scene\area</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ready_UI.cpp">
+      <Filter>active_scene\lobby</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ready_txt.cpp">
+      <Filter>active_scene\lobby</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\active_scene_character.h" />
-    <ClInclude Include="src\active_scene_character_state.h" />
-    <ClInclude Include="src\area.h" />
     <ClInclude Include="src\billboard.h" />
     <ClInclude Include="src\camera.h" />
     <ClInclude Include="src\camera_state.h" />
     <ClInclude Include="src\card.h" />
     <ClInclude Include="src\card_state.h" />
-    <ClInclude Include="src\character.h" />
     <ClInclude Include="src\colision.h" />
     <ClInclude Include="src\count.h" />
-    <ClInclude Include="src\enemy.h" />
-    <ClInclude Include="src\enemy_manager.h" />
     <ClInclude Include="src\energy_charge.h" />
     <ClInclude Include="src\energy_frame.h" />
     <ClInclude Include="src\energy_gauge.h" />
-    <ClInclude Include="src\enemy_state.h" />
     <ClInclude Include="src\energy_UI.h" />
     <ClInclude Include="src\fade.h" />
     <ClInclude Include="src\field.h" />
-    <ClInclude Include="src\game.h" />
     <ClInclude Include="src\game_camera.h" />
     <ClInclude Include="src\game_field.h" />
-    <ClInclude Include="src\active_manager.h" />
-    <ClInclude Include="src\game_player.h" />
-    <ClInclude Include="src\game_player_state.h" />
-    <ClInclude Include="src\active_scene_state.h" />
     <ClInclude Include="src\hand.h" />
     <ClInclude Include="src\input.h" />
     <ClInclude Include="src\life_UI.h" />
@@ -126,9 +146,67 @@
     <ClInclude Include="src\title_screen.h" />
     <ClInclude Include="src\useful.h" />
     <ClInclude Include="src\center_area.h" />
-    <ClInclude Include="src\area_manager.h" />
     <ClInclude Include="src\client.h" />
     <ClInclude Include="src\raknet.h" />
     <ClInclude Include="src\card_frame.h" />
+    <ClInclude Include="src\active_scene_character.h">
+      <Filter>character</Filter>
+    </ClInclude>
+    <ClInclude Include="src\active_scene_character_state.h">
+      <Filter>character</Filter>
+    </ClInclude>
+    <ClInclude Include="src\character.h">
+      <Filter>character</Filter>
+    </ClInclude>
+    <ClInclude Include="src\enemy.h">
+      <Filter>character</Filter>
+    </ClInclude>
+    <ClInclude Include="src\enemy_manager.h">
+      <Filter>character</Filter>
+    </ClInclude>
+    <ClInclude Include="src\enemy_state.h">
+      <Filter>character</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game_player.h">
+      <Filter>character</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game_player_state.h">
+      <Filter>character</Filter>
+    </ClInclude>
+    <ClInclude Include="src\active_manager.h">
+      <Filter>active_scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\active_scene_state.h">
+      <Filter>active_scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game.h">
+      <Filter>active_scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\area.h">
+      <Filter>active_scene\area</Filter>
+    </ClInclude>
+    <ClInclude Include="src\area_manager.h">
+      <Filter>active_scene\area</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ready_UI.h">
+      <Filter>active_scene\lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ready_txt.h">
+      <Filter>active_scene\lobby</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="character">
+      <UniqueIdentifier>{5921e8f8-9523-4b4c-a104-b6bd33f73882}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="active_scene">
+      <UniqueIdentifier>{80462793-f791-4dac-9263-03e8e1424395}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="active_scene\area">
+      <UniqueIdentifier>{56a985dc-c3e1-4095-aed5-5700ac8611cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="active_scene\lobby">
+      <UniqueIdentifier>{b471ed37-6a4b-4b0f-b87c-f68cee98794f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

@@ -121,9 +121,6 @@ void My::CGame::Uninit()
 	CGameManager::GetInstance()->Uninit();
 
 	CObject::ReleaseAll();
-
-	//ステート初期化
-	CGameManager::GetInstance()->ChangeState(new CLobby);
 }
 
 //=============================================

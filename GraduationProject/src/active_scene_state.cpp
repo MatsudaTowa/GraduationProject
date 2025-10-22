@@ -16,6 +16,21 @@
 int My::CLobby::m_characterIdx = -1;
 
 //=============================================
+// コンストラクタ
+//=============================================
+My::CLobby::CLobby()
+{
+	GET_CAMERA(GET_CAMERA_IDX)->ChangeCameraState(new CSideView);
+}
+
+//=============================================
+// デストラクタ
+//=============================================
+My::CLobby::~CLobby()
+{
+}
+
+//=============================================
 // ロビー
 //=============================================
 void My::CLobby::Lobby(CGame* game)
@@ -55,7 +70,7 @@ void My::CLobby::Lobby(CGame* game)
 
 		//エナジーUI枠表示
 		CEnergy_Gauge::CreateEnergy();
-
+		
 		CGameManager::GetInstance()->ChangeState(new CDuel);
 	}
 }
@@ -221,7 +236,7 @@ void My::CLobby::Connect(CGame* /*game*/)
 //=============================================
 My::CDuel::CDuel()
 {
-
+	GET_CAMERA(GET_CAMERA_IDX)->ChangeCameraState(new CBirdView);
 }
 
 //=============================================

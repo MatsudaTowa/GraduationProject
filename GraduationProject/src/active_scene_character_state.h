@@ -16,6 +16,7 @@ namespace My
 	//前方宣言
 	//=============================================
 	class CActiveSceneCharacter;
+	class CReadyUI;
 
 	/** @brief キャラクターステートクラス */
 	class CActiveSceneCharacterState
@@ -38,14 +39,39 @@ namespace My
 	class CLobbyCharacter :public CActiveSceneCharacterState
 	{
 	public:
-		struct SEND_DATA
+		struct LobbyData
 		{
-			bool isDuel;
-
+			bool isReady;
+			int player_id;
 		};
+		CLobbyCharacter(CActiveSceneCharacter* character);
+		~CLobbyCharacter() override;
+		/**
+		 * @brief ロビー
+		 * @param [in]character
+		 */
 		void Lobby(CActiveSceneCharacter* character) override;
-	private:
 
+		/**
+		 * @brief データ設定
+		 * @param [in]data
+		 */
+		inline void SetLobbyData(LobbyData data)
+		{
+			m_data = data;
+		}
+
+		/**
+		 * @brief ロビーデータ取得
+		 * @return ロビーデータ
+		 */
+		inline LobbyData GetLobbyData()
+		{
+			return m_data;
+		}
+	private:
+		LobbyData m_data;
+		CReadyUI* m_pReadyUI;			//!<準備UI
 	};
 
 	class CDuelCharacter :public CActiveSceneCharacterState

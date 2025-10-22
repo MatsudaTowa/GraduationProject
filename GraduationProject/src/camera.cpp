@@ -114,6 +114,7 @@ void My::CCamera::Update()
 	if (m_pCameraState != nullptr)
 	{
 		m_pCameraState->BirdView(this);
+		m_pCameraState->SideView(this);
 	}
 
 	m_ViewPort.Width = SCREEN_WIDTH;

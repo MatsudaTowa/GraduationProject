@@ -56,6 +56,16 @@ namespace My
 			m_num_pos = pos;
 		}
 
+		inline D3DXVECTOR3 GetNumPos()
+		{
+			return m_num_pos;
+		}
+
+		inline std::vector<CNumber_2D*> GetNumVector()
+		{
+			return  m_pNumber;
+		}
+
 	private:
 		/**
 		 * @brief Œ…’Ç‰Á

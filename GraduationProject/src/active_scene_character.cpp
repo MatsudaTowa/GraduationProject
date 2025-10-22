@@ -34,7 +34,7 @@ HRESULT My::CActiveSceneCharacter::Init()
 {
 	if (m_pState== nullptr)
 	{
-		m_pState = new CActiveSceneCharacterState;
+		m_pState = new CLobbyCharacter(this);
 	}
 	//ステータス設定
 	m_status.deckSize = START_DECK;
@@ -83,6 +83,7 @@ void My::CActiveSceneCharacter::Update()
 		m_pState->Duel(this);
 	}
 
+	D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), GetPos()); //スクリーン座標に変換
 	if (m_pLifeUI != nullptr)
 	{
 		if (m_status.life > MAX_LIFE)
@@ -94,6 +95,20 @@ void My::CActiveSceneCharacter::Update()
 			SetLife(INT_ZERO);
 		}
 		m_pLifeUI->SetLifeNumber(m_status.life);
+
+		// スクリーン座標に数字を描画
+		int i = INT_ZERO;
+
+		for (auto& itr : m_pLifeUI->GetNumVector())
+		{
+			if (itr == nullptr) { continue; }
+
+			// TODO: 30.0fは桁ずらし値 取得できるように変更予定
+			itr->SetPos({ screen_pos.x - (i * 30.0f),screen_pos.y,screen_pos.z });
+
+			//桁ずらす
+			++i;
+		}
 	}
 	if (m_pEneryUI != nullptr)
 	{
@@ -106,6 +121,20 @@ void My::CActiveSceneCharacter::Update()
 			SetEnergy(INT_ZERO);
 		}
 		m_pEneryUI->SetEnergyNumber(m_status.energy);
+
+		// スクリーン座標に数字を描画
+		int i = INT_ZERO;
+
+		for (auto& itr : m_pEneryUI->GetNumVector())
+		{
+			if (itr == nullptr) { continue; }
+
+			// TODO: 30.0fは桁ずらし値 取得できるように変更予定
+			itr->SetPos({ screen_pos.x + 100.0f - (i * 30.0f),screen_pos.y,screen_pos.z });
+
+			//桁ずらす
+			++i;
+		}
 	}
 	CCharacter::Update();
 }

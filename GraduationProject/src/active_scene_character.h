@@ -10,6 +10,8 @@
 #include "main.h"
 #include "character.h"
 #include "active_scene_character_state.h"
+#include "ready_UI.h"
+
 /** @brief My –¼‘O‹óŠÔ */
 namespace My
 {

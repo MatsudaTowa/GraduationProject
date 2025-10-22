@@ -60,6 +60,8 @@ namespace My
 	{
 	public:
 		static constexpr int SPECIAL_TIME = 30;	//必殺技状態に移る時間
+		CLobby();
+		~CLobby() override;
 		/**
 		* @brief ロビー処理
 		* @param [in]ゲームプレイヤーポインタ
@@ -101,6 +103,7 @@ namespace My
 		 * @return エリア
 		 */
 		CInputMouse::AREA CharacterArea(float angle);
+
 		static int m_characterIdx; //ID TODO:サーバーから自身のID取得するから疑似的にオフラインで再現するためにstaticにしてます。
 	};
 
