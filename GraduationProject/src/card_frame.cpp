@@ -17,12 +17,12 @@ std::string My::CCardFrame::FramePass = "../asetto/card_frame/";
 * @brief カードフレームの情報構造体の配列
 */
 My::CCardFrame::CardFrameInfo My::CCardFrame::m_FrameInfo[My::CCardFrame::FRAMETYPE::FRAMETYPE_MAX] = {
-	{"../asetto/cardframe/bg.png",		{0,0,0},	{CARD_WIDTH, 1.0f, CARD_HEIGHT} },
-	{"../asetto/cardframe/illust.png",	{0,0,5},	{CARD_WIDTH-2.0f, 1.0f, 7.0f}},
-	{"../asetto/cardframe/text.png",	{0,0,-7},	{CARD_WIDTH-2.0f, 1.0f, 7.0f}},
-	{"../asetto/cardframe/name.png",	{0,0,0},	{CARD_WIDTH+2.0f, 1.0f, 4.0f}},
-	{"../asetto/cardframe/type.png",	{12.0f,0,10.0f},	{5.0f, 1.0f, 5.0f}},
-	{"../asetto/cardframe/cost.png",	{-12.0f,0.0f,12.0f},	{5,5,5}}
+	{"../asetto/cardframe/bg.png",		{0.0f,0.0f,0.0f},	{CARD_WIDTH,1.0f,CARD_HEIGHT},	false},
+	{"../asetto/cardframe/illust.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,1.0f,CARD_HEIGHT},	false},
+	{"../asetto/cardframe/text.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,1.0f,CARD_HEIGHT},	false},
+	{"../asetto/cardframe/name.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,1.0f,CARD_HEIGHT},	false},
+	{"../asetto/cardframe/type.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,1.0f,CARD_HEIGHT},	true},
+	{"../asetto/cardframe/cost.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,1.0f,CARD_HEIGHT},	true}
 };
 
 //===========================================================================================================
@@ -56,7 +56,8 @@ HRESULT My::CCardFrame::Init()
 	// サイズ設定
 	SetSize({CARD_WIDTH,1.0f,CARD_HEIGHT});
 
-	SetColor(COLOR_GREEN);
+	// カラー設定
+	SetColor(SetColorCard());
 
 	//頂点設定
 	SetVtx(D3DXVECTOR3(0.0f, 1.0f, 0.0f));
@@ -79,9 +80,6 @@ void My::CCardFrame::Update()
 {
 	D3DXVECTOR3 offsetpos = m_pParent->GetPos() + m_FrameInfo[m_type].offset;
 	D3DXVECTOR3 rot = m_pParent->GetRot();
-
-	//rot.x += -D3DX_PI;
-
 
 	//SetPos(offsetpos);
 	SetPos(m_pParent->GetPos());
@@ -133,7 +131,7 @@ void My::CCardFrame::Draw()
 //===========================================================================================================
 // 生成
 //===========================================================================================================
-My::CCardFrame* My::CCardFrame::Create(FRAMETYPE type, CObject3D* pObj)
+My::CCardFrame* My::CCardFrame::Create(FRAMETYPE type, CCard* pObj)
 {
 	CCardFrame* pCardFrame = new CCardFrame();
 
@@ -152,8 +150,41 @@ My::CCardFrame* My::CCardFrame::Create(FRAMETYPE type, CObject3D* pObj)
 //===========================================================================================================
 // 親設定
 //===========================================================================================================
-void My::CCardFrame::SetParent(CObject3D* pObj)
+void My::CCardFrame::SetParent(CCard* pObj)
 {
 	m_pParent = pObj;
+}
+
+//===========================================================================================================
+// カードタイプに合わせて色を変える
+//===========================================================================================================
+D3DXCOLOR My::CCardFrame::SetColorCard()
+{
+	if (!m_FrameInfo[m_type].IsChangeable)
+		return COLOR_WHITE;
+
+	// 親のカードタイプを取得
+	CCard::CARDTYPE_ CardType = m_pParent->GetCardType();
+
+	// 色を代入する変数
+	D3DXCOLOR color = COLOR_WHITE;
+
+	// カードのタイプによって色を変える
+	switch (CardType)
+	{
+	case CCard::CARDTYPE_::TYPE_ATTACK:
+		color = COLOR_RED;
+		break;
+
+	case CCard::CARDTYPE_::TYPE_DEFFENCE:
+		color = COLOR_BLUE;
+		break;
+
+	case CCard::CARDTYPE_::TYPE_ASSIST:
+		color = COLOR_PURPLE;
+		break;
+	}
+
+	return color;
 }
 

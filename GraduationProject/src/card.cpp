@@ -17,7 +17,8 @@ My::CCard::CCard(int nPriority):CObject3D(nPriority),
 	m_pState(nullptr),
 	m_IsChoice(false),
 	m_outpos({0,0,0}),
-	m_StateNum(CCardState::CARD_NEUTRAL)
+	m_StateNum(CCardState::CARD_NEUTRAL),
+	m_CardType(CARDTYPE_::TYPE_ATTACK)
 {
 	//if (m_pTop == nullptr)
 	//{// top が設定されていなかったら
@@ -47,21 +48,7 @@ My::CCard::~CCard()
 //===========================================================================================================
 HRESULT My::CCard::Init()
 {
-	//// モデル設定
-	//CModel*pModel= CManager::GetInstance()->GetModel();
-	//int Idx = pModel->Regist("data\\model\\card_traial_002.x");
-	//CModel::MODEL_INFO mi = pModel->GetModelInfo(Idx);
-	//BindXFile(mi.pBuffMat, mi.dwNumMat, mi.pMesh);
-
 	CObject3D::Init();
-
-	//// スケール
-	//D3DXVECTOR3 scale = GetScale();
-
-	//scale.x *= 1.2f;
-	//scale *= 1.0f;
-
-	//SetScale(scale);
 
 	m_pState = new CCardStateNeutral();
 	m_pState->Init();
@@ -72,13 +59,6 @@ HRESULT My::CCard::Init()
 	{
 		CCardFrame::Create((CCardFrame::FRAMETYPE)i, this);
 	}
-
-	//CCardFrame::Create(CCardFrame::FRAMETYPE::FRAMETYPE_BASE, this);	// 基盤
-	//CCardFrame::Create(CCardFrame::FRAMETYPE::FRAMETYPE_ILLUST, this);	// コストアイコン
-	//CCardFrame::Create(CCardFrame::FRAMETYPE::FRAMETYPE_NAME, this);	// ネーム
-
-	//CFrameBase::Create(CCardFrame::FRAMETYPE::FRAMETYPE_BASE, this);
-	//CFrameillust::Create(CCardFrame::FRAMETYPE::FRAMETYPE_ILLUST, this);
 
 	return S_OK;
 }
@@ -96,8 +76,6 @@ void My::CCard::Uninit()
 //===========================================================================================================
 void My::CCard::Update()
 {
-	//ChangeState(CCardState::CARD_NEUTRAL);
-
 	// カメラの位置と角度に合わせる
 	CCamera* pCamera = CManager::GetInstance()->GetCamera(0);
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();

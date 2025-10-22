@@ -9,6 +9,7 @@
 
 #include "main.h"
 #include "object3D.h"
+#include "card.h"
 
 /** @brief My 名前空間 */
 namespace My
@@ -52,12 +53,14 @@ namespace My
 		* @param pass : 画像ファイルのパス
 		* @param offset : オフセット位置
 		* @param size : サイズ
+		* @param IsChangeable : 色が変更可能かどうか
 		*/
 		typedef struct
 		{
 			std::string pass;
 			D3DXVECTOR3 offset;
 			D3DXVECTOR3 size;
+			bool IsChangeable;
 		}CardFrameInfo;
 
 		/* @brief コンストラクタ */
@@ -78,16 +81,19 @@ namespace My
 		/* @brief 描画 */
 		void Draw()override;
 
-		static CCardFrame* Create(FRAMETYPE type, CObject3D* pObj);
+		static CCardFrame* Create(FRAMETYPE type, CCard* pObj);
 
 		/* @brief 親設定 */
-		void SetParent(CObject3D*pObj);
+		void SetParent(CCard*pObj);
 
 		/* @brief 親設定 */
 		inline void SetType(CCardFrame::FRAMETYPE type) { m_type = type; }
 		inline FRAMETYPE GetType() { return m_type; }
 
 	private:
+		/** @brief カードのタイプに合わせて色を変える */
+		D3DXCOLOR SetColorCard();
+
 		/** @brief カードフレームまでの相対パス */
 		static std::string FramePass;
 
@@ -95,10 +101,16 @@ namespace My
 		static CardFrameInfo m_FrameInfo[FRAMETYPE::FRAMETYPE_MAX];
 
 		/** @brief 親のポインタ */
-		CObject3D* m_pParent;
+		CCard* m_pParent;
 
 		/** @brief 何のフレームかを判別するタイプ */
 		FRAMETYPE m_type;
+	};
+
+	class FrameBase :public CCardFrame
+	{
+		FrameBase();
+		~FrameBase();
 	};
 
 }

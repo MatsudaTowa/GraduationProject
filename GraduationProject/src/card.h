@@ -18,6 +18,20 @@ namespace My
 	{
 	public:
 
+	/**
+	* @brief カードタイプの列挙型
+	* @param 攻撃カード
+	* @param 防御カード
+	* @param 補助カード
+	*/
+		typedef enum
+		{
+			TYPE_ATTACK=0,
+			TYPE_DEFFENCE,
+			TYPE_ASSIST,
+			TYPE_MAX
+		}CARDTYPE_;
+
 		/**
 		 * @brief コンストラクタ
 		 * @param [in]プライオリティ
@@ -67,6 +81,11 @@ namespace My
 		inline CCardState* GetState() { return m_pState; }
 		inline CCardState::CARD_STATE GetStateNum() { return m_StateNum; }
 
+		/**
+		* @brief カードタイプ取得
+		*/
+		inline CARDTYPE_ GetCardType() { return m_CardType; }
+
 		//inline CCard* GetTop() { return m_pTop; }
 		//inline CCard* GetPrev() { return m_pPrev; }
 
@@ -80,6 +99,11 @@ namespace My
 		 * @brief カードを選択しているか否か(trueだったら選択している)
 		 */
 		bool m_IsChoice;
+
+		/**
+		 * @brief カードカードのタイプ
+		 */
+		CARDTYPE_ m_CardType;
 
 		/**
 		 * @brief カードの状態
