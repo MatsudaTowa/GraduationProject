@@ -73,6 +73,9 @@ namespace My
 	class CCardStatePickup :public CCardState
 	{
 	public:
+		/** @brief ‰Šú‰» */
+		void Init(CCard* cpy) override;
+
 		/** @brief XV */
 		void Update(CCard* cpy)override;
 	};

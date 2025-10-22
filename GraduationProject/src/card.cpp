@@ -104,7 +104,7 @@ void My::CCard::Update()
 	//SetPos({ pCamera->GetPosV().x,pCamera->GetPosV().y - 100.0f,pCamera->GetPosV().z + 30.0f });
 
 	D3DXVECTOR3 rot = pCamera->GetRot();
-	rot.x += -0.6f;
+	rot.x += -1.2f;
 
 	// TODO : マウスを実装しようとしました
 
@@ -164,15 +164,17 @@ void My::CCard::Draw()
 	char aStr[512];
 	sprintf(&aStr[0], "\n\n\n\n\n\n\n\n\n\noutpos = %f , %f , %f \n"
 		" cardpos = %f , %f , %f \n"
+		" cardrot = %f , %f , %f \n"
 		" mousepos = %f , %f \n\n"
-		" cardstate : %d\n\n\n\n\n\n"
-		" [ 操作方法 ] \n"
+		" cardstate : %d \n"
+		"\n\n\n\n\n\n [ 操作方法 ] \n"
 		" < ← → > でカード選択 \n"
 		" < J > 選択したカードをキャスト \n"
 		" < 1,2,3 > でステイ状態にする \n"
 		" 時間が経過したらカードがトリガーされ消える \n",
 		m_outpos.x, m_outpos.y, m_outpos.z,
-		GetPos().x, GetPos().y, GetPos().z
+		GetPos().x, GetPos().y, GetPos().z,
+		GetRot().x, GetRot().y, GetRot().z
 		,x, y,
 		m_StateNum);
 	//テキストの描画

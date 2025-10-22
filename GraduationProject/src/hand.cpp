@@ -81,8 +81,14 @@ void My::CHand::Update()
 	// カードをキャストする
 	if (pkeyboad->GetTrigger(DIK_J))
 	{
+		// カードが選択されていたら
 		if (m_SelectNum >= 0)
-			m_pCard[m_SelectNum]->ChangeState(CCardState::CARD_STATE::CARD_CAST);
+		{
+			// 選択されたカードが存在していたら
+			if (m_pCard[m_SelectNum] != nullptr)
+				m_pCard[m_SelectNum]->ChangeState(CCardState::CARD_STATE::CARD_CAST);
+		}
+			
 	}
 
 	// カード除去
