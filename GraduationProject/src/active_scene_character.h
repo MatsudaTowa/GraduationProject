@@ -262,6 +262,11 @@ namespace My
 		static constexpr int MAX_ENERGY = 99;				//!<エナジー最大値
 		static constexpr int MAX_LIFE = 99;					//!<体力最大値
 
+		/**
+		 * @brief UIの位置設定
+		 */
+		void UpdateUI();
+
 		Status m_status;			//!ステータス
 
 		CInputMouse::AREA m_area;	//!自分がどこのエリアか

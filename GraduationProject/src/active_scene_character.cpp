@@ -83,6 +83,15 @@ void My::CActiveSceneCharacter::Update()
 		m_pState->Duel(this);
 	}
 
+	UpdateUI();
+	CCharacter::Update();
+}
+
+//=============================================
+// UIの更新
+//=============================================
+void My::CActiveSceneCharacter::UpdateUI()
+{
 	D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), GetPos()); //スクリーン座標に変換
 	if (m_pLifeUI != nullptr)
 	{
@@ -136,7 +145,6 @@ void My::CActiveSceneCharacter::Update()
 			++i;
 		}
 	}
-	CCharacter::Update();
 }
 
 //=============================================
