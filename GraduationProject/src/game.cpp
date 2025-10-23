@@ -13,6 +13,7 @@
 #include "energy_charge.h"
 #include "center_area.h"
 #include "raknet.h"
+#include "font.h"
 
 namespace
 {
@@ -29,6 +30,8 @@ m_pDelayCnt(nullptr)				//リザルトに遷移するまでのディレイカウント
 {
 	CGameManager::GetInstance()->SetFinish(false);
 	CRakNet::GetInstance()->Init();
+	CFont* pFont = new CFont;
+	pFont->Init();
 }
 
 //=============================================

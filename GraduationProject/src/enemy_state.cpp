@@ -11,7 +11,7 @@
 //=============================================
 // コンストラクタ
 //=============================================
-My::CEnemyLobbyState::CEnemyLobbyState()
+My::CEnemyLobbyState::CEnemyLobbyState(CActiveSceneCharacter* character):CLobbyCharacter(character)
 {
 }
 
@@ -27,6 +27,7 @@ My::CEnemyLobbyState::~CEnemyLobbyState()
 //=============================================
 void My::CEnemyLobbyState::Lobby(CActiveSceneCharacter* character)
 {
+	CLobbyCharacter::Lobby(character);
 	if (typeid(*character) != typeid(CEnemy))
 	{
 		return;

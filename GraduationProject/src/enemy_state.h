@@ -19,13 +19,13 @@ namespace My
 	class CEnemy;
 
 	/** @brief エネミーのロビークラス */
-	class CEnemyLobbyState :public CActiveSceneCharacterState
+	class CEnemyLobbyState :public CLobbyCharacter
 	{
 	public:
 		/**
 		 * @brief コンストラクタ
 		 */
-		CEnemyLobbyState();
+		CEnemyLobbyState(CActiveSceneCharacter* character);
 		/**
 		 * @brief デストラクタ
 		 */

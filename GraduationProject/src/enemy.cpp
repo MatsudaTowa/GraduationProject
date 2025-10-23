@@ -33,7 +33,7 @@ HRESULT My::CEnemy::Init()
 {
 	CActiveSceneCharacter::Init();
 
-	ChangeState(new CEnemyLobbyState);
+	ChangeState(new CEnemyLobbyState(this));
 	
 	Load_Parts("data\\MOTION\\motion_Karateka.bin"); //ÉpÅ[Écì«Ç›çûÇ›
 
