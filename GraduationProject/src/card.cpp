@@ -107,6 +107,8 @@ void My::CCard::Update()
 	////D3DXVECTOR3 pos = { GetPos().x,GetPos().z,GetPos().y };
 	//D3DXVECTOR3 pos = GetPos();
 
+	//CalcScreenToWorld(&pos, sX, sY, 1.0f, width, height, &View, &Proj);
+
 	//CalcScreenToXZ(&m_outpos, pos, sX, sY, width, height, &View, &Proj);
 	////CalcScreenToXZ(&m_outpos, GetPos(), mouse.x, mouse.y, SCREEN_WIDTH, SCREEN_WIDTH, &View, &Proj);
 
@@ -114,11 +116,15 @@ void My::CCard::Update()
 	//{
 	//	ChangeState(CCardState::CARD_PICKUP);
 	//}
-
-	//if (GET_COLISION->CheckColisionCircle({ sX,0.0f,sY}, 20.0f, pos).colision)
+	//else
 	//{
-	//	ChangeState(CCardState::CARD_PICKUP);
+	//	ChangeState(CCardState::CARD_NEUTRAL);
 	//}
+
+	////if (GET_COLISION->CheckColisionCircle({ sX,0.0f,sY}, 20.0f, pos).colision)
+	////{
+	////	ChangeState(CCardState::CARD_PICKUP);
+	////}
 
 	m_pState->Update(this);
 

@@ -63,6 +63,11 @@ void My::CCardStatePickup::Init(CCard* cpy)
 {
 	if (cpy == nullptr)
 		return;
+
+	// ƒJ[ƒh‚ðŒ©‚â‚·‚­‚·‚é
+	D3DXVECTOR3 pos = cpy->GetPos();
+	pos.y += 15.0f;
+	cpy->SetPos(pos);
 }
 
 //=======================================================================================
@@ -73,7 +78,7 @@ void My::CCardStatePickup::Update(CCard* cpy)
 	if (cpy == nullptr)
 		return;
 
-	cpy->SetSize({ 1.2f * 1.2f,1.2f, 1.2f });
+	//cpy->SetSize({ 1.2f * 1.2f,1.2f, 1.2f });
 }
 
 
