@@ -9,8 +9,8 @@
 #include "object.h"
 namespace
 {
-	const std::string TEX_NAME = "data\\TEXTURE\\card_test.png";
-	const D3DXVECTOR2 SCREEN_SIZE = {512.0f,256.0f };
+	const std::string TEX_NAME = "data\\TEXTURE\\logo.png";
+	const D3DXVECTOR2 SCREEN_SIZE = {280.0f,256.0f };
 }
 
 //=============================================
