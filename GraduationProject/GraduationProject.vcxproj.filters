@@ -100,6 +100,9 @@
     <ClCompile Include="src\card_deffence.cpp" />
     <ClCompile Include="src\card_assist.cpp" />
     <ClCompile Include="src\font.cpp" />
+    <ClCompile Include="src\client_lobby.cpp">
+      <Filter>active_scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -202,6 +205,9 @@
     <ClInclude Include="src\card_deffence.h" />
     <ClInclude Include="src\card_assist.h" />
     <ClInclude Include="src\font.h" />
+    <ClInclude Include="src\client_lobby.h">
+      <Filter>active_scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">

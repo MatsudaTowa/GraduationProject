@@ -7,15 +7,7 @@
 
 //ヘッダーのインクルード
 #include "raknet.h"
-
-//列挙
-enum GameMessages
-{
-    ID_GAME_MESSAGE_1 = ID_USER_PACKET_ENUM + 1,
-    ID_CONNECT_MESSAGE_1,   //自分が接続時
-    ID_CONNECT_MESSAGE_2,   //他人が接続時
-    ID_DUEL_MESSAGE_1,      //対戦が接続時
-};
+#include "client_lobby.h"
 
 //静的変数宣言
 CClient* CRakNet::m_Client = nullptr;
@@ -57,7 +49,7 @@ bool CRakNet::Init()
     //クライアントクラスの作成
     if (m_Client == nullptr)
     {
-        m_Client = new CClient;
+        m_Client = new CClient_Lobby;
     }
 
     return true;
@@ -77,7 +69,11 @@ void CRakNet::Accept(void)
 void CRakNet::Uninit()
 {
     //接続の破棄
-    RakNet::RakPeerInterface::DestroyInstance(m_pPeer);
+    if (m_pPeer != nullptr)
+    {
+        m_pPeer->Shutdown(300); //300ミリ秒後破棄
+        RakNet::RakPeerInterface::DestroyInstance(m_pPeer);
+    }
 
     //クラスの破棄
     if (m_Client != nullptr)
@@ -111,14 +107,6 @@ void CRakNet::Communication(RakNet::RakPeerInterface* peer)
             break;
         case ID_CONNECTION_REQUEST_ACCEPTED:
             std::cout << "Our connection request has been accepted.\n";
-
-            {
-                // 送信側
-                //RakNet::BitStream bsOut;
-                // 送信
-                //peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
-            }
-
             break;
         case ID_NEW_INCOMING_CONNECTION:
             std::cout << "A new client is connecting.\n";
@@ -134,29 +122,30 @@ void CRakNet::Communication(RakNet::RakPeerInterface* peer)
             break;
         case ID_GAME_MESSAGE_1:
 
-        {
-            // 受信側
-            RakNet::BitStream bsIn/*(packet->data, packet->length, false)*/;
-            unsigned char messageId;
-            float positionX, positionY;
-
-            // BitStreamから構造体の各メンバーを読み出す
-            bsIn.Read(messageId);
-            bsIn.Read(positionX);
-            bsIn.Read(positionY);
-
-            /* RakNet::RakString rs;
-             RakNet::BitStream bsIn(packet->data, packet->length, false);
-             bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-             bsIn.Read(rs);
-             std::cout << "Received from a client: " << rs.C_String() << "\n";*/
-        }
         break;
         case ID_CONNECT_MESSAGE_1:
-        {
+        
             //登録処理
             m_Client->Regist(packet);
-        }
+            break;
+
+        case ID_DISCONNECT_MESSAGE_1:
+        
+            //削除処理
+            m_Client->Delete(packet);
+            break;
+
+        case ID_LOBY_MESSAGE_SEND_READY:
+        
+            //準備OKの合図を送る処理
+            m_Client->SendReady(packet, peer);
+            break;
+
+        case ID_LOBY_MESSAGE_RECEIVE_READY:
+        
+            //準備OKの合図を受信する処理処理
+            m_Client->ReceiveReady(packet);
+        
 
         break;
         case ID_UNCONNECTED_PONG:
@@ -225,23 +214,6 @@ void CRakNet::DuelComunication(RakNet::RakPeerInterface* peer)
             break;
         case ID_GAME_MESSAGE_1:
 
-        {
-            // 受信側
-            RakNet::BitStream bsIn/*(packet->data, packet->length, false)*/;
-            unsigned char messageId;
-            float positionX, positionY;
-
-            // BitStreamから構造体の各メンバーを読み出す
-            bsIn.Read(messageId);
-            bsIn.Read(positionX);
-            bsIn.Read(positionY);
-
-            /* RakNet::RakString rs;
-             RakNet::BitStream bsIn(packet->data, packet->length, false);
-             bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
-             bsIn.Read(rs);
-             std::cout << "Received from a client: " << rs.C_String() << "\n";*/
-        }
         break;
         case ID_CONNECT_MESSAGE_1:
         {

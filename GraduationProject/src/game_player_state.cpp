@@ -8,6 +8,7 @@
 #include "game_player.h"
 #include "active_manager.h"
 #include "field.h"
+#include "raknet.h"
 
 //=============================================
 // コンストラクタ
@@ -52,6 +53,10 @@ void My::CPlayerLobbyState::Lobby(CActiveSceneCharacter* character)
 		bool isReady = GetIsReady();
 		isReady = isReady ? false : true;
 		SetIsReady(isReady);
+
+		if (!CRakNet::GetInstance()->GetOnline()) return;
+		//通信処理
+		CRakNet::GetInstance()->GetClient()->SendReady(nullptr, CRakNet::GetInstance()->GetPeer());
 	}
 }
 

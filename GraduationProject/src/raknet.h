@@ -28,6 +28,19 @@ public:
 	//	ID_CONNECT_MESSAGE_2,   //他人が接続時
 	//};
 
+	//列挙
+	enum GameMessages
+	{
+		ID_GAME_MESSAGE_1 = ID_USER_PACKET_ENUM + 1,
+		ID_CONNECT_MESSAGE_1,			//自分が接続時
+		ID_DISCONNECT_MESSAGE_1,		//他人が接続切断
+		ID_LOBY_MESSAGE_SEND_READY,		//ロビーでの準備OKを送信
+		ID_LOBY_MESSAGE_RECEIVE_READY,  //ロビーでの準備OKを受信
+		ID_LOBY_MESSAGE_SEND_START,		//ロビーでの開始合図を送信
+		ID_LOBY_MESSAGE_RECEIVE_START,	//ロビーでの開始合図を受信
+		ID_DUEL_MESSAGE_1,				//対戦時のメッセージ
+	};
+
 	//シングルトン
 	static CRakNet* GetInstance()
 	{
@@ -49,6 +62,9 @@ public:
 	//オンラインか
 	void SetOnline(bool online) { m_isOnline = online; }	//設定
 	bool GetOnline() { return m_isOnline; }					//取得
+
+	//クライアントクラスの取得
+	CClient* GetClient() { return m_Client; }
 
 private:
 

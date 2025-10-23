@@ -176,6 +176,7 @@
     <ClCompile Include="src\center_area.cpp" />
     <ClCompile Include="src\character.cpp" />
     <ClCompile Include="src\client.cpp" />
+    <ClCompile Include="src\client_lobby.cpp" />
     <ClCompile Include="src\colision.cpp" />
     <ClCompile Include="src\enemy.cpp" />
     <ClCompile Include="src\enemy_manager.cpp" />
@@ -250,6 +251,7 @@
     <ClInclude Include="src\center_area.h" />
     <ClInclude Include="src\character.h" />
     <ClInclude Include="src\client.h" />
+    <ClInclude Include="src\client_lobby.h" />
     <ClInclude Include="src\colision.h" />
     <ClInclude Include="src\count.h" />
     <ClInclude Include="src\enemy.h" />
