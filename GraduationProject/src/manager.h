@@ -13,7 +13,6 @@
 #include "light.h"
 #include "texture.h"
 #include "model.h"
-#include "useful.h"
 #include "object.h"
 #include "colision.h"
 #include "scene.h"

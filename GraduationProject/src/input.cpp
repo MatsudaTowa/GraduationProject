@@ -298,6 +298,24 @@ void My::CInputMouse::SetMouseArea()
 	}
 }
 
+D3DXVECTOR3 My::CInputMouse::GetMousePos(void)
+{
+	//マウス座標を取得してクライアント座標に変換
+	POINT mouse;
+	GetCursorPos(&mouse);
+	ScreenToClient(CManager::GetInstance()->GetHwnd(), &mouse);
+	//クライアントサイズを取得
+	RECT rc;
+	GetClientRect(CManager::GetInstance()->GetHwnd(), &rc);
+	float width = (float)(rc.right - rc.left);
+	float height = (float)(rc.bottom - rc.top);
+
+	float x = (float)mouse.x;
+	float y = (float)mouse.y;
+
+	return { x * SCREEN_WIDTH / width,y * SCREEN_HEIGHT / height,0.0f };
+}
+
 /**
  * @brief マウスのデバッグ表示
  */

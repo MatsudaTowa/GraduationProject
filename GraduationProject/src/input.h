@@ -106,10 +106,7 @@ namespace My
 		}
 
 		//ˆÊ’uŽæ“¾
-		inline D3DXVECTOR3 GetMousePos(void)
-		{
-			return m_MousePos;
-		}
+		D3DXVECTOR3 GetMousePos(void);
 
 		//ˆÚ“®—ÊŽæ“¾
 		inline D3DXVECTOR3 GetMouseMove(void)

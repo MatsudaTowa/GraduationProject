@@ -21,6 +21,7 @@ int My::CLobby::m_characterIdx = -1;
 My::CLobby::CLobby()
 {
 	GET_CAMERA(GET_CAMERA_IDX)->ChangeCameraState(new CSideView);
+	GET_CAMERA(GET_CAMERA_IDX)->SetCamera();
 }
 
 //=============================================
@@ -141,6 +142,7 @@ void My::CLobby::Connect(CGame* /*game*/)
 My::CDuel::CDuel()
 {
 	GET_CAMERA(GET_CAMERA_IDX)->ChangeCameraState(new CBirdView);
+	GET_CAMERA(GET_CAMERA_IDX)->SetCamera();
 }
 
 //=============================================
