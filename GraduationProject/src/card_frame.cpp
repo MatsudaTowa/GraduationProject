@@ -108,10 +108,10 @@ void My::CCardFrame::Draw()
 	CRenderer* pRender = GET_RENDERER;
 	LPDIRECT3DDEVICE9 pDevice = pRender->GetDevice();
 
-	// Zの比較方法
-	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_ALWAYS);
-	// Zバッファに書き込まない
-	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
+	//// Zの比較方法
+	//pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_ALWAYS);
+	//// Zバッファに書き込まない
+	//pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 
 	// αブレンド
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
@@ -122,10 +122,10 @@ void My::CCardFrame::Draw()
 
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 
-	// Zの比較方法
-	pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
-	// Zバッファに書き込む
-	pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
+	//// Zの比較方法
+	//pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
+	//// Zバッファに書き込む
+	//pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
 }
 
 //===========================================================================================================
