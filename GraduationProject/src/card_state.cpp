@@ -39,6 +39,17 @@ void My::CCardState::Copy(CCard* cpy)
 //===========================================================================================================
 
 //=======================================================================================
+// 初期化処理
+//=======================================================================================
+void My::CCardStateNeutral::Init(CCard* cpy)
+{
+	if (cpy == nullptr)
+		return;
+
+	cpy->SetPos(cpy->GetNeutralPos());
+}
+
+//=======================================================================================
 // 更新処理
 //=======================================================================================
 void My::CCardStateNeutral::Update(CCard* cpy)
@@ -66,7 +77,8 @@ void My::CCardStatePickup::Init(CCard* cpy)
 
 	// カードを見やすくする
 	D3DXVECTOR3 pos = cpy->GetPos();
-	pos.y += 15.0f;
+	pos.y += 20.0f;
+	pos.z += 10.0f;
 	cpy->SetPos(pos);
 }
 
@@ -77,6 +89,8 @@ void My::CCardStatePickup::Update(CCard* cpy)
 {
 	if (cpy == nullptr)
 		return;
+
+	cpy->SetSize({ 1.5f * 1.2f, 1.5f, 1.5f });
 
 	//cpy->SetSize({ 1.2f * 1.2f,1.2f, 1.2f });
 }

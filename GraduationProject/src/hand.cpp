@@ -16,7 +16,8 @@ My::CHand::CHand() :
 	m_SelectNum(-1),
 	m_TotalNum(0),
 	m_IsPassStart(false),
-	m_FrontSelectNum(-1)
+	m_FrontSelectNum(-1),
+	m_IsPickUp(false)
 {
 	for (int i = 0; i < MAX_HANDSCARD; i++)
 	{
@@ -45,7 +46,7 @@ void My::CHand::Init()
 
 	// カメラの位置と角度に合わせる
 	CCamera* pCamera = CManager::GetInstance()->GetCamera(0);
-	m_CenterPos = { pCamera->GetPosV().x, pCamera->GetPosV().y - 100.0f, pCamera->GetPosV().z + 30.0f };
+	m_CenterPos = { pCamera->GetPosV().x, pCamera->GetPosV().y - 150.0f, pCamera->GetPosV().z + 23.0f };
 }
 
 //===========================================================================================================
@@ -79,20 +80,7 @@ void My::CHand::Update()
 	}
 
 	// 手札選択
-	Select();
-
-	// カードをキャストする
-	if (pkeyboad->GetTrigger(DIK_J))
-	{
-		// カードが選択されていたら
-		if (m_SelectNum >= 0)
-		{
-			// 選択されたカードが存在していたら
-			if (m_pCard[m_SelectNum] != nullptr)
-				m_pCard[m_SelectNum]->ChangeState(CCardState::CARD_STATE::CARD_CAST);
-		}
-			
-	}
+	Select();	
 
 	// カード除去
 	DeleteCard();
@@ -103,40 +91,32 @@ void My::CHand::Update()
 //===========================================================================================================
 void My::CHand::Select()
 {
-	// キーボード取得
-	// TODO : マウスDE操作
-	CInputKeyboard* pKeyboad = CManager::GetInstance()->GetKeyboard();
+	// 何も選択されていない場合
+	if (!m_IsPickUp)
+	{
+		for (int i = 0; i < m_TotalNum; i++)
+		{// すべてのカードを判定
 
-	// 選択番号が変わっているか否か
-	bool IsChangeSelect = false;
+			// マウスでカード選択
+			m_IsPickUp = m_pCard[i]->CardSelectToMouse();
 
-	// キーボードで選択
-	if (pKeyboad->GetTrigger(DIK_RIGHTARROW))
-	{// 右選択
-		IsChangeSelect = true;
-		m_SelectNum++;
-		if (m_SelectNum >= m_TotalNum)
-		{
-			m_SelectNum = 0;
+			if (m_IsPickUp)
+			{// どれかのカードが選択されたら
+				m_SelectNum = i;	// 今の配列番号を一時格納しておく
+				break;
+			}
 		}
 	}
-	if (pKeyboad->GetTrigger(DIK_LEFTARROW))
-	{// 左選択
-		IsChangeSelect = true;
-		m_SelectNum--;
-		if (m_SelectNum < 0)
-		{
-			m_SelectNum = m_TotalNum - 1;
-		}
+	else
+	{
+		// 選択番号のカードのみ判定する
+		m_IsPickUp = m_pCard[m_SelectNum]->CardSelectToMouse();
+
+		// 選択番号のカードが非選択状態になったら
+		if (m_pCard[m_SelectNum]->GetStateNum() == CCardState::CARD_NEUTRAL)
+			m_IsPickUp = false;	// 選択されていない状態にする
 	}
 
-	// 番号が変わっていない場合チェンジステートをしない
-	if (!IsChangeSelect)
-		return;
-
-	SetHandCardPos();
-
-	SelectStateSet();
 }
 
 //===========================================================================================================
@@ -265,7 +245,7 @@ My::CHand* My::CHand::Create()
 void My::CHand::SetHandCardPos()
 {
 	D3DXVECTOR3 firstpos;	// 一番左側の位置(手札の最初の位置)
-	float posInterbal = 20.0f - (20 * m_TotalNum * 0.07f);	// 手札に表示されている時のカードの間隔
+	float posInterbal = 25.0f - (20 * m_TotalNum * 0.07f);	// 手札に表示されている時のカードの間隔
 	float xpos;	// 一枚目のカードのx座標
 
 	// x座標の設定 = センター - (現在の合計枚数 * カードの間隔の半分)
@@ -285,6 +265,11 @@ void My::CHand::SetHandCardPos()
 			m_pCard[0]->SetPos(firstpos);
 		}
 		
+		// 元の位置を設定しておく
+		m_pCard[i]->SetNeutralPos(m_pCard[i]->GetPos());
+		// 一度ニュートラルにリセットする
+		m_pCard[i]->ChangeState(CCardState::CARD_STATE::CARD_NEUTRAL);
+
 		// 間隔を開ける
 		xpos += posInterbal*0.5f;
 	}
