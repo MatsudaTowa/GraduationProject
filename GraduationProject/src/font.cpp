@@ -95,6 +95,8 @@ My::CFont* My::CFont::Create(D3DXVECTOR3 pos, float size, int thickness, int idx
 	pFont->SetPos(pos);
 	pFont->SetSize({size,size});
 
+	pFont->SetType(OBJECT_TYPE_FONT);
+
 	pFont->CreateFontTexture(thickness,idx,txt);
 
 	pFont->Init();
@@ -138,7 +140,7 @@ My::CFont* My::CFont::CreateFontTexture(int thickness, int idx, WCHAR txt)
 	//‘ζ14ψ”:ƒtƒHƒ“ƒg–Ό
 	HFONT hFont = CreateFont(
 		FONT_SIZE, 0, 0, 0,                    // © ­‚µ‘ε‚«‚ί‚ΕγY—ν‚Ι
-		thickness, FALSE, FALSE, FALSE,
+		thickness, TRUE, FALSE, FALSE,
 		SHIFTJIS_CHARSET,
 		OUT_DEFAULT_PRECIS,
 		CLIP_DEFAULT_PRECIS,

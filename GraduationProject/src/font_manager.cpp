@@ -53,13 +53,46 @@ void My::CFontManager::Uninit()
 }
 
 //================================
-// “o˜^
+// “o˜^ TODO;•¶Žš—ñ‚Ì’·‚³‚É‰ž‚¶‚ÄƒtƒHƒ“ƒgƒTƒCƒY‚â‚¸‚ç‚·’l‚ðŒˆ‚ß‚½‚¢‚æ‚Ë
 //================================
-void My::CFontManager::Regist(StringData font, D3DXVECTOR3 first_pos)
+void My::CFontManager::Regist(const wchar_t* text, D3DXVECTOR3 first_pos, float size, float txt_shift, int thickness, int idx)
 {
-	
+	StringData data;
+	std::vector<CFont*> font_list;
+	font_list.clear();
+
+	for (int i = INT_ZERO; i < wcslen(text); ++i)
+	{
+		CFont* font = nullptr;
+		font = CFont::Create(first_pos, size, thickness, idx, text[i]);
+		font_list.push_back(font);
+
+		first_pos.x += txt_shift;
+	}
+
+	data.text = text;
+	data.pFont = font_list;
+
 	//“G‚Ìî•ñ‚ð“o˜^
-	m_apManager.push_back(font);
+	m_apManager.push_back(data);
+}
+
+//================================
+// ‘Síœ
+//================================
+void My::CFontManager::Release()
+{
+	for (auto& i : m_apManager)
+	{
+		for (auto& j : i.pFont)
+		{
+			if (j == nullptr) { continue; }
+			j->Uninit();
+			j = nullptr;
+		}
+		i.text = NULL;
+	}
+	m_apManager.clear();
 }
 
 //================================

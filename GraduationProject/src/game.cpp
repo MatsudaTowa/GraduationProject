@@ -30,8 +30,6 @@ m_pDelayCnt(nullptr)				//リザルトに遷移するまでのディレイカウント
 {
 	CGameManager::GetInstance()->SetFinish(false);
 	CRakNet::GetInstance()->Init();
-	const WCHAR text = L'あ';
-	CFont* pFont = CFont::Create({500.0f,500.0f,0.0f}, 256.0f, 20, 3, text);
 }
 
 //=============================================
@@ -52,6 +50,10 @@ HRESULT My::CGame::Init()
 	GET_CAMERA(0)->ChangeCameraState(new CBirdView);
 
 	SET_CAMERA_IDX(0);
+
+	const wchar_t* text = L"あいうえお";
+
+	GET_FONT_MANAGER->Regist(text, { 100.0f,500.0f,0.0f }, 50, 55, 00, 1);
 
 	CEnemyManager* enemy_manager = CGameManager::GetInstance()->GetEnemyManager();
 	if (enemy_manager == nullptr)
@@ -116,6 +118,7 @@ void My::CGame::Uninit()
 		m_pPauseCnt = nullptr;
 	}
 
+	GET_FONT_MANAGER->Release();
 	CEnergy_Charge* pCharge = CEnergy_Charge::GetInstance();
 	pCharge->Uninit();
 

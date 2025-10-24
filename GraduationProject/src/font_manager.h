@@ -21,7 +21,7 @@ namespace My
 
 		struct StringData
 		{
-			wchar_t* text;
+			const wchar_t* text;
 			std::vector<CFont*> pFont;
 		};
 
@@ -50,8 +50,19 @@ namespace My
 		 * @brief 登録
 		 * @param [in]font
 		 * @param [in]一文字目のpos
+		 * @param [in]テキストのサイズ
+		 * @param [in]2文字以降テキストをずらす値
+		 * @param [in]文字の太さ
+		 * @param [in]フォント番号
 		 */
-		void Regist(StringData font,D3DXVECTOR3 first_pos);
+		void Regist(const wchar_t* text,D3DXVECTOR3 first_pos, float size, float txt_shift, int thickness, int idx);
+
+		/**
+		 * @brief 削除
+		 * @param [in]font
+		 */
+		void Release();
+
 		/**
 		 * @brief 削除
 		 * @param [in]font
