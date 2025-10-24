@@ -124,15 +124,7 @@ void My::CAreaManager::SelectArea()
 			CGamePlayer* player = CGameManager::GetInstance()->GetPlayer();
 			std::list<CEnemy*> enemy_list = CGameManager::GetInstance()->GetEnemyManager()->GetList();
 			int life;
-			if (player->GetArea() == area)
-			{
-				life = player->GetLife();
-				if (life > INT_ZERO)
-				{
-					--life;
-				}
-				player->SetLife(life);
-			}
+			player_cast(player, area, life);
 
 			for (auto& itr : enemy_list)
 			{
@@ -166,5 +158,22 @@ void My::CAreaManager::SelectArea()
 				m_pArea[i]->SetSelect(false);
 			}
 		}
+	}
+}
+
+void My::CAreaManager::player_cast(CGamePlayer* player, CInputMouse::AREA area, int& life)
+{
+	if (player == nullptr)
+	{
+		return;
+	}
+	if (player->GetArea() == area)
+	{
+		life = player->GetLife();
+		if (life > INT_ZERO)
+		{
+			--life;
+		}
+		player->SetLife(life);
 	}
 }
