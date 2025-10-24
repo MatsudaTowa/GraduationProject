@@ -103,6 +103,7 @@
     <ClCompile Include="src\client_lobby.cpp">
       <Filter>active_scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\font_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -208,6 +209,7 @@
     <ClInclude Include="src\client_lobby.h">
       <Filter>active_scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\font_manager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">

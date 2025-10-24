@@ -50,10 +50,30 @@ namespace My
 		 * @brief 描画
 		 */
 		void Draw();
+
+		/**
+		 * @brief 生成
+		 * @param [in]pos
+		 * @param [in]size
+		 * @param [in]太さ指定
+		 * @param [in]フォント番号
+		 * @param [in]文字
+		 * @return 
+		 */
+		static CFont* Create(D3DXVECTOR3 pos,float size,int thickness,int idx,WCHAR txt);
+
+		/**
+		 * @brief フォントのテクスチャ作成
+		 * @param [in]太さ指定
+		 * @param [in]フォント番号
+		 * @param [in]文字 必ずL`a`のようにリテラルを記述して
+		 * @return
+		 */
+		CFont* CreateFontTexture(int thickness, int idx, WCHAR txt);
 	private:
 
 		// フォントビットマップを取得する関数
-		BYTE* GetFontBitmap(HDC hDC, TCHAR c, GLYPHMETRICS& gm, int& bmpWidth, int& bmpHeight, int& level);
+		BYTE* GetFontBitmap(HDC hDC, WCHAR c, GLYPHMETRICS& gm, int& bmpWidth, int& bmpHeight, int& level);
 	};
 }
 

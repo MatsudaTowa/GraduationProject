@@ -78,6 +78,7 @@
 #define GET_DEVICE				(GET_MANAGER->GetRenderer()->GetDevice())					// デバイス情報取得
 #define GET_SOUND				(GET_MANAGER->GetSound())									// サウンド取得
 #define GET_COLISION			(GET_MANAGER->GetColision())								// 当たり判定取得
+#define GET_FONT_MANAGER		(GET_MANAGER->GetFontManager())								// フォントマネージャー取得
 
 //インクリメント関数
 template <std::floating_point T>  // float, double など浮動小数点型のみ

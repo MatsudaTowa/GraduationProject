@@ -30,8 +30,8 @@ m_pDelayCnt(nullptr)				//リザルトに遷移するまでのディレイカウント
 {
 	CGameManager::GetInstance()->SetFinish(false);
 	CRakNet::GetInstance()->Init();
-	CFont* pFont = new CFont;
-	pFont->Init();
+	const WCHAR text = L'あ';
+	CFont* pFont = CFont::Create({500.0f,500.0f,0.0f}, 256.0f, 20, 3, text);
 }
 
 //=============================================

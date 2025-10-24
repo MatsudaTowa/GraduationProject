@@ -17,6 +17,7 @@
 #include "colision.h"
 #include "scene.h"
 #include "fade.h"
+#include "font_manager.h"
 
 /** @brief My 名前空間 */
 namespace My
@@ -120,6 +121,11 @@ namespace My
 		 */
 		CColision* GetColision();
 		/**
+		 * @brief フォントマネージャー取得
+		 * @return フォントマネージャ
+		 */
+		CFontManager* GetFontManager();
+		/**
 		 * @brief フェード取得
 		 * @return フェードのポインタ
 		 */
@@ -161,6 +167,7 @@ namespace My
 		CModel* m_pModel;
 		CColision* m_pColision;
 		CFade* m_pFade;
+		CFontManager* m_pFontManager;
 		HWND m_hWnd;
 	};
 }

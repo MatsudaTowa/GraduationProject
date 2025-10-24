@@ -22,6 +22,7 @@ m_pPad(nullptr),		//padのポインタ
 m_pRenderer(nullptr),	//レンダラーポインタ
 m_pScene(nullptr),		//シーンポインタ
 m_pTexture(nullptr),		//テクスチャ管理ポインタ
+m_pFontManager(nullptr),	
 m_CurrentViewCamera(INT_ZERO)	//映すカメラ番号
 {
 	
@@ -122,6 +123,12 @@ HRESULT My::CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 		m_pFade = CFade::Create(VEC3_RESET_ZERO);
 	}
 
+	if (m_pFontManager == nullptr)
+	{
+		m_pFontManager = new CFontManager;
+		m_pFontManager->Init();
+	}
+
 	SetMode(CScene::MODE::MODE_TITLE);
 
 	return S_OK;
@@ -185,6 +192,12 @@ void My::CManager::Uninit()
 	{
 		m_pFade->Uninit();
 		m_pFade = nullptr;
+	}
+
+	if (m_pFontManager != nullptr)
+	{
+		m_pFontManager->Uninit();
+		m_pFontManager = nullptr;
 	}
 
 	CObject::ReleaseAll();
@@ -400,4 +413,13 @@ My::CFade* My::CManager::GetFade()
 My::CColision* My::CManager::GetColision()
 {
 	return m_pColision;
+}
+
+/**
+ * @brief フォントマネージャー取得
+ * @return フォントマネージャ
+ */
+My::CFontManager* My::CManager::GetFontManager()
+{
+	return m_pFontManager;
 }

@@ -1,20 +1,37 @@
 //=============================================
 //
-//フォント表示[font.cpp]
-//Author Matsuda Towa
+// フォント表示 [font.cpp]
+// Author: Matsuda Towa
 //
 //=============================================
 #include "font.h"
+#include <tchar.h>
+#include <string>
 
 namespace
 {
-	const D3DXVECTOR2 FONT_SIZE = { 300.0f,300.0f };
+	struct FontData
+	{
+		const LPCSTR FONT_PATH;
+		const LPCSTR FONT_NAME;
+	};
+	const float FONT_SIZE = 256.0f;
+
+	const int NUM_FONT = 4;
+
+	FontData FONT_DATA[NUM_FONT]
+	{
+		{"data\\FONT\\GenEiChikugoMin3-R.ttf","源暎ちくご明朝 v3 Regular"},
+		{"data\\FONT\\MOBO-ExtraLight.otf","モボ-ExtraLight"},
+		{"data\\FONT\\oshigo.otf","推しゴ"},
+		{"data\\FONT\\Kazesawa-Bold.ttf","Kazesawa Bold"},
+	};
 }
 
 //=============================================
 // コンストラクタ
 //=============================================
-My::CFont::CFont(int nPriority):CObject2D(nPriority)
+My::CFont::CFont(int nPriority) : CObject2D(nPriority)
 {
 }
 
@@ -30,74 +47,11 @@ My::CFont::~CFont()
 //=============================================
 HRESULT My::CFont::Init()
 {
-    SetColor(COLOR_RED);
+	SetColor(COLOR_RED);
 
-    SetPos({ 500.0f,500.0f,0.0f });
+	SetVtx();
 
-    SetSize(FONT_SIZE);
-
-    // ① テクスチャ作成
-    LPDIRECT3DTEXTURE9 pTex = nullptr;
-    GET_DEVICE->CreateTexture(
-        (UINT)FONT_SIZE.x, (UINT)FONT_SIZE.y,
-        1,
-        D3DUSAGE_DYNAMIC,
-        D3DFMT_A8R8G8B8,
-        D3DPOOL_DEFAULT,
-        &pTex,
-        NULL
-    );
-
-    // ② GDIフォントの準備
-    HDC hDC = CreateCompatibleDC(NULL);
-    HFONT hFont = CreateFont(
-        32, 0, 0, 0,
-        FW_NORMAL, FALSE, FALSE, FALSE,
-        SHIFTJIS_CHARSET,
-        OUT_DEFAULT_PRECIS,
-        CLIP_DEFAULT_PRECIS,
-        DEFAULT_QUALITY,
-        DEFAULT_PITCH | FF_DONTCARE,
-        ("HG創英角ｺﾞｼｯｸUB")
-    );
-    SelectObject(hDC, hFont);
-
-    // ③ フォントビットマップ取得
-    GLYPHMETRICS gm;
-    int bmpW, bmpH, level;
-    BYTE* pBmp = GetFontBitmap(hDC, ('あ'), gm, bmpW, bmpH, level); // ←ここでAを取得
-    if (!pBmp) return E_FAIL;
-
-    // ④ サーフェイスロック
-    D3DLOCKED_RECT lockRect;
-    pTex->LockRect(0, &lockRect, NULL, D3DLOCK_DISCARD);
-    FillMemory(lockRect.pBits, lockRect.Pitch * (int)FONT_SIZE.y, 0);
-
-    // ⑤ テクスチャへフォント情報の書き込み
-    for (int y = 0; y < bmpH; y++)
-    {
-        for (int x = 0; x < bmpW; x++)
-        {
-            BYTE val = pBmp[x + bmpW * y];
-            DWORD Trans = (255 * val) / (level - 1);
-            DWORD color = 0x00ffffff | (Trans << 24);
-            memcpy((BYTE*)lockRect.pBits + lockRect.Pitch * y + 4 * x, &color, sizeof(DWORD));
-        }
-    }
-
-    // ⑥ アンロック
-    pTex->UnlockRect(0);
-
-    // GDIクリーンアップ
-    DeleteObject(hFont);
-    DeleteDC(hDC);
-    delete[] pBmp;
-
-    // ⑦ DirectX描画用セットアップ
-    BindTexture(pTex);
-    SetVtx();
-
-    return S_OK;
+	return S_OK;
 }
 
 void My::CFont::Uninit()
@@ -114,37 +68,137 @@ void My::CFont::Draw()
 {
 	LPDIRECT3DDEVICE9 pDevice = GET_DEVICE;
 	LPDIRECT3DTEXTURE9 tex = GetTexture();
-	// テクスチャセット
+
 	pDevice->SetTexture(0, tex);
 	pDevice->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
 	pDevice->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_MODULATE);
 	pDevice->SetTextureStageState(0, D3DTSS_COLORARG2, D3DTA_DIFFUSE);
 	pDevice->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
 	pDevice->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
-	pDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE); // 板ポリのα値を利用
+	pDevice->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
 
-	CObject2D::Draw();
-
-	// レンダリングステート
 	pDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
 	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+
+	CObject2D::Draw();
 }
 
-BYTE* My::CFont::GetFontBitmap(HDC hDC, TCHAR c, GLYPHMETRICS& gm, int& bmpWidth, int& bmpHeight, int& level)
+//=============================================
+// 生成
+//=============================================
+My::CFont* My::CFont::Create(D3DXVECTOR3 pos, float size, int thickness, int idx, WCHAR txt)
 {
-	level = GGO_GRAY8_BITMAP; //高品質のビットマップを使用
+	CFont* pFont = new CFont;
 
-	 // 必要なバッファサイズを取得
-	MAT2 mat = { {0,1}, {0,0}, {0,0}, {0,1} };
-	DWORD bufSize = GetGlyphOutline(hDC, c, level, &gm, 0, NULL, &mat);
-	if (bufSize == GDI_ERROR) { return nullptr; }
+	if (pFont == nullptr) { return nullptr; }
+	pFont->SetPos(pos);
+	pFont->SetSize({size,size});
 
-	// バッファ確保
+	pFont->CreateFontTexture(thickness,idx,txt);
+
+	pFont->Init();
+
+	return pFont;
+}
+
+My::CFont* My::CFont::CreateFontTexture(int thickness, int idx, WCHAR txt)
+{
+	// ① テクスチャ作成
+	LPDIRECT3DTEXTURE9 pTex = nullptr;
+	GET_DEVICE->CreateTexture(
+		(UINT)FONT_SIZE, (UINT)FONT_SIZE,
+		1,
+		D3DUSAGE_DYNAMIC,
+		D3DFMT_A8R8G8B8,
+		D3DPOOL_DEFAULT,
+		&pTex,
+		NULL
+	);
+
+	// ② GDIフォントの準備
+	HDC hDC = CreateCompatibleDC(NULL);
+
+	// フォント登録（外部ファイル）
+	AddFontResourceEx(_T(FONT_DATA[idx].FONT_PATH), FR_PRIVATE, NULL);
+
+	//第1引数:フォントサイズ
+	//第2引数:引き伸ばし
+	//第3引数:文字送りの方向とX軸との角度
+	//第4引数:ベースラインとX軸との角度
+	//第5引数:文字の太さ
+	//第6引数:斜体指定
+	//第7引数:下線指定
+	//第8引数:打消し指定
+	//第9引数:キャラクタセット
+	//第10引数:出力制度
+	//第11引数:クリッピングの精度
+	//第12引数:出力品質
+	//第13引数:ピッチとファミリ
+	//第14引数:フォント名
+	HFONT hFont = CreateFont(
+		FONT_SIZE, 0, 0, 0,                    // ← 少し大きめで綺麗に
+		thickness, FALSE, FALSE, FALSE,
+		SHIFTJIS_CHARSET,
+		OUT_DEFAULT_PRECIS,
+		CLIP_DEFAULT_PRECIS,
+		CLEARTYPE_NATURAL_QUALITY,              // ←ClearTypeで滑らかに
+		DEFAULT_PITCH | FF_DECORATIVE,
+		_T(FONT_DATA[idx].FONT_NAME)                 // フォントのパスではなくフォントの内部のフォント名で
+	);
+	SelectObject(hDC, hFont);
+
+	// ③ フォントビットマップ取得
+	GLYPHMETRICS gm;
+	int bmpW, bmpH, level;
+	const WCHAR text = (txt);
+	BYTE* pBmp = GetFontBitmap(hDC, text, gm, bmpW, bmpH, level);
+	if (!pBmp) return nullptr;
+
+	// ④ サーフェイスロック
+	D3DLOCKED_RECT lockRect;
+	pTex->LockRect(0, &lockRect, NULL, D3DLOCK_DISCARD);
+	FillMemory(lockRect.pBits, lockRect.Pitch * (int)FONT_SIZE, 0);
+
+	// ⑤ テクスチャへフォント情報の書き込み
+	for (int y = 0; y < bmpH; y++)
+	{
+		for (int x = 0; x < bmpW; x++)
+		{
+			BYTE val = pBmp[x + bmpW * y];
+			BYTE alpha = (BYTE)(255 * val / 64);
+			DWORD color = 0x00ffffff | (alpha << 24);
+			memcpy((BYTE*)lockRect.pBits + lockRect.Pitch * y + 4 * x, &color, sizeof(DWORD));
+		}
+	}
+
+	// ⑥ アンロック
+	pTex->UnlockRect(0);
+
+	// GDIクリーンアップ
+	DeleteObject(hFont);
+	DeleteDC(hDC);
+	delete[] pBmp;
+
+	// ⑦ DirectX描画用セットアップ
+	BindTexture(pTex);
+}
+
+//=============================================
+// ビットマップ取得（Unicode対応版）
+//=============================================
+BYTE* My::CFont::GetFontBitmap(HDC hDC, WCHAR c, GLYPHMETRICS& gm, int& bmpWidth, int& bmpHeight, int& level)
+{
+	level = GGO_GRAY8_BITMAP; // 高品質グレースケール
+
+	MAT2 mat = { {0,1}, {0,0}, {0,0}, {0,1} }; // スケーリングを1:1に
+	DWORD bufSize = GetGlyphOutlineW(hDC, c, level, &gm, 0, NULL, &mat);
+	if (bufSize == GDI_ERROR || bufSize == 0) return nullptr;
+
 	BYTE* pBmp = new BYTE[bufSize];
-	GetGlyphOutline(hDC, c, level, &gm, bufSize, pBmp, &mat);
+	GetGlyphOutlineW(hDC, c, level, &gm, bufSize, pBmp, &mat);
 
-	// 横幅を4の倍数にそろえる
+	// 横幅を4の倍数に揃える
 	bmpWidth = gm.gmBlackBoxX + (4 - (gm.gmBlackBoxX % 4)) % 4;
 	bmpHeight = gm.gmBlackBoxY;
 

@@ -188,6 +188,7 @@
     <ClCompile Include="src\fade.cpp" />
     <ClCompile Include="src\field.cpp" />
     <ClCompile Include="src\font.cpp" />
+    <ClCompile Include="src\font_manager.cpp" />
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\game_camera.cpp" />
     <ClCompile Include="src\game_field.cpp" />
@@ -264,6 +265,7 @@
     <ClInclude Include="src\fade.h" />
     <ClInclude Include="src\field.h" />
     <ClInclude Include="src\font.h" />
+    <ClInclude Include="src\font_manager.h" />
     <ClInclude Include="src\game.h" />
     <ClInclude Include="src\game_camera.h" />
     <ClInclude Include="src\game_field.h" />
