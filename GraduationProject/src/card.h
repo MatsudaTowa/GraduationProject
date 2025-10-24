@@ -64,6 +64,11 @@ namespace My
 		void Draw()override;
 
 		/**
+		 * @brief マウスでカードを選択する
+		 */
+		bool CardSelectToMouse();
+
+		/**
 		 * @brief 生成
 		 * @param [in]カードタイプ
 		 */
@@ -87,6 +92,12 @@ namespace My
 		inline void SetCardType(CCard::CARDTYPE_ type) { m_CardType = type; }
 		inline CARDTYPE_ GetCardType() { return m_CardType; }
 
+		/**
+		* @brief ニュートラル位置
+		*/
+		inline void SetNeutralPos(D3DXVECTOR3 npos) { m_NeutralPos = npos; }
+		inline D3DXVECTOR3 GetNeutralPos() { return m_NeutralPos; }
+
 		//inline CCard* GetTop() { return m_pTop; }
 		//inline CCard* GetPrev() { return m_pPrev; }
 
@@ -95,6 +106,8 @@ namespace My
 		//static CCard* m_pCur;	//現在（最後尾）のポインタ
 		//CCard* m_pPrev;			//前のオブジェクトのポインタ
 		//CCard* m_pNext;			//次のオブジェクトのポインタ
+
+		
 
 		/**
 		 * @brief カードを選択しているか否か(trueだったら選択している)
@@ -115,6 +128,11 @@ namespace My
 		 * @brief カードの状態列挙
 		 */
 		My::CCardState::CARD_STATE m_StateNum;
+
+		/**
+		 * @brief ニュートラル状態の位置(戻すため)
+		 */
+		D3DXVECTOR3 m_NeutralPos;
 
 		D3DXVECTOR3 m_outpos;
 	};

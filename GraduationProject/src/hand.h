@@ -64,16 +64,16 @@ namespace My
 		void HandDraw(int drawnum);
 
 		/**
+		* @brief 手札のカードの位置設定
+		*/
+		void SetHandCardPos();
+
+		/**
 		* @brief 生成
 		*/
 		static CHand* Create();
 
 	private:
-		/**
-		* @brief 手札のカードの位置設定
-		*/
-		void SetHandCardPos();
-
 		/**
 		* @brief 手札のカードの状態変更
 		*/
@@ -115,6 +115,9 @@ namespace My
 
 		/* @brief スタートを通ったかどうか */
 		bool m_IsPassStart;
+
+		/* @brief スタートを通ったかどうか */
+		bool m_IsPickUp;
 	};
 }
 

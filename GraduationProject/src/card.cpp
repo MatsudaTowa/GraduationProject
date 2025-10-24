@@ -83,48 +83,9 @@ void My::CCard::Update()
 
 	D3DXVECTOR3 rot = pCamera->GetRot();
 	rot.x += -1.2f;
-
-	// TODO : マウスを実装しようとしました
-
-	//POINT mouse;
-	//GetCursorPos(&mouse);
-	//ScreenToClient(GET_HWND, &mouse);
-	////D3DXVECTOR3 pos = GetPos();
-
-	//D3DXVECTOR3 outpos;
-	//float sX=(float)mouse.x, sY=(float)mouse.y;
-
-	////クライアントサイズを取得
-	//RECT rc;
-	//GetClientRect(GET_HWND, &rc);
-	//float width = (float)(rc.right - rc.left);
-	//float height = (float)(rc.bottom - rc.top);
-	//
-	//D3DXMATRIX View, Proj;
-	//pDevice->GetTransform(D3DTRANSFORMSTATETYPE::D3DTS_VIEW, &View);	// ビュー行列の取得
-	//pDevice->GetTransform(D3DTRANSFORMSTATETYPE::D3DTS_PROJECTION, &Proj);	// 投影行列の取得
-
-	////D3DXVECTOR3 pos = { GetPos().x,GetPos().z,GetPos().y };
-	//D3DXVECTOR3 pos = GetPos();
-
-	//CalcScreenToWorld(&pos, sX, sY, 1.0f, width, height, &View, &Proj);
-
-	//CalcScreenToXZ(&m_outpos, pos, sX, sY, width, height, &View, &Proj);
-	////CalcScreenToXZ(&m_outpos, GetPos(), mouse.x, mouse.y, SCREEN_WIDTH, SCREEN_WIDTH, &View, &Proj);
-
-	//if (m_outpos.x >= -50 && m_outpos.x < 50)
-	//{
-	//	ChangeState(CCardState::CARD_PICKUP);
-	//}
-	//else
-	//{
-	//	ChangeState(CCardState::CARD_NEUTRAL);
-	//}
-
-	////if (GET_COLISION->CheckColisionCircle({ sX,0.0f,sY}, 20.0f, pos).colision)
-	////{
-	////	ChangeState(CCardState::CARD_PICKUP);
-	////}
+	
+	//// マウスでカード選択
+	//CardSelectToMouse();
 
 	m_pState->Update(this);
 
@@ -136,7 +97,7 @@ void My::CCard::Update()
 //===========================================================================================================
 void My::CCard::Draw()
 {
-	//CObject3D::Draw();
+	//CObjectX::Draw();
 
 	POINT mouse;
 	GetCursorPos(&mouse);
@@ -250,6 +211,37 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state)
 		// 初期化
 		m_pState->Init(this);
 		m_pState->Init();
+	}
+}
+
+//===========================================================================================================
+// マウスでカードを選択する
+//===========================================================================================================
+bool My::CCard::CardSelectToMouse()
+{
+	// カメラの位置と角度に合わせる
+	CCamera* pCamera = GET_CAMERA(0);
+	CInputMouse* pMouse = GET_INPUT_MOUSE;
+
+	D3DXVECTOR2 mousepos = { pMouse->GetMousePos().x, pMouse->GetMousePos().y };
+	D3DXVECTOR3 pos = GetPos();
+
+	D3DXVECTOR3 screenpos;
+	screenpos = ConvertToScreenPos(pCamera, pos);
+
+	D3DXVECTOR2 resultpos;
+	resultpos.x = mousepos.x - screenpos.x;
+	resultpos.y = mousepos.y - screenpos.y;
+
+	if (resultpos.x <= 50.0f * GetSize().x && resultpos.x >= -50.0f * GetSize().x)
+	{
+		ChangeState(CCardState::CARD_PICKUP);
+		return true;
+	}
+	else
+	{
+		ChangeState(CCardState::CARD_NEUTRAL);
+		return false;
 	}
 }
 
