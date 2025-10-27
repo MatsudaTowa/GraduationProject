@@ -218,6 +218,9 @@ void My::CHand::DeleteCard()
 		m_pCard[ii] = m_pCard[ii + 1];
 	}
 
+	// 最大の配列カードに変なゴミが残らないようにヌルにする
+	m_pCard[m_TotalNum-1] = nullptr;
+
 	// 手札総数を減らす
 	m_TotalNum--;
 
@@ -319,5 +322,8 @@ void My::CHand::SetHandCardPos()
 		// 間隔を開ける
 		xpos += posInterbal*0.5f;
 	}
+
+	// 選択番号も一度リセット
+	m_SelectNum = 0;
 	
 }
