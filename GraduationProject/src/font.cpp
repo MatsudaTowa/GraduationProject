@@ -1,6 +1,6 @@
-//=============================================
+ï»¿//=============================================
 //
-// ƒtƒHƒ“ƒg•\¦ [font.cpp]
+// ãƒ•ã‚©ãƒ³ãƒˆè¡¨ç¤º [font.cpp]
 // Author: Matsuda Towa
 //
 //=============================================
@@ -17,33 +17,36 @@ namespace
 	};
 	const float FONT_SIZE = 256.0f;
 
-	const int NUM_FONT = 4;
+	const int NUM_FONT = 7;
 
 	FontData FONT_DATA[NUM_FONT]
 	{
-		{"data\\FONT\\GenEiChikugoMin3-R.ttf","Œ¹ó‚¿‚­‚²–¾’© v3 Regular"},
-		{"data\\FONT\\MOBO-ExtraLight.otf","ƒ‚ƒ{-ExtraLight"},
-		{"data\\FONT\\oshigo.otf","„‚µƒS"},
+		{"data\\FONT\\GenEiChikugoMin3-R.ttf","æºæšã¡ãã”æ˜æœ v3 Regular"},
+		{"data\\FONT\\MOBO-ExtraLight.otf","ãƒ¢ãƒœ-ExtraLight"},
+		{"data\\FONT\\oshigo.otf","æ¨ã—ã‚´"},
 		{"data\\FONT\\Kazesawa-Bold.ttf","Kazesawa Bold"},
+		{"data\\FONT\\GenEiLateMin_v2.ttc","æºæšãƒ©ãƒ†ãƒŸãƒ³ v2"},
+		{"data\\FONT\\H7GBKHeavy.TTF","AR FangXinShuH7GBK HV"},
+		{"data\\FONT\\ja-jp.ttf","SDK_JP_Web"},
 	};
 }
 
 //=============================================
-// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 //=============================================
 My::CFont::CFont(int nPriority) : CObject2D(nPriority)
 {
 }
 
 //=============================================
-// ƒfƒXƒgƒ‰ƒNƒ^
+// ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
 //=============================================
 My::CFont::~CFont()
 {
 }
 
 //=============================================
-// ‰Šú‰»
+// åˆæœŸåŒ–
 //=============================================
 HRESULT My::CFont::Init()
 {
@@ -85,7 +88,7 @@ void My::CFont::Draw()
 }
 
 //=============================================
-// ¶¬
+// ç”Ÿæˆ
 //=============================================
 My::CFont* My::CFont::Create(D3DXVECTOR3 pos, float size, int thickness, int idx, WCHAR txt)
 {
@@ -106,7 +109,7 @@ My::CFont* My::CFont::Create(D3DXVECTOR3 pos, float size, int thickness, int idx
 
 My::CFont* My::CFont::CreateFontTexture(int thickness, int idx, WCHAR txt)
 {
-	// ‡@ ƒeƒNƒXƒ`ƒƒì¬
+	//ãƒ†ã‚¯ã‚¹ãƒãƒ£ä½œæˆ
 	LPDIRECT3DTEXTURE9 pTex = nullptr;
 	GET_DEVICE->CreateTexture(
 		(UINT)FONT_SIZE, (UINT)FONT_SIZE,
@@ -118,89 +121,111 @@ My::CFont* My::CFont::CreateFontTexture(int thickness, int idx, WCHAR txt)
 		NULL
 	);
 
-	// ‡A GDIƒtƒHƒ“ƒg‚Ì€”õ
+	//GDIãƒ•ã‚©ãƒ³ãƒˆã®æº–å‚™
 	HDC hDC = CreateCompatibleDC(NULL);
 
-	// ƒtƒHƒ“ƒg“o˜^iŠO•”ƒtƒ@ƒCƒ‹j
+	// ãƒ•ã‚©ãƒ³ãƒˆç™»éŒ²ï¼ˆå¤–éƒ¨ãƒ•ã‚¡ã‚¤ãƒ«ï¼‰
 	AddFontResourceEx(_T(FONT_DATA[idx].FONT_PATH), FR_PRIVATE, NULL);
 
-	//‘æ1ˆø”:ƒtƒHƒ“ƒgƒTƒCƒY
-	//‘æ2ˆø”:ˆø‚«L‚Î‚µ
-	//‘æ3ˆø”:•¶š‘—‚è‚Ì•ûŒü‚ÆX²‚Æ‚ÌŠp“x
-	//‘æ4ˆø”:ƒx[ƒXƒ‰ƒCƒ“‚ÆX²‚Æ‚ÌŠp“x
-	//‘æ5ˆø”:•¶š‚Ì‘¾‚³
-	//‘æ6ˆø”:Î‘Ìw’è
-	//‘æ7ˆø”:‰ºüw’è
-	//‘æ8ˆø”:‘ÅÁ‚µw’è
-	//‘æ9ˆø”:ƒLƒƒƒ‰ƒNƒ^ƒZƒbƒg
-	//‘æ10ˆø”:o—Í§“x
-	//‘æ11ˆø”:ƒNƒŠƒbƒsƒ“ƒO‚Ì¸“x
-	//‘æ12ˆø”:o—Í•i¿
-	//‘æ13ˆø”:ƒsƒbƒ`‚Æƒtƒ@ƒ~ƒŠ
-	//‘æ14ˆø”:ƒtƒHƒ“ƒg–¼
+	//ç¬¬1å¼•æ•°:ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚º
+	//ç¬¬2å¼•æ•°:å¼•ãä¼¸ã°ã—
+	//ç¬¬3å¼•æ•°:æ–‡å­—é€ã‚Šã®æ–¹å‘ã¨Xè»¸ã¨ã®è§’åº¦
+	//ç¬¬4å¼•æ•°:ãƒ™ãƒ¼ã‚¹ãƒ©ã‚¤ãƒ³ã¨Xè»¸ã¨ã®è§’åº¦
+	//ç¬¬5å¼•æ•°:æ–‡å­—ã®å¤ªã•
+	//ç¬¬6å¼•æ•°:æ–œä½“æŒ‡å®š
+	//ç¬¬7å¼•æ•°:ä¸‹ç·šæŒ‡å®š
+	//ç¬¬8å¼•æ•°:æ‰“æ¶ˆã—æŒ‡å®š
+	//ç¬¬9å¼•æ•°:ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ã‚»ãƒƒãƒˆ
+	//ç¬¬10å¼•æ•°:å‡ºåŠ›åˆ¶åº¦
+	//ç¬¬11å¼•æ•°:ã‚¯ãƒªãƒƒãƒ”ãƒ³ã‚°ã®ç²¾åº¦
+	//ç¬¬12å¼•æ•°:å‡ºåŠ›å“è³ª
+	//ç¬¬13å¼•æ•°:ãƒ”ãƒƒãƒã¨ãƒ•ã‚¡ãƒŸãƒª
+	//ç¬¬14å¼•æ•°:ãƒ•ã‚©ãƒ³ãƒˆå
 	HFONT hFont = CreateFont(
-		FONT_SIZE, 0, 0, 0,                    // © ­‚µ‘å‚«‚ß‚ÅãY—í‚É
-		thickness, TRUE, FALSE, FALSE,
+		FONT_SIZE, 0, 0, 0,                    // â† å°‘ã—å¤§ãã‚ã§ç¶ºéº—ã«
+		thickness, FALSE, FALSE, FALSE,
 		SHIFTJIS_CHARSET,
 		OUT_DEFAULT_PRECIS,
 		CLIP_DEFAULT_PRECIS,
-		CLEARTYPE_NATURAL_QUALITY,              // ©ClearType‚ÅŠŠ‚ç‚©‚É
+		CLEARTYPE_NATURAL_QUALITY,              // â†ClearTypeã§æ»‘ã‚‰ã‹ã«
 		DEFAULT_PITCH | FF_DECORATIVE,
-		_T(FONT_DATA[idx].FONT_NAME)                 // ƒtƒHƒ“ƒg‚ÌƒpƒX‚Å‚Í‚È‚­ƒtƒHƒ“ƒg‚Ì“à•”‚ÌƒtƒHƒ“ƒg–¼‚Å
+		_T(FONT_DATA[idx].FONT_NAME)                 // ãƒ•ã‚©ãƒ³ãƒˆã®ãƒ‘ã‚¹ã§ã¯ãªããƒ•ã‚©ãƒ³ãƒˆã®å†…éƒ¨ã®ãƒ•ã‚©ãƒ³ãƒˆåã§
 	);
 	SelectObject(hDC, hFont);
+	
+	//ä½¿ç”¨ãƒ•ã‚©ãƒ³ãƒˆã®æƒ…å ±å–å¾—
+	TEXTMETRIC tm;
+	GetTextMetrics(hDC, &tm);
+	//æ–‡å­—ã®ãƒ™ãƒ¼ã‚¹ãƒ©ã‚¤ãƒ³ã‹ã‚‰ä¸€ç•ªä¸Šã¾ã§
+	int ascent = tm.tmAscent;
+	//æ–‡å­—ã®ãƒ™ãƒ¼ã‚¹ãƒ©ã‚¤ãƒ³ã‹ã‚‰ä¸€ç•ªä¸‹ã¾ã§
+	int descent = tm.tmDescent;
 
-	// ‡B ƒtƒHƒ“ƒgƒrƒbƒgƒ}ƒbƒvæ“¾
+	int baseline = ascent; // ãƒ™ãƒ¼ã‚¹ãƒ©ã‚¤ãƒ³ã¯ãƒ•ã‚©ãƒ³ãƒˆä¸Šéƒ¨ã‹ã‚‰ã®è·é›¢
+
+	// â‘£ æ–‡å­—ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—å–å¾—
 	GLYPHMETRICS gm;
 	int bmpW, bmpH, level;
-	const WCHAR text = (txt);
-	BYTE* pBmp = GetFontBitmap(hDC, text, gm, bmpW, bmpH, level);
+	BYTE* pBmp = GetFontBitmap(hDC, txt, gm, bmpW, bmpH, level);
 	if (!pBmp) return nullptr;
 
-	// ‡C ƒT[ƒtƒFƒCƒXƒƒbƒN
+	// â‘¤ ã‚µãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ãƒ­ãƒƒã‚¯
 	D3DLOCKED_RECT lockRect;
 	pTex->LockRect(0, &lockRect, NULL, D3DLOCK_DISCARD);
 	FillMemory(lockRect.pBits, lockRect.Pitch * (int)FONT_SIZE, 0);
 
-	// ‡D ƒeƒNƒXƒ`ƒƒ‚ÖƒtƒHƒ“ƒgî•ñ‚Ì‘‚«‚İ
+	// â‘¥ ãƒ™ãƒ¼ã‚¹ãƒ©ã‚¤ãƒ³è£œæ­£è¨ˆç®—
+	// gmptGlyphOrigin.y ã¯ãƒ™ãƒ¼ã‚¹ãƒ©ã‚¤ãƒ³ã‹ã‚‰ã®ç›¸å¯¾ä½ç½®ï¼ˆä¸Šæ–¹å‘ãŒæ­£ï¼‰
+	// baselineã¨ã®å·®ã‚’å–ã‚‹ã“ã¨ã§ã€æ–‡å­—ã‚’çµ±ä¸€çš„ã«é…ç½®
+	int yOffset = baseline - gm.gmptGlyphOrigin.y;
+	int xOffset =  gm.gmptGlyphOrigin.x;
+
+	// â‘¦ ãƒ†ã‚¯ã‚¹ãƒãƒ£ã¸ãƒ•ã‚©ãƒ³ãƒˆæƒ…å ±ã®æ›¸ãè¾¼ã¿
 	for (int y = 0; y < bmpH; y++)
 	{
 		for (int x = 0; x < bmpW; x++)
 		{
+			int destX = x + xOffset;
+			int destY = y + yOffset;
+
+			if (destY < 0 || destY >= FONT_SIZE || destX < 0 || destX >= FONT_SIZE) continue;
+
 			BYTE val = pBmp[x + bmpW * y];
 			BYTE alpha = (BYTE)(255 * val / 64);
 			DWORD color = 0x00ffffff | (alpha << 24);
-			memcpy((BYTE*)lockRect.pBits + lockRect.Pitch * y + 4 * x, &color, sizeof(DWORD));
+			memcpy((BYTE*)lockRect.pBits + lockRect.Pitch * destY + 4 * destX, &color, sizeof(DWORD));
 		}
 	}
 
-	// ‡E ƒAƒ“ƒƒbƒN
+	// â‘§ ã‚¢ãƒ³ãƒ­ãƒƒã‚¯
 	pTex->UnlockRect(0);
 
-	// GDIƒNƒŠ[ƒ“ƒAƒbƒv
+	// â‘¨ ã‚¯ãƒªãƒ¼ãƒ³ã‚¢ãƒƒãƒ—
 	DeleteObject(hFont);
 	DeleteDC(hDC);
 	delete[] pBmp;
 
-	// ‡F DirectX•`‰æ—pƒZƒbƒgƒAƒbƒv
+	// â‘© DirectXç”¨ã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—
 	BindTexture(pTex);
+
+	return this;
 }
 
 //=============================================
-// ƒrƒbƒgƒ}ƒbƒvæ“¾iUnicode‘Î‰”Åj
+// ãƒ“ãƒƒãƒˆãƒãƒƒãƒ—å–å¾—ï¼ˆUnicodeå¯¾å¿œç‰ˆï¼‰
 //=============================================
 BYTE* My::CFont::GetFontBitmap(HDC hDC, WCHAR c, GLYPHMETRICS& gm, int& bmpWidth, int& bmpHeight, int& level)
 {
-	level = GGO_GRAY8_BITMAP; // ‚•i¿ƒOƒŒ[ƒXƒP[ƒ‹
+	level = GGO_GRAY8_BITMAP; // é«˜å“è³ªã‚°ãƒ¬ãƒ¼ã‚¹ã‚±ãƒ¼ãƒ«
 
-	MAT2 mat = { {0,1}, {0,0}, {0,0}, {0,1} }; // ƒXƒP[ƒŠƒ“ƒO‚ğ1:1‚É
+	MAT2 mat = { {0,1}, {0,0}, {0,0}, {0,1} }; // ã‚¹ã‚±ãƒ¼ãƒªãƒ³ã‚°ã‚’1:1ã«
 	DWORD bufSize = GetGlyphOutlineW(hDC, c, level, &gm, 0, NULL, &mat);
 	if (bufSize == GDI_ERROR || bufSize == 0) return nullptr;
 
 	BYTE* pBmp = new BYTE[bufSize];
 	GetGlyphOutlineW(hDC, c, level, &gm, bufSize, pBmp, &mat);
 
-	// ‰¡•‚ğ4‚Ì”{”‚É‘µ‚¦‚é
+	// æ¨ªå¹…ã‚’4ã®å€æ•°ã«æƒãˆã‚‹
 	bmpWidth = gm.gmBlackBoxX + (4 - (gm.gmBlackBoxX % 4)) % 4;
 	bmpHeight = gm.gmBlackBoxY;
 

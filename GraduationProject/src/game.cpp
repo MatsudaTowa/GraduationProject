@@ -51,9 +51,13 @@ HRESULT My::CGame::Init()
 
 	SET_CAMERA_IDX(0);
 
-	const wchar_t* text = L"あいうえお";
 
-	GET_FONT_MANAGER->Regist(text, { 100.0f,500.0f,0.0f }, 50, 55, 00, 1);
+	//TODO:フォントは要修正
+	const wchar_t* text_000 = L"ワロタ";
+	const wchar_t* text_001 = L"うおｗ";
+
+	GET_FONT_MANAGER->Regist(text_000, { 100.0f,500.0f,0.0f }, 50.0f, 80, 0, 5);
+	GET_FONT_MANAGER->Regist(text_001, { 100.0f,300.0f,0.0f }, 50.0f, 80, 0, 6);
 
 	CEnemyManager* enemy_manager = CGameManager::GetInstance()->GetEnemyManager();
 	if (enemy_manager == nullptr)

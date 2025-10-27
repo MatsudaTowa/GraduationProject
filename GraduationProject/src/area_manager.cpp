@@ -143,8 +143,6 @@ void My::CAreaManager::SelectArea()
 		}
 	}
 
-	
-
 	for (int i = 0; i < CInputMouse::AREA::MAX; ++i)
 	{
 		if (i != area)
@@ -161,7 +159,7 @@ void My::CAreaManager::SelectArea()
 	}
 }
 
-void My::CAreaManager::player_cast(CGamePlayer* player, CInputMouse::AREA area, int& life)
+void My::CAreaManager::player_cast(CGamePlayer* player, My::CInputMouse::AREA area, int& life)
 {
 	if (player == nullptr)
 	{
