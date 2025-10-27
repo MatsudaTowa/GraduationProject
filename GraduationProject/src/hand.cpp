@@ -11,13 +11,16 @@
 #include "card_deffence.h"
 #include "card_assist.h"
 #include "game.h"
+#include "active_manager.h"
+#include "active_scene_state.h"
 
 My::CHand::CHand() :
 	m_SelectNum(-1),
 	m_TotalNum(0),
 	m_IsPassStart(false),
 	m_FrontSelectNum(-1),
-	m_IsPickUp(false)
+	m_IsPickUp(false),
+	m_handtype(NEUTRAL)
 {
 	for (int i = 0; i < MAX_HANDSCARD; i++)
 	{
@@ -80,7 +83,10 @@ void My::CHand::Update()
 	}
 
 	// 手札選択
-	Select();	
+	Select();
+
+	// カードキャスト
+	Cast();
 
 	// カード除去
 	DeleteCard();
@@ -97,26 +103,51 @@ void My::CHand::Select()
 		for (int i = 0; i < m_TotalNum; i++)
 		{// すべてのカードを判定
 
+			if (!m_pCard[i])
+				continue;
+
 			// マウスでカード選択
 			m_IsPickUp = m_pCard[i]->CardSelectToMouse();
 
 			if (m_IsPickUp)
 			{// どれかのカードが選択されたら
 				m_SelectNum = i;	// 今の配列番号を一時格納しておく
+				//CGameManager::GetInstance()->ChangeState(new CCardCast);
 				break;
 			}
 		}
 	}
 	else
 	{
-		// 選択番号のカードのみ判定する
-		m_IsPickUp = m_pCard[m_SelectNum]->CardSelectToMouse();
+		if (!m_pCard[m_SelectNum])
+			return;
 
 		// 選択番号のカードが非選択状態になったら
 		if (m_pCard[m_SelectNum]->GetStateNum() == CCardState::CARD_NEUTRAL)
+		{
+			CGameManager::GetInstance()->ChangeState(new CDuel);
 			m_IsPickUp = false;	// 選択されていない状態にする
+		}
+		else
+		{
+			// 選択番号のカードのみ判定する
+			m_IsPickUp = m_pCard[m_SelectNum]->CardSelectToMouse();
+		}
 	}
+}
 
+//===========================================================================================================
+// カードのキャスト
+//===========================================================================================================
+void My::CHand::Cast()
+{
+	if (!m_pCard[m_SelectNum] || m_SelectNum < 0)
+		return;
+
+	if (m_pCard[m_SelectNum]->GetStateNum() == CCardState::CARD_CAST)
+	{
+		//CGameManager::GetInstance()->ChangeState(new CCardCast);
+	}
 }
 
 //===========================================================================================================
@@ -133,13 +164,27 @@ void My::CHand::SelectStateSet()
 		}
 	}
 
-	if (m_SelectNum <= -1)
+	if (!m_pCard[m_SelectNum]||m_SelectNum <= -1)
 		return;
 
 	// 選択中のカードのステートを変える
 	if (m_pCard[m_SelectNum] != nullptr)
 	{
 		m_pCard[m_SelectNum]->ChangeState(CCardState::CARD_STATE::CARD_PICKUP);
+	}
+}
+
+void My::CHand::HandTypeUpdate()
+{
+	switch (m_handtype)
+	{
+	case SELECT:
+		Select();
+		break;
+
+	case CAST:
+		Cast();
+		break;
 	}
 }
 
@@ -233,6 +278,7 @@ void My::CHand::HandDraw(int drawnum)
 My::CHand* My::CHand::Create()
 {
 	CHand* pHand = new CHand();
+	//CGameManager::GetInstance()->SetHand(pHand);
 
 	pHand->Init();
 

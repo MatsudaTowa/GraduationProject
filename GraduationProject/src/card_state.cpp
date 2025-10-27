@@ -110,14 +110,13 @@ void My::CCardStateCast::Init(CCard* cpy)
 	if (cpy == nullptr)
 		return;
 
+	//CGameManager::GetInstance()->ChangeState(new CCardCast);
+
 	// 今だけわかりやすく位置を変える
 	D3DXVECTOR3 pos = cpy->GetPos();
 	pos.z += 20.0f;
 
 	cpy->SetPos(pos);
-
-	//// ゲームのステートをキャスト状態に変える
-	//CGameManager::GetInstance()->ChangeState(new CCardCast());	
 }
 
 //=======================================================================================
@@ -125,26 +124,14 @@ void My::CCardStateCast::Init(CCard* cpy)
 //=======================================================================================
 void My::CCardStateCast::Update(CCard* cpy)
 {
-	// キーボードを取得
-	CInputKeyboard* pKeyboard = CManager::GetInstance()->GetKeyboard();
-	bool IsSelectPlayer = false;	// プレイヤーを選択した
+	if (cpy == nullptr)
+		return;
 
-	// TODO : 一旦ここで判別をしている。
-	if (pKeyboard->GetTrigger(DIK_1))
-	{
-		IsSelectPlayer = true;
-	}
-	if (pKeyboard->GetTrigger(DIK_2))
-	{
-		IsSelectPlayer = true;
-	}
-	if (pKeyboard->GetTrigger(DIK_3))
-	{
-		IsSelectPlayer = true;
-	}
+	float mag = 30.0f;
 
-	if(IsSelectPlayer)
-		cpy->ChangeState(CCardState::CARD_STATE::CARD_STAY);
+	cpy->SetSize({ mag * 1.2f,mag,mag });
+
+	//cpy->ChangeState(CCardState::CARD_STATE::CARD_STAY);
 }
 
 //===========================================================================================================

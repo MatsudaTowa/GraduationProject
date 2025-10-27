@@ -83,10 +83,9 @@ void My::CCard::Update()
 
 	D3DXVECTOR3 rot = pCamera->GetRot();
 	rot.x += -1.2f;
-	
-	//// マウスでカード選択
-	//CardSelectToMouse();
 
+	CardCastToMouse();
+	
 	m_pState->Update(this);
 
 	SetRot(rot);
@@ -214,35 +213,116 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state)
 	}
 }
 
+void My::CCard::CardCastToMouse()
+{
+	// 選択状態とキャスト状態以外は通さない
+	if (GetStateNum() != CCardState::CARD_PICKUP&&
+		GetStateNum() != CCardState::CARD_CAST)
+		return;
+
+	// カメラ取得
+	CCamera* pCamera = GET_CAMERA(0);
+	// マウス取得
+	CInputMouse* pMouse = GET_INPUT_MOUSE;
+	// カード座標
+	D3DXVECTOR3 pos = GetPos();
+
+	// カード座標をスクリーン座標変換する
+	D3DXVECTOR3 screenpos;
+	screenpos = ConvertToScreenPos(pCamera, pos);
+
+	POINT mouse;
+	GetCursorPos(&mouse);
+	ScreenToClient(GET_HWND, &mouse);
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();
+
+	float sX=(float)mouse.x, sY=(float)mouse.y;
+
+	//クライアントサイズを取得
+	RECT rc;
+	GetClientRect(GET_HWND, &rc);
+	float width = (float)(rc.right - rc.left);
+	float height = (float)(rc.bottom - rc.top);
+	
+	D3DXMATRIX View, Proj;
+	pDevice->GetTransform(D3DTRANSFORMSTATETYPE::D3DTS_VIEW, &View);	// ビュー行列の取得
+	pDevice->GetTransform(D3DTRANSFORMSTATETYPE::D3DTS_PROJECTION, &Proj);	// 投影行列の取得
+
+	D3DXVECTOR3 resultpos = {0,0,0};
+
+	if (pMouse->GetPress(0))
+	{
+		ChangeState(CCardState::CARD_CAST);
+
+		screenpos = pMouse->GetMousePos();
+		CalcScreenToWorld(&resultpos, screenpos.x, screenpos.y, 1.0f, width, height, &View, &Proj);
+		resultpos.y += 20.0f;
+		SetPos(resultpos);
+	}
+	else if (pMouse->GetRelease(0))
+	{
+		ChangeState(CCardState::CARD_STAY);
+	}
+	
+}
+
 //===========================================================================================================
 // マウスでカードを選択する
 //===========================================================================================================
 bool My::CCard::CardSelectToMouse()
 {
-	// カメラの位置と角度に合わせる
+	if (GetStateNum() == CCardState::CARD_CAST||GetStateNum()==CCardState::CARD_STAY|| GetStateNum() == CCardState::CARD_TRIGGER
+		)
+		return true;
+
+	// カメラ取得
 	CCamera* pCamera = GET_CAMERA(0);
+	// マウス取得
 	CInputMouse* pMouse = GET_INPUT_MOUSE;
 
+	// マウス座標
 	D3DXVECTOR2 mousepos = { pMouse->GetMousePos().x, pMouse->GetMousePos().y };
+	// カード座標
 	D3DXVECTOR3 pos = GetPos();
 
-	D3DXVECTOR3 screenpos;
+	// カードの座標をスクリーン座標変換した座標を格納する変数
+	D3DXVECTOR3 screenpos,screenposN;
+	
+	// カード座標をスクリーン座標変換する
 	screenpos = ConvertToScreenPos(pCamera, pos);
+	// ニュートラル状態のカード座標をスクリーン座標変換する
+	screenposN = ConvertToScreenPos(pCamera, m_NeutralPos);
 
+	// マウスとカードの位置の差
 	D3DXVECTOR2 resultpos;
 	resultpos.x = mousepos.x - screenpos.x;
 	resultpos.y = mousepos.y - screenpos.y;
 
-	if (resultpos.x <= 50.0f * GetSize().x && resultpos.x >= -50.0f * GetSize().x)
+	// マウスとニュートラル状態のカードの位置の差
+	D3DXVECTOR2 resultposN;
+	resultposN.x = mousepos.x - screenposN.x;
+	resultposN.y = mousepos.y - screenposN.y;
+
+	
+
+	// 矩形判定
+	if (resultpos.x <= 50.0f * GetSize().x && resultpos.x >= -50.0f * GetSize().x &&
+		resultpos.y <= 100.0f * GetSize().y && resultpos.y >= -100.0f * GetSize().y ||
+		resultposN.x <= 50.0f && resultposN.x >= -50.0f &&
+		resultposN.y <= 100.0f && resultposN.y >= -100.0f)
 	{
+		// カード選択状態にする
 		ChangeState(CCardState::CARD_PICKUP);
 		return true;
 	}
 	else
 	{
+		// カード非選択状態にする
 		ChangeState(CCardState::CARD_NEUTRAL);
 		return false;
 	}
+
+	return false;
 }
 
 

@@ -58,6 +58,11 @@ namespace My
 		void Select();
 
 		/**
+		* @brief 選択
+		*/
+		void Cast();
+
+		/**
 		* @brief 手札を引く
 		* @param [in]ドロー数
 		*/
@@ -73,7 +78,24 @@ namespace My
 		*/
 		static CHand* Create();
 
+		/**
+		* @brief カードが選択されているかどうか
+		* @return 選択状態かのブール
+		*/
+		inline bool GetIsPickUp() { return m_IsPickUp; }
+
 	private:
+		typedef enum
+		{
+			NEUTRAL=0,
+			SELECT,
+			CAST,
+		}HANDTYPE;
+
+		HANDTYPE m_handtype;
+
+		void HandTypeUpdate();
+
 		/**
 		* @brief 手札のカードの状態変更
 		*/

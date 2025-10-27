@@ -65,8 +65,14 @@ namespace My
 
 		/**
 		 * @brief マウスでカードを選択する
+		 * @param [out]カードが選択されたかどうかを返す
 		 */
 		bool CardSelectToMouse();
+
+		/**
+		 * @brief カードをマウスでキャストする
+		 */
+		void CardCastToMouse();
 
 		/**
 		 * @brief 生成
@@ -106,8 +112,6 @@ namespace My
 		//static CCard* m_pCur;	//現在（最後尾）のポインタ
 		//CCard* m_pPrev;			//前のオブジェクトのポインタ
 		//CCard* m_pNext;			//次のオブジェクトのポインタ
-
-		
 
 		/**
 		 * @brief カードを選択しているか否か(trueだったら選択している)
