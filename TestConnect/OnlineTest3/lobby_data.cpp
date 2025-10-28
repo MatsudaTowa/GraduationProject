@@ -198,6 +198,93 @@ void CLobby_Data::Ready(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
 //=====================================
 bool CLobby_Data::ChangeToDuel(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
 {
+    //リストの周回
+    for (auto& iter : m_LobbyPlayerList)
+    {
+        //準備ができていないプレイヤーがいたらfalse
+        if (!iter->Getready())
+        {
+            return false;
+        }
+    }
+
     //ロビー中尚且つ全員が準備中ならtrueを返す
     return true;
+}
+
+//=====================================
+//プレイヤーリストの設定
+//=====================================
+void CLobby_Data::SetData(std::list<CPlayer::Data> data)
+{
+    //リストを削除
+    for (auto& iter : m_LobbyPlayerList)
+    {
+        //破棄の処理
+        if (iter != nullptr)
+        {
+            delete iter;
+            iter = nullptr;
+        }
+
+        m_LobbyPlayerList.remove(iter);
+    }
+
+    //リストの削除
+    m_LobbyPlayerList.clear();
+
+    //引数のリスト周回
+    for (const auto& iter : data)
+    {
+        //基底パラメータを代入
+        CLobby_Player* pPlayer = new CLobby_Player; //クラスを作成し代入
+        pPlayer->SetIndex(iter.nIndex);
+        pPlayer->SetRakNetID(iter.RakNetID);
+
+        //追加
+        m_LobbyPlayerList.push_back(pPlayer);
+    }
+}
+
+//=====================================
+//プレイヤーリストの取得
+//=====================================
+std::list<CPlayer::Data> CLobby_Data::GetData()
+{
+    //変数宣言
+    std::list<CPlayer::Data> List;
+    List.clear();
+
+    //現在のリストを基底にコピー
+    for (const auto& iter : m_LobbyPlayerList)
+    {
+        //基底構造体のリストに追加
+        CPlayer::Data Data;                     //変数
+        Data.nIndex = iter->GetIndex();         //番号
+        Data.RakNetID = iter->GetRakNetID();    //RakNetID
+        List.push_back(Data);                   //追加
+    }
+
+    return List;
+}
+
+//=====================================
+//開始メンバーを送信
+//=====================================
+void CLobby_Data::AddStartMember()
+{
+    //足りない数だけプレイヤーを送信
+    for (int i = m_LobbyPlayerList.size(); i < 4; i++)
+    {
+        //プレイヤーを追加
+        CLobby_Player* pPlayer = new CLobby_Player;
+
+        //パラメータの設定
+        pPlayer->SetIndex(i);                                       //番号
+        pPlayer->SetRakNetID(static_cast<RakNet::RakNetGUID>(-1));  //RakNetID(CPUとわかるように-1を代入)
+        pPlayer->SetReady(true);                                    //敵は準備がいらないのでtrue
+
+        //追加
+        m_LobbyPlayerList.push_back(pPlayer);                       
+    }
 }

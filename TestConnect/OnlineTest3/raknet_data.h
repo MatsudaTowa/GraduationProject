@@ -31,7 +31,9 @@ public:
 		ID_LOBY_MESSAGE_RECEIVE_READY,  //ロビーでの準備OKを送信
 		ID_LOBY_MESSAGE_SEND_START,		//ロビーでの開始合図を送信
 		ID_LOBY_MESSAGE_RECEIVE_START,	//ロビーでの開始合図を受信
-		ID_DUEL_MESSAGE_SERVER_START,	//サーバーが対戦用に変わったことを通知
+		ID_DUEL_MESSAGE_CLIENT_START,	//クライアントが対戦用に変わったことを通知
+		ID_DUEL_MESSAGE_START,			//対戦の開始を通知
+		ID_DUEL_MESSAGE_SEND_STATUS,	//ステータスを送る
 		ID_DUEL_MESSAGE_1,				//対戦時のメッセージ
 	};
 
@@ -45,6 +47,17 @@ public:
 	virtual void Ready(RakNet::Packet* packet, RakNet::RakPeerInterface* peer);							//準備確認処理
 	virtual bool ChangeToDuel(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) { return false; }	//対戦に変更
 	virtual void SendChangedServer(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) {}			//サーバーが変わったことを送信
+	virtual void AddStartMember() = 0;																	//開始メンバーの追加
+	virtual void SendStartMember(RakNet::RakPeerInterface* peer) = 0;									//開始メンバーの送信
+	virtual bool CheckStartBattle(RakNet::Packet* packet) = 0;											//対戦を開始するか
+	virtual void StartBattle(RakNet::RakPeerInterface* peer) = 0;										//対戦の開始
+	virtual void SendStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) = 0;				//ステータスを送る
+
+	//設定と取得
+
+	//プレイヤーのデータリスト
+	virtual void SetData(std::list<CPlayer::Data> data) = 0;	//設定
+	virtual std::list<CPlayer::Data> GetData() = 0;				//取得
 
 private:
 

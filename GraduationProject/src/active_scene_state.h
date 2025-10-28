@@ -72,6 +72,10 @@ namespace My
 		* @param [in]ゲームポインタ
 		*/
 		void Connect(CGame* game) override;
+
+		//対戦開始の合図
+		void SetBattleSign(bool sign) { m_isBattle = sign; }
+
 	private:
 		//正方形なのでサイズは統一
 		static constexpr float FIELD_SIZE = 200.0f;
@@ -90,9 +94,13 @@ namespace My
 		 * @param [in]enemy
 		 */
 		void CreatePlayers(My::CInputKeyboard* pKeyboard, std::list<My::CEnemy*>& enemy);
-	
+		/**
+		 * @brief オンラインでデュエルシーンに切り替える処理
+		 */
+		void OnlineChangeToDuel();
 
 		static int m_characterIdx; //ID TODO:サーバーから自身のID取得するから疑似的にオフラインで再現するためにstaticにしてます。
+		bool m_isBattle = false;
 	};
 
 	/** @brief デュエルクラス */

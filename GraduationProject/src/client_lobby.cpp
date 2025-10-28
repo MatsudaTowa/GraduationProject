@@ -195,7 +195,7 @@ void CClient_Lobby::Delete(RakNet::Packet* packet)
 //=====================================
 void CClient_Lobby::SendReady(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
 {
-    // データの作成
+    //データの作成
     RakNet::BitStream bsOut;
     bool isRaedy = false;
     int nID = My::CGameManager::GetInstance()->GetPlayer()->GetPlayerIdx();
@@ -316,26 +316,58 @@ void CClient_Lobby::ReceiveReady(RakNet::Packet* packet)
 //=====================================
 void CClient_Lobby::CardCast(RakNet::Packet* packet)
 {
-    // 受信側
-    RakNet::BitStream bsIn(packet->data, packet->length, false);
+   
+}
 
-    //人数を取得
-    unsigned char messageId;
-    int nPlayerNum = 0;
-    bsIn.Read(messageId);
-    bsIn.Read(nPlayerNum);
-
-    //接続人数が0以下なら抜ける
-    if (nPlayerNum <= 0) return;
-
-    //中身を空に
-    m_LobbyPlayerList.clear();
-    int nStart = 0;         //ずらし始める番号
-
-    //人数分読み込み
-    for (int i = 0; i < nPlayerNum; i++)
+//=====================================
+//基底パラメータの設定
+//=====================================
+void CClient_Lobby::SetParam(std::list<CClient::PlayerParam> list)
+{
+    //引数のリスト周回
+    for (auto iter : list)
     {
-        bool isReady = false;
-        bsIn.Read(isReady);
+        //基底パラメータを代入
+        LobbyPlayerParam Param;
+        Param.Param = iter;
+
+        //追加
+        m_LobbyPlayerList.push_back(Param);
+    }
+}
+
+//=====================================
+//基底パラメータの取得
+//=====================================
+std::list<CClient::PlayerParam> CClient_Lobby::GetParam()
+{
+    //パラメータ保存用
+    std::list<CClient::PlayerParam> ParamList;
+    ParamList.clear();  //初期化
+
+    //現在のプレイヤーを保存
+    for (auto iter : m_LobbyPlayerList)
+    {
+        ParamList.push_back(iter.Param);
+    }
+
+    return ParamList;
+}
+
+//=====================================
+//開始の合図を送信
+//=====================================
+void CClient_Lobby::SendStartSign(RakNet::RakPeerInterface* peer)
+{
+    //データの作成
+    RakNet::BitStream bsOut;
+    bsOut.Write((RakNet::MessageID)CRakNet::GameMessages::ID_LOBY_MESSAGE_SEND_START);
+    RakNet::SystemAddress server_address = peer->GetSystemAddressFromIndex(0);
+
+    //サーバーの確認
+    if (server_address != RakNet::UNASSIGNED_SYSTEM_ADDRESS)
+    {
+        // 全クライアントにブロードキャスト
+        peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, peer->GetSystemAddressFromIndex(0), false);
     }
 }

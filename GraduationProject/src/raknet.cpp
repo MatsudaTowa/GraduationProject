@@ -8,6 +8,7 @@
 //ヘッダーのインクルード
 #include "raknet.h"
 #include "client_lobby.h"
+#include "client_duel.h"
 
 //静的変数宣言
 CClient* CRakNet::m_Client = nullptr;
@@ -145,9 +146,25 @@ void CRakNet::Communication(RakNet::RakPeerInterface* peer)
         
             //準備OKの合図を受信する処理処理
             m_Client->ReceiveReady(packet);
-        
+            break;
 
-        break;
+        case ID_LOBY_MESSAGE_RECEIVE_START:
+            ChangeClient(new CClient_Duel); //クライアント処理を変更
+            m_Client->AddCPU(packet, peer); //コンピューターの追加
+            break;
+
+        case ID_DUEL_MESSAGE_CLIENT_START:
+            //ChangeClient(new CClient_Duel);
+            break;
+
+        case ID_DUEL_MESSAGE_START:
+            m_Client->StartBattle();
+            break;
+
+        case ID_DUEL_MESSAGE_SEND_STATUS:
+            m_Client->ReceiveStatus(packet);
+            break;
+
         case ID_UNCONNECTED_PONG:
         {
             RakNet::SystemAddress serverAddress = packet->systemAddress;
@@ -167,75 +184,46 @@ void CRakNet::Communication(RakNet::RakPeerInterface* peer)
 }
 
 //=====================================
-//対戦中の通信処理
+//クライアント処理の変更
 //=====================================
-void CRakNet::DuelComunication(RakNet::RakPeerInterface* peer)
+void CRakNet::ChangeClient(CClient* client)
 {
-    //変数宣言
-    RakNet::Packet* packet;
+    //引数にデータがあるか確認
+    if (client == nullptr) return;
 
-    //受信処理
-    for (packet = peer->Receive(); packet; peer->DeallocatePacket(packet), packet = peer->Receive())
+    //変数
+    std::list<CClient::PlayerParam> Param = {};    //基底のパラメータリスト
+    Param.clear();
+
+    //クライアントの中身を確認
+    if (m_Client != nullptr)
     {
-        switch (packet->data[0])
-        {
-        case ID_REMOTE_DISCONNECTION_NOTIFICATION:
-            std::cout << "Another client has disconnected.\n";
-            break;
-        case ID_REMOTE_CONNECTION_LOST:
-            std::cout << "Another client has lost the connection.\n";
-            break;
-        case ID_REMOTE_NEW_INCOMING_CONNECTION:
-            std::cout << "Another client has connected.\n";
-            break;
-        case ID_CONNECTION_REQUEST_ACCEPTED:
-            std::cout << "Our connection request has been accepted.\n";
-
-            {
-                // 送信側
-                //RakNet::BitStream bsOut;
-                // 送信
-                //peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
-            }
-
-
-            break;
-        case ID_NEW_INCOMING_CONNECTION:
-            std::cout << "A new client is connecting.\n";
-            break;
-        case ID_NO_FREE_INCOMING_CONNECTIONS:
-            std::cout << "The server is full.\n";
-            break;
-        case ID_DISCONNECTION_NOTIFICATION:
-            std::cout << "We have been disconnected.\n";
-            break;
-        case ID_CONNECTION_LOST:
-            std::cout << "Connection lost.\n";
-            break;
-        case ID_GAME_MESSAGE_1:
-
-        break;
-        case ID_CONNECT_MESSAGE_1:
-        {
-            //登録処理
-            m_Client->Regist(packet);
-        }
-
-        break;
-        case ID_UNCONNECTED_PONG:
-        {
-            RakNet::SystemAddress serverAddress = packet->systemAddress;
-            std::cout << "Server found at: " << serverAddress.ToString() << std::endl;
-
-            // サーバーに接続
-            peer->Connect(serverAddress.ToString(false), CRakNet::PORT, 0, 0);
-            std::cout << "Connecting to " << serverAddress.ToString() << "...\n";
-            break;
-        }
-
-        default:
-            std::cout << "Message with identifier " << (int)packet->data[0] << " has arrived.\n";
-            break;
-        }
+        Param = m_Client->GetParam();
+        //クライアントの削除
+        delete m_Client;
+        m_Client = nullptr;
     }
+
+    //代入
+    m_Client = client;
+
+    //基底パラメータの引き継ぎ
+    m_Client->SetParam(Param);
+}
+
+//=====================================
+//開始の合図を送信
+//=====================================
+void CRakNet::SendStartSign()
+{
+    //開始の合図を送る処理
+    m_Client->SendStartSign(m_pPeer);
+}
+
+//=====================================
+//ステータスの送信
+//=====================================
+void CRakNet::SendStatus()
+{
+    m_Client->SendStatus(m_pPeer);
 }

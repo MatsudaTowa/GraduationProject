@@ -19,22 +19,35 @@ class CDuel_Data : public CRakNet_Data
 public:
 
 	//関数
-	CDuel_Data() {} 	//コンストラクタ
-	~CDuel_Data() {}	//デストラクタ
+	CDuel_Data() : m_DuelPlayerList(), m_isCheckStart{ false,false,false,false }{} 	//コンストラクタ
+	~CDuel_Data() {}										//デストラクタ
 
 	//送受信の処理
 	void NewConnection(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;		//新しく接続する処理
 	void DisConnection(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;		//接続切断処理
 	void Ready(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;				//準備確認処理
 	void SendChangedServer(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;	//サーバーが変わったことを送信する処理
+	void AddStartMember() override {}															//開始メンバーの追加
+	void SendStartMember(RakNet::RakPeerInterface* peer) override;								//開始メンバーの送信
+	bool CheckStartBattle(RakNet::Packet* packet) override;										//対戦を開始するか
+	void StartBattle(RakNet::RakPeerInterface* peer) override;									//対戦の開始
+	void SendStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;			//ステータスを送る
+
+	//プレイヤーのデータリスト
+	void SetData(std::list<CPlayer::Data> data) override;	//設定
+	std::list<CPlayer::Data> GetData() override;			//取得
 
 private:
+
+	//定数
+	static constexpr int MAX_CLIENT{ 4 };	//最大人数
 
 	//関数
 	void SendPlayerNum(RakNet::RakPeerInterface* peer, GameMessages message);	//プレイヤー数を送信する関数
 
 	//変数
 	std::list<CDuel_Player*> m_DuelPlayerList;	//ロビープレイヤー保管用変数
+	bool m_isCheckStart[MAX_CLIENT];			//開始するかのフラグ
 };
 
 #endif

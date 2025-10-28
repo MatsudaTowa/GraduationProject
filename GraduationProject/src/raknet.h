@@ -38,6 +38,9 @@ public:
 		ID_LOBY_MESSAGE_RECEIVE_READY,  //ロビーでの準備OKを受信
 		ID_LOBY_MESSAGE_SEND_START,		//ロビーでの開始合図を送信
 		ID_LOBY_MESSAGE_RECEIVE_START,	//ロビーでの開始合図を受信
+		ID_DUEL_MESSAGE_CLIENT_START,	//クライアントが対戦用に変わったことを通知
+		ID_DUEL_MESSAGE_START,			//対戦の開始を通知
+		ID_DUEL_MESSAGE_SEND_STATUS,	//ステータスを送る
 		ID_DUEL_MESSAGE_1,				//対戦時のメッセージ
 	};
 
@@ -54,7 +57,9 @@ public:
 	void Accept();		//接続待ち受け処理
 	void Uninit();		//終了処理
 	static void Communication(RakNet::RakPeerInterface* peer);		//通信処理
-	static void DuelComunication(RakNet::RakPeerInterface* peer);	//対戦中の通信処理
+	//static void DuelComunication(RakNet::RakPeerInterface* peer);	//対戦中の通信処理
+	void SendStartSign();											//開始の合図を送信
+	void SendStatus();												//ステータスの送信
 
 	//設定と取得
 	RakNet::RakPeerInterface* GetPeer() { return m_pPeer; }	//ピアの取得
@@ -65,6 +70,9 @@ public:
 
 	//クライアントクラスの取得
 	CClient* GetClient() { return m_Client; }
+
+	//クライアントの変更
+	static void ChangeClient(CClient* client);
 
 private:
 

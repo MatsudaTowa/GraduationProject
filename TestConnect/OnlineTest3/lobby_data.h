@@ -27,6 +27,15 @@ public:
 	void DisConnection(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;	//接続切断処理
 	void Ready(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;			//準備確認処理
 	bool ChangeToDuel(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;		//対戦準備中
+	void AddStartMember() override;															//開始メンバーを追加
+	void SendStartMember(RakNet::RakPeerInterface* peer) override {}						//開始メンバーの送信
+	bool CheckStartBattle(RakNet::Packet* packet) override { return false; }				//対戦を開始するか
+	void StartBattle(RakNet::RakPeerInterface* peer) override {}							//対戦の開始
+	void SendStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override {}		//ステータスを送る
+
+	//プレイヤーのデータリスト
+	void SetData(std::list<CPlayer::Data> data) override;	//設定
+	std::list<CPlayer::Data> GetData() override;			//取得
 
 private:
 

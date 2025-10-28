@@ -6,6 +6,7 @@
 //================================
 #include "area_manager.h"
 #include "active_manager.h"
+#include "raknet.h"
 
 //================================
 // コンストラクタ
@@ -138,8 +139,11 @@ void My::CAreaManager::SelectArea()
 					--life;
 				}
 				itr->SetLife(life);
-				
 			}
+
+			if (!CRakNet::GetInstance()->GetOnline()) return;
+			//通信処理
+			CRakNet::GetInstance()->SendStatus();
 		}
 	}
 

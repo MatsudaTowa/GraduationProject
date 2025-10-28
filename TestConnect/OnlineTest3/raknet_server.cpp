@@ -142,15 +142,34 @@ void CRakNet_Server::Communication(RakNet::RakPeerInterface* peer)
                 m_pRakNetData->Ready(packet, peer);
                 break;
 
-            case CRakNet_Data::GameMessages::ID_LOBY_MESSAGE_RECEIVE_START:
+            case CRakNet_Data::GameMessages::ID_LOBY_MESSAGE_SEND_START:
 
+                std::cout << "開始の合図を受信\n";
                 //ロビーから戦闘に切り替わるフラグを受信したら
                 if (m_pRakNetData->ChangeToDuel(packet, peer))
                 {
                     //データの変更
                     ChangeData(new CDuel_Data);
+
+                    //開始メンバーの送信処理
+                    m_pRakNetData->SendStartMember(peer);
                 }
                 
+                break;
+
+            case CRakNet_Data::GameMessages::ID_DUEL_MESSAGE_CLIENT_START:
+
+                //バトルを開始するか確認
+                if (m_pRakNetData->CheckStartBattle(packet))
+                {
+                    m_pRakNetData->StartBattle(peer);
+                }
+                
+                break;
+
+            case CRakNet_Data::GameMessages::ID_DUEL_MESSAGE_SEND_STATUS:
+
+                m_pRakNetData->SendStatus(packet, peer);
                 break;
 
             default:
@@ -177,13 +196,25 @@ void CRakNet_Server::ChangeData(CRakNet_Data* data)
     //上書き先のデータがあるか確認
     if (data == nullptr) return;
 
+    //変数の上書き
+    std::list<CPlayer::Data> DataList;
+    DataList.clear();
+
+    //メンバーの追加(CPU)
+    m_pRakNetData->AddStartMember();
+
     //データの中身を確認
     if (m_pRakNetData != nullptr)
     {
+        //基底パラメータの保存
+        DataList = m_pRakNetData->GetData();
+
+        //削除
         delete m_pRakNetData;
         m_pRakNetData = nullptr;
     }
 
     //上書き
-    m_pRakNetData = data;
+    m_pRakNetData = data;               //クラスの変更
+    m_pRakNetData->SetData(DataList);   //データの引き継ぎ
 }

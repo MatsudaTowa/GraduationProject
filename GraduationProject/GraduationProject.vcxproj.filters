@@ -104,6 +104,7 @@
       <Filter>active_scene</Filter>
     </ClCompile>
     <ClCompile Include="src\font_manager.cpp" />
+    <ClCompile Include="src\client_duel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -210,6 +211,7 @@
     <ClInclude Include="src\ready_UI.h">
       <Filter>active_scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\client_duel.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">

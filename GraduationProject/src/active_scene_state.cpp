@@ -74,6 +74,9 @@ void My::CLobby::Lobby(CGame* game)
 		
 		CGameManager::GetInstance()->ChangeState(new CDuel);
 	}
+
+	//オンラインの対戦開始処理
+	OnlineChangeToDuel();
 }
 
 //=============================================
@@ -134,6 +137,53 @@ void My::CLobby::Connect(CGame* /*game*/)
 
 	//通信処理
 	CRakNet::GetInstance()->Communication(CRakNet::GetInstance()->GetPeer());
+}
+
+//=============================================
+//オンラインでデュエルシーンに切り替える処理
+//=============================================
+void My::CLobby::OnlineChangeToDuel()
+{
+	if (!CRakNet::GetInstance()->GetOnline()) return;
+
+	//弾く条件
+	if (CGameManager::GetInstance()->GetPlayer() == nullptr) return;			//プレイヤーが生成されているか
+
+	if (m_isBattle == true)
+	{
+		std::list<CEnemy*> enemy = CGameManager::GetInstance()->GetEnemyManager()->GetList();
+
+		for (auto& itr : enemy)
+		{
+			if (itr == nullptr)
+			{
+				continue;
+			}
+			itr->ChangeState(new CEnemyDuelState);
+		}
+
+		CGameManager::GetInstance()->GetPlayer()->ChangeState(new CPlayerDuelState);
+
+		//地面生成
+		CField::Create(VEC3_RESET_ZERO, { FIELD_SIZE,0.0f,FIELD_SIZE }, new CGameField);
+
+		//エナジーUI枠表示
+		CEnergy_Gauge::CreateEnergy();
+
+		CGameManager::GetInstance()->ChangeState(new CDuel);
+		return;
+	}
+
+	if (CGameManager::GetInstance()->GetPlayer()->GetPlayerIdx() != 0) return;	//プレイヤーが１人目じゃないなら飛ばす
+
+	//入力デバイス取得
+	CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;
+
+	//Mキーでデュエルシーンに切り替え
+	if (pKeyboard->GetTrigger(DIK_M))
+	{
+		CRakNet::GetInstance()->SendStartSign();
+	}
 }
 
 //=============================================

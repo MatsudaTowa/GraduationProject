@@ -33,11 +33,23 @@ public:
 	virtual void Uninit();		//終了処理
 
 	//通信用関数
-	virtual void Regist(RakNet::Packet* packet);		//登録処理
-	virtual void Delete(RakNet::Packet* packet);		//削除処理
+	virtual void Regist(RakNet::Packet* packet);										//登録処理
+	virtual void Delete(RakNet::Packet* packet);										//削除処理
 	virtual void SendReady(RakNet::Packet* packet, RakNet::RakPeerInterface* peer);		//準備送信処理
-	virtual void ReceiveReady(RakNet::Packet* packet);	//準備受信処理
-	virtual void CardCast(RakNet::Packet* packet);		//カードのキャスト処理
+	virtual void ReceiveReady(RakNet::Packet* packet);									//準備受信処理
+	virtual void CardCast(RakNet::Packet* packet);										//カードのキャスト処理
+	virtual void SendStartSign(RakNet::RakPeerInterface* peer) = 0;						//開始の合図を送信
+	virtual void AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) = 0;	//コンピューターの追加
+	virtual void SendSuccessDuelLoad(RakNet::RakPeerInterface* peer) = 0;				//決闘読み込みの成功を送信
+	virtual void StartBattle() = 0;														//対戦の開始
+	virtual void SendStatus(RakNet::RakPeerInterface* peer) = 0;						//ステータスを送る
+	virtual void ReceiveStatus(RakNet::Packet* packet) = 0;								//ステータスを受信
+
+	//設定と取得
+
+	//パラメータ
+	virtual void SetParam(std::list<PlayerParam> list) = 0;	//設定
+	virtual std::list<PlayerParam> GetParam() = 0;			//取得
 
 private:
 
