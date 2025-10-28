@@ -130,6 +130,9 @@ namespace My
 		/*
 		* @brief 手札の配列
 		* TODO : いったん配列で管理。のちにリスト構造などの構造で管理予定
+		* HandList : 手札カード
+		* StayList : ステイ中のカード
+		* TriggerList : トリガーしたカード
 		*/ 
 		My::CCard* m_pCard[MAX_HANDSCARD];
 

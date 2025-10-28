@@ -126,7 +126,7 @@ void My::CHand::Select()
 		// 選択番号のカードが非選択状態になったら
 		if (m_pCard[m_SelectNum]->GetStateNum() == CCardState::CARD_NEUTRAL)
 		{
-			CGameManager::GetInstance()->ChangeState(new CDuel);
+			//CGameManager::GetInstance()->ChangeState(new CDuel);
 			m_IsPickUp = false;	// 選択されていない状態にする
 		}
 		else
@@ -225,8 +225,18 @@ void My::CHand::DeleteCard()
 	// 手札総数を減らす
 	m_TotalNum--;
 
-	//// 手札の位置をセットする
-	//SetHandCardPos();
+	// ステイ中のカードがあるかどうか
+	for (int i = 0; i < m_TotalNum; i++)
+	{
+		if (m_pCard[i]->GetStateNum() == CCardState::CARD_STATE::CARD_STAY)
+		{// あったら手札の整理をしない
+			return;
+		}
+	}
+
+	// 手札の位置をセットする
+	SetHandCardPos();
+	
 }
 
 //===========================================================================================================
@@ -305,7 +315,8 @@ void My::CHand::SetHandCardPos()
 	{
 		// カードの座標の設定
 		if (i != 0)
-		{// 一枚目以外は前の手札の位置を参照して "Interbal" 分横にずらす
+		{
+			// 一枚目以外は前の手札の位置を参照して "Interbal" 分横にずらす
 			m_pCard[i]->SetPos({ m_pCard[i - 1]->GetPos().x+posInterbal, m_pCard[i - 1]->GetPos().y, m_pCard[i - 1]->GetPos().z });
 		}
 		else
@@ -314,8 +325,6 @@ void My::CHand::SetHandCardPos()
 			firstpos = { xpos,m_CenterPos.y,m_CenterPos.z };
 			m_pCard[0]->SetPos(firstpos);
 		}
-		
-		
 
 		if (m_pCard[i]->GetStateNum() != CCardState::CARD_STAY)
 		{
@@ -325,7 +334,6 @@ void My::CHand::SetHandCardPos()
 			m_pCard[i]->ChangeState(CCardState::CARD_STATE::CARD_NEUTRAL);
 		}
 		
-
 		// 間隔を開ける
 		xpos += posInterbal*0.5f;
 	}

@@ -232,14 +232,8 @@ void My::CCard::CardCastToMouse()
 
 	// カード座標をスクリーン座標変換する
 	D3DXVECTOR3 screenpos;
-	screenpos = ConvertToScreenPos(pCamera, pos);
-
-	POINT mouse;
-	GetCursorPos(&mouse);
-	ScreenToClient(GET_HWND, &mouse);
+	//screenpos = ConvertToScreenPos(pCamera, pos);
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();
-
-	float sX=(float)mouse.x, sY=(float)mouse.y;
 
 	//クライアントサイズを取得
 	RECT rc;
