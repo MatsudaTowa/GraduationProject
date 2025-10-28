@@ -196,9 +196,6 @@
     <ClInclude Include="src\area_manager.h">
       <Filter>active_scene\area</Filter>
     </ClInclude>
-    <ClInclude Include="src\ready_UI.h">
-      <Filter>active_scene\lobby</Filter>
-    </ClInclude>
     <ClInclude Include="src\ready_txt.h">
       <Filter>active_scene\lobby</Filter>
     </ClInclude>
@@ -210,6 +207,9 @@
       <Filter>active_scene</Filter>
     </ClInclude>
     <ClInclude Include="src\font_manager.h" />
+    <ClInclude Include="src\ready_UI.h">
+      <Filter>active_scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">

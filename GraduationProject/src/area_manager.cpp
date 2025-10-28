@@ -134,7 +134,7 @@ void My::CAreaManager::SelectArea()
 				
 				life = itr->GetLife();
 				if (life > INT_ZERO)
-				{
+				{//TODO:‘I‘ð‚Å‚«‚È‚¢Ž|‚ÌUI•\Ž¦
 					--life;
 				}
 				itr->SetLife(life);

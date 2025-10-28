@@ -62,12 +62,6 @@ void My::CEnemy::Update()
 	CActiveSceneCharacter::Update();
 
 	Motion(); //ƒ‚[ƒVƒ‡ƒ“ˆ—
-
-	if (GetLife() <= INT_ZERO)
-	{
-		SetisDelete(true);
-		CGameManager::GetInstance()->GetEnemyManager()->Remove(this);
-	}
 }
 
 //=============================================
