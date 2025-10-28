@@ -28,7 +28,7 @@ namespace My
 		{
 			int deckSize;	//!<デッキの枚数
 			int trash;		//!<墓地枚数
-			int hand;		//!<手札枚数
+			int hand_num;		//!<手札枚数
 			int energy;		//!<エナジー
 			int life;		//!<体力
 		};
@@ -119,9 +119,9 @@ namespace My
 		 * @brief ハンド設定
 		 * @param [in]ハンド枚数
 		 */
-		inline void SetHand(int hand)
+		inline void SetHandNum(int hand)
 		{
-			m_status.hand = hand;
+			m_status.hand_num = hand;
 		}
 
 		/**
@@ -202,7 +202,7 @@ namespace My
 		 */
 		inline int GetHand()
 		{
-			return m_status.hand;
+			return m_status.hand_num;
 		}
 
 		/**

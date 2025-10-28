@@ -56,6 +56,7 @@ HRESULT My::CGame::Init()
 	//const wchar_t* text_000 = L"ƒƒƒ^";
 	//const wchar_t* text_001 = L"‚¤‚¨‚—";
 
+
 	//GET_FONT_MANAGER->Regist(text_000, { 100.0f,500.0f,0.0f }, 50.0f, 80, 0, 5);
 	//GET_FONT_MANAGER->Regist(text_001, { 100.0f,300.0f,0.0f }, 50.0f, 80, 0, 6);
 

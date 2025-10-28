@@ -38,7 +38,7 @@ HRESULT My::CActiveSceneCharacter::Init()
 	}
 	//ステータス設定
 	m_status.deckSize = START_DECK;
-	m_status.hand = START_HAND;
+	m_status.hand_num = START_HAND;
 	m_status.life = START_LIFE;
 	m_status.energy = START_ENERGY;
 	m_status.trash = INT_ZERO;

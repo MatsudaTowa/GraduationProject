@@ -111,6 +111,9 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 		pHand->Start();
 
 		pHand->Update();
+
+		//TODO:ƒnƒ“ƒh‚Ì‘”‚ð‚±‚±‚ÅŽæ“¾‚µÝ’è
+		//player->SetHandNum(pHand->GetTotal())
 	}
 
 	EnergyUp(player);
