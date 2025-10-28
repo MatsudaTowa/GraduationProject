@@ -53,11 +53,11 @@ HRESULT My::CGame::Init()
 
 
 	//TODO:フォントは要修正
-	const wchar_t* text_000 = L"ワロタ";
-	const wchar_t* text_001 = L"うおｗ";
+	//const wchar_t* text_000 = L"ワロタ";
+	//const wchar_t* text_001 = L"うおｗ";
 
-	GET_FONT_MANAGER->Regist(text_000, { 100.0f,500.0f,0.0f }, 50.0f, 80, 0, 5);
-	GET_FONT_MANAGER->Regist(text_001, { 100.0f,300.0f,0.0f }, 50.0f, 80, 0, 6);
+	//GET_FONT_MANAGER->Regist(text_000, { 100.0f,500.0f,0.0f }, 50.0f, 80, 0, 5);
+	//GET_FONT_MANAGER->Regist(text_001, { 100.0f,300.0f,0.0f }, 50.0f, 80, 0, 6);
 
 	CEnemyManager* enemy_manager = CGameManager::GetInstance()->GetEnemyManager();
 	if (enemy_manager == nullptr)
