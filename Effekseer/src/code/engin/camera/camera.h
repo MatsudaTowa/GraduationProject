@@ -7,10 +7,12 @@
 #ifndef _CUMERA_H_
 #define _CUMERA_H_
 //#include "../../system/pch.h"
+
+// 使わないならコメントアウトを外す
+#define NoCameraParamDraw 	// カメラ情報を表示するかどうか
+
 namespace My
 {
-#define s_bCameraDataDraw (true)	// カメラ情報を表示するかどうか
-
 	class CText;
 	class CCamera
 	{

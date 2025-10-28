@@ -6,7 +6,7 @@
 //============================================
 #ifndef _OBJECT_H_
 #define _OBJECT_H_
-//#include "../system/pch.h"	//プリコンパイルヘッダ
+#include "../system/pch.h"	//プリコンパイルヘッダ
 #include "../system/calculation.h"	// 計算用
 
 namespace My

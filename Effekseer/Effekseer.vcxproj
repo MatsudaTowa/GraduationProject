@@ -72,7 +72,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\student\Documents\チーム制作\卒業制作\GraduationProject\Effekseer\thirdparty\simpleini-master;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
   </PropertyGroup>
@@ -174,8 +174,8 @@
     <ClInclude Include="src\code\engin\light\light.h" />
     <ClInclude Include="src\code\object\3D\object_3D.h" />
     <ClInclude Include="src\code\object\3D\object_billboard.h" />
-    <ClInclude Include="src\code\object\effect\Effekseer.h" />
-    <ClInclude Include="src\code\object\effect\EffekseerManager.h" />
+    <ClInclude Include="src\code\object\effect\Effect.h" />
+    <ClInclude Include="src\code\object\effect\EffectManager.h" />
     <ClInclude Include="src\code\object\object.h" />
     <ClInclude Include="src\code\object\text\text.h" />
     <ClInclude Include="src\code\object\X\object_X.h" />
@@ -188,15 +188,15 @@
     <ClInclude Include="src\code\system\manager.h" />
     <ClInclude Include="src\code\system\pch.h" />
     <ClInclude Include="src\code\system\renderer.h" />
-    <ClInclude Include="src\code\scene\scene_effekseer.h" />
+    <ClInclude Include="src\code\scene\scene_effect.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\code\engin\camera\camera.cpp" />
     <ClCompile Include="src\code\engin\light\light.cpp" />
     <ClCompile Include="src\code\object\3D\object_3D.cpp" />
     <ClCompile Include="src\code\object\3D\object_billboard.cpp" />
-    <ClCompile Include="src\code\object\effect\Effekseer.cpp" />
-    <ClCompile Include="src\code\object\effect\EffekseerManager.cpp" />
+    <ClCompile Include="src\code\object\effect\Effectr.cpp" />
+    <ClCompile Include="src\code\object\effect\EffectManager.cpp" />
     <ClCompile Include="src\code\object\object.cpp" />
     <ClCompile Include="src\code\object\text\text.cpp" />
     <ClCompile Include="src\code\object\X\object_X.cpp" />
@@ -208,9 +208,10 @@
     <ClCompile Include="src\code\system\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/FI"pch.h" %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <ClCompile Include="src\code\system\renderer.cpp" />
-    <ClCompile Include="src\code\scene\scene_effekseer.cpp" />
+    <ClCompile Include="src\code\scene\scene_effect.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

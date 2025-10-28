@@ -6,7 +6,7 @@
 //===========================================
 #include "manager.h"	// マネージャー
 #include "../object/object.h"	// オブジェクト基底
-#include "../object/effect/EffekseerManager.h"	// エフェクトマネージャー
+#include "../object/effect/EffectManager.h"	// エフェクトマネージャー
 
 namespace My
 {

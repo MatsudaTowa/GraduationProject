@@ -272,7 +272,7 @@ namespace My
 
 		return pObjectX;
 	}
-	CObjectX* CObjectX::create(string aFileName)
+	CObjectX* CObjectX::create(std::string aFileName)
 	{
 		int nID = 0;
 		nID = CModelX::Load(aFileName.c_str());

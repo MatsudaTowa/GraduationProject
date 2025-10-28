@@ -4,23 +4,32 @@
 // Author:Uedakou
 // 
 //============================================
-#include "EffekseerManager.h"       // エフェクシアマネージャー
+#include "EffectManager.h"       // エフェクシアマネージャー
 #include <EffekseerRendererDX9.h>   // 
 #include <Effekseer.h>
 #include "../../system/manager.h"   // 全体マネージャー
 
+/// <summary>
+/// コンストラク
+/// </summary>
 My::CEffekseerManager::CEffekseerManager()
 {
     Init();
 }
-
+/// <summary>
+/// デストラクタ
+/// </summary>
 My::CEffekseerManager::~CEffekseerManager()
 {
 }
-
+/// <summary>
+/// 初期化処理
+/// </summary>
+/// <returns>初期化結果</returns>
 HRESULT My::CEffekseerManager::Init()
 {
-    CManager* pManager = CManager::GetInstance();
+    // マネージャー
+    CManager* pManager = CManager::GetInstance(); // マネージャー取得
     LPDIRECT3DDEVICE9 pDevice = pManager->GetRenderer()->GetDevice(); // デバイス取得
 
     // Effekseerマネージャ生成（最大同時エフェクト数1000）
@@ -28,6 +37,9 @@ HRESULT My::CEffekseerManager::Init()
 
     // DX9レンダラー生成（最大描画パーティクル数8000）
     m_rendererRef = EffekseerRendererDX9::Renderer::Create(pDevice, 8000);
+
+    // テクスチャ読み込み
+    m_managerRef->SetTextureLoader(m_rendererRef->CreateTextureLoader());
 
     // パーティクルタイプのレンダラー登録
     m_managerRef->SetSpriteRenderer(m_rendererRef->CreateSpriteRenderer());
@@ -50,7 +62,9 @@ HRESULT My::CEffekseerManager::Init()
 
     return S_OK;
 }
-
+/// <summary>
+/// 終了処理
+/// </summary>
 void My::CEffekseerManager::Uninit()
 {
     if (m_managerRef != nullptr) {
@@ -61,7 +75,9 @@ void My::CEffekseerManager::Uninit()
         m_rendererRef = nullptr;
     }
 }
-
+/// <summary>
+/// 更新処理
+/// </summary>
 void My::CEffekseerManager::Update()
 {
     if (m_managerRef == nullptr) return;
@@ -70,7 +86,9 @@ void My::CEffekseerManager::Update()
     m_managerRef->Update();
 
 }
-
+/// <summary>
+/// 描画処理
+/// </summary>
 void My::CEffekseerManager::Draw()
 {
 }

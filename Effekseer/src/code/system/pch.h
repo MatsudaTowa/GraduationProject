@@ -11,9 +11,9 @@
 // WindowsSDK
 #include <Windows.h>
 
-
 #include "d3d9.h"	 // 描画に必要
 #include "d3dx9.h"	 // 描画に必要
+
 #include "dinput.h" //入力処理に必要
 #include "xaudio2.h"
 #include "Xinput.h"
@@ -22,8 +22,9 @@
 #include <string>	// 文字列型
 #include <iostream>	// インアウトストリーム
 
+
 // C++ テキスト
-using namespace std;
+
 
 // マクロ定義
 #define SCREEN_W (1280)			// ウィンドウの幅
@@ -38,6 +39,7 @@ using namespace std;
 
 #define CLASS_NAME "CatasrtopheMobile"		// ウィンドウクラス名前
 #define WINDOW_NAME "CatasrtopheMobile"		// ウィンドウの名前
+
 
 namespace My {
 	// 頂点情報[2D]の構造体を定義
@@ -57,4 +59,5 @@ namespace My {
 		D3DXVECTOR2 tex;	// テクスチャ座標
 	}VERTEX_3D;
 }
+
 #endif // !_PCH_H_

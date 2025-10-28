@@ -139,7 +139,7 @@ namespace My
 		// デバッグビルド時のみ有効
 #if _DEBUG
 	// カメラ情報を表示するフラグが有効な場合
-#if s_bCameraDataDraw
+#ifndef NoCameraParamDraw
 	// デバッグテキスト描画用オブジェクトを取得
 		CText* pDebugText = pManager->GetDebugText();
 
@@ -154,7 +154,7 @@ namespace My
 
 		// 整形した文字列をデバッグテキストに表示
 		pDebugText->PrintText(aStr);
-#endif // s_bCameraDataDraw
+#endif // NoCameraParamDraw
 #endif // _DEBUG
 	}
 	/// <summary>

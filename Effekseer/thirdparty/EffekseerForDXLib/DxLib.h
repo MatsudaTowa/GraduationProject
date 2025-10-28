@@ -8,6 +8,8 @@
 
 #ifndef DX_LIB_H
 #define DX_LIB_H
+// 下記のコメントのある場所は私的理由により手を加えている
+// 私的編集
 
 #include "DxCompileConfig.h"
 
@@ -1852,6 +1854,10 @@ typedef struct tagIMAGEFORMATDESC
 
 #endif // DX_NOTUSE_DRAWFUNCTION
 
+// 私的編集
+// xinput.hのXINPUT_STATEと競合を防ぐために追加
+#ifndef DX_NON_INPUT
+
 // DirectInput のジョイパッド入力情報
 typedef struct tagDINPUT_JOYSTATE
 {
@@ -1877,6 +1883,8 @@ typedef struct tagXINPUT_STATE
 	short					ThumbRX ;						// 右スティックの横軸値( -32768 ～ 32767 )
 	short					ThumbRY ;						// 右スティックの縦軸値( -32768 ～ 32767 )
 } XINPUT_STATE ;
+// 私的編集
+#endif // !DX_NON_INPUT
 
 // タッチパネルの１箇所分のタッチの情報
 typedef struct tagTOUCHINPUTPOINT

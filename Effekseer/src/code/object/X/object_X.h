@@ -71,7 +71,7 @@ namespace My
 
 
 		static CObjectX* create(const char* aFileName);	// ê∂ê¨
-		static CObjectX* create(string aFileName);	// ê∂ê¨
+		static CObjectX* create(std::string aFileName);	// ê∂ê¨
 	protected:
 	private:
 		TYPE m_type;	// éÌóﬁ

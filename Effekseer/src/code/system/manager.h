@@ -11,7 +11,7 @@
 #include "input.h"						// 入力
 #include "../engin/light/light.h"		// ライト
 #include "../engin/camera/camera.h"		// カメラ
-#include "../object/effect/EffekseerManager.h"	// エフェクシアマネージャー
+#include "../object/effect/EffectManager.h"	// エフェクシアマネージャー
 
 #include "../scene/scene_maneger.h"		// シーンマネージャー
 

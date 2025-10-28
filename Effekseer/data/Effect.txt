@@ -1,0 +1,5 @@
+Filepas = 
+POS = 0 0 0
+ROT = 0 0 0
+SCL = 1 1 1
+COL = 1 1 1 1

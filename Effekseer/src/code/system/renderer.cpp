@@ -197,7 +197,7 @@ namespace My
 		{
 			// FPSを取得
 			int nCountFPS = My::GetFPS();
-			string aStr;	// 表示用の文字列バッファ
+			std:: string aStr;	// 表示用の文字列バッファ
 			wsprintf(&aStr[0], "FPS:%d\n", nCountFPS);	// テキスト保持
 			pText->PrintText(aStr);
 		}

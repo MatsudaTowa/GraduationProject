@@ -13,12 +13,12 @@ namespace My
 	class CEffekseerManager : CObject
 	{
 	public:
-		CEffekseerManager();
-		~CEffekseerManager();
-		HRESULT Init()override;
-		void Uninit()override;
-		void Update()override;
-		void Draw()override;
+		CEffekseerManager();		// コンストラクタ
+		~CEffekseerManager();		// デストラクタ
+		HRESULT Init()override;		// 初期化
+		void Uninit()override;		// 終了
+		void Update()override;		// 更新
+		void Draw()override;		// 描画
 
 		/// <summary>
 		/// エフェクシアマネージャー取得

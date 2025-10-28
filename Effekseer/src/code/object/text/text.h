@@ -42,9 +42,9 @@ namespace My{
 			m_Space = { nSpaceSW, nSpaceSH, nSpaceBW, nSpaceBH };	//領域
 		}
 		void SetText(const char* text);	// テキスト設定
-		void SetText(string text);		// テキスト設定
+		void SetText(std::string text);		// テキスト設定
 
-		void PrintText(string text) { m_aText += text; }	// 与えられた文字列を内部テキストに追加
+		void PrintText(std::string text) { m_aText += text; }	// 与えられた文字列を内部テキストに追加
 
 		LPD3DXFONT GetFont();	// フォント取得
 
@@ -54,7 +54,8 @@ namespace My{
 		static CText* create(int nHyde, UINT nWide, UINT nBold, UINT nMip, bool bItalic);
 		static CText* create(int nHyde, UINT nWide, UINT nBold, UINT nMip, bool bItalic, DWORD nFont, DWORD nSize, DWORD nPitch, Type type);
 	protected:
-		static string m_aFontList[Max];	// フォント名
+		static std::string m_aFontList[Max];	// フォント名
+		std::string	m_aText;	// テキスト
 
 		int		m_nHyde;	// 文字高さ	
 		UINT	m_nWide;	// 文字幅
@@ -68,7 +69,7 @@ namespace My{
 		RECT	m_Space;
 		D3DXCOLOR m_pCol;	// 色
 		LPD3DXFONT m_pFont;// フォントのポインタ
-		string	m_aText;	// テキスト
+
 	public:
 		static const int	s_nHyde;	// 文字高さ	
 		static const UINT	s_nWide;	// 文字幅
@@ -82,7 +83,7 @@ namespace My{
 		static const RECT	s_Space;
 		static const D3DXCOLOR s_pCol;	// 色
 		static const LPD3DXFONT s_pFont;// フォントのポインタ
-		static const string	s_aText;	// テキスト
+		static const std::string	s_aText;	// テキスト
 	};
 }
 #endif // !_TEXT_H_

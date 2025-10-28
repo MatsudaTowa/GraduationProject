@@ -8,7 +8,7 @@
 #include <strsafe.h>			// StringCbPrintfを使用するにのに必要
 #include "../../system/manager.h"// ゲーム全体を管理するクラス
 // フォントの種類
-string My::CText::m_aFontList[Max] = {	
+std::string My::CText::m_aFontList[Max] = {	
 	{"Terminal"},
 };
 
@@ -23,12 +23,13 @@ const DWORD	My::CText::s_nPitch = DEFAULT_PITCH;		// ピッチ
 const My::CText::Type	My::CText::s_type = Type::Terminal;		// 書体を含む文字列
 const RECT	My::CText::s_Space = { 0, 0, SCREEN_H , SCREEN_W };	// 表示領域
 const D3DXCOLOR My::CText::s_pCol = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);	// 色
-const string	My::CText::s_aText = "テキストを入力してください";		// テキスト
+const std::string	My::CText::s_aText = "テキストを入力してください";		// テキスト
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
-My::CText::CText()
+My::CText::CText():
+	CObject()
 {
 	m_pFont = nullptr;		// フォント
 	m_nHyde = s_nHyde;		// 文字高さ
@@ -182,7 +183,7 @@ void My::CText::SetText(const char* text)
 /// テキスト設定
 /// </summary>
 /// <param name="text">設定したいテキスト</param>
-void My::CText::SetText(string text)
+void My::CText::SetText(std::string text)
 {
 	m_aText = text;
 }
