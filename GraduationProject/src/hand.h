@@ -16,6 +16,7 @@ namespace My
 	/**
 	* @brief 手札のクラス
 	*/
+
 	class CHand
 	{
 	public:
@@ -84,6 +85,12 @@ namespace My
 		*/
 		inline bool GetIsPickUp() { return m_IsPickUp; }
 
+		/**
+		* @brief 手札枚数の取得
+		* @return 手札枚数
+		*/
+		inline int GetTotalNum() { return m_TotalNum; }
+
 	private:
 		typedef enum
 		{
@@ -131,9 +138,6 @@ namespace My
 
 		/* @brief 選択番号(手札を左から見た順番) */
 		int m_SelectNum;
-
-		/* @brief 選択番号(手札を左から見た順番) */
-		int m_FrontSelectNum;
 
 		/* @brief スタートを通ったかどうか */
 		bool m_IsPassStart;

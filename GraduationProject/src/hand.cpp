@@ -18,7 +18,6 @@ My::CHand::CHand() :
 	m_SelectNum(-1),
 	m_TotalNum(0),
 	m_IsPassStart(false),
-	m_FrontSelectNum(-1),
 	m_IsPickUp(false),
 	m_handtype(NEUTRAL)
 {
@@ -97,8 +96,10 @@ void My::CHand::Update()
 //===========================================================================================================
 void My::CHand::Select()
 {
+	// ifをなくせば複数キャスト可能だが、複数同時選択されてしまう
+
 	// 何も選択されていない場合
-	if (!m_IsPickUp)
+	//if (!m_IsPickUp)
 	{
 		for (int i = 0; i < m_TotalNum; i++)
 		{// すべてのカードを判定
@@ -117,7 +118,7 @@ void My::CHand::Select()
 			}
 		}
 	}
-	else
+	//else
 	{
 		if (!m_pCard[m_SelectNum])
 			return;
@@ -224,8 +225,8 @@ void My::CHand::DeleteCard()
 	// 手札総数を減らす
 	m_TotalNum--;
 
-	// 手札の位置をセットする
-	SetHandCardPos();
+	//// 手札の位置をセットする
+	//SetHandCardPos();
 }
 
 //===========================================================================================================
@@ -314,10 +315,16 @@ void My::CHand::SetHandCardPos()
 			m_pCard[0]->SetPos(firstpos);
 		}
 		
-		// 元の位置を設定しておく
-		m_pCard[i]->SetNeutralPos(m_pCard[i]->GetPos());
-		// 一度ニュートラルにリセットする
-		m_pCard[i]->ChangeState(CCardState::CARD_STATE::CARD_NEUTRAL);
+		
+
+		if (m_pCard[i]->GetStateNum() != CCardState::CARD_STAY)
+		{
+			// 元の位置を設定しておく
+			m_pCard[i]->SetNeutralPos(m_pCard[i]->GetPos());
+			// 一度ニュートラルにリセットする
+			m_pCard[i]->ChangeState(CCardState::CARD_STATE::CARD_NEUTRAL);
+		}
+		
 
 		// 間隔を開ける
 		xpos += posInterbal*0.5f;

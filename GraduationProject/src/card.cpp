@@ -213,6 +213,9 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state)
 	}
 }
 
+//===========================================================================================================
+// カードをマウスでキャスト
+//===========================================================================================================
 void My::CCard::CardCastToMouse()
 {
 	// 選択状態とキャスト状態以外は通さない
@@ -271,9 +274,10 @@ void My::CCard::CardCastToMouse()
 //===========================================================================================================
 bool My::CCard::CardSelectToMouse()
 {
-	if (GetStateNum() == CCardState::CARD_CAST||GetStateNum()==CCardState::CARD_STAY|| GetStateNum() == CCardState::CARD_TRIGGER
-		)
-		return true;
+	if (GetStateNum() == CCardState::CARD_CAST
+		|| GetStateNum() == CCardState::CARD_STAY
+		|| GetStateNum() == CCardState::CARD_TRIGGER)
+		return false;
 
 	// カメラ取得
 	CCamera* pCamera = GET_CAMERA(0);
@@ -302,8 +306,6 @@ bool My::CCard::CardSelectToMouse()
 	D3DXVECTOR2 resultposN;
 	resultposN.x = mousepos.x - screenposN.x;
 	resultposN.y = mousepos.y - screenposN.y;
-
-	
 
 	// 矩形判定
 	if (resultpos.x <= 50.0f * GetSize().x && resultpos.x >= -50.0f * GetSize().x &&
