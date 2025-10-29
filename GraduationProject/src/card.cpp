@@ -13,12 +13,14 @@
 //===========================================================================================================
 // コンストラクタ
 //===========================================================================================================
-My::CCard::CCard(int nPriority):CObject3D(nPriority),
-	m_pState(nullptr),
-	m_IsChoice(false),
-	m_outpos({0,0,0}),
-	m_StateNum(CCardState::CARD_NEUTRAL),
-	m_CardType(CARDTYPE_::TYPE_ATTACK)
+My::CCard::CCard(int nPriority) :CObject3D(nPriority),
+m_pState(nullptr),
+m_IsChoice(false),
+m_outpos({ 0,0,0 }),
+m_StateNum(CCardState::CARD_NEUTRAL),
+m_CardType(CARDTYPE_::TYPE_ATTACK),
+m_IsChange(true),
+m_target(CInputMouse::AREA::CENTER)
 {
 	//if (m_pTop == nullptr)
 	//{// top が設定されていなかったら
@@ -169,8 +171,8 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state)
 {
 	if (m_pState != nullptr)
 	{
-		// 同じステートだった場合ここを通らない
-		if (m_StateNum == state)
+		// 同じステートかチェンジできない場合ここを通らない
+		if (m_StateNum == state || !m_IsChange)
 			return;
 
 		// 削除
@@ -259,6 +261,7 @@ void My::CCard::CardCastToMouse()
 	else if (pMouse->GetRelease(0))
 	{
 		ChangeState(CCardState::CARD_STAY);
+		m_target = pMouse->GetArea();
 	}
 	
 }

@@ -12,8 +12,6 @@
 
 namespace My
 {
-	//class CCardState;
-
 	class CCard :public CObject3D
 	{
 	public:
@@ -104,6 +102,12 @@ namespace My
 		inline void SetNeutralPos(D3DXVECTOR3 npos) { m_NeutralPos = npos; }
 		inline D3DXVECTOR3 GetNeutralPos() { return m_NeutralPos; }
 
+		/**
+		* @brief ニュートラル位置
+		*/
+		inline void SetTarget(CInputMouse::AREA area) { m_target = area; }
+		inline CInputMouse::AREA GetTarget() { return m_target; }
+
 		//inline CCard* GetTop() { return m_pTop; }
 		//inline CCard* GetPrev() { return m_pPrev; }
 
@@ -112,6 +116,17 @@ namespace My
 		//static CCard* m_pCur;	//現在（最後尾）のポインタ
 		//CCard* m_pPrev;			//前のオブジェクトのポインタ
 		//CCard* m_pNext;			//次のオブジェクトのポインタ
+
+		/**
+		 * @brief ステートをチェンジできるかどうか
+		 */
+		bool m_IsChange;
+
+		/**
+		* どのプレイヤーに対して攻撃するのか
+		* TODO : AttackCardのみに記載
+		*/
+		CInputMouse::AREA m_target;
 
 		/**
 		 * @brief カードを選択しているか否か(trueだったら選択している)

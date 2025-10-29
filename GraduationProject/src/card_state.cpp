@@ -182,6 +182,9 @@ void My::CCardStateTrigger::Init(CCard* cpy)
 	if (cpy == nullptr)
 		return;
 
+	cpy->GetTarget();
+	CGameManager::GetInstance()->GetAreaManager()->SelectArea();
+
 	// ƒgƒŠƒK[‚µ‚½‚±‚Æ‚ð‚í‚©‚è‚â‚·‚­‚·‚é‚½‚ß¡‚¾‚¯ˆÊ’u‚ð•Ï‚¦‚Ä‚¢‚é
 	D3DXVECTOR3 pos = cpy->GetPos();
 	pos.x += 20.0f;
