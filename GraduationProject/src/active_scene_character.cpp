@@ -210,6 +210,7 @@ void My::CActiveSceneCharacter::Regist(CDebuff* debuff)
 		if (itr == nullptr) { continue; }
 		if (itr->GetDebuffType() == CDebuff::DEBUFF_TYPE::DEATH)
 		{
+			delete debuff;
 			return;
 		}
 	}
