@@ -115,8 +115,6 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 	//モーション設定
 	player->SetMotion(CPlayer::MOTION_NEUTRAL);
 
-	CGameManager::GetInstance()->GetAreaManager()->SelectArea();
-
 	/*
 		* @brief 開始
 		* TODO : 今だけここにおいている。のちにゲーム開始時に呼び出す
