@@ -1,6 +1,6 @@
 //============================================================================================================
 //
-// エナジーUI枠 「energy_gauge.h」
+// エナジーたまり具合の表示 「energy_gauge.h」
 // Author : 笹生一颯
 //
 //============================================================================================================
@@ -89,7 +89,7 @@ namespace My
 		* @param [in]どんな状態
 		* @param [in]効果強度（最大５）
 		*/
-		inline static void EffectSet(EFFECT AnyEffect,int Level)
+		static void EffectSet(EFFECT AnyEffect,int Level)
 		{
 			m_Effect = AnyEffect;
 			m_nEffectLevel = Level;
@@ -100,7 +100,7 @@ namespace My
 		* @brief カウントを取得する処理
 		* @return 何番目のやつか
 		*/
-		inline static int GetPolyCnt()
+		static int GetPolyCnt()
 		{
 			return m_nPolyCount;
 		}

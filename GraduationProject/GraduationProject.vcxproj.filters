@@ -105,6 +105,9 @@
     </ClCompile>
     <ClCompile Include="src\font_manager.cpp" />
     <ClCompile Include="src\client_duel.cpp" />
+    <ClCompile Include="src\life_frame.cpp" />
+    <ClCompile Include="src\life_gauge.cpp" />
+    <ClCompile Include="src\object2D_trapezoid.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -212,6 +215,9 @@
       <Filter>active_scene</Filter>
     </ClInclude>
     <ClInclude Include="src\client_duel.h" />
+    <ClInclude Include="src\life_frame.h" />
+    <ClInclude Include="src\life_gauge.h" />
+    <ClInclude Include="src\object2D_trapezoid.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">

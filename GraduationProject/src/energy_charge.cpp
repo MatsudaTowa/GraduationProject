@@ -1,6 +1,6 @@
 //============================================================================================================
 //
-// エナジーUI枠 「energy_charge.cpp」
+// エナジーたまり具合の表示 「energy_charge.cpp」
 // Author : 笹生一颯
 //
 //============================================================================================================
@@ -49,6 +49,7 @@ HRESULT My::CEnergy_Charge::Init()
 void My::CEnergy_Charge::Uninit()
 {
 	m_fTimeSpend = FLOAT_ZERO;
+	m_nEffectLv = INT_ZERO;
 	m_fChargeSpeed = SPEED_DEF;
 	m_fChargeTime = CHARGE_DEF;
 }

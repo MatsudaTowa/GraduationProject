@@ -199,6 +199,8 @@
     <ClCompile Include="src\active_scene_state.cpp" />
     <ClCompile Include="src\hand.cpp" />
     <ClCompile Include="src\input.cpp" />
+    <ClCompile Include="src\life_frame.cpp" />
+    <ClCompile Include="src\life_gauge.cpp" />
     <ClCompile Include="src\life_UI.cpp" />
     <ClCompile Include="src\light.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -209,6 +211,7 @@
     <ClCompile Include="src\object.cpp" />
     <ClCompile Include="src\object2D.cpp" />
     <ClCompile Include="src\object2D_anim.cpp" />
+    <ClCompile Include="src\object2D_trapezoid.cpp" />
     <ClCompile Include="src\object3D.cpp" />
     <ClCompile Include="src\object3D_anim.cpp" />
     <ClCompile Include="src\objectX.cpp" />
@@ -277,6 +280,8 @@
     <ClInclude Include="src\active_scene_state.h" />
     <ClInclude Include="src\hand.h" />
     <ClInclude Include="src\input.h" />
+    <ClInclude Include="src\life_frame.h" />
+    <ClInclude Include="src\life_gauge.h" />
     <ClInclude Include="src\life_UI.h" />
     <ClInclude Include="src\light.h" />
     <ClInclude Include="src\main.h" />
@@ -287,6 +292,7 @@
     <ClInclude Include="src\object.h" />
     <ClInclude Include="src\object2D.h" />
     <ClInclude Include="src\object2D_anim.h" />
+    <ClInclude Include="src\object2D_trapezoid.h" />
     <ClInclude Include="src\object3D.h" />
     <ClInclude Include="src\object3D_anim.h" />
     <ClInclude Include="src\objectX.h" />
