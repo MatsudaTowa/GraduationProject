@@ -95,10 +95,27 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 		return;
 	}
 	CGamePlayer* player = dynamic_cast<CGamePlayer*>(character);
+
+	std::list<CDebuff*> DebuffList = character->GetDebuffList();
+
+	//死んでいたら関数を抜ける
+	for (auto& itr : DebuffList)
+	{
+		if (itr == nullptr) { continue; }
+		if (itr->GetDebuffType() == CDebuff::DEBUFF_TYPE::DEATH)
+		{
+			//ステートをデュエルにしてから抜ける
+			CGameManager::GetInstance()->ChangeState(new CDuel);
+			return; 
+		}
+	}
+
 	//UIが生成されてなければ生成される
 	CreateDuelUI(player);
 	//モーション設定
 	player->SetMotion(CPlayer::MOTION_NEUTRAL);
+
+	CGameManager::GetInstance()->GetAreaManager()->SelectArea();
 
 	/*
 		* @brief 開始

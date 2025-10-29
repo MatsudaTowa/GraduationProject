@@ -18,6 +18,7 @@ m_pEneryUI(nullptr),
 m_pLifeUI(nullptr),
 m_area()
 {
+	m_DebuffList.clear();
 }
 
 //=============================================
@@ -25,6 +26,13 @@ m_area()
 //=============================================
 My::CActiveSceneCharacter::~CActiveSceneCharacter()
 {
+	for (auto& itr : m_DebuffList)
+	{
+		if (itr == nullptr) { continue; }
+		delete itr;
+		itr = nullptr;
+	}
+	m_DebuffList.clear();
 }
 
 //=============================================
@@ -81,6 +89,11 @@ void My::CActiveSceneCharacter::Update()
 		m_pState->Lobby(this);
 
 		m_pState->Duel(this);
+	}
+	for (auto& itr : m_DebuffList)
+	{
+		if (itr == nullptr) { continue; }
+		itr->Debuff(this);
 	}
 
 	UpdateUI();
@@ -170,4 +183,29 @@ void My::CActiveSceneCharacter::ChangeState(CActiveSceneCharacterState* state)
 	{
 		delete state;
 	}
+}
+
+//=============================================
+// デバフ登録
+//=============================================
+void My::CActiveSceneCharacter::Regist(CDebuff* debuff)
+{
+	//デバフの情報を登録
+	m_DebuffList.push_back(debuff);
+}
+
+//=============================================
+// デバフ削除
+//=============================================
+void My::CActiveSceneCharacter::Remove(CDebuff* debuff)
+{
+	//サイズが0なら抜ける
+	if (m_DebuffList.size() == 0)
+	{
+		return;
+	}
+	delete debuff;
+	debuff = nullptr;
+	//デバフの情報を削除
+	m_DebuffList.remove(debuff);
 }

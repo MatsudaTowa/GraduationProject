@@ -71,5 +71,6 @@ namespace My
 
 		CCount* m_pEnergyUpCount;	//!エナジーを増やすまでのカウント
 	};
+
 }
 #endif // !_GAME_PLAYER_STATE_H_

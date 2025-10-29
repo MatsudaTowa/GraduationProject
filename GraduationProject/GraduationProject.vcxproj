@@ -179,6 +179,8 @@
     <ClCompile Include="src\client_duel.cpp" />
     <ClCompile Include="src\client_lobby.cpp" />
     <ClCompile Include="src\colision.cpp" />
+    <ClCompile Include="src\death_icon.cpp" />
+    <ClCompile Include="src\debuff.cpp" />
     <ClCompile Include="src\enemy.cpp" />
     <ClCompile Include="src\enemy_manager.cpp" />
     <ClCompile Include="src\energy_charge.cpp" />
@@ -257,6 +259,8 @@
     <ClInclude Include="src\client_lobby.h" />
     <ClInclude Include="src\colision.h" />
     <ClInclude Include="src\count.h" />
+    <ClInclude Include="src\death_icon.h" />
+    <ClInclude Include="src\debuff.h" />
     <ClInclude Include="src\enemy.h" />
     <ClInclude Include="src\enemy_manager.h" />
     <ClInclude Include="src\energy_charge.h" />

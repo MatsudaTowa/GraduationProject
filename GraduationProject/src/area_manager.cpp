@@ -137,6 +137,10 @@ void My::CAreaManager::SelectArea()
 				if (life > INT_ZERO)
 				{//TODO:‘I‘ð‚Å‚«‚È‚¢Ž|‚ÌUI•\Ž¦
 					--life;
+					if (life <= INT_ZERO)
+					{
+						itr->Regist(new CDeath);
+					}
 				}
 				itr->SetLife(life);
 			}
@@ -175,6 +179,10 @@ void My::CAreaManager::player_cast(CGamePlayer* player, My::CInputMouse::AREA ar
 		if (life > INT_ZERO)
 		{
 			--life;
+			if (life <= INT_ZERO)
+			{
+				player->Regist(new CDeath);
+			}
 		}
 		player->SetLife(life);
 	}

@@ -105,6 +105,10 @@
     </ClCompile>
     <ClCompile Include="src\font_manager.cpp" />
     <ClCompile Include="src\client_duel.cpp" />
+    <ClCompile Include="src\debuff.cpp">
+      <Filter>debuff</Filter>
+    </ClCompile>
+    <ClCompile Include="src\death_icon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -212,6 +216,10 @@
       <Filter>active_scene</Filter>
     </ClInclude>
     <ClInclude Include="src\client_duel.h" />
+    <ClInclude Include="src\debuff.h">
+      <Filter>debuff</Filter>
+    </ClInclude>
+    <ClInclude Include="src\death_icon.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">
@@ -225,6 +233,9 @@
     </Filter>
     <Filter Include="active_scene\lobby">
       <UniqueIdentifier>{b471ed37-6a4b-4b0f-b87c-f68cee98794f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="debuff">
+      <UniqueIdentifier>{1923b1d6-04cd-4db5-a3df-525fb43f5002}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

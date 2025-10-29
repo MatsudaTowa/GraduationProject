@@ -11,6 +11,7 @@
 #include "character.h"
 #include "active_scene_character_state.h"
 #include "ready_UI.h"
+#include "debuff.h"
 
 /** @brief My 名前空間 */
 namespace My
@@ -69,6 +70,12 @@ namespace My
 		 * @param [in]次のステート
 		 */
 		void ChangeState(CActiveSceneCharacterState* state);
+
+		void Regist(CDebuff* debuff);	//登録
+		void Remove(CDebuff* debuff);	//削除
+
+		//リストの取得
+		std::list<CDebuff*> GetDebuffList() { return m_DebuffList; }
 
 		/**
 		 * @brief ステート取得
@@ -277,6 +284,7 @@ namespace My
 		CLife_UI* m_pLifeUI;			//!<体力UI TODO:UIのインスタンスをキャラクターで持たせないように改良
 		CEnergy_UI* m_pEneryUI;			//!エナジーUI TODO:UIのインスタンスをキャラクターで持たせないように改良
 		CActiveSceneCharacterState* m_pState;	//!ステート
+		std::list<CDebuff*> m_DebuffList;	//デバフリスト
 	};
 }
 #endif

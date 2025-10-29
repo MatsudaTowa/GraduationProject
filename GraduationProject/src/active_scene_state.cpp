@@ -396,7 +396,6 @@ My::CCardCast::~CCardCast()
 //=============================================
 void My::CCardCast::CardCast(CGame* game)
 {
-	CGameManager::GetInstance()->GetAreaManager()->SelectArea();
 #ifdef _DEBUG
 	//入力デバイス取得
 	CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;
