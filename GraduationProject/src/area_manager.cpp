@@ -102,11 +102,32 @@ void My::CAreaManager::CreateArea()
 //=============================================
 void My::CAreaManager::SelectArea()
 {
-	CInputMouse::AREA area = GET_INPUT_MOUSE->GetArea();
+	// 手札の取得
+	CHand* pHand = CGameManager::GetInstance()->GetPlayer()->GetHand();
+	// カード配列の取得
+	CCard** pCard = pHand->GetHandCard();
+	int TriggerNum = -1;
+
+	// トータルカード分回す
+	for (int i = 0; i < pHand->GetTotalNum(); i++)
+	{
+		if (pCard[i]->GetStateNum() == CCardState::CARD_TRIGGER)
+		{// トリガーされているカード
+			TriggerNum = i;
+			break;
+		}
+	}
+	if (TriggerNum < 0)
+		return;
+
+	// カードで設定したエリアを取得
+	CInputMouse::AREA area = pCard[TriggerNum]->GetTarget();
 
 	if (area == CInputMouse::AREA::CENTER)
 	{
 		m_pCenterArea->SetSelect(true);
+		// ニュートラルに戻す
+		pCard[TriggerNum]->ChangeState(CCardState::CARD_NEUTRAL);
 
 		//TODO:カードを離したらに変更予定
 		if (GET_INPUT_MOUSE->GetTrigger(0))
@@ -119,7 +140,7 @@ void My::CAreaManager::SelectArea()
 		m_pArea[area]->SetSelect(true);	
 
 		//TODO:ここに選択されたカードの処理を！
-		if (GET_INPUT_MOUSE->GetTrigger(0))
+		//if (GET_INPUT_MOUSE->GetTrigger(0))
 		{
 			//登録されているキャラクターを取得
 			CGamePlayer* player = CGameManager::GetInstance()->GetPlayer();

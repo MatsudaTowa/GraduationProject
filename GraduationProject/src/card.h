@@ -117,6 +117,9 @@ namespace My
 		//CCard* m_pPrev;			//前のオブジェクトのポインタ
 		//CCard* m_pNext;			//次のオブジェクトのポインタ
 
+		int Cost;
+		int AttackNum;
+
 		/**
 		 * @brief ステートをチェンジできるかどうか
 		 */
