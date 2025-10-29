@@ -91,6 +91,11 @@ namespace My
 		*/
 		inline int GetTotalNum() { return m_TotalNum; }
 
+		/**
+		* @brief 手札カードの取得
+		*/
+		inline CCard** GetHandCard() { return &m_pCard[0]; }
+
 	private:
 		typedef enum
 		{
@@ -135,6 +140,10 @@ namespace My
 		* TriggerList : トリガーしたカード
 		*/ 
 		My::CCard* m_pCard[MAX_HANDSCARD];
+
+		My::CCard* m_pHandCard[MAX_HANDSCARD];
+		My::CCard* m_pStayCard[MAX_HANDSCARD];
+		My::CCard* m_pTriggerCard[MAX_HANDSCARD];
 
 		/* @brief 現在持っているカード枚数 */
 		int m_TotalNum;

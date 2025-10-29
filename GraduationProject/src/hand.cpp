@@ -19,7 +19,10 @@ My::CHand::CHand() :
 	m_TotalNum(0),
 	m_IsPassStart(false),
 	m_IsPickUp(false),
-	m_handtype(NEUTRAL)
+	m_handtype(NEUTRAL),
+	m_pHandCard(),
+	m_pStayCard(),
+	m_pTriggerCard()
 {
 	for (int i = 0; i < MAX_HANDSCARD; i++)
 	{
@@ -99,7 +102,7 @@ void My::CHand::Select()
 	// ifをなくせば複数キャスト可能だが、複数同時選択されてしまう
 
 	// 何も選択されていない場合
-	//if (!m_IsPickUp)
+	if (!m_IsPickUp)
 	{
 		for (int i = 0; i < m_TotalNum; i++)
 		{// すべてのカードを判定
@@ -118,7 +121,7 @@ void My::CHand::Select()
 			}
 		}
 	}
-	//else
+	else
 	{
 		if (!m_pCard[m_SelectNum])
 			return;
@@ -282,6 +285,8 @@ void My::CHand::HandDraw(int drawnum)
 
 		SetCard((CCard::CARDTYPE_)rundom);
 		m_TotalNum++;	// 手札の総数を増やす
+
+		// 手札の位置整理
 		SetHandCardPos();
 	}
 }
