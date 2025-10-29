@@ -106,6 +106,9 @@ void My::CActiveSceneCharacter::Update()
 void My::CActiveSceneCharacter::UpdateUI()
 {
 	D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), GetPos()); //スクリーン座標に変換
+
+	//HPが0なら殺す
+	DeathRegist();
 	if (m_pLifeUI != nullptr)
 	{
 		if (m_status.life > MAX_LIFE)
@@ -186,11 +189,30 @@ void My::CActiveSceneCharacter::ChangeState(CActiveSceneCharacterState* state)
 }
 
 //=============================================
+//  HPが0になったら殺す処理
+//=============================================
+void My::CActiveSceneCharacter::DeathRegist()
+{
+	if (m_status.life <= INT_ZERO)
+	{
+		Regist(new CDeath);
+	}
+}
+
+//=============================================
 // デバフ登録
 //=============================================
 void My::CActiveSceneCharacter::Regist(CDebuff* debuff)
 {
-	//デバフの情報を登録
+	for (auto& itr : m_DebuffList)
+	{//デバフの情報を回してdeathがあれば抜ける
+	 //NOTE:二回死をしないため
+		if (itr == nullptr) { continue; }
+		if (itr->GetDebuffType() == CDebuff::DEBUFF_TYPE::DEATH)
+		{
+			return;
+		}
+	}
 	m_DebuffList.push_back(debuff);
 }
 

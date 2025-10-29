@@ -71,6 +71,11 @@ namespace My
 		 */
 		void ChangeState(CActiveSceneCharacterState* state);
 
+		/**
+		 * @brief HP‚ª0‚É‚È‚Á‚½‚çE‚·ˆ—
+		 */
+		void DeathRegist();
+
 		void Regist(CDebuff* debuff);	//“o˜^
 		void Remove(CDebuff* debuff);	//íœ
 
