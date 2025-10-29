@@ -109,6 +109,9 @@
       <Filter>debuff</Filter>
     </ClCompile>
     <ClCompile Include="src\death_icon.cpp" />
+    <ClCompile Include="src\life_frame.cpp" />
+    <ClCompile Include="src\life_gauge.cpp" />
+    <ClCompile Include="src\object2D_trapezoid.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -220,6 +223,9 @@
       <Filter>debuff</Filter>
     </ClInclude>
     <ClInclude Include="src\death_icon.h" />
+    <ClInclude Include="src\life_frame.h" />
+    <ClInclude Include="src\life_gauge.h" />
+    <ClInclude Include="src\object2D_trapezoid.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">

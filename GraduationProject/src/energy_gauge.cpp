@@ -7,10 +7,11 @@
 #include "energy_gauge.h"
 #include "energy_charge.h"
 #include "energy_frame.h"
+#include "life_gauge.h"
 
 namespace
 {
-
+	//const std::string TEX_NAME = "data\\TEXTURE\\UI\\Energy.png";
 }
 
 //=====================================================================
@@ -48,6 +49,10 @@ HRESULT My::CEnergy_Gauge::Init()
 	D3DXCOLOR col = GetColor();
 	col = COLOR_WHITE;
 	SetColor(col);
+
+	////テクスチャ登録
+	//CTexture* pTexture = CManager::GetInstance()->GetTexture();
+	//CObject2D::BindTexture(pTexture->GetAddress(pTexture->Regist(&TEX_NAME)));//テクスチャ設定
 
 	SetTexPos(VEC2_RESET_ONE);
 
@@ -104,14 +109,18 @@ void My::CEnergy_Gauge::Update()
 		break;
 	}
 
-	if (m_nPolyNum < m_nEnergyRaito || m_nEnergyRaito >= 10)
-	{
-		m_bDisplay = true;
-	}
-	else
-	{
-		m_bDisplay = false;
-	}
+	////テクスチャ登録
+	//CTexture* pTexture = CManager::GetInstance()->GetTexture();
+	//CObject2D::BindTexture(pTexture->GetAddress(pTexture->Regist(&TEX_NAME)));//テクスチャ設定
+
+	//if (m_nPolyNum < m_nEnergyRaito || m_nEnergyRaito >= 10)
+	//{
+	//	m_bDisplay = true;
+	//}
+	//else
+	//{
+	//	m_bDisplay = false;
+	//}
 }
 
 //=====================================================================
@@ -119,7 +128,9 @@ void My::CEnergy_Gauge::Update()
 //=====================================================================
 void My::CEnergy_Gauge::Draw()
 {
-	if (m_bDisplay == true)
+	//TODO : バグの解決法探し（内容：スタミナが描画されないタイミングでHPの描画も止まる。スタミナフレームは影響なし）
+	//テクスチャの有り無しが関与？
+	if (m_nPolyNum < m_nEnergyRaito || m_nEnergyRaito >= 10)
 	{
 		CObject2D::Draw();
 	}
@@ -151,6 +162,8 @@ void My::CEnergy_Gauge::CreateEnergy()
 	{
 		CEnergy_Gauge::Create({ 1039.0f+ (i * 28.0f),497.0f,FLOAT_ZERO });
 	}
+	//すごく仮置き（体力関連）
+	CLife_Gauge::CreateLifeUI({ 10.0f });
 }
 
 //=====================================================================
