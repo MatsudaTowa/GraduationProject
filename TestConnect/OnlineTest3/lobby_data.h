@@ -32,6 +32,7 @@ public:
 	bool CheckStartBattle(RakNet::Packet* packet) override { return false; }				//対戦を開始するか
 	void StartBattle(RakNet::RakPeerInterface* peer) override {}							//対戦の開始
 	void SendStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override {}		//ステータスを送る
+	void AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;			//CPUの追加
 
 	//プレイヤーのデータリスト
 	void SetData(std::list<CPlayer::Data> data) override;	//設定

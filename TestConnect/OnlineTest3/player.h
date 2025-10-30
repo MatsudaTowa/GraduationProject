@@ -18,6 +18,14 @@ class CPlayer
 {
 public:
 
+	//キャラクタータグの列挙
+	enum TAG
+	{
+		TAG_PLAYER,
+		TAG_CPU,
+		TAG_MAX
+	};
+
 	//構造体
 	struct Data
 	{

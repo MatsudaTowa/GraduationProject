@@ -288,3 +288,33 @@ void CLobby_Data::AddStartMember()
         m_LobbyPlayerList.push_back(pPlayer);                       
     }
 }
+
+//======================================
+//CPUの追加
+//======================================
+void CLobby_Data::AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
+{
+    //内容を出力
+    std::cout << "CPUの追加を確認\n";
+
+    //データの受信
+    RakNet::BitStream bsIn(packet->data, packet->length, false);
+    
+    //読み取り
+    bsIn.IgnoreBytes(sizeof(RakNet::MessageID));
+
+    //すでに最大人数いるなら消す
+    if (m_LobbyPlayerList.size() >= 4) return;
+
+    //新しく情報を取得
+    CLobby_Player* pPlayer = new CLobby_Player;
+
+    //パラメータの設定
+    pPlayer->SetIndex(m_LobbyPlayerList.size()); //番号
+    pPlayer->SetRakNetID(packet->guid);          //RakNetID
+
+    //リストに保存
+    m_LobbyPlayerList.push_back(pPlayer);
+
+    //TODO : 以下に送信の処理を追加
+}
