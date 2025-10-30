@@ -74,15 +74,15 @@ void My::CEnemyDuelState::CreateDuelUI(CEnemy* enemy)
 {
 	D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), enemy->GetPos()); //スクリーン座標に変換
 
-	if (enemy->GetLifeUI() == nullptr)
+	if (enemy->GetPlayerUI()->GetLifeUI() == nullptr)
 	{
 		CLife_UI* pLifeUI = CLife_UI::Create(screen_pos);
-		enemy->SetLifeUI(pLifeUI);
+		enemy->GetPlayerUI()->SetLifeUI(pLifeUI);
 	}
 
-	if (enemy->GetEnergyUI() == nullptr)
+	if (enemy->GetPlayerUI()->GetEnergyUI() == nullptr)
 	{
 		CEnergy_UI* pEnergyUI = CEnergy_UI::Create({ screen_pos.x + 100.0f,screen_pos.y,screen_pos.z });
-		enemy->SetEnergyUI(pEnergyUI);
+		enemy->GetPlayerUI()->SetEnergyUI(pEnergyUI);
 	}
 }

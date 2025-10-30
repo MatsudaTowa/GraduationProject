@@ -5,6 +5,7 @@
 //
 //=============================================
 #include "active_scene_character.h"
+#include "active_scene_state.h"
 
 //=============================================
 // コンストラクタ
@@ -14,8 +15,7 @@ m_pState(nullptr),												//ステート初期化
 m_status(),
 m_isHost(false),
 m_playerIdx(-1),
-m_pEneryUI(nullptr),
-m_pLifeUI(nullptr),
+m_pPlayerUI(nullptr),
 m_area()
 {
 	m_DebuffList.clear();
@@ -32,6 +32,7 @@ My::CActiveSceneCharacter::~CActiveSceneCharacter()
 		delete itr;
 		itr = nullptr;
 	}
+
 	m_DebuffList.clear();
 }
 
@@ -43,6 +44,11 @@ HRESULT My::CActiveSceneCharacter::Init()
 	if (m_pState== nullptr)
 	{
 		m_pState = new CLobbyCharacter(this);
+	}
+	if (m_pPlayerUI == nullptr)
+	{
+		m_pPlayerUI = new CPlayerUI;
+		m_pPlayerUI->Init(this);
 	}
 	//ステータス設定
 	m_status.deckSize = START_DECK;
@@ -65,15 +71,11 @@ void My::CActiveSceneCharacter::Uninit()
 		delete m_pState;
 		m_pState = nullptr;
 	}
-	if (m_pLifeUI != nullptr)
+	if (m_pPlayerUI != nullptr)
 	{
-		m_pLifeUI->Uninit();
-		m_pLifeUI = nullptr;
-	}
-	if (m_pEneryUI != nullptr)
-	{
-		m_pEneryUI->Uninit();
-		m_pEneryUI = nullptr;
+		m_pPlayerUI->Uninit();
+		delete m_pPlayerUI;
+		m_pPlayerUI = nullptr;
 	}
 
 	CCharacter::Uninit();
@@ -109,57 +111,11 @@ void My::CActiveSceneCharacter::UpdateUI()
 
 	//HPが0なら殺す
 	DeathRegist();
-	if (m_pLifeUI != nullptr)
+	
+	//TODO:上の処理をここにまとめよう
+	if (m_pPlayerUI != nullptr)
 	{
-		if (m_status.life > MAX_LIFE)
-		{
-			SetLife(MAX_LIFE);
-		}
-		if (m_status.life < INT_ZERO)
-		{
-			SetLife(INT_ZERO);
-		}
-		m_pLifeUI->SetLifeNumber(m_status.life);
-
-		// スクリーン座標に数字を描画
-		int i = INT_ZERO;
-
-		for (auto& itr : m_pLifeUI->GetNumVector())
-		{
-			if (itr == nullptr) { continue; }
-
-			// TODO: 30.0fは桁ずらし値 取得できるように変更予定
-			itr->SetPos({ screen_pos.x - (i * 30.0f),screen_pos.y,screen_pos.z });
-
-			//桁ずらす
-			++i;
-		}
-	}
-	if (m_pEneryUI != nullptr)
-	{
-		if (m_status.energy > MAX_ENERGY)
-		{
-			SetEnergy(MAX_LIFE);
-		}
-		if (m_status.energy < INT_ZERO)
-		{
-			SetEnergy(INT_ZERO);
-		}
-		m_pEneryUI->SetEnergyNumber(m_status.energy);
-
-		// スクリーン座標に数字を描画
-		int i = INT_ZERO;
-
-		for (auto& itr : m_pEneryUI->GetNumVector())
-		{
-			if (itr == nullptr) { continue; }
-
-			// TODO: 30.0fは桁ずらし値 取得できるように変更予定
-			itr->SetPos({ screen_pos.x + 100.0f - (i * 30.0f),screen_pos.y,screen_pos.z });
-
-			//桁ずらす
-			++i;
-		}
+		m_pPlayerUI->SetCurrentPlayer_UI({screen_pos},this);
 	}
 }
 

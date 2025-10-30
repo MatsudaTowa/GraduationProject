@@ -112,6 +112,12 @@
     <ClCompile Include="src\life_frame.cpp" />
     <ClCompile Include="src\life_gauge.cpp" />
     <ClCompile Include="src\object2D_trapezoid.cpp" />
+    <ClCompile Include="src\player_number_UI.cpp">
+      <Filter>character</Filter>
+    </ClCompile>
+    <ClCompile Include="src\player_UI.cpp">
+      <Filter>character</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -215,9 +221,6 @@
       <Filter>active_scene</Filter>
     </ClInclude>
     <ClInclude Include="src\font_manager.h" />
-    <ClInclude Include="src\ready_UI.h">
-      <Filter>active_scene</Filter>
-    </ClInclude>
     <ClInclude Include="src\client_duel.h" />
     <ClInclude Include="src\debuff.h">
       <Filter>character\debuff</Filter>
@@ -226,6 +229,15 @@
     <ClInclude Include="src\life_frame.h" />
     <ClInclude Include="src\life_gauge.h" />
     <ClInclude Include="src\object2D_trapezoid.h" />
+    <ClInclude Include="src\player_number_UI.h">
+      <Filter>character</Filter>
+    </ClInclude>
+    <ClInclude Include="src\player_UI.h">
+      <Filter>character</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ready_UI.h">
+      <Filter>active_scene\lobby</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">

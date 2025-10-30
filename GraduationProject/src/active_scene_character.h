@@ -12,6 +12,7 @@
 #include "active_scene_character_state.h"
 #include "ready_UI.h"
 #include "debuff.h"
+#include "player_UI.h"
 
 /** @brief My 名前空間 */
 namespace My
@@ -24,6 +25,8 @@ namespace My
 	{
 	public:
 		static constexpr int PRIORITY = 8;		//!<描画順
+		static constexpr int MAX_ENERGY = 99;				//!<エナジー最大値
+		static constexpr int MAX_LIFE = 99;					//!<体力最大値
 
 		struct Status
 		{
@@ -155,21 +158,12 @@ namespace My
 		}
 
 		/**
-		 * @brief 体力UIの設定
-		 * @param [in]体力UIのポインタ
+		 * @brief プレイヤーUIの設定
+		 * @param [in]プレイヤーUIのポインタ
 		 */
-		inline void SetLifeUI(CLife_UI* plifeUI)
+		inline void SetPlayerUI(CPlayerUI* pPlayer)
 		{
-			m_pLifeUI = plifeUI;
-		}
-
-		/**
-		 * @brief エナジーUIの設定
-		 * @param [in]エナジーUIのポインタ
-		 */
-		inline void SetEnergyUI(CEnergy_UI* pEnergyUI)
-		{
-			m_pEneryUI = pEnergyUI;
+			m_pPlayerUI = pPlayer;
 		}
 
 		/**
@@ -245,21 +239,12 @@ namespace My
 		}
 
 		/**
-		 * @brief 体力UIの取得
-		 * @return [in]体力UIのポインタ
+		 * @brief プレイヤーUIの取得
+		 * @return [in]プレイヤーUIのポインタ
 		 */
-		inline CLife_UI* GetLifeUI()
+		inline CPlayerUI* GetPlayerUI()
 		{
-			return m_pLifeUI;
-		}
-
-		/**
-		 * @brief エナジーUIの取得
-		 * @return [in]エナジーUIのポインタ
-		 */
-		inline CEnergy_UI* GetEnergyUI()
-		{
-			return m_pEneryUI;
+			return m_pPlayerUI;
 		}
 
 		inline CInputMouse::AREA GetArea()
@@ -271,8 +256,6 @@ namespace My
 		static constexpr int START_HAND = 3;				//!<最初の手札枚数
 		static constexpr int START_LIFE = 10;				//!<最初の体力
 		static constexpr int START_ENERGY = 1;				//!<最初のエナジー
-		static constexpr int MAX_ENERGY = 99;				//!<エナジー最大値
-		static constexpr int MAX_LIFE = 99;					//!<体力最大値
 
 		/**
 		 * @brief UIの位置設定
@@ -286,10 +269,10 @@ namespace My
 		int m_playerIdx = -1;		//!自分自身のID(接続順)
 		bool m_isHost = false;		//!ホストかどうか
 
-		CLife_UI* m_pLifeUI;			//!<体力UI TODO:UIのインスタンスをキャラクターで持たせないように改良
-		CEnergy_UI* m_pEneryUI;			//!エナジーUI TODO:UIのインスタンスをキャラクターで持たせないように改良
 		CActiveSceneCharacterState* m_pState;	//!ステート
 		std::list<CDebuff*> m_DebuffList;	//デバフリスト
+
+		CPlayerUI* m_pPlayerUI;
 	};
 }
 #endif

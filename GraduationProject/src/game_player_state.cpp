@@ -153,16 +153,16 @@ void My::CPlayerDuelState::CreateDuelUI(CGamePlayer* player)
 
 	D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), player->GetPos()); //スクリーン座標に変換
 
-	if (player->GetLifeUI() == nullptr)
+	if (player->GetPlayerUI()->GetLifeUI() == nullptr)
 	{
 		CLife_UI* pLifeUI = CLife_UI::Create(screen_pos);
-		player->SetLifeUI(pLifeUI);
+		player->GetPlayerUI()->SetLifeUI(pLifeUI);
 	}
 
-	if (player->GetEnergyUI() == nullptr)
+	if (player->GetPlayerUI()->GetEnergyUI() == nullptr)
 	{
 		CEnergy_UI* pEnergyUI = CEnergy_UI::Create({ screen_pos.x + 100.0f,screen_pos.y,screen_pos.z });
-		player->SetEnergyUI(pEnergyUI);
+		player->GetPlayerUI()->SetEnergyUI(pEnergyUI);
 	}
 }
 

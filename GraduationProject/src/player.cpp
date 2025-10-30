@@ -87,12 +87,12 @@ My::CPlayer* My::CPlayer::Create(CPlayer* player, D3DXVECTOR3 pos, D3DXVECTOR3 r
 	// null‚È‚çnull‚ğ•Ô‚·
 	if (pPlayer == nullptr) { return nullptr; }
 
-	pPlayer->Init(); //‰Šú‰»ˆ—
 	pPlayer->SetPos(pos);
 	pPlayer->SetRot(rot);
 	pPlayer->SetPlayerIdx(id);
 
 	pPlayer->SetType(OBJECT_TYPE_PLAYER); //ƒ^ƒCƒvİ’è
+	pPlayer->Init(); //‰Šú‰»ˆ—
 
 	return pPlayer;
 }
