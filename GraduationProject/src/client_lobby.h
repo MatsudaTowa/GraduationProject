@@ -42,6 +42,7 @@ public:
 	void StartBattle() override {}														//対戦の開始
 	void SendStatus(RakNet::RakPeerInterface* peer) override {}							//ステータスを送る
 	void ReceiveStatus(RakNet::Packet* packet) override {}								//ステータスの受信
+	void SendAddEnemy(RakNet::RakPeerInterface* peer) override;							//敵の追加を送信
 
 	//取得
 	void SetParam(std::list<PlayerParam> list) override;	//設定

@@ -13,6 +13,7 @@
 #include "RakPeerInterface.h"
 #include "MessageIdentifiers.h"
 #include "BitStream.h"
+#include "character.h"
 
 //Clientのクラス
 class CClient
@@ -44,6 +45,7 @@ public:
 	virtual void StartBattle() = 0;														//対戦の開始
 	virtual void SendStatus(RakNet::RakPeerInterface* peer) = 0;						//ステータスを送る
 	virtual void ReceiveStatus(RakNet::Packet* packet) = 0;								//ステータスを受信
+	virtual void SendAddEnemy(RakNet::RakPeerInterface* peer) = 0;						//敵の追加を送信
 
 	//設定と取得
 

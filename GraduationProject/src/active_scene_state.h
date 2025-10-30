@@ -95,6 +95,14 @@ namespace My
 		 */
 		void CreatePlayers(My::CInputKeyboard* pKeyboard, std::list<My::CEnemy*>& enemy);
 		/**
+		 * @brief オンライン用の処理
+		 */
+		void Online();
+		/**
+		 * @brief オンラインで敵を追加する処理
+		 */
+		void OnlineAddEnemy();
+		/**
 		 * @brief オンラインでデュエルシーンに切り替える処理
 		 */
 		void OnlineChangeToDuel();

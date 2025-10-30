@@ -1,74 +1,59 @@
 //=============================================
 //
-//エネミー[enemy.cpp]
+//コンピューター[cpu.cpp]
 //Author Matsuda Towa
 //
 //=============================================
-#include "enemy.h"
-#include "active_manager.h"
-#include "enemy_state.h"
+#include "cpu.h"
 
 //=============================================
 // コンストラクタ
 //=============================================
-My::CEnemy::CEnemy(int nPriority)
+My::CCpu::CCpu(int nPriority)
 {
-	//マネージャーに登録
-	CGameManager::GetInstance()->GetEnemyManager()->Regist(this);
+	//TAGの変更
 	My::CCharacter::SetTag(My::CCharacter::TAG_CPU);
 }
 
 //=============================================
 // デストラクタ
 //=============================================
-My::CEnemy::~CEnemy()
+My::CCpu::~CCpu()
 {
 	//NOTE:Removeは呼ばない ReleseAllなどで要素数いじった後に全削除してしまうため
-	//一個ずつ消していくにはSetisDeleteでtrue代入後にエネミーマネージャーのRemoveを呼ぶように
+	//一個ずつ消していくにはSetisDeleteでtrue代入後にコンピューターマネージャーのRemoveを呼ぶように
 }
 
 //=============================================
 // 初期化
 //=============================================
-HRESULT My::CEnemy::Init()
+HRESULT My::CCpu::Init()
 {
-	CActiveSceneCharacter::Init();
-
-	ChangeState(new CEnemyLobbyState(this));
-	
-	Load_Parts("data\\MOTION\\motion_Karateka.bin"); //パーツ読み込み
-
-	//初期モーション設定
-	SetMotion(MOTION_NEUTRAL);
-
-	Motion(); //モーション処理
-
+	CEnemy::Init();
 	return S_OK;
 }
 
 //=============================================
 // 終了
 //=============================================
-void My::CEnemy::Uninit()
+void My::CCpu::Uninit()
 {
 	//親クラスの終了処理を呼ぶ
-	CActiveSceneCharacter::Uninit();
+	CEnemy::Uninit();
 }
 
 //=============================================
 // 更新
 //=============================================
-void My::CEnemy::Update()
+void My::CCpu::Update()
 {
-	CActiveSceneCharacter::Update();
-
-	Motion(); //モーション処理
+	CEnemy::Update();
 }
 
 //=============================================
 // 描画
 //=============================================
-void My::CEnemy::Draw()
+void My::CCpu::Draw()
 {
 	//親クラスのモーション用の描画を呼ぶ
 	MotionDraw();
@@ -77,13 +62,13 @@ void My::CEnemy::Draw()
 //=============================================
 // 生成
 //=============================================
-My::CEnemy* My::CEnemy::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot,int id)
+My::CCpu* My::CCpu::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, int id)
 {
-	CEnemy* pEnemy = new CEnemy;
-	if (pEnemy == nullptr) { return nullptr; }
-	pEnemy->SetPos(pos);
-	pEnemy->SetRot(rot);
-	pEnemy->SetPlayerIdx(id);
-	pEnemy->Init();
-	return pEnemy;
+	CCpu* pCpu = new CCpu;
+	if (pCpu == nullptr) { return nullptr; }
+	pCpu->SetPos(pos);
+	pCpu->SetRot(rot);
+	pCpu->SetPlayerIdx(id);
+	pCpu->Init();
+	return pCpu;
 }

@@ -34,6 +34,7 @@ public:
 		ID_GAME_MESSAGE_1 = ID_USER_PACKET_ENUM + 1,
 		ID_CONNECT_MESSAGE_1,			//自分が接続時
 		ID_DISCONNECT_MESSAGE_1,		//他人が接続切断
+		//ID_LOBY_MESSAGE_ADD_ENEMY,		//ロビーでの敵を追加を送信
 		ID_LOBY_MESSAGE_SEND_READY,		//ロビーでの準備OKを送信
 		ID_LOBY_MESSAGE_RECEIVE_READY,  //ロビーでの準備OKを受信
 		ID_LOBY_MESSAGE_SEND_START,		//ロビーでの開始合図を送信
@@ -57,9 +58,9 @@ public:
 	void Accept();		//接続待ち受け処理
 	void Uninit();		//終了処理
 	static void Communication(RakNet::RakPeerInterface* peer);		//通信処理
-	//static void DuelComunication(RakNet::RakPeerInterface* peer);	//対戦中の通信処理
 	void SendStartSign();											//開始の合図を送信
 	void SendStatus();												//ステータスの送信
+	void SendAddEnemy();											//敵の追加を送信
 
 	//設定と取得
 	RakNet::RakPeerInterface* GetPeer() { return m_pPeer; }	//ピアの取得

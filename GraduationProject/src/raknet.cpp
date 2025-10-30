@@ -136,6 +136,12 @@ void CRakNet::Communication(RakNet::RakPeerInterface* peer)
             m_Client->Delete(packet);
             break;
 
+        //case ID_LOBY_MESSAGE_ADD_ENEMY:
+
+        //    //“G‚Ì’Ç‰Áˆ—
+        //    m_Client->Delete(packet);
+        //    break;
+
         case ID_LOBY_MESSAGE_SEND_READY:
         
             //€”õOK‚Ì‡}‚ð‘—‚éˆ—
@@ -226,4 +232,12 @@ void CRakNet::SendStartSign()
 void CRakNet::SendStatus()
 {
     m_Client->SendStatus(m_pPeer);
+}
+
+//=====================================
+//“G‚Ì’Ç‰Á‚ð‘—M
+//=====================================
+void CRakNet::SendAddEnemy()
+{
+    m_Client->SendAddEnemy(m_pPeer);
 }

@@ -371,3 +371,21 @@ void CClient_Lobby::SendStartSign(RakNet::RakPeerInterface* peer)
         peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, peer->GetSystemAddressFromIndex(0), false);
     }
 }
+
+//=====================================
+//開始の合図を送信
+//=====================================
+void CClient_Lobby::SendAddEnemy(RakNet::RakPeerInterface* peer)
+{
+    ////データの作成
+    //RakNet::BitStream bsOut;
+    //bsOut.Write((RakNet::MessageID)CRakNet::GameMessages::ID_LOBY_MESSAGE_ADD_ENEMY);
+    //RakNet::SystemAddress server_address = peer->GetSystemAddressFromIndex(0);
+
+    ////サーバーの確認
+    //if (server_address != RakNet::UNASSIGNED_SYSTEM_ADDRESS)
+    //{
+    //    // 全クライアントにブロードキャスト
+    //    peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, peer->GetSystemAddressFromIndex(0), false);
+    //}
+}

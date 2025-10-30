@@ -28,6 +28,14 @@ namespace My
 		static constexpr int MAX_MOTION = 100;				//!<モーションの最大数
 		static constexpr int MAX_PARTS = 64;				//!<最大パーツ数
 
+		//キャラクター識別タグ
+		enum TAG
+		{
+			TAG_PLAYER,	//プレイヤー
+			TAG_CPU,	//コンピューター
+			TAG_MAX		//列挙の最大
+		};
+
 		/**
 		 * @brief コンストラクタ
 		 * @param [in]プライオリティ
@@ -106,6 +114,15 @@ namespace My
 		}
 
 		/**
+		 * @brief 引数で指定したタグに切り替える
+		 * @param 変更するタグ
+		 */
+		inline void SetTag(TAG tag)
+		{
+			m_TAG = tag;
+		}
+
+		/**
 		 * @brief 影のサイズ取得
 		 * @return 影のサイズ
 		 */			
@@ -159,6 +176,15 @@ namespace My
 		{
 			return m_apModel[idx];
 		}
+
+		/**
+		 * @brief タグ取得
+		 * @return キャラクター識別タグ
+		 */
+		inline TAG GetTag()
+		{
+			return m_TAG;
+		}
 	private:
 		static constexpr float SHADOW_POS_Y = 0.5f;	 //!<影のY座標(地面から少し浮かす)
 
@@ -173,6 +199,7 @@ namespace My
 		CShadow* m_pShadow;			//!<影
 
 		CModel_Parts* m_apModel[MAX_PARTS]; 		//!<パーツ
+		TAG m_TAG;									//識別タグ
 
 		/**
 		 * @brief キー構造体

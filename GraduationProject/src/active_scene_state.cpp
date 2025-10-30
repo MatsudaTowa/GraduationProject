@@ -51,7 +51,7 @@ void My::CLobby::Lobby(CGame* game)
 
 		//足りてないプレイヤーを生成
 		FillEmptyPlayer(total, enemy);
-	
+
 		for (auto& itr : enemy)
 		{
 			if (itr == nullptr)
@@ -71,7 +71,7 @@ void My::CLobby::Lobby(CGame* game)
 
 		//エナジーUI枠表示
 		CEnergy_Gauge::CreateEnergy();
-		
+
 		CGameManager::GetInstance()->ChangeState(new CDuel);
 	}
 
@@ -140,6 +140,27 @@ void My::CLobby::Connect(CGame* /*game*/)
 }
 
 //=============================================
+//オンライン時に行う処理
+//=============================================
+void My::CLobby::Online()
+{
+	if (!CRakNet::GetInstance()->GetOnline()) return;
+
+	//デュエルシーンに切り替える
+	OnlineChangeToDuel();
+}
+
+//=============================================
+//オンラインで敵を追加する処理
+//=============================================
+void My::CLobby::OnlineAddEnemy()
+{
+	//弾く条件
+	if (CGameManager::GetInstance()->GetPlayer() == nullptr) return;			//プレイヤーが生成されているか
+	if (CGameManager::GetInstance()->GetPlayer()->GetPlayerIdx() != 0) return;	//プレイヤーが１人目じゃないなら飛ばす
+}
+
+//=============================================
 //オンラインでデュエルシーンに切り替える処理
 //=============================================
 void My::CLobby::OnlineChangeToDuel()
@@ -149,10 +170,13 @@ void My::CLobby::OnlineChangeToDuel()
 	//弾く条件
 	if (CGameManager::GetInstance()->GetPlayer() == nullptr) return;			//プレイヤーが生成されているか
 
+	//バトルを開始する合図が出ていたら状態を対戦に変更
 	if (m_isBattle == true)
 	{
+		//敵の状態を変更
 		std::list<CEnemy*> enemy = CGameManager::GetInstance()->GetEnemyManager()->GetList();
 
+		//敵の数だけ周回
 		for (auto& itr : enemy)
 		{
 			if (itr == nullptr)
@@ -162,6 +186,7 @@ void My::CLobby::OnlineChangeToDuel()
 			itr->ChangeState(new CEnemyDuelState);
 		}
 
+		//プレイヤーの状態を変更
 		CGameManager::GetInstance()->GetPlayer()->ChangeState(new CPlayerDuelState);
 
 		//地面生成
@@ -170,6 +195,7 @@ void My::CLobby::OnlineChangeToDuel()
 		//エナジーUI枠表示
 		CEnergy_Gauge::CreateEnergy();
 
+		//ゲームの状態を変更
 		CGameManager::GetInstance()->ChangeState(new CDuel);
 		return;
 	}
@@ -182,6 +208,7 @@ void My::CLobby::OnlineChangeToDuel()
 	//Mキーでデュエルシーンに切り替え
 	if (pKeyboard->GetTrigger(DIK_M))
 	{
+		//サーバーに対戦開始の合図を送る
 		CRakNet::GetInstance()->SendStartSign();
 	}
 }

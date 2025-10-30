@@ -20,7 +20,8 @@ m_Motion(INT_ZERO),												//モーション情報
 m_isLoopFinish(),												//ループが終わったか
 m_motion_data(),												//モーション設定
 m_pShadow(),													//影のポインタ
-m_ShadowSize(VEC3_RESET_ZERO)									//影のサイズ
+m_ShadowSize(VEC3_RESET_ZERO),									//影のサイズ
+m_TAG(My::CCharacter::TAG_PLAYER)								//識別タグ
 {//イニシャライザーでプライオリティ設定、各メンバ変数初期化
 }
 
