@@ -9,6 +9,7 @@
 #include "active_manager.h"
 #include "field.h"
 #include "raknet.h"
+#include "energy_charge.h"
 
 //=============================================
 // コンストラクタ
@@ -63,13 +64,16 @@ void My::CPlayerLobbyState::Lobby(CActiveSceneCharacter* character)
 //=============================================
 // コンストラクタ
 //=============================================
-My::CPlayerDuelState::CPlayerDuelState():m_pEnergyUpCount(nullptr)
+My::CPlayerDuelState::CPlayerDuelState():
+	m_pEnergyUpCount(nullptr),
+	m_EnergyUpFrame(INT_ZERO)
 {
 	if (m_pEnergyUpCount == nullptr)
 	{
 		m_pEnergyUpCount = new CCount;
 		m_pEnergyUpCount->SetCnt(INT_ZERO);
 		m_pEnergyUpCount->SetFrame(ENERGY_UP_FRAME);
+		m_EnergyUpFrame = ENERGY_UP_FRAME;
 	}
 }
 
@@ -95,6 +99,11 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 		return;
 	}
 	CGamePlayer* player = dynamic_cast<CGamePlayer*>(character);
+
+	//ゲージ用チャージの更新
+	CEnergy_Charge* pCharge = CEnergy_Charge::GetInstance();
+	pCharge->Update();
+	EnergyUp(player);
 
 	std::list<CDebuff*> DebuffList = character->GetDebuffList();
 
@@ -130,8 +139,6 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 		//TODO:ハンドの総数をここで取得し設定
 		//player->SetHandNum(pHand->GetTotal())
 	}
-
-	EnergyUp(player);
 }
 
 //=============================================

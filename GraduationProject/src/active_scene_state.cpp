@@ -239,10 +239,6 @@ void My::CDuel::Duel(CGame* game)
 
 	ArrangePlayerClockwise(VEC3_RESET_ZERO, 200.0f);
 
-	//ゲージ用チャージの更新
-	CEnergy_Charge* pCharge = CEnergy_Charge::GetInstance();
-	pCharge->Update();
-
 	//入力デバイス取得
 	CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;
 	if (pKeyboard->GetTrigger(DIK_RETURN) && game->GetPauseKey())

@@ -54,6 +54,45 @@ namespace My
 		* @param [in]キャラクターポインタ
 		*/
 		void Duel(CActiveSceneCharacter* character) override;
+
+		/**
+		 * @brief エナジー増やすまでのカウント取得
+		 * @return m_EnergyUpFrame
+		 */
+		inline CCount* GetEnergyCnt()
+		{
+			return m_pEnergyUpCount;
+		}
+
+		/**
+		 * @brief エナジ増やすまでのカウント設定
+		 * @param [in]nCnt
+		 */
+		inline void SetEnergyCnt(int nCnt)
+		{
+			if (m_pEnergyUpCount == nullptr) { return; }
+			m_pEnergyUpCount->SetCnt(nCnt);
+		}
+
+		/**
+		 * @brief エナジーのフレーム数取得
+		 * @return m_EnergyUpFrame
+		 */
+		inline int GetEnergyFrame()
+		{
+			return m_EnergyUpFrame;
+		}
+
+		/**
+		 * @brief エナジーフレーム設定
+		 * @param [in]frame
+		 */
+		inline void SetEnergyFrame(int frame)
+		{
+			if (m_pEnergyUpCount == nullptr) { return; }
+			m_EnergyUpFrame = frame;
+			m_pEnergyUpCount->SetFrame(m_EnergyUpFrame);
+		}
 	private:
 		static constexpr int ENERGY_UP_FRAME = 3 * 60;		//!<エナジーが上がるまでのフレーム数 TODO:今後のカードによっては変数に昇格するかも
 
@@ -70,6 +109,7 @@ namespace My
 		void EnergyUp(CGamePlayer* player);
 
 		CCount* m_pEnergyUpCount;	//!エナジーを増やすまでのカウント
+		int m_EnergyUpFrame;		//!エナジーを増やすフレーム
 	};
 
 }
