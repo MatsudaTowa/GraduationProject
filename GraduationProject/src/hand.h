@@ -102,11 +102,10 @@ namespace My
 			NEUTRAL=0,
 			SELECT,
 			CAST,
-		}HANDTYPE;
+		}HANDSTATE;
 
-		HANDTYPE m_handtype;
-
-		void HandTypeUpdate();
+		// 手札の状態
+		HANDSTATE m_HandState;
 
 		/**
 		* @brief 手札のカードの状態変更

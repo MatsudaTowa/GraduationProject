@@ -69,8 +69,9 @@ namespace My
 
 		/**
 		 * @brief カードをマウスでキャストする
+		 * @return [out]カードがキャストされたかどうか判定
 		 */
-		void CardCastToMouse();
+		bool CardCastToMouse();
 
 		/**
 		 * @brief 生成

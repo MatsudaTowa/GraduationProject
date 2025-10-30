@@ -19,7 +19,7 @@ My::CHand::CHand() :
 	m_TotalNum(0),
 	m_IsPassStart(false),
 	m_IsPickUp(false),
-	m_handtype(NEUTRAL),
+	m_HandState(NEUTRAL),
 	m_pHandCard(),
 	m_pStayCard(),
 	m_pTriggerCard()
@@ -99,7 +99,9 @@ void My::CHand::Update()
 //===========================================================================================================
 void My::CHand::Select()
 {
-	// ifをなくせば複数キャスト可能だが、複数同時選択されてしまう
+	// キャスト状態だったらセレクトさせない
+	if (m_HandState == CAST)
+		return;
 
 	// 何も選択されていない場合
 	if (!m_IsPickUp)
@@ -145,13 +147,18 @@ void My::CHand::Select()
 //===========================================================================================================
 void My::CHand::Cast()
 {
+	// 選択カードがnullptr か セレクトナンバーが 0 未満だったら
 	if (!m_pCard[m_SelectNum] || m_SelectNum < 0)
 		return;
 
-	if (m_pCard[m_SelectNum]->GetStateNum() == CCardState::CARD_CAST)
-	{
-		//CGameManager::GetInstance()->ChangeState(new CCardCast);
-	}
+	// キャスト状態かどうか判断
+	bool IsCast = m_pCard[m_SelectNum]->CardCastToMouse();
+
+	// キャスト状態によって手札のタイプを変える
+	if (IsCast)
+		m_HandState = CAST;
+	else
+		m_HandState = NEUTRAL;
 }
 
 //===========================================================================================================
@@ -175,20 +182,6 @@ void My::CHand::SelectStateSet()
 	if (m_pCard[m_SelectNum] != nullptr)
 	{
 		m_pCard[m_SelectNum]->ChangeState(CCardState::CARD_STATE::CARD_PICKUP);
-	}
-}
-
-void My::CHand::HandTypeUpdate()
-{
-	switch (m_handtype)
-	{
-	case SELECT:
-		Select();
-		break;
-
-	case CAST:
-		Cast();
-		break;
 	}
 }
 

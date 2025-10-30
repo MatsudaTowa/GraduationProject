@@ -86,7 +86,7 @@ void My::CCard::Update()
 	D3DXVECTOR3 rot = pCamera->GetRot();
 	rot.x += -1.2f;
 
-	CardCastToMouse();
+	//CardCastToMouse();
 	
 	m_pState->Update(this);
 
@@ -218,12 +218,12 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state)
 //===========================================================================================================
 // カードをマウスでキャスト
 //===========================================================================================================
-void My::CCard::CardCastToMouse()
+bool My::CCard::CardCastToMouse()
 {
 	// 選択状態とキャスト状態以外は通さない
 	if (GetStateNum() != CCardState::CARD_PICKUP&&
 		GetStateNum() != CCardState::CARD_CAST)
-		return;
+	{ }
 
 	// カメラ取得
 	CCamera* pCamera = GET_CAMERA(0);
@@ -257,12 +257,18 @@ void My::CCard::CardCastToMouse()
 		CalcScreenToWorld(&resultpos, screenpos.x, screenpos.y, 1.0f, width, height, &View, &Proj);
 		resultpos.y += 20.0f;
 		SetPos(resultpos);
+
+		return true;
 	}
 	else if (pMouse->GetRelease(0))
 	{
+		// ステイ遷移
 		ChangeState(CCardState::CARD_STAY);
+		// 
 		m_target = pMouse->GetArea();
 	}
+
+	return false;
 	
 }
 
