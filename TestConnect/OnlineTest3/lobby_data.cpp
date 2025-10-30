@@ -20,6 +20,7 @@ void CLobby_Data::NewConnection(RakNet::Packet* packet, RakNet::RakPeerInterface
     //パラメータの設定
     pPlayer->SetIndex(m_LobbyPlayerList.size()); //番号
     pPlayer->SetRakNetID(packet->guid);          //RakNetID
+    pPlayer->SetTag(CPlayer::TAG_PLAYER);        //タグ
     std::cout << "プレイヤー" << pPlayer->GetIndex() + 1 << "を受信しました\n";
 
     //プレイヤーの情報を受け取る
@@ -37,6 +38,7 @@ void CLobby_Data::NewConnection(RakNet::Packet* packet, RakNet::RakPeerInterface
             CLobby_Player::LobbyData SendData;
             SendData.BaceData.RakNetID = iter->GetRakNetID();
             SendData.BaceData.nIndex = iter->GetIndex();
+            SendData.BaceData.Tag = iter->GetTag();
             SendData.isReady = iter->Getready();
 
             //送信
@@ -49,6 +51,7 @@ void CLobby_Data::NewConnection(RakNet::Packet* packet, RakNet::RakPeerInterface
             CLobby_Player::LobbyData SendData;
             SendData.BaceData.RakNetID = pPlayer->GetRakNetID();
             SendData.BaceData.nIndex = pPlayer->GetIndex();
+            SendData.BaceData.Tag = pPlayer->GetTag();
             SendData.isReady = pPlayer->Getready();
 
             //送信
@@ -129,6 +132,7 @@ void CLobby_Data::SendPlayerNum(RakNet::RakPeerInterface* peer, GameMessages mes
         CLobby_Player::LobbyData SendData;
         SendData.BaceData.RakNetID = iter->GetRakNetID();
         SendData.BaceData.nIndex = iter->GetIndex();
+        SendData.BaceData.Tag = iter->GetTag();
         SendData.isReady = iter->Getready();
 
         //書き出し
@@ -185,6 +189,7 @@ void CLobby_Data::Ready(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
         CLobby_Player::LobbyData SendData;
         SendData.BaceData.RakNetID = iter->GetRakNetID();
         SendData.BaceData.nIndex = iter->GetIndex();
+        SendData.BaceData.Tag = iter->GetTag();
         SendData.isReady = iter->Getready();
         bsOut.Write(iter->Getready());
     }
@@ -240,6 +245,7 @@ void CLobby_Data::SetData(std::list<CPlayer::Data> data)
         CLobby_Player* pPlayer = new CLobby_Player; //クラスを作成し代入
         pPlayer->SetIndex(iter.nIndex);
         pPlayer->SetRakNetID(iter.RakNetID);
+        pPlayer->SetTag(iter.Tag);
 
         //追加
         m_LobbyPlayerList.push_back(pPlayer);
@@ -262,6 +268,7 @@ std::list<CPlayer::Data> CLobby_Data::GetData()
         CPlayer::Data Data;                     //変数
         Data.nIndex = iter->GetIndex();         //番号
         Data.RakNetID = iter->GetRakNetID();    //RakNetID
+        Data.Tag = iter->GetTag();              //タグ
         List.push_back(Data);                   //追加
     }
 
@@ -282,6 +289,7 @@ void CLobby_Data::AddStartMember()
         //パラメータの設定
         pPlayer->SetIndex(i);                                       //番号
         pPlayer->SetRakNetID(static_cast<RakNet::RakNetGUID>(-1));  //RakNetID(CPUとわかるように-1を代入)
+        pPlayer->SetTag(CPlayer::TAG_CPU);                          //cpuのタグをつける
         pPlayer->SetReady(true);                                    //敵は準備がいらないのでtrue
 
         //追加
@@ -312,6 +320,7 @@ void CLobby_Data::AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
     //パラメータの設定
     pPlayer->SetIndex(m_LobbyPlayerList.size()); //番号
     pPlayer->SetRakNetID(packet->guid);          //RakNetID
+    pPlayer->SetTag(CPlayer::TAG_CPU);           //タグ
 
     //リストに保存
     m_LobbyPlayerList.push_back(pPlayer);

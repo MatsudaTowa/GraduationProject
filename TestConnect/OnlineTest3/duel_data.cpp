@@ -142,6 +142,7 @@ void CDuel_Data::SendPlayerNum(RakNet::RakPeerInterface* peer, GameMessages mess
         CDuel_Player::DuelData SendData;
         SendData.BaceData.RakNetID = iter->GetRakNetID();
         SendData.BaceData.nIndex = iter->GetIndex();
+        SendData.BaceData.Tag = iter->GetTag();
 
         //書き出し
         bsOut.Write(SendData);
@@ -195,6 +196,7 @@ void CDuel_Data::Ready(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
         CDuel_Player::DuelData SendData;
         SendData.BaceData.RakNetID = iter->GetRakNetID();
         SendData.BaceData.nIndex = iter->GetIndex();
+        SendData.BaceData.Tag = iter->GetTag();
         //bsOut.Write(iter->Getready());
     }
 
@@ -243,6 +245,7 @@ void CDuel_Data::SetData(std::list<CPlayer::Data> data)
         CDuel_Player* pPlayer = new CDuel_Player; //クラスを作成し代入
         pPlayer->SetIndex(iter.nIndex);
         pPlayer->SetRakNetID(iter.RakNetID);
+        pPlayer->SetTag(iter.Tag);
 
         //追加
         m_DuelPlayerList.push_back(pPlayer);
@@ -265,6 +268,7 @@ std::list<CPlayer::Data> CDuel_Data::GetData()
         CPlayer::Data Data;                     //変数
         Data.nIndex = iter->GetIndex();         //番号
         Data.RakNetID = iter->GetRakNetID();    //RakNetID
+        Data.Tag = iter->GetTag();              //タグ
         List.push_back(Data);                   //追加
     }
 

@@ -25,6 +25,7 @@ public:
 	{
 		RakNet::RakNetGUID ClientID;	//プレイヤー判別用のID
 		int nIndex;						//プレイヤー番号
+		My::CCharacter::TAG Tag;		//タグ
 	};
 
 	//関数

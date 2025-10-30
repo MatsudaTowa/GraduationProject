@@ -31,10 +31,11 @@ public:
 	{
 		RakNet::RakNetGUID RakNetID;	//プレイヤー判別用ID
 		int nIndex;						//プレイヤー番号
+		TAG Tag;						//タグ
 	};
 	
 	//関数
-	CPlayer() : m_nIndex(-1), m_RakNetID(){} 	//コンストラクタ
+	CPlayer() : m_nIndex(-1), m_RakNetID()/*, m_Tag(TAG_PLAYER)*/{} 	//コンストラクタ
 	~CPlayer() {}								//デストラクタ
 
 	//設定と取得
@@ -47,11 +48,16 @@ public:
 	void SetIndex(int index) { m_nIndex = index; }	//設定
 	int& GetIndex() { return m_nIndex; }			//取得
 
+	//タグ
+	void SetTag(TAG tag) { m_Tag = tag; }	//設定
+	TAG& GetTag() { return m_Tag; }			//取得
+
 private:
 
 	//変数
 	RakNet::RakNetGUID m_RakNetID;	//プレイヤー判別用のID
 	int m_nIndex;					//プレイヤー番号
+	TAG m_Tag;						//タグ
 };
 
 #endif

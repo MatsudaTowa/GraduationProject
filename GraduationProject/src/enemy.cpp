@@ -15,7 +15,7 @@ My::CEnemy::CEnemy(int nPriority)
 {
 	//マネージャーに登録
 	CGameManager::GetInstance()->GetEnemyManager()->Regist(this);
-	My::CCharacter::SetTag(My::CCharacter::TAG_CPU);
+	My::CCharacter::SetTag(My::CCharacter::TAG_PLAYER);
 }
 
 //=============================================

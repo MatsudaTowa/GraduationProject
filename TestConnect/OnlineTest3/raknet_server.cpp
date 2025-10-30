@@ -17,7 +17,8 @@ CRakNet_Data* CRakNet_Server::m_pRakNetData = nullptr;
 //コンストラクタ
 //=====================================
 CRakNet_Server::CRakNet_Server() :
-	m_pPacket(nullptr)	//パケット
+	m_pPacket(nullptr),	//パケット
+    m_isUpdate(false)   //更新
 {
     //動的確保
     m_pRakNetData = new CLobby_Data;

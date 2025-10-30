@@ -20,8 +20,7 @@ My::CCpu::CCpu(int nPriority)
 //=============================================
 My::CCpu::~CCpu()
 {
-	//NOTE:Removeは呼ばない ReleseAllなどで要素数いじった後に全削除してしまうため
-	//一個ずつ消していくにはSetisDeleteでtrue代入後にコンピューターマネージャーのRemoveを呼ぶように
+	
 }
 
 //=============================================
@@ -62,7 +61,7 @@ void My::CCpu::Draw()
 //=============================================
 // 生成
 //=============================================
-My::CCpu* My::CCpu::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, int id)
+My::CEnemy* My::CCpu::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, int id)
 {
 	CCpu* pCpu = new CCpu;
 	if (pCpu == nullptr) { return nullptr; }

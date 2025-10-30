@@ -42,6 +42,7 @@ private:
 	//メンバ変数
 	RakNet::Packet* m_pPacket;			//パケット
 	static CRakNet_Data* m_pRakNetData;	//ラックネットのデータ
+	bool m_isUpdate;					//更新フラグ
 };
 
 #endif
