@@ -119,8 +119,6 @@ void My::CCardStateCast::Init(CCard* cpy)
 	pos.z += 20.0f;
 
 	cpy->SetPos(pos);
-
-	//CGameManager::GetInstance().get
 }
 
 //=======================================================================================
@@ -155,6 +153,14 @@ void My::CCardStateStay::Init(CCard* cpy)
 	if (CManager::GetInstance()->GetMouse()->GetArea() == CInputMouse::AREA::CENTER)
 	{
 		cpy->ChangeState(CCardState::CARD_NEUTRAL);
+	}
+	else
+	{
+		CActiveSceneCharacter::Status status = CGameManager::GetInstance()->GetPlayer()->GetStatus();
+
+		status.energy -= cpy->GetParameter().cost;
+
+		CGameManager::GetInstance()->GetPlayer()->SetStatus(status);
 	}
 	
 }

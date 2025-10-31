@@ -78,10 +78,19 @@ void My::CHand::Update()
 	// キーボード取得
 	CInputKeyboard* pkeyboad = CManager::GetInstance()->GetKeyboard();
 
+	// ステータス取得
+	CActiveSceneCharacter::Status status = CGameManager::GetInstance()->GetPlayer()->GetStatus();
+
 	// 手札ドロー
 	if (pkeyboad->GetTrigger(DIK_SPACE))
 	{
-		HandDraw(1);
+		if (status.energy > 0)
+		{// 消費できるエナジーがなかったらドローできない
+
+			HandDraw(1);
+			--status.energy;
+			CGameManager::GetInstance()->GetPlayer()->SetStatus(status);
+		}
 	}
 
 	// 手札選択
@@ -131,7 +140,6 @@ void My::CHand::Select()
 		// 選択番号のカードが非選択状態になったら
 		if (m_pCard[m_SelectNum]->GetStateNum() == CCardState::CARD_NEUTRAL)
 		{
-			//CGameManager::GetInstance()->ChangeState(new CDuel);
 			m_IsPickUp = false;	// 選択されていない状態にする
 		}
 		else
