@@ -20,7 +20,9 @@ m_outpos({ 0,0,0 }),
 m_StateNum(CCardState::CARD_NEUTRAL),
 m_CardType(CARDTYPE_::TYPE_ATTACK),
 m_IsChange(true),
-m_target(CInputMouse::AREA::CENTER)
+m_target(CInputMouse::AREA::CENTER),
+m_Cost(INT_ZERO),
+m_AttackPower(INT_ZERO)
 {
 	//if (m_pTop == nullptr)
 	//{// top が設定されていなかったら
@@ -55,6 +57,9 @@ HRESULT My::CCard::Init()
 	m_pState = new CCardStateNeutral();
 	m_pState->Init();
 	m_StateNum = CCardState::CARD_NEUTRAL;
+
+	m_Param.power = Rundom(1, 10);
+	m_Param.cost = Rundom(1, 10);
 
 	// カードフレーム生成
 	for (int i = 0; i < CCardFrame::FRAMETYPE_MAX; i++)
@@ -251,6 +256,7 @@ bool My::CCard::CardCastToMouse()
 
 	if (pMouse->GetPress(0))
 	{
+		// キャストステートにする
 		ChangeState(CCardState::CARD_CAST);
 
 		screenpos = pMouse->GetMousePos();

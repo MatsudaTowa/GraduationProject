@@ -45,8 +45,10 @@ void My::CCardStateNeutral::Init(CCard* cpy)
 {
 	if (cpy == nullptr)
 		return;
+	D3DXVECTOR3 pos = cpy->GetPos();
+	D3DXVECTOR3 npos = cpy->GetNeutralPos();
 
-	cpy->SetPos(cpy->GetNeutralPos());
+	cpy->SetPos(npos);
 }
 
 //=======================================================================================
@@ -143,10 +145,16 @@ void My::CCardStateCast::Update(CCard* cpy)
 //=======================================================================================
 // 初期化
 //=======================================================================================
-void My::CCardStateStay::Init()
+void My::CCardStateStay::Init(CCard* cpy)
 {
 	// カウントを初期化
 	m_Staycount = 0;
+
+	if (CManager::GetInstance()->GetMouse()->GetArea() == CInputMouse::AREA::CENTER)
+	{
+		cpy->ChangeState(CCardState::CARD_NEUTRAL);
+	}
+	
 }
 
 //=======================================================================================
@@ -182,8 +190,7 @@ void My::CCardStateTrigger::Init(CCard* cpy)
 	if (cpy == nullptr)
 		return;
 
-	cpy->GetTarget();
-	CGameManager::GetInstance()->GetAreaManager()->SelectArea();
+	CGameManager::GetInstance()->GetAreaManager()->CardTrigger(cpy->GetTarget());
 
 	// トリガーしたことをわかりやすくするため今だけ位置を変えている
 	D3DXVECTOR3 pos = cpy->GetPos();

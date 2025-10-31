@@ -151,10 +151,10 @@ void My::CHand::Cast()
 	if (!m_pCard[m_SelectNum] || m_SelectNum < 0)
 		return;
 
-	// キャスト状態かどうか判断
+	// 返り値でキャスト状態かどうか判断
 	bool IsCast = m_pCard[m_SelectNum]->CardCastToMouse();
 
-	// キャスト状態によって手札のタイプを変える
+	// キャスト状態によって手札の状態を変える
 	if (IsCast)
 		m_HandState = CAST;
 	else
@@ -232,7 +232,6 @@ void My::CHand::DeleteCard()
 
 	// 手札の位置をセットする
 	SetHandCardPos();
-	
 }
 
 //===========================================================================================================
