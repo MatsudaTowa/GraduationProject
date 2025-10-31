@@ -4,9 +4,9 @@
 //Author Matsuda Towa
 //
 //=============================================
-#include "game_player_state.h"
+#include "active_scene_player_state.h"
 #include "game_player.h"
-#include "active_manager.h"
+#include "active_scene_manager.h"
 #include "field.h"
 #include "raknet.h"
 #include "energy_charge.h"
@@ -31,11 +31,11 @@ My::CPlayerLobbyState::~CPlayerLobbyState()
 void My::CPlayerLobbyState::Lobby(CActiveSceneCharacter* character)
 {
 	CLobbyCharacter::Lobby(character);
-	if (typeid(*character) != typeid(CGamePlayer))
+	if (typeid(*character) != typeid(CActiveScenePlayer))
 	{
 		return;
 	}
-	CGamePlayer* player = dynamic_cast<CGamePlayer*>(character);
+	CActiveScenePlayer* player = dynamic_cast<CActiveScenePlayer*>(character);
 	//モーション設定
 	player->SetMotion(CPlayer::MOTION_NEUTRAL);
 
@@ -94,11 +94,11 @@ My::CPlayerDuelState::~CPlayerDuelState()
 //=============================================
 void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 {
-	if (typeid(*character) != typeid(CGamePlayer))
+	if (typeid(*character) != typeid(CActiveScenePlayer))
 	{
 		return;
 	}
-	CGamePlayer* player = dynamic_cast<CGamePlayer*>(character);
+	CActiveScenePlayer* player = dynamic_cast<CActiveScenePlayer*>(character);
 
 	//ゲージ用チャージの更新
 	CEnergy_Charge* pCharge = CEnergy_Charge::GetInstance();
@@ -118,7 +118,7 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 		if (itr->GetDebuffType() == CDebuff::DEBUFF_TYPE::DEATH)
 		{
 			//ステートをデュエルにしてから抜ける
-			CGameManager::GetInstance()->ChangeState(new CDuel);
+			CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
 			return; 
 		}
 	}
@@ -148,7 +148,7 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 //=============================================
 // UI設定
 //=============================================
-void My::CPlayerDuelState::CreateDuelUI(CGamePlayer* player)
+void My::CPlayerDuelState::CreateDuelUI(CActiveScenePlayer* player)
 {
 	if (player->GetHand() == nullptr)
 	{// 手札生成
@@ -174,7 +174,7 @@ void My::CPlayerDuelState::CreateDuelUI(CGamePlayer* player)
 //=============================================
 //エナジー上げる処理
 //=============================================
-void My::CPlayerDuelState::EnergyUp(CGamePlayer* player)
+void My::CPlayerDuelState::EnergyUp(CActiveScenePlayer* player)
 {
 	int energy = player->GetEnergy();
 

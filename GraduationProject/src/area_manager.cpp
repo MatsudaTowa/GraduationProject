@@ -5,7 +5,7 @@
 // 
 //================================
 #include "area_manager.h"
-#include "active_manager.h"
+#include "active_scene_manager.h"
 #include "raknet.h"
 
 //================================
@@ -150,14 +150,14 @@ void My::CAreaManager::CardTrigger(My::CInputMouse::AREA area)
 			//TODO:カードを離したらに変更予定
 			if (GET_INPUT_MOUSE->GetTrigger(0))
 			{
-				CGameManager::GetInstance()->ChangeState(new CDuel);
+				CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
 			}
 		}
 		else
 		{
 			//登録されているキャラクターを取得
-			CGamePlayer* player = CGameManager::GetInstance()->GetPlayer();
-			std::list<CEnemy*> enemy_list = CGameManager::GetInstance()->GetEnemyManager()->GetList();
+			CActiveScenePlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();
+			std::list<CEnemy*> enemy_list = CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList();
 			int life;
 			player_cast(player, area, life);
 
@@ -182,7 +182,7 @@ void My::CAreaManager::CardTrigger(My::CInputMouse::AREA area)
 	}
 }
 
-void My::CAreaManager::player_cast(CGamePlayer* player, My::CInputMouse::AREA area, int& life)
+void My::CAreaManager::player_cast(CActiveScenePlayer* player, My::CInputMouse::AREA area, int& life)
 {
 	if (player == nullptr)
 	{

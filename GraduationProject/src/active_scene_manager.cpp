@@ -4,12 +4,12 @@
 //Auther MatsudaTowa
 //
 //=============================================
-#include "active_manager.h"
+#include "active_scene_manager.h"
 
 //=============================================
 // コンストラクタ
 //=============================================
-My::CGameManager::CGameManager():
+My::CActiveSceneManager::CActiveSceneManager():
 m_pState(nullptr),			//ゲームのステート
 m_pEnemyManager(),			//エネミーマネージャー
 m_pAreaManager(),			//エリアマネージャー
@@ -22,14 +22,14 @@ m_isFinish(false)
 //=============================================
 // デストラクタ
 //=============================================
-My::CGameManager::~CGameManager()
+My::CActiveSceneManager::~CActiveSceneManager()
 {
 }
 
 //=============================================
 // 終了
 //=============================================
-void My::CGameManager::Uninit()
+void My::CActiveSceneManager::Uninit()
 {
 	if (m_pAreaManager != nullptr)
 	{
@@ -65,9 +65,9 @@ void My::CGameManager::Uninit()
 //=============================================
 //ステート変更
 //=============================================
-void My::CGameManager::ChangeState(CActiveSceneState* state)
+void My::CActiveSceneManager::ChangeState(CActiveSceneState* state)
 {
-	CActiveSceneState* current_state = CGameManager::GetInstance()->GetState();
+	CActiveSceneState* current_state = CActiveSceneManager::GetInstance()->GetState();
 	//今のステートを消し引数のステートに切り替える
 	if (current_state != nullptr)
 	{
@@ -79,6 +79,6 @@ void My::CGameManager::ChangeState(CActiveSceneState* state)
 		delete current_state;
 
 		current_state = state;
-		CGameManager::GetInstance()->SetState(current_state);
+		CActiveSceneManager::GetInstance()->SetState(current_state);
 	}
 }

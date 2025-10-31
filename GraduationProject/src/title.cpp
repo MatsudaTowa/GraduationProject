@@ -35,7 +35,7 @@ My::CTitle::~CTitle()
 //=============================================
 HRESULT My::CTitle::Init()
 {
-    CREATE_CAMERA(NEW CTitleCamera);
+    CREATE_CAMERA(new CTitleCamera);
 
     //ínñ ê∂ê¨
     CField::Create(VEC3_RESET_ZERO, FIELD_SIZE,new CField);

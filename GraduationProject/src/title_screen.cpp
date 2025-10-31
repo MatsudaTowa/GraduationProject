@@ -86,7 +86,7 @@ void My::CTitle_Screen::Draw()
 My::CTitle_Screen* My::CTitle_Screen::Create(D3DXVECTOR3 pos)
 {
 	CTexture* pTexture = GET_TEXTURE;
-	CTitle_Screen* pTitle_Screen = NEW CTitle_Screen;
+	CTitle_Screen* pTitle_Screen = new CTitle_Screen;
 
 	//null‚È‚çnull‚ð•Ô‚·
 	if (pTitle_Screen == nullptr) {return nullptr;}

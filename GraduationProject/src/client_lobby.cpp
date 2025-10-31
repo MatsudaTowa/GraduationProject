@@ -9,9 +9,9 @@
 #include "client_lobby.h"
 #include "game_player.h"
 #include "enemy.h"
-#include "active_manager.h"
+#include "active_scene_manager.h"
 #include "raknet.h"
-#include "game_player_state.h"
+#include "active_scene_player_state.h"
 
 //=====================================
 //コンストラクタ
@@ -91,9 +91,9 @@ void CClient_Lobby::Regist(RakNet::Packet* packet)
         }
 
         //初期状態なら最後の番号を代入
-        if (My::CGameManager::GetInstance()->GetPlayer() == nullptr && nLap == m_LobbyPlayerList.size() - 1)
+        if (My::CActiveSceneManager::GetInstance()->GetPlayer() == nullptr && nLap == m_LobbyPlayerList.size() - 1)
         {
-            My::CPlayer::Create(new My::CGamePlayer, VEC3_RESET_ZERO, VEC3_RESET_ZERO, m_LobbyPlayerList.size() - 1);
+            My::CPlayer::Create(new My::CActiveScenePlayer, VEC3_RESET_ZERO, VEC3_RESET_ZERO, m_LobbyPlayerList.size() - 1);
         }
 
         ++nLap; //インクリメント
@@ -106,7 +106,7 @@ void CClient_Lobby::Regist(RakNet::Packet* packet)
 bool CClient_Lobby::CheckEnemyCreate(int id, int max)
 {
     //現在の敵を確認
-    std::list<My::CEnemy*> enemy = My::CGameManager::GetInstance()->GetEnemyManager()->GetList();
+    std::list<My::CEnemy*> enemy = My::CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList();
     for (auto iter : enemy)
     {
         //すでに敵が生成している
@@ -117,12 +117,12 @@ bool CClient_Lobby::CheckEnemyCreate(int id, int max)
     }
 
     //自分が存在しない
-    if (My::CGameManager::GetInstance()->GetPlayer() == nullptr && id == max - 1) return false;
+    if (My::CActiveSceneManager::GetInstance()->GetPlayer() == nullptr && id == max - 1) return false;
 
     //プレイヤーと同じ番号か
-    if (My::CGameManager::GetInstance()->GetPlayer() != nullptr)
+    if (My::CActiveSceneManager::GetInstance()->GetPlayer() != nullptr)
     {
-        if (My::CGameManager::GetInstance()->GetPlayer()->GetPlayerIdx() == id) return false;
+        if (My::CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx() == id) return false;
     }
 
     return true;
@@ -163,10 +163,10 @@ void CClient_Lobby::Delete(RakNet::Packet* packet)
     }
 
     //現在の敵を確認
-    //std::list<My::CEnemy*> EnemyList = My::CGameManager::GetInstance()->GetEnemyManager()->GetList();
+    //std::list<My::CEnemy*> EnemyList = My::CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList();
 
     //番号がずれている敵がいたら埋める
-    for (auto& iter : My::CGameManager::GetInstance()->GetEnemyManager()->GetList())
+    for (auto& iter : My::CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList())
     {
         //消えた番号より大きいならずらす
         if (iter->GetPlayerIdx() > nStart)
@@ -176,16 +176,16 @@ void CClient_Lobby::Delete(RakNet::Packet* packet)
         else if (iter->GetPlayerIdx() == nStart)
         {//消える番号と一致したプレイヤーは削除
             iter->SetisDelete(true);
-            My::CGameManager::GetInstance()->GetEnemyManager()->Remove(iter);
+            My::CActiveSceneManager::GetInstance()->GetEnemyManager()->Remove(iter);
         }
     }
 
     //プレイヤーの番号がずれるかを確認
-    if (My::CGameManager::GetInstance()->GetPlayer() != nullptr)
+    if (My::CActiveSceneManager::GetInstance()->GetPlayer() != nullptr)
     {
-        if (My::CGameManager::GetInstance()->GetPlayer()->GetPlayerIdx() > nStart)
+        if (My::CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx() > nStart)
         {
-            My::CGameManager::GetInstance()->GetPlayer()->SetPlayerIdx(My::CGameManager::GetInstance()->GetPlayer()->GetPlayerIdx() - 1);
+            My::CActiveSceneManager::GetInstance()->GetPlayer()->SetPlayerIdx(My::CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx() - 1);
         }
     }
 }
@@ -198,14 +198,14 @@ void CClient_Lobby::SendReady(RakNet::Packet* packet, RakNet::RakPeerInterface* 
     //データの作成
     RakNet::BitStream bsOut;
     bool isRaedy = false;
-    int nID = My::CGameManager::GetInstance()->GetPlayer()->GetPlayerIdx();
+    int nID = My::CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx();
     bsOut.Write((RakNet::MessageID)CRakNet::GameMessages::ID_LOBY_MESSAGE_SEND_READY);
 
     //準備フラグの書き出し
     bsOut.Write(nID);   //番号
 
     //キャストを試す
-    My::CLobbyCharacter* pState = dynamic_cast<My::CLobbyCharacter*>(My::CGameManager::GetInstance()->GetPlayer()->GetState());
+    My::CLobbyCharacter* pState = dynamic_cast<My::CLobbyCharacter*>(My::CActiveSceneManager::GetInstance()->GetPlayer()->GetState());
 
     //キャストが成功していたら
     if (pState != nullptr)
@@ -258,7 +258,7 @@ void CClient_Lobby::ReceiveReady(RakNet::Packet* packet)
     auto CheckTarget = [&](int id, bool ready)
     {
         //引数の番号の対象か確認
-        for (auto& iter : My::CGameManager::GetInstance()->GetEnemyManager()->GetList())
+        for (auto& iter : My::CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList())
         {
             //消えた番号より大きいならずらす
             if (iter->GetPlayerIdx() == id)
@@ -276,12 +276,12 @@ void CClient_Lobby::ReceiveReady(RakNet::Packet* packet)
         }
 
         //プレイヤーの番号がずれるかを確認
-        if (My::CGameManager::GetInstance()->GetPlayer() != nullptr)
+        if (My::CActiveSceneManager::GetInstance()->GetPlayer() != nullptr)
         {
-            if (My::CGameManager::GetInstance()->GetPlayer()->GetPlayerIdx() == id)
+            if (My::CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx() == id)
             {
                 //キャストを試す
-                My::CLobbyCharacter* pState = dynamic_cast<My::CLobbyCharacter*>(My::CGameManager::GetInstance()->GetPlayer()->GetState());
+                My::CLobbyCharacter* pState = dynamic_cast<My::CLobbyCharacter*>(My::CActiveSceneManager::GetInstance()->GetPlayer()->GetState());
 
                 //キャストが成功していたら
                 if (pState != nullptr)

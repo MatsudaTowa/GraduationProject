@@ -5,7 +5,7 @@
 //
 //=============================================
 #include "center_area.h"
-#include "active_manager.h"
+#include "active_scene_manager.h"
 namespace
 {
 	const std::string TEX_NAME = "data\\TEXTURE\\cancel.png";
@@ -68,7 +68,7 @@ void My::CCenterArea::Update()
 {
 	SetVtx();
 
-	if (!CGameManager::GetInstance()->GetAreaManager()->GetActive())
+	if (!CActiveSceneManager::GetInstance()->GetAreaManager()->GetActive())
 	{
 		SetColor(COLOR_NONE);
 		return;

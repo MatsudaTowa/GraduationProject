@@ -6,7 +6,7 @@
 //=============================================
 #include "scene.h"
 #include "title.h"
-#include "game.h"
+#include "active_scene.h"
 #include "result.h"
 #include "manager.h"
 
@@ -77,7 +77,7 @@ My::CScene* My::CScene::Create(MODE mode)
 
     case MODE_GAME: // ÉQÅ[ÉÄ
         //delete pScene;
-        pScene = new CGame;
+        pScene = new CActiveScene;
         break;
     case MODE_RESULT: //ÉäÉUÉãÉg
         pScene = new CResult;

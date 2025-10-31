@@ -71,16 +71,16 @@
     <ClCompile Include="src\game_player.cpp">
       <Filter>character</Filter>
     </ClCompile>
-    <ClCompile Include="src\game_player_state.cpp">
+    <ClCompile Include="src\active_player_state.cpp">
       <Filter>character</Filter>
     </ClCompile>
-    <ClCompile Include="src\active_manager.cpp">
+    <ClCompile Include="src\active_scene_manager.cpp">
       <Filter>active_scene</Filter>
     </ClCompile>
     <ClCompile Include="src\active_scene_state.cpp">
       <Filter>active_scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\game.cpp">
+    <ClCompile Include="src\active_scene.cpp">
       <Filter>active_scene</Filter>
     </ClCompile>
     <ClCompile Include="src\area.cpp">
@@ -193,16 +193,16 @@
     <ClInclude Include="src\game_player.h">
       <Filter>character</Filter>
     </ClInclude>
-    <ClInclude Include="src\game_player_state.h">
+    <ClInclude Include="src\active_scene_player_state.h">
       <Filter>character</Filter>
     </ClInclude>
-    <ClInclude Include="src\active_manager.h">
+    <ClInclude Include="src\active_scene_manager.h">
       <Filter>active_scene</Filter>
     </ClInclude>
     <ClInclude Include="src\active_scene_state.h">
       <Filter>active_scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\game.h">
+    <ClInclude Include="src\active_scene.h">
       <Filter>active_scene</Filter>
     </ClInclude>
     <ClInclude Include="src\area.h">

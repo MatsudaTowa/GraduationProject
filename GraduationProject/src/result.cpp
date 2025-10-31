@@ -5,7 +5,7 @@
 //
 //=============================================
 #include "result.h"
-#include "game.h"
+#include "active_scene.h"
 #include "result_screen.h"
 #include "result_ui.h"
 #include "result_camera.h"
