@@ -37,6 +37,12 @@ namespace My
 		void SelectArea();
 
 		/**
+		 * @brief そこのエリアにカードを実行
+		 * @param [in]area
+		 */
+		void CardTrigger(My::CInputMouse::AREA area);
+
+		/**
 		 * @brief エリアの設定
 		 * @param [in]エリアのポインタ
 		 * @param [in]どこのエリアか

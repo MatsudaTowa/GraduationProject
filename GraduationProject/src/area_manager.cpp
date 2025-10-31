@@ -139,33 +139,7 @@ void My::CAreaManager::SelectArea()
 	{
 		m_pArea[area]->SetSelect(true);	
 
-		//TODO:ここに選択されたカードの処理を！
-		//if (GET_INPUT_MOUSE->GetTrigger(0))
-		{
-			//登録されているキャラクターを取得
-			CGamePlayer* player = CGameManager::GetInstance()->GetPlayer();
-			std::list<CEnemy*> enemy_list = CGameManager::GetInstance()->GetEnemyManager()->GetList();
-			int life;
-			player_cast(player, area, life);
-
-			for (auto& itr : enemy_list)
-			{
-				if (itr == nullptr) { continue; }
-
-				if (itr->GetArea() != area) { continue; }
-				
-				life = itr->GetLife();
-				if (life > INT_ZERO)
-				{//TODO:選択できない旨のUI表示
-					--life;
-				}
-				itr->SetLife(life);
-			}
-
-			if (!CRakNet::GetInstance()->GetOnline()) return;
-			//通信処理
-			CRakNet::GetInstance()->SendStatus();
-		}
+		CardTrigger(area);
 	}
 
 	for (int i = 0; i < CInputMouse::AREA::MAX; ++i)
@@ -181,6 +155,37 @@ void My::CAreaManager::SelectArea()
 				m_pArea[i]->SetSelect(false);
 			}
 		}
+	}
+}
+
+void My::CAreaManager::CardTrigger(My::CInputMouse::AREA area)
+{
+	//TODO:ここに選択されたカードの処理を！
+	//if (GET_INPUT_MOUSE->GetTrigger(0))
+	{
+		//登録されているキャラクターを取得
+		CGamePlayer* player = CGameManager::GetInstance()->GetPlayer();
+		std::list<CEnemy*> enemy_list = CGameManager::GetInstance()->GetEnemyManager()->GetList();
+		int life;
+		player_cast(player, area, life);
+
+		for (auto& itr : enemy_list)
+		{
+			if (itr == nullptr) { continue; }
+
+			if (itr->GetArea() != area) { continue; }
+
+			life = itr->GetLife();
+			if (life > INT_ZERO)
+			{//TODO:選択できない旨のUI表示
+				--life;
+			}
+			itr->SetLife(life);
+		}
+
+		if (!CRakNet::GetInstance()->GetOnline()) return;
+		//通信処理
+		CRakNet::GetInstance()->SendStatus();
 	}
 }
 
