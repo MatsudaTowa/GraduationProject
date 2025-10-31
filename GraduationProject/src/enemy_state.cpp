@@ -5,7 +5,7 @@
 //
 //=============================================
 #include "enemy_state.h"
-#include "active_manager.h"
+#include "active_scene_manager.h"
 #include "enemy.h"
 
 //=============================================

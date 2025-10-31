@@ -15,7 +15,7 @@
 
 namespace My
 {
-	class CGamePlayer;
+	class CActiveScenePlayer;
 	//エネミーマネージャーのクラス
 	class CAreaManager
 	{
@@ -94,7 +94,7 @@ namespace My
 		 * @param [in]area
 		 * @param [in]life
 		 */
-		void player_cast(My::CGamePlayer* player, My::CInputMouse::AREA area, int& life);
+		void player_cast(My::CActiveScenePlayer* player, My::CInputMouse::AREA area, int& life);
 		CArea* m_pArea[CInputMouse::AREA::MAX - 1]; //真ん中のエリア以外に三角形を生成
 		CCenterArea* m_pCenterArea;					//真ん中のエリア
 		bool m_isActive; //実行するか

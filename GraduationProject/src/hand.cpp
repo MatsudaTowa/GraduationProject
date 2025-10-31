@@ -10,8 +10,8 @@
 #include "card_attack.h"
 #include "card_deffence.h"
 #include "card_assist.h"
-#include "game.h"
-#include "active_manager.h"
+#include "active_scene.h"
+#include "active_scene_manager.h"
 #include "active_scene_state.h"
 
 My::CHand::CHand() :
@@ -79,7 +79,7 @@ void My::CHand::Update()
 	CInputKeyboard* pkeyboad = CManager::GetInstance()->GetKeyboard();
 
 	// ステータス取得
-	CActiveSceneCharacter::Status status = CGameManager::GetInstance()->GetPlayer()->GetStatus();
+	CActiveSceneCharacter::Status status = CActiveSceneManager::GetInstance()->GetPlayer()->GetStatus();
 
 	// 手札ドロー
 	if (pkeyboad->GetTrigger(DIK_SPACE))
@@ -89,7 +89,7 @@ void My::CHand::Update()
 
 			HandDraw(1);
 			--status.energy;
-			CGameManager::GetInstance()->GetPlayer()->SetStatus(status);
+			CActiveSceneManager::GetInstance()->GetPlayer()->SetStatus(status);
 		}
 	}
 
@@ -127,7 +127,7 @@ void My::CHand::Select()
 			if (m_IsPickUp)
 			{// どれかのカードが選択されたら
 				m_SelectNum = i;	// 今の配列番号を一時格納しておく
-				//CGameManager::GetInstance()->ChangeState(new CCardCast);
+				//CActiveSceneManager::GetInstance()->ChangeState(new CCardCast);
 				break;
 			}
 		}
@@ -297,7 +297,7 @@ void My::CHand::HandDraw(int drawnum)
 My::CHand* My::CHand::Create()
 {
 	CHand* pHand = new CHand();
-	//CGameManager::GetInstance()->SetHand(pHand);
+	//CActiveSceneManager::GetInstance()->SetHand(pHand);
 
 	pHand->Init();
 

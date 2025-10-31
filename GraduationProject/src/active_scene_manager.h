@@ -19,18 +19,18 @@
 namespace My
 {
 	/** @brief ゲームマネージャークラス */
-	class CGameManager
+	class CActiveSceneManager
 	{
 	public:
 		/**
 		 * @brief コンストラクタ
 		 */
-		CGameManager();
+		CActiveSceneManager();
 
 		/**
 		 * @brief デストラクタ
 		 */		
-		~CGameManager();
+		~CActiveSceneManager();
 
 		/**
 		 * @brief 終了
@@ -40,10 +40,10 @@ namespace My
 		/**
 		 * @brief 自分自身のインスタンスを生成し取得
 		 */
-		static CGameManager* GetInstance()
+		static CActiveSceneManager* GetInstance()
 		{
 			//静的インスタンス
-			static CGameManager instance;
+			static CActiveSceneManager instance;
 			return &instance;
 		}
 
@@ -74,13 +74,13 @@ namespace My
 		 * @brief プレイヤーの設定
 		 * @param [in]プレイヤーのポインタ
 		 */		
-		void SetPlayer(CGamePlayer* player) { m_pPlayer = player; }
+		void SetPlayer(CActiveScenePlayer* player) { m_pPlayer = player; }
 
 		/**
 		 * @brief プレイヤーの取得
 		 * @return プレイヤーのポインタ
 		 */		
-		CGamePlayer* GetPlayer() { return m_pPlayer; }
+		CActiveScenePlayer* GetPlayer() { return m_pPlayer; }
 
 		/**
 		 * @brief 床の設定
@@ -116,7 +116,7 @@ namespace My
 		 * @brief ステート実行処理
 		 * @param [in]ゲームのシーンポインタ
 		 */
-		void GameStateExecution(CGame* game)
+		void GameStateExecution(CActiveScene* game)
 		{
 			if (m_pState == nullptr) { return; }
 
@@ -148,7 +148,7 @@ namespace My
 		CEnemyManager* m_pEnemyManager;
 		CAreaManager* m_pAreaManager;
 		CActiveSceneState* m_pState;				//!<ゲームのステート状態
-		CGamePlayer* m_pPlayer;				//!<プレイヤー
+		CActiveScenePlayer* m_pPlayer;				//!<プレイヤー
 		CField* m_pField;					//!<床
 		bool m_isFinish;					//!ゲームの処理を終わらせるか
 	};

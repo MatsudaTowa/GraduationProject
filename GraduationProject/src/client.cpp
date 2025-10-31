@@ -9,7 +9,7 @@
 #include "client.h"
 #include "game_player.h"
 #include "enemy.h"
-#include "active_manager.h"
+#include "active_scene_manager.h"
 #include "raknet.h"
 
 //=====================================

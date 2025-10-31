@@ -6,7 +6,7 @@
 //============================================================================================================
 #include "energy_charge.h"
 #include "energy_gauge.h"
-#include "game_player_state.h"
+#include "active_scene_player_state.h"
 
 namespace
 {

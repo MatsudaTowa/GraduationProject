@@ -5,7 +5,7 @@
 // 
 //===========================================================================================================================================================
 #include "card.h"
-#include "game.h"
+#include "active_scene.h"
 #include "card_state.h"
 #include "card_frame.h"
 #include <typeinfo>
@@ -104,6 +104,7 @@ void My::CCard::Draw()
 {
 	//CObjectX::Draw();
 
+#ifdef _DEBUG
 	POINT mouse;
 	GetCursorPos(&mouse);
 	ScreenToClient(GET_HWND, &mouse);
@@ -125,10 +126,13 @@ void My::CCard::Draw()
 		m_outpos.x, m_outpos.y, m_outpos.z,
 		GetPos().x, GetPos().y, GetPos().z,
 		GetRot().x, GetRot().y, GetRot().z
-		,x, y,
+		, x, y,
 		m_StateNum);
 	//テキストの描画
 	pFont->DrawText(NULL, &aStr[0], -1, &rect, DT_RIGHT, D3DCOLOR_RGBA(255, 0, 0, 255));
+#endif // _DEBUG
+
+
 }
 
 //===========================================================================================================

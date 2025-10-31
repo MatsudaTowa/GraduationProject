@@ -5,7 +5,7 @@
 //
 //=============================================
 #include "game_field.h"
-#include "active_manager.h"
+#include "active_scene_manager.h"
 
 //=============================================
 // コンストラクタ
@@ -27,7 +27,7 @@ My::CGameField::~CGameField()
 HRESULT My::CGameField::Init()
 {
 	CField::Init();
-	CGameManager::GetInstance()->SetField(this);
+	CActiveSceneManager::GetInstance()->SetField(this);
 	return S_OK;
 }
 

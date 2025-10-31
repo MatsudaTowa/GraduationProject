@@ -5,8 +5,8 @@
 //
 //=============================================
 #include "active_scene_state.h"
-#include "game.h"
-#include "active_manager.h"
+#include "active_scene.h"
+#include "active_scene_manager.h"
 #include "game_field.h"
 #include "energy_charge.h"
 #include "energy_gauge.h"
@@ -35,9 +35,9 @@ My::CLobby::~CLobby()
 //=============================================
 // ロビー
 //=============================================
-void My::CLobby::Lobby(CGame* game)
+void My::CLobby::Lobby(CActiveScene* game)
 {
-	std::list<CEnemy*> enemy = CGameManager::GetInstance()->GetEnemyManager()->GetList();
+	std::list<CEnemy*> enemy = CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList();
 
 	//入力デバイス取得
 	CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;
@@ -63,9 +63,9 @@ void My::CLobby::Lobby(CGame* game)
 		}
 		game->ResetPauseCnt();
 
-		if (CGameManager::GetInstance()->GetPlayer() != nullptr)
+		if (CActiveSceneManager::GetInstance()->GetPlayer() != nullptr)
 		{
-			CGameManager::GetInstance()->GetPlayer()->ChangeState(new CPlayerDuelState);
+			CActiveSceneManager::GetInstance()->GetPlayer()->ChangeState(new CPlayerDuelState);
 		}
 		//地面生成
 		CField::Create(VEC3_RESET_ZERO, { FIELD_SIZE,0.0f,FIELD_SIZE }, new CGameField);
@@ -73,7 +73,7 @@ void My::CLobby::Lobby(CGame* game)
 		//エナジーUI枠表示
 		CEnergy_Gauge::CreateEnergy();
 
-		CGameManager::GetInstance()->ChangeState(new CDuel);
+		CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
 	}
 
 	//オンラインの対戦開始処理
@@ -87,15 +87,15 @@ void My::CLobby::FillEmptyPlayer(int& total, std::list<My::CEnemy*>& enemy)
 {
 	while (total < NUM_PLAYER)
 	{
-		if (CGameManager::GetInstance()->GetPlayer() == nullptr)
+		if (CActiveSceneManager::GetInstance()->GetPlayer() == nullptr)
 		{
 			++m_characterIdx;
-			CPlayer::Create(new CGamePlayer, VEC3_RESET_ZERO, VEC3_RESET_ZERO, m_characterIdx);
+			CPlayer::Create(new CActiveScenePlayer, VEC3_RESET_ZERO, VEC3_RESET_ZERO, m_characterIdx);
 			continue;
 		}
 		++m_characterIdx;
 		CEnemy::Create(VEC3_RESET_ZERO, VEC3_RESET_ZERO, m_characterIdx);
-		enemy = CGameManager::GetInstance()->GetEnemyManager()->GetList();
+		enemy = CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList();
 		total = (int)enemy.size() + 1; // プレイヤー含む
 	}
 }
@@ -114,25 +114,25 @@ void My::CLobby::CreatePlayers(My::CInputKeyboard* pKeyboard, std::list<My::CEne
 		}
 		else
 		{
-			if (CGameManager::GetInstance()->GetPlayer() != nullptr) { return; }
+			if (CActiveSceneManager::GetInstance()->GetPlayer() != nullptr) { return; }
 			++m_characterIdx;
 
-			CPlayer::Create(new CGamePlayer, VEC3_RESET_ZERO, VEC3_RESET_ZERO, m_characterIdx);
+			CPlayer::Create(new CActiveScenePlayer, VEC3_RESET_ZERO, VEC3_RESET_ZERO, m_characterIdx);
 		}
 	}
 	else if (pKeyboard->GetTrigger(DIK_2))
 	{
-		if (CGameManager::GetInstance()->GetPlayer() != nullptr) { return; }
+		if (CActiveSceneManager::GetInstance()->GetPlayer() != nullptr) { return; }
 		++m_characterIdx;
 
-		CPlayer::Create(new CGamePlayer, VEC3_RESET_ZERO, VEC3_RESET_ZERO, m_characterIdx);
+		CPlayer::Create(new CActiveScenePlayer, VEC3_RESET_ZERO, VEC3_RESET_ZERO, m_characterIdx);
 	}
 }
 
 //=============================================
 //通信処理
 //=============================================
-void My::CLobby::Connect(CGame* /*game*/)
+void My::CLobby::Connect(CActiveScene* /*game*/)
 {
 	if (!CRakNet::GetInstance()->GetOnline()) return;
 
@@ -157,8 +157,8 @@ void My::CLobby::Online()
 void My::CLobby::OnlineAddEnemy()
 {
 	//弾く条件
-	if (CGameManager::GetInstance()->GetPlayer() == nullptr) return;			//プレイヤーが生成されているか
-	if (CGameManager::GetInstance()->GetPlayer()->GetPlayerIdx() != 0) return;	//プレイヤーが１人目じゃないなら飛ばす
+	if (CActiveSceneManager::GetInstance()->GetPlayer() == nullptr) return;			//プレイヤーが生成されているか
+	if (CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx() != 0) return;	//プレイヤーが１人目じゃないなら飛ばす
 }
 
 //=============================================
@@ -169,13 +169,13 @@ void My::CLobby::OnlineChangeToDuel()
 	if (!CRakNet::GetInstance()->GetOnline()) return;
 
 	//弾く条件
-	if (CGameManager::GetInstance()->GetPlayer() == nullptr) return;			//プレイヤーが生成されているか
+	if (CActiveSceneManager::GetInstance()->GetPlayer() == nullptr) return;			//プレイヤーが生成されているか
 
 	//バトルを開始する合図が出ていたら状態を対戦に変更
 	if (m_isBattle == true)
 	{
 		//敵の状態を変更
-		std::list<CEnemy*> enemy = CGameManager::GetInstance()->GetEnemyManager()->GetList();
+		std::list<CEnemy*> enemy = CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList();
 
 		//敵の数だけ周回
 		for (auto& itr : enemy)
@@ -188,7 +188,7 @@ void My::CLobby::OnlineChangeToDuel()
 		}
 
 		//プレイヤーの状態を変更
-		CGameManager::GetInstance()->GetPlayer()->ChangeState(new CPlayerDuelState);
+		CActiveSceneManager::GetInstance()->GetPlayer()->ChangeState(new CPlayerDuelState);
 
 		//地面生成
 		CField::Create(VEC3_RESET_ZERO, { FIELD_SIZE,0.0f,FIELD_SIZE }, new CGameField);
@@ -197,11 +197,11 @@ void My::CLobby::OnlineChangeToDuel()
 		CEnergy_Gauge::CreateEnergy();
 
 		//ゲームの状態を変更
-		CGameManager::GetInstance()->ChangeState(new CDuel);
+		CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
 		return;
 	}
 
-	if (CGameManager::GetInstance()->GetPlayer()->GetPlayerIdx() != 0) return;	//プレイヤーが１人目じゃないなら飛ばす
+	if (CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx() != 0) return;	//プレイヤーが１人目じゃないなら飛ばす
 
 	//入力デバイス取得
 	CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;
@@ -233,7 +233,7 @@ My::CDuel::~CDuel()
 //=============================================
 // デュエル
 //=============================================
-void My::CDuel::Duel(CGame* game)
+void My::CDuel::Duel(CActiveScene* game)
 {
 	//オブジェクトのアップデートを許可する
 	game->StopObject(false);
@@ -250,7 +250,7 @@ void My::CDuel::Duel(CGame* game)
 	if (pKeyboard->GetTrigger(DIK_C) && game->GetPauseKey())
 	{
 		game->ResetPauseCnt();
-		CGameManager::GetInstance()->ChangeState(new CCardCast);
+		CActiveSceneManager::GetInstance()->ChangeState(new CCardCast);
 	}
 #endif
 
@@ -258,7 +258,7 @@ void My::CDuel::Duel(CGame* game)
 	if (pKeyboard->GetTrigger(DIK_P) && game->GetPauseKey())
 	{
 		game->ResetPauseCnt();
-		CGameManager::GetInstance()->ChangeState(new CPause);
+		CActiveSceneManager::GetInstance()->ChangeState(new CPause);
 		return;
 	}
 }
@@ -269,13 +269,13 @@ void My::CDuel::Duel(CGame* game)
 void My::CDuel::ArrangePlayerClockwise(const D3DXVECTOR3 center, float radius)
 {
 	// プレイヤーを中心に配置
-	CPlayer* player = CGameManager::GetInstance()->GetPlayer();
+	CPlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();
 	if (player == nullptr)
 	{
 		return;
 	}
 	// 敵一覧を取得
-	std::list<CEnemy*> enemy = CGameManager::GetInstance()->GetEnemyManager()->GetList();
+	std::list<CEnemy*> enemy = CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList();
 
 	int total = (int)enemy.size() + 1; // プレイヤー含む
 
@@ -351,7 +351,7 @@ My::CInputMouse::AREA My::CDuel::CharacterArea(float angle)
 //=============================================
 //通信処理
 //=============================================
-void My::CDuel::Connect(CGame* /*game*/)
+void My::CDuel::Connect(CActiveScene* /*game*/)
 {
 	if (!CRakNet::GetInstance()->GetOnline()) return;
 
@@ -369,7 +369,7 @@ My::CPause::~CPause()
 //=============================================
 // ポーズ
 //=============================================
-void My::CPause::Pause(CGame* game)
+void My::CPause::Pause(CActiveScene* game)
 {
 	//オブジェクトのアップデートを止める
 	game->StopObject(true);
@@ -380,7 +380,7 @@ void My::CPause::Pause(CGame* game)
 	if (pKeyboard->GetTrigger(DIK_P) && game->GetPauseKey())
 	{
 		game->ResetPauseCnt();
-		CGameManager::GetInstance()->ChangeState(new CDuel);
+		CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
 		return;
 	}
 }
@@ -388,7 +388,7 @@ void My::CPause::Pause(CGame* game)
 //=============================================
 //通信処理
 //=============================================
-void My::CPause::Connect(CGame* /*game*/)
+void My::CPause::Connect(CActiveScene* /*game*/)
 {
 	if (!CRakNet::GetInstance()->GetOnline()) return;
 
@@ -401,7 +401,7 @@ void My::CPause::Connect(CGame* /*game*/)
 //=============================================
 My::CCardCast::CCardCast()
 {
-	CAreaManager* area_manager = CGameManager::GetInstance()->GetAreaManager();
+	CAreaManager* area_manager = CActiveSceneManager::GetInstance()->GetAreaManager();
 	area_manager->SetActive(true);
 }
 
@@ -410,7 +410,7 @@ My::CCardCast::CCardCast()
 //=============================================
 My::CCardCast::~CCardCast()
 {
-	CAreaManager* area_manager = CGameManager::GetInstance()->GetAreaManager();
+	CAreaManager* area_manager = CActiveSceneManager::GetInstance()->GetAreaManager();
 	if (area_manager == nullptr) { return; }
 	area_manager->SetActive(false);
 }
@@ -418,7 +418,7 @@ My::CCardCast::~CCardCast()
 //=============================================
 // カードキャスト
 //=============================================
-void My::CCardCast::CardCast(CGame* game)
+void My::CCardCast::CardCast(CActiveScene* game)
 {
 #ifdef _DEBUG
 	//入力デバイス取得
@@ -426,7 +426,7 @@ void My::CCardCast::CardCast(CGame* game)
 	if (pKeyboard->GetTrigger(DIK_C) && game->GetPauseKey())
 	{
 		game->ResetPauseCnt();
-		CGameManager::GetInstance()->ChangeState(new CDuel);
+		CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
 	}
 #endif
 }
@@ -434,7 +434,7 @@ void My::CCardCast::CardCast(CGame* game)
 //=============================================
 //通信処理
 //=============================================
-void My::CCardCast::Connect(CGame* /*game*/)
+void My::CCardCast::Connect(CActiveScene* /*game*/)
 {
 	if (!CRakNet::GetInstance()->GetOnline()) return;
 

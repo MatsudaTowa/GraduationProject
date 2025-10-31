@@ -5,7 +5,7 @@
 //
 //=============================================
 #include "area.h"
-#include "active_manager.h"
+#include "active_scene_manager.h"
 namespace
 {
 	const D3DXCOLOR DEFAULT_COLOR = { 0.0f,0.0f,0.0f,0.7f };
@@ -52,7 +52,7 @@ void My::CArea::Update()
 {
 	SetVtx();
 
-	if (!CGameManager::GetInstance()->GetAreaManager()->GetActive())
+	if (!CActiveSceneManager::GetInstance()->GetAreaManager()->GetActive())
 	{
 		SetColor(COLOR_NONE);
 		return;

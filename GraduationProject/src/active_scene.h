@@ -1,12 +1,12 @@
 //=============================================
 //
-//ゲーム処理[game.h]
+//ゲーム処理[active_scene.h]
 //Author Matsuda Towa
 //
 //=============================================
-#ifndef _GAME_H_ //これが定義されてないとき
+#ifndef _ACTIVE_SCENE_H_ //これが定義されてないとき
 
-#define _GAME_H_
+#define _ACTIVE_SCENE_H_
 #include "main.h"
 #include "scene.h"
 #include "player.h"
@@ -20,18 +20,18 @@ namespace My
 	 * @brief ゲームシーンクラス
 	 * @copydoc CScene
 	 */
-	class CGame :public CScene
+	class CActiveScene :public CScene
 	{
 	public:
 		/**
 		 * @brief コンストラクタ
 		 */
-		CGame();
+		CActiveScene();
 
 		/**
 		 * @brief デストラクタ
 		 */	
-		~CGame() override;
+		~CActiveScene() override;
 
 		/**
 		 * @brief 初期化

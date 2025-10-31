@@ -6,7 +6,7 @@
 //===========================================================================================================================================================
 #include "card_state.h"
 #include "card.h"
-#include "active_manager.h"
+#include "active_scene_manager.h"
 
 //===========================================================================================================
 // 
@@ -112,7 +112,7 @@ void My::CCardStateCast::Init(CCard* cpy)
 	if (cpy == nullptr)
 		return;
 
-	//CGameManager::GetInstance()->ChangeState(new CCardCast);
+	//CActiveSceneManager::GetInstance()->ChangeState(new CCardCast);
 
 	// 今だけわかりやすく位置を変える
 	D3DXVECTOR3 pos = cpy->GetPos();
@@ -156,11 +156,11 @@ void My::CCardStateStay::Init(CCard* cpy)
 	}
 	else
 	{
-		CActiveSceneCharacter::Status status = CGameManager::GetInstance()->GetPlayer()->GetStatus();
+		CActiveSceneCharacter::Status status = CActiveSceneManager::GetInstance()->GetPlayer()->GetStatus();
 
 		status.energy -= cpy->GetParameter().cost;
 
-		CGameManager::GetInstance()->GetPlayer()->SetStatus(status);
+		CActiveSceneManager::GetInstance()->GetPlayer()->SetStatus(status);
 	}
 	
 }
@@ -198,7 +198,7 @@ void My::CCardStateTrigger::Init(CCard* cpy)
 	if (cpy == nullptr)
 		return;
 
-	CGameManager::GetInstance()->GetAreaManager()->CardTrigger(cpy->GetTarget());
+	CActiveSceneManager::GetInstance()->GetAreaManager()->CardTrigger(cpy->GetTarget());
 
 	// トリガーしたことをわかりやすくするため今だけ位置を変えている
 	D3DXVECTOR3 pos = cpy->GetPos();

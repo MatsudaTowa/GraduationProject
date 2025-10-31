@@ -13,7 +13,7 @@ namespace My
 	//=============================================
 	//前方宣言
 	//=============================================
-	class CGame;
+	class CActiveScene;
 	class CEnemy;
 
 	/** @brief ゲームのステートクラス */
@@ -27,32 +27,32 @@ namespace My
 		* @brief ロビー処理(親では何もしない)
 		* @param [in]ゲームポインタ
 		*/
-		virtual void Lobby([[maybe_unused]] CGame* game) {};
+		virtual void Lobby([[maybe_unused]] CActiveScene* game) {};
 
 
 		/**
 		* @brief デュエル処理(親では何もしない)
 		* @param [in]ゲームポインタ
 		*/
-		virtual void Duel([[maybe_unused]] CGame* game) {};
+		virtual void Duel([[maybe_unused]] CActiveScene* game) {};
 
 		/**
 		* @brief ポーズ状態処理(親では何もしない)
 		* @param [in]ゲームポインタ
 		*/
-		virtual void Pause([[maybe_unused]] CGame* game) {};
+		virtual void Pause([[maybe_unused]] CActiveScene* game) {};
 
 		/**
 		* @brief ポーズ状態処理(親では何もしない)
 		* @param [in]ゲームポインタ
 		*/
-		virtual void CardCast([[maybe_unused]] CGame* game) {};
+		virtual void CardCast([[maybe_unused]] CActiveScene* game) {};
 
 		/**
 		* @brief 通信処理(親では何もしない)
 		* @param [in]ゲームポインタ
 		*/
-		virtual void Connect([[maybe_unused]] CGame* game) {};
+		virtual void Connect([[maybe_unused]] CActiveScene* game) {};
 	};
 
 	/** @brief ロビークラス */
@@ -66,12 +66,12 @@ namespace My
 		* @brief ロビー処理
 		* @param [in]ゲームプレイヤーポインタ
 		*/
-		void Lobby(CGame* game) override;
+		void Lobby(CActiveScene* game) override;
 		/**
 		* @brief 通信処理
 		* @param [in]ゲームポインタ
 		*/
-		void Connect(CGame* game) override;
+		void Connect(CActiveScene* game) override;
 
 		//対戦開始の合図
 		void SetBattleSign(bool sign) { m_isBattle = sign; }
@@ -122,12 +122,12 @@ namespace My
 		* @brief デュエル処理
 		* @param [in]ゲームプレイヤーポインタ
 		*/
-		void Duel(CGame* game) override;
+		void Duel(CActiveScene* game) override;
 		/**
 		* @brief 通信処理
 		* @param [in]ゲームポインタ
 		*/
-		void Connect(CGame* game) override;
+		void Connect(CActiveScene* game) override;
 	private:
 		/**
 			 * @brief 時計回りに配置
@@ -153,12 +153,12 @@ namespace My
 		* @brief ポーズ状態処理
 		* @param [in]ゲームポインタ
 		*/
-		void Pause(CGame* game) override;
+		void Pause(CActiveScene* game) override;
 		/**
 		* @brief 通信処理
 		* @param [in]ゲームポインタ
 		*/
-		void Connect(CGame* game) override;
+		void Connect(CActiveScene* game) override;
 	private:
 		static constexpr float THRESHOLD = 10.0f; // 距離が定数以下なら到達とする（必要に応じて調整）
 	};
@@ -179,12 +179,12 @@ namespace My
 		* @brief カード状態処理
 		* @param [in]ゲームポインタ
 		*/
-		void CardCast(CGame* game) override;
+		void CardCast(CActiveScene* game) override;
 		/**
 		* @brief 通信処理
 		* @param [in]ゲームポインタ
 		*/
-		void Connect(CGame* game) override;
+		void Connect(CActiveScene* game) override;
 	private:
 	};
 }

@@ -16,7 +16,7 @@ namespace My
 	//=============================================
 	//前方宣言
 	//=============================================
-	class CGamePlayer;
+	class CActiveScenePlayer;
 
 	/** @brief プレイヤーのデュエルクラス */
 	class CPlayerLobbyState :public CLobbyCharacter
@@ -101,13 +101,13 @@ namespace My
 		 * @brief UI生成
 		 * @param [in]player
 		 */
-		void CreateDuelUI(CGamePlayer* player);
+		void CreateDuelUI(CActiveScenePlayer* player);
 
 		/**
 		 * @brief エナジーを上げる処理
 		 * @param [in]player
 		 */
-		void EnergyUp(CGamePlayer* player);
+		void EnergyUp(CActiveScenePlayer* player);
 
 		CCount* m_pEnergyUpCount;	//!エナジーを増やすまでのカウント
 		int m_EnergyUpFrame;		//!エナジーを増やすフレーム

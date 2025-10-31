@@ -4,10 +4,10 @@
 //Author Matsuda Towa
 //
 //=============================================
-#include "game.h"
+#include "active_scene.h"
 #include "game_player.h"
 #include "game_camera.h"
-#include "active_manager.h"
+#include "active_scene_manager.h"
 #include "enemy.h"
 #include "card.h"
 #include "energy_charge.h"
@@ -24,18 +24,18 @@ namespace
 //=============================================
 //コンストラクタ
 //=============================================
-My::CGame::CGame():
+My::CActiveScene::CActiveScene():
 m_pPauseCnt(nullptr),				//ポーズのキーを有効化するためのカウント
 m_pDelayCnt(nullptr)				//リザルトに遷移するまでのディレイカウント
 {
-	CGameManager::GetInstance()->SetFinish(false);
+	CActiveSceneManager::GetInstance()->SetFinish(false);
 	CRakNet::GetInstance()->Init();
 }
 
 //=============================================
 //デストラクタ
 //=============================================
-My::CGame::~CGame()
+My::CActiveScene::~CActiveScene()
 {
 	CRakNet::GetInstance()->Uninit();
 }
@@ -43,7 +43,7 @@ My::CGame::~CGame()
 //=============================================
 //初期化
 //=============================================
-HRESULT My::CGame::Init()
+HRESULT My::CActiveScene::Init()
 {
 	CREATE_CAMERA(new CGameCamera);
 
@@ -60,27 +60,27 @@ HRESULT My::CGame::Init()
 	//GET_FONT_MANAGER->Regist(text_000, { 100.0f,500.0f,0.0f }, 50.0f, 80, 0, 5);
 	//GET_FONT_MANAGER->Regist(text_001, { 100.0f,300.0f,0.0f }, 50.0f, 80, 0, 6);
 
-	CEnemyManager* enemy_manager = CGameManager::GetInstance()->GetEnemyManager();
+	CEnemyManager* enemy_manager = CActiveSceneManager::GetInstance()->GetEnemyManager();
 	if (enemy_manager == nullptr)
 	{
 		enemy_manager = new CEnemyManager;
-		CGameManager::GetInstance()->SetEnemyManager(enemy_manager);
+		CActiveSceneManager::GetInstance()->SetEnemyManager(enemy_manager);
 	}
 
-	CAreaManager* area_manager = CGameManager::GetInstance()->GetAreaManager();
+	CAreaManager* area_manager = CActiveSceneManager::GetInstance()->GetAreaManager();
 	if (area_manager == nullptr)
 	{
 		area_manager = new CAreaManager;
-		CGameManager::GetInstance()->SetAreaManager(area_manager);
+		CActiveSceneManager::GetInstance()->SetAreaManager(area_manager);
 		area_manager->CreateArea();
 	}
 
-	CActiveSceneState* current_state = CGameManager::GetInstance()->GetState();
+	CActiveSceneState* current_state = CActiveSceneManager::GetInstance()->GetState();
 	if (current_state == nullptr)
 	{
 		current_state = new CLobby;
 	}		
-	CGameManager::GetInstance()->SetState(current_state);
+	CActiveSceneManager::GetInstance()->SetState(current_state);
 
 	if (m_pPauseCnt == nullptr)
 	{
@@ -102,7 +102,7 @@ HRESULT My::CGame::Init()
 //=============================================
 //終了
 //=============================================
-void My::CGame::Uninit()
+void My::CActiveScene::Uninit()
 {
 	////ジェイソンの情報削除
 	//if (CJson::GetJson() != nullptr)
@@ -129,7 +129,7 @@ void My::CGame::Uninit()
 
 	//マネージャーで管理しているオブジェクトをここで削除
 	//NOTE: オブジェクトのReleaseAll前に消すことで二重で削除することを防止
-	CGameManager::GetInstance()->Uninit();
+	CActiveSceneManager::GetInstance()->Uninit();
 
 	CObject::ReleaseAll();
 }
@@ -137,16 +137,16 @@ void My::CGame::Uninit()
 //=============================================
 //更新
 //=============================================
-void My::CGame::Update()
+void My::CActiveScene::Update()
 {
-	if (!CGameManager::GetInstance()->GetFinish())
+	if (!CActiveSceneManager::GetInstance()->GetFinish())
 	{
 		//ポーズのカウントアップ
 		m_pPauseCnt->CountUp();
 
-		CGameManager::GetInstance()->GetAreaManager()->SelectArea();
+		CActiveSceneManager::GetInstance()->GetAreaManager()->SelectArea();
 
-		CGameManager::GetInstance()->GameStateExecution(this);
+		CActiveSceneManager::GetInstance()->GameStateExecution(this);
 		return;
 	}
 
@@ -155,14 +155,14 @@ void My::CGame::Update()
 		return;
 	}
 	//ステート初期化
-	CGameManager::GetInstance()->ChangeState(new CLobby);
+	CActiveSceneManager::GetInstance()->ChangeState(new CLobby);
 	GET_FADE->SetFade(CScene::MODE::MODE_RESULT);
 }
 
 //=============================================
 //オブジェクトの更新を行うか決定
 //=============================================
-void My::CGame::StopObject(bool isStop)
+void My::CActiveScene::StopObject(bool isStop)
 {
 	//プライオリティの数だけ周回
 	for (int i = 0; i < CObject::PRI_MAX; i++)
@@ -187,7 +187,7 @@ void My::CGame::StopObject(bool isStop)
 //=============================================
 //描画
 //=============================================
-void My::CGame::Draw()
+void My::CActiveScene::Draw()
 {
 	GET_CAMERA(GET_CAMERA_IDX)->SetCamera();
 }

@@ -5,13 +5,13 @@
 //
 //=============================================
 #include "game_player.h"
-#include "active_manager.h"
+#include "active_scene_manager.h"
 #include "hand.h"
 
 //=============================================
 // コンストラクタ
 //=============================================
-My::CGamePlayer::CGamePlayer(int nPriority):CPlayer(nPriority),
+My::CActiveScenePlayer::CActiveScenePlayer(int nPriority):CPlayer(nPriority),
 m_pHand(nullptr)												// 手札初期化
 {
 }
@@ -19,14 +19,14 @@ m_pHand(nullptr)												// 手札初期化
 //=============================================
 // デストラクタ
 //=============================================
-My::CGamePlayer::~CGamePlayer()
+My::CActiveScenePlayer::~CActiveScenePlayer()
 {
 }
 
 //=============================================
 // 初期化
 //=============================================
-HRESULT My::CGamePlayer::Init()
+HRESULT My::CActiveScenePlayer::Init()
 {
 	//親クラスの初期化実行
 	CPlayer::Init();
@@ -34,7 +34,7 @@ HRESULT My::CGamePlayer::Init()
 	ChangeState(new CPlayerLobbyState(this));
 
 	//ゲームのマネージャに自分を代入
-	CGameManager::GetInstance()->SetPlayer(this);
+	CActiveSceneManager::GetInstance()->SetPlayer(this);
 
 	return S_OK;
 }
@@ -42,7 +42,7 @@ HRESULT My::CGamePlayer::Init()
 //=============================================
 // 終了
 //=============================================
-void My::CGamePlayer::Uninit()
+void My::CActiveScenePlayer::Uninit()
 {
 	if (m_pHand != nullptr)
 	{
@@ -51,9 +51,9 @@ void My::CGamePlayer::Uninit()
 	}
 
 	// ゲームマネージャーに登録されているプレイヤーにnullptrを代入してあげる
-	if (CGameManager::GetInstance()->GetPlayer() != nullptr)
+	if (CActiveSceneManager::GetInstance()->GetPlayer() != nullptr)
 	{
-		CGameManager::GetInstance()->SetPlayer(nullptr);
+		CActiveSceneManager::GetInstance()->SetPlayer(nullptr);
 	}
 	//親クラスの終了処理
 	CPlayer::Uninit();
@@ -63,7 +63,7 @@ void My::CGamePlayer::Uninit()
 //=============================================
 // 更新
 //=============================================
-void My::CGamePlayer::Update()
+void My::CActiveScenePlayer::Update()
 {
 #ifdef _DEBUG
 	int life = GetLife();
@@ -85,7 +85,7 @@ void My::CGamePlayer::Update()
 //=============================================
 // 描画
 //=============================================
-void My::CGamePlayer::Draw()
+void My::CActiveScenePlayer::Draw()
 {
 	//親クラスの描画
 	CPlayer::Draw();
@@ -94,14 +94,14 @@ void My::CGamePlayer::Draw()
 //=============================================
 // 入力
 //=============================================
-void My::CGamePlayer::Input()
+void My::CActiveScenePlayer::Input()
 {
 }
 
 //=============================================
 //プレイヤーのデバッグ表示
 //=============================================
-void My::CGamePlayer::Debug()
+void My::CActiveScenePlayer::Debug()
 {
 #ifdef _DEBUG
 	LPD3DXFONT pFont = CManager::GetInstance()->GetRenderer()->GetFont();

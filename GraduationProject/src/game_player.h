@@ -9,7 +9,7 @@
 #define _GAME_PLAYER_H_
 #include "main.h"
 #include "player.h"
-#include "game_player_state.h"
+#include "active_scene_player_state.h"
 #include "hand.h"
 
 
@@ -20,19 +20,19 @@ namespace My
 	 * @brief ゲームプレイヤークラス
 	 * @copydoc CPlayer
 	 */
-	class CGamePlayer :public CPlayer
+	class CActiveScenePlayer :public CPlayer
 	{
 	public:
 		/**
 		 * @brief コンストラクタ
 		 * @param プライオリティ
 		 */
-		CGamePlayer(int nPriority = PLAYER_PRIORITY);
+		CActiveScenePlayer(int nPriority = PLAYER_PRIORITY);
 
 		/**
 		 * @brief デストラクタ
 		 */
-		~CGamePlayer() override;
+		~CActiveScenePlayer() override;
 
 		/**
 		 * @brief 初期化

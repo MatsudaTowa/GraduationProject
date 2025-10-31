@@ -5,7 +5,7 @@
 //
 //=============================================
 #include "enemy.h"
-#include "active_manager.h"
+#include "active_scene_manager.h"
 #include "enemy_state.h"
 
 //=============================================
@@ -14,7 +14,7 @@
 My::CEnemy::CEnemy(int nPriority)
 {
 	//マネージャーに登録
-	CGameManager::GetInstance()->GetEnemyManager()->Regist(this);
+	CActiveSceneManager::GetInstance()->GetEnemyManager()->Regist(this);
 	My::CCharacter::SetTag(My::CCharacter::TAG_PLAYER);
 }
 
