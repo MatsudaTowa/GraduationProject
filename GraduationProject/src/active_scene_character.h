@@ -154,6 +154,10 @@ namespace My
 		 */
 		inline void SetEnergy(int energy)
 		{
+			if (energy > MAX_ENERGY)
+			{
+				return;
+			}
 			m_status.energy = energy;
 		}
 

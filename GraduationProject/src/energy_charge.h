@@ -50,8 +50,10 @@ namespace My
 		
 		/**
 		* @brief 更新
+		* @param [in] 経過した時間
+		* @param [in] チャージにかかる時間
 		*/
-		void Update();
+		void Update(float spend_time,int charge_time);
 
 		/**
 		* @brief 回復に必要な時間の変更

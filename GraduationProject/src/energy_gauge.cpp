@@ -20,7 +20,7 @@ namespace
 My::CEnergy_Gauge::EFFECT My::CEnergy_Gauge::m_Effect = My::CEnergy_Gauge::EFFECT::EFFECT_NORMAL;
 int My::CEnergy_Gauge::m_nPolyCount = INT_ZERO;
 int My::CEnergy_Gauge::m_nEnergyRaito = INT_ZERO;
-int My::CEnergy_Gauge::m_nEffectLevel = INT_ZERO;
+float My::CEnergy_Gauge::m_color = FLOAT_ZERO;
 
 //=====================================================================
 //コンストラクタ
@@ -74,40 +74,32 @@ void My::CEnergy_Gauge::Uninit()
 //=====================================================================
 void My::CEnergy_Gauge::Update()
 {
-	//ローカル変数宣言
-	float EffectColor = 1.0f - EFFECT_LV1 * m_nEffectLevel;;//効果強度による色の変動
-
 	//何割チャージされてるかを教えてもらう
 	m_nEnergyRaito = CEnergy_Charge::GetPolyCnt();
 
-	//速度の変化で色変化
-
+	
 	switch (m_Effect)
 	{
 	case EFFECT::EFFECT_NORMAL:
 		SetColor({1.0f,1.0f,0.0f,1.0f});
-		SetVtx();
 		break;
 	case EFFECT::EFFECT_SPDUP:
-		SetColor({ 1.0f,EffectColor,0.0f,1.0f });
-		SetVtx();
+		SetColor({ 1.0f,m_color,0.0f,1.0f });
 		break;
 	case EFFECT::EFFECT_SPDDOWN:
 
-		SetColor({ EffectColor,1.0f,0.0f,1.0f });
-		SetVtx();
+		SetColor({ m_color,1.0f,0.0f,1.0f });
 		break;
 	case EFFECT::EFFECT_STOP:
 		SetColor({ 0.0f,0.0f,1.0f,1.0f });
-		SetVtx();
 		break;
 	case EFFECT::EFFECT_BACKWARD:
 		SetColor({ 1.0f,0.0f,1.0f,1.0f });
-		SetVtx();
 		break;
 	default:
 		break;
 	}
+	SetVtx();
 
 	////テクスチャ登録
 	//CTexture* pTexture = CManager::GetInstance()->GetTexture();

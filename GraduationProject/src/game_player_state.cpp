@@ -102,8 +102,12 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 
 	//ゲージ用チャージの更新
 	CEnergy_Charge* pCharge = CEnergy_Charge::GetInstance();
-	pCharge->Update();
-	EnergyUp(player);
+
+	if (character->GetEnergy() < CActiveSceneCharacter::MAX_ENERGY)
+	{//エナジーがMAXになったらUIの更新はしない
+		pCharge->Update(m_pEnergyUpCount->GetCnt(), m_pEnergyUpCount->GetFrame());
+		EnergyUp(player);
+	}
 
 	std::list<CDebuff*> DebuffList = character->GetDebuffList();
 
@@ -175,11 +179,22 @@ void My::CPlayerDuelState::EnergyUp(CGamePlayer* player)
 	int energy = player->GetEnergy();
 
 #ifdef _DEBUG
-	if (GET_INPUT_KEYBOARD->GetTrigger(DIK_1))
+	int frame = m_pEnergyUpCount->GetFrame();
+
+	if (GET_INPUT_KEYBOARD->GetPress(DIK_1))
 	{
-		energy += 10;
-		player->SetEnergy(energy);
+		--frame;
+		if (frame <= 0)
+		{
+			frame = 1;
+		}
 	}
+	else if (GET_INPUT_KEYBOARD->GetPress(DIK_2))
+	{
+		++frame;
+	}
+	m_pEnergyUpCount->SetFrame(frame);
+
 #endif // _DEBUG
 
 	if (m_pEnergyUpCount == nullptr)

@@ -89,10 +89,10 @@ namespace My
 		* @param [in]どんな状態
 		* @param [in]効果強度（最大５）
 		*/
-		static void EffectSet(EFFECT AnyEffect,int Level)
+		static void EffectSet(EFFECT AnyEffect,float color)
 		{
 			m_Effect = AnyEffect;
-			m_nEffectLevel = Level;
+			m_color = color;
 		}
 
 	private:
@@ -120,10 +120,7 @@ namespace My
 		*/
 		static int m_nEnergyRaito;
 
-		/**
-		* @brief 効果強度（最大５）
-		*/
-		static int m_nEffectLevel;
+		static float m_color;
 
 		/**
 		* @brief 全体で何番目か

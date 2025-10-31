@@ -6,6 +6,7 @@
 //============================================================================================================
 #include "energy_charge.h"
 #include "energy_gauge.h"
+#include "game_player_state.h"
 
 namespace
 {
@@ -57,121 +58,40 @@ void My::CEnergy_Charge::Uninit()
 //======================================================================
 // 更新
 //======================================================================
-void My::CEnergy_Charge::Update()
+void My::CEnergy_Charge::Update(float spend_time, int charge_time)
 {
 	//ローカル変数宣言
-	float SpendTime = m_fTimeSpend;
-	int ChargeTime = m_fChargeTime;
+	float SpendTime = spend_time;
+	int ChargeTime = charge_time;
 
-	#ifdef _DEBUG
-	//インプット取得
-	CInputKeyboard* pKeyboard = CManager::GetInstance()->GetKeyboard();
-
-	//平常化
-	if (pKeyboard->GetTrigger(DIK_1))
-	{
-		SpeedChange(FLOAT_ONE);
-		TimeChange(180.0f);
-		m_nEffectLv = INT_ZERO;
-	}
-
-	//速度：加速
-	else if (pKeyboard->GetTrigger(DIK_2))
-	{
-		if (m_nEffectLv < 5) m_nEffectLv++;
-		SpeedChange(FLOAT_ONE + 0.2f * m_nEffectLv);
-	}
-
-	//速度：減速
-	else if (pKeyboard->GetTrigger(DIK_3))
-	{
-		if (m_nEffectLv < 5) m_nEffectLv++;
-		SpeedChange(FLOAT_ONE - 0.1f * m_nEffectLv);
-	}
-
-	//速度：停止
-	else if (pKeyboard->GetTrigger(DIK_4))
-	{
-		SpeedChange(FLOAT_ZERO);
-	}
-
-	//速度：減退
-	else if (pKeyboard->GetTrigger(DIK_5))
-	{
-		SpeedChange(-FLOAT_ONE);
-	}
-
-	//必要時間：半減
-	else if (pKeyboard->GetTrigger(DIK_6))
-	{
-		TimeChange(90.0f);
-	}
-
-	//必要時間：倍化
-	else if (pKeyboard->GetTrigger(DIK_7))
-	{
-		TimeChange(360.0f);
-	}
-
-	#endif //_DEBUG
+	//floatの絶対値で差を算出
+	float EffectLv = 1.0f - std::fabs(ChargeTime - CPlayerDuelState::ENERGY_UP_FRAME) / CPlayerDuelState::ENERGY_UP_FRAME;
 
 	//描画部分に今の状態を投げるところ
-	if (m_fChargeSpeed > SPEED_DEF)
+	if (ChargeTime < CPlayerDuelState::ENERGY_UP_FRAME)
 	{
-		CEnergy_Gauge::EffectSet(CEnergy_Gauge::EFFECT::EFFECT_SPDUP,m_nEffectLv);
+		CEnergy_Gauge::EffectSet(CEnergy_Gauge::EFFECT::EFFECT_SPDUP, EffectLv);
 	}
-	else if (m_fChargeSpeed < SPEED_DEF && m_fChargeSpeed > FLOAT_ZERO)
+	else if (ChargeTime > CPlayerDuelState::ENERGY_UP_FRAME)
 	{
-		CEnergy_Gauge::EffectSet(CEnergy_Gauge::EFFECT::EFFECT_SPDDOWN,m_nEffectLv);
+		CEnergy_Gauge::EffectSet(CEnergy_Gauge::EFFECT::EFFECT_SPDDOWN, EffectLv);
 	}
-	else if (m_fChargeSpeed == FLOAT_ZERO)
+	else
+	{
+		CEnergy_Gauge::EffectSet(CEnergy_Gauge::EFFECT::EFFECT_NORMAL, 5);
+	}
+	/*else if (m_fChargeSpeed == FLOAT_ZERO)
 	{
 		CEnergy_Gauge::EffectSet(CEnergy_Gauge::EFFECT::EFFECT_STOP,5);
 	}
 	else if (m_fChargeSpeed <= FLOAT_ZERO)
 	{
 		CEnergy_Gauge::EffectSet(CEnergy_Gauge::EFFECT::EFFECT_BACKWARD,5);
-	}
-	else
-	{
-		CEnergy_Gauge::EffectSet(CEnergy_Gauge::EFFECT::EFFECT_NORMAL,5);
-	}
-
-	//速度分だけ充電
-	m_fTimeSpend += m_fChargeSpeed;
-
-	//充電完了したときやいろんな理由でタメが０以下になるとき
-	if (m_fTimeSpend >= m_fChargeTime || m_fTimeSpend <= FLOAT_ZERO)
-	{
-		m_fTimeSpend = FLOAT_ZERO;
-	}
+	}*/
 
 	//充電割合を計算（受け渡し用）
 	float Raito =  (SpendTime/ ChargeTime) *10;
 	SetPolyCnt(Raito);
-}
-
-//======================================================================
-// 回復に必要な時間の変更
-//======================================================================
-void My::CEnergy_Charge::TimeChange(float NewChargeTime)
-{
-	CEnergy_Charge* pGauge = GetInstance();
-
-	pGauge->m_fChargeTime = NewChargeTime;
-	pGauge->m_bEffect_T = true;
-}
-
-
-//======================================================================
-//回復速度の変更
-//======================================================================
-void My::CEnergy_Charge::SpeedChange(float NewChargeSpeed)
-{
-	CEnergy_Charge* pGauge = GetInstance();
-
-	pGauge->m_fChargeSpeed = NewChargeSpeed;
-	pGauge->m_bEffect_S = true;
 }
 
 //======================================================================

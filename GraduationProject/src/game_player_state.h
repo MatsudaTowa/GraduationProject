@@ -41,6 +41,8 @@ namespace My
 	class CPlayerDuelState :public CActiveSceneCharacterState
 	{
 	public:
+		static constexpr int ENERGY_UP_FRAME = 3 * 60;		//!<エナジーが上がるまでのフレーム数 TODO:今後のカードによっては変数に昇格するかも
+
 		/**
 		 * @brief コンストラクタ
 		 */
@@ -94,7 +96,6 @@ namespace My
 			m_pEnergyUpCount->SetFrame(m_EnergyUpFrame);
 		}
 	private:
-		static constexpr int ENERGY_UP_FRAME = 3 * 60;		//!<エナジーが上がるまでのフレーム数 TODO:今後のカードによっては変数に昇格するかも
 
 		/**
 		 * @brief UI生成
