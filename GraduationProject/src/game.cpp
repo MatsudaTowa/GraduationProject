@@ -144,6 +144,8 @@ void My::CGame::Update()
 		//ポーズのカウントアップ
 		m_pPauseCnt->CountUp();
 
+		CGameManager::GetInstance()->GetAreaManager()->SelectArea();
+
 		CGameManager::GetInstance()->GameStateExecution(this);
 		return;
 	}

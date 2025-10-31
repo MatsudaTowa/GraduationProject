@@ -45,6 +45,7 @@ void My::CAreaManager::Uninit()
 	}
 
 	if (m_pCenterArea == nullptr) { return; }
+
 	m_pCenterArea->Uninit();
 	m_pCenterArea = nullptr;
 }
@@ -102,46 +103,12 @@ void My::CAreaManager::CreateArea()
 //=============================================
 void My::CAreaManager::SelectArea()
 {
-	// 手札の取得
-	CHand* pHand = CGameManager::GetInstance()->GetPlayer()->GetHand();
-	// カード配列の取得
-	CCard** pCard = pHand->GetHandCard();
-	int TriggerNum = -1;
-
-	// トータルカード分回す
-	for (int i = 0; i < pHand->GetTotalNum(); i++)
-	{
-		if (pCard[i]->GetStateNum() == CCardState::CARD_TRIGGER)
-		{// トリガーされているカード
-			TriggerNum = i;
-			break;
-		}
-	}
-	if (TriggerNum < 0)
-		return;
-
 	// カードで設定したエリアを取得
-	CInputMouse::AREA area = pCard[TriggerNum]->GetTarget();
-
-	if (area == CInputMouse::AREA::CENTER)
+  	CInputMouse::AREA area = GET_INPUT_MOUSE->GetArea();
+	if (area == CInputMouse::AREA::MAX)
 	{
-		m_pCenterArea->SetSelect(true);
-		// ニュートラルに戻す
-		pCard[TriggerNum]->ChangeState(CCardState::CARD_NEUTRAL);
-
-		//TODO:カードを離したらに変更予定
-		if (GET_INPUT_MOUSE->GetTrigger(0))
-		{
-			CGameManager::GetInstance()->ChangeState(new CDuel);
-		}
+		return;
 	}
-	else
-	{
-		m_pArea[area]->SetSelect(true);	
-
-		CardTrigger(area);
-	}
-
 	for (int i = 0; i < CInputMouse::AREA::MAX; ++i)
 	{
 		if (i != area)
@@ -155,37 +122,63 @@ void My::CAreaManager::SelectArea()
 				m_pArea[i]->SetSelect(false);
 			}
 		}
+		else
+		{
+			if (i == CInputMouse::AREA::CENTER)
+			{//真ん中だったら
+				m_pCenterArea->SetSelect(true);
+			}
+			else
+			{//三角形だったら
+				m_pArea[i]->SetSelect(true);
+			}
+		}
 	}
 }
 
 void My::CAreaManager::CardTrigger(My::CInputMouse::AREA area)
 {
 	//TODO:ここに選択されたカードの処理を！
+	//
 	//if (GET_INPUT_MOUSE->GetTrigger(0))
 	{
-		//登録されているキャラクターを取得
-		CGamePlayer* player = CGameManager::GetInstance()->GetPlayer();
-		std::list<CEnemy*> enemy_list = CGameManager::GetInstance()->GetEnemyManager()->GetList();
-		int life;
-		player_cast(player, area, life);
-
-		for (auto& itr : enemy_list)
+		if (area == CInputMouse::AREA::CENTER)
 		{
-			if (itr == nullptr) { continue; }
+			//ニュートラルに戻す
+			//pCard[TriggerNum]->ChangeState(CCardState::CARD_NEUTRAL);
 
-			if (itr->GetArea() != area) { continue; }
-
-			life = itr->GetLife();
-			if (life > INT_ZERO)
-			{//TODO:選択できない旨のUI表示
-				--life;
+			//TODO:カードを離したらに変更予定
+			if (GET_INPUT_MOUSE->GetTrigger(0))
+			{
+				CGameManager::GetInstance()->ChangeState(new CDuel);
 			}
-			itr->SetLife(life);
 		}
+		else
+		{
+			//登録されているキャラクターを取得
+			CGamePlayer* player = CGameManager::GetInstance()->GetPlayer();
+			std::list<CEnemy*> enemy_list = CGameManager::GetInstance()->GetEnemyManager()->GetList();
+			int life;
+			player_cast(player, area, life);
 
-		if (!CRakNet::GetInstance()->GetOnline()) return;
-		//通信処理
-		CRakNet::GetInstance()->SendStatus();
+			for (auto& itr : enemy_list)
+			{
+				if (itr == nullptr) { continue; }
+
+				if (itr->GetArea() != area) { continue; }
+
+				life = itr->GetLife();
+				if (life > INT_ZERO)
+				{//TODO:選択できない旨のUI表示
+					--life;
+				}
+				itr->SetLife(life);
+			}
+
+			if (!CRakNet::GetInstance()->GetOnline()) return;
+			//通信処理
+			CRakNet::GetInstance()->SendStatus();
+		}
 	}
 }
 

@@ -47,7 +47,6 @@
     <ClCompile Include="src\title_camera.cpp" />
     <ClCompile Include="src\title_screen.cpp" />
     <ClCompile Include="src\useful.cpp" />
-    <ClCompile Include="src\center_area.cpp" />
     <ClCompile Include="src\client.cpp" />
     <ClCompile Include="src\raknet.cpp" />
     <ClCompile Include="src\card_frame.cpp" />
@@ -118,6 +117,9 @@
     <ClCompile Include="src\player_UI.cpp">
       <Filter>character</Filter>
     </ClCompile>
+    <ClCompile Include="src\center_area.cpp">
+      <Filter>active_scene\area</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -167,7 +169,6 @@
     <ClInclude Include="src\title_camera.h" />
     <ClInclude Include="src\title_screen.h" />
     <ClInclude Include="src\useful.h" />
-    <ClInclude Include="src\center_area.h" />
     <ClInclude Include="src\client.h" />
     <ClInclude Include="src\raknet.h" />
     <ClInclude Include="src\card_frame.h" />
@@ -237,6 +238,9 @@
     </ClInclude>
     <ClInclude Include="src\ready_UI.h">
       <Filter>active_scene\lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="src\center_area.h">
+      <Filter>active_scene\area</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

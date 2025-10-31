@@ -81,12 +81,6 @@ void My::CCenterArea::Update()
 	}
 
 	SetColor(COLOR_WHITE);
-
-	//TODO:カードを離したらに変更予定
-	if (GET_INPUT_MOUSE->GetTrigger(0))
-	{
-		CGameManager::GetInstance()->ChangeState(new CDuel);
-	}
 }
 
 //=============================================
