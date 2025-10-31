@@ -21,6 +21,20 @@ namespace My
 	{
 	public:
 		/**
+		* @brief 手札の状態
+		* これを使わないとキャスト中にキャストなどなるため
+		* @param ニュートラル
+		* @param 選択
+		* @param キャスト
+		*/
+		typedef enum
+		{
+			NEUTRAL = 0,
+			SELECT,
+			CAST,
+		}HANDSTATE;
+
+		/**
 		* @brief [ 定数 ]
 		* @param 開始時の手札
 		* @param 手札の上限枚数
@@ -97,13 +111,6 @@ namespace My
 		inline CCard** GetHandCard() { return &m_pCard[0]; }
 
 	private:
-		typedef enum
-		{
-			NEUTRAL=0,
-			SELECT,
-			CAST,
-		}HANDSTATE;
-
 		// 手札の状態
 		HANDSTATE m_HandState;
 

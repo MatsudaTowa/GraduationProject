@@ -20,7 +20,9 @@ m_outpos({ 0,0,0 }),
 m_StateNum(CCardState::CARD_NEUTRAL),
 m_CardType(CARDTYPE_::TYPE_ATTACK),
 m_IsChange(true),
-m_target(CInputMouse::AREA::CENTER)
+m_target(CInputMouse::AREA::CENTER),
+m_Cost(INT_ZERO),
+m_AttackPower(INT_ZERO)
 {
 	//if (m_pTop == nullptr)
 	//{// top が設定されていなかったら
@@ -56,6 +58,9 @@ HRESULT My::CCard::Init()
 	m_pState->Init();
 	m_StateNum = CCardState::CARD_NEUTRAL;
 
+	m_Param.power = Rundom(1, 10);
+	m_Param.cost = Rundom(1, 10);
+
 	// カードフレーム生成
 	for (int i = 0; i < CCardFrame::FRAMETYPE_MAX; i++)
 	{
@@ -81,7 +86,6 @@ void My::CCard::Update()
 	// カメラの位置と角度に合わせる
 	CCamera* pCamera = CManager::GetInstance()->GetCamera(0);
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();
-	//SetPos({ pCamera->GetPosV().x,pCamera->GetPosV().y - 100.0f,pCamera->GetPosV().z + 30.0f });
 
 	D3DXVECTOR3 rot = pCamera->GetRot();
 	rot.x += -1.2f;
@@ -221,9 +225,11 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state)
 bool My::CCard::CardCastToMouse()
 {
 	// 選択状態とキャスト状態以外は通さない
-	if (GetStateNum() != CCardState::CARD_PICKUP&&
+	if (GetStateNum() != CCardState::CARD_PICKUP &&
 		GetStateNum() != CCardState::CARD_CAST)
-	{ }
+	{
+		return false;
+	}
 
 	// カメラ取得
 	CCamera* pCamera = GET_CAMERA(0);
@@ -251,6 +257,7 @@ bool My::CCard::CardCastToMouse()
 
 	if (pMouse->GetPress(0))
 	{
+		// キャストステートにする
 		ChangeState(CCardState::CARD_CAST);
 
 		screenpos = pMouse->GetMousePos();

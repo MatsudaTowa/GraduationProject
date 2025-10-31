@@ -31,6 +31,17 @@ namespace My
 		}CARDTYPE_;
 
 		/**
+		* @brief カードパラメーター
+		* @param コスト
+		* @param カードパワー(ここでは攻撃値も防御値も同じ)
+		*/
+		typedef struct
+		{
+			int cost;
+			int power;
+		}Parameter;
+
+		/**
 		 * @brief コンストラクタ
 		 * @param [in]プライオリティ
 		 */
@@ -109,6 +120,15 @@ namespace My
 		inline void SetTarget(CInputMouse::AREA area) { m_target = area; }
 		inline CInputMouse::AREA GetTarget() { return m_target; }
 
+		inline void SetAttackPower(int num) { m_AttackPower = num; }
+		inline int GetAttackPower() { return m_AttackPower; }
+		
+		inline void SetCost(int num) { m_Cost = num; }
+		inline int GetCost() { return m_Cost; }
+
+		inline void SetParameter(Parameter param) { m_Param = param; }
+		inline Parameter GetParameter() { return m_Param; }
+
 		//inline CCard* GetTop() { return m_pTop; }
 		//inline CCard* GetPrev() { return m_pPrev; }
 
@@ -118,8 +138,10 @@ namespace My
 		//CCard* m_pPrev;			//前のオブジェクトのポインタ
 		//CCard* m_pNext;			//次のオブジェクトのポインタ
 
-		int Cost;
-		int AttackNum;
+		Parameter m_Param;	// カードパラメーター
+
+		int m_Cost;
+		int m_AttackPower;
 
 		/**
 		 * @brief ステートをチェンジできるかどうか
