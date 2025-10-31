@@ -119,6 +119,8 @@ void My::CCardStateCast::Init(CCard* cpy)
 	pos.z += 20.0f;
 
 	cpy->SetPos(pos);
+
+	//CGameManager::GetInstance().get
 }
 
 //=======================================================================================

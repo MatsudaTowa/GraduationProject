@@ -103,7 +103,7 @@ namespace My
 	{
 	public:
 		/** @brief ‰Šú‰» */
-		void Init() override;
+		void Init(CCard* cpy) override;
 
 		/** @brief XV */
 		void Update(CCard* cpy)override;

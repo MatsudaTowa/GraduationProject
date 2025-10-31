@@ -86,7 +86,6 @@ void My::CCard::Update()
 	// カメラの位置と角度に合わせる
 	CCamera* pCamera = CManager::GetInstance()->GetCamera(0);
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();
-	//SetPos({ pCamera->GetPosV().x,pCamera->GetPosV().y - 100.0f,pCamera->GetPosV().z + 30.0f });
 
 	D3DXVECTOR3 rot = pCamera->GetRot();
 	rot.x += -1.2f;
@@ -226,9 +225,11 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state)
 bool My::CCard::CardCastToMouse()
 {
 	// 選択状態とキャスト状態以外は通さない
-	if (GetStateNum() != CCardState::CARD_PICKUP&&
+	if (GetStateNum() != CCardState::CARD_PICKUP &&
 		GetStateNum() != CCardState::CARD_CAST)
-	{ }
+	{
+		return false;
+	}
 
 	// カメラ取得
 	CCamera* pCamera = GET_CAMERA(0);
