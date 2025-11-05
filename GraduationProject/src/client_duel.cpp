@@ -12,7 +12,6 @@
 #include "active_scene_manager.h"
 #include "raknet.h"
 #include "active_scene_player_state.h"
-#include "active_scene_manager.h"
 
 //=====================================
 //コンストラクタ
@@ -52,7 +51,7 @@ void CClient_Duel::Uninit()
 //=====================================
 void CClient_Duel::Regist(RakNet::Packet* packet)
 {
-    
+
 }
 
 //=====================================
@@ -118,7 +117,7 @@ void CClient_Duel::Delete(RakNet::Packet* packet)
     }
 
     //現在の敵を確認
-    //std::list<My::CEnemy*> EnemyList = My::CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList();
+    //std::list<My::CEnemy*> EnemyList = My::CGameManager::GetInstance()->GetEnemyManager()->GetList();
 
     //番号がずれている敵がいたら埋める
     for (auto& iter : My::CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList())
@@ -150,7 +149,7 @@ void CClient_Duel::Delete(RakNet::Packet* packet)
 //=====================================
 void CClient_Duel::SendReady(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
 {
-  
+
 }
 
 //=====================================
@@ -158,7 +157,7 @@ void CClient_Duel::SendReady(RakNet::Packet* packet, RakNet::RakPeerInterface* p
 //=====================================
 void CClient_Duel::ReceiveReady(RakNet::Packet* packet)
 {
-   
+
 }
 
 //=====================================
@@ -370,7 +369,7 @@ void CClient_Duel::ReceiveStatus(RakNet::Packet* packet)
     //対象を確認
     auto CheckTarget = [](int id, CClient_Duel::DuelPlayerParam param)
     {
-        //番号がずれている敵がいたら埋める
+        //番号で確認
         for (auto& iter : My::CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList())
         {
             //消えた番号より大きいならずらす
@@ -381,7 +380,7 @@ void CClient_Duel::ReceiveStatus(RakNet::Packet* packet)
             }
         }
 
-        //プレイヤーの番号がずれるかを確認
+        //プレイヤーの番号で確認
         if (My::CActiveSceneManager::GetInstance()->GetPlayer() != nullptr)
         {
             if (My::CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx() == id)
@@ -397,5 +396,56 @@ void CClient_Duel::ReceiveStatus(RakNet::Packet* packet)
     {
         bsIn.Read(iter);
         CheckTarget(iter.Param.nIndex, iter);
+    }
+}
+
+//=====================================
+//更新可能かを受信
+//=====================================
+void CClient_Duel::ReceiveIsUpdate(RakNet::Packet* packet)
+{
+    //受信側
+    RakNet::BitStream bsIn(packet->data, packet->length, false);
+
+    //人数を取得
+    unsigned char messageId;    //メッセージ
+
+    //読み込み
+    bsIn.Read(messageId);
+
+    //更新可能のフラグを受け取る
+    CRakNet::GetInstance()->SetIsUpdate(true);
+}
+
+//=====================================
+//自身のステータスを送信
+//=====================================
+void CClient_Duel::SendMyStatus(RakNet::RakPeerInterface* peer)
+{
+    //プレイヤーの中身がないなら返す
+    if (My::CActiveSceneManager::GetInstance()->GetPlayer() == nullptr) return;
+
+    //データの作成
+    RakNet::BitStream bsOut;
+    bsOut.Write((RakNet::MessageID)CRakNet::GameMessages::ID_DUEL_MESSAGE_STATUS);
+
+    //リストの周回
+    for (auto iter : m_DuelPlayerList)
+    {
+        //周回
+        if (iter.Param.nIndex != My::CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx()) continue;
+
+        //書き出し
+        bsOut.Write(iter);
+    }
+
+    //サーバーに送信
+    RakNet::SystemAddress server_address = peer->GetSystemAddressFromIndex(0);
+
+    //サーバーの確認
+    if (server_address != RakNet::UNASSIGNED_SYSTEM_ADDRESS)
+    {
+        //サーバーにブロードキャスト
+        peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, peer->GetSystemAddressFromIndex(0), false);
     }
 }

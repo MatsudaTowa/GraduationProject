@@ -42,6 +42,7 @@ public:
 		ID_DUEL_MESSAGE_CLIENT_START,	//クライアントが対戦用に変わったことを通知
 		ID_DUEL_MESSAGE_START,			//対戦の開始を通知
 		ID_DUEL_MESSAGE_SEND_STATUS,	//ステータスを送る
+		ID_DUEL_MESSAGE_STATUS,			//ステータスの通知
 		ID_DUEL_MESSAGE_1,				//対戦時のメッセージ
 	};
 
@@ -69,11 +70,18 @@ public:
 	void SetOnline(bool online) { m_isOnline = online; }	//設定
 	bool GetOnline() { return m_isOnline; }					//取得
 
+	//更新の許可
+	void SetIsUpdate(bool update) { m_isUpdate = update; }	//設定
+	bool GetIsUpdate() { return m_isUpdate; }				//取得
+
 	//クライアントクラスの取得
 	CClient* GetClient() { return m_Client; }
 
 	//クライアントの変更
 	static void ChangeClient(CClient* client);
+
+	//自身のステータスを送信
+	void SendMyStatus();
 
 private:
 
@@ -87,6 +95,7 @@ private:
 	RakNet::Packet* m_pPacket;			//パケット
 	RakNet::RakPeerInterface* m_pPeer;	//ピア(接続用)
 	bool m_isOnline;					//オンラインか
+	bool m_isUpdate;					//更新しても良いか
 
 	//静的変数
 	static CClient* m_Client;			//クライアントクラス

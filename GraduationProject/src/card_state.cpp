@@ -45,6 +45,7 @@ void My::CCardStateNeutral::Init(CCard* cpy)
 {
 	if (cpy == nullptr)
 		return;
+
 	D3DXVECTOR3 pos = cpy->GetPos();
 	D3DXVECTOR3 npos = cpy->GetNeutralPos();
 

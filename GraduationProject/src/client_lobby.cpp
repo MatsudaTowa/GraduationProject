@@ -163,7 +163,7 @@ void CClient_Lobby::Delete(RakNet::Packet* packet)
     }
 
     //Œ»İ‚Ì“G‚ğŠm”F
-    //std::list<My::CEnemy*> EnemyList = My::CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList();
+    //std::list<My::CEnemy*> EnemyList = My::CGameManager::GetInstance()->GetEnemyManager()->GetList();
 
     //”Ô†‚ª‚¸‚ê‚Ä‚¢‚é“G‚ª‚¢‚½‚ç–„‚ß‚é
     for (auto& iter : My::CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList())
@@ -316,7 +316,7 @@ void CClient_Lobby::ReceiveReady(RakNet::Packet* packet)
 //=====================================
 void CClient_Lobby::CardCast(RakNet::Packet* packet)
 {
-   
+
 }
 
 //=====================================

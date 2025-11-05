@@ -19,7 +19,8 @@ CClient* CRakNet::m_Client = nullptr;
 CRakNet::CRakNet() :
     m_pPacket(nullptr),	 //パケット
     m_pPeer(nullptr),    //ピア
-    m_isOnline(false)    //オンラインか
+    m_isOnline(false),   //オンラインか
+    m_isUpdate(false)    //更新しても良いか
 {
    
 }
@@ -171,6 +172,10 @@ void CRakNet::Communication(RakNet::RakPeerInterface* peer)
             m_Client->ReceiveStatus(packet);
             break;
 
+            case ID_DUEL_MESSAGE_STATUS:
+            m_Client->ReceiveStatus(packet);
+            break;
+
         case ID_UNCONNECTED_PONG:
         {
             RakNet::SystemAddress serverAddress = packet->systemAddress;
@@ -240,4 +245,13 @@ void CRakNet::SendStatus()
 void CRakNet::SendAddEnemy()
 {
     m_Client->SendAddEnemy(m_pPeer);
+}
+
+//=====================================
+//自身のステータスを送る
+//=====================================
+void CRakNet::SendMyStatus()
+{
+    m_Client->SendMyStatus(m_pPeer);
+    m_isUpdate = false;
 }

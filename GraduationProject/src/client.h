@@ -47,6 +47,8 @@ public:
 	virtual void SendStatus(RakNet::RakPeerInterface* peer) = 0;						//ステータスを送る
 	virtual void ReceiveStatus(RakNet::Packet* packet) = 0;								//ステータスを受信
 	virtual void SendAddEnemy(RakNet::RakPeerInterface* peer) = 0;						//敵の追加を送信
+	virtual void ReceiveIsUpdate(RakNet::Packet* packet) = 0;							//更新可能かを受信する
+	virtual void SendMyStatus(RakNet::RakPeerInterface* peer) = 0;						//自分のステータスを送る
 
 	//設定と取得
 
