@@ -43,6 +43,8 @@ public:
 	void SendStatus(RakNet::RakPeerInterface* peer) override {}							//ステータスを送る
 	void ReceiveStatus(RakNet::Packet* packet) override {}								//ステータスの受信
 	void SendAddEnemy(RakNet::RakPeerInterface* peer) override;							//敵の追加を送信
+	void ReceiveIsUpdate(RakNet::Packet* packet) override {}							//更新可能かを受信
+	void SendMyStatus(RakNet::RakPeerInterface* peer) override {}						//自分のステータスを送る
 
 	//取得
 	void SetParam(std::list<PlayerParam> list) override;	//設定
