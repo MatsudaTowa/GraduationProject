@@ -60,7 +60,7 @@ HRESULT My::CCard::Init()
 	m_StateNum = CCardState::CARD_NEUTRAL;
 
 	m_Param.power = Rundom(1, 10);
-	m_Param.cost = Rundom(1, 10);
+	m_Param.cost = Rundom(1, 3);
 
 	// カードフレーム生成
 	for (int i = 0; i < CCardFrame::FRAMETYPE_MAX; i++)

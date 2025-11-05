@@ -15,7 +15,7 @@ namespace My
 	class CTargetArrow:public CObject2D
 	{
 	public:
-		CTargetArrow();
+		CTargetArrow(int nPriority = 10);
 		~CTargetArrow()override;
 		HRESULT Init()override;
 		void Uninit()override;

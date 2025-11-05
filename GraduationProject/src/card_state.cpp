@@ -7,7 +7,6 @@
 #include "card_state.h"
 #include "card.h"
 #include "active_scene_manager.h"
-#include "target_arrow.h"
 
 //===========================================================================================================
 // 
@@ -116,14 +115,11 @@ void My::CCardStateCast::Init(CCard* cpy)
 
 	//CActiveSceneManager::GetInstance()->ChangeState(new CCardCast);
 
-	// 今だけわかりやすく位置を変える
-	D3DXVECTOR3 pos = cpy->GetPos();
-	pos.z += 20.0f;
+	//// 今だけわかりやすく位置を変える
+	//D3DXVECTOR3 pos = cpy->GetPos();
+	//pos.z += 20.0f;
 
-	cpy->SetPos(pos);
-
-	CTargetArrow *targetarrow = new CTargetArrow();
-	targetarrow->Init();
+	//cpy->SetPos(pos);
 }
 
 //=======================================================================================
@@ -135,7 +131,6 @@ void My::CCardStateCast::Update(CCard* cpy)
 		return;
 
 	float mag = 30.0f;
-
 	cpy->SetSize({ mag * 1.2f,mag,mag });
 
 	//cpy->ChangeState(CCardState::CARD_STATE::CARD_STAY);
@@ -155,18 +150,25 @@ void My::CCardStateStay::Init(CCard* cpy)
 	// カウントを初期化
 	m_Staycount = 0;
 
-	if (CManager::GetInstance()->GetMouse()->GetArea() == CInputMouse::AREA::CENTER)
-	{
+	// ステータスを取得
+	CActiveSceneCharacter::Status status = CActiveSceneManager::GetInstance()->GetPlayer()->GetStatus();
+
+	if (CManager::GetInstance()->GetMouse()->GetArea() == CInputMouse::AREA::CENTER ||
+		status.energy < cpy->GetParameter().cost)
+	{// 真ん中エリアだった場合
 		cpy->ChangeState(CCardState::CARD_NEUTRAL);
 	}
 	else
-	{
-		CActiveSceneCharacter::Status status = CActiveSceneManager::GetInstance()->GetPlayer()->GetStatus();
+	{// そのほかのエリアの場合
 
+		// コスト分エナジーを減らす
 		status.energy -= cpy->GetParameter().cost;
 
+		// エナジーを設定
 		CActiveSceneManager::GetInstance()->GetPlayer()->SetStatus(status);
+
 	}
+
 	
 }
 
@@ -204,9 +206,4 @@ void My::CCardStateTrigger::Init(CCard* cpy)
 		return;
 
 	CActiveSceneManager::GetInstance()->GetAreaManager()->CardTrigger(cpy->GetTarget());
-
-	// トリガーしたことをわかりやすくするため今だけ位置を変えている
-	D3DXVECTOR3 pos = cpy->GetPos();
-	pos.x += 20.0f;
-	cpy->SetPos(pos);
 }

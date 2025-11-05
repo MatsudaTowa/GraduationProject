@@ -84,7 +84,7 @@ void My::CHand::Update()
 	// 手札ドロー
 	if (pkeyboad->GetTrigger(DIK_SPACE))
 	{
-		if (status.energy > 0)
+		if (status.energy > 0 && m_TotalNum < MAX_HANDSCARD)
 		{// 消費できるエナジーがなかったらドローできない
 
 			HandDraw(1);
