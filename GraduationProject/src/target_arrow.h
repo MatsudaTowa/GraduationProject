@@ -16,7 +16,7 @@ namespace My
 	{
 	public:
 		CTargetArrow();
-		~CTargetArrow();
+		~CTargetArrow()override;
 		HRESULT Init()override;
 
 	private:

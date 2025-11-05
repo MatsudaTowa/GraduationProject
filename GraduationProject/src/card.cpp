@@ -54,6 +54,7 @@ HRESULT My::CCard::Init()
 {
 	CObject3D::Init();
 
+	// ステートの設定
 	m_pState = new CCardStateNeutral();
 	m_pState->Init();
 	m_StateNum = CCardState::CARD_NEUTRAL;
