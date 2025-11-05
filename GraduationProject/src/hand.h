@@ -110,6 +110,8 @@ namespace My
 		*/
 		inline CCard** GetHandCard() { return &m_pCard[0]; }
 
+		CCard* SearchHandList(int num);
+
 	private:
 		// 手札の状態
 		HANDSTATE m_HandState;
@@ -146,6 +148,8 @@ namespace My
 		* TriggerList : トリガーしたカード
 		*/ 
 		My::CCard* m_pCard[MAX_HANDSCARD];
+
+		std::list<CCard*>m_pHandList;
 
 		My::CCard* m_pHandCard[MAX_HANDSCARD];
 		My::CCard* m_pStayCard[MAX_HANDSCARD];

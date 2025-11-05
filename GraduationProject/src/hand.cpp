@@ -5,7 +5,6 @@
 // 
 //===========================================================================================================================================================
 #include "hand.h"
-#include "card.h"
 #include "card_state.h"
 #include "card_attack.h"
 #include "card_deffence.h"
@@ -13,6 +12,7 @@
 #include "active_scene.h"
 #include "active_scene_manager.h"
 #include "active_scene_state.h"
+#include <algorithm>
 
 My::CHand::CHand() :
 	m_SelectNum(-1),
@@ -24,6 +24,8 @@ My::CHand::CHand() :
 	m_pStayCard(),
 	m_pTriggerCard()
 {
+	m_pHandList.clear();
+
 	for (int i = 0; i < MAX_HANDSCARD; i++)
 	{
 		m_pCard[i] = nullptr;
@@ -32,6 +34,7 @@ My::CHand::CHand() :
 
 My::CHand::~CHand()
 {
+	m_pHandList.clear();
 }
 
 //===========================================================================================================
@@ -43,11 +46,6 @@ void My::CHand::Init()
 	m_SelectNum = -1;
 	m_TotalNum = 0;
 	m_IsPassStart = false;
-
-	for (int i = 0; i < MAX_HANDSCARD; i++)
-	{
-		m_pCard[i] = nullptr;
-	}
 
 	// カメラの位置と角度に合わせる
 	CCamera* pCamera = CManager::GetInstance()->GetCamera(0);
@@ -112,6 +110,57 @@ void My::CHand::Select()
 	if (m_HandState == CAST)
 		return;
 
+	//m_pHandList.size();
+
+	//// 何も選択されていない場合
+	//if (!m_IsPickUp)
+	//{
+	//	int i = 0;
+
+	//	// リスト分回す
+	//	for (auto& itr : m_pHandList)
+	//	{
+	//		if (!itr) {
+	//			i++;
+	//			continue;
+	//		}
+
+	//		// マウスでカード選択
+	//		m_IsPickUp = itr->CardSelectToMouse();
+
+	//		if (m_IsPickUp)
+	//		{
+	//			m_SelectNum = i;
+	//			break;
+	//		}
+
+	//		i++;
+	//	}
+	//}
+	//else
+	//{
+	//	CCard* a = nullptr;
+
+	//	 a = SearchHandList(m_SelectNum);
+
+	//	if (!a)
+	//		return;
+
+	//	// 選択番号のカードが非選択状態になったら
+	//	if (a->GetStateNum() == CCardState::CARD_NEUTRAL)
+	//	{
+	//		m_IsPickUp = false;	// 選択されていない状態にする
+	//	}
+	//	else
+	//	{
+	//		// 選択番号のカードのみ判定する
+	//		m_IsPickUp = a->CardSelectToMouse();
+	//	}
+	//}
+
+	
+
+
 	// 何も選択されていない場合
 	if (!m_IsPickUp)
 	{
@@ -127,7 +176,6 @@ void My::CHand::Select()
 			if (m_IsPickUp)
 			{// どれかのカードが選択されたら
 				m_SelectNum = i;	// 今の配列番号を一時格納しておく
-				//CActiveSceneManager::GetInstance()->ChangeState(new CCardCast);
 				break;
 			}
 		}
@@ -169,6 +217,32 @@ void My::CHand::Cast()
 		m_HandState = NEUTRAL;
 }
 
+My::CCard* My::CHand::SearchHandList(int num)
+{
+	/*auto result = std::find_if(m_pHandList.begin(), m_pHandList.end(), [](CCard* pCard) {return pCard->GetStateNum() == CCardState::CARD_STATE::CARD_STAY; });
+
+	if (result == m_pHandList.end())
+	{
+		return nullptr;
+	}
+	else
+	{
+	}*/
+
+	auto itr = m_pHandList.begin();
+
+	// リスト分回す
+	for (unsigned int i = 0; i < m_pHandList.size(); i++)
+	{
+		if (i == num){
+			return *itr;
+		}
+		itr++;
+	}
+
+	return nullptr;
+}
+
 //===========================================================================================================
 // 手札のカードの状態変更
 //===========================================================================================================
@@ -201,9 +275,16 @@ void My::CHand::DeleteCard()
 	// カード番号(-1 で初期化)
 	int num = -1;
 
+	//auto itr = m_pHandList.begin();
+
 	// トリガーされたカードを調べる
 	for (int i = 0; i < m_TotalNum; i++)
 	{
+		//if ( == CCardState::CARD_TRIGGER)
+		//{
+
+		//}
+
 		if (m_pCard[i]->GetStateNum() == CCardState::CARD_STATE::CARD_TRIGGER)
 		{
 			num = i;
@@ -247,20 +328,28 @@ void My::CHand::DeleteCard()
 //===========================================================================================================
 void My::CHand::SetCard(CCard::CARDTYPE_ type)
 {
+	// 一時的に保管する
+	CCard* pCard = nullptr;
+
 	switch (type)
 	{
 	case CCard::CARDTYPE_::TYPE_ATTACK:
-		m_pCard[m_TotalNum] = CCardAttack::Create(type);
+		pCard = CCardAttack::Create(type);
 		break;
 
 	case CCard::CARDTYPE_::TYPE_DEFFENCE:
-		m_pCard[m_TotalNum] = CCardDeffence::Create(type);
+		pCard = CCardDeffence::Create(type);
 		break;
 
 	case CCard::CARDTYPE_::TYPE_ASSIST:
-		m_pCard[m_TotalNum] = CCardAssist::Create(type);
+		pCard = CCardAssist::Create(type);
 		break;
 	}
+
+	m_pCard[m_TotalNum] = pCard;
+
+	// リストテスト
+	m_pHandList.push_back(pCard);
 }
 
 //===========================================================================================================
