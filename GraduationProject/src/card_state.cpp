@@ -7,6 +7,7 @@
 #include "card_state.h"
 #include "card.h"
 #include "active_scene_manager.h"
+#include "target_arrow.h"
 
 //===========================================================================================================
 // 
@@ -120,6 +121,9 @@ void My::CCardStateCast::Init(CCard* cpy)
 	pos.z += 20.0f;
 
 	cpy->SetPos(pos);
+
+	CTargetArrow *targetarrow = new CTargetArrow();
+	targetarrow->Init();
 }
 
 //=======================================================================================
