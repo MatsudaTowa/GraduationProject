@@ -727,9 +727,10 @@ void My::CEdit::Load()
 	}
 
 	ordered_json Json;
+
 	try
 	{
-		// 文字列から直接パース
+		// 文字列から直接パース(日本語変換)
 		Json = ordered_json::parse(fileData);
 	}
 	catch (const std::exception& e)
