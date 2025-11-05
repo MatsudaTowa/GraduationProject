@@ -120,6 +120,7 @@
     <ClCompile Include="src\center_area.cpp">
       <Filter>active_scene\area</Filter>
     </ClCompile>
+    <ClCompile Include="src\target_arrow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -242,6 +243,7 @@
     <ClInclude Include="src\center_area.h">
       <Filter>active_scene\area</Filter>
     </ClInclude>
+    <ClInclude Include="src\target_arrow.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">
