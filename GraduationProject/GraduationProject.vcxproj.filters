@@ -124,6 +124,7 @@
     <ClCompile Include="src\active_scene.cpp">
       <Filter>active_scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\card_strategy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -250,6 +251,7 @@
     <ClInclude Include="src\condition.h">
       <Filter>character\condition</Filter>
     </ClInclude>
+    <ClInclude Include="src\card_strategy.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">

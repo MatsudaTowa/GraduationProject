@@ -173,6 +173,7 @@
     <ClCompile Include="src\card_deffence.cpp" />
     <ClCompile Include="src\card_frame.cpp" />
     <ClCompile Include="src\card_state.cpp" />
+    <ClCompile Include="src\card_strategy.cpp" />
     <ClCompile Include="src\center_area.cpp" />
     <ClCompile Include="src\character.cpp" />
     <ClCompile Include="src\client.cpp" />
@@ -259,6 +260,7 @@
     <ClInclude Include="src\card_deffence.h" />
     <ClInclude Include="src\card_frame.h" />
     <ClInclude Include="src\card_state.h" />
+    <ClInclude Include="src\card_strategy.h" />
     <ClInclude Include="src\center_area.h" />
     <ClInclude Include="src\character.h" />
     <ClInclude Include="src\client.h" />
