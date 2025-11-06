@@ -80,9 +80,6 @@
     <ClCompile Include="src\active_scene_state.cpp">
       <Filter>active_scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\active_scene.cpp">
-      <Filter>active_scene</Filter>
-    </ClCompile>
     <ClCompile Include="src\area.cpp">
       <Filter>active_scene\area</Filter>
     </ClCompile>
@@ -123,6 +120,9 @@
     <ClCompile Include="src\target_arrow.cpp" />
     <ClCompile Include="src\condition.cpp">
       <Filter>character\condition</Filter>
+    </ClCompile>
+    <ClCompile Include="src\active_scene.cpp">
+      <Filter>active_scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

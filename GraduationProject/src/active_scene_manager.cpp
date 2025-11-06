@@ -73,7 +73,6 @@ void My::CActiveSceneManager::ChangeState(CActiveSceneState* state)
 	{
 		if (typeid(*current_state) == typeid(*state))
 		{//Œ»İ‚Æ“¯‚¶‚¾‚Á‚½‚çŠÖ”‚ğ”²‚¯‚é
-			delete state;
 			return;
 		}
 		delete current_state;

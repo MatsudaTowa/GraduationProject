@@ -117,8 +117,6 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 		if (itr == nullptr) { continue; }
 		if (itr->GetConditionType() == CCondition::CONDITION_TYPE::DEATH)
 		{
-			//ステートをデュエルにしてから抜ける
-			CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
 			return; 
 		}
 	}
