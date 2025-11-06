@@ -8,6 +8,7 @@
 #include "active_scene.h"
 #include "card_state.h"
 #include "card_frame.h"
+#include "active_scene_manager.h"
 #include <typeinfo>
 
 //===========================================================================================================
@@ -264,6 +265,7 @@ bool My::CCard::CardCastToMouse()
 	{
 		// キャストステートにする
 		ChangeState(CCardState::CARD_CAST);
+		CActiveSceneManager::GetInstance()->ChangeState(new CCardCast);
 
 		screenpos = pMouse->GetMousePos();
 		CalcScreenToWorld(&resultpos, screenpos.x, screenpos.y, 1.0f, width, height, &View, &Proj);
@@ -276,6 +278,8 @@ bool My::CCard::CardCastToMouse()
 	{
 		// ステイ遷移
 		ChangeState(CCardState::CARD_STAY);
+		CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
+
 		// 
 		m_target = pMouse->GetArea();
 	}
