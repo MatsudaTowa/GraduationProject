@@ -109,13 +109,13 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 		EnergyUp(player);
 	}
 
-	std::list<CDebuff*> DebuffList = character->GetDebuffList();
+	std::list<CCondition*> DebuffList = character->GetConditionList();
 
 	//死んでいたら関数を抜ける
 	for (auto& itr : DebuffList)
 	{
 		if (itr == nullptr) { continue; }
-		if (itr->GetConditionType() == CDebuff::CONDITION_TYPE::DEATH)
+		if (itr->GetConditionType() == CCondition::CONDITION_TYPE::DEATH)
 		{
 			//ステートをデュエルにしてから抜ける
 			CActiveSceneManager::GetInstance()->ChangeState(new CDuel);

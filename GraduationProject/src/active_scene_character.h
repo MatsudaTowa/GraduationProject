@@ -11,7 +11,7 @@
 #include "character.h"
 #include "active_scene_character_state.h"
 #include "ready_UI.h"
-#include "debuff.h"
+#include "condition.h"
 #include "player_UI.h"
 
 /** @brief My 名前空間 */
@@ -79,11 +79,11 @@ namespace My
 		 */
 		void DeathRegist();
 
-		void Regist(CDebuff* debuff);	//登録
-		void Remove(CDebuff* debuff);	//削除
+		void Regist(CCondition* condition);	//登録
+		void Remove(CCondition* condition);	//削除
 
 		//リストの取得
-		std::list<CDebuff*> GetDebuffList() { return m_DebuffList; }
+		std::list<CCondition*> GetConditionList() { return m_ConditionList; }
 
 		/**
 		 * @brief ステート取得
@@ -274,7 +274,7 @@ namespace My
 		bool m_isHost = false;		//!ホストかどうか
 
 		CActiveSceneCharacterState* m_pState;	//!ステート
-		std::list<CDebuff*> m_DebuffList;	//デバフリスト
+		std::list<CCondition*> m_ConditionList;	//コンディションリスト
 
 		CPlayerUI* m_pPlayerUI;
 	};

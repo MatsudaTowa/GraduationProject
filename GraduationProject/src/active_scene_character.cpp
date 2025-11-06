@@ -6,6 +6,7 @@
 //=============================================
 #include "active_scene_character.h"
 #include "active_scene_state.h"
+#include "debuff.h"
 
 //=============================================
 // コンストラクタ
@@ -18,7 +19,7 @@ m_playerIdx(-1),
 m_pPlayerUI(nullptr),
 m_area()
 {
-	m_DebuffList.clear();
+	m_ConditionList.clear();
 }
 
 //=============================================
@@ -26,14 +27,14 @@ m_area()
 //=============================================
 My::CActiveSceneCharacter::~CActiveSceneCharacter()
 {
-	for (auto& itr : m_DebuffList)
+	for (auto& itr : m_ConditionList)
 	{
 		if (itr == nullptr) { continue; }
 		delete itr;
 		itr = nullptr;
 	}
 
-	m_DebuffList.clear();
+	m_ConditionList.clear();
 }
 
 //=============================================
@@ -92,7 +93,7 @@ void My::CActiveSceneCharacter::Update()
 
 		m_pState->Duel(this);
 	}
-	for (auto& itr : m_DebuffList)
+	for (auto& itr : m_ConditionList)
 	{
 		if (itr == nullptr) { continue; }
 		itr->Condition(this);
@@ -158,33 +159,33 @@ void My::CActiveSceneCharacter::DeathRegist()
 //=============================================
 // デバフ登録
 //=============================================
-void My::CActiveSceneCharacter::Regist(CDebuff* debuff)
+void My::CActiveSceneCharacter::Regist(CCondition* condition)
 {
-	for (auto& itr : m_DebuffList)
+	for (auto& itr : m_ConditionList)
 	{//デバフの情報を回してdeathがあれば抜ける
 	 //NOTE:二回死をしないため
 		if (itr == nullptr) { continue; }
-		if (itr->GetConditionType() == CDebuff::CONDITION_TYPE::DEATH)
+		if (itr->GetConditionType() == CCondition::CONDITION_TYPE::DEATH)
 		{
-			delete debuff;
+			delete condition;
 			return;
 		}
 	}
-	m_DebuffList.push_back(debuff);
+	m_ConditionList.push_back(condition);
 }
 
 //=============================================
 // デバフ削除
 //=============================================
-void My::CActiveSceneCharacter::Remove(CDebuff* debuff)
+void My::CActiveSceneCharacter::Remove(CCondition* condition)
 {
 	//サイズが0なら抜ける
-	if (m_DebuffList.size() == 0)
+	if (m_ConditionList.size() == 0)
 	{
 		return;
 	}
-	delete debuff;
-	debuff = nullptr;
+	delete condition;
+	condition = nullptr;
 	//デバフの情報を削除
-	m_DebuffList.remove(debuff);
+	m_ConditionList.remove(condition);
 }
