@@ -35,6 +35,7 @@ public:
 		ID_DUEL_MESSAGE_CLIENT_START,	//クライアントが対戦用に変わったことを通知
 		ID_DUEL_MESSAGE_START,			//対戦の開始を通知
 		ID_DUEL_MESSAGE_SEND_STATUS,	//ステータスを送る
+		ID_DUEL_MESSAGE_STATUS,			//ステータスの通知
 		ID_DUEL_MESSAGE_1,				//対戦時のメッセージ
 	};
 
@@ -54,6 +55,7 @@ public:
 	virtual void StartBattle(RakNet::RakPeerInterface* peer) = 0;										//対戦の開始
 	virtual void SendStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) = 0;				//ステータスを送る
 	virtual void AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) = 0;					//CPUの追加
+	virtual void ReceiveStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) = 0;				//ステータスを受信	
 
 	//設定と取得
 

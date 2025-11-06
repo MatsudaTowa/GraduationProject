@@ -14,55 +14,6 @@
 //=====================================
 void CDuel_Data::NewConnection(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
 {
-    ////新しく情報を取得
-    //CDuel_Player* pPlayer = new CDuel_Player;
-
-    ////パラメータの設定
-    //pPlayer->SetIndex(m_DuelPlayerList.size()); //番号
-    //pPlayer->SetRakNetID(packet->guid);          //RakNetID
-    //std::cout << "プレイヤー" << pPlayer->GetIndex() + 1 << "を受信しました\n";
-
-    ////プレイヤーの情報を受け取る
-    //{
-    //    // データの作成
-    //    RakNet::BitStream bsOut;
-    //    int PlayerNum = pPlayer->GetIndex() + 1;
-    //    bsOut.Write((RakNet::MessageID)ID_CONNECT_MESSAGE_1);
-    //    bsOut.Write(PlayerNum);
-
-    //    //既存プレイヤー情報を書き出し
-    //    for (auto iter : m_DuelPlayerList)
-    //    {
-    //        //送信用のデータをまとめる
-    //        CDuel_Player::DuelData SendData;
-    //        SendData.BaceData.RakNetID = iter->GetRakNetID();
-    //        SendData.BaceData.nIndex = iter->GetIndex();
-
-    //        //送信
-    //        bsOut.Write(SendData);
-    //    }
-
-    //    //新規プレイヤーの書き出し
-    //    {
-    //        //送信用のデータをまとめる
-    //        CDuel_Player::DuelData SendData;
-    //        SendData.BaceData.RakNetID = pPlayer->GetRakNetID();
-    //        SendData.BaceData.nIndex = pPlayer->GetIndex();
-
-    //        //送信
-    //        bsOut.Write(SendData);
-    //    }
-
-    //    // 全クライアントにブロードキャスト
-    //    peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
-    //}
-
-    ////TODO:push_backのコードを追加予定
-    //m_DuelPlayerList.push_back(pPlayer);
-
-
-
-
 
     //ログ
     std::cout << "対戦中にプレイヤーを受信しました\n";
@@ -292,6 +243,7 @@ void CDuel_Data::SendStartMember(RakNet::RakPeerInterface* peer)
 
         DuelData.BaceData.nIndex = iter->GetIndex();        //番号
         DuelData.BaceData.RakNetID = iter->GetRakNetID();   //RakNetID
+        DuelData.BaceData.Tag = iter->GetTag();             //タグ
         bsOut.Write(DuelData.BaceData);                     //書き出し
 
         //CPUがいるならこの段階でフラグを立てる
@@ -387,6 +339,7 @@ void CDuel_Data::SendStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* pe
         pPlayer->SetStatus(Data.Status);
         pPlayer->SetRakNetID(Data.BaceData.RakNetID);
         pPlayer->SetIndex(Data.BaceData.nIndex);
+        pPlayer->SetTag(Data.BaceData.Tag);
 
         //追加
         m_DuelPlayerList.push_back(pPlayer);
@@ -395,24 +348,97 @@ void CDuel_Data::SendStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* pe
     //bsIn.Read(nId);
     //bsIn.Read(isReady);
 
-    // データの作成
-    RakNet::BitStream bsOut;
-    int PlayerNum = m_DuelPlayerList.size();
+    //// データの作成
+    //RakNet::BitStream bsOut;
+    //int PlayerNum = m_DuelPlayerList.size();
 
-    //書き出し
-    bsOut.Write((RakNet::MessageID)ID_DUEL_MESSAGE_SEND_STATUS);
+    ////書き出し
+    //bsOut.Write((RakNet::MessageID)ID_DUEL_MESSAGE_SEND_STATUS);
    
+    ////書き出し
+    //for (auto iter : m_DuelPlayerList)
+    //{
+    //    //送信用のデータをまとめる
+    //    CDuel_Player::DuelData SendData;
+    //    SendData.BaceData.RakNetID = iter->GetRakNetID();   //識別番号
+    //    SendData.BaceData.nIndex = iter->GetIndex();        //番号
+    //    SendData.BaceData.Tag = iter->GetTag();             //タグ
+    //    SendData.Status = iter->GetStatus();                //ステータス
+    //    bsOut.Write(SendData);
+    //}
+
+    //// 全クライアントにブロードキャスト
+    //peer->Send(&bsOut, IMMEDIATE_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);  //優先的に送ることで反映を先にする
+}
+
+//=====================================
+//ステータスを受信
+//=====================================
+void CDuel_Data::ReceiveStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
+{
+    //送信するかの確認
+    if (!IsSendUpdate(packet)) return;
+
+    //データの作成
+    RakNet::BitStream bsOut;
+    bsOut.Write((RakNet::MessageID)GameMessages::ID_DUEL_MESSAGE_STATUS);
+
     //書き出し
     for (auto iter : m_DuelPlayerList)
     {
         //送信用のデータをまとめる
         CDuel_Player::DuelData SendData;
-        SendData.BaceData.RakNetID = iter->GetRakNetID();
-        SendData.BaceData.nIndex = iter->GetIndex();
-        SendData.Status = iter->GetStatus();
+        SendData.BaceData.RakNetID = iter->GetRakNetID();   //識別番号
+        SendData.BaceData.nIndex = iter->GetIndex();        //番号
+        SendData.BaceData.Tag = iter->GetTag();             //タグ
+        SendData.Status = iter->GetStatus();                //ステータス
         bsOut.Write(SendData);
     }
 
-    // 全クライアントにブロードキャスト
+    //全クライアントにブロードキャスト
     peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+}
+
+//=====================================
+//更新の許可を出すかの確認
+//=====================================
+bool CDuel_Data::IsSendUpdate(RakNet::Packet* packet)
+{
+    //データの受信
+    RakNet::BitStream bsIn(packet->data, packet->length, false);
+   
+    //読み取り
+    bsIn.IgnoreBytes(sizeof(RakNet::MessageID));    //メッセージの読み込み
+    CDuel_Player::DuelData Data;                    //データの読み込み
+    bsIn.Read(Data);
+
+    //同じ番号のステータスに反映
+    for (auto& iter : m_DuelPlayerList)
+    {
+        //番号を確認
+        if (iter->GetIndex() == Data.BaceData.nIndex)
+        {
+            //ステータスを代入
+            iter->SetStatus(Data.Status);
+            break;
+        }
+    }
+
+    //受信数のカウント
+    m_nReceiveNum++;
+
+    //プレイヤーの人数を確認
+    int PlayerNum = 0;
+    for (auto iter : m_DuelPlayerList)
+    {
+        if (iter->GetTag() == CPlayer::TAG_PLAYER)
+        {
+            PlayerNum++;
+        }
+    }
+
+    //プレイヤーの数だけ受信できていないなら許可しない
+    if (m_nReceiveNum != PlayerNum) return false;
+
+    return false;
 }

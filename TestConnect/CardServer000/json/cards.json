@@ -1,0 +1,81 @@
+{
+    "カード": [
+        {
+            "Pack ID": 1,
+            "Card ID": 1,
+            "Card Name": "狂殺猿",
+            "Card Name Ruby": "アサルトおさる",
+            "image": "asalt_monkey.png",
+            "cost": 1,
+            "rarity": 1,
+            "type": 1,
+            "attacktype": 2,
+            "power": 1
+        },
+        {
+            "Pack ID": 1,
+            "Card ID": 2,
+            "Card Name": "デーモンベーコン",
+            "Card Name Ruby": "",
+            "image": "demon_becon.png",
+            "cost": 1,
+            "rarity": 0,
+            "type": 1,
+            "attacktype": 1,
+            "power": 1
+        },
+        {
+            "Pack ID": 1,
+            "Card ID": 3,
+            "Card Name": "筋肉城",
+            "Card Name Ruby": "マッスルキャッスル",
+            "image": "muscle_castle.png",
+            "cost": 2,
+            "rarity": 2,
+            "type": 2,
+            "defensetype": 1,
+            "guard": 3,
+            "counter": 2
+        },
+        {
+            "Pack ID": 1,
+            "Card ID": 4,
+            "Card Name": "扇子柵",
+            "Card Name Ruby": "せんすのフェンス",
+            "image": "fan_fence.png",
+            "cost": 2,
+            "rarity": 1,
+            "type": 2,
+            "defensetype": 2,
+            "guard": 1
+        },
+        {
+            "Pack ID": 1,
+            "Card ID": 5,
+            "Card Name": "脳列車",
+            "Card Name Ruby": "ブレイントレイン",
+            "image": "brain_train.png",
+            "cost": 2,
+            "rarity": 2,
+            "type": 3,
+            "assisttype": 2,
+            "bufftype": 1,
+            "healtype": 5,
+            "heal": 3
+        },
+        {
+            "Pack ID": 1,
+            "Card ID": 6,
+            "Card Name": "黒氷",
+            "Card Name Ruby": "ヴァイスアイス",
+            "image": "vice_ice.png",
+            "cost": 1,
+            "rarity": 1,
+            "type": 3,
+            "assisttype": 2,
+            "bufftype": 1,
+            "healtype": 3,
+            "heal": 1
+        }
+    ]
+}
