@@ -11,7 +11,7 @@
 //=============================================
 My::CDeath::CDeath():m_pDeathIcon(nullptr)
 {
-	SetType(DEBUFF_TYPE::DEATH);
+	SetType(CONDITION_TYPE::DEATH);
 }
 
 //=============================================
@@ -29,7 +29,7 @@ My::CDeath::~CDeath()
 //=============================================
 // ƒfƒoƒt
 //=============================================
-void My::CDeath::Debuff(CActiveSceneCharacter* character)
+void My::CDeath::Condition(CActiveSceneCharacter* character)
 {
 	if (m_pDeathIcon == nullptr)
 	{

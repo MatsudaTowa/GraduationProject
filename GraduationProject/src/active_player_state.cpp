@@ -115,7 +115,7 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 	for (auto& itr : DebuffList)
 	{
 		if (itr == nullptr) { continue; }
-		if (itr->GetDebuffType() == CDebuff::DEBUFF_TYPE::DEATH)
+		if (itr->GetConditionType() == CDebuff::CONDITION_TYPE::DEATH)
 		{
 			//ステートをデュエルにしてから抜ける
 			CActiveSceneManager::GetInstance()->ChangeState(new CDuel);

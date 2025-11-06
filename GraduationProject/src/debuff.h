@@ -7,7 +7,7 @@
 #ifndef _DEBUFF_H_
 #define _DEBUFF_H_
 
-#include "character.h"
+#include "condition.h"
 #include "active_scene_character_state.h"
 #include "death_icon.h"
 
@@ -15,14 +15,9 @@
 namespace My
 {
 	/** @brief デバフクラス */
-	class CDebuff
+	class CDebuff:public CCondition
 	{
 	public:
-		enum DEBUFF_TYPE
-		{
-			DEATH,
-			MAX
-		};
 		/**
 		 * @brief コンストラクタ
 		 */
@@ -30,32 +25,13 @@ namespace My
 		/**
 		 * @brief デストラクタ
 		 */
-		virtual ~CDebuff() {};
+		~CDebuff()override {};
 		/**
 		* @brief デバフ処理
 		* @param [in]キャラクターポインタ
 		*/
-		virtual void Debuff([[maybe_unused]] CActiveSceneCharacter* character) {};
-
-		/**
-		 * @brief タイプ取得
-		 * @return タイプ
-		 */
-		inline DEBUFF_TYPE GetDebuffType()
-		{
-			return m_type;
-		}
-
-		/**
-		 * @brief タイプの設定
-		 * @param [in]type
-		 */
-		inline void SetType(DEBUFF_TYPE type)
-		{
-			m_type = type;
-		}
+		void Condition([[maybe_unused]] CActiveSceneCharacter* character)override {};
 	private:
-		DEBUFF_TYPE m_type;
 	};
 
 	/** @brief 死亡デバフ */
@@ -74,7 +50,7 @@ namespace My
 		* @brief 死亡処理
 		* @param [in]キャラクターポインタ
 		*/
-		void Debuff(CActiveSceneCharacter* character)override;
+		void Condition(CActiveSceneCharacter* character)override;
 	private:
 		CDeathIcon* m_pDeathIcon;
 		

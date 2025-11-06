@@ -105,7 +105,7 @@
     <ClCompile Include="src\font_manager.cpp" />
     <ClCompile Include="src\client_duel.cpp" />
     <ClCompile Include="src\debuff.cpp">
-      <Filter>character\debuff</Filter>
+      <Filter>character\condition\debuff</Filter>
     </ClCompile>
     <ClCompile Include="src\death_icon.cpp" />
     <ClCompile Include="src\life_frame.cpp" />
@@ -121,6 +121,9 @@
       <Filter>active_scene\area</Filter>
     </ClCompile>
     <ClCompile Include="src\target_arrow.cpp" />
+    <ClCompile Include="src\condition.cpp">
+      <Filter>character\condition</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -225,7 +228,7 @@
     <ClInclude Include="src\font_manager.h" />
     <ClInclude Include="src\client_duel.h" />
     <ClInclude Include="src\debuff.h">
-      <Filter>character\debuff</Filter>
+      <Filter>character\condition\debuff</Filter>
     </ClInclude>
     <ClInclude Include="src\death_icon.h" />
     <ClInclude Include="src\life_frame.h" />
@@ -244,6 +247,9 @@
       <Filter>active_scene\area</Filter>
     </ClInclude>
     <ClInclude Include="src\target_arrow.h" />
+    <ClInclude Include="src\condition.h">
+      <Filter>character\condition</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">
@@ -258,8 +264,14 @@
     <Filter Include="active_scene\lobby">
       <UniqueIdentifier>{b471ed37-6a4b-4b0f-b87c-f68cee98794f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="character\debuff">
+    <Filter Include="character\condition">
+      <UniqueIdentifier>{45545ecf-1b94-4090-8a9a-fa84716f42b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="character\condition\debuff">
       <UniqueIdentifier>{1923b1d6-04cd-4db5-a3df-525fb43f5002}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="character\condition\buff">
+      <UniqueIdentifier>{02190a37-3ba9-43c2-9633-05687adb288e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

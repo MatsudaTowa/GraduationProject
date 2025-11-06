@@ -95,7 +95,7 @@ void My::CActiveSceneCharacter::Update()
 	for (auto& itr : m_DebuffList)
 	{
 		if (itr == nullptr) { continue; }
-		itr->Debuff(this);
+		itr->Condition(this);
 	}
 
 	UpdateUI();
@@ -164,7 +164,7 @@ void My::CActiveSceneCharacter::Regist(CDebuff* debuff)
 	{//ƒfƒoƒt‚Ìî•ñ‚ð‰ñ‚µ‚Ädeath‚ª‚ ‚ê‚Î”²‚¯‚é
 	 //NOTE:“ñ‰ñŽ€‚ð‚µ‚È‚¢‚½‚ß
 		if (itr == nullptr) { continue; }
-		if (itr->GetDebuffType() == CDebuff::DEBUFF_TYPE::DEATH)
+		if (itr->GetConditionType() == CDebuff::CONDITION_TYPE::DEATH)
 		{
 			delete debuff;
 			return;
