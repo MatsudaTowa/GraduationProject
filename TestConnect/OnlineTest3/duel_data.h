@@ -19,7 +19,7 @@ class CDuel_Data : public CRakNet_Data
 public:
 
 	//関数
-	CDuel_Data() : m_DuelPlayerList(), m_isCheckStart{ false,false,false,false }{} 	//コンストラクタ
+	CDuel_Data() : m_DuelPlayerList(), m_isCheckStart{ false,false,false,false }, m_nReceiveNum(0){} 	//コンストラクタ
 	~CDuel_Data() {}										//デストラクタ
 
 	//送受信の処理
@@ -33,6 +33,7 @@ public:
 	void StartBattle(RakNet::RakPeerInterface* peer) override;									//対戦の開始
 	void SendStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;			//ステータスを送る
 	void AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override {}				//CPUの追加
+	void ReceiveStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;		//ステータスを受信
 
 	//プレイヤーのデータリスト
 	void SetData(std::list<CPlayer::Data> data) override;	//設定
@@ -45,10 +46,12 @@ private:
 
 	//関数
 	void SendPlayerNum(RakNet::RakPeerInterface* peer, GameMessages message);	//プレイヤー数を送信する関数
+	bool IsSendUpdate(RakNet::Packet* packet);									//更新の許可を出すか
 
 	//変数
 	std::list<CDuel_Player*> m_DuelPlayerList;	//ロビープレイヤー保管用変数
 	bool m_isCheckStart[MAX_CLIENT];			//開始するかのフラグ
+	int m_nReceiveNum;							//ステータスを受信した数
 };
 
 #endif
