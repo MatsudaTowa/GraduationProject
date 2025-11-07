@@ -183,7 +183,7 @@
     <ClCompile Include="src\condition.cpp" />
     <ClCompile Include="src\death_icon.cpp" />
     <ClCompile Include="src\debuff.cpp" />
-    <ClCompile Include="src\duel_manager.cpp" />
+    <ClCompile Include="src\deck.cpp" />
     <ClCompile Include="src\enemy.cpp" />
     <ClCompile Include="src\enemy_manager.cpp" />
     <ClCompile Include="src\energy_charge.cpp" />
@@ -246,6 +246,8 @@
     <ClCompile Include="src\title_camera.cpp" />
     <ClCompile Include="src\title_screen.cpp" />
     <ClCompile Include="src\useful.cpp" />
+    <ClCompile Include="src\zone.cpp" />
+    <ClCompile Include="src\zone_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\active_scene_character.h" />
@@ -272,7 +274,7 @@
     <ClInclude Include="src\count.h" />
     <ClInclude Include="src\death_icon.h" />
     <ClInclude Include="src\debuff.h" />
-    <ClInclude Include="src\duel_manager.h" />
+    <ClInclude Include="src\deck.h" />
     <ClInclude Include="src\enemy.h" />
     <ClInclude Include="src\enemy_manager.h" />
     <ClInclude Include="src\energy_charge.h" />
@@ -332,6 +334,8 @@
     <ClInclude Include="src\title_camera.h" />
     <ClInclude Include="src\title_screen.h" />
     <ClInclude Include="src\useful.h" />
+    <ClInclude Include="src\zone.h" />
+    <ClInclude Include="src\zone_manager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -125,8 +125,14 @@
       <Filter>active_scene</Filter>
     </ClCompile>
     <ClCompile Include="src\card_strategy.cpp" />
-    <ClCompile Include="src\duel_manager.cpp">
-      <Filter>active_scene</Filter>
+    <ClCompile Include="src\zone.cpp">
+      <Filter>zone\base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\zone_manager.cpp">
+      <Filter>zone\manager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\deck.cpp">
+      <Filter>zone\deck</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -255,8 +261,14 @@
       <Filter>character\condition</Filter>
     </ClInclude>
     <ClInclude Include="src\card_strategy.h" />
-    <ClInclude Include="src\duel_manager.h">
-      <Filter>active_scene</Filter>
+    <ClInclude Include="src\zone.h">
+      <Filter>zone\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\zone_manager.h">
+      <Filter>zone\manager</Filter>
+    </ClInclude>
+    <ClInclude Include="src\deck.h">
+      <Filter>zone\deck</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -280,6 +292,18 @@
     </Filter>
     <Filter Include="character\condition\buff">
       <UniqueIdentifier>{02190a37-3ba9-43c2-9633-05687adb288e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="zone">
+      <UniqueIdentifier>{0a568144-0858-4418-a59f-3b8b68347b7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="zone\base">
+      <UniqueIdentifier>{393bad63-fce7-4c85-ae36-095fea48d92b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="zone\manager">
+      <UniqueIdentifier>{8ab879bc-9e65-4ae5-a3b8-48ce4abe5295}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="zone\deck">
+      <UniqueIdentifier>{1c75ae80-a79b-49ef-96e6-2aabd3d40622}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
