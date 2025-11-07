@@ -276,12 +276,11 @@ bool My::CCard::CardCastToMouse()
 	}
 	else if (pMouse->GetRelease(0))
 	{
+		m_target = pMouse->GetArea();
+
 		// ƒXƒeƒC‘JˆÚ
 		ChangeState(CCardState::CARD_STAY);
 		CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
-
-		// 
-		m_target = pMouse->GetArea();
 	}
 
 	return false;

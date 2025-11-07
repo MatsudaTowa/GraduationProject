@@ -7,6 +7,7 @@
 #include "card_state.h"
 #include "card.h"
 #include "active_scene_manager.h"
+#include "target_arrow.h"
 
 //===========================================================================================================
 // 
@@ -167,6 +168,7 @@ void My::CCardStateStay::Init(CCard* cpy)
 		// エナジーを設定
 		CActiveSceneManager::GetInstance()->GetPlayer()->SetStatus(status);
 
+		CTargetArrow::Create(CInputMouse::AREA::DOWN, cpy->GetTarget());
 	}
 
 	

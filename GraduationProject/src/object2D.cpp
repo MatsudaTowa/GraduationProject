@@ -163,17 +163,17 @@ void My::CObject2D::SetVtx(float fAngle, float fLength)
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 	//í∏ì_ç¿ïWÇÃê›íË
-	pVtx[0].pos = D3DXVECTOR3(m_pos.x + sinf(m_rot.z - (D3DX_PI - fAngle)) * fLength
-		, m_pos.y + cosf(m_rot.z - (D3DX_PI - fAngle)) * fLength
+	pVtx[0].pos = D3DXVECTOR3(m_pos.x + sinf(m_rot.z - (D3DX_PI - fAngle)) * fLength*GetSize().x
+		, m_pos.y + cosf(m_rot.z - (D3DX_PI - fAngle)) * fLength * GetSize().y
 		, 0.0f);
-	pVtx[1].pos = D3DXVECTOR3(m_pos.x + sinf(m_rot.z + (D3DX_PI - fAngle)) * fLength
-		, m_pos.y + cosf(m_rot.z + (D3DX_PI - fAngle)) * fLength
+	pVtx[1].pos = D3DXVECTOR3(m_pos.x + sinf(m_rot.z + (D3DX_PI - fAngle)) * fLength * GetSize().x
+		, m_pos.y + cosf(m_rot.z + (D3DX_PI - fAngle)) * fLength * GetSize().y
 		, 0.0f);
-	pVtx[2].pos = D3DXVECTOR3(m_pos.x + sinf(m_rot.z - fAngle) * fLength
-		, m_pos.y + cosf(m_rot.z - fAngle) * fLength
+	pVtx[2].pos = D3DXVECTOR3(m_pos.x + sinf(m_rot.z - fAngle) * fLength * GetSize().x
+		, m_pos.y + cosf(m_rot.z - fAngle) * fLength * GetSize().y
 		, 0.0f);
-	pVtx[3].pos = D3DXVECTOR3(m_pos.x + sinf(m_rot.z + fAngle) * fLength
-		, m_pos.y + cosf(m_rot.z + fAngle) * fLength
+	pVtx[3].pos = D3DXVECTOR3(m_pos.x + sinf(m_rot.z + fAngle) * fLength * GetSize().x
+		, m_pos.y + cosf(m_rot.z + fAngle) * fLength * GetSize().y
 		, 0.0f);
 
 	//rhwÇÃê›íË
