@@ -26,6 +26,7 @@
 #include <sstream>
 #include "nlohmann/json.hpp"
 #include "imgui/imgui_internal.h"
+#include "tiny_aes/aes.h"
 #include <ShObjIdl.h>
 #pragma comment(lib,"imm32")
 
@@ -39,6 +40,50 @@ std::wstring ConvertToWString(const std::string& str)
 	std::wstring wstr(len, L'\0');
 	MultiByteToWideChar(CP_ACP, 0, str.c_str(), -1, &wstr[0], len);
 	return wstr;
+}
+
+/**
+* @brief CBOR暗号化
+*/
+std::vector<uint8_t> AES_Encrypt(const std::vector<uint8_t>& plaintext,
+	const std::vector<uint8_t>& key,
+	const std::vector<uint8_t>& iv) 
+{
+	std::vector<uint8_t> buffer = plaintext;
+
+	// PKCS7風パディング（1〜16バイト）
+	size_t pad_len = AES_BLOCKLEN - (buffer.size() % AES_BLOCKLEN);
+	buffer.insert(buffer.end(), pad_len, static_cast<uint8_t>(pad_len));
+
+	AES_ctx ctx;
+	AES_init_ctx_iv(&ctx, key.data(), iv.data());
+	AES_CBC_encrypt_buffer(&ctx, buffer.data(), buffer.size());
+
+	return buffer;
+}
+
+/**
+* @brief CBOR複合化
+*/
+std::vector<uint8_t> AES_Decrypt(const std::vector<uint8_t>& ciphertext,
+	const std::vector<uint8_t>& key,
+	const std::vector<uint8_t>& iv)
+{
+	std::vector<uint8_t> buffer = ciphertext;
+
+	AES_ctx ctx;
+	AES_init_ctx_iv(&ctx, key.data(), iv.data());
+	AES_CBC_decrypt_buffer(&ctx, buffer.data(), buffer.size());
+
+	// PKCS7風パディング除去
+	if (!buffer.empty()) {
+		uint8_t pad_len = buffer.back();
+		if (pad_len > 0 && pad_len <= AES_BLOCKLEN && buffer.size() >= pad_len) {
+			buffer.resize(buffer.size() - pad_len);
+		}
+	}
+
+	return buffer;
 }
 
 /**
@@ -359,85 +404,9 @@ void My::CEdit::Edit()
 */
 void My::CEdit::Save()
 {
-	// ルート JSON を作る
 	ordered_json root;
 	root[u8"カード"] = ordered_json::array();
 
-	// 列挙型を文字列に変換する配列（必要に応じて拡張してください）
-	static const char* CardTypeNames[] =
-	{// カードタイプ
-		"NONE",
-		"ATTACK",
-		"DEFENSE",
-		"ASSIST"
-	};
-
-	static const char* CardRarity[] =
-	{// レアリティ
-		"NONE_RARITY",
-		"COMMON",
-		"UNCOMMON",
-		"RARE",
-		"SUPERRARE",
-		"HYPERRARE",
-		"ROYALRARE",
-		"EMPERORRARE",
-		"GODRARE",
-		"XRARE"
-	};
-
-	static const char* CardAttackTypes[] =
-	{// 攻撃対象用タグ
-		"NULL",
-		"ALL_ATTACK",
-		"SPECIFIC_ATTACK",
-		"RANDOM_ATTACK",
-		"SELFINTARGET_ATTACK",
-	};
-
-	static const char* CardDefenseTypes[] =
-	{// 守備用タグ
-		"NULL",
-		"COUNTER",
-		"NOT_COUNTER"
-	};
-
-	static const char* CardAssistType[] =
-	{// アシスト用タグ
-		"NONE_ASSIST",
-		"OBSTRUCT",
-		"BUFF",
-		"DEBUFF"
-	};
-
-	static const char* CardBuffType[] =
-	{// バフ用タグ
-		"NONE_BUFF",
-		"HEAL",
-		"NONAME_ONE",
-		"NONAME_TWO"
-	};
-
-	static const char* CardHealTypes[] =
-	{// 回復対象用タグ
-		"NULL",
-		"ALL_HEAL",
-		"SPECIFIC_HEAL",
-		"RANDOM_HEAL",
-		"SELFINTARGET_HEAL",
-		"ONLY_ME"
-	};
-
-
-	// ヘルパ：前後空白を除去
-	auto trim_copy = [](const std::string& s) -> std::string {
-		size_t l = s.find_first_not_of(" \t\n\r");
-		if (l == std::string::npos) return std::string();
-		size_t r = s.find_last_not_of(" \t\n\r");
-		return s.substr(l, r - l + 1);
-	};
-
-	// すべてのパックとカードを巡回して JSON 配列に詰める
 	for (size_t packIdx = 0; packIdx < m_Pack.size(); ++packIdx)
 	{
 		const auto& pack = m_Pack[packIdx];
@@ -445,189 +414,65 @@ void My::CEdit::Save()
 		{
 			const auto& card = pack.cards[cardIdx];
 
-			// カード名保存
-			std::string nameToSave = card.name;
-			if (!pack.Packname.empty())
-			{
-				std::string prefix = pack.Packname + "_";
-				if (nameToSave.size() >= prefix.size() && nameToSave.compare(0, prefix.size(), prefix) == 0)
-				{
-					nameToSave = nameToSave.substr(prefix.size());
-				}
-			}
-			// 前後空白トリム
-			nameToSave = trim_copy(nameToSave);
-
-			// ルビの保存
-			std::string nameRubyToSave = card.ruby;
-			if (!pack.Packname.empty())
-			{
-				std::string prefix = pack.Packname + "_";
-				if (nameRubyToSave.size() >= prefix.size() && nameRubyToSave.compare(0, prefix.size(), prefix) == 0)
-				{
-					nameRubyToSave = nameRubyToSave.substr(prefix.size());
-				}
-			}
-			// 前後空白トリム
-			nameRubyToSave = trim_copy(nameRubyToSave);
-
-			// 空ならデフォルト名（安全策）
-			if (nameRubyToSave.empty())
-			{
-				nameRubyToSave = std::string("");
-			}
-
+			// データの関連付け
 			ordered_json j;
-			j["Pack ID"] = (int)packIdx + 1;
-			j["Card ID"] = (int)cardIdx + 1;
-			j["Card Name"] = nameToSave;
-			j["Card Name Ruby"] = nameRubyToSave;
-
-			// 画像パス（相対パスを期待するなら card.imagePath を直接保存）
-			j["image"] = card.imagePath;
-
-			// 基本数値フィールド
-			j["cost"] = card.cost;
-			//j["rarity"] = card.rarity;
-
-			// カードレアリティ
-			// rarity
-			{
-				int rarity = static_cast<int>(card.raritytype);
-				if(rarity >= 0 && rarity < (int)(sizeof(CardRarity) / sizeof(CardRarity[0])))
-				{
-					j["rarity"] = rarity;
-				}
-				else
-				{
-					j["rarity"] = "";
-				}
-			}
-
-			// カードタイプ
-			// maintype
-			{
-				int mt = static_cast<int>(card.maintype);
-				if (mt >= 0 && mt < (int)(sizeof(CardTypeNames) / sizeof(CardTypeNames[0])))
-				{
-					j["type"] = mt;
-				}
-				else
-				{
-					j["type"] = "";
-				}
-			}
+			j["Pack ID"] = (int)packIdx + 1;					// パック番号
+			j["Card ID"] = (int)cardIdx + 1;					// カード番号
+			j["Card Name"] = trim_copy(card.name);				// カード名
+			j["Card Name Ruby"] = trim_copy(card.ruby);			// カードの読み方
+			j["image"] = card.imagePath;						// カードのイラスト画像
+			j["cost"] = card.cost;								// コスト
+			j["rarity"] = static_cast<int>(card.raritytype);	// レアリティ
+			j["type"] = static_cast<int>(card.maintype);		// カードのメインタイプ
 
 			switch (card.maintype)
 			{
-			case ATTACK:
-				// 攻撃タイプ（必要なら追加）
-			{
-				int at = static_cast<int>(card.attacktype);	// 攻撃対象を設定
-				if (at >= 0 && at < (int)(sizeof(CardAttackTypes) / sizeof(CardAttackTypes[0])))
-				{// 選択肢の中から選んだ場合
-					j["attacktype"] = at;
-				}
-				else
-				{// 選択肢の中から選んでない場合
-					j["attacktype"] = "NULL";
-				}
-
-				j["power"] = card.damage;	// 攻撃力の設定
-
-			}
-
+			case ATTACK:	// 攻撃の場合
+				j["attacktype"] = static_cast<int>(card.attacktype);	// 攻撃対象
+				j["power"] = card.damage;								// 攻撃力
 				break;
-			case DEFENSE:
-				// 守備タイプ
-			{
-				int dt = static_cast<int>(card.defensetype);	// 守備のタイプを設定
-				if (dt >= 0 && dt < (int)(sizeof(CardDefenseTypes) / sizeof(CardDefenseTypes[0])))
-				{
-					j["defensetype"] = dt;
-				}
-				else
-				{
-					j["defensetype"] = "NULL";
-				}
-
-				j["guard"] = card.guard;
+			case DEFENSE:	// 守備の場合
+				j["defensetype"] = static_cast<int>(card.defensetype);	// カウンターの有無
+				j["guard"] = card.guard;								// ガード値
 				if (card.defensetype == COUNTER)
-				{
-					j["counter"] = card.counter;
+				{// カウンターする場合
+					j["counter"] = card.counter;	// カウンター値
 				}
-
-
-			}
-
 				break;
-			case ASSIST:
-				// アシストタイプ / バフタイプ
-			{
-				int at = static_cast<int>(card.assisttype);
-				if (at >= 0 && at < (int)(sizeof(CardAssistType) / sizeof(CardAssistType[0])))
-				{
-					j["assisttype"] = at;
+			case ASSIST:	// アシストの場合
+				j["assisttype"] = static_cast<int>(card.assisttype);	// アシストの種類
+				j["bufftype"] = static_cast<int>(card.bufftype);		// バフの種類
+				if (card.assisttype == BUFF && card.bufftype == HEAL)
+				{// バフの回復の場合
+					j["healtype"] = static_cast<int>(card.healtype);	// 回復対象
+					j["heal"] = card.heal;								// 回復値
 				}
-				else
-				{
-					j["assisttype"] = "NONE_ASSIST";
-				}
-
-				int bt = static_cast<int>(card.bufftype);
-				if (bt >= 0 && bt < (int)(sizeof(CardBuffType) / sizeof(CardBuffType[0])))
-				{
-					j["bufftype"] = bt;
-				}
-				else
-				{
-					j["bufftype"] = "NONE_BUFF";
-				}
-
-				if (card.assisttype == BUFF)
-				{
-					switch (card.bufftype)
-					{
-					case HEAL:
-						// 回復タイプのカードの場合
-						int at = static_cast<int>(card.healtype);	// 回復対象を設定
-						if (at >= 0 && at < (int)(sizeof(CardHealTypes) / sizeof(CardHealTypes[0])))
-						{// 選択肢の中から選んだ場合
-							j["healtype"] = at;
-						}
-						else
-						{// 選択肢の中から選んでない場合
-							j["healtype"] = "NULL";
-						}
-
-						j["heal"] = card.heal;
-						break;
-					}
-				}
-
-			}
-
 				break;
 			}
 
-			// 最終的に配列へ追加
 			root[u8"カード"].push_back(j);
 		}
 	}
 
-	// ファイル書き込み
-	std::ofstream ofs("data\\json\\cards.json");
+	// 暗号化
+	std::vector<uint8_t> cbor_bytes = ordered_json::to_cbor(root);
 
+	std::vector<uint8_t> key(32, 0x01);
+	std::vector<uint8_t> iv(16, 0x02);
+
+	std::vector<uint8_t> encrypted = AES_Encrypt(cbor_bytes, key, iv);
+
+	// バイナリ保存
+	std::ofstream ofs("data\\json\\cards.cbor", std::ios::binary);
 	if (!ofs.is_open())
-	{// 書き出しに失敗した場合
-		MessageBox(m_hWnd, L"セーブに失敗しました", L"失敗ログ", MB_OK);
+	{// ファイルが開けなかった場合
+		MessageBox(m_hWnd, L"暗号化セーブに失敗しました", L"失敗ログ", MB_OK);
 		return;
 	}
-	else
-	{// 書き出しに成功した場合
-		MessageBox(m_hWnd, L"セーブに成功しました!!", L"成功ログ", MB_OK);
-	}
-	ofs << root.dump(4) << std::endl;
+	ofs.write(reinterpret_cast<const char*>(encrypted.data()), encrypted.size());
+	ofs.close();
+
+	MessageBox(m_hWnd, L"暗号化セーブに成功しました!!", L"成功ログ", MB_OK);
 }
 
 /**
@@ -635,28 +480,18 @@ void My::CEdit::Save()
 */
 void My::CEdit::SavePackName()
 {
-	// ルート JSON を作る
 	ordered_json root;
 	root[u8"パック"] = ordered_json::array();
 
-	// 各パックの情報を詰める
 	for (size_t packIdx = 0; packIdx < m_Pack.size(); ++packIdx)
 	{
 		const auto& pack = m_Pack[packIdx];
 
-		// パック名を前後トリムし、空ならデフォルト名を設定
 		std::string packName = trim_copy(pack.Packname);
-		if (packName.empty())
-		{
-			packName = std::string(u8"");
-		}
+		if (packName.empty()) packName = std::string(u8"");
 
-		// パック名ルビを前後トリムし、空ならデフォルト名を設定
 		std::string packNameRuby = trim_copy(pack.Ruby);
-		if (packNameRuby.empty())
-		{
-			packNameRuby = std::string(u8"");
-		}
+		if (packNameRuby.empty()) packNameRuby = std::string(u8"");
 
 		ordered_json pj;
 		pj["Pack Name"] = packName;
@@ -665,21 +500,29 @@ void My::CEdit::SavePackName()
 		root[u8"パック"].push_back(pj);
 	}
 
-	// 書き出し先ファイル（必要ならパスを変更）
-	const std::string path = "data\\json\\packs.json";
+	// CBOR変換
+	std::vector<uint8_t> cbor_bytes = ordered_json::to_cbor(root);
 
-	// ファイル出力
-	std::ofstream ofs(path, std::ios::trunc);
+	// 鍵とIV（固定値）
+	std::vector<uint8_t> key(32, 0x01);
+	std::vector<uint8_t> iv(16, 0x02);
+
+	// AES暗号化（PKCS7風パディング）
+	std::vector<uint8_t> encrypted = AES_Encrypt(cbor_bytes, key, iv);
+
+	// ファイル保存（バイナリモード）
+	const std::string path = "data\\json\\packs.cbor";
+	std::ofstream ofs(path, std::ios::binary);
 	if (!ofs.is_open())
 	{
-		MessageBox(m_hWnd, L"パック名のセーブに失敗しました", L"失敗ログ", MB_OK);
+		MessageBox(m_hWnd, L"パック名の暗号化セーブに失敗しました", L"失敗ログ", MB_OK);
 		return;
 	}
 
-	ofs << root.dump(4) << std::endl;
+	ofs.write(reinterpret_cast<const char*>(encrypted.data()), encrypted.size());
 	ofs.close();
 
-	//MessageBox(m_hWnd, L"パック名をセーブしました", L"成功ログ", MB_OK);
+	MessageBox(m_hWnd, L"パック名の暗号化セーブに成功しました！", L"成功ログ", MB_OK);
 }
 
 /**
@@ -687,98 +530,76 @@ void My::CEdit::SavePackName()
 */
 void My::CEdit::Load()
 {
-	const std::string relPath = "data\\json\\cards.json";	// ファイルを設定
+	const std::string relPath = "data\\json\\cards.cbor";
 
-	// デバッグ: 実行時のカレントディレクトリと読み込むファイルの絶対パスを出力すると早く原因が分かります
-	std::cout << "Attempting to load file: " << relPath << "\n";
-
-	// テキストで全読み込み
-	std::ifstream ifs(relPath.c_str());
+	// 暗号化されたCBORファイルをバイナリで読み込む
+	std::ifstream ifs(relPath, std::ios::binary);
 	if (!ifs.is_open())
-	{
-		MessageBox(m_hWnd, L"ファイルが存在しません", L"エラー", MB_OK);
+	{// ファイルが開けなかった場合
+		MessageBox(m_hWnd, L"暗号化ファイルが存在しません", L"エラー", MB_OK);
 		std::cout << "Failed to open: " << relPath << "\n";
 		return;
 	}
 
-	std::string fileData((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+	std::vector<uint8_t> encrypted((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
 	ifs.close();
 
-	// 先頭3バイトをデバッグ表示（BOM検出）
-	if (fileData.size() >= 3)
-	{
-		unsigned char b0 = static_cast<unsigned char>(fileData[0]);
-		unsigned char b1 = static_cast<unsigned char>(fileData[1]);
-		unsigned char b2 = static_cast<unsigned char>(fileData[2]);
-		std::cout << "首3バイト (hex): "
-			<< std::hex << std::setw(2) << std::setfill('0') << (int)b0 << " "
-			<< std::setw(2) << (int)b1 << " "
-			<< std::setw(2) << (int)b2 << std::dec << "\n";
-	}
+	// 鍵とIV（Save関数と同じ値を使う）
+	std::vector<uint8_t> key(32, 0x01);
+	std::vector<uint8_t> iv(16, 0x02);
 
-	// BOM (EF BB BF) を取り除く（あるとキー比較で失敗することがある）
-	if (fileData.size() >= 3 &&
-		static_cast<unsigned char>(fileData[0]) == 0xEF &&
-		static_cast<unsigned char>(fileData[1]) == 0xBB &&
-		static_cast<unsigned char>(fileData[2]) == 0xBF)
-	{
-		std::cout << "UTF-8 BOM detected; removing\n";
-		fileData.erase(0, 3);
-	}
+	// AES-256-CBC 復号
+	std::vector<uint8_t> decrypted = AES_Decrypt(encrypted, key, iv);
 
+	std::cout << "Decrypted size: " << decrypted.size() << "\n";
+	for (size_t i = 0; i < std::min<size_t>(decrypted.size(), 64); ++i)
+	{
+		std::cout << std::hex << std::setw(2) << std::setfill('0') << (int)decrypted[i] << " ";
+	}
+	std::cout << std::dec << "\n";
+
+	// CBOR → JSON に変換
 	ordered_json Json;
 
-	try
-	{
-		// 文字列から直接パース(日本語変換)
-		Json = ordered_json::parse(fileData);
+	try 
+	{// 変換に成功した場合
+		Json = ordered_json::from_cbor(decrypted);
 	}
-	catch (const std::exception& e)
-	{
-		MessageBox(m_hWnd, L"JSON のパースに失敗しました", L"エラー", MB_OK);
-		std::cout << "JSON parse error: " << e.what() << "\n";
+	catch (const std::exception& e) 
+	{// 変換に失敗した場合
+		MessageBox(m_hWnd, L"CBOR の復号またはパースに失敗しました", L"エラー", MB_OK);
+		std::cout << "CBOR parse error: " << e.what() << "\n";
 		return;
 	}
 
-	// ルート情報とキー一覧を出力（デバッグ）
-	std::cout << "Root type: " << Json.type_name() << "\n";
-	std::cout << "Root dump:\n" << Json.dump(2) << "\n";
-
-	if (Json.is_object())
-	{
-		std::cout << "Root keys and their byte sequences:\n";
-		for (auto it = Json.begin(); it != Json.end(); ++it)
-		{
-			const std::string k = it.key();
-			std::cout << " Key: [" << k << "] type: " << it.value().type_name() << " bytes:";
-			for (unsigned char c : k) {
-				std::cout << " " << std::hex << std::setw(2) << std::setfill('0') << (int)c;
-			}
-			std::cout << std::dec << "\n";
-		}
-	}
-
-	// "カード" キーを厳密に探す（不可視文字や近似キーも拾う）
+	// カードキーを探す
 	std::string cardKey;
-	if (Json.contains(u8"カード")) {
+	if (Json.contains(u8"カード")) 
+	{
 		cardKey = u8"カード";
 		std::cout << "Exact key u8\"カード\" found via contains()\n";
 	}
 	else if (Json.is_object())
 	{
-		// 逐一比較して類似キーを探す（暫定）
 		for (auto it = Json.begin(); it != Json.end(); ++it)
 		{
 			const std::string k = it.key();
-			if (k == u8"カード") { cardKey = k; break; }
-			// 部分一致も許容する（不要なら削除）
-			if (k.find(u8"カード") != std::string::npos) { cardKey = k; break; }
+			if (k == u8"カード")
+			{ 
+				cardKey = k; 
+				break; 
+			}
+			if (k.find(u8"カード") != std::string::npos) 
+			{ 
+				cardKey = k; 
+				break; 
+			}
 		}
 	}
 
 	ordered_json cardNode;
 	if (!cardKey.empty()) cardNode = Json[cardKey];
-	else if (Json.is_array()) cardNode = Json; // ルートが配列ならそのまま使う
+	else if (Json.is_array()) cardNode = Json;
 
 	if (cardNode.is_null())
 	{
@@ -787,15 +608,14 @@ void My::CEdit::Load()
 		return;
 	}
 
-	// m_Pack 初期化
 	m_Pack.clear();
 
-	// カード処理ラムダ（既存ロジックと同様に保持）
 	auto ProcessCardJson = [this](const ordered_json& j)
 	{
 		int packID = j.value("Pack ID", 1);
 		size_t packIndex = (packID > 0) ? static_cast<size_t>(packID - 1) : 0;
 
+		// データ設定
 		while (m_Pack.size() <= packIndex)
 		{
 			Pack pack;
@@ -803,99 +623,61 @@ void My::CEdit::Load()
 			m_Pack.push_back(pack);
 		}
 
-		// 読み込む情報の初期化
 		Card card;
-		card.name = j.value("Card Name", j.value("CardName", "名前なし"));	// カード名
-		card.ruby = j.value("Card Name Ruby", j.value("Card Name Ruby", "名前なし"));	// カード名の読み方
-		card.imagePath = trim_copy(j.value("image", j.value("Card Img", "")));
-		card.cost = j.value("cost", 0);										// コスト
-		card.raritytype = static_cast<My::RARITY>(j.value("rarity", 0));		// レアリティ
-		card.maintype = static_cast<My::CardType>(j.value("type", 0));		// カードタイプ
-
-		//********************************************
-		// jsonファイルの情報からカードにタグ付け
-		//********************************************
+		card.name = j.value("Card Name", j.value("CardName", "名前なし"));				// カード名
+		card.ruby = j.value("Card Name Ruby", j.value("Card Name Ruby", "名前なし"));	// カードの読み方
+		card.imagePath = trim_copy(j.value("image", j.value("Card Img", "")));			// イラスト画像
+		card.cost = j.value("cost", 0);													// コスト
+		card.raritytype = static_cast<My::RARITY>(j.value("rarity", 0));				// レアリティ
+		card.maintype = static_cast<My::CardType>(j.value("type", 0));					// メインタイプ
 
 		switch (card.maintype)
 		{
-		case 1:	// 攻撃タイプ
-			card.attacktype = static_cast<My::AttackType>(j.value("attacktype", 0));
-
-			switch (card.attacktype)
-			{
-			case 1:	// 全体攻撃
-				break;
-			case 2:	// 特定の相手を選んで攻撃
-				break;
-			case 3:	// ランダム攻撃
-				break;
-			case 4:	// 自分を含めてランダム攻撃
-				break;
-			}
-
-			card.damage = j.value("power", 0);									// 攻撃力
-
+		case ATTACK:	// 攻撃の場合
+			card.attacktype = static_cast<My::AttackType>(j.value("attacktype", 0));	// 攻撃対象
+			card.damage = j.value("power", 0);	// 攻撃力
 			break;
-		case 2:	// 守備タイプ
-			card.defensetype = static_cast<My::DefenseType>(j.value("defensetype", 0));
-			switch (card.defensetype)
-			{
-			case 1:	// カウンターあり
-				card.counter = j.value("counter", 0);								// カウンター値
-				break;
-			case 2:	// カウンター無し
-				break;
+		case DEFENSE:	// 守備の場合
+			card.defensetype = static_cast<My::DefenseType>(j.value("defensetype", 0));	// カウンターの有無
+			card.guard = j.value("guard", 0);	// ガード値
+			if (card.defensetype == COUNTER)
+			{// カウンターする場合
+				card.counter = j.value("counter", 0);	// カウンター値
 			}
-
-			card.guard = j.value("guard", 0);									// ガード値
-
 			break;
-		case 3:	// アシストタイプ
-			card.assisttype = static_cast<My::AssistType>(j.value("assisttype", 0));
-			switch (card.assisttype)
-			{
-			case 1:	// 妨害
-				break;
-			case 2:	// バフ
-
-				card.bufftype = static_cast<My::BuffType>(j.value("bufftype", 0));	// バフタイプ
-
-				switch (card.bufftype)
-				{
-				case 1:	// 回復タイプの時
-					card.healtype = static_cast<My::HealType>(j.value("healtype", 0));
-
-					card.heal = j.value("heal", 0);										// 回復量
-					break;
-				case 2:	// 未定①
-					break;
-				case 3:	// 未定②
-					break;
-				}
-				break;
-			case 3:	// デバフ
-				break;
+		case ASSIST:	// アシストの場合
+			card.assisttype = static_cast<My::AssistType>(j.value("assisttype", 0));	// アシストの種類
+			card.bufftype = static_cast<My::BuffType>(j.value("bufftype", 0));			// バフの種類
+			if (card.assisttype == BUFF && card.bufftype == HEAL)
+			{// バフで回復の場合
+				card.healtype = static_cast<My::HealType>(j.value("healtype", 0));	// 回復対象
+				card.heal = j.value("heal", 0);	// 回復値
 			}
-
-
-
 			break;
 		}
 
 		m_Pack[packIndex].cards.push_back(card);
 	};
 
-	// cardNode を配列/オブジェクトどちらでも処理
 	if (cardNode.is_array())
 	{
-		for (const auto& j : cardNode) { if (j.is_object()) ProcessCardJson(j); }
+		for (const auto& j : cardNode) 
+		{ 
+			if (j.is_object())
+			{
+				ProcessCardJson(j);
+			}
+		}
 	}
 	else if (cardNode.is_object())
 	{
 		for (auto it = cardNode.begin(); it != cardNode.end(); ++it)
 		{
 			const ordered_json& j = it.value();
-			if (j.is_object()) ProcessCardJson(j);
+			if (j.is_object())
+			{
+				ProcessCardJson(j);
+			}
 		}
 	}
 	else
@@ -908,11 +690,11 @@ void My::CEdit::Load()
 	{
 		for (size_t c = 0; c < m_Pack[p].cards.size(); ++c)
 		{
-			SetLoadTexture(m_Pack[p].cards[c]); // ← ここで呼ぶ
+			SetLoadTexture(m_Pack[p].cards[c]);
 		}
 	}
-	MessageBox(m_hWnd, L"カードデータの読み込みに成功しました！", L"読み込み完了", MB_OK);
 
+	MessageBox(m_hWnd, L"カードデータの読み込みに成功しました！", L"読み込み完了", MB_OK);
 }
 
 /**
@@ -920,40 +702,38 @@ void My::CEdit::Load()
 */
 void My::CEdit::LoadPackName()
 {
-	const std::string relPath = "data\\json\\packs.json";
+	const std::string relPath = "data\\json\\packs.cbor";
 
-	std::cout << "Attempting to load pack names file: " << relPath << "\n";
+	std::cout << "Attempting to load encrypted pack names file: " << relPath << "\n";
 
-	std::ifstream ifs(relPath.c_str(), std::ios::binary);
+	std::ifstream ifs(relPath, std::ios::binary);
 	if (!ifs.is_open())
-	{
+	{// ファイルが開けなかった場合
 		MessageBox(m_hWnd, L"パック名ファイルが見つかりません", L"読み込み", MB_OK);
 		std::cout << "Failed to open: " << relPath << "\n";
 		return;
 	}
 
-	std::string fileData((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+	std::vector<uint8_t> encrypted((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
 	ifs.close();
 
-	// BOM 検出と削除 (UTF-8 BOM: EF BB BF)
-	if (fileData.size() >= 3 &&
-		static_cast<unsigned char>(fileData[0]) == 0xEF &&
-		static_cast<unsigned char>(fileData[1]) == 0xBB &&
-		static_cast<unsigned char>(fileData[2]) == 0xBF)
-	{
-		std::cout << "UTF-8 BOM detected in pack names file; removing\n";
-		fileData.erase(0, 3);
-	}
+	// 鍵とIV（SavePackNameと同じ値）
+	std::vector<uint8_t> key(32, 0x01);
+	std::vector<uint8_t> iv(16, 0x02);
 
+	// 復号
+	std::vector<uint8_t> decrypted = AES_Decrypt(encrypted, key, iv);
+
+	// CBORからJSONに変換
 	ordered_json root;
-	try
-	{
-		root = ordered_json::parse(fileData);
+	try 
+	{// 成功した場合
+		root = ordered_json::from_cbor(decrypted);
 	}
-	catch (const std::exception& e)
-	{
-		MessageBox(m_hWnd, L"パック名ファイルのパースに失敗しました", L"読み込みエラー", MB_OK);
-		std::cout << "JSON parse error (packs): " << e.what() << "\n";
+	catch (const std::exception& e) 
+	{// 失敗した場合
+		MessageBox(m_hWnd, L"パック名ファイルの復号またはパースに失敗しました", L"読み込みエラー", MB_OK);
+		std::cout << "CBOR parse error (packs): " << e.what() << "\n";
 		return;
 	}
 
@@ -994,33 +774,19 @@ void My::CEdit::LoadPackName()
 
 		if (pj.is_object())
 		{
-			// パック名
 			if (pj.contains("Pack Name") && pj["Pack Name"].is_string())
-			{
 				name = pj["Pack Name"].get<std::string>();
-			}
 			else if (pj.contains("PackName") && pj["PackName"].is_string())
-			{
 				name = pj["PackName"].get<std::string>();
-			}
 			else if (pj.contains("Pack") && pj["Pack"].is_string())
-			{
 				name = pj["Pack"].get<std::string>();
-			}
 
-			// パック名読み方
 			if (pj.contains("Pack Name Ruby") && pj["Pack Name Ruby"].is_string())
-			{
-				nameRuby = pj["Pack Name"].get<std::string>();
-			}
+				nameRuby = pj["Pack Name Ruby"].get<std::string>();
 			else if (pj.contains("PackNameRuby") && pj["PackNameRuby"].is_string())
-			{
 				nameRuby = pj["PackNameRuby"].get<std::string>();
-			}
 			else if (pj.contains("Pack") && pj["Pack"].is_string())
-			{
 				nameRuby = pj["Pack"].get<std::string>();
-			}
 		}
 		else if (pj.is_string())
 		{
@@ -1028,23 +794,18 @@ void My::CEdit::LoadPackName()
 			nameRuby = pj.get<std::string>();
 		}
 
-		// trim_copy がプロジェクトにある前提
 		name = trim_copy(name);
 		nameRuby = trim_copy(nameRuby);
 
 		if (name.empty())
-		{
 			name = std::string(u8"無名パック");
-		}
 
-		// m_Pack の該当エントリに設定（m_Pack は既に resize 済み）
 		m_Pack[i].Packname = name;
 		m_Pack[i].Ruby = nameRuby;
 
 		std::cout << "Loaded Pack[" << i << "] = " << name << "\n";
 	}
 
-	// 少なくとも 1 パックは存在させ、先頭が空ならデフォルト名を入れる
 	if (m_Pack.empty())
 	{
 		Pack p;
@@ -1057,15 +818,12 @@ void My::CEdit::LoadPackName()
 			m_Pack[0].Packname = std::string(u8"無名パック1");
 	}
 
-	// UI 側の表示用インデックスを先頭にリセットして確実に表示されるようにする
 	m_SelectPack = 0;
 	m_Select = -1;
-	// 編集モードは解除しておく（起動時に自動で編集に入らない）
 	m_EditPackIndex = -1;
 
 	std::cout << "Finished loading pack names. m_Pack.size()=" << m_Pack.size() << "\n";
 	MessageBox(m_hWnd, L"パック名を読み込みました", L"読み込み完了", MB_OK);
-
 }
 
 
@@ -1722,7 +1480,6 @@ void My::CEdit::SelectDeckPreview()
 		RemovePack(m_SelectPack);
 		m_SelectPack = CEdit::clamp(m_SelectPack, 0, (int)m_Pack.size() - 1);
 		m_Select = -1;
-		SavePackName();
 	}
 
 	ImGui::Separator();
@@ -1776,7 +1533,6 @@ void My::CEdit::SelectDeckPreview()
 				m_Pack[i].Packname = finalName;
 				m_Pack[i].Ruby = finalRuby;
 				m_EditPackIndex = -1;
-				SavePackName();
 			}
 			ImGui::SameLine();
 			if (ImGui::Button(u8"キャンセル"))
@@ -1826,7 +1582,6 @@ void My::CEdit::SelectDeckPreview()
 				m_PackNameBuf[0] = '\0';
 				m_PackRubyBuf[0] = '\0';
 
-				SavePackName();
 			}
 			ImGui::SameLine();
 			if (ImGui::Button(u8"キャンセル"))
