@@ -52,7 +52,6 @@ namespace My
 		* @param [in]カードポインタ
 		*/
 		void Strategy(CActiveSceneCharacter* character, CCard* card) override;
-		void Strategy(CActiveSceneCharacter* character, CCard* card, CCard* attack_card) {};
 	};
 
 	/** @brief カードストラテジー体力回復クラス */

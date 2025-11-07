@@ -23,7 +23,7 @@
 namespace My
 {
 
-	class CEffectManager;
+	//class CEffectManager;
 	/** @brief My マネージャークラス */
 	class CManager
 	{
@@ -137,7 +137,7 @@ namespace My
 		/// エフェクトマネージャー取得
 		/// </summary>
 		/// <returns></returns>
-		CEffectManager* GetEffectManager();
+		//CEffectManager* GetEffectManager();
 
 
 		HWND GetHwnd()
@@ -177,7 +177,7 @@ namespace My
 		CColision* m_pColision;
 		CFade* m_pFade;
 		CFontManager* m_pFontManager;
-		CEffectManager* m_pEffectManager;
+		//CEffectManager* m_pEffectManager;
 		HWND m_hWnd;
 	};
 }
