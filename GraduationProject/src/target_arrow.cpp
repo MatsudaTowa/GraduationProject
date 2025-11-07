@@ -2,7 +2,7 @@
 
 namespace
 {
-	const std::string TEX_NAME = "data\\TEXTURE\\TargetArrow.png";
+	const std::string TEX_NAME = "data\\TEXTURE\\target_arrow.png";
 }
 
 //===========================================================================================================
@@ -28,10 +28,10 @@ HRESULT My::CTargetArrow::Init()
 	SetPos({ SCREEN_WIDTH * 0.5f,SCREEN_HEIGHT * 0.5f ,0.0f });
 
 	// サイズの倍率
-	float size_mag = 1.7f;
+	float size_mag = 1.2f;
 
 	// サイズ設定
-	SetSize({ 10* size_mag,10* size_mag });
+	SetSize({ 10* size_mag,8* size_mag });
 
 	// カラー設定
 	SetColor(COLOR_WHITE);
@@ -90,6 +90,9 @@ My::CTargetArrow* My::CTargetArrow::Create(int attacker, int target)
 	return pTA;
 }
 
+//===========================================================================================================
+// ターゲットの
+//===========================================================================================================
 D3DXVECTOR2 My::CTargetArrow::SetTargetPos(D3DXVECTOR2& target, int targetnum)
 {
 	switch (targetnum)

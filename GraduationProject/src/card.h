@@ -129,6 +129,8 @@ namespace My
 		inline void SetParameter(Parameter param) { m_Param = param; }
 		inline Parameter GetParameter() { return m_Param; }
 
+		inline CTargetArrow* GetTargetArrow() { return m_pTargetArrow; }
+
 		//inline CCard* GetTop() { return m_pTop; }
 		//inline CCard* GetPrev() { return m_pPrev; }
 
@@ -180,6 +182,11 @@ namespace My
 		D3DXVECTOR3 m_NeutralPos;
 
 		D3DXVECTOR3 m_outpos;
+
+		/**
+		 * @brief カードのターゲットを示す矢印
+		 */
+		CTargetArrow* m_pTargetArrow;
 	};
 };
 

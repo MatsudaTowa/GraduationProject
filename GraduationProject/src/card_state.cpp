@@ -167,8 +167,6 @@ void My::CCardStateStay::Init(CCard* cpy)
 
 		// エナジーを設定
 		CActiveSceneManager::GetInstance()->GetPlayer()->SetStatus(status);
-
-		CTargetArrow::Create(CInputMouse::AREA::DOWN, cpy->GetTarget());
 	}
 
 	
@@ -208,4 +206,7 @@ void My::CCardStateTrigger::Init(CCard* cpy)
 		return;
 
 	CActiveSceneManager::GetInstance()->GetAreaManager()->CardTrigger(cpy->GetTarget());
+
+	// トリガーされた際に消去する
+	cpy->GetTargetArrow()->Uninit();
 }

@@ -23,7 +23,8 @@ m_CardType(CARDTYPE_::TYPE_ATTACK),
 m_IsChange(true),
 m_target(CInputMouse::AREA::CENTER),
 m_Cost(INT_ZERO),
-m_AttackPower(INT_ZERO)
+m_AttackPower(INT_ZERO),
+m_pTargetArrow(nullptr)
 {
 	//if (m_pTop == nullptr)
 	//{// top ‚ªÝ’è‚³‚ê‚Ä‚¢‚È‚©‚Á‚½‚ç
@@ -281,6 +282,8 @@ bool My::CCard::CardCastToMouse()
 		// ƒXƒeƒC‘JˆÚ
 		ChangeState(CCardState::CARD_STAY);
 		CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
+
+		m_pTargetArrow = CTargetArrow::Create(CInputMouse::AREA::DOWN, GetTarget());
 	}
 
 	return false;
