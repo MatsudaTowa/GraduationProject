@@ -58,7 +58,7 @@ namespace My
 		*/
 		static CTargetArrow* Create(int attacker, int target);
 
-		static D3DXVECTOR2 SetArrowAngle(D3DXVECTOR2 &target,int targetnum);
+		static D3DXVECTOR2 SetTargetPos(D3DXVECTOR2 &target,int targetnum);
 	private:
 		/**
 		* @brief Šp“x‚Æ’·‚³‚ğİ’è
