@@ -22,7 +22,7 @@
 namespace My
 {
 
-	class CEffekseerManager;
+	class CEffectManager;
 	class CManager
 	{
 	public:
@@ -47,7 +47,7 @@ namespace My
 		CInputMouse* GetMouse() { return m_pInMouse; }	// マウス取得
 		CInputJoypad* GetJoyKey() { return m_pJoiKey; }	// マウス取得
 
-		CEffekseerManager* GetEffekseerManager() { return m_pEffekseerManager; }	// エフェクトマネージャー取得
+		CEffectManager* GetEffectManager() { return m_pEffectManager; }	// エフェクトマネージャー取得
 
 		My::Scene::CBase* GetSceneManager() { return m_pSceneManager; }					// シーンマネージャー
 
@@ -67,7 +67,7 @@ namespace My
 		CLight* m_pLight;		// ライト
 		CCamera* m_pCamera;		// カメラ
 
-		CEffekseerManager* m_pEffekseerManager;	// エフェクトマネージャー
+		CEffectManager* m_pEffectManager;	// エフェクトマネージャー
 
 		Scene::CBase* m_pSceneManager;			// シーンマネージャー
 

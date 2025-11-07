@@ -28,6 +28,8 @@ namespace My
 
 		m_pSceneManager = nullptr;		// シーンマネージャー
 
+		m_pEffectManager = nullptr;		// エフェクトマネージャー
+
 		m_pDebugText = nullptr;			// デバッグ用テキスト
 	}
 	/// <summary>
@@ -49,13 +51,20 @@ namespace My
 		if (m_pRenderer == nullptr)
 		{
 			m_pRenderer = new CRenderer;
-			m_pRenderer->Init(nWnd, bWindow);
+			if(m_pRenderer->Init(nWnd, bWindow))
+			{
+				return E_FAIL;
+			}
 		}
 		// ライト
 		if (m_pLight == nullptr)
 		{
 			m_pLight = new CLight;
-			m_pLight->Init();
+			if (m_pLight->Init())
+			{
+				return E_FAIL;
+			}
+
 		}
 		// カメラ
 		if (m_pCamera == nullptr)
@@ -63,11 +72,14 @@ namespace My
 			m_pCamera = new CCamera;
 			m_pCamera->Init();
 		}
-		// エフェクシアマネージャー
-		if (!m_pEffekseerManager)
+		// エフェクトマネージャー
+		if (!m_pEffectManager)
 		{
-			m_pEffekseerManager = new CEffekseerManager;
-			m_pEffekseerManager->Init();
+			m_pEffectManager = new CEffectManager;
+			if(m_pEffectManager->Init())
+			{
+				return E_FAIL;
+			}
 		}
 
 
@@ -75,23 +87,36 @@ namespace My
 		if (m_pInkey == nullptr)
 		{// キーボード
 			m_pInkey = new CInputKeyboard;
-			m_pInkey->Init(hInstance, nWnd);
+			if(m_pInkey->Init(hInstance, nWnd))
+			{
+				return E_FAIL;
+			}
 		}
 		if (m_pInMouse == nullptr)
 		{// マウス
 			m_pInMouse = new CInputMouse;
-			m_pInMouse->Init(hInstance, nWnd);
+			if(m_pInMouse->Init(hInstance, nWnd))
+			{
+				return E_FAIL;
+			}
 		}
 		// ジョイパッド入力
 		if (m_pJoiKey == nullptr)
 		{
 			m_pJoiKey = new CInputJoypad;
-			m_pJoiKey->Init();
+			if(m_pJoiKey->Init())
+			{
+				return E_FAIL;
+			}
 		}
 		// シーンマネージャー
 		if (m_pSceneManager == nullptr)
 		{
 			m_pSceneManager = new Scene::CSceneManager;
+			if (!m_pSceneManager)
+			{
+				return E_FAIL;
+			}
 		}
 		// デバッグテキスト
 		if (m_pDebugText == nullptr)
@@ -126,11 +151,6 @@ namespace My
 			m_pCamera->Uninit();
 			delete m_pCamera;
 			m_pCamera = nullptr;
-		}
-		// エフェクシアマネージャー
-		if (!m_pEffekseerManager)
-		{
-			m_pEffekseerManager->Uninit();
 		}
 
 		// キーボード入力
@@ -167,12 +187,22 @@ namespace My
 			delete m_pRenderer;
 			m_pRenderer = nullptr;
 		}
+		// エフェクシアマネージャー
+		if (!m_pEffectManager)
+		{
+			m_pEffectManager->Uninit();
+		}
 	}
 	/// <summary>
 	/// 更新
 	/// </summary>
 	void CManager::Update()
 	{
+		// エフェクトマネージャー
+		if (!m_pEffectManager)
+		{
+			m_pEffectManager->Update();
+		}
 		// デバッグテキスト
 		if (m_pDebugText != nullptr)
 		{
@@ -213,6 +243,8 @@ namespace My
 		{
 			m_pSceneManager->Update();
 		}
+
+
 
 		CObject::ReleaseDeathFlag();
 	}

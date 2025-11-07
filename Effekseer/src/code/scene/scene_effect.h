@@ -8,6 +8,7 @@
 #define _SENE_TITLE_H_
 #include "scene_base.h"		// シーンベース
 #include "../object/3D/object_3D.h"	// ３Dオブジェクト
+#include "../object/effect/Effect.h"
 
 
 namespace My
@@ -61,21 +62,10 @@ namespace My
 			bool SaveConfigList();	// コンフィグ書き込み処理
 			bool LoadConfigList();	// コンフィグ読み込み処理
 
-			// パラメーター保存
-			struct Param
-			{
-				std::string FilePas;	// ファイルパス
-				D3DXVECTOR3 pos;		// 位置情報
-				D3DXVECTOR3 rot;		// 向き情報
-				D3DXVECTOR3 scl;		// スケール情報
-				D3DXCOLOR col;			// 色情報
-			};
-			static const Param s_Param;
-
 			bool SaveEffektParamText(const std::string FilePas);	// エフェクトパラメーター保存
-			Param LoadEffektParamText(const std::string FilePas);	// エフェクトパラメーター保存
-			bool SaveEffektParamBinary(const std::string FilePas);	// エフェクトパラメーター保存
-			Param LoadEffektParamBinary(const std::string FilePas);	// エフェクトパラメーター保存
+			Effect::Paramater LoadEffektParamText(const std::string FilePas);	// エフェクトパラメーター保存
+			//bool SaveEffektParamBinary(const std::string FilePas);	// エフェクトパラメーター保存
+			//Effect::Paramater LoadEffektParamBinary(const std::string FilePas);	// エフェクトパラメーター保存
 
 			// 説明保存
 			bool SaveExplanationText(const std::string FilePas);	// 説明設定

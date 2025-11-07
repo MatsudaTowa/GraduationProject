@@ -1,9 +1,9 @@
 ﻿
 #pragma once
-
+//DX11を未使用のためコメントアウト
 #include "DxLib.h"
 #include "Effekseer.h"
-#include "EffekseerRendererDX11.h"
+//#include "EffekseerRendererDX11.h"
 #include "EffekseerRendererDX9.h"
 
 #include <string>
@@ -56,11 +56,11 @@
 #if _DEBUG
 #pragma comment(lib, "Effekseer_vs2019_x86_d.lib")
 #pragma comment(lib, "EffekseerRendererDX9_vs2019_x86_d.lib")
-#pragma comment(lib, "EffekseerRendererDX11_vs2019_x86_d.lib")
+//#pragma comment(lib, "EffekseerRendererDX11_vs2019_x86_d.lib")
 #else
 #pragma comment(lib, "Effekseer_vs2019_x86.lib")
 #pragma comment(lib, "EffekseerRendererDX9_vs2019_x86.lib")
-#pragma comment(lib, "EffekseerRendererDX11_vs2019_x86.lib")
+//#pragma comment(lib, "EffekseerRendererDX11_vs2019_x86.lib")
 #endif
 
 #elif _MSC_VER >= 1910
@@ -91,7 +91,7 @@
 #endif
 
 #pragma comment(lib, "d3d9.lib")
-#pragma comment(lib, "d3d11.lib")
+//#pragma comment(lib, "d3d11.lib")
 
 #ifndef _EFFEKSEER_FOR_DXLIB_LIB
 

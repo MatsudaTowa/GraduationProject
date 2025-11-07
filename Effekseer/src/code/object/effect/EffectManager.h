@@ -10,15 +10,15 @@
 #include "../object.h"
 namespace My
 {
-	class CEffekseerManager : CObject
+	class CEffectManager : CObject
 	{
 	public:
-		CEffekseerManager();		// コンストラクタ
-		~CEffekseerManager();		// デストラクタ
-		HRESULT Init()override;		// 初期化
-		void Uninit()override;		// 終了
-		void Update()override;		// 更新
-		void Draw()override;		// 描画
+		CEffectManager();		// コンストラクタ
+		~CEffectManager();		// デストラクタ
+		HRESULT Init();		// 初期化
+		void Uninit();		// 終了
+		void Update();		// 更新
+		void Draw();		// 描画
 
 		/// <summary>
 		/// エフェクシアマネージャー取得

@@ -86,7 +86,6 @@ namespace My {
 		const CSene_Effekseer::ConfigList CSene_Effekseer::s_Config;
 		const CSene_Effekseer::Explanation CSene_Effekseer::s_Explanation;	// 説明格納用
 		const CSene_Effekseer::InitialParamater CSene_Effekseer::s_InitialParamater;	// 初期値
-		const CSene_Effekseer::Param CSene_Effekseer::s_Param = { "data/Flame.efk", {}, {}, {},{}};
 
 		/// <summary>
 		/// コンストラクタ
@@ -107,17 +106,19 @@ namespace My {
 			// 説明読み込み
 			LoadExplanationText(m_Config.m_sExplanationFilepas);
 
-			Param param;
+			Effect::Paramater param;
 			// エフェクト読み込み
 			param = LoadEffektParamText(m_Config.m_sEffektFilepas);
 
 			// エフェクトm_Config.m_sEffektFilepas.c_str()
-			m_pEffect = Effect::create(param.FilePas);
-			m_pEffect->SetPos(param.pos);
-			m_pEffect->SetRot(param.rot);
-			m_pEffect->SetScl(param.scl);
-			m_pEffect->SetCol(param.col);
+			m_pEffect = Effect::create(param.m_sFilepas);
+			m_pEffect->SetPos(param.m_pos);
+			m_pEffect->SetRot(param.m_rot);
+			m_pEffect->SetScl(param.m_scl);
+			m_pEffect->SetCol(Effect::ColorSRGBToFloat(param.m_col));
 			m_pEffect->SetLoop(true);
+
+
 
 			// パラメーター用テキスト
 			m_pTextParameter = CText::create();
@@ -232,23 +233,29 @@ namespace My {
 				return false;
 			}
 			// エフェクト情報取得
-			Param param = s_Param;
+			Effect::Paramater param;
 
 			if (m_pEffect)
 			{
-				param.FilePas = m_pEffect->GetFilepas();
-				param.pos = m_pEffect->GetPos();
-				param.rot = m_pEffect->GetRot();
-				param.scl = m_pEffect->GetScl();
-				param.col = m_pEffect->GetCol();
+				param.m_sFilepas = 	m_pEffect->GetFilepas();			// ファイルパス取得
+				param.m_pos = 		m_pEffect->GetPos();				// 位置取得
+				param.m_rot = 		m_pEffect->GetRot();				// 向き取得
+				param.m_scl = 		m_pEffect->GetScl();				// スケール取得
+				param.m_col = 		m_pEffect->GetColSRGB();			// 色取得
+				param.m_nLoopInterval = m_pEffect->GetLoopInterval();	// ループ間隔
+				param.m_bIsLoop = m_pEffect->IsLoop();					// ループするか
+				param.m_nLife = m_pEffect->GetLife();					// 寿命
 			}
 
 			// 書き込み
-			file << "Filepas = "<< param.FilePas << std::endl;
-			file << "POS = " << param.pos.x << " " << param.pos.y << " " << param.pos.z << std::endl;
-			file << "ROT = " << param.rot.x << " " << param.rot.y << " " << param.rot.z << std::endl;
-			file << "SCL = " << param.scl.x << " " << param.scl.y << " " << param.scl.z << std::endl;
-			file << "COL = " << param.col.r << " " << param.col.g << " " << param.col.b << " " << param.col.a <<std::endl;
+			file << "Filepas = "<< param.m_sFilepas << std::endl;
+			file << "POS = " << param.m_pos.x << " " << param.m_pos.y << " " << param.m_pos.z << std::endl;
+			file << "ROT = " << param.m_rot.x << " " << param.m_rot.y << " " << param.m_rot.z << std::endl;
+			file << "SCL = " << param.m_scl.x << " " << param.m_scl.y << " " << param.m_scl.z << std::endl;
+			file << "COL = " << param.m_col.R << " " << param.m_col.G << " " << param.m_col.B << " " << param.m_col.A <<std::endl;
+			file << "LOOP_INTEWRVAL = " << param.m_nLoopInterval << std::endl;
+			file << "LOOP = " << param.m_bIsLoop << std::endl;
+			file << "LIFE = " << param.m_nLife << std::endl;
 
 
 			file.close(); // ファイルを閉じる
@@ -260,9 +267,9 @@ namespace My {
 		/// </summary>
 		/// <param name="FilePas">ファイルパス</param>
 		/// <returns>false:読み込み失敗</returns>
-		CSene_Effekseer::Param CSene_Effekseer::LoadEffektParamText(const std::string FilePas)
+		Effect::Paramater CSene_Effekseer::LoadEffektParamText(const std::string FilePas)
 		{
-			Param param = s_Param;
+			Effect::Paramater param;
 
 			std::ifstream inFile(FilePas);
 			if (!inFile) {
@@ -282,97 +289,109 @@ namespace My {
 
 				if (key == "Filepas") {
 					std::string eq;
-					iss >> eq >> param.FilePas; // '=' をスキップして読み込む
+					iss >> eq >> param.m_sFilepas; // '=' をスキップして読み込む
 				}
 				else if (key == "POS") {
 					char eq;
-					iss >> eq >> param.pos.x >> param.pos.y >> param.pos.z;
+					iss >> eq >> param.m_pos.x >> param.m_pos.y >> param.m_pos.z;
 				}
 				else if (key == "ROT") {
 					char eq;
-					iss >> eq >> param.rot.x >> param.rot.y >> param.rot.z;
+					iss >> eq >> param.m_rot.x >> param.m_rot.y >> param.m_rot.z;
 				}
 				else if (key == "SCL") {
 					char eq;
-					iss >> eq >> param.scl.x >> param.scl.y >> param.scl.z;
+					iss >> eq >> param.m_scl.x >> param.m_scl.y >> param.m_scl.z;
 				}
 				else if (key == "COL") {
 					char eq;
-					iss >> eq >> param.col.r >> param.col.g >> param.col.b >> param.col.a;
+					iss >> eq >> param.m_col.R >> param.m_col.G >> param.m_col.B >> param.m_col.A;
+				}
+				else if (key == "LOOP_INTEWRVAL") {
+					char eq;
+					iss >> eq >> param.m_nLoopInterval;
+				}
+				else if (key == "LOOP") {
+					char eq;
+					iss >> eq >> param.m_bIsLoop;
+				}
+				else if (key == "LIFE") {
+					char eq;
+					iss >> eq >> param.m_nLife;
 				}
 			}
 
 			inFile.close();
 			return param;
 		}
-		bool CSene_Effekseer::SaveEffektParamBinary(const std::string FilePas)
-		{
-			// エフェクト情報取得
-			D3DXVECTOR3 pos = m_pEffect->GetPos();
-			D3DXVECTOR3 rot = m_pEffect->GetRot();
-			D3DXVECTOR3 scl = m_pEffect->GetScl();
-			Effekseer::Color col = m_pEffect->GetColSRGB();
+		//bool CSene_Effekseer::SaveEffektParamBinary(const std::string FilePas)
+		//{
+		//	// エフェクト情報取得
+		//	D3DXVECTOR3 pos = m_pEffect->GetPos();
+		//	D3DXVECTOR3 rot = m_pEffect->GetRot();
+		//	D3DXVECTOR3 scl = m_pEffect->GetScl();
+		//	Effekseer::Color col = m_pEffect->GetColSRGB();
 
-			std::ofstream File(FilePas, std::ios::binary);
-			if (!File.is_open())
-			{
-				return false;
-			}
+		//	std::ofstream File(FilePas, std::ios::binary);
+		//	if (!File.is_open())
+		//	{
+		//		return false;
+		//	}
 
-			// 文字列を書き込むラムダ
-			auto WriteString = [&](const std::string& s) {
-				size_t len = s.size();
-				File.write(reinterpret_cast<const char*>(&len), sizeof(len)); // 長さ
-				File.write(s.data(), len);                                     // 本文
-			};
+		//	// 文字列を書き込むラムダ
+		//	auto WriteString = [&](const std::string& s) {
+		//		size_t len = s.size();
+		//		File.write(reinterpret_cast<const char*>(&len), sizeof(len)); // 長さ
+		//		File.write(s.data(), len);                                     // 本文
+		//	};
 
-			// 順番に書き込む
-			WriteString(m_Explanation.m_Explanation);
-			WriteString(m_Explanation.m_sParamExplanation);
-			WriteString(m_Explanation.m_sMoveExplanation);
-			WriteString(m_Explanation.m_sRotExplanation);
-			WriteString(m_Explanation.m_sSclExplanation);
-			WriteString(m_Explanation.m_sColExplanation);
+		//	// 順番に書き込む
+		//	WriteString(m_Explanation.m_Explanation);
+		//	WriteString(m_Explanation.m_sParamExplanation);
+		//	WriteString(m_Explanation.m_sMoveExplanation);
+		//	WriteString(m_Explanation.m_sRotExplanation);
+		//	WriteString(m_Explanation.m_sSclExplanation);
+		//	WriteString(m_Explanation.m_sColExplanation);
 
-			File.close();
-			return true;
-		}
-		CSene_Effekseer::Param CSene_Effekseer::LoadEffektParamBinary(const std::string FilePas)
-		{
-			Param param = s_Param;
-			//ファイルの読み込み
-			std::ifstream File(FilePas, std::ios::binary);
-			if (!File.is_open())
-			{
-				return param;
-			}
-			File.seekg(0, std::ios::end);
-			std::streamsize fileSize = File.tellg();
-			File.seekg(0, std::ios::beg);
+		//	File.close();
+		//	return true;
+		//}
+		//Effect::Paramater CSene_Effekseer::LoadEffektParamBinary(const std::string FilePas)
+		//{
+		//	Effect::Paramater param;
+		//	//ファイルの読み込み
+		//	std::ifstream File(FilePas, std::ios::binary);
+		//	if (!File.is_open())
+		//	{
+		//		return param;
+		//	}
+		//	File.seekg(0, std::ios::end);
+		//	std::streamsize fileSize = File.tellg();
+		//	File.seekg(0, std::ios::beg);
 
-			if (fileSize < sizeof(Explanation)) {
-				// 不正なファイル
-				return param;
-			}
-			// 読み込み用ラムダ
-			auto ReadString = [&](std::string& s) {
-				size_t len = 0;
-				File.read(reinterpret_cast<char*>(&len), sizeof(len)); // 文字列の長さを読む
-				s.resize(len);                                        // 文字列領域を確保
-				File.read(&s[0], len);                                // 本文を読む
-			};
+		//	if (fileSize < sizeof(Explanation)) {
+		//		// 不正なファイル
+		//		return param;
+		//	}
+		//	// 読み込み用ラムダ
+		//	auto ReadString = [&](std::string& s) {
+		//		size_t len = 0;
+		//		File.read(reinterpret_cast<char*>(&len), sizeof(len)); // 文字列の長さを読む
+		//		s.resize(len);                                        // 文字列領域を確保
+		//		File.read(&s[0], len);                                // 本文を読む
+		//	};
 
-			// 順番に読み込む
-			ReadString(m_Explanation.m_Explanation);
-			ReadString(m_Explanation.m_sParamExplanation);
-			ReadString(m_Explanation.m_sMoveExplanation);
-			ReadString(m_Explanation.m_sRotExplanation);
-			ReadString(m_Explanation.m_sSclExplanation);
-			ReadString(m_Explanation.m_sColExplanation);
+		//	// 順番に読み込む
+		//	ReadString(m_Explanation.m_Explanation);
+		//	ReadString(m_Explanation.m_sParamExplanation);
+		//	ReadString(m_Explanation.m_sMoveExplanation);
+		//	ReadString(m_Explanation.m_sRotExplanation);
+		//	ReadString(m_Explanation.m_sSclExplanation);
+		//	ReadString(m_Explanation.m_sColExplanation);
 
-			File.close();
-			return param;
-		}
+		//	File.close();
+		//	return param;
+		//}
 		/// <summary>
 		/// 説明用テキスト保存処理
 		/// </summary>

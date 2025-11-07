@@ -22,6 +22,8 @@
 /** @brief My 名前空間 */
 namespace My
 {
+
+	class CEffectManager;
 	/** @brief My マネージャークラス */
 	class CManager
 	{
@@ -131,6 +133,13 @@ namespace My
 		 */
 		CFade* GetFade();
 
+		/// <summary>
+		/// エフェクトマネージャー取得
+		/// </summary>
+		/// <returns></returns>
+		CEffectManager* GetEffectManager();
+
+
 		HWND GetHwnd()
 		{
 			return m_hWnd;
@@ -168,6 +177,7 @@ namespace My
 		CColision* m_pColision;
 		CFade* m_pFade;
 		CFontManager* m_pFontManager;
+		CEffectManager* m_pEffectManager;
 		HWND m_hWnd;
 	};
 }

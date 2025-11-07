@@ -19,7 +19,7 @@
 
 
 My::Effect::Paramater::Paramater():
-	m_sFilepas{},					// ファイルパス
+	m_sFilepas{ "data/Flame.efk" },					// ファイルパス
 	m_pos({ 0.0f, 0.0f, 0.0f }),	// 初期位置位置
 	m_rot({ 0.0f, 0.0f, 0.0f }),	// 初期向き
 	m_scl({ 1.0f, 1.0f, 1.0f }),	// 初期スケール
@@ -41,6 +41,7 @@ My::Effect::Effect():
 /// </summary>
 My::Effect::~Effect()
 {
+	
 }
 /// <summary>
 /// 初期化処理
@@ -55,7 +56,13 @@ HRESULT My::Effect::Init()
 /// </summary>
 void My::Effect::Uninit()
 {
-	// エフェクト
+	//// ハンドル解放
+	//CManager* pMAnager = CManager::GetInstance();
+	//CEffectManager* pEffekseerManager = pMAnager->GetEffectManager();
+	//Effekseer::ManagerRef pManagerRef = pEffekseerManager->GetManager();
+	//pManagerRef->StopEffect(m_handle);
+
+	// エフェクト解放
 	if (m_effectRef != nullptr)
 	{
 		m_effectRef = nullptr;
@@ -69,9 +76,8 @@ void My::Effect::Update()
 {
 	// マネージャー取得
 	CManager* pManager = CManager::GetInstance();
-	My::CEffekseerManager* pEffekseerManager = pManager->GetEffekseerManager();
+	My::CEffectManager* pEffekseerManager = pManager->GetEffectManager();
 	Effekseer::ManagerRef managerRef = pEffekseerManager->GetManager();
-	CText* Debug = pManager->GetDebugText();
 
 
 	// 定期的にエフェクトを再生する
@@ -84,15 +90,20 @@ void My::Effect::Update()
 		managerRef->SetRotation(m_handle, paramater.m_rot.x, paramater.m_rot.y, paramater.m_rot.z);
 		managerRef->SetAllColor(m_handle, Effekseer::Color(paramater.m_col.R, paramater.m_col.G, paramater.m_col.B, paramater.m_col.A));
 	}
-
 	// 再生カウントを進める
 	m_nLoopCount++;
 
-#if _DEBUG
-
-
-
-#endif // !_DEBUG
+	// 寿命処理
+	if (paramater.m_nLife !=-1 &&
+		paramater.m_nLife > 0)
+	{
+		paramater.m_nLife--;
+	}
+	// 寿命が0なら死亡フラグを立てる
+	if (paramater.m_nLife == 0)
+	{
+		//DeathFlag();
+	}
 }
 /// <summary>
 /// 描画処理
@@ -101,7 +112,7 @@ void My::Effect::Draw()
 {
 	// マネージャー取得
 	My::CManager* pManager = CManager::GetInstance();   // マネージャー取得
-	My::CEffekseerManager* pEffekseerManager = pManager->GetEffekseerManager(); // エフェクシアマネージャー取得
+	My::CEffectManager* pEffekseerManager = pManager->GetEffectManager(); // エフェクシアマネージャー取得
 	LPDIRECT3DDEVICE9 pDevice = pManager->GetRenderer()->GetDevice();   // デバイス取得
 	Effekseer::ManagerRef managerRef = pEffekseerManager->GetManager();		//
 	EffekseerRenderer::RendererRef  rendererRef = pEffekseerManager->GetRenderer();
@@ -136,7 +147,7 @@ void My::Effect::Draw()
 bool My::Effect::Load(const std::string Filepas, D3DXVECTOR3 pos)
 {
 	// マネージャーRef取得
-	My::CEffekseerManager* pEffekseerManager = CManager::GetInstance()->GetEffekseerManager();
+	My::CEffectManager* pEffekseerManager = CManager::GetInstance()->GetEffectManager();
 	Effekseer::ManagerRef managerRef = pEffekseerManager->GetManager();
 	// ファイルパス確認
 	if (Filepas.empty()) {
@@ -151,28 +162,31 @@ bool My::Effect::Load(const std::string Filepas, D3DXVECTOR3 pos)
 	//	return false;
 	//}
 
-	// 文字コード変換の例外処理
-	std::u16string u16s;
-	try {
+	// 文字コード変換の例外処理 
+	std::u16string u16s; try
+	{
 		std::wstring_convert<std::codecvt_utf8_utf16<char16_t>, char16_t> convert;
 		u16s = convert.from_bytes(Filepas);
 	}
-	catch (const std::range_error& e) {
+	catch (const std::range_error& e)
+	{
 		// エラー文字型の変換ミス
-		std::cerr << "Error: UTF-8 to UTF-16 conversion failed: " << e.what() << "\n";
-		return false;
+		std::cerr << "Error: UTF-8 to UTF-16 conversion failed: " << e.what() << "\n"; return false;
 	}
-	// Effekseer::Effect::Create の例外対策
-	try {
+	// Effekseer::Effect::Create の例外対策 
+	try
+	{
 		m_effectRef = Effekseer::Effect::Create(managerRef, u16s.c_str());
 	}
-	catch (...) {
+	catch (...)
+	{
 		std::cerr << "Error: Effekseer::Effect::Create threw an exception.\n";
 		return false;
 	}
-
-	// エフェクトデータ生成
+	// エフェクトデータ生成 
 	m_effectRef = Effekseer::Effect::Create(managerRef, u16s.c_str());
+
+
 
 	// 生成が成功してい無かったら警告を出す
 	if (m_effectRef == nullptr) {
@@ -209,7 +223,7 @@ void My::Effect::SetPos(D3DXVECTOR3 pos)
 {
 	// マネージャーRef取得
 	My::CManager* pManager = CManager::GetInstance();   // マネージャー取得
-	My::CEffekseerManager* pEffekseerManager = pManager->GetEffekseerManager(); // エフェクシアマネージャー取得
+	My::CEffectManager* pEffekseerManager = pManager->GetEffectManager(); // エフェクシアマネージャー取得
 	Effekseer::ManagerRef managerRef = pEffekseerManager->GetManager(); // エフェクシアのマネージャー取得
 	// 再生中のエフェクトを移動する。
 
@@ -224,7 +238,7 @@ void My::Effect::SetRot(D3DXVECTOR3 rot)
 {
 	// マネージャーRef取得
 	My::CManager* pManager = CManager::GetInstance();   // マネージャー取得
-	My::CEffekseerManager* pEffekseerManager = pManager->GetEffekseerManager(); // エフェクシアマネージャー取得
+	My::CEffectManager* pEffekseerManager = pManager->GetEffectManager(); // エフェクシアマネージャー取得
 	Effekseer::ManagerRef managerRef = pEffekseerManager->GetManager(); // エフェクシアのマネージャー取得
 
 	// 再生中のエフェクトの向きを設定
@@ -239,7 +253,7 @@ void My::Effect::SetScl(D3DXVECTOR3 scl)
 {
 	// マネージャーRef取得
 	My::CManager* pManager = CManager::GetInstance();   // マネージャー取得
-	My::CEffekseerManager* pEffekseerManager = pManager->GetEffekseerManager(); // エフェクシアマネージャー取得
+	My::CEffectManager* pEffekseerManager = pManager->GetEffectManager(); // エフェクシアマネージャー取得
 	Effekseer::ManagerRef managerRef = pEffekseerManager->GetManager(); // エフェクシアのマネージャー取得
 
 	// 再生中のエフェクトの大きさを変更する。
@@ -254,7 +268,7 @@ void My::Effect::SetScl(float scl)
 {
 	// マネージャーRef取得
 	My::CManager* pManager = CManager::GetInstance();   // マネージャー取得
-	My::CEffekseerManager* pEffekseerManager = pManager->GetEffekseerManager(); // エフェクシアマネージャー取得
+	My::CEffectManager* pEffekseerManager = pManager->GetEffectManager(); // エフェクシアマネージャー取得
 	Effekseer::ManagerRef managerRef = pEffekseerManager->GetManager(); // エフェクシアのマネージャー取得
 
 	// 再生中のエフェクトの大きさを変更する。
@@ -271,7 +285,7 @@ void My::Effect::SetCol(D3DXCOLOR col)
 {
 	// マネージャーRef取得
 	My::CManager* pManager = CManager::GetInstance();   // マネージャー取得
-	My::CEffekseerManager* pEffekseerManager = pManager->GetEffekseerManager(); // エフェクシアマネージャー取得
+	My::CEffectManager* pEffekseerManager = pManager->GetEffectManager(); // エフェクシアマネージャー取得
 	Effekseer::ManagerRef managerRef = pEffekseerManager->GetManager(); // エフェクシアのマネージャー取得
 
 	// 再生中のエフェクトの色を変更
@@ -287,7 +301,7 @@ void My::Effect::SetColorSRGB(Effekseer::Color col)
 {
 	// マネージャーRef取得
 	My::CManager* pManager = CManager::GetInstance();   // マネージャー取得
-	My::CEffekseerManager* pEffekseerManager = pManager->GetEffekseerManager(); // エフェクシアマネージャー取得
+	My::CEffectManager* pEffekseerManager = pManager->GetEffectManager(); // エフェクシアマネージャー取得
 	Effekseer::ManagerRef managerRef = pEffekseerManager->GetManager(); // エフェクシアのマネージャー取得
 
 	// 再生中のエフェクトの色を変更
@@ -303,7 +317,7 @@ void My::Effect::AddPos(D3DXVECTOR3 pos)
 {
 	// マネージャーRef取得
 	My::CManager* pManager = CManager::GetInstance();   // マネージャー取得
-	My::CEffekseerManager* pEffekseerManager = pManager->GetEffekseerManager(); // エフェクシアマネージャー取得
+	My::CEffectManager* pEffekseerManager = pManager->GetEffectManager(); // エフェクシアマネージャー取得
 	Effekseer::ManagerRef managerRef = pEffekseerManager->GetManager(); // エフェクシアのマネージャー取得
 
 
@@ -321,7 +335,7 @@ void My::Effect::AddRot(D3DXVECTOR3 rot)
 {
 	// マネージャーRef取得
 	My::CManager* pManager = CManager::GetInstance();   // マネージャー取得
-	My::CEffekseerManager* pEffekseerManager = pManager->GetEffekseerManager(); // エフェクシアマネージャー取得
+	My::CEffectManager* pEffekseerManager = pManager->GetEffectManager(); // エフェクシアマネージャー取得
 	Effekseer::ManagerRef managerRef = pEffekseerManager->GetManager(); // エフェクシアのマネージャー取得
 
 	// 再生中のエフェクトの向きを変更する。
@@ -336,7 +350,7 @@ void My::Effect::AddScl(D3DXVECTOR3 scl)
 {
 	// マネージャーRef取得
 	My::CManager* pManager = CManager::GetInstance();   // マネージャー取得
-	My::CEffekseerManager* pEffekseerManager = pManager->GetEffekseerManager(); // エフェクシアマネージャー取得
+	My::CEffectManager* pEffekseerManager = pManager->GetEffectManager(); // エフェクシアマネージャー取得
 	Effekseer::ManagerRef managerRef = pEffekseerManager->GetManager(); // エフェクシアのマネージャー取得
 
 
@@ -354,7 +368,7 @@ void My::Effect::AddScl(float scl)
 {
 	// マネージャーRef取得
 	My::CManager* pManager = CManager::GetInstance();   // マネージャー取得
-	My::CEffekseerManager* pEffekseerManager = pManager->GetEffekseerManager(); // エフェクシアマネージャー取得
+	My::CEffectManager* pEffekseerManager = pManager->GetEffectManager(); // エフェクシアマネージャー取得
 	Effekseer::ManagerRef managerRef = pEffekseerManager->GetManager(); // エフェクシアのマネージャー取得
 	// 再生中のエフェクトの大きさを変更する。
 	paramater.m_scl.x += scl;
@@ -370,7 +384,7 @@ void My::Effect::AddColor(D3DXCOLOR col)
 {
 	// マネージャーRef取得
 	My::CManager* pManager = CManager::GetInstance();   // マネージャー取得
-	My::CEffekseerManager* pEffekseerManager = pManager->GetEffekseerManager(); // エフェクシアマネージャー取得
+	My::CEffectManager* pEffekseerManager = pManager->GetEffectManager(); // エフェクシアマネージャー取得
 	Effekseer::ManagerRef managerRef = pEffekseerManager->GetManager(); // エフェクシアのマネージャー取得
 
 	// 再生中のエフェクトの色を変更
@@ -389,7 +403,7 @@ void My::Effect::AddColorSRGB(const std::array<int, 4>& col)
 {
 	// マネージャーRef取得
 	My::CManager* pManager = CManager::GetInstance();   // マネージャー取得
-	My::CEffekseerManager* pEffekseerManager = pManager->GetEffekseerManager(); // エフェクシアマネージャー取得
+	My::CEffectManager* pEffekseerManager = pManager->GetEffectManager(); // エフェクシアマネージャー取得
 	Effekseer::ManagerRef managerRef = pEffekseerManager->GetManager(); // エフェクシアのマネージャー取得
 
 	// 再生中のエフェクトの色を変更

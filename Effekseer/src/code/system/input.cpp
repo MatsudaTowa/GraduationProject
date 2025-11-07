@@ -66,7 +66,6 @@ namespace My {
 	/// </summary>
 	void CInput::Update()
 	{
-
 	}
 	//============================================
 	// コンスト（キーボード）
@@ -97,8 +96,7 @@ namespace My {
 			return E_FAIL;
 		}
 		// 入力デバイス(キーボード)の生成
-		if (FAILED(m_pInput->CreateDevice(GUID_SysKeyboard,
-			&m_pDevice, nullptr)))
+		if (FAILED(m_pInput->CreateDevice(GUID_SysKeyboard,	&m_pDevice, nullptr)))
 		{
 			return E_FAIL;
 		}

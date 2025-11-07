@@ -12,21 +12,21 @@
 /// <summary>
 /// コンストラク
 /// </summary>
-My::CEffekseerManager::CEffekseerManager()
+My::CEffectManager::CEffectManager()
 {
     Init();
 }
 /// <summary>
 /// デストラクタ
 /// </summary>
-My::CEffekseerManager::~CEffekseerManager()
+My::CEffectManager::~CEffectManager()
 {
 }
 /// <summary>
 /// 初期化処理
 /// </summary>
 /// <returns>初期化結果</returns>
-HRESULT My::CEffekseerManager::Init()
+HRESULT My::CEffectManager::Init()
 {
     // マネージャー
     CManager* pManager = CManager::GetInstance(); // マネージャー取得
@@ -65,7 +65,7 @@ HRESULT My::CEffekseerManager::Init()
 /// <summary>
 /// 終了処理
 /// </summary>
-void My::CEffekseerManager::Uninit()
+void My::CEffectManager::Uninit()
 {
     if (m_managerRef != nullptr) {
         m_managerRef = nullptr;
@@ -78,7 +78,7 @@ void My::CEffekseerManager::Uninit()
 /// <summary>
 /// 更新処理
 /// </summary>
-void My::CEffekseerManager::Update()
+void My::CEffectManager::Update()
 {
     if (m_managerRef == nullptr) return;
 
@@ -89,6 +89,6 @@ void My::CEffekseerManager::Update()
 /// <summary>
 /// 描画処理
 /// </summary>
-void My::CEffekseerManager::Draw()
+void My::CEffectManager::Draw()
 {
 }
