@@ -70,7 +70,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hInstancePrev, _
 		NULL, NULL, hInstance, NULL
 	);
 
-
 	// 生成＆初期化
 	My::CManager* pManager = new My::CManager();
 	
@@ -78,7 +77,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hInstancePrev, _
 	{// 初期化
 		return -1;
 	}
-
 
 	// ウィンドウの表示
 	ShowWindow(hWnd, nCmdShow);	// ウィンドウの表示状態を設定
@@ -226,3 +224,5 @@ void AdjustWindowStyleForResize(HWND hWnd)
 	SetWindowPos(hWnd, nullptr, 0, 0, 0, 0,
 		SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
 }
+
+

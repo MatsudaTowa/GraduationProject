@@ -117,7 +117,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;CBC=1;AES256=1</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
@@ -146,7 +146,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;CBC=1;AES256=1</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
@@ -191,6 +191,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\manager.cpp" />
     <ClCompile Include="src\renderer.cpp" />
+    <ClCompile Include="src\tiny_aes\aes_force.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\edit.h" />
@@ -209,6 +210,7 @@
     <ClInclude Include="src\manager.h" />
     <ClInclude Include="src\nlohmann\json.hpp" />
     <ClInclude Include="src\renderer.h" />
+    <ClInclude Include="src\tiny_aes\aes.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
