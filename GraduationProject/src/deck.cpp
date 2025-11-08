@@ -33,6 +33,9 @@ void My::CDeck::Flip(int sheet)
 
 }
 
+/**
+* @brief ƒVƒƒƒbƒtƒ‹ˆ—
+*/
 void My::CDeck::Shuffle()
 {
 

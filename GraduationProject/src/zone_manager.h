@@ -9,7 +9,7 @@
 #define _ZONE_MANAGER_H_
 
 // include
-#include "zone.h"
+#include "deck.h"
 
 /** @brief My 名前空間 */
 namespace My
@@ -47,15 +47,12 @@ namespace My
 		void Update();
 
 		/**
-		* @brief ゾーンの取得処理
-		* @return ゾーンのポインタ
+		* @brief デッキのポインタ取得
 		*/
-		CZone* GetZone();
+		CDeck* GetDeck();
 
-		//TODO : のちのちそれぞれのゾーンのポインタ取得処理をここに入力
 	private:
-		CZone* m_pZone;	// ゾーンのポインタ
-		//TODO : のちのちそれぞれのゾーンのポインタをここに入力
+		CDeck* m_pDeck;	// 山札のポインタ
 	};
 }
 #endif
