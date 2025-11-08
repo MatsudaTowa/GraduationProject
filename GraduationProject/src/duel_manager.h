@@ -37,6 +37,13 @@ namespace My
 			return &instance;
 		}
 
+		/**
+		 * @brief ƒJ[ƒhí“¬ˆ—
+		 * @param [in]attack_card
+		 * @param [in]defence_card
+		 */
+		void ProcessCardBattle(std::list<CCard*> attack_card_list , std::list<CCard*> defence_card_list);
+
 		void RegistUseCardList(CCard* card);	//“o˜^
 		void RemoveUseCardList(CCard* card);	//íœ
 

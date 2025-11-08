@@ -38,6 +38,14 @@ void My::CDuelManager::Uninit()
 }
 
 //================================
+// カードの戦闘処理
+//================================
+void My::CDuelManager::ProcessCardBattle(std::list<CCard*> attack_card_list, std::list<CCard*> defence_card_list)
+{
+
+}
+
+//================================
 // カードのリストに登録
 //================================
 void My::CDuelManager::RegistUseCardList(CCard* card)
