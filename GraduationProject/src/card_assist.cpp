@@ -1,5 +1,13 @@
 #include "card_assist.h"
 
+My::CCardAssist::CCardAssist(int nPriority):CCard(nPriority),
+m_AssistType(),
+m_BuffType(),
+m_DebuffType(),
+m_HealType()
+{
+}
+
 My::CCardAssist::~CCardAssist()
 {
 }
@@ -24,4 +32,14 @@ void My::CCardAssist::Update()
 void My::CCardAssist::Draw()
 {
 	CCard::Draw();
+}
+
+//===========================================================================================================
+// カード情報読み込み
+//===========================================================================================================
+void My::CCardAssist::LoadCardData()
+{
+	CCard::LoadCardData();
+
+	//TODO:親クラスの読み込みしてから各ステータス読み込み
 }

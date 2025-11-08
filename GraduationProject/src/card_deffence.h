@@ -13,10 +13,18 @@ namespace My
 {
 	class CCardDeffence :public CCard
 	{
+	public:
+		enum DefenseType
+		{// 守備の種類
+			NONE_DEFENSE,        // 守備以外のときはこれ
+			COUNTER,            // 反撃できる
+			NOT_COUNTER,        // 反撃できない
+		};
+
 		/**
 		 * @brief コンストラクタ
 		 */
-		CCardDeffence();
+		CCardDeffence(int nPriority);
 
 		/**
 		 * @brief デストラクタ
@@ -42,6 +50,22 @@ namespace My
 		 * @brief 描画
 		 */
 		void Draw()override;
+
+		void LoadCardData() override;
+
+		/**
+		 * @brief 守備のタイプ取得
+		 * @return m_AttackType
+		 */
+		inline DefenseType GetDefenceType() { return m_DefenceType; }
+
+		/**
+		 * @brief 守備のタイプ設定
+		 * @param [in]attack_type
+		 */
+		inline void SetDefenceType(DefenseType defence_type) { m_DefenceType = defence_type; }
+	private:
+		DefenseType m_DefenceType;
 	};
 }
 

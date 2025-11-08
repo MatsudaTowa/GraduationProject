@@ -13,10 +13,19 @@ namespace My
 {
 	class CCardAttack :public CCard
 	{
+	public:
+		enum AttackType
+		{// 攻撃の種類
+			NONE_ATTACK,            // 攻撃以外のときはこれ
+			ALL_ATTACK,                // 全体攻撃
+			SPECIFIC_ATTACK,        // 特定の相手を選んで攻撃
+			RANDOM_ATTACK,            // ランダム攻撃
+			SELFINTARGET_ATTACK,    // 自分を含めた攻撃
+		};
 		/**
 		 * @brief コンストラクタ
 		 */
-		CCardAttack();
+		CCardAttack(int nPriority);
 
 		/**
 		 * @brief デストラクタ
@@ -42,6 +51,22 @@ namespace My
 		 * @brief 描画
 		 */
 		void Draw()override;
+
+		void LoadCardData() override;
+
+		/**
+		 * @brief 攻撃のタイプ取得
+		 * @return m_AttackType
+		 */
+		inline AttackType GetAttackType() { return m_AttackType; }
+
+		/**
+		 * @brief 攻撃のタイプ設定
+		 * @param [in]attack_type
+		 */
+		inline void SetAttackType(AttackType attack_type) { m_AttackType = attack_type; }
+	private:
+		AttackType m_AttackType;
 	};
 }
 

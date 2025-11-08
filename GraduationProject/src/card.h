@@ -98,6 +98,10 @@ namespace My
 		 */
 		void Draw()override;
 
+		/**
+		 * @brief カードデータ読み込み
+		 */
+		virtual void LoadCardData();
 
 		/**
 		 * @brief マウスでカードを選択する

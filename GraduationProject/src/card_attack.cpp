@@ -1,5 +1,10 @@
 #include "card_attack.h"
 
+My::CCardAttack::CCardAttack(int nPriority):CCard(nPriority),
+m_AttackType()
+{
+}
+
 My::CCardAttack::~CCardAttack()
 {
 }
@@ -36,4 +41,14 @@ void My::CCardAttack::Update()
 void My::CCardAttack::Draw()
 {
 	CCard::Draw();
+}
+
+//===========================================================================================================
+// カード情報読み込み
+//===========================================================================================================
+void My::CCardAttack::LoadCardData()
+{
+	CCard::LoadCardData();
+
+	//TODO:親クラスの読み込みしてから各ステータス読み込み
 }

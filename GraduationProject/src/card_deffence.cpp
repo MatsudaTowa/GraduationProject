@@ -1,5 +1,9 @@
 #include "card_deffence.h"
 
+My::CCardDeffence::CCardDeffence(int nPriority):CCard(nPriority)
+{
+}
+
 My::CCardDeffence::~CCardDeffence()
 {
 }
@@ -36,4 +40,14 @@ void My::CCardDeffence::Update()
 void My::CCardDeffence::Draw()
 {
 	CCard::Draw();
+}
+
+//===========================================================================================================
+// カード情報読み込み
+//===========================================================================================================
+void My::CCardDeffence::LoadCardData()
+{
+	CCard::LoadCardData();
+
+	//TODO:親クラスの読み込みしてから各ステータス読み込み
 }
