@@ -23,13 +23,38 @@ namespace My
 		* @param 防御カード
 		* @param 補助カード
 		*/
-		typedef enum
+		enum CARDTYPE_
 		{
-			TYPE_ATTACK=0,
+			TYPE_NONE=0,
+			TYPE_ATTACK,
 			TYPE_DEFFENCE,
 			TYPE_ASSIST,
 			TYPE_MAX
-		}CARDTYPE_;
+		};
+
+		enum RARITY
+		{// レアリティの種類
+			NONE_RARITY,
+			COMMON,            // コモン
+			UNCOMMON,        // アンコモン
+			RARE,            // レア
+			SUPERRARE,        // スーパーレア
+			HYPERRARE,        // ハイパーレア
+			ROYALRARE,        // ロイヤルレア
+			EMPERORRARE,    // エンペラーレア
+			GODRARE,        // ゴッドレア
+			XRARE,            // エックスレア
+		};
+
+		struct BaseStatus
+		{
+			std::string name;					// カード名
+			std::string ruby;                     // フリガナ
+			int nCost;                            // カードコスト
+			CARDTYPE_ maintype;                   // カードの種類
+			RARITY raritytype;                    // レアリティの種類
+			std::string imagePath;                // 画像ファイルパス
+		};
 
 		/**
 		* @brief カードパラメーター
@@ -72,6 +97,7 @@ namespace My
 		 * @brief 描画
 		 */
 		void Draw()override;
+
 
 		/**
 		 * @brief マウスでカードを選択する
@@ -116,6 +142,18 @@ namespace My
 		inline D3DXVECTOR3 GetNeutralPos() { return m_NeutralPos; }
 
 		/**
+		 * @brief ステータス取得
+		 * @return m_BaseStatus
+		 */
+		inline BaseStatus GetBaseStatus() { return m_BaseStatus; }
+
+		/**
+		 * @brief ステータス設定
+		 * @param [in]status
+		 */
+		inline void SetBaseStatus(BaseStatus status) { m_BaseStatus = status; }
+
+		/**
 		* @brief ニュートラル位置
 		*/
 		inline void SetTarget(CInputMouse::AREA area) { m_target = area; }
@@ -148,6 +186,8 @@ namespace My
 		//static CCard* m_pCur;	//現在（最後尾）のポインタ
 		//CCard* m_pPrev;			//前のオブジェクトのポインタ
 		//CCard* m_pNext;			//次のオブジェクトのポインタ
+
+		BaseStatus m_BaseStatus;
 
 		Parameter m_Param;	// カードパラメーター
 
