@@ -134,6 +134,9 @@
     <ClCompile Include="src\deck.cpp">
       <Filter>zone\deck</Filter>
     </ClCompile>
+    <ClCompile Include="src\duel_manager.cpp">
+      <Filter>active_scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -269,6 +272,9 @@
     </ClInclude>
     <ClInclude Include="src\deck.h">
       <Filter>zone\deck</Filter>
+    </ClInclude>
+    <ClInclude Include="src\duel_manager.h">
+      <Filter>active_scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

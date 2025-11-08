@@ -184,6 +184,7 @@
     <ClCompile Include="src\death_icon.cpp" />
     <ClCompile Include="src\debuff.cpp" />
     <ClCompile Include="src\deck.cpp" />
+    <ClCompile Include="src\duel_manager.cpp" />
     <ClCompile Include="src\enemy.cpp" />
     <ClCompile Include="src\enemy_manager.cpp" />
     <ClCompile Include="src\energy_charge.cpp" />
@@ -275,6 +276,7 @@
     <ClInclude Include="src\death_icon.h" />
     <ClInclude Include="src\debuff.h" />
     <ClInclude Include="src\deck.h" />
+    <ClInclude Include="src\duel_manager.h" />
     <ClInclude Include="src\enemy.h" />
     <ClInclude Include="src\enemy_manager.h" />
     <ClInclude Include="src\energy_charge.h" />
