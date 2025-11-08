@@ -9,6 +9,7 @@
 #include "card_state.h"
 #include "card_frame.h"
 #include "active_scene_manager.h"
+#include "duel_manager.h"
 #include <typeinfo>
 
 //===========================================================================================================
@@ -395,6 +396,9 @@ bool My::CCard::CardSelectToMouse()
 void My::CCard::LoadCardData()
 {
 	//TODO:ここに各ステータスの読み込み
+
+	//読み込んだカード情報をリストに登録
+	CDuelManager::GetInstance()->RegistUseCardList(this);
 }
 
 
