@@ -24,8 +24,10 @@ m_IsChange(true),
 m_target(CInputMouse::AREA::CENTER),
 m_Cost(INT_ZERO),
 m_AttackPower(INT_ZERO),
-m_pTargetArrow(nullptr)
+m_pTargetArrow(nullptr),
+m_pCardHolder(nullptr)
 {
+	m_pTargetPlayerList.clear();
 	//if (m_pTop == nullptr)
 	//{// top が設定されていなかったら
 	//	m_pPrev = nullptr;	// 
@@ -47,6 +49,7 @@ m_pTargetArrow(nullptr)
 //===========================================================================================================
 My::CCard::~CCard()
 {
+	m_pTargetPlayerList.clear();
 }
 
 //===========================================================================================================
@@ -227,6 +230,29 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state)
 }
 
 //===========================================================================================================
+// ターゲットリストの登録
+//===========================================================================================================
+void My::CCard::RegistTargetList(CActiveSceneCharacter* target_list)
+{
+	//ターゲットリストの情報を登録
+	m_pTargetPlayerList.push_back(target_list);
+}
+
+//===========================================================================================================
+// ターゲットリストの削除
+//===========================================================================================================
+void My::CCard::RemoveTargetList(CActiveSceneCharacter* target_list)
+{
+	//サイズが0なら抜ける
+	if (m_pTargetPlayerList.size() == 0)
+	{
+		return;
+	}
+	//敵の情報を削除
+	m_pTargetPlayerList.remove(target_list);
+}
+
+//===========================================================================================================
 // カードをマウスでキャスト
 //===========================================================================================================
 bool My::CCard::CardCastToMouse()
@@ -282,6 +308,21 @@ bool My::CCard::CardCastToMouse()
 		// ステイ遷移
 		ChangeState(CCardState::CARD_STAY);
 		CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
+
+		CActiveScenePlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();
+		if (player->GetArea() == m_target)
+		{
+			RegistTargetList(player);
+		}
+
+		std::list<CEnemy*> enemy_list = CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList();
+		for (auto& itr : enemy_list)
+		{
+			if (itr == nullptr) { continue; }
+			if (itr->GetArea() != m_target) { continue; }
+
+			RegistTargetList(itr);
+		}
 
 		m_pTargetArrow = CTargetArrow::Create(CInputMouse::AREA::DOWN, GetTarget());
 	}

@@ -12,6 +12,7 @@
 
 namespace My
 {
+	class CActiveScenePlayer;
 	class CCard :public CObject3D
 	{
 	public:
@@ -131,6 +132,14 @@ namespace My
 
 		inline CTargetArrow* GetTargetArrow() { return m_pTargetArrow; }
 
+		inline void SetCardHolder(CActiveScenePlayer* player) { m_pCardHolder = player; }
+		inline CActiveScenePlayer* GetCardHolder() { return m_pCardHolder; }
+
+		void RegistTargetList(CActiveSceneCharacter* target_list);	//登録
+		void RemoveTargetList(CActiveSceneCharacter* target_list);	//削除
+
+		//リストの取得
+		inline std::list<CActiveSceneCharacter*> GetTargetPlayerList() { return m_pTargetPlayerList; }	
 		//inline CCard* GetTop() { return m_pTop; }
 		//inline CCard* GetPrev() { return m_pPrev; }
 
@@ -187,6 +196,10 @@ namespace My
 		 * @brief カードのターゲットを示す矢印
 		 */
 		CTargetArrow* m_pTargetArrow;
+
+		CActiveScenePlayer* m_pCardHolder; //!<カードの所有者(一旦プレイヤーで固定)
+
+		std::list<CActiveSceneCharacter*> m_pTargetPlayerList; //!<対象 NOTE:複数対象のカードが存在するためリストで管理
 	};
 };
 
