@@ -97,13 +97,13 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>precompile.h</PrecompiledHeaderFile>
       <ForcedIncludeFiles>precompile.h</ForcedIncludeFiles>
-      <AdditionalIncludeDirectories>$(ProjectDir)RakNet/Source</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>thirdparty\EffekseerForDXLib;$(ProjectDir)RakNet/Source</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)RakNet/lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>thirdparty\EffekseerForDXLib;$(ProjectDir)RakNet/lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies);RakNet_VS2008_LibStatic_Debug_Win32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -185,6 +185,8 @@
     <ClCompile Include="src\debuff.cpp" />
     <ClCompile Include="src\deck.cpp" />
     <ClCompile Include="src\duel_manager.cpp" />
+    <ClCompile Include="src\EffectManager.cpp" />
+    <ClCompile Include="src\Effectr.cpp" />
     <ClCompile Include="src\enemy.cpp" />
     <ClCompile Include="src\enemy_manager.cpp" />
     <ClCompile Include="src\energy_charge.cpp" />
@@ -277,6 +279,8 @@
     <ClInclude Include="src\debuff.h" />
     <ClInclude Include="src\deck.h" />
     <ClInclude Include="src\duel_manager.h" />
+    <ClInclude Include="src\Effect.h" />
+    <ClInclude Include="src\EffectManager.h" />
     <ClInclude Include="src\enemy.h" />
     <ClInclude Include="src\enemy_manager.h" />
     <ClInclude Include="src\energy_charge.h" />

@@ -137,6 +137,8 @@
     <ClCompile Include="src\duel_manager.cpp">
       <Filter>active_scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\EffectManager.cpp" />
+    <ClCompile Include="src\Effectr.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -276,6 +278,8 @@
     <ClInclude Include="src\duel_manager.h">
       <Filter>active_scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\Effect.h" />
+    <ClInclude Include="src\EffectManager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">

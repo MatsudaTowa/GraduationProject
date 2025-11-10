@@ -6,7 +6,7 @@
 //=============================================
 #include "manager.h"
 #include "renderer.h"
-//#include "EffectManager.h"	// エフェクトマネージャー
+#include "EffectManager.h"	// エフェクトマネージャー
 
 /**
  * @brief コンストラクタ
@@ -24,7 +24,7 @@ m_pRenderer(nullptr),	//レンダラーポインタ
 m_pScene(nullptr),		//シーンポインタ
 m_pTexture(nullptr),		//テクスチャ管理ポインタ
 m_pFontManager(nullptr),	
-//m_pEffectManager(nullptr),		// エフェクトマネージャー
+m_pEffectManager(nullptr),		// エフェクトマネージャー
 m_CurrentViewCamera(INT_ZERO)	//映すカメラ番号
 {
 	
@@ -120,14 +120,14 @@ HRESULT My::CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	}
 
 	//// エフェクトマネージャー生成
-	//if (!m_pEffectManager)
-	//{
-	//	m_pEffectManager = new My::CEffectManager;
-	//	if (m_pEffectManager->Init())	// 初期化
-	//	{
-	//		return E_FAIL;
-	//	}
-	//}
+	if (!m_pEffectManager)
+	{
+		m_pEffectManager = new My::CEffectManager;
+		if (m_pEffectManager->Init())	// 初期化
+		{
+			return E_FAIL;
+		}
+	}
 
 	//最初のシーン設定
 	if (m_pFade == nullptr)
@@ -214,11 +214,11 @@ void My::CManager::Uninit()
 	}
 
 	//// エフェクシアマネージャー終了
-	//if (m_pEffectManager)
-	//{
-	//	m_pEffectManager->Uninit();
-	//	m_pEffectManager = nullptr;
-	//}
+	if (m_pEffectManager)
+	{
+		m_pEffectManager->Uninit();
+		m_pEffectManager = nullptr;
+	}
 
 	CObject::ReleaseAll();
 }
@@ -252,10 +252,10 @@ void My::CManager::Update()
 		m_pScene->Update();
 	}
 
-	//if (m_pEffectManager)
-	//{
-	//	m_pEffectManager->Update();
-	//}
+	if (m_pEffectManager)
+	{
+		m_pEffectManager->Update();
+	}
 }
 
 /**
@@ -431,14 +431,14 @@ My::CFade* My::CManager::GetFade()
 {
 	return m_pFade;
 }
-///// <summary>
-///// エフェクトマネージャー取得
-///// </summary>
-///// <returns>エフェクトマネージャーのポインター</returns>
-//My::CEffectManager* My::CManager::GetEffectManager()
-//{
-//	return m_pEffectManager;
-//}
+/// <summary>
+/// エフェクトマネージャー取得
+/// </summary>
+/// <returns>エフェクトマネージャーのポインター</returns>
+My::CEffectManager* My::CManager::GetEffectManager()
+{
+	return m_pEffectManager;
+}
 
 /**
  * @brief コリジョン取得
