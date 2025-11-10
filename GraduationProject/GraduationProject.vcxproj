@@ -169,6 +169,10 @@
     <ClCompile Include="src\camera_state.cpp" />
     <ClCompile Include="src\card.cpp" />
     <ClCompile Include="src\card_assist.cpp" />
+    <ClCompile Include="src\card_assist_buff.cpp" />
+    <ClCompile Include="src\card_assist_buff_heal.cpp" />
+    <ClCompile Include="src\card_assist_debuff.cpp" />
+    <ClCompile Include="src\card_assist_debuff_death.cpp" />
     <ClCompile Include="src\card_attack.cpp" />
     <ClCompile Include="src\card_client.cpp" />
     <ClCompile Include="src\card_deffence.cpp" />
@@ -263,6 +267,10 @@
     <ClInclude Include="src\camera_state.h" />
     <ClInclude Include="src\card.h" />
     <ClInclude Include="src\card_assist.h" />
+    <ClInclude Include="src\card_assist_buff.h" />
+    <ClInclude Include="src\card_assist_buff_heal.h" />
+    <ClInclude Include="src\card_assist_debuff.h" />
+    <ClInclude Include="src\card_assist_debuff_death.h" />
     <ClInclude Include="src\card_attack.h" />
     <ClInclude Include="src\card_client.h" />
     <ClInclude Include="src\card_deffence.h" />
