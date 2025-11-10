@@ -7,20 +7,21 @@
 #ifndef _TARGET_ARROW_ //これが定義されてないとき
 #define _TARGET_ARROW_
 #include "main.h"
+#include "object2D_anim.h"
 
 namespace
 {
-	const D3DXVECTOR2 up = { SCREEN_WIDTH * 0.5f,0.0f };
-	const D3DXVECTOR2 down = { SCREEN_WIDTH * 0.5f,SCREEN_HEIGHT};
-	const D3DXVECTOR2 right = {SCREEN_WIDTH*0.8f,SCREEN_HEIGHT * 0.5f };
-	const D3DXVECTOR2 left = { SCREEN_WIDTH * 0.2f,SCREEN_HEIGHT * 0.5f };
+	const D3DXVECTOR2 arrow_up = { SCREEN_WIDTH * 0.5f,0.0f };
+	const D3DXVECTOR2 arrow_down = { SCREEN_WIDTH * 0.5f,SCREEN_HEIGHT};
+	const D3DXVECTOR2 arrow_right = {SCREEN_WIDTH*0.8f,SCREEN_HEIGHT * 0.5f };
+	const D3DXVECTOR2 arrow_left = { SCREEN_WIDTH * 0.2f,SCREEN_HEIGHT * 0.5f };
 }
 
 /** @brief My 名前空間 */
 namespace My
 {
 	/** @brief テクスチャ管理クラス */
-	class CTargetArrow:public CObject2D
+	class CTargetArrow:public CObject2D_Anim
 	{
 	public:
 		/**
