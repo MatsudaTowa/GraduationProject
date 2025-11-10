@@ -1,6 +1,9 @@
 #include "card_deffence.h"
 
-My::CCardDeffence::CCardDeffence(int nPriority):CCard(nPriority)
+My::CCardDeffence::CCardDeffence(int nPriority):CCard(nPriority),
+m_DefenceType(),
+m_nDefenceValue(INT_ZERO),
+m_nCounterValue(INT_ZERO)
 {
 }
 

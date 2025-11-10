@@ -61,12 +61,25 @@ namespace My
 		inline AttackType GetAttackType() { return m_AttackType; }
 
 		/**
+		 * @brief 攻撃力を取得
+		 * @return 攻撃
+		 */
+		inline int GetAttackValue() { return m_nAttackValue; }
+
+		/**
 		 * @brief 攻撃のタイプ設定
 		 * @param [in]attack_type
 		 */
 		inline void SetAttackType(AttackType attack_type) { m_AttackType = attack_type; }
+
+		/**
+		 * @brief 攻撃量の値設定
+		 * @param [in]attack_value
+		 */
+		inline void SetAttackValue(int attack_value) { m_nAttackValue = attack_value; }
 	private:
 		AttackType m_AttackType;
+		int m_nAttackValue;                        // ダメージ数
 	};
 }
 

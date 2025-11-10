@@ -60,12 +60,39 @@ namespace My
 		inline DefenseType GetDefenceType() { return m_DefenceType; }
 
 		/**
+		 * @brief ディフェンスの値取得
+		 * @return ディフェンスの値
+		 */
+		inline int GetDefenceValue() { return m_nDefenceValue; }
+
+		/**
+		 * @brief カウンターの値取得
+		 * @return カウンターの値
+		 */
+		inline int GetCounterValue() { return m_nCounterValue; }
+
+		/**
 		 * @brief 守備のタイプ設定
 		 * @param [in]attack_type
 		 */
 		inline void SetDefenceType(DefenseType defence_type) { m_DefenceType = defence_type; }
+
+		/**
+		 * @brief ディフェンスの値取得
+		 * @param ディフェンスの値
+		 */
+		inline void SetDefenceValue(int defence_value) { m_nDefenceValue = defence_value; }
+
+		/**
+		 * @brief カウンターの値取得
+		 * @param カウンターの値
+		 */
+		inline void GetCounterValue(int counter_value) { m_nCounterValue = counter_value; }
+
 	private:
 		DefenseType m_DefenceType;
+		int m_nDefenceValue;
+		int m_nCounterValue;
 	};
 }
 

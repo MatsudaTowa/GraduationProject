@@ -1,7 +1,8 @@
 #include "card_attack.h"
 
 My::CCardAttack::CCardAttack(int nPriority):CCard(nPriority),
-m_AttackType()
+m_AttackType(),
+m_nAttackValue(INT_ZERO)
 {
 }
 
