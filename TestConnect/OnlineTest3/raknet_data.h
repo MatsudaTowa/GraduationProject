@@ -27,7 +27,7 @@ public:
 		ID_GAME_MESSAGE_1 = ID_USER_PACKET_ENUM + 1,
 		ID_CONNECT_MESSAGE_1,			//自分が接続時
 		ID_DISCONNECT_MESSAGE_1,		//他人が切断した時
-		//ID_LOBY_MESSAGE_ADD_ENEMY,		//ロビーでの敵を追加を送信
+		ID_LOBY_MESSAGE_ADD_ENEMY,		//ロビーでの敵を追加を送信
 		ID_LOBY_MESSAGE_SEND_READY,		//ロビーでの準備OKを送信
 		ID_LOBY_MESSAGE_RECEIVE_READY,  //ロビーでの準備OKを送信
 		ID_LOBY_MESSAGE_SEND_START,		//ロビーでの開始合図を送信

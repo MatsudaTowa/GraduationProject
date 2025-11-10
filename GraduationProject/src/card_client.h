@@ -1,19 +1,21 @@
 //================================
 //
-// カード用のヘッダー[card.h]
+// カードクライアント用のヘッダー[card_client.h]
 // Author:Yuuto Shimadu
 //
 //================================
 
 //二重マクロ防止
-#ifndef _CARD_H_
-#define _CARD_H_
+#ifndef _CARD_CLIENT_H_
+#define _CARD_CLIENT_H_
 
 //ヘッダーのインクルード
-#include "main.h"
+#include "RakPeerInterface.h"
+#include "MessageIdentifiers.h"
+#include "BitStream.h"
 
-//カードのクラス
-class CCard
+//カードクライアントのクラス
+class CCard_Client
 {
 public:
 
@@ -148,21 +150,44 @@ public:
 		HealType Healtype;				// 回復の種類
 	};
 
-	//関数
-	CCard();			//コンストラクタ
-	~CCard();			//デストラクタ
-	//bool Init();		//初期化処理
+	//列挙
+	enum GAME_MESSAGE
+	{
+		ID_GAME_MESSAGE_1 = ID_USER_PACKET_ENUM + 1,
+		ID_CARD_MESSAGE_1,			//カード情報の送信
+		ID_ALLCARD_MESSAGE_1,		//全カードの情報を送信
+	};
 
-	//設定と取得
-	Param& GetParam() { return m_Param; }		//基本のパラメータ取得
-	AttackParam GetAttackParam(Param param);	//攻撃のパラメータ取得
-	DefenseParam GetDefenseParam(Param param);	//防御のパラメータ取得
-	AssistParam GetAssistParam(Param param);	//アシストパラメータ取得
+	//インスタンス
+	static CCard_Client* GetInstance()
+	{
+		static CCard_Client instance; //静的インスタンス
+		return &instance;
+	}
+
+	//関数
+	~CCard_Client();											//デストラクタ
+	bool Init();												//初期化処理
+	void Uninit();												//終了処理
+
+	//通信
+	void Communication();							//通信処理
+	void RequestCard(int id);						//カードリクエスト
+	void RequestAllCard();							//全カードリクエスト
+	void ReceiveCardInfo(RakNet::Packet* packet);	//カード情報の受信
 
 private:
 
-	//変数
-	Param m_Param;	//パラメータ
+	//定数
+	static constexpr int PORT{ 22334 };	//ポート番号
+
+	//関数
+	CCard_Client();												//コンストラクタ
+	void Send(RakNet::RakPeerInterface* peer, RakNet::BitStream* out);	//送信処理
+
+	//メンバ変数
+	RakNet::Packet* m_pPacket;			//パケット
+	RakNet::RakPeerInterface* m_pPeer;	//ピア(接続用)
 };
 
 #endif

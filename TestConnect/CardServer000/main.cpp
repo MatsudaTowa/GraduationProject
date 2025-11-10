@@ -25,8 +25,8 @@
 #include <unistd.h>
 #endif
 
-#define MAX_CLIENTS (4)
-#define SERVER_PORT (22333)
+#define MAX_CLIENTS (10)
+#define SERVER_PORT (22334)
 
 // 構造体の定義（送信側と受信側で共有）
 struct PlayerData {
@@ -50,40 +50,10 @@ enum GameMessages
 //=====================================
 int main(void)
 {
-    //RakNet::RakPeerInterface* peer = RakNet::RakPeerInterface::GetInstance();
-    //CRakNet_Server* pServer = new CRakNet_Server();
-    //pServer->Init(22333, peer);
-
-    ////終わるまで周回
-    ///*while (1)
-    //{
-    //    
-    //}*/
-
-    //// 通信スレッドを起動
-    //std::thread netThread(CRakNet_Server::Communication, peer);
-
-    ////スレッドの切り離す
-    //netThread.detach();
-
-    //ファイルを開く
-    //std::ifstream ifs("json\\cards.json");
-
-    ////開けたかを確認
-    //if (!ifs.is_open())
-    //{
-    //    assert(false && "ファイルを開けませんでした");
-    //    return -1;
-    //}
-
-    ////文字列から直接パース
-    //ordered_json Json;
-    //Json = ordered_json::parse(ifs);
-   
-    //std::cout << Json << std::endl;  // coutに渡せば出力できる。
-
     CRakNet_Server a;
     a.LoadCard();
+    a.Init(SERVER_PORT);
+    a.Communication();
 
     getchar();
     rewind(stdin);

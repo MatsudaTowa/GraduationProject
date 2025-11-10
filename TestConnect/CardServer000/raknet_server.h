@@ -23,15 +23,15 @@ class CRakNet_Server
 public:
 
 	//関数
-	CRakNet_Server();											//コンストラクタ
-	~CRakNet_Server();											//デストラクタ
-	bool Init(int nPortNum, RakNet::RakPeerInterface* peer);	//初期化処理
-	void Accept(void);											//接続待ち受け処理
-	void Uninit(RakNet::RakPeerInterface* peer);				//終了処理
-	void LoadCard();											//カード情報の読み込み
+	CRakNet_Server();			//コンストラクタ
+	~CRakNet_Server();			//デストラクタ
+	bool Init(int nPortNum);	//初期化処理
+	void Accept(void);			//接続待ち受け処理
+	void Uninit();				//終了処理
+	void LoadCard();			//カード情報の読み込み
 
 	//静的
-	static void Communication(RakNet::RakPeerInterface* peer);						//通信処理
+	void Communication();		//通信処理
 	void Communication0(RakNet::RakPeerInterface* peer, RakNet::Packet* packet);	//特定のクライアントの通信処理
 private:
 
@@ -43,8 +43,9 @@ private:
 
 	//メンバ変数
 	RakNet::Packet* m_pPacket;			//パケット
+	RakNet::RakPeerInterface* m_pPeer;	//ピア
 	static CRakNet_Data* m_pRakNetData;	//ラックネットのデータ
-	std::vector<CCard> m_CardVector;	//カードのベクター
+	//std::vector<CCard> m_CardVector;	//カードのベクター
 };
 
 #endif

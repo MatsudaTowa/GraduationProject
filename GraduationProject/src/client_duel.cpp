@@ -372,7 +372,7 @@ void CClient_Duel::ReceiveStatus(RakNet::Packet* packet)
         //番号で確認
         for (auto& iter : My::CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList())
         {
-            //消えた番号より大きいならずらす
+            //番号を確認
             if (iter->GetPlayerIdx() == id)
             {
                 iter->SetStatus(param.Status);
@@ -430,10 +430,13 @@ void CClient_Duel::SendMyStatus(RakNet::RakPeerInterface* peer)
     bsOut.Write((RakNet::MessageID)CRakNet::GameMessages::ID_DUEL_MESSAGE_STATUS);
 
     //リストの周回
-    for (auto iter : m_DuelPlayerList)
+    for (auto& iter : m_DuelPlayerList)
     {
         //周回
         if (iter.Param.nIndex != My::CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx()) continue;
+
+        //ステータスの上書き
+        iter.Status = My::CActiveSceneManager::GetInstance()->GetPlayer()->GetStatus();
 
         //書き出し
         bsOut.Write(iter);

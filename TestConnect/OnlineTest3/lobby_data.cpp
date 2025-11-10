@@ -194,7 +194,7 @@ void CLobby_Data::Ready(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
         bsOut.Write(iter->Getready());
     }
 
-    // 全クライアントにブロードキャスト
+    //全クライアントにブロードキャスト
     peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 }
 
@@ -315,15 +315,29 @@ void CLobby_Data::AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
     if (m_LobbyPlayerList.size() >= 4) return;
 
     //新しく情報を取得
-    CLobby_Player* pPlayer = new CLobby_Player;
+    CLobby_Player* pPlayer = new CLobby_Player; //保存用
+    CLobby_Player::LobbyData Data;              //送信用
 
     //パラメータの設定
-    pPlayer->SetIndex(m_LobbyPlayerList.size()); //番号
-    pPlayer->SetRakNetID(packet->guid);          //RakNetID
-    pPlayer->SetTag(CPlayer::TAG_CPU);           //タグ
+    pPlayer->SetIndex(m_LobbyPlayerList.size());                 //番号
+    pPlayer->SetRakNetID(static_cast<RakNet::RakNetGUID>(-1));   //RakNetID
+    pPlayer->SetTag(CPlayer::TAG_CPU);                           //タグ
+    pPlayer->SetReady(true);                                     //準備フラグ
 
     //リストに保存
     m_LobbyPlayerList.push_back(pPlayer);
 
+    //送信用のデータを代入
+    Data.BaceData.nIndex = pPlayer->GetIndex();
+    Data.BaceData.RakNetID = pPlayer->GetRakNetID();
+    Data.BaceData.Tag = pPlayer->GetTag();
+    Data.isReady = pPlayer->GetTag();
+
     //TODO : 以下に送信の処理を追加
+    RakNet::BitStream bsOut;
+    bsOut.Write((RakNet::MessageID)ID_LOBY_MESSAGE_ADD_ENEMY);
+    bsOut.Write(Data);
+
+    //全クライアントにブロードキャスト
+    peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 }

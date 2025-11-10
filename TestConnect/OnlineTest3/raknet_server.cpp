@@ -173,6 +173,11 @@ void CRakNet_Server::Communication(RakNet::RakPeerInterface* peer)
                 m_pRakNetData->SendStatus(packet, peer);
                 break;
 
+            case CRakNet_Data::GameMessages::ID_DUEL_MESSAGE_STATUS:
+
+                m_pRakNetData->ReceiveStatus(packet, peer);
+                break;
+
             default:
                 std::cout << "Message with identifier " << (int)packet->data[0] << " has arrived.\n";
                 break;

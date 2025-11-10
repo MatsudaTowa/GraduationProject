@@ -373,19 +373,44 @@ void CClient_Lobby::SendStartSign(RakNet::RakPeerInterface* peer)
 }
 
 //=====================================
-//開始の合図を送信
+//敵の追加を送信
 //=====================================
 void CClient_Lobby::SendAddEnemy(RakNet::RakPeerInterface* peer)
 {
     ////データの作成
-    //RakNet::BitStream bsOut;
-    //bsOut.Write((RakNet::MessageID)CRakNet::GameMessages::ID_LOBY_MESSAGE_ADD_ENEMY);
-    //RakNet::SystemAddress server_address = peer->GetSystemAddressFromIndex(0);
+    RakNet::BitStream bsOut;
+    bsOut.Write((RakNet::MessageID)CRakNet::GameMessages::ID_LOBY_MESSAGE_ADD_ENEMY);
+    RakNet::SystemAddress server_address = peer->GetSystemAddressFromIndex(0);
 
-    ////サーバーの確認
-    //if (server_address != RakNet::UNASSIGNED_SYSTEM_ADDRESS)
-    //{
-    //    // 全クライアントにブロードキャスト
-    //    peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, peer->GetSystemAddressFromIndex(0), false);
-    //}
+    //サーバーの確認
+    if (server_address != RakNet::UNASSIGNED_SYSTEM_ADDRESS)
+    {
+        // 全クライアントにブロードキャスト
+        peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, peer->GetSystemAddressFromIndex(0), false);
+    }
+}
+
+//=====================================
+//敵の追加を受信
+//=====================================
+void CClient_Lobby::ReceiveAddEnemy(RakNet::Packet* packet)
+{
+    // 受信側
+    RakNet::BitStream bsIn(packet->data, packet->length, false);
+
+    //人数を取得
+    unsigned char messageId;                //メッセージ
+    CClient_Lobby::LobbyPlayerParam Param;  //パラメータ
+
+    //読み取り
+    bsIn.Read(messageId);
+    bsIn.Read(Param);
+
+    //すでに最大人数いるなら消す
+    if (m_LobbyPlayerList.size() >= 4) return;
+
+    m_LobbyPlayerList.push_back(Param);     //追加
+
+    //敵の生成
+    My::CEnemy::Create(VEC3_RESET_ZERO, VEC3_RESET_ZERO, m_LobbyPlayerList.size() - 1);
 }

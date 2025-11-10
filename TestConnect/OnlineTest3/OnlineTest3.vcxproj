@@ -142,6 +142,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="card.h" />
+    <ClInclude Include="card_client.h" />
     <ClInclude Include="duel_data.h" />
     <ClInclude Include="duel_player.h" />
     <ClInclude Include="lobby_data.h" />
@@ -306,6 +308,8 @@
     <ClInclude Include="Source\_FindFirst.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="card.cpp" />
+    <ClCompile Include="card_client.cpp" />
     <ClCompile Include="duel_data.cpp" />
     <ClCompile Include="lobby_data.cpp" />
     <ClCompile Include="main.cpp" />

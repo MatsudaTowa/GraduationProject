@@ -379,6 +379,9 @@ void CDuel_Data::ReceiveStatus(RakNet::Packet* packet, RakNet::RakPeerInterface*
     //送信するかの確認
     if (!IsSendUpdate(packet)) return;
 
+    //受信数の初期化
+    m_nReceiveNum = 0;
+
     //データの作成
     RakNet::BitStream bsOut;
     bsOut.Write((RakNet::MessageID)GameMessages::ID_DUEL_MESSAGE_STATUS);
@@ -437,8 +440,11 @@ bool CDuel_Data::IsSendUpdate(RakNet::Packet* packet)
         }
     }
 
+    //テスト
+    std::cout << PlayerNum << "/" << m_nReceiveNum << "\n";
+
     //プレイヤーの数だけ受信できていないなら許可しない
     if (m_nReceiveNum != PlayerNum) return false;
 
-    return false;
+    return true;
 }

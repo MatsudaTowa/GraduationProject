@@ -137,11 +137,11 @@ void CRakNet::Communication(RakNet::RakPeerInterface* peer)
             m_Client->Delete(packet);
             break;
 
-        //case ID_LOBY_MESSAGE_ADD_ENEMY:
+        case ID_LOBY_MESSAGE_ADD_ENEMY:
 
-        //    //“G‚Ì’Ç‰Áˆ—
-        //    m_Client->Delete(packet);
-        //    break;
+            //“G‚Ì’Ç‰Áˆ—
+            m_Client->ReceiveAddEnemy(packet);
+            break;
 
         case ID_LOBY_MESSAGE_SEND_READY:
         
@@ -174,6 +174,7 @@ void CRakNet::Communication(RakNet::RakPeerInterface* peer)
 
             case ID_DUEL_MESSAGE_STATUS:
             m_Client->ReceiveStatus(packet);
+            m_isUpdate = true;
             break;
 
         case ID_UNCONNECTED_PONG:
