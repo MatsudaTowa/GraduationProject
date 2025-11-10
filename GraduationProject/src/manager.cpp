@@ -6,6 +6,7 @@
 //=============================================
 #include "manager.h"
 #include "renderer.h"
+#include "card_client.h"
 #include "EffectManager.h"	// エフェクトマネージャー
 
 /**
@@ -141,6 +142,7 @@ HRESULT My::CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 		m_pFontManager->Init();
 	}
 
+	CCard_Client::GetInstance()->Init();
 
 	SetMode(CScene::MODE::MODE_TITLE);
 
@@ -221,6 +223,8 @@ void My::CManager::Uninit()
 	}
 
 	CObject::ReleaseAll();
+
+	CCard_Client::GetInstance()->Uninit();
 }
 
 /**
