@@ -4,8 +4,6 @@
     <ClCompile Include="src\billboard.cpp" />
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\camera_state.cpp" />
-    <ClCompile Include="src\card.cpp" />
-    <ClCompile Include="src\card_state.cpp" />
     <ClCompile Include="src\colision.cpp" />
     <ClCompile Include="src\energy_charge.cpp" />
     <ClCompile Include="src\energy_frame.cpp" />
@@ -49,7 +47,6 @@
     <ClCompile Include="src\useful.cpp" />
     <ClCompile Include="src\client.cpp" />
     <ClCompile Include="src\raknet.cpp" />
-    <ClCompile Include="src\card_frame.cpp" />
     <ClCompile Include="src\active_scene_character.cpp">
       <Filter>character</Filter>
     </ClCompile>
@@ -92,9 +89,6 @@
     <ClCompile Include="src\ready_txt.cpp">
       <Filter>active_scene\lobby</Filter>
     </ClCompile>
-    <ClCompile Include="src\card_attack.cpp" />
-    <ClCompile Include="src\card_deffence.cpp" />
-    <ClCompile Include="src\card_assist.cpp" />
     <ClCompile Include="src\font.cpp" />
     <ClCompile Include="src\client_lobby.cpp">
       <Filter>active_scene</Filter>
@@ -124,7 +118,6 @@
     <ClCompile Include="src\active_scene.cpp">
       <Filter>active_scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\card_strategy.cpp" />
     <ClCompile Include="src\zone.cpp">
       <Filter>zone\base</Filter>
     </ClCompile>
@@ -139,14 +132,47 @@
     </ClCompile>
     <ClCompile Include="src\EffectManager.cpp" />
     <ClCompile Include="src\Effectr.cpp" />
-    <ClCompile Include="src\card_client.cpp" />
+    <ClCompile Include="src\card_client.cpp">
+      <Filter>card</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_frame.cpp">
+      <Filter>card</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_state.cpp">
+      <Filter>card</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_strategy.cpp">
+      <Filter>card</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_attack.cpp">
+      <Filter>card\attack</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_assist.cpp">
+      <Filter>card\assist</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_deffence.cpp">
+      <Filter>card\defence</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card.cpp">
+      <Filter>card\base</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_assist_debuff.cpp">
+      <Filter>card\assist\debuff</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_assist_debuff_death.cpp">
+      <Filter>card\assist\debuff\death</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_assist_buff.cpp">
+      <Filter>card\assist\buff</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_assist_buff_heal.cpp">
+      <Filter>card\assist\buff\heal</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
     <ClInclude Include="src\camera.h" />
     <ClInclude Include="src\camera_state.h" />
-    <ClInclude Include="src\card.h" />
-    <ClInclude Include="src\card_state.h" />
     <ClInclude Include="src\colision.h" />
     <ClInclude Include="src\count.h" />
     <ClInclude Include="src\energy_charge.h" />
@@ -191,7 +217,6 @@
     <ClInclude Include="src\useful.h" />
     <ClInclude Include="src\client.h" />
     <ClInclude Include="src\raknet.h" />
-    <ClInclude Include="src\card_frame.h" />
     <ClInclude Include="src\active_scene_character.h">
       <Filter>character</Filter>
     </ClInclude>
@@ -234,9 +259,6 @@
     <ClInclude Include="src\ready_txt.h">
       <Filter>active_scene\lobby</Filter>
     </ClInclude>
-    <ClInclude Include="src\card_attack.h" />
-    <ClInclude Include="src\card_deffence.h" />
-    <ClInclude Include="src\card_assist.h" />
     <ClInclude Include="src\font.h" />
     <ClInclude Include="src\client_lobby.h">
       <Filter>active_scene</Filter>
@@ -266,7 +288,6 @@
     <ClInclude Include="src\condition.h">
       <Filter>character\condition</Filter>
     </ClInclude>
-    <ClInclude Include="src\card_strategy.h" />
     <ClInclude Include="src\zone.h">
       <Filter>zone\base</Filter>
     </ClInclude>
@@ -281,7 +302,42 @@
     </ClInclude>
     <ClInclude Include="src\Effect.h" />
     <ClInclude Include="src\EffectManager.h" />
-    <ClInclude Include="src\card_client.h" />
+    <ClInclude Include="src\card_client.h">
+      <Filter>card</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_frame.h">
+      <Filter>card</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_state.h">
+      <Filter>card</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_strategy.h">
+      <Filter>card</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_attack.h">
+      <Filter>card\attack</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_assist.h">
+      <Filter>card\assist</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_deffence.h">
+      <Filter>card\defence</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card.h">
+      <Filter>card\base</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_assist_debuff.h">
+      <Filter>card\assist\debuff</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_assist_debuff_death.h">
+      <Filter>card\assist\debuff\death</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_assist_buff.h">
+      <Filter>card\assist\buff</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_assist_buff_heal.h">
+      <Filter>card\assist\buff\heal</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">
@@ -316,6 +372,36 @@
     </Filter>
     <Filter Include="zone\deck">
       <UniqueIdentifier>{1c75ae80-a79b-49ef-96e6-2aabd3d40622}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="card">
+      <UniqueIdentifier>{3c140a99-ffa4-4a6a-9dbb-dc067b280e3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="card\attack">
+      <UniqueIdentifier>{cdaf7bcb-eb1c-4c4c-8b49-e519e9b707e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="card\assist">
+      <UniqueIdentifier>{72e69661-4c3a-42ef-b5da-27fe783c8b68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="card\defence">
+      <UniqueIdentifier>{1fa71e5f-3e17-4dce-bc59-67a619ba7602}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="card\base">
+      <UniqueIdentifier>{89bb330a-b789-48b4-a667-5043cd96cff4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="card\assist\buff">
+      <UniqueIdentifier>{94034eb9-8c19-46cc-943f-f15c792c1fb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="card\assist\debuff">
+      <UniqueIdentifier>{1dc116e9-fe57-43f0-ab1c-b881f25d8be1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="card\assist\obstruct">
+      <UniqueIdentifier>{a8168d5a-51aa-4474-a01b-82e7846a1bb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="card\assist\buff\heal">
+      <UniqueIdentifier>{860ce3f4-5018-4660-b859-10360ee7640c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="card\assist\debuff\death">
+      <UniqueIdentifier>{c1dcdc20-1065-4022-a6b9-e788c01390f8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
