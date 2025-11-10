@@ -1,0 +1,8 @@
+Filepas = data/Flame.efk
+POS = 0 0 0
+ROT = 0 0 0
+SCL = 10 10 10
+COL = ÿ ÿ ÿ ÿ
+LOOP_INTEWRVAL = 300
+LOOP = 1
+LIFE = 900
