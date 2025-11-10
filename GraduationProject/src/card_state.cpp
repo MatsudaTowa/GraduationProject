@@ -167,6 +167,9 @@ void My::CCardStateStay::Init(CCard* cpy)
 
 		// エナジーを設定
 		CActiveSceneManager::GetInstance()->GetPlayer()->SetStatus(status);
+
+		// ターゲットアローを生成
+		cpy->SetTargetArrow(CTargetArrow::Create(CInputMouse::AREA::DOWN, cpy->GetTarget()));
 	}
 
 	

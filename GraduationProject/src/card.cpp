@@ -324,8 +324,6 @@ bool My::CCard::CardCastToMouse()
 
 			RegistTargetList(itr);
 		}
-
-		m_pTargetArrow = CTargetArrow::Create(CInputMouse::AREA::DOWN, GetTarget());
 	}
 
 	return false;

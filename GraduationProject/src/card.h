@@ -182,6 +182,10 @@ namespace My
 
 		//リストの取得
 		inline std::list<CActiveSceneCharacter*> GetTargetPlayerList() { return m_pTargetPlayerList; }	
+
+		// ターゲットアローを設定
+		inline void SetTargetArrow(CTargetArrow* pTA) { m_pTargetArrow = pTA; }
+
 		//inline CCard* GetTop() { return m_pTop; }
 		//inline CCard* GetPrev() { return m_pPrev; }
 
