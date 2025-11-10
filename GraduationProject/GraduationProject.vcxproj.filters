@@ -139,6 +139,7 @@
     </ClCompile>
     <ClCompile Include="src\EffectManager.cpp" />
     <ClCompile Include="src\Effectr.cpp" />
+    <ClCompile Include="src\card_client.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -280,6 +281,7 @@
     </ClInclude>
     <ClInclude Include="src\Effect.h" />
     <ClInclude Include="src\EffectManager.h" />
+    <ClInclude Include="src\card_client.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">
