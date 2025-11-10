@@ -290,7 +290,7 @@ void My::CEdit::Edit()
 		if (ImGui::Button(u8"追加"))
 		{
 			// 新規カードをパックに追加
-			cards.push_back(Card{ u8"名前なし",u8"名前なし", 0, 0, 0, 0, 0, CardType::ATTACK, RARITY::NONE_RARITY,AssistType::NONE_ASSIST,
+			cards.push_back(Card{ u8"名前なし",u8"名前なし", 0, 0, 0, 0, 0,false,0, CardType::ATTACK, RARITY::NONE_RARITY,AssistType::NONE_ASSIST,
 								  AttackType::NONE_ATTACK, DefenseType::NONE_DEFENSE, BuffType::NONE_BUFF,HealType::NONE_HEAL, "", nullptr});
 			m_Select = (int)cards.size() - 1;
 		}
@@ -424,6 +424,13 @@ void My::CEdit::Save()
 			j["cost"] = card.cost;								// コスト
 			j["rarity"] = static_cast<int>(card.raritytype);	// レアリティ
 			j["type"] = static_cast<int>(card.maintype);		// カードのメインタイプ
+
+			j["isOneTime"] = card.isOneTime;
+
+			if (card.isOneTime == false)
+			{// 効果が単発じゃないとき
+				j["time"] = card.time;
+			}
 
 			switch (card.maintype)
 			{
@@ -630,6 +637,12 @@ void My::CEdit::Load()
 		card.cost = j.value("cost", 0);													// コスト
 		card.raritytype = static_cast<My::RARITY>(j.value("rarity", 0));				// レアリティ
 		card.maintype = static_cast<My::CardType>(j.value("type", 0));					// メインタイプ
+		card.isOneTime = j.value("isOneTime", false);									// 単発かどうか
+
+		if (card.isOneTime == false)
+		{// 単発じゃないとき
+			card.time = j.value("time", 0);	// 発動時間
+		}
 
 		switch (card.maintype)
 		{
@@ -698,7 +711,7 @@ void My::CEdit::Load()
 }
 
 /**
-* @brief バック名ロード処理
+* @brief パック名ロード処理
 */
 void My::CEdit::LoadPackName()
 {
@@ -1125,6 +1138,8 @@ void My::CEdit::SelectType(int PackID, int ID)
 	}
 	else if (card.maintype == ASSIST)
 	{
+		SetActiveTime(PackID, ID);
+
 		SetAssist(PackID, ID);
 	}
 
@@ -1218,6 +1233,58 @@ void My::CEdit::SetAssist(int PackID, int ID)
 	ImGui::PopID();
 	ImGui::PopID();
 	ImGui::PopID();
+}
+
+/**
+* @brief 効果発動時間設定
+* @param [in]パック番号
+* @param [in]カード番号
+*/
+void My::CEdit::SetActiveTime(int PackID, int ID)
+{
+	// 範囲チェック
+	if (!IsValidPackIndex((size_t)PackID) || !IsValidCardIndex((size_t)PackID, (size_t)ID))
+	{
+		return;
+	}
+
+	Card& card = m_Pack[PackID].cards[ID];
+
+	if (card.time < 0)
+	{// 変な値が入らないように初期化
+		card.time = 0;
+	}
+
+	// ユニークな ImGui ID を構築（パック＋カード＋機能ごと）
+	ImGui::PushID((int)PackID);
+	ImGui::PushID(ID);
+	ImGui::PushID("assist");
+
+	ImGui::Text(u8"効果が単発かどうか");
+
+	int mode = card.isOneTime ? 0 : 1;	// フラグ設定
+
+	if (ImGui::RadioButton(u8"単発", mode == 0))
+	{
+		card.isOneTime = true;
+	}
+
+	if (ImGui::RadioButton(u8"単発じゃない", mode == 1))
+	{
+		card.isOneTime = false;
+	}
+
+	if (card.isOneTime == false)
+	{
+		ImGui::Text(u8"効果の発動時間を設定してください");
+
+		ImGui::InputInt(u8"発動時間", &card.time);
+	}
+
+	ImGui::PopID();
+	ImGui::PopID();
+	ImGui::PopID();
+
 }
 
 /**

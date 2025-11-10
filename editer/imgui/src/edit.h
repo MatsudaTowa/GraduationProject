@@ -99,6 +99,9 @@ namespace My
 		int guard;									// ガード値
 		int counter;								// 反撃値
 		int heal;									// 回復値
+		bool isOneTime;								// 効果の発動時間(true = 単発,false = 単発じゃない)
+		int time;									// 発動時間
+
 		CardType maintype;							// カードの種類
 		RARITY raritytype;							// レアリティの種類
 		AssistType assisttype;						// アシストの種類
@@ -214,6 +217,13 @@ namespace My
 		* @param [in]カード番号
 		*/
 		void SetAssist(int packID,int ID);
+
+		/**
+		* @brief 効果の発動時間
+		* @param [in]パック番号
+		* @param [in]カード番号
+		*/
+		void SetActiveTime(int PackID, int ID);
 
 		/**
 		* @brief 攻撃設定処理
