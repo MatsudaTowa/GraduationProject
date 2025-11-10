@@ -168,6 +168,18 @@
     <ClCompile Include="src\card_assist_buff_heal.cpp">
       <Filter>card\assist\buff\heal</Filter>
     </ClCompile>
+    <ClCompile Include="src\cemetery_zone.cpp">
+      <Filter>zone\cemetery</Filter>
+    </ClCompile>
+    <ClCompile Include="src\field_zone.cpp">
+      <Filter>zone\field</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hand_zone.cpp">
+      <Filter>zone\hand</Filter>
+    </ClCompile>
+    <ClCompile Include="src\wait_zone.cpp">
+      <Filter>zone\wait</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -338,6 +350,18 @@
     <ClInclude Include="src\card_assist_buff_heal.h">
       <Filter>card\assist\buff\heal</Filter>
     </ClInclude>
+    <ClInclude Include="src\cemetery_zone.h">
+      <Filter>zone\cemetery</Filter>
+    </ClInclude>
+    <ClInclude Include="src\field_zone.h">
+      <Filter>zone\field</Filter>
+    </ClInclude>
+    <ClInclude Include="src\hand_zone.h">
+      <Filter>zone\hand</Filter>
+    </ClInclude>
+    <ClInclude Include="src\wait_zone.h">
+      <Filter>zone\wait</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">
@@ -402,6 +426,18 @@
     </Filter>
     <Filter Include="card\assist\debuff\death">
       <UniqueIdentifier>{c1dcdc20-1065-4022-a6b9-e788c01390f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="zone\cemetery">
+      <UniqueIdentifier>{8cb04ae9-6320-4716-974a-325f41d192a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="zone\field">
+      <UniqueIdentifier>{29e69845-c778-4e45-af80-a3f4708cb04f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="zone\hand">
+      <UniqueIdentifier>{6b0d6324-9df9-402a-ba9a-f52ea749723f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="zone\wait">
+      <UniqueIdentifier>{87842a2f-d099-4e39-ab0b-9f67a31f890a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

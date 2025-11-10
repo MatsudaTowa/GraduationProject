@@ -12,7 +12,8 @@
 * @brief コンストラクタ
 */
 My::CZoneManager::CZoneManager():
-	m_pDeck(nullptr)
+	m_pDeck(nullptr),
+	m_pCemetery(nullptr)
 {
 
 }
@@ -62,8 +63,18 @@ void My::CZoneManager::Update()
 
 /**
 * @brief 山札のポインタ取得
+* @return デッキのポインタ
 */
 My::CDeck* My::CZoneManager::GetDeck()
 {
-	return nullptr;
+	return m_pDeck;
+}
+
+/**
+* @brief 墓地のポインタ取得
+* @return 墓地のポインタ
+*/
+My::CCemetery* My::CZoneManager::GetCemetery()
+{
+	return m_pCemetery;
 }

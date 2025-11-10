@@ -10,6 +10,7 @@
 
 // include
 #include "deck.h"
+#include "cemetery_zone.h"
 
 /** @brief My 名前空間 */
 namespace My
@@ -51,8 +52,14 @@ namespace My
 		*/
 		CDeck* GetDeck();
 
+		/**
+		* @brief 墓地のポインタ取得
+		*/
+		CCemetery* GetCemetery();
+
 	private:
 		CDeck* m_pDeck;	// 山札のポインタ
+		CCemetery* m_pCemetery;	// 墓地のポインタ
 	};
 }
 #endif

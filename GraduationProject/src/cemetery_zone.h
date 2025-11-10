@@ -1,12 +1,11 @@
 //===========================================================================================================================================================
 // 
-// ゾーンの処理 [deck.h]
+// 墓地ゾーンの処理 [cemetery_zone.h]
 // Author : Kasai Keisuke
 // 
 //===========================================================================================================================================================
-
-#ifndef _DECK_H_
-#define _DECK_H_
+#ifndef _CEMETERY_ZONE_H_
+#define _CEMRTERY_ZONE_H_
 
 // include
 #include "zone.h"
@@ -15,31 +14,26 @@
 namespace My
 {
 	/**
-	* @brief 山札のクラス
+	* @brief 墓地のクラス
 	*/
-	class CDeck : public CZone
+	class CCemetery : public CZone
 	{
 	public:
 		/**
 		* @brief コンストラクタ
 		*/
-		CDeck();
+		CCemetery();
 
 		/**
 		* @brief デストラクタ
 		*/
-		~CDeck();
+		~CCemetery()override;
 
 		/**
-		* @brief めくる処理
-		* @param [in]枚数
+		* @brief 墓地にカードを送る
+		* @param [in]カードのポインタ
 		*/
-		void Flip(int sheet);
-
-		/**
-		* @brief シャッフル処理
-		*/
-		void Shuffle();
+		void SendToGrave(CCard* pCard);
 
 	};
 }

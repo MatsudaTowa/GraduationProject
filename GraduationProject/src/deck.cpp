@@ -30,6 +30,25 @@ My::CDeck::~CDeck()
 */
 void My::CDeck::Flip(int sheet)
 {
+    // 変数の初期化
+    int count = 0;
+
+    for (CCard* card : GetList())
+    {
+        if (count >= sheet)
+        {// めくり切ったら
+            break;
+        }
+
+        if (card)
+        {
+            SetCardFaceUp(card);
+
+            ++count;
+        }
+    }
+
+    //TODO:のちのちめくったカードを選択する処理を追加
 
 }
 
@@ -38,5 +57,18 @@ void My::CDeck::Flip(int sheet)
 */
 void My::CDeck::Shuffle()
 {
+    std::list<CCard*>& list = GetListRef();
+
+    std::vector<CCard*> temp(list.begin(), list.end());
+
+    // シードの生成
+    std::random_device rd;
+    std::mt19937 g(rd());
+
+    // シャッフルさせる
+    std::shuffle(temp.begin(), temp.end(), g);
+
+    // シャッフル結果を代入
+    list.assign(temp.begin(), temp.end());
 
 }
