@@ -8,7 +8,7 @@ namespace
 //===========================================================================================================
 // コンストラクタ
 //===========================================================================================================
-My::CTargetArrow::CTargetArrow(int nPriority):CObject2D(nPriority)
+My::CTargetArrow::CTargetArrow(int nPriority):CObject2D_Anim(nPriority)
 {
 }
 
@@ -28,24 +28,24 @@ HRESULT My::CTargetArrow::Init()
 	SetPos({ SCREEN_WIDTH * 0.5f,SCREEN_HEIGHT * 0.5f ,0.0f });
 
 	// サイズの倍率
-	float size_mag = 1.2f;
+	float size_mag = 10.0f;
 
 	// サイズ設定
-	SetSize({ 10* size_mag,8* size_mag });
+	SetSize({ 5* size_mag,15* size_mag });
 
 	// カラー設定
 	SetColor(COLOR_WHITE);
 
 	//テクスチャ登録
 	CTexture* pTexture = GET_TEXTURE;
-	CObject2D::BindTexture(pTexture->GetAddress(pTexture->Regist(&TEX_NAME)));	// テクスチャ設定
+	CObject2D_Anim::BindTexture(pTexture->GetAddress(pTexture->Regist(&TEX_NAME)));	// テクスチャ設定
 
 	//頂点設定
 	SetVtx();
-	SetAngleLength();
 
+	SetAnimFrame(1);
 
-	CObject2D::Init();
+	CObject2D_Anim::Init();
 
 	return S_OK;
 }
@@ -55,7 +55,7 @@ HRESULT My::CTargetArrow::Init()
 //===========================================================================================================
 void My::CTargetArrow::Uninit()
 {
-	CObject2D::Uninit();
+	CObject2D_Anim::Uninit();
 }
 
 //===========================================================================================================
@@ -63,7 +63,9 @@ void My::CTargetArrow::Uninit()
 //===========================================================================================================
 void My::CTargetArrow::Update()
 {
-	
+	AnimationTex(GetTexPos(), { 1,5.03f });
+
+	SetAngleLength();
 }
 
 //===========================================================================================================
@@ -71,7 +73,7 @@ void My::CTargetArrow::Update()
 //===========================================================================================================
 void My::CTargetArrow::Draw()
 {
-	CObject2D::Draw();
+	CObject2D_Anim::Draw();
 }
 
 //===========================================================================================================
@@ -98,19 +100,19 @@ D3DXVECTOR2 My::CTargetArrow::SetTargetPos(D3DXVECTOR2& target, int targetnum)
 	switch (targetnum)
 	{
 	case CInputMouse::UP:
-		target = up;
+		target = arrow_up;
 		break;
 
 	case CInputMouse::DOWN:
-		target = down;
+		target = arrow_down;
 		break;
 
 	case CInputMouse::LEFT:
-		target = right;
+		target = arrow_right;
 		break;
 
 	case CInputMouse::RIGHT:
-		target = left;
+		target = arrow_left;
 		break;
 	}
 
@@ -138,7 +140,7 @@ void My::CTargetArrow::SetAngleLength()
 
 	// 長さを設定
 	float length = FLOAT_ZERO;	// 初期化
-	length = sqrtf(dx * dx + dy * dy) * 0.5f;	// 設定
+	length = sqrtf(dx * dx + dy * dy);	// 設定
 
 	//頂点設定
 	SetVtx(angle, length);

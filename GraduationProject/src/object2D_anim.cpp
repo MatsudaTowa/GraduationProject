@@ -70,6 +70,7 @@ void My::CObject2D_Anim::AnimationTex(D3DXVECTOR2 tex_pos, D3DXVECTOR2 tex_move)
 	{//フレーム数が達したら
 		//テクスチャをずらす
 		tex_pos.x += tex_move.x;
+		tex_pos.y += tex_move.y;
 		m_tex_move = tex_move;
 
 		m_nAnimCnt = INT_ZERO;
