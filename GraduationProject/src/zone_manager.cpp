@@ -32,6 +32,7 @@ My::CZoneManager::~CZoneManager()
 */
 HRESULT My::CZoneManager::Init()
 {
+	// デッキのポインタ生成
 	if (m_pDeck == nullptr)
 	{
 		m_pDeck = new CDeck();
@@ -42,6 +43,11 @@ HRESULT My::CZoneManager::Init()
 		m_pDeck->Init();
 	}
 
+	// 墓地のポインタ生成
+	if (m_pCemetery == nullptr)
+	{
+		m_pCemetery = new CCemeteryZone();
+	}
 	return S_OK;
 }
 
@@ -74,7 +80,7 @@ My::CDeck* My::CZoneManager::GetDeck()
 * @brief 墓地のポインタ取得
 * @return 墓地のポインタ
 */
-My::CCemetery* My::CZoneManager::GetCemetery()
+My::CCemeteryZone* My::CZoneManager::GetCemetery()
 {
 	return m_pCemetery;
 }

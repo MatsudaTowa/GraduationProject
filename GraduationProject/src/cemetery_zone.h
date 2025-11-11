@@ -16,18 +16,18 @@ namespace My
 	/**
 	* @brief 墓地のクラス
 	*/
-	class CCemetery : public CZone
+	class CCemeteryZone : public CZone
 	{
 	public:
 		/**
 		* @brief コンストラクタ
 		*/
-		CCemetery();
+		CCemeteryZone();
 
 		/**
 		* @brief デストラクタ
 		*/
-		~CCemetery()override;
+		~CCemeteryZone()override;
 
 		/**
 		* @brief 墓地にカードを送る

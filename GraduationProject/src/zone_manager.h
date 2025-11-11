@@ -9,7 +9,7 @@
 #define _ZONE_MANAGER_H_
 
 // include
-#include "deck.h"
+#include "deck_zone.h"
 #include "cemetery_zone.h"
 
 /** @brief My 名前空間 */
@@ -55,11 +55,11 @@ namespace My
 		/**
 		* @brief 墓地のポインタ取得
 		*/
-		CCemetery* GetCemetery();
+		CCemeteryZone* GetCemetery();
 
 	private:
 		CDeck* m_pDeck;	// 山札のポインタ
-		CCemetery* m_pCemetery;	// 墓地のポインタ
+		CCemeteryZone* m_pCemetery;	// 墓地のポインタ
 	};
 }
 #endif

@@ -189,7 +189,7 @@
     <ClCompile Include="src\condition.cpp" />
     <ClCompile Include="src\death_icon.cpp" />
     <ClCompile Include="src\debuff.cpp" />
-    <ClCompile Include="src\deck.cpp" />
+    <ClCompile Include="src\deck_zone.cpp" />
     <ClCompile Include="src\duel_manager.cpp" />
     <ClCompile Include="src\EffectManager.cpp" />
     <ClCompile Include="src\Effectr.cpp" />
@@ -292,7 +292,7 @@
     <ClInclude Include="src\count.h" />
     <ClInclude Include="src\death_icon.h" />
     <ClInclude Include="src\debuff.h" />
-    <ClInclude Include="src\deck.h" />
+    <ClInclude Include="src\deck_zone.h" />
     <ClInclude Include="src\duel_manager.h" />
     <ClInclude Include="src\Effect.h" />
     <ClInclude Include="src\EffectManager.h" />

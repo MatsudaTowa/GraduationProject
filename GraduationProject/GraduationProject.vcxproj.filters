@@ -124,7 +124,7 @@
     <ClCompile Include="src\zone_manager.cpp">
       <Filter>zone\manager</Filter>
     </ClCompile>
-    <ClCompile Include="src\deck.cpp">
+    <ClCompile Include="src\deck_zone.cpp">
       <Filter>zone\deck</Filter>
     </ClCompile>
     <ClCompile Include="src\duel_manager.cpp">
@@ -306,7 +306,7 @@
     <ClInclude Include="src\zone_manager.h">
       <Filter>zone\manager</Filter>
     </ClInclude>
-    <ClInclude Include="src\deck.h">
+    <ClInclude Include="src\deck_zone.h">
       <Filter>zone\deck</Filter>
     </ClInclude>
     <ClInclude Include="src\duel_manager.h">

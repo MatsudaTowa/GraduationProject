@@ -11,7 +11,7 @@
 /**
 * @brief コンストラクタ
 */
-My::CCemetery::CCemetery()
+My::CCemeteryZone::CCemeteryZone()
 {
 
 }
@@ -19,7 +19,7 @@ My::CCemetery::CCemetery()
 /**
 * @brief デストラクタ
 */
-My::CCemetery::~CCemetery()
+My::CCemeteryZone::~CCemeteryZone()
 {
 
 }
@@ -27,7 +27,7 @@ My::CCemetery::~CCemetery()
 /**
 * @brief 墓地に送る
 */
-void My::CCemetery::SendToGrave(CCard* pCard)
+void My::CCemeteryZone::SendToGrave(CCard* pCard)
 {
 	// 追加処理
 	AddCard(pCard);
