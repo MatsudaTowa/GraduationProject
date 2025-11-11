@@ -177,6 +177,7 @@
     <ClCompile Include="src\card_client.cpp" />
     <ClCompile Include="src\card_deffence.cpp" />
     <ClCompile Include="src\card_frame.cpp" />
+    <ClCompile Include="src\card_manager.cpp" />
     <ClCompile Include="src\card_state.cpp" />
     <ClCompile Include="src\card_strategy.cpp" />
     <ClCompile Include="src\cemetery_zone.cpp" />
@@ -279,6 +280,7 @@
     <ClInclude Include="src\card_client.h" />
     <ClInclude Include="src\card_deffence.h" />
     <ClInclude Include="src\card_frame.h" />
+    <ClInclude Include="src\card_manager.h" />
     <ClInclude Include="src\card_state.h" />
     <ClInclude Include="src\card_strategy.h" />
     <ClInclude Include="src\cemetery_zone.h" />

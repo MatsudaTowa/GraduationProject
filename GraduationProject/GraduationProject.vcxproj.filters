@@ -180,6 +180,9 @@
     <ClCompile Include="src\wait_zone.cpp">
       <Filter>zone\wait</Filter>
     </ClCompile>
+    <ClCompile Include="src\card_manager.cpp">
+      <Filter>card</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -361,6 +364,9 @@
     </ClInclude>
     <ClInclude Include="src\wait_zone.h">
       <Filter>zone\wait</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_manager.h">
+      <Filter>card</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
