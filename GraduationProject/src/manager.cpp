@@ -248,6 +248,8 @@ void My::CManager::Update()
 	m_pMouse->Update();
 	m_pPad->Update();
 
+	//カードサーバーとの受信
+	CCard_Client::GetInstance()->Communication();
 	CObject::UpdateAll();
 
 	//シーンの更新

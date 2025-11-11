@@ -13,6 +13,7 @@
 #include "RakPeerInterface.h"
 #include "MessageIdentifiers.h"
 #include "BitStream.h"
+#include "card_assist.h"
 
 //カードクライアントのクラス
 class CCard_Client
@@ -175,15 +176,20 @@ public:
 	void RequestCard(int id);						//カードリクエスト
 	void RequestAllCard();							//全カードリクエスト
 	void ReceiveCardInfo(RakNet::Packet* packet);	//カード情報の受信
+	void ReceiveAllCardInfo(RakNet::Packet* packet);//全カード情報の受信
 
 private:
 
 	//定数
 	static constexpr int PORT{ 22334 };	//ポート番号
+	static constexpr int PRIORITY{ 27 };	//カードのプライオリティ
 
 	//関数
-	CCard_Client();												//コンストラクタ
+	CCard_Client();														//コンストラクタ
 	void Send(RakNet::RakPeerInterface* peer, RakNet::BitStream* out);	//送信処理
+	void RegistCard(Param param);										//カードの登録
+	My::CCardAssist* LoadAssistCard(Param param);									//アシストカードの読み込み
+
 
 	//メンバ変数
 	RakNet::Packet* m_pPacket;			//パケット

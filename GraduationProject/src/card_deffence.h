@@ -84,10 +84,10 @@ namespace My
 		inline void SetDefenceValue(int defence_value) { m_nDefenceValue = defence_value; }
 
 		/**
-		 * @brief カウンターの値取得
+		 * @brief カウンターの値設定
 		 * @param カウンターの値
 		 */
-		inline void GetCounterValue(int counter_value) { m_nCounterValue = counter_value; }
+		inline void SetCounterValue(int counter_value) { m_nCounterValue = counter_value; }
 
 	private:
 		DefenseType m_DefenceType;

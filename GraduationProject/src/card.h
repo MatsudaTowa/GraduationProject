@@ -48,7 +48,9 @@ namespace My
 
 		struct BaseStatus
 		{
-			std::string name;					// カード名
+			int nPackID;						  // パック番号
+			int nCardID;						  // カード番号
+			std::string name;					  // カード名
 			std::string ruby;                     // フリガナ
 			int nCost;                            // カードコスト
 			CARDTYPE_ maintype;                   // カードの種類
@@ -177,6 +179,9 @@ namespace My
 		inline void SetCardHolder(CActiveScenePlayer* player) { m_pCardHolder = player; }
 		inline CActiveScenePlayer* GetCardHolder() { return m_pCardHolder; }
 
+		inline void SetUpdate(bool update) { m_isUpdate = update; }
+		inline bool GetUpdate() { return m_isUpdate; }
+
 		void RegistTargetList(CActiveSceneCharacter* target_list);	//登録
 		void RemoveTargetList(CActiveSceneCharacter* target_list);	//削除
 
@@ -248,6 +253,11 @@ namespace My
 		CActiveScenePlayer* m_pCardHolder; //!<カードの所有者(一旦プレイヤーで固定)
 
 		std::list<CActiveSceneCharacter*> m_pTargetPlayerList; //!<対象 NOTE:複数対象のカードが存在するためリストで管理
+
+		/**
+		 * @brief 更新するカードか
+		 */
+		bool m_isUpdate;
 	};
 };
 

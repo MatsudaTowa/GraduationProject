@@ -10,6 +10,7 @@
 #include "field.h"
 #include "title_camera.h"
 #include "raknet.h"
+#include "card_client.h"
 
 namespace
 {
@@ -67,6 +68,7 @@ void My::CTitle::Update()
     {
 		//チュートリアルに遷移
 		GET_FADE->SetFade(CScene::MODE::MODE_GAME);
+        CCard_Client::GetInstance()->RequestAllCard();
     }
 
     //左シフト押したらオンライン
@@ -77,6 +79,7 @@ void My::CTitle::Update()
 
         //チュートリアルに遷移
         GET_FADE->SetFade(CScene::MODE::MODE_GAME);
+        CCard_Client::GetInstance()->RequestAllCard();
     }
 }
 

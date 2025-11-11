@@ -86,7 +86,7 @@ void CRakNet_Data::LoadCard()
     // コンソールの出力コードページを UTF-8 に変更
     //SetConsoleOutputCP(CP_UTF8);
 
-    //std::locale::global(std::locale(""));
+    std::locale::global(std::locale(""));
 
     //ファイルを開く
     std::ifstream ifs("json\\cards.cbor", std::ios::binary);
@@ -282,7 +282,7 @@ void CRakNet_Data::SendCard(RakNet::Packet* packet, RakNet::RakPeerInterface* pe
     //データの作成
     RakNet::BitStream bsOut;
     bsOut.Write((RakNet::MessageID)GameMessages::ID_CARD_MESSAGE_1);
-    bsOut.Write(m_CardVector[nCardID - 1]);
+    bsOut.Write(m_CardVector[nCardID - 1].GetParam());
 
     //受信したクライアントにブロードキャスト
     peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->guid, false);
@@ -301,13 +301,31 @@ void CRakNet_Data::SendAllCard(RakNet::Packet* packet, RakNet::RakPeerInterface*
 
     //データの作成
     RakNet::BitStream bsOut;
-    bsOut.Write((RakNet::MessageID)GameMessages::ID_CARD_MESSAGE_1);    //メッセージ
+    bsOut.Write((RakNet::MessageID)GameMessages::ID_ALLCARD_MESSAGE_1); //メッセージ
     bsOut.Write((int)m_CardVector.size());                              //カード総数
 
     //全カードの情報を送信
     for (auto iter : m_CardVector)
     {
-        bsOut.Write(iter);
+        //bsOut.Write(iter.GetParam());
+        //書き出し
+        bsOut.Write(iter.GetParam().nPackID);
+        bsOut.Write(iter.GetParam().nCardID);
+        //bsOut.Write(iter.GetParam().Name);
+        //bsOut.Write(iter.GetParam().Ruby);
+        bsOut.Write(iter.GetParam().nCost);
+        bsOut.Write(iter.GetParam().nDamage);
+        bsOut.Write(iter.GetParam().nGuard);
+        bsOut.Write(iter.GetParam().nCounter);
+        bsOut.Write(iter.GetParam().nHeal);
+        bsOut.Write(static_cast<int>(iter.GetParam().Maintype));
+        bsOut.Write(static_cast<int>(iter.GetParam().Raritytype));
+        bsOut.Write(static_cast<int>(iter.GetParam().Assisttype));
+        bsOut.Write(static_cast<int>(iter.GetParam().Attacktype));
+        bsOut.Write(static_cast<int>(iter.GetParam().Defensetype));
+        bsOut.Write(static_cast<int>(iter.GetParam().Bufftype));
+        bsOut.Write(static_cast<int>(iter.GetParam().Healtype));
+        //bsOut.Write(iter.GetParam().ImagePath);
     }
 
     //受信したクライアントにブロードキャスト

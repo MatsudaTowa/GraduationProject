@@ -26,7 +26,8 @@ m_target(CInputMouse::AREA::CENTER),
 m_Cost(INT_ZERO),
 m_AttackPower(INT_ZERO),
 m_pTargetArrow(nullptr),
-m_pCardHolder(nullptr)
+m_pCardHolder(nullptr),
+m_isUpdate(true)
 {
 	m_pTargetPlayerList.clear();
 	//if (m_pTop == nullptr)
@@ -90,6 +91,9 @@ void My::CCard::Uninit()
 //===========================================================================================================
 void My::CCard::Update()
 {
+	//更新フラグがないものは更新しない
+	if (!m_isUpdate) return;
+
 	// カメラの位置と角度に合わせる
 	CCamera* pCamera = CManager::GetInstance()->GetCamera(0);
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();
@@ -109,6 +113,9 @@ void My::CCard::Update()
 //===========================================================================================================
 void My::CCard::Draw()
 {
+	//更新フラグがないものは描画しない
+	if (!m_isUpdate) return;
+
 	//CObjectX::Draw();
 
 #ifdef _DEBUG

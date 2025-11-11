@@ -1,10 +1,7 @@
 #include "card_assist.h"
 
 My::CCardAssist::CCardAssist(int nPriority):CCard(nPriority),
-m_AssistType(),
-m_BuffType(),
-m_DebuffType(),
-m_HealType()
+m_AssistType()
 {
 }
 
