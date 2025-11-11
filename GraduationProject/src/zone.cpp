@@ -43,7 +43,7 @@ void My::CZone::Update()
 /**
 * @brief ’Ç‰Áˆ—
 */
-void My::CZone::AddCard(CCard* card)
+void My::CZone::AddList(CCard* card)
 {
 	if (card)
 	{
@@ -54,7 +54,7 @@ void My::CZone::AddCard(CCard* card)
 /**
 * @brief íœˆ—
 */
-bool My::CZone::DeleteCard(CCard* card)
+bool My::CZone::DeleteList(CCard* card)
 {
 	// ƒJ[ƒh‚ğŒŸõ‚·‚é
 	auto it = std::find(m_CardList.begin(), m_CardList.end(), card);

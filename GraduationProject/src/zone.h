@@ -59,12 +59,12 @@ namespace My
 		/**
 		* @brief リストの追加処理
 		*/
-		void AddCard(CCard* card);
+		void AddList(CCard* card);
 
 		/**
 		* @brief リストの削除処理
 		*/
-		bool DeleteCard(CCard* card);
+		bool DeleteList(CCard* card);
 
 	protected:
 		/**

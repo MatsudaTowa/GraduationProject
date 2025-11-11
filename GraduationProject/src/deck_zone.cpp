@@ -11,7 +11,7 @@
 /**
 * @brief コンストラクタ
 */
-My::CDeck::CDeck()
+My::CDeckZone::CDeckZone()
 {
 
 }
@@ -19,7 +19,7 @@ My::CDeck::CDeck()
 /**
 * @brief デストラクタ
 */
-My::CDeck::~CDeck()
+My::CDeckZone::~CDeckZone()
 {
 
 }
@@ -28,7 +28,7 @@ My::CDeck::~CDeck()
 * @brief めくる処理
 * @param [in]枚数
 */
-void My::CDeck::Flip(int sheet)
+void My::CDeckZone::Flip(int sheet)
 {
     // 変数の初期化
     int count = 0;
@@ -55,7 +55,7 @@ void My::CDeck::Flip(int sheet)
 /**
 * @brief シャッフル処理
 */
-void My::CDeck::Shuffle()
+void My::CDeckZone::Shuffle()
 {
     std::list<CCard*>& list = GetListRef();
 

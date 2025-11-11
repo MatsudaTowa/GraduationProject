@@ -23,6 +23,18 @@ namespace My
 		/**
 		* @brief コンストラクタ
 		*/
+		CFieldZone();
+
+		/**
+		* @brief デストラクタ
+		*/
+		~CFieldZone();
+
+		/**
+		* @brief カードを送る
+		* @param [in]カードのポインタ
+		*/
+		void UseCardSend(CCard* pCard);
 	};
 }
 #endif

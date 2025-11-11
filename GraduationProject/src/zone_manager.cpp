@@ -13,7 +13,8 @@
 */
 My::CZoneManager::CZoneManager():
 	m_pDeck(nullptr),
-	m_pCemetery(nullptr)
+	m_pCemetery(nullptr),
+	m_pFieldZone(nullptr)
 {
 
 }
@@ -23,7 +24,9 @@ My::CZoneManager::CZoneManager():
 */
 My::CZoneManager::~CZoneManager()
 {
-	
+	m_pDeck = nullptr;
+	m_pCemetery = nullptr;
+	m_pFieldZone = nullptr;
 }
 
 /**
@@ -35,7 +38,7 @@ HRESULT My::CZoneManager::Init()
 	// デッキのポインタ生成
 	if (m_pDeck == nullptr)
 	{
-		m_pDeck = new CDeck();
+		m_pDeck = new CDeckZone();
 	}
 
 	if (m_pDeck != nullptr)
@@ -47,6 +50,12 @@ HRESULT My::CZoneManager::Init()
 	if (m_pCemetery == nullptr)
 	{
 		m_pCemetery = new CCemeteryZone();
+	}
+
+	// フィールドゾーンポインタ生成
+	if (m_pFieldZone == nullptr)
+	{
+		m_pFieldZone = new CFieldZone();
 	}
 	return S_OK;
 }
@@ -71,7 +80,7 @@ void My::CZoneManager::Update()
 * @brief 山札のポインタ取得
 * @return デッキのポインタ
 */
-My::CDeck* My::CZoneManager::GetDeck()
+My::CDeckZone* My::CZoneManager::GetDeck()
 {
 	return m_pDeck;
 }
@@ -83,4 +92,30 @@ My::CDeck* My::CZoneManager::GetDeck()
 My::CCemeteryZone* My::CZoneManager::GetCemetery()
 {
 	return m_pCemetery;
+}
+
+/**
+* @brief フィールドゾーンのポインタ取得
+*/
+My::CFieldZone* My::CZoneManager::GetFieldZone()
+{
+	return m_pFieldZone;
+}
+
+/**
+* @brief 手札ゾーンの取得
+* @return 手札のポインタ
+*/
+My::CHandZone* My::CZoneManager::GetHandZone()
+{
+	return m_pHandZone;
+}
+
+/**
+* @brief 待機ゾーンのポインタ
+* @return 待機ゾーンのポインタ
+*/
+My::CWaitZone* My::CZoneManager::GetWaitZone()
+{
+	return m_pWaitZone;
 }

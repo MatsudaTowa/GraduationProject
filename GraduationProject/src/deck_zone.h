@@ -17,18 +17,18 @@ namespace My
 	/**
 	* @brief 山札のクラス
 	*/
-	class CDeck : public CZone
+	class CDeckZone : public CZone
 	{
 	public:
 		/**
 		* @brief コンストラクタ
 		*/
-		CDeck();
+		CDeckZone();
 
 		/**
 		* @brief デストラクタ
 		*/
-		~CDeck();
+		~CDeckZone();
 
 		/**
 		* @brief めくる処理

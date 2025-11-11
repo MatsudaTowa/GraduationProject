@@ -30,5 +30,5 @@ My::CCemeteryZone::~CCemeteryZone()
 void My::CCemeteryZone::SendToGrave(CCard* pCard)
 {
 	// ’Ç‰Áˆ—
-	AddCard(pCard);
+	AddList(pCard);
 }
