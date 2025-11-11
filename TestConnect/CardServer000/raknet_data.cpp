@@ -308,11 +308,15 @@ void CRakNet_Data::SendAllCard(RakNet::Packet* packet, RakNet::RakPeerInterface*
     for (auto iter : m_CardVector)
     {
         //bsOut.Write(iter.GetParam());
+        RakNet::RakString msg;
+
         //書き出し
         bsOut.Write(iter.GetParam().nPackID);
         bsOut.Write(iter.GetParam().nCardID);
-        //bsOut.Write(iter.GetParam().Name);
-        //bsOut.Write(iter.GetParam().Ruby);
+        msg = iter.GetParam().Name.c_str();
+        bsOut.Write(msg); msg.Clear();
+        msg = iter.GetParam().Ruby.c_str();
+        bsOut.Write(msg); msg.Clear();
         bsOut.Write(iter.GetParam().nCost);
         bsOut.Write(iter.GetParam().nDamage);
         bsOut.Write(iter.GetParam().nGuard);
@@ -325,7 +329,8 @@ void CRakNet_Data::SendAllCard(RakNet::Packet* packet, RakNet::RakPeerInterface*
         bsOut.Write(static_cast<int>(iter.GetParam().Defensetype));
         bsOut.Write(static_cast<int>(iter.GetParam().Bufftype));
         bsOut.Write(static_cast<int>(iter.GetParam().Healtype));
-        //bsOut.Write(iter.GetParam().ImagePath);
+        msg = iter.GetParam().ImagePath.c_str();
+        bsOut.Write(msg);
     }
 
     //受信したクライアントにブロードキャスト

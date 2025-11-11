@@ -327,12 +327,15 @@ void CCard_Client::ReceiveAllCardInfo(RakNet::Packet* packet)
     for (int i = 0; i < nMax; i++)
     {
         Param CardParam = {};       //カード情報
-        int nInt = 0;
+        RakNet::RakString msg;      //文字列読み込み用
+
        // bsIn.Read(CardParam);
         bsIn.Read(CardParam.nPackID);
         bsIn.Read(CardParam.nCardID);
-        //bsIn.Read(CardParam.Name);
-        //bsIn.Read(CardParam.Ruby);
+        bsIn.Read(msg);
+        CardParam.Name = msg.C_String(); msg.Clear();
+        bsIn.Read(msg);
+        CardParam.Ruby = msg.C_String(); msg.Clear();
         bsIn.Read(CardParam.nCost);
         bsIn.Read(CardParam.nDamage);
         bsIn.Read(CardParam.nGuard);
@@ -345,7 +348,8 @@ void CCard_Client::ReceiveAllCardInfo(RakNet::Packet* packet)
         bsIn.Read(CardParam.Defensetype);
         bsIn.Read(CardParam.Bufftype);
         bsIn.Read(CardParam.Healtype);
-        //bsIn.Read(CardParam.ImagePath);
+        bsIn.Read(msg);
+        CardParam.ImagePath = msg.C_String();
 
         //下にカード情報を追加
         RegistCard(CardParam);
