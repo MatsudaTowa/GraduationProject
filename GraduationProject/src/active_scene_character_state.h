@@ -16,7 +16,7 @@ namespace My
 	//前方宣言
 	//=============================================
 	class CActiveSceneCharacter;
-	class CReadyUI;
+	class CLobbyUIManager;
 
 	/** @brief キャラクターステートクラス */
 	class CActiveSceneCharacterState
@@ -89,16 +89,16 @@ namespace My
 		}
 
 		/**
-		 * @brief 準備UI取得
-		 * @return 準備UI
+		 * @brief UI取得
+		 * @return UI
 		 */
-		inline CReadyUI* GetReadyUI()
+		inline CLobbyUIManager* GetLobbyUI()
 		{
-			return m_pReadyUI;
+			return m_pLobbyUImanager;
 		}
 	private:
 		LobbyData m_data;
-		CReadyUI* m_pReadyUI;			//!<準備UI
+		CLobbyUIManager* m_pLobbyUImanager;			//!<ロビーUI
 	};
 
 	class CDuelCharacter :public CActiveSceneCharacterState

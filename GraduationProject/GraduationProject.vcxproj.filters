@@ -183,6 +183,9 @@
     <ClCompile Include="src\card_manager.cpp">
       <Filter>card</Filter>
     </ClCompile>
+    <ClCompile Include="src\lobby_UI_manager.cpp">
+      <Filter>active_scene\lobby</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -367,6 +370,9 @@
     </ClInclude>
     <ClInclude Include="src\card_manager.h">
       <Filter>card</Filter>
+    </ClInclude>
+    <ClInclude Include="src\lobby_UI_manager.h">
+      <Filter>active_scene\lobby</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

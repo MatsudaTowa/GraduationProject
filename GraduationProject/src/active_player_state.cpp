@@ -10,6 +10,7 @@
 #include "field.h"
 #include "raknet.h"
 #include "energy_charge.h"
+#include "lobby_UI_manager.h"
 
 //=============================================
 // コンストラクタ
@@ -40,7 +41,7 @@ void My::CPlayerLobbyState::Lobby(CActiveSceneCharacter* character)
 	player->SetMotion(CPlayer::MOTION_NEUTRAL);
 
 
-	CReadyTxt* pTxt = GetReadyUI()->GetReadyTxt();
+	CReadyTxt* pTxt = GetLobbyUI()->GetReadyUI()->GetReadyTxt();
 
 	if (!GET_COLISION->Check2DPolygonColision(GET_INPUT_MOUSE->GetMousePos(), { 3.0f,3.0f }, { pTxt->GetPos().x,pTxt->GetPos().y,0.0f }, pTxt->GetSize()))
 	{

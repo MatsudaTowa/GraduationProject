@@ -5,15 +5,16 @@
 //
 //===============================================================================
 #include "active_scene_character_state.h"
+#include "lobby_UI_manager.h"
 
 //===============================================================================
 // コンストラクタ
 //===============================================================================
-My::CLobbyCharacter::CLobbyCharacter(CActiveSceneCharacter* character):m_pReadyUI(nullptr),m_data()
+My::CLobbyCharacter::CLobbyCharacter(CActiveSceneCharacter* character):m_pLobbyUImanager(nullptr),m_data()
 {
-	if (m_pReadyUI != nullptr) { return; }
-	m_pReadyUI = new CReadyUI;
-	m_pReadyUI->Init(character);
+	if (m_pLobbyUImanager != nullptr) { return; }
+	m_pLobbyUImanager = new CLobbyUIManager;
+	m_pLobbyUImanager->Init(character);
 }
 
 //===============================================================================
@@ -21,10 +22,10 @@ My::CLobbyCharacter::CLobbyCharacter(CActiveSceneCharacter* character):m_pReadyU
 //===============================================================================
 My::CLobbyCharacter::~CLobbyCharacter()
 {
-	if (m_pReadyUI == nullptr) { return; }
-	m_pReadyUI->Uninit();
-	delete m_pReadyUI;
-	m_pReadyUI = nullptr;
+	if (m_pLobbyUImanager == nullptr) { return; }
+	m_pLobbyUImanager->Uninit();
+	delete m_pLobbyUImanager;
+	m_pLobbyUImanager = nullptr;
 }
 
 //===============================================================================
@@ -32,10 +33,11 @@ My::CLobbyCharacter::~CLobbyCharacter()
 //===============================================================================
 void My::CLobbyCharacter::Lobby(CActiveSceneCharacter* character)
 {
-	if (m_pReadyUI != nullptr)
+	if (m_pLobbyUImanager != nullptr)
 	{
 		D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), character->GetPos()); //スクリーン座標に変換
-		m_pReadyUI->SetCurrentReady_UI(screen_pos,m_data.isReady);
+
+		m_pLobbyUImanager->GetReadyUI()->SetCurrentReady_UI(screen_pos, m_data.isReady);
 	}
 }
 

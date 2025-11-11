@@ -220,6 +220,7 @@
     <ClCompile Include="src\life_gauge.cpp" />
     <ClCompile Include="src\life_UI.cpp" />
     <ClCompile Include="src\light.cpp" />
+    <ClCompile Include="src\lobby_UI_manager.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\manager.cpp" />
     <ClCompile Include="src\model.cpp" />
@@ -324,6 +325,7 @@
     <ClInclude Include="src\life_gauge.h" />
     <ClInclude Include="src\life_UI.h" />
     <ClInclude Include="src\light.h" />
+    <ClInclude Include="src\lobby_UI_manager.h" />
     <ClInclude Include="src\main.h" />
     <ClInclude Include="src\manager.h" />
     <ClInclude Include="src\model.h" />
