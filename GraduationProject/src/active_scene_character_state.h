@@ -96,6 +96,11 @@ namespace My
 		{
 			return m_pLobbyUImanager;
 		}
+
+		inline void SetLobbyUI(CCharacterLobbyUIManager* ui_manager)
+		{
+			m_pLobbyUImanager = ui_manager;
+		}
 	private:
 		LobbyData m_data;
 		CCharacterLobbyUIManager* m_pLobbyUImanager;			//!<ƒƒr[UI

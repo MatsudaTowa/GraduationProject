@@ -12,9 +12,6 @@
 //===============================================================================
 My::CLobbyCharacter::CLobbyCharacter(CActiveSceneCharacter* character):m_pLobbyUImanager(nullptr),m_data()
 {
-	if (m_pLobbyUImanager != nullptr) { return; }
-	m_pLobbyUImanager = new CCharacterLobbyUIManager;
-	m_pLobbyUImanager->Init(character);
 }
 
 //===============================================================================
@@ -39,6 +36,9 @@ void My::CLobbyCharacter::Lobby(CActiveSceneCharacter* character)
 
 		m_pLobbyUImanager->GetReadyUI()->SetCurrentReady_UI(screen_pos, m_data.isReady);
 	}
+	if (m_pLobbyUImanager != nullptr) { return; }
+	m_pLobbyUImanager = new CCharacterLobbyUIManager;
+	m_pLobbyUImanager->Init(character);
 }
 
 //===============================================================================

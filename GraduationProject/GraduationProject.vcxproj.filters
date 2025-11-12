@@ -68,7 +68,7 @@
     <ClCompile Include="src\game_player.cpp">
       <Filter>character</Filter>
     </ClCompile>
-    <ClCompile Include="src\active_player_state.cpp">
+    <ClCompile Include="src\active_scene_player_state.cpp">
       <Filter>character</Filter>
     </ClCompile>
     <ClCompile Include="src\active_scene_manager.cpp">
@@ -184,6 +184,9 @@
       <Filter>active_scene\lobby</Filter>
     </ClCompile>
     <ClCompile Include="src\ready_button.cpp">
+      <Filter>active_scene\lobby</Filter>
+    </ClCompile>
+    <ClCompile Include="src\player_lobby_UI_manager.cpp">
       <Filter>active_scene\lobby</Filter>
     </ClCompile>
   </ItemGroup>
@@ -372,6 +375,9 @@
       <Filter>active_scene\lobby</Filter>
     </ClInclude>
     <ClInclude Include="src\ready_button.h">
+      <Filter>active_scene\lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="src\player_lobby_UI_manager.h">
       <Filter>active_scene\lobby</Filter>
     </ClInclude>
   </ItemGroup>

@@ -10,7 +10,6 @@
 #include "active_scene_character.h"
 namespace My
 {
-	class CReadyButton;
 	class CReadyUI;
 	//=============================================
 	//ロビー全体のUIクラス
@@ -25,21 +24,21 @@ namespace My
 		/**
 		 * @brief デストラクタ
 		 */
-		~CCharacterLobbyUIManager();
+		virtual ~CCharacterLobbyUIManager();
 		/**
 		 * @brief 初期化
 		 * @param [in]キャラクターのポインタ
 		 * @return 成功したか
 		 */
-		HRESULT Init(CActiveSceneCharacter* character);
+		virtual HRESULT Init(CActiveSceneCharacter* character);
 		/**
 		 * @brief 終了
 		 */
-		void Uninit();
+		virtual void Uninit();
 		/**
 		 * @brief 更新
 		 */
-		void Update();
+		virtual void Update();
 
 		inline CReadyUI* GetReadyUI()
 		{
@@ -51,19 +50,8 @@ namespace My
 			m_pReadyUI = readyUI;
 		}
 
-		inline CReadyButton* GetReadyButton()
-		{
-			return m_pReadyButton;
-		}
-
-		inline void SetReadyButton(CReadyButton* readyButton)
-		{
-			m_pReadyButton = readyButton;
-		}
-
 	private:
 		CReadyUI* m_pReadyUI;
-		CReadyButton* m_pReadyButton;
 	};
 }
 

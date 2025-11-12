@@ -210,7 +210,7 @@
     <ClCompile Include="src\game_field.cpp" />
     <ClCompile Include="src\active_scene_manager.cpp" />
     <ClCompile Include="src\game_player.cpp" />
-    <ClCompile Include="src\active_player_state.cpp" />
+    <ClCompile Include="src\active_scene_player_state.cpp" />
     <ClCompile Include="src\active_scene_state.cpp" />
     <ClCompile Include="src\hand.cpp" />
     <ClCompile Include="src\hand_zone.cpp" />
@@ -235,6 +235,7 @@
     <ClCompile Include="src\object2D_triangle.cpp" />
     <ClCompile Include="src\particle.cpp" />
     <ClCompile Include="src\player.cpp" />
+    <ClCompile Include="src\player_lobby_UI_manager.cpp" />
     <ClCompile Include="src\player_number_UI.cpp" />
     <ClCompile Include="src\player_UI.cpp" />
     <ClCompile Include="src\precompile.cpp">
@@ -340,6 +341,7 @@
     <ClInclude Include="src\object2D_triangle.h" />
     <ClInclude Include="src\particle.h" />
     <ClInclude Include="src\player.h" />
+    <ClInclude Include="src\player_lobby_UI_manager.h" />
     <ClInclude Include="src\player_number_UI.h" />
     <ClInclude Include="src\player_UI.h" />
     <ClInclude Include="src\precompile.h" />

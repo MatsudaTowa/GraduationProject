@@ -10,7 +10,7 @@
 #include "field.h"
 #include "raknet.h"
 #include "energy_charge.h"
-#include "character_lobby_UI_manager.h"
+#include "player_lobby_UI_manager.h"
 
 //=============================================
 // コンストラクタ
@@ -31,12 +31,21 @@ My::CPlayerLobbyState::~CPlayerLobbyState()
 //=============================================
 void My::CPlayerLobbyState::Lobby(CActiveSceneCharacter* character)
 {
-	CLobbyCharacter::Lobby(character);
 	if (typeid(*character) != typeid(CActiveScenePlayer))
 	{
 		return;
 	}
 	CActiveScenePlayer* player = dynamic_cast<CActiveScenePlayer*>(character);
+
+	CCharacterLobbyUIManager* lobbyUI = GetLobbyUI();
+	if (lobbyUI == nullptr)
+	{
+		lobbyUI = new CPlayerLobbyUIManager;
+		lobbyUI->Init(character);
+		SetLobbyUI(lobbyUI);
+	}
+	CLobbyCharacter::Lobby(character);
+
 	//モーション設定
 	player->SetMotion(CPlayer::MOTION_NEUTRAL);
 
