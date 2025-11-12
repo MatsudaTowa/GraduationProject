@@ -67,6 +67,17 @@ void My::CZone::AddList(CCard* card)
 */
 void My::CZone::SelectAddList(CCard* card, bool bAddflag)
 {
+	if (card)
+	{
+		if (bAddflag)
+		{// —v‘f‚ğæ“ª‚É’Ç‰Á
+			m_CardList.push_front(card);
+		}
+		else if (!bAddflag)
+		{// —v‘f‚ğ––”ö‚É’Ç‰Á
+			m_CardList.push_back(card);
+		}
+	}
 }
 
 /**

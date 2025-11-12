@@ -65,7 +65,9 @@ namespace My
 		/**
 		* @brief リストの選択追加
 		* @param [in]カードのポインタ
+		* @param [in]追加フラグ
 		*/
+		void SelectAddList(CCard* card, bool bAddflag);
 
 		/**
 		* @brief リストの削除処理
