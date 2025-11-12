@@ -80,6 +80,15 @@ namespace My
 		*/
 		CWaitZone* GetWaitZone();
 
+		/**
+		* @brief ゾーンの移動処理
+		* @param [in]カードのポインタ
+		* @param [in]現在のゾーン
+		* @param [in]別のゾーン
+		* @return 成功したかどうか
+		*/
+		bool MoveZone(CCard* pCard, CZone* pCurrentZone, CZone* pNextZone);
+
 	private:
 		CCemeteryZone* m_pCemetery;	// 墓地のポインタ
 		CDeckZone* m_pDeck;			// 山札のポインタ

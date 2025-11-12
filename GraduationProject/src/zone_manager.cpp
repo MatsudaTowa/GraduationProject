@@ -14,7 +14,9 @@
 My::CZoneManager::CZoneManager():
 	m_pDeck(nullptr),
 	m_pCemetery(nullptr),
-	m_pFieldZone(nullptr)
+	m_pFieldZone(nullptr),
+	m_pHandZone(nullptr),
+	m_pWaitZone(nullptr)
 {
 
 }
@@ -27,6 +29,8 @@ My::CZoneManager::~CZoneManager()
 	m_pDeck = nullptr;
 	m_pCemetery = nullptr;
 	m_pFieldZone = nullptr;
+	m_pHandZone = nullptr;
+	m_pWaitZone = nullptr;
 }
 
 /**
@@ -112,10 +116,37 @@ My::CHandZone* My::CZoneManager::GetHandZone()
 }
 
 /**
-* @brief 待機ゾーンのポインタ
+* @brief 待機ゾーンの取得
 * @return 待機ゾーンのポインタ
 */
 My::CWaitZone* My::CZoneManager::GetWaitZone()
 {
 	return m_pWaitZone;
+}
+
+/**
+* @brief ゾーンの移動処理
+* @param [in]カードのポインタ
+* @param [in]現在のゾーン
+* @param [in]次のゾーン
+* @return 成功したかどうか
+*/
+bool My::CZoneManager::MoveZone(CCard* pCard, CZone* pCurrentZone, CZone* pNextZone)
+{
+	if (pCard == nullptr || pCurrentZone == nullptr || pNextZone == nullptr)
+	{// カードがなかったりゾーンが存在しなかったら
+		return false;
+	}
+	else
+	{
+		if (!pCurrentZone->DeleteList(pCard))
+		{// 現在のゾーンのリストから削除できなかった場合
+			return false;
+		}
+
+		// 新しいゾーンにカードを追加
+		pNextZone->AddList(pCard);
+	}
+
+	return true;
 }
