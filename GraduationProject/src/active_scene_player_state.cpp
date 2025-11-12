@@ -12,6 +12,7 @@
 #include "energy_charge.h"
 #include "player_lobby_UI_manager.h"
 #include "ready_button.h"
+#include "match_start_button.h"
 
 //=============================================
 // コンストラクタ
@@ -57,20 +58,23 @@ void My::CPlayerLobbyState::Lobby(CActiveSceneCharacter* character)
 	}
 	CPlayerLobbyUIManager* player_lobby_manager = dynamic_cast<CPlayerLobbyUIManager*>(lobbyUI);
 	
-	CReadyButton* pButton = player_lobby_manager->GetReadyButton();
 
-	if (pButton == nullptr)
+	//TODO:ボタンは処理をまとめなさい
+	CReadyButton* pReadyButton = player_lobby_manager->GetReadyButton();
+	CMatchStartButton* pStartButton = player_lobby_manager->GetStartButton();
+
+	if (pReadyButton == nullptr && pStartButton ==  nullptr)
 	{
 		return;
 	}
 
-	if (!GET_COLISION->Check2DPolygonColision(GET_INPUT_MOUSE->GetMousePos(), { 3.0f,3.0f }, { pButton->GetPos().x,pButton->GetPos().y,0.0f }, pButton->GetSize()))
+	if (!GET_COLISION->Check2DPolygonColision(GET_INPUT_MOUSE->GetMousePos(), { 3.0f,3.0f }, { pReadyButton->GetPos().x,pReadyButton->GetPos().y,0.0f }, pReadyButton->GetSize()))
 	{
-		pButton->SetColor({ 0.2f,0.2f,0.2f,1.0f });
+		pReadyButton->SetColor({ 0.2f,0.2f,0.2f,1.0f });
 		return;
 	}
 
-	pButton->SetColor(COLOR_WHITE);
+	pReadyButton->SetColor(COLOR_WHITE);
 	if (GET_INPUT_MOUSE->GetTrigger(0))
 	{
 		bool isReady = GetIsReady();
@@ -80,16 +84,16 @@ void My::CPlayerLobbyState::Lobby(CActiveSceneCharacter* character)
 		if (isReady)
 		{
 			const wchar_t* txt = L"CANCEL";
-			D3DXVECTOR3 pos = pButton->GetPos();
+			D3DXVECTOR3 pos = pReadyButton->GetPos();
 
-			pButton->GetFontManager()->SetText(txt, { pos.x - pButton->GetSize().x * 0.55f,pos.y,pos.z }, 30.0f, 35.0f, 50, 6);
+			pReadyButton->GetFontManager()->SetText(txt, { pos.x - pReadyButton->GetSize().x * 0.6f,pos.y,pos.z }, 25.0f, 30.0f, 50, 6);
 		}
 		else if (!isReady)
 		{
 			const wchar_t* txt = L"READY";
-			D3DXVECTOR3 pos = pButton->GetPos();
+			D3DXVECTOR3 pos = pReadyButton->GetPos();
 
-			pButton->GetFontManager()->SetText(txt, { pos.x - pButton->GetSize().x * 0.55f,pos.y,pos.z }, 30.0f, 35.0f, 50, 6);
+			pReadyButton->GetFontManager()->SetText(txt, { pos.x - pReadyButton->GetSize().x * 0.55f,pos.y,pos.z }, 30.0f, 35.0f, 50, 6);
 		}
 
 		if (!CRakNet::GetInstance()->GetOnline()) return;

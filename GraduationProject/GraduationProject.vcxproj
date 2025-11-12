@@ -222,6 +222,7 @@
     <ClCompile Include="src\character_lobby_UI_manager.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\manager.cpp" />
+    <ClCompile Include="src\match_start_button.cpp" />
     <ClCompile Include="src\model.cpp" />
     <ClCompile Include="src\model_parts.cpp" />
     <ClCompile Include="src\number.cpp" />
@@ -328,6 +329,7 @@
     <ClInclude Include="src\character_lobby_UI_manager.h" />
     <ClInclude Include="src\main.h" />
     <ClInclude Include="src\manager.h" />
+    <ClInclude Include="src\match_start_button.h" />
     <ClInclude Include="src\model.h" />
     <ClInclude Include="src\model_parts.h" />
     <ClInclude Include="src\number.h" />

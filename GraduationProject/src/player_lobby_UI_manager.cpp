@@ -6,11 +6,13 @@
 //=============================================
 #include "player_lobby_UI_manager.h"
 #include "ready_button.h"
+#include "match_start_button.h"
 
 //=============================================
 // コンストラクタ
 //=============================================
-My::CPlayerLobbyUIManager::CPlayerLobbyUIManager()
+My::CPlayerLobbyUIManager::CPlayerLobbyUIManager():m_pReadyButton(nullptr),
+m_pStartButton(nullptr)
 {
 }
 
@@ -30,6 +32,10 @@ HRESULT My::CPlayerLobbyUIManager::Init(CActiveSceneCharacter* character)
 	{
 		m_pReadyButton = CReadyButton::Create({ 1000.0f,300.0f,0.0f }, { 100.0f,50.0f });
 	}
+	if (m_pStartButton == nullptr)
+	{
+		m_pStartButton = CMatchStartButton::Create({ 1000.0f,450.0f,0.0f }, { 100.0f,50.0f });
+	}
 	CCharacterLobbyUIManager::Init(character);
 	return S_OK;
 }
@@ -43,6 +49,11 @@ void My::CPlayerLobbyUIManager::Uninit()
 	{
 		m_pReadyButton->Uninit();
 		m_pReadyButton = nullptr;
+	}
+	if (m_pStartButton != nullptr)
+	{
+		m_pStartButton->Uninit();
+		m_pStartButton = nullptr;
 	}
 	CCharacterLobbyUIManager::Uninit();
 }

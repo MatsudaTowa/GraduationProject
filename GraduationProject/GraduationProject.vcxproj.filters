@@ -189,6 +189,9 @@
     <ClCompile Include="src\player_lobby_UI_manager.cpp">
       <Filter>active_scene\lobby</Filter>
     </ClCompile>
+    <ClCompile Include="src\match_start_button.cpp">
+      <Filter>active_scene\lobby</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -378,6 +381,9 @@
       <Filter>active_scene\lobby</Filter>
     </ClInclude>
     <ClInclude Include="src\player_lobby_UI_manager.h">
+      <Filter>active_scene\lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="src\match_start_button.h">
       <Filter>active_scene\lobby</Filter>
     </ClInclude>
   </ItemGroup>

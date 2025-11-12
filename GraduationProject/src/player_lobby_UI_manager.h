@@ -12,6 +12,7 @@
 namespace My
 {
 	class CReadyButton;
+	class CMatchStartButton;
 	//=============================================
 	//ロビー全体のUIクラス
 	//=============================================
@@ -51,8 +52,19 @@ namespace My
 			m_pReadyButton = readyButton;
 		}
 
+		inline CMatchStartButton* GetStartButton()
+		{
+			return m_pStartButton;
+		}
+
+		inline void SetReadyButton(CMatchStartButton* startButton)
+		{
+			m_pStartButton = startButton;
+		}
+
 	private:
 		CReadyButton* m_pReadyButton;
+		CMatchStartButton* m_pStartButton;
 	};
 }
 
