@@ -139,10 +139,8 @@ bool My::CZoneManager::MoveZone(CCard* pCard, CZone* pCurrentZone, CZone* pNextZ
 	}
 	else
 	{
-		if (!pCurrentZone->DeleteList(pCard))
-		{// 現在のゾーンのリストから削除できなかった場合
-			return false;
-		}
+		// 現在のゾーンのリストから削除
+		pCurrentZone->DeleteList(pCard);
 
 		// 新しいゾーンにカードを追加
 		pNextZone->AddList(pCard);
