@@ -50,6 +50,7 @@ void My::CZone::Update()
 
 /**
 * @brief 追加処理
+* @param [in]カードのポインタ
 */
 void My::CZone::AddList(CCard* card)
 {
@@ -57,6 +58,15 @@ void My::CZone::AddList(CCard* card)
 	{
 		m_CardList.push_back(card);
 	}
+}
+
+/**
+* @brief リストの選択追加
+* @param [in]カードのポインタ
+* @param [in]追加フラグ
+*/
+void My::CZone::SelectAddList(CCard* card, bool bAddflag)
+{
 }
 
 /**

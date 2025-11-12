@@ -85,9 +85,10 @@ namespace My
 		* @param [in]カードのポインタ
 		* @param [in]現在のゾーン
 		* @param [in]別のゾーン
+		* @param [in]追加フラグ(デフォルトはfalse)
 		* @return 成功したかどうか
 		*/
-		bool MoveZone(CCard* pCard, CZone* pCurrentZone, CZone* pNextZone);
+		bool MoveZone(CCard* pCard, CZone* pCurrentZone, CZone* pNextZone,bool Addflag);
 
 	private:
 		CCemeteryZone* m_pCemetery;	// 墓地のポインタ
