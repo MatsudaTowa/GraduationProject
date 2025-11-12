@@ -10,7 +10,7 @@
 #include "field.h"
 #include "raknet.h"
 #include "energy_charge.h"
-#include "lobby_UI_manager.h"
+#include "character_lobby_UI_manager.h"
 
 //=============================================
 // コンストラクタ

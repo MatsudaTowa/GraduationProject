@@ -5,7 +5,7 @@
 //
 //===============================================================================
 #include "active_scene_character_state.h"
-#include "lobby_UI_manager.h"
+#include "character_lobby_UI_manager.h"
 
 //===============================================================================
 // コンストラクタ
@@ -13,7 +13,7 @@
 My::CLobbyCharacter::CLobbyCharacter(CActiveSceneCharacter* character):m_pLobbyUImanager(nullptr),m_data()
 {
 	if (m_pLobbyUImanager != nullptr) { return; }
-	m_pLobbyUImanager = new CLobbyUIManager;
+	m_pLobbyUImanager = new CCharacterLobbyUIManager;
 	m_pLobbyUImanager->Init(character);
 }
 

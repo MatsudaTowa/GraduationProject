@@ -15,17 +15,17 @@ namespace My
 	//=============================================
 	//ロビー全体のUIクラス
 	//=============================================
-	class CLobbyUIManager
+	class CCharacterLobbyUIManager
 	{
 	public:
 		/**
 		 * @brief コンストラクタ
 		 */
-		CLobbyUIManager();
+		CCharacterLobbyUIManager();
 		/**
 		 * @brief デストラクタ
 		 */
-		~CLobbyUIManager();
+		~CCharacterLobbyUIManager();
 		/**
 		 * @brief 初期化
 		 * @param [in]キャラクターのポインタ

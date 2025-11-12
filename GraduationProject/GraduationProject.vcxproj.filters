@@ -159,9 +159,6 @@
     <ClCompile Include="src\card_assist_debuff.cpp">
       <Filter>card\assist\debuff</Filter>
     </ClCompile>
-    <ClCompile Include="src\card_assist_debuff_death.cpp">
-      <Filter>card\assist\debuff\death</Filter>
-    </ClCompile>
     <ClCompile Include="src\card_assist_buff.cpp">
       <Filter>card\assist\buff</Filter>
     </ClCompile>
@@ -183,7 +180,7 @@
     <ClCompile Include="src\card_manager.cpp">
       <Filter>card</Filter>
     </ClCompile>
-    <ClCompile Include="src\lobby_UI_manager.cpp">
+    <ClCompile Include="src\character_lobby_UI_manager.cpp">
       <Filter>active_scene\lobby</Filter>
     </ClCompile>
     <ClCompile Include="src\ready_button.cpp">
@@ -350,9 +347,6 @@
     <ClInclude Include="src\card_assist_debuff.h">
       <Filter>card\assist\debuff</Filter>
     </ClInclude>
-    <ClInclude Include="src\card_assist_debuff_death.h">
-      <Filter>card\assist\debuff\death</Filter>
-    </ClInclude>
     <ClInclude Include="src\card_assist_buff.h">
       <Filter>card\assist\buff</Filter>
     </ClInclude>
@@ -374,7 +368,7 @@
     <ClInclude Include="src\card_manager.h">
       <Filter>card</Filter>
     </ClInclude>
-    <ClInclude Include="src\lobby_UI_manager.h">
+    <ClInclude Include="src\character_lobby_UI_manager.h">
       <Filter>active_scene\lobby</Filter>
     </ClInclude>
     <ClInclude Include="src\ready_button.h">
@@ -441,9 +435,6 @@
     </Filter>
     <Filter Include="card\assist\buff\heal">
       <UniqueIdentifier>{860ce3f4-5018-4660-b859-10360ee7640c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="card\assist\debuff\death">
-      <UniqueIdentifier>{c1dcdc20-1065-4022-a6b9-e788c01390f8}</UniqueIdentifier>
     </Filter>
     <Filter Include="zone\cemetery">
       <UniqueIdentifier>{8cb04ae9-6320-4716-974a-325f41d192a0}</UniqueIdentifier>

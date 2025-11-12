@@ -172,7 +172,6 @@
     <ClCompile Include="src\card_assist_buff.cpp" />
     <ClCompile Include="src\card_assist_buff_heal.cpp" />
     <ClCompile Include="src\card_assist_debuff.cpp" />
-    <ClCompile Include="src\card_assist_debuff_death.cpp" />
     <ClCompile Include="src\card_attack.cpp" />
     <ClCompile Include="src\card_client.cpp" />
     <ClCompile Include="src\card_deffence.cpp" />
@@ -220,7 +219,7 @@
     <ClCompile Include="src\life_gauge.cpp" />
     <ClCompile Include="src\life_UI.cpp" />
     <ClCompile Include="src\light.cpp" />
-    <ClCompile Include="src\lobby_UI_manager.cpp" />
+    <ClCompile Include="src\character_lobby_UI_manager.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\manager.cpp" />
     <ClCompile Include="src\model.cpp" />
@@ -277,7 +276,6 @@
     <ClInclude Include="src\card_assist_buff.h" />
     <ClInclude Include="src\card_assist_buff_heal.h" />
     <ClInclude Include="src\card_assist_debuff.h" />
-    <ClInclude Include="src\card_assist_debuff_death.h" />
     <ClInclude Include="src\card_attack.h" />
     <ClInclude Include="src\card_client.h" />
     <ClInclude Include="src\card_deffence.h" />
@@ -326,7 +324,7 @@
     <ClInclude Include="src\life_gauge.h" />
     <ClInclude Include="src\life_UI.h" />
     <ClInclude Include="src\light.h" />
-    <ClInclude Include="src\lobby_UI_manager.h" />
+    <ClInclude Include="src\character_lobby_UI_manager.h" />
     <ClInclude Include="src\main.h" />
     <ClInclude Include="src\manager.h" />
     <ClInclude Include="src\model.h" />

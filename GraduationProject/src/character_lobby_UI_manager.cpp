@@ -4,13 +4,13 @@
 // Author松田永久
 //
 //=============================================
-#include "lobby_UI_manager.h"
+#include "character_lobby_UI_manager.h"
 #include "ready_button.h"
 
 //=============================================
 // コンストラクタ
 //=============================================
-My::CLobbyUIManager::CLobbyUIManager():
+My::CCharacterLobbyUIManager::CCharacterLobbyUIManager():
 	m_pReadyUI(nullptr)
 {
 }
@@ -18,20 +18,21 @@ My::CLobbyUIManager::CLobbyUIManager():
 //=============================================
 // デストラクタ
 //=============================================
-My::CLobbyUIManager::~CLobbyUIManager()
+My::CCharacterLobbyUIManager::~CCharacterLobbyUIManager()
 {
 }
 
 //=============================================
 // 初期化
 //=============================================
-HRESULT My::CLobbyUIManager::Init(CActiveSceneCharacter* character)
+HRESULT My::CCharacterLobbyUIManager::Init(CActiveSceneCharacter* character)
 {
 	if (m_pReadyUI == nullptr)
 	{
 		m_pReadyUI = new CReadyUI;
 		m_pReadyUI->Init(character);
 	}
+
 	if (m_pReadyButton == nullptr)
 	{
 		m_pReadyButton = CReadyButton::Create({ 1000.0f,300.0f,0.0f }, {100.0f,50.0f});
@@ -42,7 +43,7 @@ HRESULT My::CLobbyUIManager::Init(CActiveSceneCharacter* character)
 //=============================================
 // 終了
 //=============================================
-void My::CLobbyUIManager::Uninit()
+void My::CCharacterLobbyUIManager::Uninit()
 {
 	if (m_pReadyUI != nullptr)
 	{
@@ -59,6 +60,6 @@ void My::CLobbyUIManager::Uninit()
 //=============================================
 // 更新
 //=============================================
-void My::CLobbyUIManager::Update()
+void My::CCharacterLobbyUIManager::Update()
 {
 }
