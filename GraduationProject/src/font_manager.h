@@ -19,12 +19,6 @@ namespace My
 	{
 	public:
 
-		struct StringData
-		{
-			const wchar_t* text;
-			std::vector<CFont*> pFont;
-		};
-
 		//メンバ関数
 		/**
 		 * @brief コンストラクタ
@@ -58,40 +52,29 @@ namespace My
 		void Regist(const wchar_t* text,D3DXVECTOR3 first_pos, float size, float txt_shift, int thickness, int idx);
 
 		/**
+		 * @brief 
+		 * @param [in]text
+		 * @param [in]first_pos
+		 * @param [in]size
+		 * @param [in]txt_shift
+		 * @param [in]thickness
+		 * @param [in]idx
+		 */
+		void SetText(const wchar_t* text, D3DXVECTOR3 first_pos, float size, float txt_shift, int thickness, int idx);
+
+		/**
 		 * @brief 削除
 		 * @param [in]font
 		 */
 		void Release();
 
-		/**
-		 * @brief 削除
-		 * @param [in]font
-		 */
-		void Remove(StringData font);
-
 		//リストの取得
-		std::list<StringData> GetList() { return m_apManager; }
-
-		/**
-		 * @brief 
-		 * @param [in]idx
-		 * @return 
-		 */
-		std::vector<CFont*> GetFont(int idx)
-		{
-			int i = 0;
-			for (auto& itr : m_apManager)
-			{
-				if (i == idx) { return itr.pFont; }
-
-				++i;
-			}
-		}
+		std::vector<CFont*> GetList() { return m_Font; }
 
 	private:
 
 		//メンバ変数
-		std::list<StringData> m_apManager;	//敵を管理
+		std::vector<CFont*> m_Font;	//敵を管理
 	};
 }
 

@@ -186,6 +186,9 @@
     <ClCompile Include="src\lobby_UI_manager.cpp">
       <Filter>active_scene\lobby</Filter>
     </ClCompile>
+    <ClCompile Include="src\ready_button.cpp">
+      <Filter>active_scene\lobby</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -372,6 +375,9 @@
       <Filter>card</Filter>
     </ClInclude>
     <ClInclude Include="src\lobby_UI_manager.h">
+      <Filter>active_scene\lobby</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ready_button.h">
       <Filter>active_scene\lobby</Filter>
     </ClInclude>
   </ItemGroup>

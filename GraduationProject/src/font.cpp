@@ -59,6 +59,13 @@ HRESULT My::CFont::Init()
 
 void My::CFont::Uninit()
 {
+	LPDIRECT3DTEXTURE9 tex = GetTexture();
+	if (tex != nullptr)
+	{
+		tex->Release();
+		tex = nullptr;
+	}
+
 	CObject2D::Uninit();
 }
 
@@ -109,6 +116,7 @@ My::CFont* My::CFont::Create(D3DXVECTOR3 pos, float size, int thickness, int idx
 
 My::CFont* My::CFont::CreateFontTexture(int thickness, int idx, WCHAR txt)
 {
+
 	//テクスチャ作成
 	LPDIRECT3DTEXTURE9 pTex = nullptr;
 	GET_DEVICE->CreateTexture(
@@ -205,8 +213,16 @@ My::CFont* My::CFont::CreateFontTexture(int thickness, int idx, WCHAR txt)
 	DeleteDC(hDC);
 	delete[] pBmp;
 
-	// ⑩ DirectX用セットアップ
-	BindTexture(pTex);
+	LPDIRECT3DTEXTURE9 my_tex = GetTexture();
+	if (my_tex == nullptr)
+	{
+		delete my_tex;
+		my_tex = nullptr;
+
+		// ⑩ DirectX用セットアップ
+		BindTexture(pTex);
+	}
+
 
 	return this;
 }

@@ -71,7 +71,6 @@ namespace My
 		 */
 		CFont* CreateFontTexture(int thickness, int idx, WCHAR txt);
 	private:
-
 		// フォントビットマップを取得する関数
 		BYTE* GetFontBitmap(HDC hDC, WCHAR c, GLYPHMETRICS& gm, int& bmpWidth, int& bmpHeight, int& level);
 	};

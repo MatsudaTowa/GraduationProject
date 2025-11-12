@@ -10,6 +10,7 @@
 #include "active_scene_character.h"
 namespace My
 {
+	class CReadyButton;
 	class CReadyUI;
 	//=============================================
 	//ロビー全体のUIクラス
@@ -50,8 +51,19 @@ namespace My
 			m_pReadyUI = readyUI;
 		}
 
+		inline CReadyButton* GetReadyButton()
+		{
+			return m_pReadyButton;
+		}
+
+		inline void SetReadyButton(CReadyButton* readyButton)
+		{
+			m_pReadyButton = readyButton;
+		}
+
 	private:
 		CReadyUI* m_pReadyUI;
+		CReadyButton* m_pReadyButton;
 	};
 }
 

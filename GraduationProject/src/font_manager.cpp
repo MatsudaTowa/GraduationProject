@@ -16,7 +16,7 @@ namespace
 //================================
 My::CFontManager::CFontManager()
 {
-	m_apManager.clear();
+	m_Font.clear();
 }
 
 //================================
@@ -39,17 +39,13 @@ HRESULT My::CFontManager::Init()
 //================================
 void My::CFontManager::Uninit()
 {
-	for (auto& i : m_apManager)
+	for (auto& itr : m_Font)
 	{
-		for (auto& j : i.pFont)
-		{
-			if (j == nullptr) { continue; }
-			j->Uninit();
-			j = nullptr;
-		}
-		i.text = NULL;
+		if (itr == nullptr) { continue; }
+		itr->Uninit();
+		itr = nullptr;
 	}
-	m_apManager.clear();
+	m_Font.clear();
 }
 
 //================================
@@ -57,24 +53,34 @@ void My::CFontManager::Uninit()
 //================================
 void My::CFontManager::Regist(const wchar_t* text, D3DXVECTOR3 first_pos, float size, float txt_shift, int thickness, int idx)
 {
-	StringData data;
-	std::vector<CFont*> font_list;
-	font_list.clear();
+	for (int i = INT_ZERO; i < wcslen(text); ++i)
+	{
+		CFont* font = nullptr;
+		font = CFont::Create(first_pos, size, thickness, idx, text[i]);
+		m_Font.push_back(font);
+
+		first_pos.x += txt_shift;
+	}
+}
+
+void My::CFontManager::SetText(const wchar_t* text, D3DXVECTOR3 first_pos, float size, float txt_shift, int thickness, int idx)
+{
+	for (auto& itr : m_Font)
+	{
+		if (itr == nullptr) { continue; }
+		itr->Uninit();
+		itr = nullptr;
+	}
+	m_Font.clear();
 
 	for (int i = INT_ZERO; i < wcslen(text); ++i)
 	{
 		CFont* font = nullptr;
 		font = CFont::Create(first_pos, size, thickness, idx, text[i]);
-		font_list.push_back(font);
+		m_Font.push_back(font);
 
 		first_pos.x += txt_shift;
 	}
-
-	data.text = text;
-	data.pFont = font_list;
-
-	//敵の情報を登録
-	m_apManager.push_back(data);
 }
 
 //================================
@@ -82,33 +88,11 @@ void My::CFontManager::Regist(const wchar_t* text, D3DXVECTOR3 first_pos, float 
 //================================
 void My::CFontManager::Release()
 {
-	for (auto& i : m_apManager)
+	for (auto& itr : m_Font)
 	{
-		for (auto& j : i.pFont)
-		{
-			if (j == nullptr) { continue; }
-			j->Uninit();
-			j = nullptr;
-		}
-		i.text = NULL;
+		if (itr == nullptr) { continue; }
+		itr->Uninit();
+		itr = nullptr;
 	}
-	m_apManager.clear();
-}
-
-//================================
-// 削除　NOTE:必ずフォントのUninitを呼んでから
-//================================
-void My::CFontManager::Remove(StringData font)
-{
-	//サイズが0なら抜ける
-	if (m_apManager.size() == 0)
-	{
-		return;
-	}
-
-	// textとポインタが一致するものを削除
-	m_apManager.remove_if([&](const StringData& data)
-	{
-		return data.text == font.text;
-	});
+	m_Font.clear();
 }
