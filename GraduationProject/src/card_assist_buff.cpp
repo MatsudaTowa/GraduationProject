@@ -52,3 +52,15 @@ void My::CCardAssist_Buff::Draw()
 {
 	CCardAssist::Draw();
 }
+
+//===========================================================================================================
+//固有情報の読み込み
+//===========================================================================================================
+void My::CCardAssist_Buff::LoadUniqueInfo(CCard_Client::Param param)
+{
+	//親の固有読み込み
+	My::CCardAssist::LoadUniqueInfo(param);
+
+	//バフステータスの読み込み
+	m_BuffType = (BuffType)param.Bufftype;	//バフの種類
+}

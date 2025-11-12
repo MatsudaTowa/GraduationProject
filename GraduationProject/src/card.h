@@ -9,10 +9,16 @@
 #include "main.h"
 #include "objectX.h"
 #include "card_state.h"
+#include "card_manager.h"
 
 namespace My
 {
+	//=============================================
+	//前方宣言
+	//=============================================
+	//class CCard_Client;
 	class CActiveScenePlayer;
+
 	class CCard :public CObject3D
 	{
 	public:
@@ -191,10 +197,17 @@ namespace My
 		// ターゲットアローを設定
 		inline void SetTargetArrow(CTargetArrow* pTA) { m_pTargetArrow = pTA; }
 
+		//カード情報の読み込み
+		virtual void LoadInfo(int id);
+
+		//固有情報の読み込み
+		virtual void LoadUniqueInfo(CCard_Client::Param param) {}
+
 		//inline CCard* GetTop() { return m_pTop; }
 		//inline CCard* GetPrev() { return m_pPrev; }
 
 	private:
+
 		//static CCard* m_pTop;	//先頭のオブジェクトポインタ
 		//static CCard* m_pCur;	//現在（最後尾）のポインタ
 		//CCard* m_pPrev;			//前のオブジェクトのポインタ

@@ -138,6 +138,10 @@ void CRakNet_Server::Communication(RakNet::RakPeerInterface* peer)
                  std::cout << "Received from a client: " << rs.C_String() << "\n";*/
             }
             break;
+            case CRakNet_Data::GameMessages::ID_LOBY_MESSAGE_ADD_ENEMY:
+                std::cout << "“G‚Ì’Ç‰Á\n";
+                m_pRakNetData->AddCPU(packet, peer);
+                break;
             case CRakNet_Data::GameMessages::ID_LOBY_MESSAGE_SEND_READY:
                 std::cout << "€”õƒtƒ‰ƒO\n";
                 m_pRakNetData->Ready(packet, peer);

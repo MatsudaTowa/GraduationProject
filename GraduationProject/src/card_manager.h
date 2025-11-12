@@ -9,7 +9,8 @@
 #define _CARD_MANAGER_H_ //２重インクルード防止のマクロ定義
 
 //インクルード
-#include "card.h"
+//#include "card.h"
+#include "card_client.h"
 
 namespace My
 {
@@ -40,13 +41,20 @@ namespace My
 		void ResetCardList();
 
 		//リストの関数
-		void RegistCardList(CCard* card);									//登録
-		void RemoveCardList(CCard* card);									//削除
-		inline std::list<CCard*> GetUseCardList() { return m_CardList; }	//取得
+		void RegistCardList(CCard_Client::Param card);									//登録
+		void RemoveCardList(CCard_Client::Param card);									//削除
+		inline std::vector<CCard_Client::Param> GetUseCardVector() { return m_CardVector; }	//取得
+
+		/**
+		 * @brief 生成
+		 * @param [in]カードID
+		 */
+		void CreateCard(int id);
+		
 	private:
 
 		//メンバ変数
-		std::list<CCard*> m_CardList; //このゲームで使うカードのリスト
+		std::vector<CCard_Client::Param> m_CardVector; //このゲームで使うカードのリスト
 	};
 }
 

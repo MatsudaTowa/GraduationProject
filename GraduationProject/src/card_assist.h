@@ -59,6 +59,12 @@ namespace My
 
 		inline void SetAssistType(AssistType assist_type) {  m_AssistType = assist_type; }
 		
+		/**
+		 * @brief ŒÅ—Lî•ñ“Ç‚İ‚İ
+		 * @param [in]param
+		 */
+		void LoadUniqueInfo(CCard_Client::Param param) override;
+
 	private:
 		AssistType m_AssistType;
 	};

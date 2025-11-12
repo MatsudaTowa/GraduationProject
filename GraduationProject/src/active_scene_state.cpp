@@ -215,6 +215,12 @@ void My::CLobby::OnlineChangeToDuel()
 	//入力デバイス取得
 	CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;
 
+	//Nキーで敵の追加を送信
+	if (pKeyboard->GetTrigger(DIK_N))
+	{
+		CRakNet::GetInstance()->SendAddEnemy();
+	}
+
 	//Mキーでデュエルシーンに切り替え
 	if (pKeyboard->GetTrigger(DIK_M))
 	{

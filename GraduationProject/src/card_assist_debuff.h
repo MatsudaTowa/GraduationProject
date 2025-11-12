@@ -53,6 +53,13 @@ namespace My
 		inline DebuffType GetDebuffType() { return m_DebuffType; }
 
 		inline void SetDebuffType(DebuffType debuff_type) { m_DebuffType = debuff_type; }
+
+		/**
+		 * @brief ŒÅ—Lî•ñ“Ç‚İ‚İ
+		 * @param [in]param
+		 */
+		void LoadUniqueInfo(CCard_Client::Param param) override;
+
 	private:
 		DebuffType m_DebuffType;
 	};

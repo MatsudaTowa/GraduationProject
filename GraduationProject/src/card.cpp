@@ -406,5 +406,30 @@ void My::CCard::LoadCardData()
 	CDuelManager::GetInstance()->RegistUseCardList(this);
 }
 
+//===========================================================================================================
+// カード情報読み込み
+//===========================================================================================================
+void My::CCard::LoadInfo(int id)
+{
+	std::vector<CCard_Client::Param> List = My::CCardManager::GetInstance()->GetUseCardVector();
 
+	//リストから同じ番号を探す
+	for (auto iter : List)
+	{
+		if (iter.nCardID == id)
+		{
+			//基本ステータスの読み込み
+			m_BaseStatus.maintype = (CARDTYPE_)iter.Maintype;
+			m_BaseStatus.name = iter.Name;
+			m_BaseStatus.nCardID = iter.nCardID;
+			m_BaseStatus.nPackID = iter.nPackID;
+			m_BaseStatus.nCost = iter.nCost;
+			m_BaseStatus.raritytype = (RARITY)iter.Raritytype;
+			m_BaseStatus.ruby = iter.Ruby;
+			m_BaseStatus.imagePath = iter.ImagePath;
 
+			//固有情報の読み込み
+			break;
+		}
+	}
+}

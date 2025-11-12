@@ -56,6 +56,13 @@ namespace My
 		inline BuffType GetBuffType() { return m_BuffType; }
 
 		inline void SetBuffType(BuffType buff_type) { m_BuffType = buff_type; }
+
+		/**
+		 * @brief ŒÅ—Lî•ñ“Ç‚İ‚İ
+		 * @param [in]param
+		 */
+		void LoadUniqueInfo(CCard_Client::Param param) override;
+
 	private:
 		BuffType m_BuffType;
 	};

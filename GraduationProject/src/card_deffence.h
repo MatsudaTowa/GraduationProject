@@ -89,7 +89,14 @@ namespace My
 		 */
 		inline void SetCounterValue(int counter_value) { m_nCounterValue = counter_value; }
 
+		/**
+		 * @brief ŒÅ—Lî•ñİ’è
+		 * @param [in]param
+		 */
+		void LoadUniqueInfo(CCard_Client::Param param) override;
+
 	private:
+
 		DefenseType m_DefenceType;
 		int m_nDefenceValue;
 		int m_nCounterValue;

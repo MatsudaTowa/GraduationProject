@@ -53,3 +53,15 @@ void My::CCardAssist_Debuff::Draw()
 {
 	CCardAssist::Draw();
 }
+
+//===========================================================================================================
+//固有情報の読み込み
+//===========================================================================================================
+void My::CCardAssist_Debuff::LoadUniqueInfo(CCard_Client::Param param)
+{
+	//親の固有読み込み
+	My::CCardAssist::LoadUniqueInfo(param);
+
+	//デバフステータスの読み込み
+	//m_DebuffType = (DebuffType)param.Attacktype;	//バフの種類TODO変数出来次第追加
+}

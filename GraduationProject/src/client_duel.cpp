@@ -242,13 +242,14 @@ void CClient_Duel::AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer
     //リストの削除
     m_DuelPlayerList.clear();
 
+    int nEnemyCount = 0;
+
     //最大人数分周回
     for (int i = 0; i < 4; i++)
     {
         //受け取る情報の変数
         CClient_Duel::DuelPlayerParam Param;
-        //Param.isReady = false;
-
+        
         //基底情報の取得
         bsIn.Read(Param.Param);
 
@@ -258,7 +259,14 @@ void CClient_Duel::AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer
         //CPUなら敵を生成
         if (Param.Param.ClientID == static_cast<RakNet::RakNetGUID>(-1))
         {
-            My::CEnemy::Create({ i * 100.0f + 50.0f, 0.0f, 0.0f }, VEC3_RESET_ZERO, i);
+            //カウントアップ
+            nEnemyCount++;
+
+            //すでに生成されている敵は生成しない
+            if (My::CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList().size() < nEnemyCount)
+            {
+                My::CEnemy::Create({ i * 100.0f + 50.0f, 0.0f, 0.0f }, VEC3_RESET_ZERO, i);
+            }
         }
     }
 
