@@ -52,3 +52,13 @@ void My::CCardAttack::LoadCardData()
 	//TODO:各ステータス読み込みしてから親クラスの読み込み
 	CCard::LoadCardData();
 }
+
+//===========================================================================================================
+//固有情報の読み込み
+//===========================================================================================================
+void My::CCardAttack::LoadUniqueInfo(CCard_Client::Param param)
+{
+	//攻撃ステータスの読み込み
+	m_AttackType = (AttackType)param.Attacktype;	//攻撃の種類
+	m_nAttackValue = param.nDamage;					//攻撃力
+}

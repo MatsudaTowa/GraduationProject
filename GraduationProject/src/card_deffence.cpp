@@ -53,3 +53,15 @@ void My::CCardDeffence::LoadCardData()
 	//TODO:各ステータス読み込みしてから親クラスの読み込み
 	CCard::LoadCardData();
 }
+
+
+//===========================================================================================================
+//固有情報の読み込み
+//===========================================================================================================
+void My::CCardDeffence::LoadUniqueInfo(CCard_Client::Param param)
+{
+	//攻撃ステータスの読み込み
+	m_DefenceType = (DefenseType)param.Attacktype;	//防御の種類
+	m_nCounterValue = param.nCounter;				//カウンター値
+	m_nDefenceValue = param.nGuard;					//防御値
+}

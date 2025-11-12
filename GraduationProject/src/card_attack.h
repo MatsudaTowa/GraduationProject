@@ -77,7 +77,14 @@ namespace My
 		 * @param [in]attack_value
 		 */
 		inline void SetAttackValue(int attack_value) { m_nAttackValue = attack_value; }
+
+		/**
+		 * @brief 固有情報読み込み
+		 * @param [in]param
+		 */
+		void LoadUniqueInfo(CCard_Client::Param param) override;
 	private:
+
 		AttackType m_AttackType;
 		int m_nAttackValue;                        // ダメージ数
 	};

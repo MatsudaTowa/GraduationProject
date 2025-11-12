@@ -200,8 +200,11 @@ void CCard_Client::ReceiveCardInfo(RakNet::Packet* packet)
     bsIn.Read(messageId);
     bsIn.Read(CardParam);
 
+    //登録
+    My::CCardManager::GetInstance()->RegistCardList(CardParam);
+
     //下にカード情報を追加
-    RegistCard(CardParam);
+    //RegistCard(CardParam);
 }
 
 //=====================================
@@ -209,103 +212,102 @@ void CCard_Client::ReceiveCardInfo(RakNet::Packet* packet)
 //=====================================
 void CCard_Client::RegistCard(Param param)
 {
-    //ベースのパラメータを読み込み
-    My::CCard::BaseStatus Base;
-    Base.nCardID = param.nCardID;                           //カード番号
-    Base.nPackID = param.nPackID;                           //パック番号
-    Base.imagePath = param.ImagePath;                       //画像パス
-    Base.maintype = (My::CCard::CARDTYPE_)param.Maintype;   //カード種類
-    Base.name = param.Name;                                 //名前
-    Base.nCost = param.nCost;                               //コスト
-    Base.raritytype = (My::CCard::RARITY)param.Raritytype;  //レアリティ
-    Base.ruby = param.Ruby;                                 //フリガナ
+    ////ベースのパラメータを読み込み
+    //My::CCard::BaseStatus Base;
+    //Base.nCardID = param.nCardID;                           //カード番号
+    //Base.nPackID = param.nPackID;                           //パック番号
+    //Base.imagePath = param.ImagePath;                       //画像パス
+    //Base.maintype = (My::CCard::CARDTYPE_)param.Maintype;   //カード種類
+    //Base.name = param.Name;                                 //名前
+    //Base.nCost = param.nCost;                               //コスト
+    //Base.raritytype = (My::CCard::RARITY)param.Raritytype;  //レアリティ
+    //Base.ruby = param.Ruby;                                 //フリガナ
 
-    //カードの種類に応じて生成先を変更
-    switch (param.Maintype)
-    {
-    case ATTACK:    //攻撃
-    {
-        My::CCardAttack* pAttack = new My::CCardAttack(PRIORITY);
+    ////カードの種類に応じて生成先を変更
+    //switch (param.Maintype)
+    //{
+    //case ATTACK:    //攻撃
+    //{
+    //    My::CCardAttack* pAttack = new My::CCardAttack(PRIORITY);
 
-        //パラメータの代入
-        pAttack->SetBaseStatus(Base);         //ベース
-        pAttack->SetAttackValue(param.nDamage);    //ダメージ
-        pAttack->SetAttackType((My::CCardAttack::AttackType)param.Attacktype);   //攻撃種類
+    //    //パラメータの代入
+    //    pAttack->SetBaseStatus(Base);         //ベース
+    //    pAttack->SetAttackValue(param.nDamage);    //ダメージ
+    //    pAttack->SetAttackType((My::CCardAttack::AttackType)param.Attacktype);   //攻撃種類
 
-        //登録
-        My::CCardManager::GetInstance()->RegistCardList(pAttack);
+    //    //登録
+    //    My::CCardManager::GetInstance()->RegistCardList(pAttack);
 
-    }
-       
-        break;
+    //}
+    //   
+    //    break;
 
-    case DEFENSE:    //防御
-    {
-        My::CCardDeffence* pDeffence = new My::CCardDeffence(PRIORITY);
+    //case DEFENSE:    //防御
+    //{
+    //    My::CCardDeffence* pDeffence = new My::CCardDeffence(PRIORITY);
 
-        //パラメータの代入
-        pDeffence->SetBaseStatus(Base);                   //ベース
-        pDeffence->SetCounterValue(param.nCounter);       //カウンター
-        pDeffence->SetDefenceType((My::CCardDeffence::DefenseType)param.Defensetype);   //守備の種類
-        pDeffence->SetDefenceValue(param.nGuard);           //ガード値
+    //    //パラメータの代入
+    //    pDeffence->SetBaseStatus(Base);                   //ベース
+    //    pDeffence->SetCounterValue(param.nCounter);       //カウンター
+    //    pDeffence->SetDefenceType((My::CCardDeffence::DefenseType)param.Defensetype);   //守備の種類
+    //    pDeffence->SetDefenceValue(param.nGuard);           //ガード値
 
-        //登録
-        My::CCardManager::GetInstance()->RegistCardList(pDeffence);
-    }
+    //    //登録
+    //    My::CCardManager::GetInstance()->RegistCardList(pDeffence);
+    //}
 
-        break;
+    //    break;
 
-    case ASSIST:    //アシスト
-    {
-        //My::CCardAssist* pAssist = new My::CCardAssist(PRIORITY);
-        My::CCardAssist* pAssist = nullptr;
-        pAssist = LoadAssistCard(param);
+    //case ASSIST:    //アシスト
+    //{
+    //    //My::CCardAssist* pAssist = new My::CCardAssist(PRIORITY);
+    //    My::CCardAssist* pAssist = nullptr;
+    //    pAssist = LoadAssistCard(param);
 
-        //パラメータの代入
-        pAssist->SetBaseStatus(Base);              //ベース
-        pAssist->SetAssistType((My::CCardAssist::AssistType)param.Assisttype);  //アシストの種類
+    //    //パラメータの代入
+    //    pAssist->SetBaseStatus(Base);              //ベース
+    //    pAssist->SetAssistType((My::CCardAssist::AssistType)param.Assisttype);  //アシストの種類
 
-        //登録
-        My::CCardManager::GetInstance()->RegistCardList(pAssist);
-    }
+    //    //登録
+    //    My::CCardManager::GetInstance()->RegistCardList(pAssist);
+    //}
 
-        break;
-    default:
-        break;
-    }
+    //    break;
+    //default:
+    //    break;
+    //}
 }
 
 //=====================================
 //アシストカードの読み込み
 //=====================================
-My::CCardAssist* CCard_Client::LoadAssistCard(Param param)
-{
-    switch (param.Assisttype)
-    {
-    case CCard_Client::AssistType::BUFF:    //バフ
-    {
-        My::CCardAssist_Buff* pBuff = new My::CCardAssist_Buff(PRIORITY);
-        pBuff->SetBuffType((My::CCardAssist_Buff::BuffType)param.Bufftype);
-        return pBuff;
-    }
-        break;
-
-    case CCard_Client::AssistType::DEBUFF:  //デバフ
-    {
-        My::CCardAssist_Debuff* pDebuff = new My::CCardAssist_Debuff(PRIORITY);
-        return nullptr;
-        //pDebuff->SetDebuffType((My::CCardAssist_Debuff::DebuffType)param.);   //TODOデバフタイプ出来次第追加
-    }
-        break;
-
-    case CCard_Client::AssistType::OBSTRUCT://妨害TODO:妨害クラスが出来次第追加
-        return nullptr;
-        break;
-    }
-
-    return nullptr;
-}
-
+//My::CCardAssist* CCard_Client::LoadAssistCard(Param param)
+//{
+//    //switch (param.Assisttype)
+//    //{
+//    //case CCard_Client::AssistType::BUFF:    //バフ
+//    //{
+//    //    My::CCardAssist_Buff* pBuff = new My::CCardAssist_Buff(PRIORITY);
+//    //    pBuff->SetBuffType((My::CCardAssist_Buff::BuffType)param.Bufftype);
+//    //    return pBuff;
+//    //}
+//    //    break;
+//
+//    //case CCard_Client::AssistType::DEBUFF:  //デバフ
+//    //{
+//    //    My::CCardAssist_Debuff* pDebuff = new My::CCardAssist_Debuff(PRIORITY);
+//    //    return nullptr;
+//    //    //pDebuff->SetDebuffType((My::CCardAssist_Debuff::DebuffType)param.);   //TODOデバフタイプ出来次第追加
+//    //}
+//    //    break;
+//
+//    //case CCard_Client::AssistType::OBSTRUCT://妨害TODO:妨害クラスが出来次第追加
+//    //    return nullptr;
+//    //    break;
+//    //}
+//
+//    //return nullptr;
+//}
 
 //=====================================
 //全カード情報の受信
@@ -351,8 +353,11 @@ void CCard_Client::ReceiveAllCardInfo(RakNet::Packet* packet)
         bsIn.Read(msg);
         CardParam.ImagePath = msg.C_String();
 
+        //登録
+        My::CCardManager::GetInstance()->RegistCardList(CardParam);
+
         //下にカード情報を追加
-        RegistCard(CardParam);
+        //RegistCard(CardParam);
     }
 
 }
