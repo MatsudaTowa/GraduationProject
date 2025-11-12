@@ -11,6 +11,7 @@
 #include "raknet.h"
 #include "energy_charge.h"
 #include "player_lobby_UI_manager.h"
+#include "ready_button.h"
 
 //=============================================
 // コンストラクタ
@@ -50,20 +51,46 @@ void My::CPlayerLobbyState::Lobby(CActiveSceneCharacter* character)
 	player->SetMotion(CPlayer::MOTION_NEUTRAL);
 
 
-	CReadyTxt* pTxt = GetLobbyUI()->GetReadyUI()->GetReadyTxt();
-
-	if (!GET_COLISION->Check2DPolygonColision(GET_INPUT_MOUSE->GetMousePos(), { 3.0f,3.0f }, { pTxt->GetPos().x,pTxt->GetPos().y,0.0f }, pTxt->GetSize()))
+	if(typeid(*lobbyUI) != typeid(CPlayerLobbyUIManager))
 	{
-		pTxt->SetColor({ 0.2f,0.2f,0.2f,1.0f });
+		return;
+	}
+	CPlayerLobbyUIManager* player_lobby_manager = dynamic_cast<CPlayerLobbyUIManager*>(lobbyUI);
+	
+	CReadyButton* pButton = player_lobby_manager->GetReadyButton();
+
+	if (pButton == nullptr)
+	{
 		return;
 	}
 
-	pTxt->SetColor(COLOR_WHITE);
+	if (!GET_COLISION->Check2DPolygonColision(GET_INPUT_MOUSE->GetMousePos(), { 3.0f,3.0f }, { pButton->GetPos().x,pButton->GetPos().y,0.0f }, pButton->GetSize()))
+	{
+		pButton->SetColor({ 0.2f,0.2f,0.2f,1.0f });
+		return;
+	}
+
+	pButton->SetColor(COLOR_WHITE);
 	if (GET_INPUT_MOUSE->GetTrigger(0))
 	{
 		bool isReady = GetIsReady();
 		isReady = isReady ? false : true;
 		SetIsReady(isReady);
+
+		if (isReady)
+		{
+			const wchar_t* txt = L"CANCEL";
+			D3DXVECTOR3 pos = pButton->GetPos();
+
+			pButton->GetFontManager()->SetText(txt, { pos.x - pButton->GetSize().x * 0.55f,pos.y,pos.z }, 30.0f, 35.0f, 50, 6);
+		}
+		else if (!isReady)
+		{
+			const wchar_t* txt = L"READY";
+			D3DXVECTOR3 pos = pButton->GetPos();
+
+			pButton->GetFontManager()->SetText(txt, { pos.x - pButton->GetSize().x * 0.55f,pos.y,pos.z }, 30.0f, 35.0f, 50, 6);
+		}
 
 		if (!CRakNet::GetInstance()->GetOnline()) return;
 		//通信処理
