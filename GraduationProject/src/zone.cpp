@@ -50,12 +50,33 @@ void My::CZone::Update()
 
 /**
 * @brief 追加処理
+* @param [in]カードのポインタ
 */
 void My::CZone::AddList(CCard* card)
 {
 	if (card)
 	{
 		m_CardList.push_back(card);
+	}
+}
+
+/**
+* @brief リストの選択追加
+* @param [in]カードのポインタ
+* @param [in]追加フラグ
+*/
+void My::CZone::SelectAddList(CCard* card, bool bAddflag)
+{
+	if (card)
+	{
+		if (bAddflag)
+		{// 要素を先頭に追加
+			m_CardList.push_front(card);
+		}
+		else if (!bAddflag)
+		{// 要素を末尾に追加
+			m_CardList.push_back(card);
+		}
 	}
 }
 

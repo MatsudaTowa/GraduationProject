@@ -131,7 +131,7 @@ My::CWaitZone* My::CZoneManager::GetWaitZone()
 * @param [in]次のゾーン
 * @return 成功したかどうか
 */
-bool My::CZoneManager::MoveZone(CCard* pCard, CZone* pCurrentZone, CZone* pNextZone)
+bool My::CZoneManager::MoveZone(CCard* pCard, CZone* pCurrentZone, CZone* pNextZone,bool Addflag)
 {
 	if (pCard == nullptr || pCurrentZone == nullptr || pNextZone == nullptr)
 	{// カードがなかったりゾーンが存在しなかったら
@@ -142,8 +142,15 @@ bool My::CZoneManager::MoveZone(CCard* pCard, CZone* pCurrentZone, CZone* pNextZ
 		// 現在のゾーンのリストから削除
 		pCurrentZone->DeleteList(pCard);
 
-		// 新しいゾーンにカードを追加
-		pNextZone->AddList(pCard);
+		if (pNextZone == m_pDeck)
+		{// ゾーンの移動先が山札の場合Addflagがtrueならpush_front、falseならpush_back
+			pNextZone->SelectAddList(pCard, Addflag);
+		}
+		else
+		{// ゾーンの移動先が山札以外の場合
+			// 新しいゾーンにカードを追加
+			pNextZone->AddList(pCard);
+		}
 	}
 
 	return true;
