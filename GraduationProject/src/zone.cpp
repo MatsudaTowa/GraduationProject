@@ -33,6 +33,14 @@ HRESULT My::CZone::Init()
 }
 
 /**
+* @brief I—¹ˆ—
+*/
+void My::CZone::Uninit()
+{
+
+}
+
+/**
 * @brief XVˆ—
 */
 void My::CZone::Update()
