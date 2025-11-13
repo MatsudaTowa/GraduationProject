@@ -103,7 +103,7 @@ void My::CMatchStartButton::ButtonTrigger()
 	}
 	else if(!is_online)
 	{
-		lobby_state->OfflineChangeToDuel();
+		lobby_state->SetBattleSign(true);
 	}
 
 }

@@ -46,36 +46,9 @@ void My::CLobby::Lobby(CActiveScene* game)
 	//TODO:生成は接続されたら行うカタチになる
 	CreatePlayers(pKeyboard, enemy);
 
-	if (pKeyboard->GetTrigger(DIK_RETURN) && game->GetPauseKey())
-	{
-		//int total = (int)enemy.size() + 1; // プレイヤー含む
 
-		////足りてないプレイヤーを生成
-		//FillEmptyPlayer(total, enemy);
-
-		//for (auto& itr : enemy)
-		//{
-		//	if (itr == nullptr)
-		//	{
-		//		continue;
-		//	}
-		//	itr->ChangeState(new CEnemyDuelState);
-		//}
-		game->ResetPauseCnt();
-
-		//if (CActiveSceneManager::GetInstance()->GetPlayer() != nullptr)
-		//{
-		//	CActiveSceneManager::GetInstance()->GetPlayer()->ChangeState(new CPlayerDuelState);
-		//}
-		////地面生成
-		//CField::Create(VEC3_RESET_ZERO, { FIELD_SIZE,0.0f,FIELD_SIZE }, new CGameField);
-
-		////エナジーUI枠表示
-		//CEnergy_Gauge::CreateEnergy();
-
-		//CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
-		OfflineChangeToDuel();
-	}
+	OfflineChangeToDuel();
+	
 
 	//オンラインの対戦開始処理
 	OnlineChangeToDuel();
@@ -86,6 +59,7 @@ void My::CLobby::Lobby(CActiveScene* game)
 //=============================================
 void My::CLobby::OfflineChangeToDuel()
 {
+	if (!m_isBattle) { return; }
 	std::list<CEnemy*> enemy = CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList();
 
 	int total = (int)enemy.size() + 1; // プレイヤー含む
