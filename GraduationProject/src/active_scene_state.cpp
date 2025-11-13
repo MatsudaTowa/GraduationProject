@@ -61,7 +61,6 @@ void My::CLobby::Lobby(CActiveScene* game)
 		//	}
 		//	itr->ChangeState(new CEnemyDuelState);
 		//}
-		game->ResetPauseCnt();
 
 		//if (CActiveSceneManager::GetInstance()->GetPlayer() != nullptr)
 		//{
