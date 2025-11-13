@@ -193,6 +193,9 @@
       <Filter>active_scene\lobby</Filter>
     </ClCompile>
     <ClCompile Include="src\button.cpp" />
+    <ClCompile Include="src\castpreview_zone.cpp">
+      <Filter>zone\cast</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -388,6 +391,9 @@
       <Filter>active_scene\lobby</Filter>
     </ClInclude>
     <ClInclude Include="src\button.h" />
+    <ClInclude Include="src\castpreview_zone.h">
+      <Filter>zone\cast</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">
@@ -461,6 +467,9 @@
     </Filter>
     <Filter Include="zone\wait">
       <UniqueIdentifier>{87842a2f-d099-4e39-ab0b-9f67a31f890a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="zone\cast">
+      <UniqueIdentifier>{a6e8a991-c72d-405f-8680-b6b2918ab040}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

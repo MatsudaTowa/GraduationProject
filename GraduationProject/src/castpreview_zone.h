@@ -1,12 +1,12 @@
 //===========================================================================================================================================================
 // 
-// 山札ゾーンの処理 [deck.h]
+// キャストプレビューゾーンのヘッダー [castpreview_zone.h]
 // Author : Kasai Keisuke
 // 
 //===========================================================================================================================================================
 
-#ifndef _DECK_H_
-#define _DECK_H_
+#ifndef _CASTPREVIEW_ZONE_H_
+#define _CASTPREVIEW_ZONE_H_
 
 // include
 #include "zone.h"
@@ -15,31 +15,27 @@
 namespace My
 {
 	/**
-	* @brief 山札のクラス
+	* @brief キャストプレビューゾーンクラス
 	*/
-	class CDeckZone : public CZone
+	class CCastPreviewZone : public CZone
 	{
 	public:
+
 		/**
 		* @brief コンストラクタ
 		*/
-		CDeckZone();
+		CCastPreviewZone();
 
 		/**
 		* @brief デストラクタ
 		*/
-		~CDeckZone();
+		~CCastPreviewZone();
 
 		/**
-		* @brief めくる処理
-		* @param [in]枚数
+		* @brief 使用したカードを送る
+		* @param [in]カードのポインタ
 		*/
-		void Flip(int sheet);
-
-		/**
-		* @brief シャッフル処理
-		*/
-		void Shuffle();
+		void UsePlayerCard(CCard* pCard);
 
 	};
 }

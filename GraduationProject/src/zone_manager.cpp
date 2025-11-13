@@ -16,7 +16,8 @@ My::CZoneManager::CZoneManager():
 	m_pCemetery(nullptr),
 	m_pFieldZone(nullptr),
 	m_pHandZone(nullptr),
-	m_pWaitZone(nullptr)
+	m_pWaitZone(nullptr),
+	m_pCastPreviewZone(nullptr)
 {
 
 }
@@ -31,6 +32,7 @@ My::CZoneManager::~CZoneManager()
 	m_pFieldZone = nullptr;
 	m_pHandZone = nullptr;
 	m_pWaitZone = nullptr;
+	m_pCastPreviewZone = nullptr;
 }
 
 /**
@@ -60,6 +62,24 @@ HRESULT My::CZoneManager::Init()
 	if (m_pFieldZone == nullptr)
 	{
 		m_pFieldZone = new CFieldZone();
+	}
+
+	// キャストプレビューゾーンのポインタ生成
+	if (m_pCastPreviewZone == nullptr)
+	{
+		m_pCastPreviewZone = new CCastPreviewZone();
+	}
+
+	// 待機ゾーンのポインタ生成
+	if (m_pWaitZone == nullptr)
+	{
+		m_pWaitZone = new CWaitZone();
+	}
+
+	// 手札ゾーンのポインタ生成
+	if (m_pHandZone == nullptr)
+	{
+		m_pHandZone = new CHandZone();
 	}
 	return S_OK;
 }
@@ -122,6 +142,15 @@ My::CHandZone* My::CZoneManager::GetHandZone()
 My::CWaitZone* My::CZoneManager::GetWaitZone()
 {
 	return m_pWaitZone;
+}
+
+/**
+* @brief キャストプレビューゾーンの取得
+* @return キャストプレビューゾーンのポインタ
+*/
+My::CCastPreviewZone* My::CZoneManager::GetCastPreviewZone()
+{
+	return m_pCastPreviewZone;
 }
 
 /**
