@@ -11,7 +11,6 @@
 
 namespace
 {
-	//const std::string TEX_NAME = "data\\TEXTURE\\UI\\Energy.png";
 }
 
 //=====================================================================
@@ -50,10 +49,6 @@ HRESULT My::CEnergy_Gauge::Init()
 	col = COLOR_WHITE;
 	SetColor(col);
 
-	////テクスチャ登録
-	//CTexture* pTexture = CManager::GetInstance()->GetTexture();
-	//CObject2D::BindTexture(pTexture->GetAddress(pTexture->Regist(&TEX_NAME)));//テクスチャ設定
-
 	SetTexPos(VEC2_RESET_ONE);
 
 	SetVtx();
@@ -74,8 +69,10 @@ void My::CEnergy_Gauge::Uninit()
 //=====================================================================
 void My::CEnergy_Gauge::Update()
 {
+	//チャージ部分のインスタンス取得
+	CEnergy_Charge* pEnCharge = CEnergy_Charge::GetInstance();
 	//何割チャージされてるかを教えてもらう
-	m_nEnergyRaito = CEnergy_Charge::GetPolyCnt();
+	m_nEnergyRaito = pEnCharge->GetPolyCnt();
 
 	
 	switch (m_Effect)
@@ -100,19 +97,6 @@ void My::CEnergy_Gauge::Update()
 		break;
 	}
 	SetVtx();
-
-	////テクスチャ登録
-	//CTexture* pTexture = CManager::GetInstance()->GetTexture();
-	//CObject2D::BindTexture(pTexture->GetAddress(pTexture->Regist(&TEX_NAME)));//テクスチャ設定
-
-	//if (m_nPolyNum < m_nEnergyRaito || m_nEnergyRaito >= 10)
-	//{
-	//	m_bDisplay = true;
-	//}
-	//else
-	//{
-	//	m_bDisplay = false;
-	//}
 }
 
 //=====================================================================
@@ -120,8 +104,6 @@ void My::CEnergy_Gauge::Update()
 //=====================================================================
 void My::CEnergy_Gauge::Draw()
 {
-	//TODO : バグの解決法探し（内容：スタミナが描画されないタイミングでHPの描画も止まる。スタミナフレームは影響なし）
-	//テクスチャの有り無しが関与？
 	if (m_nPolyNum < m_nEnergyRaito || m_nEnergyRaito >= 10)
 	{
 		CObject2D::Draw();
@@ -155,7 +137,7 @@ void My::CEnergy_Gauge::CreateEnergy()
 		CEnergy_Gauge::Create({ 1039.0f+ (i * 28.0f),497.0f,FLOAT_ZERO });
 	}
 	//すごく仮置き（体力関連）
-	CLife_Gauge::CreateLifeUI({ 10.0f });
+	CLife_Gauge::CreateLifeUI(40.0f, 110.0f);
 }
 
 //=====================================================================

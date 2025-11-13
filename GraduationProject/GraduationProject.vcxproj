@@ -218,6 +218,7 @@
     <ClCompile Include="src\hand.cpp" />
     <ClCompile Include="src\hand_zone.cpp" />
     <ClCompile Include="src\input.cpp" />
+    <ClCompile Include="src\life_changer.cpp" />
     <ClCompile Include="src\life_frame.cpp" />
     <ClCompile Include="src\life_gauge.cpp" />
     <ClCompile Include="src\life_UI.cpp" />
@@ -328,6 +329,7 @@
     <ClInclude Include="src\hand.h" />
     <ClInclude Include="src\hand_zone.h" />
     <ClInclude Include="src\input.h" />
+    <ClInclude Include="src\life_changer.h" />
     <ClInclude Include="src\life_frame.h" />
     <ClInclude Include="src\life_gauge.h" />
     <ClInclude Include="src\life_UI.h" />

@@ -6,17 +6,14 @@
 //=====================================================================================================================================
 #include "life_gauge.h"
 #include "life_frame.h"
+#include "life_changer.h"
 namespace
 {
-	constexpr int SEGMENT_NUM = 100;
-	constexpr float LIFE_75 = 0.75;
-	constexpr float LIFE_50 = 0.5;
-	constexpr float LIFE_25 = 0.25;
+	constexpr int SEGMENT_NUM = 100;//分割数
+	constexpr float LIFE_75 = 0.75;//7.5割
+	constexpr float LIFE_50 = 0.5;//5割
+	constexpr float LIFE_25 = 0.25;//2.5割
 }
-
-float My::CLife_Gauge::m_fLife = FLOAT_ZERO;
-float My::CLife_Gauge::m_fLife_Max = FLOAT_ZERO;
-float My::CLife_Gauge::m_fRaito = FLOAT_ZERO;
 
 //===============================================================================================
 //コンストラクタ
@@ -59,59 +56,32 @@ void My::CLife_Gauge::Uninit()
 //===============================================================================================
 void My::CLife_Gauge::Update()
 {
-	//ここに入れたら複数回更新するの忘れてた。（すっごい減るからバグを疑った）
-	//【デバッグ専用】ダメージ反映・回復反映・最大変化
-	//インプット取得
-	CInputKeyboard* pKeyboard = CManager::GetInstance()->GetKeyboard();
-
-	//HP増加
-	if (pKeyboard->GetTrigger(DIK_L))
-	{
-		ApplyHeal(0.01f);
-	}
-
-	//HP減少
-	else if (pKeyboard->GetTrigger(DIK_K))
-	{
-		ApplyDamage(0.01f);
-	}
-
-	////最大増加
-	//else if (pKeyboard->GetTrigger(DIK_8))
-	//{
-	//	IncreaseMax(FLOAT_ONE);
-	//}
-
-	////最大減少
-	//else if (pKeyboard->GetTrigger(DIK_9))
-	//{
-	//	DecreaseMax(FLOAT_ONE);
-	//}
-
+	//インスタンス取得
+	CLife_changer* pLife = CLife_changer::GetInstance();
 
 	//割合計算
-	m_fRaito = (m_fLife / m_fLife_Max);
+	float fRaito = pLife->GetLifeRaito();
 
-	//表示していいポリゴンの計算（１つで5％）
-	m_nDrawSegNum = SEGMENT_NUM - (m_fRaito * SEGMENT_NUM);
+	//表示していいポリゴンの計算（1つで1％）
+	m_nDrawSegNum = SEGMENT_NUM - (fRaito * SEGMENT_NUM);
 
 	//割合に応じた色変化
-	if (m_fRaito > LIFE_75)
+	if (fRaito > LIFE_75)
 	{//水色
 		ChangeColor({ FLOAT_ZERO, FLOAT_ONE, FLOAT_ONE, FLOAT_ONE });
 	}
 
-	else if (m_fRaito <= LIFE_75 && m_fRaito >= LIFE_50)
+	else if (fRaito <= LIFE_75 && fRaito >= LIFE_50)
 	{//緑色
 		ChangeColor({ FLOAT_ZERO, FLOAT_ONE, FLOAT_ZERO, FLOAT_ONE });
 	}
 
-	else if (m_fRaito <= 0.5 && m_fRaito >= LIFE_25)
+	else if (fRaito <= 0.5 && fRaito >= LIFE_25)
 	{//黄色
 		ChangeColor({ FLOAT_ONE, FLOAT_ONE, FLOAT_ZERO, FLOAT_ONE });
 	}
 
-	else if (m_fRaito < LIFE_25)
+	else if (fRaito < LIFE_25)
 	{//赤色
 		ChangeColor({ FLOAT_ONE, FLOAT_ZERO, FLOAT_ZERO, FLOAT_ONE });
 	}
@@ -177,15 +147,18 @@ void My::CLife_Gauge::SetVtx_S()
 //===============================================================================================
 // 体力UIまとめて生成
 //===============================================================================================
-void My::CLife_Gauge::CreateLifeUI(float GameHP)
+void My::CLife_Gauge::CreateLifeUI(float GameHP, float Rad)
 {
-	CLife_frame::Create({ 260.0f,600.0f,0.0f }, {245,120});
+	//インスタンス取得
+	CLife_changer* pLife = CLife_changer::GetInstance();
+
+	CLife_frame::Create({ 260.0f,600.0f,0.0f }, {Rad + 130,Rad +10});
 
 	for (int i = 0; i < SEGMENT_NUM; i++)
 	{
-		CLife_Gauge::Create_S({ 137,600,0 }, 110, SEGMENT_NUM, i);
+		CLife_Gauge::Create_S({ 140.0f,600.0f,0.0f }, Rad, SEGMENT_NUM, i);
 	}
-	CLife_Gauge::DefMax(GameHP);
+	pLife->DefMax(GameHP);
 }
 
 //------------------------------------------------------------------------------------------------------------------------//

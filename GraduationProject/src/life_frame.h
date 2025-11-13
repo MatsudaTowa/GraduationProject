@@ -60,6 +60,7 @@ namespace My
 		* @return ライフUI枠のポインタ
 		*/
 		static CLife_frame* Create(D3DXVECTOR3 pos, D3DXVECTOR2 size);
+
 	};
 }
 

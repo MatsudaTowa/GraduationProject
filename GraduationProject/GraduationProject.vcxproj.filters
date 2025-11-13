@@ -199,6 +199,7 @@
     <ClCompile Include="src\card_info.cpp">
       <Filter>card</Filter>
     </ClCompile>
+    <ClCompile Include="src\life_changer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -400,6 +401,7 @@
     <ClInclude Include="src\card_info.h">
       <Filter>card</Filter>
     </ClInclude>
+    <ClInclude Include="src\life_changer.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">

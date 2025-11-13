@@ -15,18 +15,6 @@ namespace My
 	{
 	public:
 		/**
-		* @brief [ 定数 ]
-		* @param デフォルトのエナジーがたまるまでの時間
-		*/
-		 static constexpr float CHARGE_DEF = 180.0f ;
-
-		/**
-		* @brief [ 定数 ]
-		* @param デフォルトのチャージ速度
-		*/
-		 static constexpr float SPEED_DEF = 1.0f;
-
-		/**
 		* @brief コンストラクタ
 		* @param [in]プライオリティ
 		*/
@@ -59,23 +47,23 @@ namespace My
 		* @brief 回復に必要な時間の変更
 		* @param [in]変更後の時間
 		*/
-		static void TimeChange(float NewChargeTime);
+		void TimeChange(float NewChargeTime);
 
 		/**
 		* @brief 回復時間変動
 		* @param [in]変更後の速度
 		*/
-		static void SpeedChange(float NewChargeSpeed);
+		void SpeedChange(float NewChargeSpeed);
 
 		/**
 		* @brief 充電何割か教えるやつ
 		* @return 何割たまっているか（int型）
 		*/
-		inline static void SetPolyCnt(float Raito)
+		void SetPolyCnt(float Raito)
 		{
 			m_fChargeRaito = Raito;
 		}
-		inline static float GetPolyCnt()
+		float GetPolyCnt()
 		{
 			return m_fChargeRaito;
 		}
