@@ -14,6 +14,7 @@
 #include "field_zone.h"
 #include "hand_zone.h"
 #include "wait_zone.h"
+#include "castpreview_zone.h"
 
 /** @brief My 名前空間 */
 namespace My
@@ -81,6 +82,12 @@ namespace My
 		CWaitZone* GetWaitZone();
 
 		/**
+		* @brief キャストプレビューゾーンのポインタ取得
+		* @return キャストプレビューゾーンのポインタ
+		*/
+		CCastPreviewZone* GetCastPreviewZone();
+
+		/**
 		* @brief ゾーンの移動処理
 		* @param [in]カードのポインタ
 		* @param [in]現在のゾーン
@@ -91,11 +98,12 @@ namespace My
 		bool MoveZone(CCard* pCard, CZone* pCurrentZone, CZone* pNextZone,bool Addflag);
 
 	private:
-		CCemeteryZone* m_pCemetery;	// 墓地のポインタ
-		CDeckZone* m_pDeck;			// 山札のポインタ
-		CFieldZone* m_pFieldZone;	// フィールドゾーンのポインタ
-		CHandZone* m_pHandZone;		// 手札ゾーンのポインタ
-		CWaitZone* m_pWaitZone;		// 待機ゾーンのポインタ
+		CCemeteryZone* m_pCemetery;				// 墓地のポインタ
+		CDeckZone* m_pDeck;						// 山札のポインタ
+		CFieldZone* m_pFieldZone;				// フィールドゾーンのポインタ
+		CHandZone* m_pHandZone;					// 手札ゾーンのポインタ
+		CWaitZone* m_pWaitZone;					// 待機ゾーンのポインタ
+		CCastPreviewZone* m_pCastPreviewZone;	// キャストプレビューゾーンのポインタ
 	};
 }
 #endif
