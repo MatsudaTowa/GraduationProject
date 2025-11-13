@@ -196,6 +196,9 @@
     <ClCompile Include="src\castpreview_zone.cpp">
       <Filter>zone\cast</Filter>
     </ClCompile>
+    <ClCompile Include="src\card_info.cpp">
+      <Filter>card</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -393,6 +396,9 @@
     <ClInclude Include="src\button.h" />
     <ClInclude Include="src\castpreview_zone.h">
       <Filter>zone\cast</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_info.h">
+      <Filter>card</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
