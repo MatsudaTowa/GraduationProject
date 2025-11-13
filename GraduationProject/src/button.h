@@ -1,21 +1,21 @@
 //=============================================
 //
-//準備できているかの切り替えボタン[ready_button.h]
+// ボタン[button.h]
 //Author Matsuda Towa
 //
 //=============================================
-#ifndef _READY_BUTTON_H_ //これが定義されてないとき
+#ifndef _BUTTON_H_ //これが定義されてないとき
 
-#define _READY_BUTTON_H_
+#define _BUTTON_H_
 #include "main.h"
-#include "button.h"
+#include "object2D.h"
 
 namespace My
 {
 	//=============================================
-	///準備できているかの切り替えボタン
+	///ボタン
 	//=============================================
-	class CReadyButton : public CButton
+	class CButton : public CObject2D
 	{
 	public:
 		static const int PRIORITY = 25;  //描画順
@@ -24,11 +24,11 @@ namespace My
 		 * @brief コンストラクタ
 		 * @param [in]プライオリティ
 		 */
-		CReadyButton(int nPriority = PRIORITY);
+		CButton(int nPriority = PRIORITY);
 		/**
 		 * @brief デストラクタ
 		 */
-		~CReadyButton()override;
+		~CButton()override;
 		/**
 		 * @brief 初期化
 		 * @return 成功したか
@@ -50,25 +50,14 @@ namespace My
 		/**
 		 * @brief ボタンが押された時の処理
 		 */
-		void ButtonTrigger()override;
+		virtual void ButtonTrigger() = 0;
 
 		/**
 		 * @brief マウスの判定
 		 * @return 当たっているか
 		 */
-		bool ProcessMouseEvent()override;
-
-		/**
-		 * @brief 生成
-		 * @param [in]位置
-		 * @param [in]サイズ
-		 * @return
-		 */
-		static CReadyButton* Create(D3DXVECTOR3 pos, D3DXVECTOR2 size);
-
-		CFontManager* GetFontManager() { return m_font_manager; }
+		virtual bool ProcessMouseEvent();
 	private:
-		CFontManager* m_font_manager;
 	};
 }
 

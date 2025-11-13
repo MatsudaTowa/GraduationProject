@@ -58,8 +58,6 @@ void My::CPlayerLobbyState::Lobby(CActiveSceneCharacter* character)
 	}
 	CPlayerLobbyUIManager* player_lobby_manager = dynamic_cast<CPlayerLobbyUIManager*>(lobbyUI);
 	
-
-	//TODO:ボタンは処理をまとめなさい
 	CReadyButton* pReadyButton = player_lobby_manager->GetReadyButton();
 	CMatchStartButton* pStartButton = player_lobby_manager->GetStartButton();
 
@@ -68,38 +66,9 @@ void My::CPlayerLobbyState::Lobby(CActiveSceneCharacter* character)
 		return;
 	}
 
-	if (!GET_COLISION->Check2DPolygonColision(GET_INPUT_MOUSE->GetMousePos(), { 3.0f,3.0f }, { pReadyButton->GetPos().x,pReadyButton->GetPos().y,0.0f }, pReadyButton->GetSize()))
-	{
-		pReadyButton->SetColor({ 0.2f,0.2f,0.2f,1.0f });
-		return;
-	}
-
-	pReadyButton->SetColor(COLOR_WHITE);
-	if (GET_INPUT_MOUSE->GetTrigger(0))
-	{
-		bool isReady = GetIsReady();
-		isReady = isReady ? false : true;
-		SetIsReady(isReady);
-
-		if (isReady)
-		{
-			const wchar_t* txt = L"CANCEL";
-			D3DXVECTOR3 pos = pReadyButton->GetPos();
-
-			pReadyButton->GetFontManager()->SetText(txt, { pos.x - pReadyButton->GetSize().x * 0.6f,pos.y,pos.z }, 25.0f, 30.0f, 50, 6);
-		}
-		else if (!isReady)
-		{
-			const wchar_t* txt = L"READY";
-			D3DXVECTOR3 pos = pReadyButton->GetPos();
-
-			pReadyButton->GetFontManager()->SetText(txt, { pos.x - pReadyButton->GetSize().x * 0.55f,pos.y,pos.z }, 30.0f, 35.0f, 50, 6);
-		}
-
-		if (!CRakNet::GetInstance()->GetOnline()) return;
-		//通信処理
-		CRakNet::GetInstance()->GetClient()->SendReady(nullptr, CRakNet::GetInstance()->GetPeer());
-	}
+	// それぞれのマウスのイベントを呼ぶ
+	pReadyButton->ProcessMouseEvent();
+	pStartButton->ProcessMouseEvent();
 }
 
 //=============================================

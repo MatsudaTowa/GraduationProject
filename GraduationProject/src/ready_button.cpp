@@ -5,11 +5,13 @@
 //
 //=============================================
 #include "ready_button.h"
+#include "active_scene_manager.h"
+#include "raknet.h"
 
 //=============================================
 // コンストラクタ
 //=============================================
-My::CReadyButton::CReadyButton(int nPriority):CObject2D(nPriority),
+My::CReadyButton::CReadyButton(int nPriority):CButton(nPriority),
 m_font_manager(nullptr)
 {
 }
@@ -26,7 +28,7 @@ My::CReadyButton::~CReadyButton()
 //=============================================
 HRESULT My::CReadyButton::Init()
 {
-	CObject2D::Init();
+	CButton::Init();
 
 	SetColor(COLOR_WHITE);
 
@@ -39,9 +41,6 @@ HRESULT My::CReadyButton::Init()
 		D3DXVECTOR3 pos = GetPos();
 		m_font_manager->Regist(txt, { pos.x - GetSize().x * 0.55f,pos.y,pos.z }, 30.0f, 35.0f, 50, 6);
 	}
-
-	SetVtx();
-
 	return S_OK;
 }
 
@@ -57,7 +56,7 @@ void My::CReadyButton::Uninit()
 		m_font_manager = nullptr;
 	}
 
-	CObject2D::Uninit();
+	CButton::Uninit();
 }
 
 //=============================================
@@ -81,8 +80,7 @@ void My::CReadyButton::Update()
 		m_font_manager->SetText(txt, { pos.x - GetSize().x * 0.55f,pos.y,pos.z }, 30.0f, 35.0f, 50, 6);
 	}
 #endif // _DEBUG
-
-	SetVtx();
+	CButton::Update();
 }
 
 //=============================================
@@ -90,7 +88,70 @@ void My::CReadyButton::Update()
 //=============================================
 void My::CReadyButton::Draw()
 {
-	CObject2D::Draw();
+	CButton::Draw();
+}
+
+//=============================================
+// ボタンが押された時の処理
+//=============================================
+void My::CReadyButton::ButtonTrigger()
+{
+	CActiveScenePlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();
+	if (player == nullptr) { return; }
+
+	CActiveSceneCharacterState* state = player->GetState();
+	// ロビーじゃなかったら抜ける
+	if (typeid(*state) != typeid(CPlayerLobbyState)) { return; }
+
+	CPlayerLobbyState* lobby_state = dynamic_cast<CPlayerLobbyState*>(state);
+
+	//準備OKか切り替え
+	bool isReady = lobby_state->GetIsReady();
+	isReady = isReady ? false : true;
+	lobby_state->SetIsReady(isReady);
+
+	if (isReady)
+	{
+		const wchar_t* txt = L"CANCEL";
+		D3DXVECTOR3 pos = GetPos();
+
+		GetFontManager()->SetText(txt, { pos.x - GetSize().x * 0.6f,pos.y,pos.z }, 25.0f, 30.0f, 50, 6);
+	}
+	else if (!isReady)
+	{
+		const wchar_t* txt = L"READY";
+		D3DXVECTOR3 pos = GetPos();
+
+		GetFontManager()->SetText(txt, { pos.x - GetSize().x * 0.55f,pos.y,pos.z }, 30.0f, 35.0f, 50, 6);
+	}
+
+	if (!CRakNet::GetInstance()->GetOnline()) return;
+	//通信処理
+	CRakNet::GetInstance()->GetClient()->SendReady(nullptr, CRakNet::GetInstance()->GetPeer());
+}
+
+//=============================================
+// マウスとの判定
+//=============================================
+bool My::CReadyButton::ProcessMouseEvent()
+{
+	bool ishit = CButton::ProcessMouseEvent();
+
+	if (ishit)
+	{
+		SetColor(COLOR_WHITE);
+		if (GET_INPUT_MOUSE->GetTrigger(0))
+		{
+			//押された時の処理の名前
+			ButtonTrigger();
+		}
+	}
+	else if(!ishit)
+	{
+		SetColor({ 0.2f,0.2f,0.2f,1.0f });
+	}
+
+	return ishit;
 }
 
 //=============================================

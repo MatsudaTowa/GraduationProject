@@ -192,6 +192,7 @@
     <ClCompile Include="src\match_start_button.cpp">
       <Filter>active_scene\lobby</Filter>
     </ClCompile>
+    <ClCompile Include="src\button.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -386,6 +387,7 @@
     <ClInclude Include="src\match_start_button.h">
       <Filter>active_scene\lobby</Filter>
     </ClInclude>
+    <ClInclude Include="src\button.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">

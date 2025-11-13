@@ -68,6 +68,10 @@ namespace My
 		*/
 		void Lobby(CActiveScene* game) override;
 		/**
+		 * @brief オフラインでデュエルシーンに切り替える処理
+		 */
+		void OfflineChangeToDuel();
+		/**
 		* @brief 通信処理
 		* @param [in]ゲームポインタ
 		*/

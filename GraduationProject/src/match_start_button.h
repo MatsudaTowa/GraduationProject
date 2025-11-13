@@ -8,14 +8,14 @@
 
 #define _MATCH_START_BUTTON_H_
 #include "main.h"
-#include "object2D.h"
+#include "button.h"
 
 namespace My
 {
 	//=============================================
 	///準備できているかの切り替えボタン
 	//=============================================
-	class CMatchStartButton : public CObject2D
+	class CMatchStartButton : public CButton
 	{
 	public:
 		static const int PRIORITY = 25;  //描画順
@@ -46,6 +46,18 @@ namespace My
 		 * @brief 描画
 		 */
 		void Draw()override;
+
+		/**
+		 * @brief ボタンが押された時の処理
+		 */
+		void ButtonTrigger()override;
+
+		/**
+		 * @brief マウスの判定
+		 * @return 当たっているか
+		 */
+		bool ProcessMouseEvent()override;
+
 		/**
 		 * @brief 生成
 		 * @param [in]位置

@@ -5,11 +5,12 @@
 //
 //=============================================
 #include "match_start_button.h"
-
+#include "active_scene_manager.h"
+#include "raknet.h"
 //=============================================
 // コンストラクタ
 //=============================================
-My::CMatchStartButton::CMatchStartButton(int nPriority):CObject2D(nPriority),
+My::CMatchStartButton::CMatchStartButton(int nPriority):CButton(nPriority),
 m_font_manager(nullptr)
 {
 }
@@ -26,7 +27,7 @@ My::CMatchStartButton::~CMatchStartButton()
 //=============================================
 HRESULT My::CMatchStartButton::Init()
 {
-	CObject2D::Init();
+	CButton::Init();
 
 	SetColor(COLOR_WHITE);
 
@@ -39,8 +40,6 @@ HRESULT My::CMatchStartButton::Init()
 		D3DXVECTOR3 pos = GetPos();
 		m_font_manager->Regist(txt, { pos.x - GetSize().x * 0.55f,pos.y,pos.z }, 30.0f, 35.0f, 50, 6);
 	}
-
-	SetVtx();
 
 	return S_OK;
 }
@@ -57,7 +56,7 @@ void My::CMatchStartButton::Uninit()
 		m_font_manager = nullptr;
 	}
 
-	CObject2D::Uninit();
+	CButton::Uninit();
 }
 
 //=============================================
@@ -65,7 +64,7 @@ void My::CMatchStartButton::Uninit()
 //=============================================
 void My::CMatchStartButton::Update()
 {
-	SetVtx();
+	CButton::Update();
 }
 
 //=============================================
@@ -74,6 +73,62 @@ void My::CMatchStartButton::Update()
 void My::CMatchStartButton::Draw()
 {
 	CObject2D::Draw();
+}
+
+//=============================================
+// ボタンが押された時の処理
+//=============================================
+void My::CMatchStartButton::ButtonTrigger()
+{
+	CActiveSceneState* scene_state = CActiveSceneManager::GetInstance()->GetState();
+	if (typeid(*scene_state) != typeid(CLobby)) { return; }
+	CLobby* lobby_state = dynamic_cast<CLobby*>(scene_state);
+
+	CActiveScenePlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();
+	if (player == nullptr) { return; }
+
+	if (player->GetPlayerIdx() != INT_ZERO) { return; }
+
+	bool is_online = CRakNet::GetInstance()->GetOnline();
+	if (is_online)
+	{
+		//サーバーに対戦開始の合図を送る
+		CRakNet::GetInstance()->SendStartSign();
+	}
+	else if(!is_online)
+	{
+		lobby_state->OfflineChangeToDuel();
+	}
+
+}
+
+//=============================================
+// マウスとの判定
+//=============================================
+bool My::CMatchStartButton::ProcessMouseEvent()
+{
+	SetColor({ 0.2f,0.2f,0.2f,1.0f });
+
+	bool ishit = CButton::ProcessMouseEvent();
+
+	CActiveScenePlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();
+	if (player->GetPlayerIdx() != INT_ZERO) { return ishit; }
+
+	if (ishit)
+	{
+		SetColor(COLOR_WHITE);
+		if (GET_INPUT_MOUSE->GetTrigger(0))
+		{
+			//押された時の処理の名前
+			ButtonTrigger();
+		}
+	}
+	else if (!ishit)
+	{
+		SetColor({ 0.2f,0.2f,0.2f,1.0f });
+	}
+
+	return ishit;
 }
 
 //=============================================
