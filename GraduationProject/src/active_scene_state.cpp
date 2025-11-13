@@ -46,10 +46,7 @@ void My::CLobby::Lobby(CActiveScene* game)
 	//TODO:生成は接続されたら行うカタチになる
 	CreatePlayers(pKeyboard, enemy);
 
-
 	OfflineChangeToDuel();
-	
-
 	//オンラインの対戦開始処理
 	OnlineChangeToDuel();
 }
@@ -60,6 +57,7 @@ void My::CLobby::Lobby(CActiveScene* game)
 void My::CLobby::OfflineChangeToDuel()
 {
 	if (!m_isBattle) { return; }
+
 	std::list<CEnemy*> enemy = CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList();
 
 	int total = (int)enemy.size() + 1; // プレイヤー含む
