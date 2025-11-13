@@ -14,7 +14,6 @@
 //=====================================
 void CDuel_Data::NewConnection(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
 {
-
     //ログ
     std::cout << "対戦中にプレイヤーを受信しました\n";
 
@@ -398,6 +397,9 @@ void CDuel_Data::ReceiveStatus(RakNet::Packet* packet, RakNet::RakPeerInterface*
         bsOut.Write(SendData);
     }
 
+    //キャストされたカードを送信
+    SendCastCard(&bsOut);
+
     //全クライアントにブロードキャスト
     peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 }
@@ -447,4 +449,64 @@ bool CDuel_Data::IsSendUpdate(RakNet::Packet* packet)
     if (m_nReceiveNum != PlayerNum) return false;
 
     return true;
+}
+
+//=====================================
+//キャストカードの受信
+//=====================================
+void CDuel_Data::ReceiveCastCard(RakNet::Packet* packet)
+{
+    //データの受信
+    RakNet::BitStream bsIn(packet->data, packet->length, false);
+
+    //読み取り
+    bsIn.IgnoreBytes(sizeof(RakNet::MessageID));    //メッセージの読み込み
+    CastCardInfo CastInfo = {};                     //データの読み込み
+    int nTargetNum = 0;                             //ターゲット数
+
+    //カード情報の読み込み
+    bsIn.Read(CastInfo.nCardID);        //カード情報
+    bsIn.Read(CastInfo.nPlayerID);      //使用者番号
+
+    bsIn.Read(nTargetNum);              //ターゲット数
+
+    //ターゲット数だけ周回
+    for (int i = 0; i < nTargetNum; i++)
+    {
+        int nTarget = 0;                    //ターゲット数
+        bsIn.Read(nTargetNum);              //読み込み
+
+        CastInfo.m_TargetIDList.push_back(nTargetNum);  //リストに追加
+    }
+}
+
+//=====================================
+//キャストカードの送信
+//=====================================
+void CDuel_Data::SendCastCard(RakNet::BitStream* bsout)
+{
+    return; //TODO : 作業中の為return
+
+    //キャストされたカード枚数
+    bsout->Write((int)m_CastCardList.size());
+
+    //キャストカード情報の送信
+    for (auto& iter : m_CastCardList)
+    {
+        bsout->Write(iter.nCardID);     //カード番号
+        bsout->Write(iter.nPlayerID);   //プレイヤーID
+
+        bsout->Write((int)iter.m_TargetIDList.size());   //対象の数
+
+        //対象の数だけ周回
+        for (auto iter : iter.m_TargetIDList)
+        {
+            bsout->Write(iter); //対象の番号
+        }
+
+        //対象者のリストをクリア
+        iter.m_TargetIDList.clear();
+    }
+
+    m_CastCardList.clear();
 }

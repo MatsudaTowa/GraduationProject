@@ -257,13 +257,13 @@ void CClient_Duel::AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer
         m_DuelPlayerList.push_back(Param);
 
         //CPUなら敵を生成
-        if (Param.Param.ClientID == static_cast<RakNet::RakNetGUID>(-1))
+        //if (Param.Param.ClientID == static_cast<RakNet::RakNetGUID>(-1))
         {
             //カウントアップ
             nEnemyCount++;
 
             //すでに生成されている敵は生成しない
-            if (My::CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList().size() < nEnemyCount)
+            if (My::CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList().size() + 1 < nEnemyCount)
             {
                 My::CEnemy::Create({ i * 100.0f + 50.0f, 0.0f, 0.0f }, VEC3_RESET_ZERO, i);
             }
@@ -458,5 +458,50 @@ void CClient_Duel::SendMyStatus(RakNet::RakPeerInterface* peer)
     {
         //サーバーにブロードキャスト
         peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, peer->GetSystemAddressFromIndex(0), false);
+    }
+}
+
+//=====================================
+//キャストカードの受信
+//=====================================
+void CClient_Duel::ReceiveCastCard(RakNet::Packet* packet)
+{
+    //受信側
+    RakNet::BitStream bsIn(packet->data, packet->length, false);
+
+    //人数を取得
+    unsigned char messageId;    //メッセージ
+    int nCardNum = 0;           //カード数
+
+    //読み込み
+    bsIn.Read(messageId);   //メッセージ
+    bsIn.Read(nCardNum);    //カード数
+
+    //カード数の周回
+    for (int i = 0; i < nCardNum; i++)
+    {
+        //変数
+        int nCardID = 0;                //カード番号
+        int nPlayerID = 0;              //プレイヤー番号
+        int nTargetNum = 0;             //ターゲット数
+        std::vector<int> TargetVector;  //ターゲットベクター
+        TargetVector.clear();
+
+        //読み込み
+        bsIn.Read(nCardID);      //カード番号
+        bsIn.Read(nPlayerID);    //プレイヤー番号
+        bsIn.Read(nTargetNum);   //ターゲット数
+
+        //ターゲット数分周回
+        for (int j = 0; j < nTargetNum; j++)
+        {
+            int nTargetID = 0;
+            bsIn.Read(nTargetID);
+
+            //対象の保存
+            TargetVector.push_back(nTargetID);
+        }
+
+        //TODO : キャストカード情報の追加
     }
 }

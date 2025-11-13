@@ -34,6 +34,7 @@ public:
 	void SendStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override {}		//ステータスを送る
 	void AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;			//CPUの追加
 	void ReceiveStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override {}	//ステータスを受信
+	void ReceiveCastCard(RakNet::Packet* packet) override {}								//キャストカードの受信
 
 	//プレイヤーのデータリスト
 	void SetData(std::list<CPlayer::Data> data) override;	//設定

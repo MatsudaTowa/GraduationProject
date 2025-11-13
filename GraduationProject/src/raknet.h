@@ -43,6 +43,7 @@ public:
 		ID_DUEL_MESSAGE_START,			//対戦の開始を通知
 		ID_DUEL_MESSAGE_SEND_STATUS,	//ステータスを送る
 		ID_DUEL_MESSAGE_STATUS,			//ステータスの通知
+		ID_DUEL_MESSAGE_CAST_CARD,		//キャストカードを通知
 		ID_DUEL_MESSAGE_1,				//対戦時のメッセージ
 	};
 
@@ -59,9 +60,9 @@ public:
 	void Accept();		//接続待ち受け処理
 	void Uninit();		//終了処理
 	void Communication(RakNet::RakPeerInterface* peer);		//通信処理
-	void SendStartSign();											//開始の合図を送信
-	void SendStatus();												//ステータスの送信
-	void SendAddEnemy();											//敵の追加を送信
+	void SendStartSign();									//開始の合図を送信
+	void SendStatus();										//ステータスの送信
+	void SendAddEnemy();									//敵の追加を送信
 
 	//設定と取得
 	RakNet::RakPeerInterface* GetPeer() { return m_pPeer; }	//ピアの取得
@@ -82,6 +83,37 @@ public:
 
 	//自身のステータスを送信
 	void SendMyStatus();
+
+	//キャストカードの送信
+	template<typename... Args>
+	void SendCastCard(int cardid, int playerid, Args... args)
+	{
+		//データの作成
+		RakNet::BitStream bsOut;
+		bsOut.Write((RakNet::MessageID)GameMessages::ID_DUEL_MESSAGE_CAST_CARD);    //メッセージ
+		bsOut.Write(cardid);														//カード番号
+		bsOut.Write(playerid);														//使用者番号
+
+		//対象者の数を確認し書き出し
+		int nLength = sizeof...(args);
+		bsOut.Write(nLength);
+
+		//攻撃対象の書き出し
+		for (int Target : std::initializer_list<int>{ args... }) 
+		{
+			bsOut.Write(Target);													//対象者者番号
+		}
+
+		//サーバーに送信
+		RakNet::SystemAddress server_address = m_pPeer->GetSystemAddressFromIndex(0);
+
+		//サーバーの確認
+		if (server_address != RakNet::UNASSIGNED_SYSTEM_ADDRESS)
+		{
+			//サーバーにブロードキャスト
+			m_pPeer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, m_pPeer->GetSystemAddressFromIndex(0), false);
+		}
+	}
 
 private:
 

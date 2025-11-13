@@ -19,7 +19,7 @@ class CDuel_Data : public CRakNet_Data
 public:
 
 	//関数
-	CDuel_Data() : m_DuelPlayerList(), m_isCheckStart{ false,false,false,false }, m_nReceiveNum(0){} 	//コンストラクタ
+	CDuel_Data() : m_DuelPlayerList(), m_isCheckStart{ false,false,false,false }, m_nReceiveNum(0), m_CastCardList(){} 	//コンストラクタ
 	~CDuel_Data() {}										//デストラクタ
 
 	//送受信の処理
@@ -34,6 +34,7 @@ public:
 	void SendStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;			//ステータスを送る
 	void AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override {}				//CPUの追加
 	void ReceiveStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;		//ステータスを受信
+	void ReceiveCastCard(RakNet::Packet* packet) override;										//キャストカードの受信
 
 	//プレイヤーのデータリスト
 	void SetData(std::list<CPlayer::Data> data) override;	//設定
@@ -41,17 +42,27 @@ public:
 
 private:
 
+	//キャストカード情報
+	struct CastCardInfo
+	{
+		int nPlayerID;					//使用者ID
+		std::list<int> m_TargetIDList;	//ターゲットIDリスト
+		int nCardID;					//カードID
+	};
+
 	//定数
 	static constexpr int MAX_CLIENT{ 4 };	//最大人数
 
 	//関数
 	void SendPlayerNum(RakNet::RakPeerInterface* peer, GameMessages message);	//プレイヤー数を送信する関数
 	bool IsSendUpdate(RakNet::Packet* packet);									//更新の許可を出すか
+	void SendCastCard(RakNet::BitStream* bsout);								//キャストカードの送信
 
 	//変数
 	std::list<CDuel_Player*> m_DuelPlayerList;	//ロビープレイヤー保管用変数
 	bool m_isCheckStart[MAX_CLIENT];			//開始するかのフラグ
 	int m_nReceiveNum;							//ステータスを受信した数
+	std::list<CastCardInfo> m_CastCardList;		//キャストカードのリスト
 };
 
 #endif

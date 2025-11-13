@@ -50,6 +50,7 @@ public:
 	virtual void ReceiveAddEnemy(RakNet::Packet* packet) = 0;							//敵の追加を受信
 	virtual void ReceiveIsUpdate(RakNet::Packet* packet) = 0;							//更新可能かを受信する
 	virtual void SendMyStatus(RakNet::RakPeerInterface* peer) = 0;						//自分のステータスを送る
+	virtual void ReceiveCastCard(RakNet::Packet* packet) = 0;							//キャストカードの受信
 
 	//設定と取得
 
