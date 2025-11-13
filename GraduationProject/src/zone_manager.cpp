@@ -69,6 +69,18 @@ HRESULT My::CZoneManager::Init()
 	{
 		m_pCastPreviewZone = new CCastPreviewZone();
 	}
+
+	// 待機ゾーンのポインタ生成
+	if (m_pWaitZone == nullptr)
+	{
+		m_pWaitZone = new CWaitZone();
+	}
+
+	// 手札ゾーンのポインタ生成
+	if (m_pHandZone == nullptr)
+	{
+		m_pHandZone = new CHandZone();
+	}
 	return S_OK;
 }
 
