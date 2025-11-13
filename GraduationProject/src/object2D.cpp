@@ -172,7 +172,7 @@ void My::CObject2D::SetVtx(float fAngle, float fLength)
 	pVtx[2].pos = D3DXVECTOR3(m_pos.x + sinf(m_rot.z - fAngle) * fLength
 		, m_pos.y + cosf(m_rot.z - fAngle) * fLength
 		, 0.0f);
-	pVtx[3].pos = D3DXVECTOR3(m_pos.x + sinf(m_rot.z + fAngle) * fLength
+	pVtx[3].pos = D3DXVECTOR3(m_pos.x + sinf(m_rot.z + fAngle) * fLength 
 		, m_pos.y + cosf(m_rot.z + fAngle) * fLength
 		, 0.0f);
 

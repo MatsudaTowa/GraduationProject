@@ -11,9 +11,9 @@
 
 namespace
 {
-	const D3DXVECTOR2 arrow_up = { SCREEN_WIDTH * 0.5f,0.0f };
-	const D3DXVECTOR2 arrow_down = { SCREEN_WIDTH * 0.5f,SCREEN_HEIGHT};
-	const D3DXVECTOR2 arrow_right = {SCREEN_WIDTH*0.8f,SCREEN_HEIGHT * 0.5f };
+	const D3DXVECTOR2 arrow_up = { SCREEN_WIDTH * 0.5f,SCREEN_HEIGHT * 0.2f };
+	const D3DXVECTOR2 arrow_down = { SCREEN_WIDTH * 0.5f,SCREEN_HEIGHT * 0.8f };
+	const D3DXVECTOR2 arrow_right = { SCREEN_WIDTH * 0.8f,SCREEN_HEIGHT * 0.5f };
 	const D3DXVECTOR2 arrow_left = { SCREEN_WIDTH * 0.2f,SCREEN_HEIGHT * 0.5f };
 }
 
@@ -55,11 +55,20 @@ namespace My
 		void Draw()override;
 
 		/**
-		* @brief 
+		* @brief 生成
 		*/
 		static CTargetArrow* Create(int attacker, int target);
 
+		/**
+		* @brief 標的の位置を設定する
+		*/
 		static D3DXVECTOR2 SetTargetPos(D3DXVECTOR2 &target,int targetnum);
+
+		/**
+		* @brief 相手と自分の間の線上に位置を設定する
+		*/
+		void SetOnTheLinePos();
+
 	private:
 		/**
 		* @brief 角度と長さを設定
@@ -75,6 +84,16 @@ namespace My
 		* @brief 攻撃者
 		*/
 		D3DXVECTOR2 m_attacker;
+
+		/**
+		* @brief 矢印のベースサイズ
+		*/
+		D3DXVECTOR2 m_basesize;
+
+		/**
+		* @brief 矢印の三角の部分のポインタ
+		*/
+		CObject2D* m_triangle;
 	};
 }
 
