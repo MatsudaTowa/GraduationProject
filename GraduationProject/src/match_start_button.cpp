@@ -7,6 +7,7 @@
 #include "match_start_button.h"
 #include "active_scene_manager.h"
 #include "raknet.h"
+#include "card_manager.h"
 //=============================================
 // コンストラクタ
 //=============================================
@@ -36,6 +37,16 @@ HRESULT My::CMatchStartButton::Init()
 		m_font_manager = new CFontManager;
 		m_font_manager->Init();
 
+		//TODO:これでカードのテキスト読み込み
+		//std::vector<CCard_Client::Param> vector = CCardManager::GetInstance()->GetUseCardVector();
+		//const char* a = vector.at(0).Name.c_str();
+		//int len = MultiByteToWideChar(CP_UTF8, 0, a, -1, NULL, 0);
+
+		//std::wstring wtxt(len, L'\0');
+		//MultiByteToWideChar(CP_UTF8, 0, a, -1, &wtxt[0], len);
+	
+		//D3DXVECTOR3 pos = GetPos();
+		//m_font_manager->Regist(wtxt.c_str(), { pos.x - GetSize().x * 0.55f,pos.y,pos.z }, 30.0f, 35.0f, 50, 6);
 		const wchar_t* txt = L"START";
 		D3DXVECTOR3 pos = GetPos();
 		m_font_manager->Regist(txt, { pos.x - GetSize().x * 0.55f,pos.y,pos.z }, 30.0f, 35.0f, 50, 6);
@@ -83,11 +94,6 @@ void My::CMatchStartButton::ButtonTrigger()
 	CActiveSceneState* scene_state = CActiveSceneManager::GetInstance()->GetState();
 	if (typeid(*scene_state) != typeid(CLobby)) { return; }
 	CLobby* lobby_state = dynamic_cast<CLobby*>(scene_state);
-
-	CActiveScenePlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();
-	if (player == nullptr) { return; }
-
-	if (player->GetPlayerIdx() != INT_ZERO) { return; }
 
 	bool is_online = CRakNet::GetInstance()->GetOnline();
 	if (is_online)
