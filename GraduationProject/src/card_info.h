@@ -10,12 +10,14 @@
 
 // include
 #include "card_manager.h"
-#include <unordered_map>
-#include <shared_mutex>
 #include <vector>
+#include <variant>
 #include <optional>
-#include <string>
 #include <memory>
+#include <shared_mutex>
+#include <stdexcept>
+#include <cstdint>
+#include "../src/nlohmann/json.hpp"
 
 /** @brief My 名前空間 */
 namespace My
@@ -118,6 +120,13 @@ namespace My
 			std::string ImagePath;					// 画像ファイルパス
 		};
 
+		// パックのバラメータ
+		struct PackParam
+		{
+			std::string name;	// パック名
+			std::string ruby;	// パック名の読み方
+		};
+
 		//基本カードのパラメータ
 		struct BaseParam
 		{
@@ -157,43 +166,8 @@ namespace My
 			HealType Healtype;				// 回復の種類
 		};
 
-		/**
-		* @brief コンストラクタ
-		*/
-		CCardInfo();
+		using Payload = std::variant<std::monostate, AttackParam, DefenseParam, AssistParam>;
 
-		/**
-		* @brief デストラクタ
-		*/
-		~CCardInfo();
-
-		/**
-		* @brief 初期化処理
-		* @return 成功したかどうか
-		*/
-		HRESULT Init();
-
-		/**
-		* @brief 終了処理
-		*/
-		void Uninit();
-
-		/**
-		* @brief 更新処理
-		*/
-		void Update();
-
-		//インスタンス
-		static CCardInfo* GetInstance()
-		{
-			static CCardInfo instance; //静的インスタンス
-			return &instance;
-		}
-
-		/**
-		* @brief 読み込み処理
-		* @param [in]バイナリデータ
-		*/
 	};
 }
 #endif
