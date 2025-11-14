@@ -211,5 +211,5 @@ void My::CCardStateTrigger::Init(CCard* cpy)
 	CActiveSceneManager::GetInstance()->GetAreaManager()->CardTrigger(cpy->GetTarget());
 
 	// ƒgƒŠƒK[‚³‚ê‚½Û‚ÉÁ‹Ž‚·‚é
-	cpy->GetTargetArrow()->Uninit();
+	cpy->GetTargetArrow()->SetisDelete(true);
 }

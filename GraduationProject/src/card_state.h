@@ -41,13 +41,13 @@ namespace My
 
 		/** @brief ‰Šú‰» */
 		virtual void Init() {};
-		virtual void Init(CCard* cpy) {};
+		virtual void Init(CCard* cpy) { cpy; };
 
 		/** @brief I—¹ */
 		virtual void Uninit();
 		
 		/** @brief XV */
-		virtual void Update(CCard* cpy) {};
+		virtual void Update(CCard* cpy) { cpy; };
 
 		/** @brief İ’è */
 		void Copy(CCard* cpy);
