@@ -69,15 +69,19 @@ namespace My
 		*/
 		void SetOnTheLinePos();
 
+		/**
+		* @brief UŒ‚Òæ“¾
+		*/
 		inline D3DXVECTOR2 GetAttacker() { return m_attacker; }
+
+		/**
+		* @brief UŒ‚‘ÎÛÒæ“¾
+		*/
 		inline D3DXVECTOR2 GetTarget() { return m_target; }
 
 	private:
 
-		/**
-		* @brief Å‘åƒTƒCƒY
-		*/
-		const float MAX_SIZE = 250.0f;
+		
 
 		/**
 		* @brief Šp“x‚Æ’·‚³‚ğİ’è

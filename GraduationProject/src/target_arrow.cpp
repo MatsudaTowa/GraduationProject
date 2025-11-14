@@ -2,8 +2,10 @@
 
 namespace
 {
-	const std::string TEX_NAME = "data\\TEXTURE\\arrow_square.png";
-	const std::string TRIANGLE_TEX_NAME = "data\\TEXTURE\\arrow_triangle.png";
+	const std::string TEX_NAME = "data\\TEXTURE\\arrow_square.png";				// 矢印の四角の部分テクスチャ
+	const std::string TRIANGLE_TEX_NAME = "data\\TEXTURE\\arrow_triangle.png";	// 矢印の三角の部分のテクスチャ
+	const float MAX_SIZE = 150.0f;	// 矢印の最大長さ
+	const float EXTEND_SPEED = 5.0f;	// 矢印が伸びる速さ
 }
 
 //===========================================================================================================
@@ -33,14 +35,8 @@ HRESULT My::CTargetArrow::Init()
 
 	SetPos(pos);
 
-	//// 位置設定
-	//SetPos({ SCREEN_WIDTH * 0.5f,SCREEN_HEIGHT * 0.5f ,0.0f });
-
-	// サイズの倍率
-	float size_mag = 5.0f;
-
 	// サイズ設定
-	SetSize({ 5* size_mag,1 });
+	SetSize({ 25.0f,0.0f });
 
 	// ベースサイズ
 	m_basesize = GetSize();
@@ -91,7 +87,7 @@ void My::CTargetArrow::Uninit()
 void My::CTargetArrow::Update()
 {
 	D3DXVECTOR2 size = GetSize();
-	size.y += 5.0f;
+	size.y += EXTEND_SPEED;
 	SetSize(size);
 
 	if (GetSize().y >= MAX_SIZE)
@@ -172,7 +168,7 @@ D3DXVECTOR2 My::CTargetArrow::SetTargetPos(D3DXVECTOR2& target, int targetnum)
 void My::CTargetArrow::SetOnTheLinePos()
 {
 	// 倍率の係数
-	float a = 0.55f;
+	float a = 0.3f;
 
 	// 位置・サイズの取得
 	D3DXVECTOR3 pos = GetPos();
@@ -190,8 +186,8 @@ void My::CTargetArrow::SetOnTheLinePos()
 	result.y = std::lerp(m_attacker.y, m_target.y, ratio *  a);
 
 	// 線形補間
-	result2.x = std::lerp(m_attacker.x, m_target.x, ratio * -1.2f);
-	result2.y = std::lerp(m_attacker.y, m_target.y, ratio * 1.2f);
+	result2.x = std::lerp(m_attacker.x, m_target.x, -ratio * 0.7f);
+	result2.y = std::lerp(m_attacker.y, m_target.y, ratio * 0.7f);
 
 	// 位置の設定
 	pos = { result.x, result.y, 0.0f };
