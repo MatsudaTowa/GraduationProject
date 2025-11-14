@@ -42,14 +42,17 @@ void CDuel_Data::DisConnection(RakNet::Packet* packet, RakNet::RakPeerInterface*
         //削除
         std::cout << "プレイヤー" << iter->GetIndex() + 1 << "をリストから削除しました\n";
 
+        iter->SetTag(CPlayer::TAG::TAG_CPU);
+        iter->SetRakNetID(static_cast<RakNet::RakNetGUID>(-1));   //RakNetID
+
         //破棄の処理
-        if (iter != nullptr)
+       /* if (iter != nullptr)
         {
             delete iter;
             iter = nullptr;
         }
 
-        m_DuelPlayerList.remove(iter);
+        m_DuelPlayerList.remove(iter);*/
         //上記のこれ破棄してなくない？
 
         break;
@@ -68,10 +71,16 @@ void CDuel_Data::DisConnection(RakNet::Packet* packet, RakNet::RakPeerInterface*
     int i = 0;
 
     //番号の補正
-    for (auto& iter : m_DuelPlayerList)
+   /* for (auto& iter : m_DuelPlayerList)
     {
         iter->SetIndex(i);
         i++;
+    }*/
+
+    //更新の合図を出すか確認
+    if (IsDisconnectionSendUpdate())
+    {
+        SendUpdateSign(peer);
     }
 }
 
@@ -378,30 +387,33 @@ void CDuel_Data::ReceiveStatus(RakNet::Packet* packet, RakNet::RakPeerInterface*
     //送信するかの確認
     if (!IsSendUpdate(packet)) return;
 
+    //更新の合図を送る
+    SendUpdateSign(peer);
+
     //受信数の初期化
-    m_nReceiveNum = 0;
+    //m_nReceiveNum = 0;
 
-    //データの作成
-    RakNet::BitStream bsOut;
-    bsOut.Write((RakNet::MessageID)GameMessages::ID_DUEL_MESSAGE_STATUS);
+    ////データの作成
+    //RakNet::BitStream bsOut;
+    //bsOut.Write((RakNet::MessageID)GameMessages::ID_DUEL_MESSAGE_STATUS);
 
-    //書き出し
-    for (auto iter : m_DuelPlayerList)
-    {
-        //送信用のデータをまとめる
-        CDuel_Player::DuelData SendData;
-        SendData.BaceData.RakNetID = iter->GetRakNetID();   //識別番号
-        SendData.BaceData.nIndex = iter->GetIndex();        //番号
-        SendData.BaceData.Tag = iter->GetTag();             //タグ
-        SendData.Status = iter->GetStatus();                //ステータス
-        bsOut.Write(SendData);
-    }
+    ////書き出し
+    //for (auto iter : m_DuelPlayerList)
+    //{
+    //    //送信用のデータをまとめる
+    //    CDuel_Player::DuelData SendData;
+    //    SendData.BaceData.RakNetID = iter->GetRakNetID();   //識別番号
+    //    SendData.BaceData.nIndex = iter->GetIndex();        //番号
+    //    SendData.BaceData.Tag = iter->GetTag();             //タグ
+    //    SendData.Status = iter->GetStatus();                //ステータス
+    //    bsOut.Write(SendData);
+    //}
 
-    //キャストされたカードを送信
-    SendCastCard(&bsOut);
+    ////キャストされたカードを送信
+    //SendCastCard(&bsOut);
 
-    //全クライアントにブロードキャスト
-    peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+    ////全クライアントにブロードキャスト
+    //peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 }
 
 //=====================================
@@ -509,4 +521,59 @@ void CDuel_Data::SendCastCard(RakNet::BitStream* bsout)
     }
 
     m_CastCardList.clear();
+}
+
+//=====================================
+//更新の合図を送る
+//=====================================
+void CDuel_Data::SendUpdateSign(RakNet::RakPeerInterface* peer)
+{
+    //受信数の初期化
+    m_nReceiveNum = 0;
+
+    //データの作成
+    RakNet::BitStream bsOut;
+    bsOut.Write((RakNet::MessageID)GameMessages::ID_DUEL_MESSAGE_STATUS);
+
+    //書き出し
+    for (auto iter : m_DuelPlayerList)
+    {
+        //送信用のデータをまとめる
+        CDuel_Player::DuelData SendData;
+        SendData.BaceData.RakNetID = iter->GetRakNetID();   //識別番号
+        SendData.BaceData.nIndex = iter->GetIndex();        //番号
+        SendData.BaceData.Tag = iter->GetTag();             //タグ
+        SendData.Status = iter->GetStatus();                //ステータス
+        bsOut.Write(SendData);
+    }
+
+    //キャストされたカードを送信
+    SendCastCard(&bsOut);
+
+    //全クライアントにブロードキャスト
+    peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+}
+
+//=====================================
+//クライアントの切断時に更新の合図を送るか
+//=====================================
+bool CDuel_Data::IsDisconnectionSendUpdate()
+{
+    //プレイヤーの人数を確認
+    int PlayerNum = 0;
+    for (auto iter : m_DuelPlayerList)
+    {
+        if (iter->GetTag() == CPlayer::TAG_PLAYER)
+        {
+            PlayerNum++;
+        }
+    }
+
+    //テスト
+    std::cout << PlayerNum << "/" << m_nReceiveNum << "\n";
+
+    //プレイヤーの数だけ受信できていないなら許可しない
+    if (m_nReceiveNum != PlayerNum) return false;
+
+    return true;
 }

@@ -97,51 +97,51 @@ void CClient_Duel::Delete(RakNet::Packet* packet)
     bsIn.Read(nPlayerNum);
 
     //接続人数が0以下なら抜ける
-    if (nPlayerNum <= 0) return;
+    //if (nPlayerNum <= 0) return;
 
-    //中身を空に
-    m_DuelPlayerList.clear();
-    int nStart = 0;         //ずらし始める番号
+    ////中身を空に
+    //m_DuelPlayerList.clear();
+    //int nStart = 0;         //ずらし始める番号
 
-    //人数分読み込み
-    for (int i = 0; i < nPlayerNum; i++)
-    {
-        DuelPlayerParam Param;
-        bsIn.Read(Param.Param);
-        m_DuelPlayerList.push_back(Param);
+    ////人数分読み込み
+    //for (int i = 0; i < nPlayerNum; i++)
+    //{
+    //    DuelPlayerParam Param;
+    //    bsIn.Read(Param.Param);
+    //    m_DuelPlayerList.push_back(Param);
 
-        if (Param.Param.nIndex == i)
-        {
-            nStart++;
-        }
-    }
+    //    if (Param.Param.nIndex == i)
+    //    {
+    //        nStart++;
+    //    }
+    //}
 
-    //現在の敵を確認
-    //std::list<My::CEnemy*> EnemyList = My::CGameManager::GetInstance()->GetEnemyManager()->GetList();
+    ////現在の敵を確認
+    ////std::list<My::CEnemy*> EnemyList = My::CGameManager::GetInstance()->GetEnemyManager()->GetList();
 
-    //番号がずれている敵がいたら埋める
-    for (auto& iter : My::CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList())
-    {
-        //消えた番号より大きいならずらす
-        if (iter->GetPlayerIdx() > nStart)
-        {
-            iter->SetPlayerIdx(iter->GetPlayerIdx() - 1);
-        }
-        else if (iter->GetPlayerIdx() == nStart)
-        {//消える番号と一致したプレイヤーは削除
-            iter->SetisDelete(true);
-            My::CActiveSceneManager::GetInstance()->GetEnemyManager()->Remove(iter);
-        }
-    }
+    ////番号がずれている敵がいたら埋める
+    //for (auto& iter : My::CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList())
+    //{
+    //    //消えた番号より大きいならずらす
+    //    if (iter->GetPlayerIdx() > nStart)
+    //    {
+    //        iter->SetPlayerIdx(iter->GetPlayerIdx() - 1);
+    //    }
+    //    else if (iter->GetPlayerIdx() == nStart)
+    //    {//消える番号と一致したプレイヤーは削除
+    //        iter->SetisDelete(true);
+    //        My::CActiveSceneManager::GetInstance()->GetEnemyManager()->Remove(iter);
+    //    }
+    //}
 
-    //プレイヤーの番号がずれるかを確認
-    if (My::CActiveSceneManager::GetInstance()->GetPlayer() != nullptr)
-    {
-        if (My::CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx() > nStart)
-        {
-            My::CActiveSceneManager::GetInstance()->GetPlayer()->SetPlayerIdx(My::CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx() - 1);
-        }
-    }
+    ////プレイヤーの番号がずれるかを確認
+    //if (My::CActiveSceneManager::GetInstance()->GetPlayer() != nullptr)
+    //{
+    //    if (My::CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx() > nStart)
+    //    {
+    //        My::CActiveSceneManager::GetInstance()->GetPlayer()->SetPlayerIdx(My::CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx() - 1);
+    //    }
+    //}
 }
 
 //=====================================

@@ -84,9 +84,9 @@ void CRakNet_Data::DisConnection(RakNet::Packet* packet, RakNet::RakPeerInterfac
 void CRakNet_Data::LoadCard()
 {
     // コンソールの出力コードページを UTF-8 に変更
-    //SetConsoleOutputCP(CP_UTF8);
+    SetConsoleOutputCP(CP_UTF8);
 
-    std::locale::global(std::locale(""));
+    //std::locale::global(std::locale(""));
 
     //ファイルを開く
     std::ifstream ifs("json\\cards.cbor", std::ios::binary);

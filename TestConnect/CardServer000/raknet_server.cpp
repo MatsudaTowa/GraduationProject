@@ -81,6 +81,9 @@ void CRakNet_Server::Uninit()
 //=====================================
 void CRakNet_Server::Communication()
 {
+    // コンソールの出力コードページを UTF-8 に変更
+    SetConsoleOutputCP(CP_UTF8);
+
     //変数宣言
     RakNet::Packet* packet;
 
@@ -93,38 +96,38 @@ void CRakNet_Server::Communication()
             switch (packet->data[0]) 
             {
             case ID_REMOTE_DISCONNECTION_NOTIFICATION:
-                std::cout << "別のクライアントが切断されました\n";
+                std::cout << u8"別のクライアントが切断されました\n";
                 break;
             case ID_REMOTE_CONNECTION_LOST:
-                std::cout << "別のクライアントが接続を失いました.\n";
+                std::cout << u8"別のクライアントが接続を失いました.\n";
                 break;
             case ID_REMOTE_NEW_INCOMING_CONNECTION:
-                std::cout << "別のクライアントが接続しました\n";
+                std::cout << u8"別のクライアントが接続しました\n";
                 break;
             case ID_CONNECTION_REQUEST_ACCEPTED:
-                std::cout << "接続リクエストが承認されました\n";
+                std::cout << u8"接続リクエストが承認されました\n";
                 break;
             case ID_NEW_INCOMING_CONNECTION:
-                std::cout << "新しいクライアントが接続しました\n";
+                std::cout << u8"新しいクライアントが接続しました\n";
                 m_pRakNetData->NewConnection(packet, m_pPeer);
                 break;
             case ID_NO_FREE_INCOMING_CONNECTIONS:
-                std::cout << "サーバーがいっぱいです\n";
+                std::cout << u8"サーバーがいっぱいです\n";
                 break;
             case ID_DISCONNECTION_NOTIFICATION:
-                std::cout << "クライアントが切断されました\n";
+                std::cout << u8"クライアントが切断されました\n";
                 m_pRakNetData->DisConnection(packet, m_pPeer);
                 break;
             case ID_CONNECTION_LOST:
-                std::cout << "クライアントの接続が失われました\n";
+                std::cout << u8"クライアントの接続が失われました\n";
                 m_pRakNetData->DisConnection(packet, m_pPeer);
                 break;
             case CRakNet_Data::ID_CARD_MESSAGE_1:
-                std::cout << "指定番号のカードの情報";
+                std::cout << u8"指定番号のカードの情報";
                 m_pRakNetData->SendCard(packet, m_pPeer);
                 break;
                 case CRakNet_Data::ID_ALLCARD_MESSAGE_1:
-                std::cout << "全カードの情報";
+                std::cout << u8"全カードの情報";
                 m_pRakNetData->SendAllCard(packet, m_pPeer);
                 break;
            

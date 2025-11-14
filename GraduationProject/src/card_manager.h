@@ -46,6 +46,13 @@ namespace My
 		inline std::vector<CCard_Client::Param> GetUseCardVector() { return m_CardVector; }	//取得
 
 		/**
+		 * @brief 引数のIDのカード情報を取得
+		 * @param [in]取得したいカードのID
+		 * @return カードのパラメータ
+		 */
+		CCard_Client::Param GetCardParam(int id);
+
+		/**
 		 * @brief 生成
 		 * @param [in]カードID
 		 */

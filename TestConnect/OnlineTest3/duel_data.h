@@ -57,6 +57,8 @@ private:
 	void SendPlayerNum(RakNet::RakPeerInterface* peer, GameMessages message);	//プレイヤー数を送信する関数
 	bool IsSendUpdate(RakNet::Packet* packet);									//更新の許可を出すか
 	void SendCastCard(RakNet::BitStream* bsout);								//キャストカードの送信
+	void SendUpdateSign(RakNet::RakPeerInterface* peer);						//更新の合図を送る
+	bool IsDisconnectionSendUpdate();											//クライアントが切断時に更新の合図を送信するか
 
 	//変数
 	std::list<CDuel_Player*> m_DuelPlayerList;	//ロビープレイヤー保管用変数

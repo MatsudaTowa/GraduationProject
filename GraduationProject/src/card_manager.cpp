@@ -167,3 +167,15 @@ void My::CCardManager::CreateCard(int id)
 		break;
 	}
 }
+
+//================================
+//カードの生成
+//================================
+CCard_Client::Param My::CCardManager::GetCardParam(int id)
+{
+	//登録されていない番号ならアサート
+	assert(id <= m_CardVector.size() || id < 1);
+
+	//引数のIDのカードを返す
+	return m_CardVector[id - 1];
+}
