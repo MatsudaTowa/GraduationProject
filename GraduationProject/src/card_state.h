@@ -41,16 +41,16 @@ namespace My
 
 		/** @brief ‰Šú‰» */
 		virtual void Init() {};
-		virtual void Init(CCard* cpy) { cpy; };
+		virtual void Init([[maybe_unused]]CCard* cpy) {};
 
 		/** @brief I—¹ */
 		virtual void Uninit();
 		
 		/** @brief XV */
-		virtual void Update(CCard* cpy) { cpy; };
+		virtual void Update([[maybe_unused]] CCard* cpy) {};
 
 		/** @brief İ’è */
-		void Copy(CCard* cpy);
+		void Copy([[maybe_unused]]CCard* cpy);
 
 	protected:
 		//My::CCard* m_pCardCpy;
