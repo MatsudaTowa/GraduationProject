@@ -64,7 +64,7 @@ namespace My
 		}CardFrameInfo;
 
 		/* @brief コンストラクタ */
-		CCardFrame(int priority = 6);
+		CCardFrame(int priority = 10);
 
 		/* @brief デストラクタ */
 		~CCardFrame()override;

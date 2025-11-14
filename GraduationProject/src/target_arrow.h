@@ -13,8 +13,8 @@ namespace
 {
 	const D3DXVECTOR2 arrow_up = { SCREEN_WIDTH * 0.5f,SCREEN_HEIGHT * 0.2f };
 	const D3DXVECTOR2 arrow_down = { SCREEN_WIDTH * 0.5f,SCREEN_HEIGHT * 0.8f };
-	const D3DXVECTOR2 arrow_right = { SCREEN_WIDTH * 0.8f,SCREEN_HEIGHT * 0.5f };
-	const D3DXVECTOR2 arrow_left = { SCREEN_WIDTH * 0.2f,SCREEN_HEIGHT * 0.5f };
+	const D3DXVECTOR2 arrow_right = { SCREEN_WIDTH * 0.7f,SCREEN_HEIGHT * 0.5f };
+	const D3DXVECTOR2 arrow_left = { SCREEN_WIDTH * 0.3f,SCREEN_HEIGHT * 0.5f };
 }
 
 /** @brief My 名前空間 */
@@ -27,7 +27,7 @@ namespace My
 		/**
 		* @brief コンストラクタ
 		*/
-		CTargetArrow(int nPriority = 10);
+		CTargetArrow(int nPriority = 5);
 
 		/**
 		* @brief デストラクタ
@@ -69,7 +69,16 @@ namespace My
 		*/
 		void SetOnTheLinePos();
 
+		inline D3DXVECTOR2 GetAttacker() { return m_attacker; }
+		inline D3DXVECTOR2 GetTarget() { return m_target; }
+
 	private:
+
+		/**
+		* @brief 最大サイズ
+		*/
+		const float MAX_SIZE = 250.0f;
+
 		/**
 		* @brief 角度と長さを設定
 		*/

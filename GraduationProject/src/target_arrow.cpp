@@ -29,20 +29,7 @@ My::CTargetArrow::~CTargetArrow()
 //===========================================================================================================
 HRESULT My::CTargetArrow::Init()
 {
-	D3DXVECTOR2 a = (m_target - m_attacker) * 0.5f;
-
-	if (a.x < 0)
-	{
-		a.x *= -1;
-	}
-	else if (a.y < 0)
-	{
-		a.y *= -1;
-	}
-
-	a = m_attacker;
-
-  	D3DXVECTOR3 pos = { a.x,a.y,0.0f };
+  	D3DXVECTOR3 pos = { m_attacker.x,m_attacker.y,0.0f };
 
 	SetPos(pos);
 
@@ -75,7 +62,7 @@ HRESULT My::CTargetArrow::Init()
 	// 三角生成
 	if (m_triangle == nullptr)
 	{
-		m_triangle = new CObject2D(10);
+		m_triangle = new CObject2D(5);
 		m_triangle->BindTexture(pTexture->GetAddress(pTexture->Regist(&TRIANGLE_TEX_NAME)));
 		m_triangle->SetSize({ 50,50 });
 		m_triangle->SetColor(COLOR_WHITE);
@@ -107,7 +94,7 @@ void My::CTargetArrow::Update()
 	size.y += 5.0f;
 	SetSize(size);
 
-	if (GetSize().y >= 250)
+	if (GetSize().y >= MAX_SIZE)
 	{
 		SetSize(m_basesize);
 	}
@@ -137,6 +124,15 @@ My::CTargetArrow* My::CTargetArrow::Create(int attacker, int target)
 	// 矢印の角度を算出
 	pTA->m_attacker = SetTargetPos(pTA->m_attacker, attacker);	// 攻撃者の位置
 	pTA->m_target = SetTargetPos(pTA->m_target, target);		// 被攻撃者の位置
+
+	if (pTA->m_target.x > SCREEN_WIDTH * 0.5f)
+	{
+		pTA->m_attacker.x += -130.0f;
+	}
+	else if(pTA->m_target.x < SCREEN_WIDTH * 0.5f)
+	{
+		pTA->m_attacker.x += 130.0f;
+	}
 
 	pTA->Init(); 
 
@@ -182,12 +178,12 @@ void My::CTargetArrow::SetOnTheLinePos()
 	D3DXVECTOR3 pos = GetPos();
 	D3DXVECTOR2 size = GetSize();
 
-	// 
+	// 計算結果
 	D3DXVECTOR2 result = { 0.0f,0.0f };
 	D3DXVECTOR2 result2 = { 0.0f,0.0f };
 
 	// 割合(サイズと最大サイズ)
-	float ratio = size.y / 250.0f;
+	float ratio = size.y / MAX_SIZE;
 
 	// 線形補間
 	result.x = std::lerp(m_attacker.x, m_target.x, ratio * -a);
@@ -197,11 +193,11 @@ void My::CTargetArrow::SetOnTheLinePos()
 	result2.x = std::lerp(m_attacker.x, m_target.x, ratio * -1.2f);
 	result2.y = std::lerp(m_attacker.y, m_target.y, ratio * 1.2f);
 
-	m_triangle->SetPos({ result2.x,result2.y,0.0f });
-
 	// 位置の設定
 	pos = { result.x, result.y, 0.0f };
 	SetPos(pos);
+
+	m_triangle->SetPos({ result2.x,result2.y,0.0f });
 }
 
 //===========================================================================================================
