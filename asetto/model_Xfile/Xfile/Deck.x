@@ -221,7 +221,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Deskto\\image.png";
+    "asetto\model_Xfile\Xfile_texture\deck_behind.png";
    }
   }
   Material {
@@ -230,7 +230,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Desktop\\450-2009081909414330861.jpg";
+    "asetto\model_Xfile\Xfile_texture\overlapping decks.png";
    }
   }
   Material {

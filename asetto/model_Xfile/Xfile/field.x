@@ -1447,7 +1447,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "model_Xfile\\Xfile_texture\\unnamed.png";
+    "asetto\model_Xfile\Xfile_texture\field.png";
    }
   }
  }
