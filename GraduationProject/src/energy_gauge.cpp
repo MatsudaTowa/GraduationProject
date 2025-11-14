@@ -8,6 +8,7 @@
 #include "energy_charge.h"
 #include "energy_frame.h"
 #include "life_gauge.h"
+#include "active_scene_character.h"
 
 namespace
 {
@@ -137,7 +138,7 @@ void My::CEnergy_Gauge::CreateEnergy()
 		CEnergy_Gauge::Create({ 1039.0f+ (i * 28.0f),497.0f,FLOAT_ZERO });
 	}
 	//すごく仮置き（体力関連）
-	CLife_Gauge::CreateLifeUI(40.0f, 110.0f);
+	CLife_Gauge::CreateLifeUI(CActiveSceneCharacter::MAX_LIFE, 110.0f);
 }
 
 //=====================================================================

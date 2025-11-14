@@ -57,13 +57,25 @@ void My::CLife_changer::Update()
 	//HP‘‰Á
 	if (pKey->GetTrigger(DIK_L))
 	{
-		ApplyHeal(1.0f);
+		ApplyHeal(5.0f);
 	}
 
 	//HPŒ¸­
 	else if (pKey->GetTrigger(DIK_K))
 	{
-		ApplyDamage(1.0f);
+		ApplyDamage(5.0f);
+	}
+
+	//Å‘åã¸
+	else if (pKey->GetTrigger(DIK_M))
+	{
+		IncreaseMax(5.0f);
+	}
+
+	//Å‘åŒ¸­
+	else if (pKey->GetTrigger(DIK_N))
+	{
+		DecreaseMax(5.0f);
 	}
 
 	m_fRaito = (m_fLife / m_fLife_Max);

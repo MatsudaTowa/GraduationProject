@@ -104,10 +104,10 @@ namespace My
 		void DecreaseMax(float DecMax)
 		{
 			//”½‰f
-			m_fLife_Max = DecMax;
+			m_fLife_Max -= DecMax;
 
 			//’²®
-			if (m_fLife >= m_fLife_Max)
+			if (m_fLife > m_fLife_Max)
 			{
 				m_fLife = m_fLife_Max;
 			}
