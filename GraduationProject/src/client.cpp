@@ -48,7 +48,7 @@ void CClient::Uninit()
 //=====================================
 //登録処理
 //=====================================
-void CClient::Regist(RakNet::Packet* packet)
+void CClient::Regist(RakNet::Packet* /*packet*/)
 {
    
 }
@@ -56,7 +56,7 @@ void CClient::Regist(RakNet::Packet* packet)
 //=====================================
 //敵を生成するか
 //=====================================
-bool CClient::CheckEnemyCreate(int id, int max)
+bool CClient::CheckEnemyCreate(int /*id*/, int /*max*/)
 {
     return true;
 }
@@ -64,7 +64,7 @@ bool CClient::CheckEnemyCreate(int id, int max)
 //=====================================
 //削除処理
 //=====================================
-void CClient::Delete(RakNet::Packet* packet)
+void CClient::Delete(RakNet::Packet* /*packet*/)
 {
    
 }
@@ -72,7 +72,7 @@ void CClient::Delete(RakNet::Packet* packet)
 //=====================================
 //準備完了送信処理
 //=====================================
-void CClient::SendReady(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
+void CClient::SendReady(RakNet::Packet* /*packet*/, RakNet::RakPeerInterface* /*peer*/)
 {
     
 }
@@ -80,7 +80,7 @@ void CClient::SendReady(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
 //=====================================
 //準備完了受信処理
 //=====================================
-void CClient::ReceiveReady(RakNet::Packet* packet)
+void CClient::ReceiveReady(RakNet::Packet* /*packet*/)
 {
     
 }
@@ -88,7 +88,7 @@ void CClient::ReceiveReady(RakNet::Packet* packet)
 //=====================================
 //カードキャスト処理
 //=====================================
-void CClient::CardCast(RakNet::Packet* packet)
+void CClient::CardCast(RakNet::Packet* /*packet*/)
 {
    
 }

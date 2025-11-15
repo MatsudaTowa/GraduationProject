@@ -38,13 +38,13 @@ namespace My
 	};
 
 	/** @brief エネミーのデュエルクラス */
-	class CEnemyDuelState :public CActiveSceneCharacterState
+	class CEnemyDuelState :public CDuelCharacter
 	{
 	public:
 		/**
 		 * @brief コンストラクタ
 		 */
-		CEnemyDuelState();
+		CEnemyDuelState(CActiveSceneCharacter* character);
 		/**
 		 * @brief デストラクタ
 		 */

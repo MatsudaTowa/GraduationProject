@@ -116,7 +116,7 @@ namespace My
 		 * @brief デッキ枚数設定
 		 * @param [in]デッキの枚数
 		 */
-		inline void SetDeck(int decksize)
+		inline void SetDeckSize(int decksize)
 		{
 			m_status.deckSize = decksize;
 		}
@@ -180,6 +180,15 @@ namespace My
 		}
 
 		/**
+		 * @brief デッキの代入
+		 * @param [in]deck
+		 */
+		inline void SetArea(std::list<int> deck)
+		{
+			m_Deck = deck;
+		}
+
+		/**
 		 * @brief ステータス取得
 		 * @return ステータス
 		 */
@@ -192,7 +201,7 @@ namespace My
 		 * @brief デッキ枚数取得
 		 * @return デッキ枚数
 		 */
-		inline int GetDeck()
+		inline int GetDeckSize()
 		{
 			return m_status.deckSize;
 		}
@@ -255,6 +264,15 @@ namespace My
 		{
 			return m_area;
 		}
+
+		/**
+		 * @brief デッキの取得
+		 * @return [in]デッキのリスト
+		 */
+		inline std::list<int> GetDeck()
+		{
+			return m_Deck;
+		}
 	private:
 		static constexpr int START_DECK = 40;				//!<最初のデッキ枚数
 		static constexpr int START_HAND = 3;				//!<最初の手札枚数
@@ -265,6 +283,11 @@ namespace My
 		 * @brief UIの位置設定
 		 */
 		void UpdateUI();
+
+		/**
+		 * @brief デッキの生成
+		 */
+		void CreateDeck();
 
 		Status m_status;			//!ステータス
 
@@ -277,6 +300,8 @@ namespace My
 		std::list<CCondition*> m_ConditionList;	//コンディションリスト
 
 		CPlayerUI* m_pPlayerUI;
+
+		std::list<int> m_Deck;	//デッキ
 	};
 }
 #endif

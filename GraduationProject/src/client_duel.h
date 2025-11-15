@@ -37,14 +37,14 @@ public:
 	void SendReady(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;//準備送信処理
 	void ReceiveReady(RakNet::Packet* packet) override;								//準備受信処理
 	void CardCast(RakNet::Packet* packet) override;									//カードのキャスト処理
-	void SendStartSign(RakNet::RakPeerInterface* peer) override {}					//開始の合図を送信
+	void SendStartSign(RakNet::RakPeerInterface* /*peer*/) override {}				//開始の合図を送信
 	void AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;	//コンピューターの追加
 	void SendSuccessDuelLoad(RakNet::RakPeerInterface* peer) override;				//決闘読み込みの成功を送信
 	void StartBattle() override;													//対戦の開始
 	void SendStatus(RakNet::RakPeerInterface* peer) override;						//ステータスを送る
 	void ReceiveStatus(RakNet::Packet* packet) override;							//ステータスの受信
-	void SendAddEnemy(RakNet::RakPeerInterface* peer) override {}					//敵の追加を送信
-	void ReceiveAddEnemy(RakNet::Packet* packet) override {}						//敵の追加を受信
+	void SendAddEnemy(RakNet::RakPeerInterface* /*peer*/) override {}				//敵の追加を送信
+	void ReceiveAddEnemy(RakNet::Packet* /*packe*/t) override {}					//敵の追加を受信
 	void ReceiveIsUpdate(RakNet::Packet* packet) override;							//更新可能かを受信
 	void SendMyStatus(RakNet::RakPeerInterface* peer) override;						//自分のステータスを送る
 	void ReceiveCastCard(RakNet::Packet* packet) override;							//キャストカードの受信

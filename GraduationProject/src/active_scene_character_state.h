@@ -17,6 +17,7 @@ namespace My
 	//=============================================
 	class CActiveSceneCharacter;
 	class CCharacterLobbyUIManager;
+	class CCard;
 
 	/** @brief キャラクターステートクラス */
 	class CActiveSceneCharacterState
@@ -109,8 +110,34 @@ namespace My
 	class CDuelCharacter :public CActiveSceneCharacterState
 	{
 	public:
+
+		CDuelCharacter() {}
+		CDuelCharacter(CActiveSceneCharacter* character);
+		~CDuelCharacter() override;
+
 		void Duel(CActiveSceneCharacter* character) override;
+
+		/**
+		 * @brief カードリストの設定
+		 * @param [in]list
+		 */
+		inline void SetCardList(std::list<CCard*> list) 
+		{ 
+			m_CardList = list; 
+		}
+
+		/**
+		 * @brief カードリスト取得
+		 * @return カードリスト
+		 */
+		inline std::list<CCard*> GetCardList()
+		{
+			return m_CardList;
+		}
+
 	private:
+
+		std::list<CCard*> m_CardList;	//カードのポインタ変数
 	};
 }
 #endif // !_ACTIVE_SCENE_CHARACTER_STATE_H_

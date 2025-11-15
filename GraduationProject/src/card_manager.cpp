@@ -77,9 +77,9 @@ void My::CCardManager::ResetCardList()
 //================================
 //カードの生成
 //================================
-void My::CCardManager::CreateCard(int id)
+My::CCard* My::CCardManager::CreateCard(int id)
 {
-	if (m_CardVector.size() < id) return;
+	if (m_CardVector.size() < id) return nullptr;
 
 	//基本ステータスの代入
 	My::CCard::BaseStatus Status;
@@ -105,6 +105,7 @@ void My::CCardManager::CreateCard(int id)
 
 		//初期化
 		pAttack->Init();
+		return pAttack;
 	}
 		break;
 
@@ -120,6 +121,8 @@ void My::CCardManager::CreateCard(int id)
 
 			//初期化
 			pDeffence->Init();
+
+			return pDeffence;
 		}
 
 		break;
@@ -137,6 +140,8 @@ void My::CCardManager::CreateCard(int id)
 
 					//初期化
 					pBuff->Init();
+
+					return pBuff;
 				}
 				
 				break;
@@ -150,6 +155,8 @@ void My::CCardManager::CreateCard(int id)
 
 					//初期化
 					pDebuff->Init();
+
+					return pDebuff;
 				}
 				
 				break;
@@ -166,6 +173,8 @@ void My::CCardManager::CreateCard(int id)
 	default:
 		break;
 	}
+
+	return nullptr;
 }
 
 //================================

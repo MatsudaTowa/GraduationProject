@@ -14,6 +14,11 @@
 
 namespace My
 {
+	//=============================================
+	//前方宣言
+	//=============================================
+	class CCard;
+
 	//カードマネージャーのクラス
 	class CCardManager
 	{
@@ -56,7 +61,7 @@ namespace My
 		 * @brief 生成
 		 * @param [in]カードID
 		 */
-		void CreateCard(int id);
+		CCard* CreateCard(int id);
 		
 	private:
 

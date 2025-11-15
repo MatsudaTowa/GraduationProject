@@ -38,7 +38,7 @@ namespace My
 	};
 
 	/** @brief プレイヤーのデュエルクラス */
-	class CPlayerDuelState :public CActiveSceneCharacterState
+	class CPlayerDuelState :public CDuelCharacter
 	{
 	public:
 		static constexpr int ENERGY_UP_FRAME = 3 * 60;		//!<エナジーが上がるまでのフレーム数 TODO:今後のカードによっては変数に昇格するかも
@@ -46,7 +46,7 @@ namespace My
 		/**
 		 * @brief コンストラクタ
 		 */
-		CPlayerDuelState();
+		CPlayerDuelState(CActiveSceneCharacter* character);
 		/**
 		 * @brief デストラクタ
 		 */

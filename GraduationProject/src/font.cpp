@@ -150,7 +150,7 @@ My::CFont* My::CFont::CreateFontTexture(int thickness, int idx, WCHAR txt)
 	//第13引数:ピッチとファミリ
 	//第14引数:フォント名
 	HFONT hFont = CreateFont(
-		FONT_SIZE, 0, 0, 0,                    // ← 少し大きめで綺麗に
+		static_cast<int>(FONT_SIZE), 0, 0, 0,                    // ← 少し大きめで綺麗に
 		thickness, FALSE, FALSE, FALSE,
 		SHIFTJIS_CHARSET,
 		OUT_DEFAULT_PRECIS,

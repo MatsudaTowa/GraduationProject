@@ -73,7 +73,7 @@ void My::CEnergy_Gauge::Update()
 	//チャージ部分のインスタンス取得
 	CEnergy_Charge* pEnCharge = CEnergy_Charge::GetInstance();
 	//何割チャージされてるかを教えてもらう
-	m_nEnergyRaito = pEnCharge->GetPolyCnt();
+	m_nEnergyRaito = static_cast<int>(pEnCharge->GetPolyCnt());
 
 	
 	switch (m_Effect)

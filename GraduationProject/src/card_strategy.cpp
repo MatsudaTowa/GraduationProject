@@ -23,7 +23,7 @@ My::CAttack::~CAttack()
 //===============================================================================
 // UŒ‚ˆ—
 //===============================================================================
-void My::CAttack::Strategy(CActiveSceneCharacter* character, CCard* card)
+void My::CAttack::Strategy(CActiveSceneCharacter* /*character*/, CCard* card)
 {
 }
 
@@ -65,7 +65,7 @@ My::CHeal::~CHeal()
 //===============================================================================
 // ƒq[ƒ‹ˆ—
 //===============================================================================
-void My::CHeal::Strategy(CActiveSceneCharacter* character, CCard* card)
+void My::CHeal::Strategy(CActiveSceneCharacter* /*character*/, CCard* /*card*/)
 {
 }
 

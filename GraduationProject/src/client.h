@@ -35,22 +35,22 @@ public:
 	virtual void Uninit();		//終了処理
 
 	//通信用関数
-	virtual void Regist(RakNet::Packet* packet);										//登録処理
-	virtual void Delete(RakNet::Packet* packet);										//削除処理
-	virtual void SendReady(RakNet::Packet* packet, RakNet::RakPeerInterface* peer);		//準備送信処理
-	virtual void ReceiveReady(RakNet::Packet* packet);									//準備受信処理
-	virtual void CardCast(RakNet::Packet* packet);										//カードのキャスト処理
-	virtual void SendStartSign(RakNet::RakPeerInterface* peer) = 0;						//開始の合図を送信
-	virtual void AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) = 0;	//コンピューターの追加
-	virtual void SendSuccessDuelLoad(RakNet::RakPeerInterface* peer) = 0;				//決闘読み込みの成功を送信
-	virtual void StartBattle() = 0;														//対戦の開始
-	virtual void SendStatus(RakNet::RakPeerInterface* peer) = 0;						//ステータスを送る
-	virtual void ReceiveStatus(RakNet::Packet* packet) = 0;								//ステータスを受信
-	virtual void SendAddEnemy(RakNet::RakPeerInterface* peer) = 0;						//敵の追加を送信
-	virtual void ReceiveAddEnemy(RakNet::Packet* packet) = 0;							//敵の追加を受信
-	virtual void ReceiveIsUpdate(RakNet::Packet* packet) = 0;							//更新可能かを受信する
-	virtual void SendMyStatus(RakNet::RakPeerInterface* peer) = 0;						//自分のステータスを送る
-	virtual void ReceiveCastCard(RakNet::Packet* packet) = 0;							//キャストカードの受信
+	virtual void Regist([[maybe_unused]] RakNet::Packet* packet);										//登録処理
+	virtual void Delete([[maybe_unused]] RakNet::Packet* packet);										//削除処理
+	virtual void SendReady([[maybe_unused]] RakNet::Packet* packet, RakNet::RakPeerInterface* peer);	//準備送信処理
+	virtual void ReceiveReady([[maybe_unused]] RakNet::Packet* packet);									//準備受信処理
+	virtual void CardCast([[maybe_unused]] RakNet::Packet* packet);										//カードのキャスト処理
+	virtual void SendStartSign([[maybe_unused]] RakNet::RakPeerInterface* peer) = 0;					//開始の合図を送信
+	virtual void AddCPU([[maybe_unused]] RakNet::Packet* packet, RakNet::RakPeerInterface* peer) = 0;	//コンピューターの追加
+	virtual void SendSuccessDuelLoad([[maybe_unused]] RakNet::RakPeerInterface* peer) = 0;				//決闘読み込みの成功を送信
+	virtual void StartBattle() = 0;																		//対戦の開始
+	virtual void SendStatus([[maybe_unused]] RakNet::RakPeerInterface* peer) = 0;						//ステータスを送る
+	virtual void ReceiveStatus([[maybe_unused]] RakNet::Packet* packet) = 0;							//ステータスを受信
+	virtual void SendAddEnemy([[maybe_unused]] RakNet::RakPeerInterface* peer) = 0;						//敵の追加を送信
+	virtual void ReceiveAddEnemy([[maybe_unused]] RakNet::Packet* packet) = 0;							//敵の追加を受信
+	virtual void ReceiveIsUpdate([[maybe_unused]] RakNet::Packet* packet) = 0;							//更新可能かを受信する
+	virtual void SendMyStatus([[maybe_unused]] RakNet::RakPeerInterface* peer) = 0;						//自分のステータスを送る
+	virtual void ReceiveCastCard([[maybe_unused]] RakNet::Packet* packet) = 0;							//キャストカードの受信
 
 	//設定と取得
 

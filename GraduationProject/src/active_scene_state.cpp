@@ -36,7 +36,7 @@ My::CLobby::~CLobby()
 //=============================================
 // ロビー
 //=============================================
-void My::CLobby::Lobby(CActiveScene* game)
+void My::CLobby::Lobby(CActiveScene* /*game*/)
 {
 	std::list<CEnemy*> enemy = CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList();
 
@@ -71,11 +71,11 @@ void My::CLobby::OfflineChangeToDuel()
 		{
 			continue;
 		}
-		itr->ChangeState(new CEnemyDuelState);
+		itr->ChangeState(new CEnemyDuelState(itr));
 	}
 	if (CActiveSceneManager::GetInstance()->GetPlayer() != nullptr)
 	{
-		CActiveSceneManager::GetInstance()->GetPlayer()->ChangeState(new CPlayerDuelState);
+		CActiveSceneManager::GetInstance()->GetPlayer()->ChangeState(new CPlayerDuelState(CActiveSceneManager::GetInstance()->GetPlayer()));
 	}
 	//地面生成
 	CField::Create(VEC3_RESET_ZERO, { FIELD_SIZE,0.0f,FIELD_SIZE }, new CGameField);
@@ -190,11 +190,11 @@ void My::CLobby::OnlineChangeToDuel()
 			{
 				continue;
 			}
-			itr->ChangeState(new CEnemyDuelState);
+			itr->ChangeState(new CEnemyDuelState(itr));
 		}
 
 		//プレイヤーの状態を変更
-		CActiveSceneManager::GetInstance()->GetPlayer()->ChangeState(new CPlayerDuelState);
+		CActiveSceneManager::GetInstance()->GetPlayer()->ChangeState(new CPlayerDuelState(CActiveSceneManager::GetInstance()->GetPlayer()));
 
 		//地面生成
 		CField::Create(VEC3_RESET_ZERO, { FIELD_SIZE,0.0f,FIELD_SIZE }, new CGameField);

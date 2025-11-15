@@ -7,6 +7,7 @@
 #include "active_scene_character.h"
 #include "active_scene_state.h"
 #include "debuff.h"
+#include "card_manager.h"
 
 //=============================================
 // コンストラクタ
@@ -17,9 +18,11 @@ m_status(),
 m_isHost(false),
 m_playerIdx(-1),
 m_pPlayerUI(nullptr),
-m_area()
+m_area(),
+m_Deck()
 {
 	m_ConditionList.clear();
+	m_Deck.clear();
 }
 
 //=============================================
@@ -57,6 +60,9 @@ HRESULT My::CActiveSceneCharacter::Init()
 	m_status.life = START_LIFE;
 	m_status.energy = START_ENERGY;
 	m_status.trash = INT_ZERO;
+
+	//デッキの生成
+	CreateDeck();
 
 	CCharacter::Init();
 	return S_OK;
@@ -188,4 +194,21 @@ void My::CActiveSceneCharacter::Remove(CCondition* condition)
 	condition = nullptr;
 	//デバフの情報を削除
 	m_ConditionList.remove(condition);
+}
+
+//=============================================
+// デッキの生成
+//=============================================
+void My::CActiveSceneCharacter::CreateDeck()
+{
+	//カード番号
+	int nCardNum = My::CCardManager::GetInstance()->GetUseCardVector().size();
+
+	//デッキの枚数分周回
+	for (int i = 0; i < 40; i++)
+	{
+		//ランダムで仮生成
+		int nID = Rundom(1, nCardNum);
+		m_Deck.push_back(nID);			//リストに保存
+	}
 }

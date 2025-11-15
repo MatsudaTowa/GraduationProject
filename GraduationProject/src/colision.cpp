@@ -96,6 +96,8 @@ My::CColision::COLISION My::CColision::CheckColision_X(D3DXVECTOR3 Aoldpos, D3DX
 	{
 		return CColision::COLISION::COLISON_NONE;
 	}
+
+	return CColision::COLISION::COLISON_NONE;
 }
 //=============================================
 //当たり判定_Yチェック関数
@@ -501,4 +503,6 @@ My::CColision::COLISION My::CColision::CheckPolygonFillColision(D3DXVECTOR3 Apos
 			return CColision::COLISION::COLISON_NONE;
 		}
 	}
+
+	return CColision::COLISION::COLISON_NONE;;
 }

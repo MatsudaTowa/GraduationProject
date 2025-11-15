@@ -6,6 +6,7 @@
 //===============================================================================
 #include "active_scene_character_state.h"
 #include "character_lobby_UI_manager.h"
+#include "card_manager.h"
 
 //===============================================================================
 // コンストラクタ
@@ -46,4 +47,27 @@ void My::CLobbyCharacter::Lobby(CActiveSceneCharacter* character)
 //===============================================================================
 void My::CDuelCharacter::Duel(CActiveSceneCharacter* character)
 {
+}
+
+//===============================================================================
+// コンストラクタ
+//===============================================================================
+My::CDuelCharacter::CDuelCharacter(CActiveSceneCharacter* character) : 
+	m_CardList()	//カードリスト
+{
+	m_CardList.clear();	//カードリストの初期化
+
+	//カードのIDから生成
+	for (auto iter : character->GetDeck())
+	{
+		m_CardList.push_back(My::CCardManager::GetInstance()->CreateCard(iter));
+	}
+}
+
+//===============================================================================
+// デストラクタ
+//===============================================================================
+My::CDuelCharacter::~CDuelCharacter()
+{
+	
 }

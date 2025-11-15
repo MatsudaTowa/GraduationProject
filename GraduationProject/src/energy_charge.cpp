@@ -66,7 +66,7 @@ void My::CEnergy_Charge::Update(float spend_time, int charge_time)
 	int ChargeTime = charge_time;
 
 	//float‚Ìâ‘Î’l‚Å·‚ğZo
-	float EffectLv = 1.0f - std::fabs(ChargeTime - CPlayerDuelState::ENERGY_UP_FRAME) / CPlayerDuelState::ENERGY_UP_FRAME;
+	float EffectLv = 1.0f - (float)std::fabs(ChargeTime - CPlayerDuelState::ENERGY_UP_FRAME) / CPlayerDuelState::ENERGY_UP_FRAME;
 
 	//•`‰æ•”•ª‚É¡‚Ìó‘Ô‚ğ“Š‚°‚é‚Æ‚±‚ë
 	if (ChargeTime < CPlayerDuelState::ENERGY_UP_FRAME)

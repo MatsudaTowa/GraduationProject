@@ -11,7 +11,7 @@
 //=============================================
 // コンストラクタ
 //=============================================
-My::CEnemy::CEnemy(int nPriority)
+My::CEnemy::CEnemy(int /*nPriority*/)
 {
 	//マネージャーに登録
 	CActiveSceneManager::GetInstance()->GetEnemyManager()->Regist(this);

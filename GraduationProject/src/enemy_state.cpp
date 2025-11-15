@@ -40,8 +40,9 @@ void My::CEnemyLobbyState::Lobby(CActiveSceneCharacter* character)
 //=============================================
 // コンストラクタ
 //=============================================
-My::CEnemyDuelState::CEnemyDuelState()
+My::CEnemyDuelState::CEnemyDuelState(CActiveSceneCharacter* character) : CDuelCharacter(character)
 {
+
 }
 
 //=============================================

@@ -49,7 +49,7 @@ void CClient_Duel::Uninit()
 //=====================================
 //登録処理
 //=====================================
-void CClient_Duel::Regist(RakNet::Packet* packet)
+void CClient_Duel::Regist(RakNet::Packet* /*packet*/)
 {
 
 }
@@ -147,7 +147,7 @@ void CClient_Duel::Delete(RakNet::Packet* packet)
 //=====================================
 //準備完了送信処理
 //=====================================
-void CClient_Duel::SendReady(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
+void CClient_Duel::SendReady(RakNet::Packet* /*packet*/, RakNet::RakPeerInterface* /*peer*/)
 {
 
 }
@@ -155,7 +155,7 @@ void CClient_Duel::SendReady(RakNet::Packet* packet, RakNet::RakPeerInterface* p
 //=====================================
 //準備完了受信処理
 //=====================================
-void CClient_Duel::ReceiveReady(RakNet::Packet* packet)
+void CClient_Duel::ReceiveReady(RakNet::Packet* /*packet*/)
 {
 
 }
@@ -179,7 +179,6 @@ void CClient_Duel::CardCast(RakNet::Packet* packet)
 
     //中身を空に
     m_DuelPlayerList.clear();
-    int nStart = 0;         //ずらし始める番号
 
     //人数分読み込み
     for (int i = 0; i < nPlayerNum; i++)
@@ -234,7 +233,6 @@ void CClient_Duel::AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer
 
     //人数を取得
     unsigned char messageId;    //メッセージ
-    int nPlayerNum = 0;         //プレイヤー数
 
     //読み込み
     bsIn.Read(messageId);
@@ -263,7 +261,7 @@ void CClient_Duel::AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer
             nEnemyCount++;
 
             //すでに生成されている敵は生成しない
-            if (My::CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList().size() + 1 < nEnemyCount)
+            if (static_cast<int>(My::CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList().size() + 1) < nEnemyCount)
             {
                 My::CEnemy::Create({ i * 100.0f + 50.0f, 0.0f, 0.0f }, VEC3_RESET_ZERO, i);
             }
@@ -369,7 +367,6 @@ void CClient_Duel::ReceiveStatus(RakNet::Packet* packet)
 
     //人数を取得
     unsigned char messageId;    //メッセージ
-    int nPlayerNum = 0;         //プレイヤー数
 
     //読み込み
     bsIn.Read(messageId);

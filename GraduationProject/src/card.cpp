@@ -114,7 +114,7 @@ void My::CCard::Update()
 void My::CCard::Draw()
 {
 	//更新フラグがないものは描画しない
-	if (!m_isUpdate) return;
+	return;
 
 	//CObjectX::Draw();
 

@@ -19,17 +19,17 @@ My::CHand::CHand() :
 	m_TotalNum(0),
 	m_IsPassStart(false),
 	m_IsPickUp(false),
-	m_HandState(NEUTRAL),
+	m_HandState(NEUTRAL)/*,
 	m_pHandCard(),
 	m_pStayCard(),
-	m_pTriggerCard()
+	m_pTriggerCard()*/
 {
 	m_pHandList.clear();
 
-	for (int i = 0; i < MAX_HANDSCARD; i++)
+	/*for (int i = 0; i < MAX_HANDSCARD; i++)
 	{
 		m_pCard[i] = nullptr;
-	}
+	}*/
 }
 
 My::CHand::~CHand()
@@ -164,36 +164,58 @@ void My::CHand::Select()
 	// 何も選択されていない場合
 	if (!m_IsPickUp)
 	{
-		for (int i = 0; i < m_TotalNum; i++)
-		{// すべてのカードを判定
+		//for (int i = 0; i < m_TotalNum; i++)
+		//{// すべてのカードを判定
 
-			if (!m_pCard[i])
-				continue;
+		//	if (!m_pCard[i])
+		//		continue;
 
+		//	// マウスでカード選択
+		//	m_IsPickUp = m_pCard[i]->CardSelectToMouse();
+
+		//	if (m_IsPickUp)
+		//	{// どれかのカードが選択されたら
+		//		m_SelectNum = i;	// 今の配列番号を一時格納しておく
+		//		break;
+		//	}
+		//}
+
+		int nCount = 0;
+		for (auto iter : m_pHandList)
+		{
 			// マウスでカード選択
-			m_IsPickUp = m_pCard[i]->CardSelectToMouse();
+			m_IsPickUp = iter->CardSelectToMouse();
 
 			if (m_IsPickUp)
 			{// どれかのカードが選択されたら
-				m_SelectNum = i;	// 今の配列番号を一時格納しておく
+				m_SelectNum = nCount;	// 今の配列番号を一時格納しておく
 				break;
 			}
 		}
 	}
 	else
 	{
-		if (!m_pCard[m_SelectNum])
-			return;
+		/*if (!m_pCard[m_SelectNum])
+			return;*/
 
-		// 選択番号のカードが非選択状態になったら
-		if (m_pCard[m_SelectNum]->GetStateNum() == CCardState::CARD_NEUTRAL)
+		//bool isReturn = false;
+		int nCount = 0;
+
+		for (auto& iter : m_pHandList)
 		{
-			m_IsPickUp = false;	// 選択されていない状態にする
-		}
-		else
-		{
-			// 選択番号のカードのみ判定する
-			m_IsPickUp = m_pCard[m_SelectNum]->CardSelectToMouse();
+			if (nCount != m_SelectNum) continue;
+
+			// 選択番号のカードが非選択状態になったら
+			if (iter->GetStateNum() == CCardState::CARD_NEUTRAL)
+			{
+				m_IsPickUp = false;	// 選択されていない状態にする
+			}
+			else
+			{
+				// 選択番号のカードのみ判定する
+				m_IsPickUp = iter->CardSelectToMouse();
+			}
+			break;
 		}
 	}
 }
@@ -204,17 +226,26 @@ void My::CHand::Select()
 void My::CHand::Cast()
 {
 	// 選択カードがnullptr か セレクトナンバーが 0 未満だったら
-	if (!m_pCard[m_SelectNum] || m_SelectNum < 0)
-		return;
+	/*if (!m_pCard[m_SelectNum] || m_SelectNum < 0)
+		return;*/
 
-	// 返り値でキャスト状態かどうか判断
-	bool IsCast = m_pCard[m_SelectNum]->CardCastToMouse();
+	if (m_SelectNum < 0) return;
 
-	// キャスト状態によって手札の状態を変える
-	if (IsCast)
-		m_HandState = CAST;
-	else
-		m_HandState = NEUTRAL;
+	int nCount = 0;
+
+	for (auto& iter : m_pHandList)
+	{
+		if (nCount != m_SelectNum) continue;
+
+		// 返り値でキャスト状態かどうか判断
+		bool IsCast = iter->CardCastToMouse();
+
+		// キャスト状態によって手札の状態を変える
+		if (IsCast)
+			m_HandState = CAST;
+		else
+			m_HandState = NEUTRAL;
+	}
 }
 
 My::CCard* My::CHand::SearchHandList(int num)
@@ -249,21 +280,37 @@ My::CCard* My::CHand::SearchHandList(int num)
 void My::CHand::SelectStateSet()
 {
 	// すべてのカードを選ばれていない状態にする
-	for (int i = 0; i < m_TotalNum; i++)
-	{// 今持っている枚数分
-		if (m_pCard[i] != nullptr)
+	//for (int i = 0; i < m_TotalNum; i++)
+	//{// 今持っている枚数分
+	//	if (m_pCard[i] != nullptr)
+	//	{
+	//		m_pCard[i]->ChangeState(CCardState::CARD_STATE::CARD_NEUTRAL);
+	//	}
+	//}
+
+	int nCount = 0;
+	CCard* pCard = nullptr;
+
+	// すべてのカードを選ばれていない状態にする
+	for (auto& iter : m_pHandList)
+	{
+		///選択中のカードなら代入
+		if (m_SelectNum == nCount)
 		{
-			m_pCard[i]->ChangeState(CCardState::CARD_STATE::CARD_NEUTRAL);
+			pCard = iter;
 		}
+
+		iter->ChangeState(CCardState::CARD_STATE::CARD_NEUTRAL);
+		nCount++;
 	}
 
-	if (!m_pCard[m_SelectNum]||m_SelectNum <= -1)
+	if (!pCard || m_SelectNum <= -1)
 		return;
 
 	// 選択中のカードのステートを変える
-	if (m_pCard[m_SelectNum] != nullptr)
+	if (pCard != nullptr)
 	{
-		m_pCard[m_SelectNum]->ChangeState(CCardState::CARD_STATE::CARD_PICKUP);
+		pCard->ChangeState(CCardState::CARD_STATE::CARD_PICKUP);
 	}
 }
 
@@ -278,49 +325,81 @@ void My::CHand::DeleteCard()
 	//auto itr = m_pHandList.begin();
 
 	// トリガーされたカードを調べる
-	for (int i = 0; i < m_TotalNum; i++)
+	//for (int i = 0; i < m_TotalNum; i++)
+	//{
+	//	//if ( == CCardState::CARD_TRIGGER)
+	//	//{
+
+	//	//}
+
+	//	if (m_pCard[i]->GetStateNum() == CCardState::CARD_STATE::CARD_TRIGGER)
+	//	{
+	//		num = i;
+	//	}
+	//}
+
+	bool isDecrease = false;
+
+	for (auto& iter : m_pHandList)
 	{
-		//if ( == CCardState::CARD_TRIGGER)
-		//{
-
-		//}
-
-		if (m_pCard[i]->GetStateNum() == CCardState::CARD_STATE::CARD_TRIGGER)
+		//トリガーカードを消去
+		if (iter->GetStateNum() == CCardState::CARD_STATE::CARD_TRIGGER)
 		{
-			num = i;
+			//削除処理とフラグを立てる
+			iter->Uninit();
+			m_pHandList.remove(iter);
+			isDecrease = true;
+			break;
 		}
 	}
 
-	// -1以下だったら通さない
-	if (num < 0)
-		return;
+	//カードが減ってないなら抜ける
+	if (!isDecrease) return;
 
-	// トリガーカード除去
-	m_pCard[num]->Uninit();
-
-	// 次の番号のカードの情報を前に移していく
-	for (int ii = num; ii < m_TotalNum; ii++)
-	{
-		m_pCard[ii] = m_pCard[ii + 1];
-	}
-
-	// 最大の配列カードに変なゴミが残らないようにヌルにする
-	m_pCard[m_TotalNum-1] = nullptr;
-
-	// 手札総数を減らす
+	//手札総数を減らす
 	m_TotalNum--;
 
-	// ステイ中のカードがあるかどうか
-	for (int i = 0; i < m_TotalNum; i++)
+	for (auto iter : m_pHandList)
 	{
-		if (m_pCard[i]->GetStateNum() == CCardState::CARD_STATE::CARD_STAY)
-		{// あったら手札の整理をしない
+		if (iter->GetStateNum() == CCardState::CARD_STATE::CARD_STAY)
+		{//ステイ中のカードがあったら手札の整理をしない
 			return;
 		}
 	}
 
 	// 手札の位置をセットする
 	SetHandCardPos();
+
+	// -1以下だったら通さない
+	/*if (num < 0)
+		return;*/
+
+	// トリガーカード除去
+	//m_pCard[num]->Uninit();
+
+	//// 次の番号のカードの情報を前に移していく
+	//for (int ii = num; ii < m_TotalNum; ii++)
+	//{
+	//	m_pCard[ii] = m_pCard[ii + 1];
+	//}
+
+	//// 最大の配列カードに変なゴミが残らないようにヌルにする
+	//m_pCard[m_TotalNum-1] = nullptr;
+
+	//// 手札総数を減らす
+	//m_TotalNum--;
+
+	// ステイ中のカードがあるかどうか
+	//for (int i = 0; i < m_TotalNum; i++)
+	//{
+	//	if (m_pCard[i]->GetStateNum() == CCardState::CARD_STATE::CARD_STAY)
+	//	{// あったら手札の整理をしない
+	//		return;
+	//	}
+	//}
+
+	//// 手札の位置をセットする
+	//SetHandCardPos();
 }
 
 //===========================================================================================================
@@ -346,7 +425,7 @@ void My::CHand::SetCard(CCard::CARDTYPE_ type)
 		break;
 	}
 
-	m_pCard[m_TotalNum] = pCard;
+	//m_pCard[m_TotalNum] = pCard;
 
 	// リストテスト
 	m_pHandList.push_back(pCard);
@@ -401,36 +480,68 @@ void My::CHand::SetHandCardPos()
 	D3DXVECTOR3 firstpos;	// 一番左側の位置(手札の最初の位置)
 	float posInterbal = 25.0f - (20 * m_TotalNum * 0.07f);	// 手札に表示されている時のカードの間隔
 	float xpos;	// 一枚目のカードのx座標
+	int nCount = 0;	//周回数
+	CCard* pCard = nullptr;	//カードのポインタ
 
 	// x座標の設定 = センター - (現在の合計枚数 * カードの間隔の半分)
 	xpos = (m_CenterPos.x) - ((m_TotalNum-1)* posInterbal*0.5f);
 
-	for (int i = 0; i < m_TotalNum; i++)
+	for (auto& iter : m_pHandList)
 	{
-		// カードの座標の設定
-		if (i != 0)
+		if (nCount == 0)
 		{
-			// 一枚目以外は前の手札の位置を参照して "Interbal" 分横にずらす
-			m_pCard[i]->SetPos({ m_pCard[i - 1]->GetPos().x+posInterbal, m_pCard[i - 1]->GetPos().y, m_pCard[i - 1]->GetPos().z });
+			firstpos = { xpos,m_CenterPos.y,m_CenterPos.z };
+			iter->SetPos(firstpos);
 		}
 		else
 		{
-			// 一枚目のカードの座標(基準となる)
-			firstpos = { xpos,m_CenterPos.y,m_CenterPos.z };
-			m_pCard[0]->SetPos(firstpos);
+			// 一枚目以外は前の手札の位置を参照して "Interbal" 分横にずらす
+			iter->SetPos({ pCard->GetPos().x + posInterbal, pCard->GetPos().y, pCard->GetPos().z });
 		}
 
-		if (m_pCard[i]->GetStateNum() != CCardState::CARD_STAY)
+		if (iter->GetStateNum() != CCardState::CARD_STAY)
 		{
 			// 元の位置を設定しておく
-			m_pCard[i]->SetNeutralPos(m_pCard[i]->GetPos());
+			iter->SetNeutralPos(iter->GetPos());
 			// 一度ニュートラルにリセットする
-			m_pCard[i]->ChangeState(CCardState::CARD_STATE::CARD_NEUTRAL);
+			iter->ChangeState(CCardState::CARD_STATE::CARD_NEUTRAL);
 		}
-		
+
+		//前回のカードのポインタを代入
+		pCard = iter;
+
+		nCount++;
+
 		// 間隔を開ける
-		xpos += posInterbal*0.5f;
+		xpos += posInterbal * 0.5f;
 	}
+
+	//for (int i = 0; i < m_TotalNum; i++)
+	//{
+	//	// カードの座標の設定
+	//	if (i != 0)
+	//	{
+	//		// 一枚目以外は前の手札の位置を参照して "Interbal" 分横にずらす
+	//		m_pCard[i]->SetPos({ m_pCard[i - 1]->GetPos().x+posInterbal, m_pCard[i - 1]->GetPos().y, m_pCard[i - 1]->GetPos().z });
+	//	}
+	//	else
+	//	{
+	//		// 一枚目のカードの座標(基準となる)
+	//		firstpos = { xpos,m_CenterPos.y,m_CenterPos.z };
+	//		m_pCard[0]->SetPos(firstpos);
+	//	}
+
+	//	if (m_pCard[i]->GetStateNum() != CCardState::CARD_STAY)
+	//	{
+	//		// 元の位置を設定しておく
+	//		m_pCard[i]->SetNeutralPos(m_pCard[i]->GetPos());
+	//		// 一度ニュートラルにリセットする
+	//		m_pCard[i]->ChangeState(CCardState::CARD_STATE::CARD_NEUTRAL);
+	//	}
+	//	
+	//	// 間隔を開ける
+	//	xpos += posInterbal*0.5f;
+	//}
 
 	// 選択番号も一度リセット
 	m_SelectNum = 0;

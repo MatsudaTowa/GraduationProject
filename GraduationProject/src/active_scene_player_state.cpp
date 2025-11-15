@@ -74,7 +74,7 @@ void My::CPlayerLobbyState::Lobby(CActiveSceneCharacter* character)
 //=============================================
 // コンストラクタ
 //=============================================
-My::CPlayerDuelState::CPlayerDuelState():
+My::CPlayerDuelState::CPlayerDuelState(CActiveSceneCharacter* character):CDuelCharacter(character),
 	m_pEnergyUpCount(nullptr),
 	m_EnergyUpFrame(INT_ZERO)
 {

@@ -91,7 +91,7 @@ void CClient_Lobby::Regist(RakNet::Packet* packet)
         }
 
         //初期状態なら最後の番号を代入
-        if (My::CActiveSceneManager::GetInstance()->GetPlayer() == nullptr && nLap == m_LobbyPlayerList.size() - 1)
+        if (My::CActiveSceneManager::GetInstance()->GetPlayer() == nullptr && nLap == static_cast<int>(m_LobbyPlayerList.size() - 1))
         {
             My::CPlayer::Create(new My::CActiveScenePlayer, VEC3_RESET_ZERO, VEC3_RESET_ZERO, m_LobbyPlayerList.size() - 1);
         }
@@ -193,7 +193,7 @@ void CClient_Lobby::Delete(RakNet::Packet* packet)
 //=====================================
 //準備完了送信処理
 //=====================================
-void CClient_Lobby::SendReady(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
+void CClient_Lobby::SendReady(RakNet::Packet* /*packet*/, RakNet::RakPeerInterface* peer)
 {
     //データの作成
     RakNet::BitStream bsOut;
@@ -314,7 +314,7 @@ void CClient_Lobby::ReceiveReady(RakNet::Packet* packet)
 //=====================================
 //カードキャスト処理
 //=====================================
-void CClient_Lobby::CardCast(RakNet::Packet* packet)
+void CClient_Lobby::CardCast(RakNet::Packet* /*packet*/)
 {
 
 }

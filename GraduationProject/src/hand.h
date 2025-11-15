@@ -108,7 +108,7 @@ namespace My
 		/**
 		* @brief 手札カードの取得
 		*/
-		inline CCard** GetHandCard() { return &m_pCard[0]; }
+		//inline CCard** GetHandCard() { return &m_pCard[0]; }
 
 		CCard* SearchHandList(int num);
 
@@ -147,13 +147,13 @@ namespace My
 		* StayList : ステイ中のカード
 		* TriggerList : トリガーしたカード
 		*/ 
-		My::CCard* m_pCard[MAX_HANDSCARD];
+		//My::CCard* m_pCard[MAX_HANDSCARD];
 
 		std::list<CCard*>m_pHandList;
 
-		My::CCard* m_pHandCard[MAX_HANDSCARD];
+		/*My::CCard* m_pHandCard[MAX_HANDSCARD];
 		My::CCard* m_pStayCard[MAX_HANDSCARD];
-		My::CCard* m_pTriggerCard[MAX_HANDSCARD];
+		My::CCard* m_pTriggerCard[MAX_HANDSCARD];*/
 
 		/* @brief 現在持っているカード枚数 */
 		int m_TotalNum;
