@@ -125,7 +125,7 @@ void My::CLife_Gauge::SetVtx_S()
 	col = { FLOAT_ZERO, FLOAT_ONE, FLOAT_ONE, FLOAT_ONE };
 
 	//•ªŠ„‚µ‚½Žž‚ÌŠp“x
-	float anglestep = D3DX_PI * 2.0 / m_nTrapeSeg;
+	float anglestep = static_cast<float>(D3DX_PI * 2.0 / m_nTrapeSeg);
 	//‚±‚ê‚à‰Á‚¦‚Ä12Žž‚©‚çŽn‚Ü‚é‚æ‚¤‚É
 	float angleoffset = -D3DX_PI / 2.0f;
 

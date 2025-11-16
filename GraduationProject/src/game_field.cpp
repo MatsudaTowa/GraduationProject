@@ -10,7 +10,7 @@
 //=============================================
 // コンストラクタ
 //=============================================
-My::CGameField::CGameField(int nPriority)
+My::CGameField::CGameField(int /*nPriority*/)
 {
 }
 

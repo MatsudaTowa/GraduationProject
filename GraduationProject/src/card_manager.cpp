@@ -79,7 +79,7 @@ void My::CCardManager::ResetCardList()
 //================================
 My::CCard* My::CCardManager::CreateCard(int id)
 {
-	if (m_CardVector.size() < id) return nullptr;
+	if (static_cast<int>(m_CardVector.size()) < id) return nullptr;
 
 	//基本ステータスの代入
 	My::CCard::BaseStatus Status;
@@ -183,7 +183,7 @@ My::CCard* My::CCardManager::CreateCard(int id)
 CCard_Client::Param My::CCardManager::GetCardParam(int id)
 {
 	//登録されていない番号ならアサート
-	assert(id <= m_CardVector.size() || id < 1);
+	assert(id <= static_cast<int>(m_CardVector.size()) || id < 1);
 
 	//引数のIDのカードを返す
 	return m_CardVector[id - 1];

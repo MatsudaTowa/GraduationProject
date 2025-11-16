@@ -97,7 +97,7 @@ public:
 	\~english Don't hold renderer in the instance
 	\~japanese インスタンス内にrendererを保持してはいけない
 	*/
-	virtual bool OnDistorting(Renderer* renderer)
+	virtual bool OnDistorting([[maybe_unused]] Renderer* renderer)
 	{
 		return false;
 	}

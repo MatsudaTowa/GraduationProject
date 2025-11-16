@@ -736,7 +736,7 @@ public:
 		テクスチャを読み込む。
 		::Effekseer::Effect::Create実行時に使用される。
 	*/
-	virtual TextureRef Load(const char16_t* path, TextureType textureType)
+	virtual TextureRef Load([[maybe_unused]] const char16_t* path, [[maybe_unused]] TextureType textureType)
 	{
 		return nullptr;
 	}
@@ -761,7 +761,7 @@ public:
 		\~English	a pointer of loaded texture
 		\~Japanese	読み込まれたテクスチャのポインタ
 	*/
-	virtual TextureRef Load(const void* data, int32_t size, TextureType textureType, bool isMipMapEnabled)
+	virtual TextureRef Load(const void* /*data*/, int32_t /*size*/, TextureType /*textureType*/, bool /*isMipMapEnabled*/)
 	{
 		return nullptr;
 	}
@@ -1012,7 +1012,7 @@ public:
 		\~English	a pointer of loaded a material
 		\~Japanese	読み込まれたマテリアルのポインタ
 	*/
-	virtual MaterialRef Load(const char16_t* path)
+	virtual MaterialRef Load([[maybe_unused]] const char16_t* path)
 	{
 		return nullptr;
 	}
@@ -1034,7 +1034,7 @@ public:
 		\~English	a pointer of loaded a material
 		\~Japanese	読み込まれたマテリアルのポインタ
 	*/
-	virtual MaterialRef Load(const void* data, int32_t size, MaterialFileType fileType)
+	virtual MaterialRef Load(const void* /*data*/, int32_t /*size*/, MaterialFileType /*fileType*/)
 	{
 		return nullptr;
 	}
@@ -1633,7 +1633,7 @@ public:
 		サウンドを読み込む。
 		::Effekseer::Effect::Create実行時に使用される。
 	*/
-	virtual SoundDataRef Load(const char16_t* path)
+	virtual SoundDataRef Load([[maybe_unused]] const char16_t* path)
 	{
 		return nullptr;
 	}
@@ -1652,7 +1652,7 @@ public:
 		\~English	a pointer of loaded texture
 		\~Japanese	読み込まれたサウンドのポインタ
 	*/
-	virtual SoundDataRef Load(const void* data, int32_t size)
+	virtual SoundDataRef Load(const void* /*data*/, int32_t /*size*/)
 	{
 		return nullptr;
 	}

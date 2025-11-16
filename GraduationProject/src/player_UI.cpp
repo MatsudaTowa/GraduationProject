@@ -29,7 +29,7 @@ HRESULT My::CPlayerUI::Init(CActiveSceneCharacter* character)
 
 	if (m_pNumberUI == nullptr)
 	{
-		D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), character->GetPos()); //スクリーン座標に変換
+		//D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), character->GetPos()); //スクリーン座標に変換
 		m_pNumberUI = CPlayerNumberUI::Create(screen_pos, character->GetPlayerIdx());
 	}
 

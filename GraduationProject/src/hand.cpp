@@ -263,7 +263,7 @@ My::CCard* My::CHand::SearchHandList(int num)
 	auto itr = m_pHandList.begin();
 
 	// リスト分回す
-	for (unsigned int i = 0; i < m_pHandList.size(); i++)
+	for (int i = 0; i < m_pHandList.size(); i++)
 	{
 		if (i == num){
 			return *itr;
@@ -320,7 +320,7 @@ void My::CHand::SelectStateSet()
 void My::CHand::DeleteCard()
 {
 	// カード番号(-1 で初期化)
-	int num = -1;
+	//int num = -1;
 
 	//auto itr = m_pHandList.begin();
 
@@ -449,7 +449,7 @@ void My::CHand::HandDraw(int drawnum)
 	{
 		// TODO : 一旦ここでランダムに抽選する
 		int rundom;
-		rundom = Rundom(CCard::CARDTYPE_::TYPE_ATTACK, CCard::CARDTYPE_::TYPE_MAX);
+		rundom = static_cast<int>(Rundom(CCard::CARDTYPE_::TYPE_ATTACK, CCard::CARDTYPE_::TYPE_MAX));
 
 		SetCard((CCard::CARDTYPE_)rundom);
 		m_TotalNum++;	// 手札の総数を増やす

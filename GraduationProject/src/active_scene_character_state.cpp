@@ -11,7 +11,7 @@
 //===============================================================================
 // コンストラクタ
 //===============================================================================
-My::CLobbyCharacter::CLobbyCharacter(CActiveSceneCharacter* character):m_pLobbyUImanager(nullptr),m_data()
+My::CLobbyCharacter::CLobbyCharacter(CActiveSceneCharacter* /*character*/):m_pLobbyUImanager(nullptr),m_data()
 {
 }
 
@@ -45,7 +45,7 @@ void My::CLobbyCharacter::Lobby(CActiveSceneCharacter* character)
 //===============================================================================
 // 戦闘
 //===============================================================================
-void My::CDuelCharacter::Duel(CActiveSceneCharacter* character)
+void My::CDuelCharacter::Duel(CActiveSceneCharacter* /*character*/)
 {
 }
 

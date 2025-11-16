@@ -115,7 +115,7 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 
 	if (character->GetEnergy() < CActiveSceneCharacter::MAX_ENERGY)
 	{//エナジーがMAXになったらUIの更新はしない
-		pCharge->Update(m_pEnergyUpCount->GetCnt(), m_pEnergyUpCount->GetFrame());
+		pCharge->Update(static_cast<float>(m_pEnergyUpCount->GetCnt()), m_pEnergyUpCount->GetFrame());
 		EnergyUp(player);
 	}
 

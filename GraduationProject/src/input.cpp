@@ -31,7 +31,7 @@ My::CInput::~CInput()
  * @param [in]ハンドルワンド
  * @return 成功したかどうか
  */
-HRESULT My::CInput::Init(HINSTANCE hInstance, HWND hWnd)
+HRESULT My::CInput::Init(HINSTANCE hInstance, HWND /*hWnd*/)
 {
 	if (m_pInput == nullptr)
 	{
@@ -398,7 +398,7 @@ My::CInputPad::~CInputPad()
  * @param [in]ハンドルワンド
  * @return 成功したかどうか
  */
-HRESULT My::CInputPad::Init(HINSTANCE hInstance, HWND hWnd)
+HRESULT My::CInputPad::Init(HINSTANCE /*hInstance*/, HWND /*hWnd*/)
 {
 	m_Connect = false;
 
@@ -455,7 +455,7 @@ void My::CInputPad::Update()
 		m_ajoyKeyStateRelease = ~Button & OldButton;    // リリース処理
 
 		// 現在の時間を取得する
-		m_aJoypadCurrentTime = timeGetTime();
+		m_aJoypadCurrentTime = WORD(timeGetTime());
 
 		if (joykeyState.Gamepad.wButtons && ((m_aJoypadCurrentTime - m_aJoypadExecLastTime) > JOYPAD_SPEED))
 		{
@@ -487,7 +487,7 @@ void My::CInputPad::UpdateStick(XINPUT_STATE state)
 {
 	for (int nCntStick = 0; nCntStick < STICKTYPE_MAX; nCntStick++)
 	{
-		float fX,fY = 0.0f; //スティックのX軸、Y軸
+		float fX = 0.0f,fY = 0.0f; //スティックのX軸、Y軸
 
 		switch (nCntStick)
 		{

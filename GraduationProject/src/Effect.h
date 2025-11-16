@@ -61,7 +61,7 @@ namespace My
 		void SetColorSRGB(Effekseer::Color col);					// 色(SRGB)の設定
 		void SetLoop(bool bLoop) { paramater.m_bIsLoop = bLoop; }	// ループするかどうか
 		void SetLoopInterval(int nLoopInterval) { paramater.m_nLoopInterval = nLoopInterval; }	// ループのインターバル設定
-		void SetLife(int nLife) { paramater.m_sFilepas = nLife; }	// ループのインターバル設定
+		void SetLife(int nLife) { paramater.m_nLife = nLife; }	// ループのインターバル設定
 
 		void AddPos(D3DXVECTOR3 pos);							// 位置の加算
 		void AddRot(D3DXVECTOR3 rot);							// 向きの加算（ラジアン）

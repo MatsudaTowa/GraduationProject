@@ -179,6 +179,8 @@ My::CColision::COLISION My::CColision::CheckColision_Y(D3DXVECTOR3 Aoldpos, D3DX
 	{
 		return CColision::COLISION::COLISON_NONE;
 	}
+
+	return CColision::COLISION::COLISON_NONE;
 }
 
 //=============================================

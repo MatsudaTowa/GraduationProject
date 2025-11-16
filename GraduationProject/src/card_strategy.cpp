@@ -23,7 +23,7 @@ My::CAttack::~CAttack()
 //===============================================================================
 // 攻撃処理
 //===============================================================================
-void My::CAttack::Strategy(CActiveSceneCharacter* /*character*/, CCard* card)
+void My::CAttack::Strategy(CActiveSceneCharacter* /*character*/, CCard* /*card*/)
 {
 }
 
@@ -44,7 +44,7 @@ My::CDiffence::~CDiffence()
 //===============================================================================
 // 守備処理
 //===============================================================================
-void My::CDiffence::Strategy(CActiveSceneCharacter* character, CCard* card)
+void My::CDiffence::Strategy(CActiveSceneCharacter* /*character*/, CCard* /*card*/)
 {
 }
 
@@ -86,6 +86,6 @@ My::CEnergyAdjust::~CEnergyAdjust()
 //===============================================================================
 // エナジー変動処理
 //===============================================================================
-void My::CEnergyAdjust::Strategy(CActiveSceneCharacter* character, CCard* card)
+void My::CEnergyAdjust::Strategy(CActiveSceneCharacter* /*character*/, CCard* /*card*/)
 {
 }

@@ -167,7 +167,7 @@ My::CFont* My::CFont::CreateFontTexture(int thickness, int idx, WCHAR txt)
 	//文字のベースラインから一番上まで
 	int ascent = tm.tmAscent;
 	//文字のベースラインから一番下まで
-	int descent = tm.tmDescent;
+	//int descent = tm.tmDescent;
 
 	int baseline = ascent; // ベースラインはフォント上部からの距離
 

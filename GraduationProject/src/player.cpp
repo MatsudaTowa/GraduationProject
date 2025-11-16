@@ -80,8 +80,6 @@ void My::CPlayer::Draw()
 //=============================================
 My::CPlayer* My::CPlayer::Create(CPlayer* player, D3DXVECTOR3 pos, D3DXVECTOR3 rot, int id)
 {
-	CModel* pModel = GET_MODEL;
-
 	CPlayer* pPlayer = player;
 
 	// null‚È‚çnull‚ð•Ô‚·

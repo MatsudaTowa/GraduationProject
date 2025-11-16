@@ -208,7 +208,7 @@ void My::CActiveSceneCharacter::CreateDeck()
 	for (int i = 0; i < 40; i++)
 	{
 		//ƒ‰ƒ“ƒ_ƒ€‚Å‰¼¶¬
-		int nID = Rundom(1, nCardNum);
+		int nID = static_cast<int>(Rundom(1, nCardNum));
 		m_Deck.push_back(nID);			//ƒŠƒXƒg‚É•Û‘¶
 	}
 }

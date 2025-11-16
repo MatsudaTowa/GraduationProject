@@ -66,8 +66,8 @@ HRESULT My::CCard::Init()
 	m_pState->Init();
 	m_StateNum = CCardState::CARD_NEUTRAL;
 
-	m_Param.power = Rundom(1, 10);
-	m_Param.cost = Rundom(1, 3);
+	m_Param.power = static_cast<int>(Rundom(1, 10));
+	m_Param.cost = static_cast<int>(Rundom(1, 3));
 
 	// カードフレーム生成
 	for (int i = 0; i < CCardFrame::FRAMETYPE_MAX; i++)
@@ -96,7 +96,6 @@ void My::CCard::Update()
 
 	// カメラの位置と角度に合わせる
 	CCamera* pCamera = CManager::GetInstance()->GetCamera(0);
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetInstance()->GetRenderer()->GetDevice();
 
 	D3DXVECTOR3 rot = pCamera->GetRot();
 	rot.x += -1.2f;
@@ -273,7 +272,7 @@ bool My::CCard::CardCastToMouse()
 	}
 
 	// カメラ取得
-	CCamera* pCamera = GET_CAMERA(0);
+	//CCamera* pCamera = GET_CAMERA(0);
 	// マウス取得
 	CInputMouse* pMouse = GET_INPUT_MOUSE;
 	// カード座標
@@ -303,7 +302,7 @@ bool My::CCard::CardCastToMouse()
 		CActiveSceneManager::GetInstance()->ChangeState(new CCardCast);
 
 		screenpos = pMouse->GetMousePos();
-		CalcScreenToWorld(&resultpos, screenpos.x, screenpos.y, 1.0f, width, height, &View, &Proj);
+		CalcScreenToWorld(&resultpos, screenpos.x, screenpos.y, 1.0f, static_cast<int>(width), static_cast<int>(height), &View, &Proj);
 		resultpos.y += 20.0f;
 		SetPos(resultpos);
 

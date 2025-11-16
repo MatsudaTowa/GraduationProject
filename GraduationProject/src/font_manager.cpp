@@ -53,7 +53,7 @@ void My::CFontManager::Uninit()
 //================================
 void My::CFontManager::Regist(const wchar_t* text, D3DXVECTOR3 first_pos, float size, float txt_shift, int thickness, int idx)
 {
-	for (int i = INT_ZERO; i < wcslen(text); ++i)
+	for (unsigned int i = INT_ZERO; i < wcslen(text); ++i)
 	{
 		CFont* font = nullptr;
 		font = CFont::Create(first_pos, size, thickness, idx, text[i]);
@@ -73,7 +73,7 @@ void My::CFontManager::SetText(const wchar_t* text, D3DXVECTOR3 first_pos, float
 	}
 	m_Font.clear();
 
-	for (int i = INT_ZERO; i < wcslen(text); ++i)
+	for (unsigned int i = INT_ZERO; i < wcslen(text); ++i)
 	{
 		CFont* font = nullptr;
 		font = CFont::Create(first_pos, size, thickness, idx, text[i]);

@@ -338,7 +338,7 @@ My::CInputPad* My::CManager::GetPad()
  */
 My::CCamera* My::CManager::GetCamera(int idx)
 {
-	if (idx >= m_pCamera.size())
+	if (idx >= static_cast<int>(m_pCamera.size()))
 	{
 		return nullptr;
 	}
@@ -366,7 +366,7 @@ int My::CManager::GetCureentViewCamera()
  */
 void My::CManager::SetCureentViewCamera(int idx)
 {
-	if (idx >= m_pCamera.size())
+	if (idx >= static_cast<int>(m_pCamera.size()))
 	{
 		assert(false && "カメラのサイズオーバー");
 	}
