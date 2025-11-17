@@ -191,6 +191,10 @@ void My::CHand::Select()
 				m_SelectNum = nCount;	// 今の配列番号を一時格納しておく
 				break;
 			}
+			else
+			{
+				nCount++;
+			}
 		}
 	}
 	else
@@ -203,7 +207,11 @@ void My::CHand::Select()
 
 		for (auto& iter : m_pHandList)
 		{
-			if (nCount != m_SelectNum) continue;
+			if (nCount != m_SelectNum)
+			{
+				nCount++;
+				continue;
+			}
 
 			// 選択番号のカードが非選択状態になったら
 			if (iter->GetStateNum() == CCardState::CARD_NEUTRAL)
@@ -263,7 +271,7 @@ My::CCard* My::CHand::SearchHandList(int num)
 	auto itr = m_pHandList.begin();
 
 	// リスト分回す
-	for (int i = 0; i < m_pHandList.size(); i++)
+	for (unsigned int i = 0; i < m_pHandList.size(); i++)
 	{
 		if (i == num){
 			return *itr;
