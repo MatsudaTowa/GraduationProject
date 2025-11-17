@@ -9,6 +9,7 @@
 
 #include "character.h"
 #include "active_scene_character_state.h"
+#include "hand.h"
 
 /** @brief My 名前空間 */
 namespace My
@@ -95,6 +96,24 @@ namespace My
 			m_EnergyUpFrame = frame;
 			m_pEnergyUpCount->SetFrame(m_EnergyUpFrame);
 		}
+
+		/**
+		 * @brief 手札取得
+		 * @return 手札
+		 */
+		inline CHand* GetHand()
+		{
+			return m_pHand;
+		}
+
+		/**
+		 * @brief 手札設定
+		 * @param [in]pHand
+		 */
+		inline void SetHand(CHand* pHand)
+		{
+			m_pHand = pHand;
+		}
 	private:
 
 		/**
@@ -111,6 +130,7 @@ namespace My
 
 		CCount* m_pEnergyUpCount;	//!エナジーを増やすまでのカウント
 		int m_EnergyUpFrame;		//!エナジーを増やすフレーム
+		CHand* m_pHand;	// 手札
 	};
 
 }

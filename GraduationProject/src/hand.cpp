@@ -181,7 +181,7 @@ void My::CHand::Select()
 		//}
 
 		int nCount = 0;
-		for (auto iter : m_pHandList)
+		for (auto& iter : m_pHandList)
 		{
 			// マウスでカード選択
 			m_IsPickUp = iter->CardSelectToMouse();
@@ -243,7 +243,11 @@ void My::CHand::Cast()
 
 	for (auto& iter : m_pHandList)
 	{
-		if (nCount != m_SelectNum) continue;
+		if (nCount != m_SelectNum)
+		{
+			nCount++;
+			continue;
+		}
 
 		// 返り値でキャスト状態かどうか判断
 		bool IsCast = iter->CardCastToMouse();
@@ -377,37 +381,6 @@ void My::CHand::DeleteCard()
 
 	// 手札の位置をセットする
 	SetHandCardPos();
-
-	// -1以下だったら通さない
-	/*if (num < 0)
-		return;*/
-
-	// トリガーカード除去
-	//m_pCard[num]->Uninit();
-
-	//// 次の番号のカードの情報を前に移していく
-	//for (int ii = num; ii < m_TotalNum; ii++)
-	//{
-	//	m_pCard[ii] = m_pCard[ii + 1];
-	//}
-
-	//// 最大の配列カードに変なゴミが残らないようにヌルにする
-	//m_pCard[m_TotalNum-1] = nullptr;
-
-	//// 手札総数を減らす
-	//m_TotalNum--;
-
-	// ステイ中のカードがあるかどうか
-	//for (int i = 0; i < m_TotalNum; i++)
-	//{
-	//	if (m_pCard[i]->GetStateNum() == CCardState::CARD_STATE::CARD_STAY)
-	//	{// あったら手札の整理をしない
-	//		return;
-	//	}
-	//}
-
-	//// 手札の位置をセットする
-	//SetHandCardPos();
 }
 
 //===========================================================================================================
@@ -432,8 +405,6 @@ void My::CHand::SetCard(CCard::CARDTYPE_ type)
 		pCard = CCardAssist::Create(type);
 		break;
 	}
-
-	//m_pCard[m_TotalNum] = pCard;
 
 	// リストテスト
 	m_pHandList.push_back(pCard);
@@ -473,8 +444,7 @@ void My::CHand::HandDraw(int drawnum)
 My::CHand* My::CHand::Create()
 {
 	CHand* pHand = new CHand();
-	//CActiveSceneManager::GetInstance()->SetHand(pHand);
-
+	
 	pHand->Init();
 
 	return pHand;
@@ -523,33 +493,6 @@ void My::CHand::SetHandCardPos()
 		// 間隔を開ける
 		xpos += posInterbal * 0.5f;
 	}
-
-	//for (int i = 0; i < m_TotalNum; i++)
-	//{
-	//	// カードの座標の設定
-	//	if (i != 0)
-	//	{
-	//		// 一枚目以外は前の手札の位置を参照して "Interbal" 分横にずらす
-	//		m_pCard[i]->SetPos({ m_pCard[i - 1]->GetPos().x+posInterbal, m_pCard[i - 1]->GetPos().y, m_pCard[i - 1]->GetPos().z });
-	//	}
-	//	else
-	//	{
-	//		// 一枚目のカードの座標(基準となる)
-	//		firstpos = { xpos,m_CenterPos.y,m_CenterPos.z };
-	//		m_pCard[0]->SetPos(firstpos);
-	//	}
-
-	//	if (m_pCard[i]->GetStateNum() != CCardState::CARD_STAY)
-	//	{
-	//		// 元の位置を設定しておく
-	//		m_pCard[i]->SetNeutralPos(m_pCard[i]->GetPos());
-	//		// 一度ニュートラルにリセットする
-	//		m_pCard[i]->ChangeState(CCardState::CARD_STATE::CARD_NEUTRAL);
-	//	}
-	//	
-	//	// 間隔を開ける
-	//	xpos += posInterbal*0.5f;
-	//}
 
 	// 選択番号も一度リセット
 	m_SelectNum = 0;

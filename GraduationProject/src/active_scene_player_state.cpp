@@ -76,7 +76,8 @@ void My::CPlayerLobbyState::Lobby(CActiveSceneCharacter* character)
 //=============================================
 My::CPlayerDuelState::CPlayerDuelState(CActiveSceneCharacter* character):CDuelCharacter(character),
 	m_pEnergyUpCount(nullptr),
-	m_EnergyUpFrame(INT_ZERO)
+	m_EnergyUpFrame(INT_ZERO),
+	m_pHand(nullptr)
 {
 	if (m_pEnergyUpCount == nullptr)
 	{
@@ -85,6 +86,10 @@ My::CPlayerDuelState::CPlayerDuelState(CActiveSceneCharacter* character):CDuelCh
 		m_pEnergyUpCount->SetFrame(ENERGY_UP_FRAME);
 		m_EnergyUpFrame = ENERGY_UP_FRAME;
 	}
+
+	//手札の生成
+	//m_pHand = new CHand;
+	//m_pHand->Init();
 }
 
 //=============================================
@@ -92,6 +97,12 @@ My::CPlayerDuelState::CPlayerDuelState(CActiveSceneCharacter* character):CDuelCh
 //=============================================
 My::CPlayerDuelState::~CPlayerDuelState()
 {
+	if (m_pHand != nullptr)
+	{
+		delete m_pHand;
+		m_pHand = nullptr;
+	}
+
 	if (m_pEnergyUpCount != nullptr)
 	{
 		delete m_pEnergyUpCount;
@@ -141,12 +152,12 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 		* TODO : 今だけここにおいている。のちにゲーム開始時に呼び出す
 		*/
 
-	CHand* pHand = player->GetHand();
-	if (pHand != nullptr)
+	//CHand* pHand = player->GetHand();
+	if (m_pHand != nullptr)
 	{
-		pHand->Start();
+		m_pHand->Start();
 
-		pHand->Update();
+		m_pHand->Update();
 
 		//TODO:ハンドの総数をここで取得し設定
 		//player->SetHandNum(pHand->GetTotal())
@@ -158,9 +169,9 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 //=============================================
 void My::CPlayerDuelState::CreateDuelUI(CActiveScenePlayer* player)
 {
-	if (player->GetHand() == nullptr)
+	if (m_pHand == nullptr)
 	{// 手札生成
-		player->SetHand(CHand::Create());
+		m_pHand = CHand::Create();
 	}
 
 	D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), player->GetPos()); //スクリーン座標に変換

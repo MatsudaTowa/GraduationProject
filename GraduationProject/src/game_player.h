@@ -56,23 +56,23 @@ namespace My
 		void Draw() override;
 
 
-		/**
-		 * @brief èDæ“¾
-		 * @return èD
-		 */
-		inline CHand* GetHand()
-		{
-			return m_pHand;
-		}
+		///**
+		// * @brief èDæ“¾
+		// * @return èD
+		// */
+		//inline CHand* GetHand()
+		//{
+		//	return m_pHand;
+		//}
 
-		/**
-		 * @brief èDİ’è
-		 * @param [in]pHand
-		 */
-		inline void SetHand(CHand* pHand)
-		{
-			m_pHand = pHand;
-		}
+		///**
+		// * @brief èDİ’è
+		// * @param [in]pHand
+		// */
+		//inline void SetHand(CHand* pHand)
+		//{
+		//	m_pHand = pHand;
+		//}
 
 private:
 		/**
@@ -85,7 +85,7 @@ private:
 		 */
 		void Debug()override;
 
-		CHand* m_pHand;	// èD
+		//CHand* m_pHand;	// èD
 	};
 }
 #endif

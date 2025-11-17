@@ -11,8 +11,8 @@
 //=============================================
 // コンストラクタ
 //=============================================
-My::CActiveScenePlayer::CActiveScenePlayer(int nPriority):CPlayer(nPriority),
-m_pHand(nullptr)												// 手札初期化
+My::CActiveScenePlayer::CActiveScenePlayer(int nPriority):CPlayer(nPriority)//,
+//m_pHand(nullptr)												// 手札初期化
 {
 }
 
@@ -44,11 +44,11 @@ HRESULT My::CActiveScenePlayer::Init()
 //=============================================
 void My::CActiveScenePlayer::Uninit()
 {
-	if (m_pHand != nullptr)
+	/*if (m_pHand != nullptr)
 	{
 		delete m_pHand;
 		m_pHand = nullptr;
-	}
+	}*/
 
 	// ゲームマネージャーに登録されているプレイヤーにnullptrを代入してあげる
 	if (CActiveSceneManager::GetInstance()->GetPlayer() != nullptr)
