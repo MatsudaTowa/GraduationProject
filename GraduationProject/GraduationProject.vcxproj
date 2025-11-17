@@ -260,6 +260,7 @@
     <ClCompile Include="src\scene.cpp" />
     <ClCompile Include="src\shadow.cpp" />
     <ClCompile Include="src\target_arrow.cpp" />
+    <ClCompile Include="src\target_arrow_manager.cpp" />
     <ClCompile Include="src\texture.cpp" />
     <ClCompile Include="src\title.cpp" />
     <ClCompile Include="src\title_camera.cpp" />
@@ -368,6 +369,7 @@
     <ClInclude Include="src\scene.h" />
     <ClInclude Include="src\shadow.h" />
     <ClInclude Include="src\target_arrow.h" />
+    <ClInclude Include="src\target_arrow_manager.h" />
     <ClInclude Include="src\texture.h" />
     <ClInclude Include="src\title.h" />
     <ClInclude Include="src\title_camera.h" />

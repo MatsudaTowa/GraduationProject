@@ -200,6 +200,7 @@
       <Filter>card</Filter>
     </ClCompile>
     <ClCompile Include="src\life_changer.cpp" />
+    <ClCompile Include="src\target_arrow_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -402,6 +403,7 @@
       <Filter>card</Filter>
     </ClInclude>
     <ClInclude Include="src\life_changer.h" />
+    <ClInclude Include="src\target_arrow_manager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">
