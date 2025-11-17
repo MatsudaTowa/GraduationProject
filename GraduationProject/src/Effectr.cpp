@@ -146,7 +146,7 @@ void My::CEffect::Draw()
 /// <param name="Filepas">ファイルパス</param>
 /// <param name="pos">位置</param>
 /// <returns>読み込み成功なら：true</returns>
-bool My::CEffect::Load(const std::string Filepas, D3DXVECTOR3 pos)
+bool My::CEffect::Load(const std::string Filepas)
 {
 	// マネージャーRef取得
 	My::CEffectManager* pEffekseerManager = CManager::GetInstance()->GetEffectManager();
@@ -190,20 +190,6 @@ bool My::CEffect::Load(const std::string Filepas, D3DXVECTOR3 pos)
 		std::cerr << oss.str();
 		return false;
 	}
-
-	//// テクスチャパス確認
-	//int textureCount = m_effectRef->GetTextureCount();
-	//for (int i = 0; i < textureCount; ++i)
-	//{
-	//	const EFK_CHAR* texPath = m_effectRef->GetTextureName(i);
-
-	//	// UTF-16 → UTF-8 に変換（Windows API使用）
-	//	std::wstring wstr(texPath);
-	//	std::string utf8str(wstr.begin(), wstr.end());
-
-	//	std::cout << "Texture[" << i << "] = " << utf8str << std::endl;
-	//}
-
 
 	return true;
 }
@@ -507,7 +493,7 @@ My::CEffect* My::CEffect::create(const std::string sFilepas)
 		return nullptr;
 	}
 
-	m_pEffect->Load(param.m_sFilepas, m_pEffect->paramater.m_pos);
+	m_pEffect->Load(param.m_sFilepas);
 
 	m_pEffect->SetPos(param.m_pos);
 	m_pEffect->SetRot(param.m_rot);

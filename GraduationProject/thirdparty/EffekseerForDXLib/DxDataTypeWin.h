@@ -1265,7 +1265,7 @@ namespace DxLib
 #endif
 
 // ‚c‚‰‚’‚…‚ƒ‚”‚h‚‚‚•‚”‚Ìƒo[ƒWƒ‡ƒ“İ’è
-#define DIRECTINPUT_VERSION 0x700
+//#define DIRECTINPUT_VERSION 0x700
 
 #ifndef DWORD_PTR
 #ifdef _WIN64

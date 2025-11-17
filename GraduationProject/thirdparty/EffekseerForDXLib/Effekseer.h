@@ -857,15 +857,15 @@ struct Gradient
 
 	struct ColorKey
 	{
-		float Position;
-		std::array<float, 3> Color;
-		float Intensity;
+		float Position = 0.0f;
+		std::array<float, 3> Color = { 1.0f, 1.0f, 1.0f };
+		float Intensity = 0.0f;
 	};
 
 	struct AlphaKey
 	{
-		float Position;
-		float Alpha;
+		float Position = 0.0f;
+		float Alpha = 0.0f;
 	};
 
 	int ColorCount;
@@ -1088,6 +1088,7 @@ public:
 
 	virtual bool Equal(const RenderingUserData* rhs) const
 	{
+		(void)rhs;
 		return true;
 	}
 };
@@ -2686,6 +2687,9 @@ public:
 	*/
 	virtual VertexBufferRef CreateVertexBuffer(int32_t size, const void* initialData, bool isDynamic)
 	{
+		(void)size;
+		(void)initialData;
+		(void)isDynamic;
 		return VertexBufferRef{};
 	}
 
@@ -2698,6 +2702,9 @@ public:
 	*/
 	virtual IndexBufferRef CreateIndexBuffer(int32_t elementCount, const void* initialData, IndexBufferStrideType stride)
 	{
+		(void)elementCount;
+		(void)initialData;
+		(void)stride;
 		return IndexBufferRef{};
 	}
 
@@ -2711,6 +2718,10 @@ public:
 	*/
 	virtual bool UpdateVertexBuffer(VertexBufferRef& buffer, int32_t size, int32_t offset, const void* data)
 	{
+		(void)buffer;
+		(void)size;
+		(void)offset;
+		(void)data;
 		return false;
 	}
 
@@ -2724,6 +2735,10 @@ public:
 	*/
 	virtual bool UpdateIndexBuffer(IndexBufferRef& buffer, int32_t size, int32_t offset, const void* data)
 	{
+		(void)buffer;
+		(void)size;
+		(void)offset;
+		(void)data;
 		return false;
 	}
 
@@ -2737,6 +2752,10 @@ public:
 	*/
 	virtual bool UpdateUniformBuffer(UniformBufferRef& buffer, int32_t size, int32_t offset, const void* data)
 	{
+		(void)buffer;
+		(void)size;
+		(void)offset;
+		(void)data;
 		return false;
 	}
 
@@ -2747,6 +2766,8 @@ public:
 	*/
 	virtual VertexLayoutRef CreateVertexLayout(const VertexLayoutElement* elements, int32_t elementCount)
 	{
+		(void)elements;
+		(void)elementCount;
 		return RefPtr<VertexLayout>{};
 	}
 
@@ -2758,41 +2779,60 @@ public:
 	*/
 	virtual UniformBufferRef CreateUniformBuffer(int32_t size, const void* initialData)
 	{
+		(void)size;
+		(void)initialData;
 		return UniformBufferRef{};
 	}
 
 	virtual PipelineStateRef CreatePipelineState(const PipelineStateParameter& param)
 	{
+		(void)param;
 		return PipelineStateRef{};
 	}
 
 	virtual FrameBufferRef CreateFrameBuffer(const TextureFormatType* formats, int32_t formatCount, TextureFormatType depthFormat)
 	{
+		(void)formats;
+		(void)formatCount;
+		(void)depthFormat;
 		return FrameBufferRef{};
 	}
 
 	virtual RenderPassRef CreateRenderPass(FixedSizeVector<TextureRef, RenderTargetMax>& textures, TextureRef& depthTexture)
 	{
+		(void)textures;
+		(void)depthTexture;
 		return RenderPassRef{};
 	}
 
 	virtual TextureRef CreateTexture(const TextureParameter& param, const CustomVector<uint8_t>& initialData = CustomVector<uint8_t>())
 	{
+		(void)param;
+		(void)initialData;
 		return TextureRef{};
 	}
 
 	virtual TextureRef CreateRenderTexture(const RenderTextureParameter& param)
 	{
+		(void)param;
 		return TextureRef{};
 	}
 
 	virtual TextureRef CreateDepthTexture(const DepthTextureParameter& param)
 	{
+		(void)param;
 		return TextureRef{};
 	}
 
 	virtual bool CopyTexture(TextureRef& dst, TextureRef& src, const std::array<int, 3>& dstPos, const std::array<int, 3>& srcPos, const std::array<int, 3>& size, int32_t dstLayer, int32_t srcLayer)
 	{
+		(void)dst;
+		(void)src;
+		(void)dstPos;
+		(void)srcPos;
+		(void)size;
+		(void)dstLayer;
+		(void)srcLayer;
 		return false;
 	}
 
@@ -2803,16 +2843,24 @@ public:
 	*/
 	virtual ShaderRef CreateShaderFromKey(const char* key)
 	{
+		(void)key;
 		return ShaderRef{};
 	}
 
 	virtual ShaderRef CreateShaderFromCodes(const CustomVector<StringView<char>>& vsCodes, const CustomVector<StringView<char>>& psCodes, UniformLayoutRef layout = nullptr)
 	{
+		(void)vsCodes;
+		(void)psCodes;
+		(void)layout;
 		return ShaderRef{};
 	}
 
 	virtual ShaderRef CreateShaderFromBinary(const void* vsData, int32_t vsDataSize, const void* psData, int32_t psDataSize)
 	{
+		(void)vsData;
+		(void)vsDataSize;
+		(void)psData;
+		(void)psDataSize;
 		return ShaderRef{};
 	}
 
@@ -2829,14 +2877,23 @@ public:
 
 	virtual void Draw(const DrawParameter& drawParam)
 	{
+		(void)drawParam;
 	}
 
 	virtual void SetViewport(int32_t x, int32_t y, int32_t width, int32_t height)
 	{
+		(void)x;
+		(void)y;
+		(void)width;
+		(void)height;
 	}
 
 	virtual void BeginRenderPass(RenderPassRef& renderPass, bool isColorCleared, bool isDepthCleared, Color clearColor)
 	{
+		(void)renderPass;
+		(void)isColorCleared;
+		(void)isDepthCleared;
+		(void)clearColor;
 	}
 
 	virtual void EndRenderPass()

@@ -43,7 +43,7 @@ struct NodeRendererTextureUVTypeParameter
 
 struct FalloffParameter
 {
-	enum BlendType
+	enum class BlendType
 	{
 		Add = 0,
 		Sub = 1,
@@ -148,14 +148,22 @@ public:
 
 	virtual void BeginRendering(const NodeParameter& parameter, int32_t count, void* userData)
 	{
+		(void)parameter;
+		(void)count;
+		(void)userData;
 	}
 
 	virtual void Rendering(const NodeParameter& parameter, const InstanceParameter& instanceParameter, void* userData)
 	{
+		(void)parameter;
+		(void)instanceParameter;
+		(void)userData;
 	}
 
 	virtual void EndRendering(const NodeParameter& parameter, void* userData)
 	{
+		(void)parameter;
+		(void)userData;
 	}
 };
 
@@ -256,22 +264,36 @@ public:
 
 	virtual void BeginRendering(const NodeParameter& parameter, int32_t count, void* userData)
 	{
+		(void)parameter;
+		(void)count;
+		(void)userData;
 	}
 
 	virtual void Rendering(const NodeParameter& parameter, const InstanceParameter& instanceParameter, void* userData)
 	{
+		(void)parameter;
+		(void)instanceParameter;
+		(void)userData;
 	}
 
 	virtual void EndRendering(const NodeParameter& parameter, void* userData)
 	{
+		(void)parameter;
+		(void)userData;
 	}
 
 	virtual void BeginRenderingGroup(const NodeParameter& parameter, int32_t count, void* userData)
 	{
+		(void)parameter;
+		(void)count;
+		(void)userData;
 	}
 
 	virtual void EndRenderingGroup(const NodeParameter& parameter, int32_t count, void* userData)
 	{
+		(void)parameter;
+		(void)count;
+		(void)userData;
 	}
 };
 
@@ -372,14 +394,22 @@ public:
 
 	virtual void BeginRendering(const NodeParameter& parameter, int32_t count, void* userData)
 	{
+		(void)parameter;
+		(void)count;
+		(void)userData;
 	}
 
 	virtual void Rendering(const NodeParameter& parameter, const InstanceParameter& instanceParameter, void* userData)
 	{
+		(void)parameter;
+		(void)instanceParameter;
+		(void)userData;
 	}
 
 	virtual void EndRendering(const NodeParameter& parameter, void* userData)
 	{
+		(void)parameter;
+		(void)userData;
 	}
 };
 
@@ -477,14 +507,22 @@ public:
 
 	virtual void BeginRendering(const NodeParameter& parameter, int32_t count, void* userData)
 	{
+		(void)parameter;
+		(void)count;
+		(void)userData;
 	}
 
 	virtual void Rendering(const NodeParameter& parameter, const InstanceParameter& instanceParameter, void* userData)
 	{
+		(void)parameter;
+		(void)instanceParameter;
+		(void)userData;
 	}
 
 	virtual void EndRendering(const NodeParameter& parameter, void* userData)
 	{
+		(void)parameter;
+		(void)userData;
 	}
 };
 
@@ -596,22 +634,36 @@ public:
 
 	virtual void BeginRendering(const NodeParameter& parameter, int32_t count, void* userData)
 	{
+		(void)parameter;
+		(void)count;
+		(void)userData;
 	}
 
 	virtual void Rendering(const NodeParameter& parameter, const InstanceParameter& instanceParameter, void* userData)
 	{
+		(void)parameter;
+		(void)instanceParameter;
+		(void)userData;
 	}
 
 	virtual void EndRendering(const NodeParameter& parameter, void* userData)
 	{
+		(void)parameter;
+		(void)userData;
 	}
 
 	virtual void BeginRenderingGroup(const NodeParameter& parameter, int32_t count, void* userData)
 	{
+		(void)parameter;
+		(void)count;
+		(void)userData;
 	}
 
 	virtual void EndRenderingGroup(const NodeParameter& parameter, int32_t count, void* userData)
 	{
+		(void)parameter;
+		(void)count;
+		(void)userData;
 	}
 };
 
@@ -1261,11 +1313,25 @@ private:
 	}
 
 public:
-	Curve()
+	Curve():
+		mControllPointCount(0),
+		mKnotCount(0),
+		mOrder(0),
+		mStep(0),
+		mType(0),
+		mDimension(0),
+		mLength(0)
 	{
 	}
 
-	Curve(const void* data, int32_t size)
+	Curve(const void* data, int32_t size):
+		mControllPointCount(0),
+		mKnotCount(0),
+		mOrder(0),
+		mStep(0),
+		mType(0),
+		mDimension(0),
+		mLength(0)
 	{
 		uint8_t* pData = new uint8_t[size];
 		memcpy(pData, data, size);
@@ -1274,7 +1340,15 @@ public:
 
 		// load converter version
 		int converter_version = 0;
+
+		if (size < sizeof(int32_t))
+		{
+			// エラー処理（例：return、例外、assert など）
+			return;
+		}
+
 		memcpy(&converter_version, m_pEffect, sizeof(int32_t));
+
 		m_pEffect += sizeof(int32_t);
 
 		// load controll point count
@@ -1361,7 +1435,7 @@ public:
 		double wSum = 0; // bs の合計
 		for (int j = 0; j < mControllPointCount; ++j)
 		{
-			bs[j] = mControllPoint[j].W * CalcBSplineBasisFunc(knot, j, m_pEffect, t * (t_rate));
+			bs[j] = mControllPoint[j].W * CalcBSplineBasisFunc(knot, j, m_pEffect, static_cast<double>(t) * static_cast<double>(t_rate));
 
 			if (!std::isnan(bs[j]))
 			{

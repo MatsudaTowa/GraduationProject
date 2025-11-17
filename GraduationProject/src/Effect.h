@@ -40,8 +40,8 @@ namespace My
 		void Update()override;		// 更新
 		void Draw()override;		// 描画
 
-		bool Load(const std::string sFilepas, D3DXVECTOR3 pos);
-		Effekseer::Handle Play();
+		bool Load(const std::string sFilepas);	// 読み込み
+		Effekseer::Handle Play();				// 再生
 
 		D3DXVECTOR3 GetPos			() { return paramater.m_pos; }			// 位置の取得
 		D3DXVECTOR3 GetRot			() { return paramater.m_rot; }			// 向きの取得（ラジアン）
