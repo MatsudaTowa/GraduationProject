@@ -155,9 +155,9 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 	//CHand* pHand = player->GetHand();
 	if (m_pHand != nullptr)
 	{
-		m_pHand->Start();
+		m_pHand->Start(this);
 
-		m_pHand->Update();
+		m_pHand->Update(this);
 
 		//TODO:ハンドの総数をここで取得し設定
 		//player->SetHandNum(pHand->GetTotal())
@@ -230,4 +230,13 @@ void My::CPlayerDuelState::EnergyUp(CActiveScenePlayer* player)
 	++energy;
 	player->SetEnergy(energy);
 	m_pEnergyUpCount->SetCnt(INT_ZERO);
+}
+
+
+//=============================================
+//カードを引く処理
+//=============================================
+void My::CPlayerDuelState::DrawCard()
+{
+
 }

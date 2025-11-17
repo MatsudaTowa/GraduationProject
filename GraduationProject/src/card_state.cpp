@@ -42,7 +42,7 @@ void My::CCardState::Copy(CCard* /*cpy*/)
 //=======================================================================================
 // 初期化処理
 //=======================================================================================
-void My::CCardStateNeutral::Init(CCard* cpy)
+void My::CCardStateNeutral::Init(CCard* cpy, CDuelCharacter* duel)
 {
 	if (cpy == nullptr)
 		return;
@@ -56,7 +56,7 @@ void My::CCardStateNeutral::Init(CCard* cpy)
 //=======================================================================================
 // 更新処理
 //=======================================================================================
-void My::CCardStateNeutral::Update(CCard* cpy)
+void My::CCardStateNeutral::Update(CCard* cpy, CDuelCharacter* duel)
 {
 	if (cpy == nullptr)
 		return;
@@ -74,7 +74,7 @@ void My::CCardStateNeutral::Update(CCard* cpy)
 //=======================================================================================
 // 初期化処理
 //=======================================================================================
-void My::CCardStatePickup::Init(CCard* cpy)
+void My::CCardStatePickup::Init(CCard* cpy, CDuelCharacter* duel)
 {
 	if (cpy == nullptr)
 		return;
@@ -89,7 +89,7 @@ void My::CCardStatePickup::Init(CCard* cpy)
 //=======================================================================================
 // 更新処理
 //=======================================================================================
-void My::CCardStatePickup::Update(CCard* cpy)
+void My::CCardStatePickup::Update(CCard* cpy, CDuelCharacter* duel)
 {
 	if (cpy == nullptr)
 		return;
@@ -109,7 +109,7 @@ void My::CCardStatePickup::Update(CCard* cpy)
 //=======================================================================================
 // 初期化
 //=======================================================================================
-void My::CCardStateCast::Init(CCard* cpy)
+void My::CCardStateCast::Init(CCard* cpy, CDuelCharacter* duel)
 {
 	if (cpy == nullptr)
 		return;
@@ -126,7 +126,7 @@ void My::CCardStateCast::Init(CCard* cpy)
 //=======================================================================================
 // 更新
 //=======================================================================================
-void My::CCardStateCast::Update(CCard* cpy)
+void My::CCardStateCast::Update(CCard* cpy, CDuelCharacter* duel)
 {
 	if (cpy == nullptr)
 		return;
@@ -146,7 +146,7 @@ void My::CCardStateCast::Update(CCard* cpy)
 //=======================================================================================
 // 初期化
 //=======================================================================================
-void My::CCardStateStay::Init(CCard* cpy)
+void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* duel)
 {
 	// カウントを初期化
 	m_Staycount = 0;
@@ -157,7 +157,7 @@ void My::CCardStateStay::Init(CCard* cpy)
 	if (CManager::GetInstance()->GetMouse()->GetArea() == CInputMouse::AREA::CENTER ||
 		status.energy < cpy->GetParameter().cost)
 	{// 真ん中エリアだった場合
-		cpy->ChangeState(CCardState::CARD_NEUTRAL);
+		cpy->ChangeState(CCardState::CARD_NEUTRAL, duel);
 	}
 	else
 	{// そのほかのエリアの場合
@@ -178,7 +178,7 @@ void My::CCardStateStay::Init(CCard* cpy)
 //=======================================================================================
 // 更新
 //=======================================================================================
-void My::CCardStateStay::Update(CCard* cpy)
+void My::CCardStateStay::Update(CCard* cpy, CDuelCharacter* duel)
 {
 	if (cpy == nullptr)
 		return;
@@ -187,7 +187,7 @@ void My::CCardStateStay::Update(CCard* cpy)
 	{// カウントが設定された時間を超えたら
 
 		// トリガー状態にする
-		cpy->ChangeState(CCardState::CARD_STATE::CARD_TRIGGER);
+		cpy->ChangeState(CCardState::CARD_STATE::CARD_TRIGGER, duel);
 	}
 
 	// カウントを進める
@@ -203,7 +203,7 @@ void My::CCardStateStay::Update(CCard* cpy)
 //=======================================================================================
 // 初期化
 //=======================================================================================
-void My::CCardStateTrigger::Init(CCard* cpy)
+void My::CCardStateTrigger::Init(CCard* cpy, CDuelCharacter* duel)
 {
 	if (cpy == nullptr)
 		return;

@@ -10,6 +10,7 @@
 #include "card_frame.h"
 #include "active_scene_manager.h"
 #include "duel_manager.h"
+#include "zone_manager.h"
 #include <typeinfo>
 
 //===========================================================================================================
@@ -27,7 +28,9 @@ m_Cost(INT_ZERO),
 m_AttackPower(INT_ZERO),
 m_pTargetArrow(nullptr),
 m_pCardHolder(nullptr),
-m_isUpdate(true)
+m_isUpdate(true),
+m_CurrentZone(ZONE::NONE_ZONE),
+m_OldZone(ZONE::NONE_ZONE)
 {
 	m_pTargetPlayerList.clear();
 	//if (m_pTop == nullptr)
@@ -91,6 +94,13 @@ void My::CCard::Uninit()
 //===========================================================================================================
 void My::CCard::Update()
 {
+
+}
+//===========================================================================================================
+// 更新処理
+//===========================================================================================================
+void My::CCard::Update(CDuelCharacter* duel)
+{
 	//更新フラグがないものは更新しない
 	if (!m_isUpdate) return;
 
@@ -102,7 +112,7 @@ void My::CCard::Update()
 
 	//CardCastToMouse();
 	
-	m_pState->Update(this);
+	m_pState->Update(this, duel);
 
 	SetRot(rot);
 }
@@ -166,7 +176,7 @@ My::CCard* My::CCard::Create(CCard::CARDTYPE_ type)
 //===========================================================================================================
 // ステートを変更する
 //===========================================================================================================
-void My::CCard::ChangeState(CCardState* state)
+void My::CCard::ChangeState(CCardState* /*state*/)
 {
 	if (m_pState != nullptr)
 	{
@@ -177,18 +187,18 @@ void My::CCard::ChangeState(CCardState* state)
 		//const char* cur_state_name = cur_state_id.name();
 		//const char* next_state_name = next_state_id.name();
 
-		delete m_pState;
+		/*delete m_pState;
 		m_pState = state;
 
 		m_pState->Init(this);
-		m_pState->Init();
+		m_pState->Init();*/
 	}
 }
 
 //===========================================================================================================
 // ステートを変更する
 //===========================================================================================================
-void My::CCard::ChangeState(CCardState::CARD_STATE state)
+void My::CCard::ChangeState(CCardState::CARD_STATE state, CDuelCharacter* duel)
 {
 	if (m_pState != nullptr)
 	{
@@ -204,6 +214,7 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state)
 		{
 		case CCardState::CARD_NEUTRAL:
 			m_pState = new CCardStateNeutral();
+			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(m_CurrentZone, duel), duel->GetZoneManager()->GetHandZone(), true);
 			break;
 
 		case CCardState::CARD_PICKUP:
@@ -216,10 +227,12 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state)
 
 		case CCardState::CARD_STAY:
 			m_pState = new CCardStateStay();
+			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(m_CurrentZone, duel), duel->GetZoneManager()->GetCastPreviewZone(), true);
 			break;
 
 		case CCardState::CARD_TRIGGER:
 			m_pState = new CCardStateTrigger();
+			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(m_CurrentZone, duel), duel->GetZoneManager()->GetCemetery(), true);
 			break;
 
 		default:
@@ -231,8 +244,8 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state)
 		m_StateNum = state;
 
 		// 初期化
-		m_pState->Init(this);
-		m_pState->Init();
+		m_pState->Init(this, duel);
+		//m_pState->Init();
 	}
 }
 
@@ -262,7 +275,7 @@ void My::CCard::RemoveTargetList(CActiveSceneCharacter* target_list)
 //===========================================================================================================
 // カードをマウスでキャスト
 //===========================================================================================================
-bool My::CCard::CardCastToMouse()
+bool My::CCard::CardCastToMouse(CDuelCharacter* duel)
 {
 	// 選択状態とキャスト状態以外は通さない
 	if (GetStateNum() != CCardState::CARD_PICKUP &&
@@ -298,7 +311,7 @@ bool My::CCard::CardCastToMouse()
 	if (pMouse->GetPress(0))
 	{
 		// キャストステートにする
-		ChangeState(CCardState::CARD_CAST);
+		ChangeState(CCardState::CARD_CAST, duel);
 		CActiveSceneManager::GetInstance()->ChangeState(new CCardCast);
 
 		screenpos = pMouse->GetMousePos();
@@ -313,7 +326,7 @@ bool My::CCard::CardCastToMouse()
 		m_target = pMouse->GetArea();
 
 		// ステイ遷移
-		ChangeState(CCardState::CARD_STAY);
+		ChangeState(CCardState::CARD_STAY, duel);
 		CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
 
 		CActiveScenePlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();
@@ -339,7 +352,7 @@ bool My::CCard::CardCastToMouse()
 //===========================================================================================================
 // マウスでカードを選択する
 //===========================================================================================================
-bool My::CCard::CardSelectToMouse()
+bool My::CCard::CardSelectToMouse(CDuelCharacter* duel)
 {
 	if (GetStateNum() == CCardState::CARD_CAST
 		|| GetStateNum() == CCardState::CARD_STAY
@@ -381,13 +394,13 @@ bool My::CCard::CardSelectToMouse()
 		resultposN.y <= 100.0f && resultposN.y >= -100.0f)
 	{
 		// カード選択状態にする
-		ChangeState(CCardState::CARD_PICKUP);
+		ChangeState(CCardState::CARD_PICKUP, duel);
 		return true;
 	}
 	else
 	{
 		// カード非選択状態にする
-		ChangeState(CCardState::CARD_NEUTRAL);
+		ChangeState(CCardState::CARD_NEUTRAL, duel);
 		return false;
 	}
 
@@ -431,4 +444,55 @@ void My::CCard::LoadInfo(int id)
 			break;
 		}
 	}
+}
+
+//===========================================================================================================
+// 列挙からゾーンのポインタを返す
+//===========================================================================================================
+My::CZone* My::CCard::CastToEnumZone(ZONE zone, CDuelCharacter* duel)
+{
+	//返す用の変数
+	CZone* pZone = nullptr;
+
+	//昔のゾーンを保存
+	if (zone != m_CurrentZone)
+	{
+		m_OldZone = m_CurrentZone;
+	}
+
+	//ゾーン列挙
+	switch (zone)
+	{
+	case ZONE::DECK:	//デッキ
+		pZone = duel->GetZoneManager()->GetDeck();
+		m_CurrentZone = ZONE::DECK;	//列挙の登録
+		break;
+
+	case ZONE::HAND:	//手札
+		pZone = duel->GetZoneManager()->GetHandZone();
+		m_CurrentZone = ZONE::HAND;	//列挙の登録
+		break;
+
+	case ZONE::CAST:	//キャストプレビュー
+		pZone = duel->GetZoneManager()->GetCastPreviewZone();
+		m_CurrentZone = ZONE::CAST;	//列挙の登録
+		break;
+
+	case ZONE::WAIT:	//待機
+		pZone = duel->GetZoneManager()->GetWaitZone();
+		m_CurrentZone = ZONE::WAIT;	//列挙の登録
+		break;
+
+	case ZONE::FIELD:	//フィールド
+		pZone = duel->GetZoneManager()->GetFieldZone();
+		m_CurrentZone = ZONE::FIELD;	//列挙の登録
+		break;
+
+	case ZONE::CEMETERY:	//墓地
+		pZone = duel->GetZoneManager()->GetCemetery();
+		m_CurrentZone = ZONE::CEMETERY;	//列挙の登録
+		break;
+	}
+
+	return pZone;
 }

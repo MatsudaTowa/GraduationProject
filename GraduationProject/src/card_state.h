@@ -14,6 +14,7 @@ namespace My
 {
 	// 前方宣言
 	class CCard;
+	//class CDuelCharacter;
 
 	/** 
 	* @brief カードのステートクラス 
@@ -41,13 +42,13 @@ namespace My
 
 		/** @brief 初期化 */
 		virtual void Init() {};
-		virtual void Init([[maybe_unused]]CCard* cpy) {};
+		virtual void Init([[maybe_unused]]CCard* cpy, [[maybe_unused]] CDuelCharacter* duel) {};
 
 		/** @brief 終了 */
 		virtual void Uninit();
 		
 		/** @brief 更新 */
-		virtual void Update([[maybe_unused]] CCard* cpy) {};
+		virtual void Update([[maybe_unused]] CCard* cpy, [[maybe_unused]] CDuelCharacter* duel) {};
 
 		/** @brief 設定 */
 		void Copy([[maybe_unused]]CCard* cpy);
@@ -65,10 +66,10 @@ namespace My
 	{
 	public:
 		/** @brief 初期化 */
-		void Init(CCard* cpy) override;
+		void Init(CCard* cpy, CDuelCharacter* duel) override;
 
 		/** @brief 更新 */
-		void Update(CCard* cpy)override;
+		void Update(CCard* cpy, CDuelCharacter* duel)override;
 	};
 
 
@@ -79,10 +80,10 @@ namespace My
 	{
 	public:
 		/** @brief 初期化 */
-		void Init(CCard* cpy) override;
+		void Init(CCard* cpy, CDuelCharacter* duel) override;
 
 		/** @brief 更新 */
-		void Update(CCard* cpy)override;
+		void Update(CCard* cpy, CDuelCharacter* duel)override;
 	};
 
 	/**
@@ -92,10 +93,10 @@ namespace My
 	{
 	public:
 		/** @brief 初期化 */
-		void Init(CCard* cpy) override;
+		void Init(CCard* cpy, CDuelCharacter* duel) override;
 
 		/** @brief 更新 */
-		void Update(CCard* cpy) override;
+		void Update(CCard* cpy, CDuelCharacter* duel) override;
 	};
 
 	/**
@@ -105,10 +106,10 @@ namespace My
 	{
 	public:
 		/** @brief 初期化 */
-		void Init(CCard* cpy) override;
+		void Init(CCard* cpy, CDuelCharacter* duel) override;
 
 		/** @brief 更新 */
-		void Update(CCard* cpy)override;
+		void Update(CCard* cpy, CDuelCharacter* duel)override;
 
 	private:
 		/** @brief 待機カウント */
@@ -125,7 +126,7 @@ namespace My
 	{
 	public:
 		/** @brief 初期化 */
-		void Init(CCard* cpy) override;
+		void Init(CCard* cpy, CDuelCharacter* duel) override;
 	};
 }
 

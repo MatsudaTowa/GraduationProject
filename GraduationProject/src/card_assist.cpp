@@ -11,8 +11,8 @@ My::CCardAssist::~CCardAssist()
 
 HRESULT My::CCardAssist::Init()
 {
-	CCard::Init();
 	SetCardType(CCard::CARDTYPE_::TYPE_ASSIST);
+	CCard::Init();
 	return S_OK;
 }
 

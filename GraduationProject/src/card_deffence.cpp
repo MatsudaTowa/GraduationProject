@@ -16,8 +16,8 @@ My::CCardDeffence::~CCardDeffence()
 //===========================================================================================================
 HRESULT My::CCardDeffence::Init()
 {
-	CCard::Init();
 	SetCardType(CCard::CARDTYPE_::TYPE_DEFFENCE);
+	CCard::Init();
 	return S_OK;
 }
 

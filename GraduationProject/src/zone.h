@@ -74,6 +74,12 @@ namespace My
 		*/
 		bool DeleteList(CCard* card);
 
+		/**
+		* @brief トップカードの取得処理
+		* @return トップカード
+		*/
+		CCard* GetTopCard();
+
 	protected:
 		/**
 		* @brief 参照を返す関数

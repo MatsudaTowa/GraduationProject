@@ -13,6 +13,12 @@
 /** @brief My 名前空間 */
 namespace My
 {
+	//================
+	//前方宣言
+	//================
+	class CPlayerDuelState;
+	class CDuelCharacter;
+
 	/**
 	* @brief 手札のクラス
 	*/
@@ -60,33 +66,33 @@ namespace My
 		/**
 		* @brief 開始時
 		*/
-		void Start();
+		void Start(CPlayerDuelState* state);
 
 		/**
 		* @brief 更新
 		*/
-		void Update();
+		void Update(CPlayerDuelState* state);
 
 		/**
 		* @brief 選択
 		*/
-		void Select();
+		void Select(CDuelCharacter* character);
 
 		/**
 		* @brief 選択
 		*/
-		void Cast();
+		void Cast(CDuelCharacter* character);
 
 		/**
 		* @brief 手札を引く
 		* @param [in]ドロー数
 		*/
-		void HandDraw(int drawnum);
+		void HandDraw(int drawnum, CPlayerDuelState* state);
 
 		/**
 		* @brief 手札のカードの位置設定
 		*/
-		void SetHandCardPos();
+		void SetHandCardPos(CDuelCharacter* character);
 
 		/**
 		* @brief 生成
@@ -119,12 +125,12 @@ namespace My
 		/**
 		* @brief 手札のカードの状態変更
 		*/
-		void SelectStateSet();
+		void SelectStateSet(CDuelCharacter* character);
 
 		/**
 		* @brief 手札のカードの状態変更
 		*/
-		void DeleteCard();
+		void DeleteCard(CDuelCharacter* character);
 		
 		/**
 		* @brief カードタイプ別生成

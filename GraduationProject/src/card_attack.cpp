@@ -15,8 +15,8 @@ My::CCardAttack::~CCardAttack()
 //===========================================================================================================
 HRESULT My::CCardAttack::Init()
 {
-	CCard::Init();
 	SetCardType(CCard::CARDTYPE_::TYPE_ATTACK);
+	CCard::Init();
 	return S_OK;
 }
 

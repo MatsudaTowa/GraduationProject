@@ -94,3 +94,16 @@ bool My::CZone::DeleteList(CCard* card)
 	}
 	return false;
 }
+
+/**
+* トップカードの取得
+*/
+My::CCard* My::CZone::GetTopCard()
+{
+	if (m_CardList.empty()) return nullptr;
+
+	//先頭のカードを返す
+	CCard* pCard = *m_CardList.begin();
+
+	return pCard;
+}

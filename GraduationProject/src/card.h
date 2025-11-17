@@ -18,6 +18,8 @@ namespace My
 	//=============================================
 	//class CCard_Client;
 	class CActiveScenePlayer;
+	class CDuelCharacter;
+	class CZone;
 
 	class CCard :public CObject3D
 	{
@@ -50,6 +52,17 @@ namespace My
 			EMPERORRARE,    // エンペラーレア
 			GODRARE,        // ゴッドレア
 			XRARE,            // エックスレア
+		};
+
+		enum ZONE
+		{//ゾーンの種類
+			NONE_ZONE,
+			DECK,
+			HAND,
+			CAST,
+			WAIT,
+			FIELD,
+			CEMETERY
 		};
 
 		struct BaseStatus
@@ -100,6 +113,7 @@ namespace My
 		 * @brief 更新
 		 */
 		void Update()override;
+		void Update(CDuelCharacter* duel);
 
 		/**
 		 * @brief 描画
@@ -115,13 +129,13 @@ namespace My
 		 * @brief マウスでカードを選択する
 		 * @param [out]カードが選択されたかどうかを返す
 		 */
-		bool CardSelectToMouse();
+		bool CardSelectToMouse(CDuelCharacter* duel);
 
 		/**
 		 * @brief カードをマウスでキャストする
 		 * @return [out]カードがキャストされたかどうか判定
 		 */
-		bool CardCastToMouse();
+		bool CardCastToMouse(CDuelCharacter* duel);
 
 		/**
 		 * @brief 生成
@@ -133,7 +147,7 @@ namespace My
 		* @brief 状態を変更する
 		*/
 		void ChangeState(CCardState*state);
-		void ChangeState(CCardState::CARD_STATE state);
+		void ChangeState(CCardState::CARD_STATE state, CDuelCharacter* duel);
 
 		/**
 		* @brief ステート取得
@@ -206,6 +220,9 @@ namespace My
 		//inline CCard* GetTop() { return m_pTop; }
 		//inline CCard* GetPrev() { return m_pPrev; }
 
+		//列挙からゾーンのポインタを返す
+		CZone* CastToEnumZone(ZONE zone, CDuelCharacter* duel);
+
 	private:
 
 		//static CCard* m_pTop;	//先頭のオブジェクトポインタ
@@ -271,6 +288,12 @@ namespace My
 		 * @brief 更新するカードか
 		 */
 		bool m_isUpdate;
+
+		/**
+		 * @brief ゾーンの状態
+		 */
+		ZONE m_CurrentZone;	//現在のゾーン
+		ZONE m_OldZone;		//昔のゾーン
 	};
 };
 

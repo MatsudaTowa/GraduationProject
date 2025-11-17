@@ -128,6 +128,11 @@ namespace My
 		 */
 		void EnergyUp(CActiveScenePlayer* player);
 
+		/**
+		 * @brief カードを引く処理
+		 */
+		void DrawCard();
+
 		CCount* m_pEnergyUpCount;	//!エナジーを増やすまでのカウント
 		int m_EnergyUpFrame;		//!エナジーを増やすフレーム
 		CHand* m_pHand;	// 手札
