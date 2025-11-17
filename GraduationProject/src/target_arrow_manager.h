@@ -51,7 +51,4 @@ namespace My
 
 	};
 }
-
-
-
 #endif // !TARGET_ARROW_MANAGER_H_

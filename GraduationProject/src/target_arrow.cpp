@@ -15,7 +15,8 @@ My::CTargetArrow::CTargetArrow(int nPriority):CObject2D_Anim(nPriority),
 m_target(VEC2_RESET_ZERO),
 m_basesize(VEC2_RESET_ZERO),
 m_attacker(VEC2_RESET_ZERO),
-m_triangle(nullptr)
+m_triangle(nullptr),
+m_nLife(0)
 {
 }
 
@@ -50,6 +51,8 @@ HRESULT My::CTargetArrow::Init()
 
 	//í∏ì_ê›íË
 	SetVtx();
+
+	m_nLife = ONE_SECOND * 3;
 
 	SetAnimFrame(1);
 

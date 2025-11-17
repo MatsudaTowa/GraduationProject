@@ -41,6 +41,8 @@ void My::CTargetArrowManager::Regist(CTargetArrow* pTA)
 		if (itr->GetAttacker() == pTA->GetAttacker()
 			&& itr->GetTarget() == pTA->GetTarget())
 		{
+			// 寿命を再設定する
+			itr->ResetLife();
 			continue;
 		}
 		else
@@ -60,12 +62,25 @@ void My::CTargetArrowManager::Regist(CTargetArrow* pTA)
 //===========================================================================================================
 void My::CTargetArrowManager::Delete()
 {
+	unsigned int i = 0;
 	for (auto& itr : m_pTargetArrowList)
 	{
 		// nullptr じゃなかったら
 		if (itr != nullptr)
 		{
-			
+			// 寿命が０になったら
+			if (itr->GetLife() <= 0)
+			{
+				// 矢印の削除
+				itr->SetisDelete(true);
+
+				// リストから削除
+				m_pTargetArrowList.erase(std::next(m_pTargetArrowList.begin(), i));
+			}
+			else
+			{// イテレーターの番号を進める
+				i++;
+			}
 		}
 	}
 }

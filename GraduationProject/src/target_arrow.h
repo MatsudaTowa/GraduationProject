@@ -79,10 +79,25 @@ namespace My
 		*/
 		inline D3DXVECTOR2 GetTarget() { return m_target; }
 
+		/**
+		* @brief 寿命設定
+		* @param [in]寿命
+		*/
+		inline void SetLife(int life) { m_nLife = life; };
+
+		/**
+		* @brief 寿命設定
+		* @param [out]寿命
+		*/
+		inline int GetLife() { return m_nLife; };
+
+		/**
+		* @brief 寿命リセット
+		* @param [in]寿命
+		*/
+		inline void ResetLife() { m_nLife = ONE_SECOND * 3; };
+
 	private:
-
-		
-
 		/**
 		* @brief 角度と長さを設定
 		*/
@@ -107,6 +122,11 @@ namespace My
 		* @brief 矢印の三角の部分のポインタ
 		*/
 		CObject2D* m_triangle;
+
+		/**
+		* @brief 寿命(矢印自体の寿命)
+		*/
+		int m_nLife;
 	};
 }
 
