@@ -868,8 +868,8 @@ struct Gradient
 		float Alpha;
 	};
 
-	int ColorCount = 0;
-	int AlphaCount = 0;
+	int ColorCount;
+	int AlphaCount;
 	std::array<ColorKey, KeyMax> Colors;
 	std::array<AlphaKey, KeyMax> Alphas;
 
@@ -879,7 +879,9 @@ struct Gradient
 
 	float GetAlpha(float x) const;
 
-	Gradient()
+	Gradient():
+		ColorCount (0),
+		AlphaCount (0)
 	{
 		for (auto& c : Colors)
 		{
