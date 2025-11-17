@@ -17,8 +17,8 @@ namespace My
 	//=============================================
 	class CActiveSceneCharacter;
 	class CCharacterLobbyUIManager;
-	class CCard;
-
+	class CZoneManager;
+	
 	/** @brief キャラクターステートクラス */
 	class CActiveSceneCharacterState
 	{
@@ -118,26 +118,26 @@ namespace My
 		void Duel(CActiveSceneCharacter* character) override;
 
 		/**
-		 * @brief カードリストの設定
-		 * @param [in]list
+		 * @brief ゾーンマネージャー設定
+		 * @param [in]zone
 		 */
-		inline void SetCardList(std::list<CCard*> list) 
-		{ 
-			m_CardList = list; 
+		inline void SetZoneManager(CZoneManager* zone)
+		{
+			m_pZoneManager = zone;
 		}
 
 		/**
-		 * @brief カードリスト取得
-		 * @return カードリスト
+		 * @brief ゾーンマネージャー取得
+		 * @return ゾーンマネージャー
 		 */
-		inline std::list<CCard*> GetCardList()
+		inline CZoneManager* GetZoneManager()
 		{
-			return m_CardList;
+			return m_pZoneManager;
 		}
 
 	private:
 
-		std::list<CCard*> m_CardList;	//カードのポインタ変数
+		CZoneManager* m_pZoneManager;		//ゾーンマネージャー
 	};
 }
 #endif // !_ACTIVE_SCENE_CHARACTER_STATE_H_

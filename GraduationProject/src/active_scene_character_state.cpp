@@ -7,6 +7,7 @@
 #include "active_scene_character_state.h"
 #include "character_lobby_UI_manager.h"
 #include "card_manager.h"
+#include "zone_manager.h"
 
 //===============================================================================
 // コンストラクタ
@@ -53,14 +54,16 @@ void My::CDuelCharacter::Duel(CActiveSceneCharacter* /*character*/)
 // コンストラクタ
 //===============================================================================
 My::CDuelCharacter::CDuelCharacter(CActiveSceneCharacter* character) : 
-	m_CardList()	//カードリスト
+	m_pZoneManager(nullptr)	//ゾーンマネージャー
 {
-	m_CardList.clear();	//カードリストの初期化
+	//ゾーンマネージャーの作成
+	m_pZoneManager = new CZoneManager;
+	m_pZoneManager->Init();
 
 	//カードのIDから生成
 	for (auto iter : character->GetDeck())
 	{
-		m_CardList.push_back(My::CCardManager::GetInstance()->CreateCard(iter));
+		m_pZoneManager->GetDeck()->AddList(My::CCardManager::GetInstance()->CreateCard(iter));
 	}
 }
 
@@ -69,5 +72,11 @@ My::CDuelCharacter::CDuelCharacter(CActiveSceneCharacter* character) :
 //===============================================================================
 My::CDuelCharacter::~CDuelCharacter()
 {
-	
+	//ゾーンマネージャーの削除
+	if (m_pZoneManager != nullptr)
+	{
+		m_pZoneManager->Uninit();
+		delete m_pZoneManager;
+		m_pZoneManager = nullptr;
+	}
 }
