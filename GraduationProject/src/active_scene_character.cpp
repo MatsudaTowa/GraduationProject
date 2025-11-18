@@ -19,7 +19,8 @@ m_isHost(false),
 m_playerIdx(-1),
 m_pPlayerUI(nullptr),
 m_area(),
-m_Deck()
+m_Deck(),
+m_pTargetArrowManager()
 {
 	m_ConditionList.clear();
 	m_Deck.clear();
@@ -54,6 +55,11 @@ HRESULT My::CActiveSceneCharacter::Init()
 		m_pPlayerUI = new CPlayerUI;
 		m_pPlayerUI->Init(this);
 	}
+	if (m_pTargetArrowManager == nullptr)
+	{
+		m_pTargetArrowManager = new CTargetArrowManager;
+	}
+
 	//ステータス設定
 	m_status.deckSize = START_DECK;
 	m_status.hand_num = START_HAND;
@@ -83,6 +89,11 @@ void My::CActiveSceneCharacter::Uninit()
 		m_pPlayerUI->Uninit();
 		delete m_pPlayerUI;
 		m_pPlayerUI = nullptr;
+	}
+	if (m_pTargetArrowManager != nullptr)
+	{
+		delete m_pTargetArrowManager;
+		m_pTargetArrowManager = nullptr;
 	}
 
 	CCharacter::Uninit();

@@ -35,7 +35,6 @@ void My::CTargetArrowManager::Regist(CTargetArrow* pTA)
 	* 上書きはできない(nullptrでなければならない)
 	*/
 
-
 	for (auto& itr : m_pTargetArrowList)
 	{
 		// 攻撃者と標的が同じだったら
@@ -44,14 +43,32 @@ void My::CTargetArrowManager::Regist(CTargetArrow* pTA)
 		{
 			// 寿命を再設定する
 			itr->ResetLife();
+
+			// イテレーターが最後まで回ったら
+			if (itr == m_pTargetArrowList.back())
+			{
+				pTA->SetisDelete(true);
+				return;
+			}
 			continue;
 		}
 		else
 		{
-			// リストに登録
-			m_pTargetArrowList.push_back(pTA);
-		}
+			// イテレーターが最後まで回ったら
+			if (itr == m_pTargetArrowList.back())
+			{
+				// リストに登録まで飛ぶ
+				break;
+			}
+
+			// まだイテレーターを回す
+			continue;
+		}		
 	}
+
+	// リストに登録
+	m_pTargetArrowList.push_back(pTA);
+	
 }
 
 //===========================================================================================================
@@ -73,6 +90,8 @@ void My::CTargetArrowManager::Remove()
 
 				// リストから削除
 				m_pTargetArrowList.erase(std::next(m_pTargetArrowList.begin(), i));
+
+				return;
 			}
 			else
 			{// イテレーターの番号を進める
