@@ -7,7 +7,7 @@
 #include "manager.h"
 #include "renderer.h"
 #include "card_client.h"
-#include "EffectManager.h"	// エフェクトマネージャー
+#include "effect_manager.h"	// エフェクトマネージャー
 
 /**
  * @brief コンストラクタ

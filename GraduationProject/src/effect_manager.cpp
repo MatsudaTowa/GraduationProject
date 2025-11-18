@@ -4,7 +4,7 @@
 // Author:Uedakou
 // 
 //============================================
-#include "EffectManager.h"       // エフェクシアマネージャー
+#include "effect_manager.h"       // エフェクシアマネージャー
 #include <EffekseerRendererDX9.h>   // 
 #include <Effekseer.h>
 #include "manager.h"   // 全体マネージャー

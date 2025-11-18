@@ -40,7 +40,7 @@ namespace My
 		void Update()override;		// 更新
 		void Draw()override;		// 描画
 
-		bool Load(const std::string sFilepas);	// 読み込み
+		bool Load(_In_ const std::string sFilepas);	// 読み込み
 		Effekseer::Handle Play();				// 再生
 
 		D3DXVECTOR3 GetPos			() { return paramater.m_pos; }			// 位置の取得
@@ -53,31 +53,31 @@ namespace My
 		int			GetLife() { return paramater.m_nLife; }						// ループのインターバル取得
 		std::string GetFilepas() { return paramater.m_sFilepas; }				// ファイルパス取得
 
-		void SetPos(D3DXVECTOR3 pos);								// 位置の設定
-		void SetRot(D3DXVECTOR3 rot);								// 向きの設定（ラジアン）
-		void SetScl(D3DXVECTOR3 scl);								// スケールの設定
-		void SetScl(float scl);										// スケールの設定（一括）
-		void SetCol(D3DXCOLOR col);									// 色(float)設定
-		void SetColorSRGB(Effekseer::Color col);					// 色(SRGB)の設定
-		void SetLoop(bool bLoop) { paramater.m_bIsLoop = bLoop; }	// ループするかどうか
-		void SetLoopInterval(int nLoopInterval) { paramater.m_nLoopInterval = nLoopInterval; }	// ループのインターバル設定
-		void SetLife(int nLife) { paramater.m_nLife = nLife; }	// ループのインターバル設定
+		void SetPos(_In_ const D3DXVECTOR3 pos);								// 位置の設定
+		void SetRot(_In_ const D3DXVECTOR3 rot);								// 向きの設定（ラジアン）
+		void SetScl(_In_ const D3DXVECTOR3 scl);								// スケールの設定
+		void SetScl(_In_ const float scl);										// スケールの設定（一括）
+		void SetCol(_In_ const D3DXCOLOR col);									// 色(float)設定
+		void SetColorSRGB(_In_ const Effekseer::Color col);					// 色(SRGB)の設定
+		void SetLoop(_In_ const bool bLoop) { paramater.m_bIsLoop = bLoop; }	// ループするかどうか
+		void SetLoopInterval(_In_ const int nLoopInterval) { paramater.m_nLoopInterval = nLoopInterval; }	// ループのインターバル設定
+		void SetLife(_In_ const int nLife) { paramater.m_nLife = nLife; }	// ループのインターバル設定
 
-		void AddPos(D3DXVECTOR3 pos);							// 位置の加算
-		void AddRot(D3DXVECTOR3 rot);							// 向きの加算（ラジアン）
-		void AddScl(D3DXVECTOR3 scl);							// スケールの加算
-		void AddScl(float scl);									// スケールの加算（一括）
-		void AddColor(D3DXCOLOR col);							// 色(float)設定
-		void AddColorSRGB(const std::array<int, 4>& col);		// 色（SRGB）設定
-		void AddLoopInterval(int nLoopInterval) { paramater.m_nLoopInterval += nLoopInterval; }	// ループのインターバル加算
-		void AddLife(int nLife) { paramater.m_nLife += nLife; }	// ループのインターバル加算
+		void AddPos(_In_ const D3DXVECTOR3 pos);							// 位置の加算
+		void AddRot(_In_ const D3DXVECTOR3 rot);							// 向きの加算（ラジアン）
+		void AddScl(_In_ const D3DXVECTOR3 scl);							// スケールの加算
+		void AddScl(_In_ const float scl);									// スケールの加算（一括）
+		void AddColor(_In_ const D3DXCOLOR col);							// 色(float)設定
+		void AddColorSRGB(_In_ const std::array<int, 4>& col);		// 色（SRGB）設定
+		void AddLoopInterval(_In_ const int nLoopInterval) { paramater.m_nLoopInterval += nLoopInterval; }	// ループのインターバル加算
+		void AddLife(_In_ const int nLife) { paramater.m_nLife += nLife; }	// ループのインターバル加算
 
 
-		static CEffect* create(const std::string sFilepas);	// 生成
+		static CEffect* create(_In_ const std::string sFilepas);	// 生成
 	public:
-		static Effekseer::Color ColorFloatToSRGB(const D3DXCOLOR col);		// SRGBColorからfloatColorに変換
-		static D3DXCOLOR ColorSRGBToFloat(const Effekseer::Color col);		// SRGBColorからfloatColorに変換
-		std::u16string ConvertToUtf16(const std::string& utf8);
+		static Effekseer::Color ColorFloatToSRGB(_In_ const D3DXCOLOR col);		// SRGBColorからfloatColorに変換
+		static D3DXCOLOR ColorSRGBToFloat(_In_ const Effekseer::Color col);		// SRGBColorからfloatColorに変換
+		std::u16string ConvertToUtf16(_In_ const std::string& utf8);
 	private:
 		// エフェクト実態
 		Effekseer::EffectRef m_effectRef = nullptr;	// エフェクト

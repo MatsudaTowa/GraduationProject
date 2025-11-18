@@ -130,8 +130,8 @@
     <ClCompile Include="src\duel_manager.cpp">
       <Filter>active_scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\EffectManager.cpp" />
-    <ClCompile Include="src\Effectr.cpp" />
+    <ClCompile Include="src\effect_manager.cpp" />
+    <ClCompile Include="src\effect.cpp" />
     <ClCompile Include="src\card_client.cpp">
       <Filter>card</Filter>
     </ClCompile>
@@ -351,8 +351,8 @@
     <ClInclude Include="src\duel_manager.h">
       <Filter>active_scene</Filter>
     </ClInclude>
-    <ClInclude Include="src\Effect.h" />
-    <ClInclude Include="src\EffectManager.h" />
+    <ClInclude Include="src\effect.h" />
+    <ClInclude Include="src\effect_manager.h" />
     <ClInclude Include="src\card_client.h">
       <Filter>card</Filter>
     </ClInclude>
@@ -440,6 +440,16 @@
     <ClInclude Include="src\card_frame_cost.h">
       <Filter>card\card_frame</Filter>
     </ClInclude>
+    <ClInclude Include="thirdparty\EffekseerForDXLib\DxCompileConfig.h" />
+    <ClInclude Include="thirdparty\EffekseerForDXLib\DxDataType.h" />
+    <ClInclude Include="thirdparty\EffekseerForDXLib\DxDataTypeWin.h" />
+    <ClInclude Include="thirdparty\EffekseerForDXLib\DxFunctionWin.h" />
+    <ClInclude Include="thirdparty\EffekseerForDXLib\DxLib.h" />
+    <ClInclude Include="thirdparty\EffekseerForDXLib\Effekseer.h" />
+    <ClInclude Include="thirdparty\EffekseerForDXLib\Effekseer.Modules.h" />
+    <ClInclude Include="thirdparty\EffekseerForDXLib\Effekseer.SIMD.h" />
+    <ClInclude Include="thirdparty\EffekseerForDXLib\EffekseerForDXLib.h" />
+    <ClInclude Include="thirdparty\EffekseerForDXLib\EffekseerRendererDX9.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">

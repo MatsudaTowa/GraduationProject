@@ -6,7 +6,7 @@
 //============================================
 #include "Effect.h"  // エフェクシア
 #include "manager.h"  // マネージャー
-#include "EffectManager.h"   // エフェクシア
+#include "effect_manager.h"   // エフェクト
 
 #include <locale>
 #include <codecvt>
@@ -146,7 +146,7 @@ void My::CEffect::Draw()
 /// <param name="Filepas">ファイルパス</param>
 /// <param name="pos">位置</param>
 /// <returns>読み込み成功なら：true</returns>
-bool My::CEffect::Load(const std::string Filepas)
+bool My::CEffect::Load(_In_ const std::string Filepas)
 {
 	// マネージャーRef取得
 	My::CEffectManager* pEffekseerManager = CManager::GetInstance()->GetEffectManager();
@@ -229,7 +229,7 @@ D3DXCOLOR My::CEffect::GetCol()
 /// 位置設定
 /// </summary>
 /// <param name="pos">設定する位置</param>
-void My::CEffect::SetPos(D3DXVECTOR3 pos)
+void My::CEffect::SetPos(_In_ D3DXVECTOR3 pos)
 {
 	// マネージャーRef取得
 	My::CManager* pManager = CManager::GetInstance();   // マネージャー取得
@@ -244,7 +244,7 @@ void My::CEffect::SetPos(D3DXVECTOR3 pos)
 /// 向き設定(ラジアン)
 /// </summary>
 /// <param name="rot">設定する向き(ラジアン)</param>
-void My::CEffect::SetRot(D3DXVECTOR3 rot)
+void My::CEffect::SetRot(_In_ D3DXVECTOR3 rot)
 {
 	// マネージャーRef取得
 	My::CManager* pManager = CManager::GetInstance();   // マネージャー取得
@@ -259,7 +259,7 @@ void My::CEffect::SetRot(D3DXVECTOR3 rot)
 /// スケール設定
 /// </summary>
 /// <param name="scl">設定するスケール</param>
-void My::CEffect::SetScl(D3DXVECTOR3 scl)
+void My::CEffect::SetScl(_In_ D3DXVECTOR3 scl)
 {
 	// マネージャーRef取得
 	My::CManager* pManager = CManager::GetInstance();   // マネージャー取得
@@ -274,7 +274,7 @@ void My::CEffect::SetScl(D3DXVECTOR3 scl)
 /// スケール設定（一括）
 /// </summary>
 /// <param name="scl">設定するスケール</param>
-void My::CEffect::SetScl(float scl)
+void My::CEffect::SetScl(_In_ float scl)
 {
 	// マネージャーRef取得
 	My::CManager* pManager = CManager::GetInstance();   // マネージャー取得
@@ -291,7 +291,7 @@ void My::CEffect::SetScl(float scl)
 /// 色の設定
 /// </summary>
 /// <param name="col">設定する色</param>
-void My::CEffect::SetCol(D3DXCOLOR col)
+void My::CEffect::SetCol(_In_ D3DXCOLOR col)
 {
 	// マネージャーRef取得
 	My::CManager* pManager = CManager::GetInstance();   // マネージャー取得
@@ -307,7 +307,7 @@ void My::CEffect::SetCol(D3DXCOLOR col)
 /// 色の設定(SRGB)
 /// </summary>
 /// <param name="col">設定する色の量(SRGB)</param>
-void My::CEffect::SetColorSRGB(Effekseer::Color col)
+void My::CEffect::SetColorSRGB(_In_ Effekseer::Color col)
 {
 	// マネージャーRef取得
 	My::CManager* pManager = CManager::GetInstance();   // マネージャー取得
@@ -323,7 +323,7 @@ void My::CEffect::SetColorSRGB(Effekseer::Color col)
 /// 位置の加算
 /// </summary>
 /// <param name="pos">移動分の距離</param>
-void My::CEffect::AddPos(D3DXVECTOR3 pos)
+void My::CEffect::AddPos(_In_ D3DXVECTOR3 pos)
 {
 	// マネージャーRef取得
 	My::CManager* pManager = CManager::GetInstance();   // マネージャー取得
@@ -341,7 +341,7 @@ void My::CEffect::AddPos(D3DXVECTOR3 pos)
 /// 向き加算(ラジアン)
 /// </summary>
 /// <param name="rot">加算する向き(ラジアン)</param>
-void My::CEffect::AddRot(D3DXVECTOR3 rot)
+void My::CEffect::AddRot(_In_ D3DXVECTOR3 rot)
 {
 	// マネージャーRef取得
 	My::CManager* pManager = CManager::GetInstance();   // マネージャー取得
@@ -356,7 +356,7 @@ void My::CEffect::AddRot(D3DXVECTOR3 rot)
 /// スケール加算
 /// </summary>
 /// <param name="scl">加算するスケール</param>
-void My::CEffect::AddScl(D3DXVECTOR3 scl)
+void My::CEffect::AddScl(_In_ D3DXVECTOR3 scl)
 {
 	// マネージャーRef取得
 	My::CManager* pManager = CManager::GetInstance();   // マネージャー取得
@@ -374,7 +374,7 @@ void My::CEffect::AddScl(D3DXVECTOR3 scl)
 /// スケール加算（一括）
 /// </summary>
 /// <param name="scl">加算するスケール</param>
-void My::CEffect::AddScl(float scl)
+void My::CEffect::AddScl(_In_ float scl)
 {
 	// マネージャーRef取得
 	My::CManager* pManager = CManager::GetInstance();   // マネージャー取得
@@ -390,7 +390,7 @@ void My::CEffect::AddScl(float scl)
 /// 色の加算(floatColor)
 /// </summary>
 /// <param name="col">加算する色の量(floatColor)</param>
-void My::CEffect::AddColor(D3DXCOLOR col)
+void My::CEffect::AddColor(_In_ D3DXCOLOR col)
 {
 	// マネージャーRef取得
 	My::CManager* pManager = CManager::GetInstance();   // マネージャー取得
@@ -409,7 +409,7 @@ void My::CEffect::AddColor(D3DXCOLOR col)
 /// 色の加算(SRGB)
 /// </summary>
 /// <param name="col">加算する色の量(SRGB)</param>
-void My::CEffect::AddColorSRGB(const std::array<int, 4>& col)
+void My::CEffect::AddColorSRGB(_In_ const std::array<int, 4>& col)
 {
 	// マネージャーRef取得
 	My::CManager* pManager = CManager::GetInstance();   // マネージャー取得
@@ -428,7 +428,7 @@ void My::CEffect::AddColorSRGB(const std::array<int, 4>& col)
 /// </summary>
 /// <param name="Filepas">生成するファイルパス</param>
 /// <returns>生成したエフェクトのポインター</returns>
-My::CEffect* My::CEffect::create(const std::string sFilepas)
+My::CEffect* My::CEffect::create(_In_ const std::string sFilepas)
 {
 	CEffect::Paramater param;
 
@@ -512,7 +512,7 @@ My::CEffect* My::CEffect::create(const std::string sFilepas)
 /// </summary>
 /// <param name="value">変換する色</param>
 /// <returns>変換した色</returns>
-Effekseer::Color My::CEffect::ColorFloatToSRGB(const D3DXCOLOR col)
+Effekseer::Color My::CEffect::ColorFloatToSRGB(_In_ const D3DXCOLOR col)
 {
 	Effekseer::Color EffColor;	// エフェクシアカラー格納用
 	EffColor.R = static_cast<uint8_t>(col.r * 255.0f + 0.5f); // 四捨五入
@@ -527,7 +527,7 @@ Effekseer::Color My::CEffect::ColorFloatToSRGB(const D3DXCOLOR col)
 /// </summary>
 /// <param name="col">変換する色</param>
 /// <returns>変換した色</returns>
-D3DXCOLOR My::CEffect::ColorSRGBToFloat(const Effekseer::Color col)
+D3DXCOLOR My::CEffect::ColorSRGBToFloat(_In_ const Effekseer::Color col)
 {
 	D3DXCOLOR EffColor;	// エフェクシアカラー格納用
 	EffColor.r = static_cast<uint8_t>(col.R / 255.0f); // 四捨五入
@@ -541,7 +541,7 @@ D3DXCOLOR My::CEffect::ColorSRGBToFloat(const Effekseer::Color col)
 /// </summary>
 /// <param name="utf8"></param>
 /// <returns></returns>
-std::u16string My::CEffect::ConvertToUtf16(const std::string& utf8)
+std::u16string My::CEffect::ConvertToUtf16(_In_ const std::string& utf8)
 {
 	int len = MultiByteToWideChar(CP_UTF8, 0, utf8.c_str(), -1, nullptr, 0);
 	std::wstring wide(len, L'\0');

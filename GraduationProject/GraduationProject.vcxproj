@@ -200,8 +200,8 @@
     <ClCompile Include="src\debuff.cpp" />
     <ClCompile Include="src\deck_zone.cpp" />
     <ClCompile Include="src\duel_manager.cpp" />
-    <ClCompile Include="src\EffectManager.cpp" />
-    <ClCompile Include="src\Effectr.cpp" />
+    <ClCompile Include="src\effect_manager.cpp" />
+    <ClCompile Include="src\effect.cpp" />
     <ClCompile Include="src\enemy.cpp" />
     <ClCompile Include="src\enemy_manager.cpp" />
     <ClCompile Include="src\energy_charge.cpp" />
@@ -318,8 +318,8 @@
     <ClInclude Include="src\debuff.h" />
     <ClInclude Include="src\deck_zone.h" />
     <ClInclude Include="src\duel_manager.h" />
-    <ClInclude Include="src\Effect.h" />
-    <ClInclude Include="src\EffectManager.h" />
+    <ClInclude Include="src\effect.h" />
+    <ClInclude Include="src\effect_manager.h" />
     <ClInclude Include="src\enemy.h" />
     <ClInclude Include="src\enemy_manager.h" />
     <ClInclude Include="src\energy_charge.h" />
@@ -390,6 +390,16 @@
     <ClInclude Include="src\wait_zone.h" />
     <ClInclude Include="src\zone.h" />
     <ClInclude Include="src\zone_manager.h" />
+    <ClInclude Include="thirdparty\EffekseerForDXLib\DxCompileConfig.h" />
+    <ClInclude Include="thirdparty\EffekseerForDXLib\DxDataType.h" />
+    <ClInclude Include="thirdparty\EffekseerForDXLib\DxDataTypeWin.h" />
+    <ClInclude Include="thirdparty\EffekseerForDXLib\DxFunctionWin.h" />
+    <ClInclude Include="thirdparty\EffekseerForDXLib\DxLib.h" />
+    <ClInclude Include="thirdparty\EffekseerForDXLib\Effekseer.h" />
+    <ClInclude Include="thirdparty\EffekseerForDXLib\Effekseer.Modules.h" />
+    <ClInclude Include="thirdparty\EffekseerForDXLib\Effekseer.SIMD.h" />
+    <ClInclude Include="thirdparty\EffekseerForDXLib\EffekseerForDXLib.h" />
+    <ClInclude Include="thirdparty\EffekseerForDXLib\EffekseerRendererDX9.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
