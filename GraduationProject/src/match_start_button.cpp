@@ -47,7 +47,7 @@ HRESULT My::CMatchStartButton::Init()
 	
 		//D3DXVECTOR3 pos = GetPos();
 		//m_font_manager->Regist(wtxt.c_str(), { pos.x - GetSize().x * 0.55f,pos.y,pos.z }, 30.0f, 35.0f, 50, 6);
-		const wchar_t* txt = L"STARTaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+		const wchar_t* txt = L"START";
 		D3DXVECTOR3 pos = GetPos();
 		D3DXVECTOR2 size = GetSize();
 		m_font_manager->Regist(txt, { pos.x - size.x * 0.55f,pos.y,pos.z }, { size.x * 2.0f,size.y*2.0f }, 30.0f, 35.0f, 50, 6,COLOR_RED);

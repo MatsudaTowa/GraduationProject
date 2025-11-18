@@ -106,13 +106,6 @@ namespace My
 		/** @brief 何のフレームかを判別するタイプ */
 		FRAMETYPE m_type;
 	};
-
-	class FrameBase :public CCardFrame
-	{
-		FrameBase();
-		~FrameBase();
-	};
-
 }
 
 

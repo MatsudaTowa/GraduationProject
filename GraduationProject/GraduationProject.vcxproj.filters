@@ -135,9 +135,6 @@
     <ClCompile Include="src\card_client.cpp">
       <Filter>card</Filter>
     </ClCompile>
-    <ClCompile Include="src\card_frame.cpp">
-      <Filter>card</Filter>
-    </ClCompile>
     <ClCompile Include="src\card_state.cpp">
       <Filter>card</Filter>
     </ClCompile>
@@ -201,6 +198,27 @@
     </ClCompile>
     <ClCompile Include="src\life_changer.cpp" />
     <ClCompile Include="src\target_arrow_manager.cpp" />
+    <ClCompile Include="src\card_frame.cpp">
+      <Filter>card\card_frame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_frame_base.cpp">
+      <Filter>card\card_frame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_frame_illust.cpp">
+      <Filter>card\card_frame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_frame_text.cpp">
+      <Filter>card\card_frame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_frame_name.cpp">
+      <Filter>card\card_frame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_frame_type.cpp">
+      <Filter>card\card_frame</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_frame_cost.cpp">
+      <Filter>card\card_frame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -338,9 +356,6 @@
     <ClInclude Include="src\card_client.h">
       <Filter>card</Filter>
     </ClInclude>
-    <ClInclude Include="src\card_frame.h">
-      <Filter>card</Filter>
-    </ClInclude>
     <ClInclude Include="src\card_state.h">
       <Filter>card</Filter>
     </ClInclude>
@@ -404,6 +419,27 @@
     </ClInclude>
     <ClInclude Include="src\life_changer.h" />
     <ClInclude Include="src\target_arrow_manager.h" />
+    <ClInclude Include="src\card_frame.h">
+      <Filter>card\card_frame</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_frame_base.h">
+      <Filter>card\card_frame</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_frame_illust.h">
+      <Filter>card\card_frame</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_frame_name.h">
+      <Filter>card\card_frame</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_frame_type.h">
+      <Filter>card\card_frame</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_frame_text.h">
+      <Filter>card\card_frame</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_frame_cost.h">
+      <Filter>card\card_frame</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">
@@ -480,6 +516,9 @@
     </Filter>
     <Filter Include="zone\cast">
       <UniqueIdentifier>{a6e8a991-c72d-405f-8680-b6b2918ab040}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="card\card_frame">
+      <UniqueIdentifier>{6ca4bae6-aceb-4b52-8eab-8121da17ce72}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
