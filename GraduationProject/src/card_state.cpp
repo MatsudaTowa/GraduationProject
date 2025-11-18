@@ -151,6 +151,9 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* duel)
 	// カウントを初期化
 	m_Staycount = 0;
 
+	// プレイヤーを取得
+	CPlayer* pPlayer = CActiveSceneManager::GetInstance()->GetPlayer();
+
 	// ステータスを取得
 	CActiveSceneCharacter::Status status = CActiveSceneManager::GetInstance()->GetPlayer()->GetStatus();
 
@@ -166,10 +169,10 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* duel)
 		status.energy -= cpy->GetParameter().cost;
 
 		// エナジーを設定
-		CActiveSceneManager::GetInstance()->GetPlayer()->SetStatus(status);
+		pPlayer->SetStatus(status);
 
-		// ターゲットアローを生成
-		cpy->SetTargetArrow(CTargetArrow::Create(CInputMouse::AREA::DOWN, cpy->GetTarget()));
+		// ターゲットアローをマネージャーに登録
+		pPlayer->GetTargetArrowManeger()->Regist(CTargetArrow::Create(CInputMouse::AREA::DOWN, cpy->GetTarget()));
 	}
 
 	
@@ -211,5 +214,5 @@ void My::CCardStateTrigger::Init(CCard* cpy, CDuelCharacter* duel)
 	CActiveSceneManager::GetInstance()->GetAreaManager()->CardTrigger(cpy->GetTarget());
 
 	// トリガーされた際に消去する
-	cpy->GetTargetArrow()->SetisDelete(true);
+	CActiveSceneManager::GetInstance()->GetPlayer()->GetTargetArrowManeger()->Remove();
 }
