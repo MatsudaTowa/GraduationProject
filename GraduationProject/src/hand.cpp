@@ -114,7 +114,9 @@ void My::CHand::Select(CDuelCharacter* character)
 {
 	// キャスト状態だったらセレクトさせない
 	if (m_HandState == CAST)
+	{
 		return;
+	}
 
 	// 何も選択されていない場合
 	if (!m_IsPickUp)
@@ -188,6 +190,7 @@ void My::CHand::Cast(CDuelCharacter* character)
 			m_HandState = CAST;
 		else
 			m_HandState = NEUTRAL;
+		break;
 	}
 }
 
