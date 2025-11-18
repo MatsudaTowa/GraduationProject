@@ -48,6 +48,7 @@ public:
 	void ReceiveIsUpdate(RakNet::Packet* packet) override;							//更新可能かを受信
 	void SendMyStatus(RakNet::RakPeerInterface* peer) override;						//自分のステータスを送る
 	void ReceiveCastCard(RakNet::Packet* packet) override;							//キャストカードの受信
+	void ReceiveCastCard(RakNet::BitStream* bsin);									//キャストカードの受信
 
 	//取得
 	//パラメータ

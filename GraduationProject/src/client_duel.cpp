@@ -402,6 +402,9 @@ void CClient_Duel::ReceiveStatus(RakNet::Packet* packet)
         bsIn.Read(iter);
         CheckTarget(iter.Param.nIndex, iter);
     }
+
+    //キャストカードの読み込み
+    ReceiveCastCard(&bsIn);
 }
 
 //=====================================
@@ -463,6 +466,16 @@ void CClient_Duel::SendMyStatus(RakNet::RakPeerInterface* peer)
 //=====================================
 void CClient_Duel::ReceiveCastCard(RakNet::Packet* packet)
 {
+    //一時的にダウンキャストを行い、遷移の合図を送る
+    My::CDuel* pDuel = nullptr;
+    pDuel = dynamic_cast<My::CDuel*>(My::CActiveSceneManager::GetInstance()->GetState());
+
+    //キャストが成功していないなら抜ける
+    if (pDuel == nullptr)
+    {
+        return;
+    }
+
     //受信側
     RakNet::BitStream bsIn(packet->data, packet->length, false);
 
@@ -500,5 +513,68 @@ void CClient_Duel::ReceiveCastCard(RakNet::Packet* packet)
         }
 
         //TODO : キャストカード情報の追加
+        My::CDuel::CastCardInfo CastCardInfo;   //構造体
+        CastCardInfo.nCardID = nCardID;         //カード番号
+        CastCardInfo.nUsePlayer = nPlayerID;    //使用者の番号
+        CastCardInfo.Target = TargetVector;     //対象のベクター
+
+        //キャストカード情報の読み込み
+        pDuel->SetCastCardInfo(CastCardInfo);
+    }
+}
+
+//=====================================
+//キャストカードの受信
+//=====================================
+void CClient_Duel::ReceiveCastCard(RakNet::BitStream* bsin)
+{
+    //変数
+    int nCardNum = 0;         //カード数
+
+    bsin->Read(nCardNum);    //カード数の読み込み
+
+     //一時的にダウンキャストを行い、遷移の合図を送る
+    My::CDuel* pDuel = nullptr;
+    pDuel = dynamic_cast<My::CDuel*>(My::CActiveSceneManager::GetInstance()->GetState());
+
+    //キャストが成功していないなら抜ける
+    if (pDuel == nullptr)
+    {
+        return;
+    }
+
+    //カード数の周回
+    for (int i = 0; i < nCardNum; i++)
+    {
+        //変数
+        int nCardID = 0;                //カード番号
+        int nPlayerID = 0;              //プレイヤー番号
+        int nTargetNum = 0;             //ターゲット数
+        std::vector<int> TargetVector;  //ターゲットベクター
+        TargetVector.clear();
+
+        //読み込み
+        bsin->Read(nCardID);      //カード番号
+        bsin->Read(nPlayerID);    //プレイヤー番号
+        bsin->Read(nTargetNum);   //ターゲット数
+
+        //ターゲット数分周回
+        for (int j = 0; j < nTargetNum; j++)
+        {
+            int nTargetID = 0;
+            bsin->Read(nTargetID);
+
+            //対象の保存
+            TargetVector.push_back(nTargetID);
+        }
+
+        //TODO : キャストカード情報の追加
+        My::CDuel::CastCardInfo CastCardInfo;   //構造体
+        CastCardInfo.nCardID = nCardID;         //カード番号
+        CastCardInfo.nUsePlayer = nPlayerID;    //使用者の番号
+        CastCardInfo.Target = TargetVector;     //対象のベクター
+
+        //キャストカード情報の読み込み
+        pDuel->SetCastCardInfo(CastCardInfo);
     }
 }

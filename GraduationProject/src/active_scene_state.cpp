@@ -229,7 +229,8 @@ void My::CLobby::OnlineChangeToDuel()
 //=============================================
 // コンストラクタ
 //=============================================
-My::CDuel::CDuel()
+My::CDuel::CDuel() :
+	m_CastCardVector()	//キャストカード情報
 {
 	GET_CAMERA(GET_CAMERA_IDX)->ChangeCameraState(new CBirdView);
 	GET_CAMERA(GET_CAMERA_IDX)->SetCamera();
@@ -244,6 +245,9 @@ My::CDuel::CDuel()
 	//	GET_FONT_MANAGER->Regist(text_000, { 100.0f,500.0f,0.0f }, 50.0f, 80, 0, 5);
 	//	return;
 	//}
+
+	//キャストカードのクリア
+	m_CastCardVector.clear();
 }
 
 //=============================================
@@ -387,6 +391,44 @@ void My::CDuel::Connect(CActiveScene* /*game*/)
 		//通信処理
 		CRakNet::GetInstance()->Communication(CRakNet::GetInstance()->GetPeer());
 	}
+
+	//カード情報の読み込み
+	if (IsCardCast())
+	{
+		CardCast();
+	}
+}
+
+//=============================================
+//キャストカードの確認
+//=============================================
+bool My::CDuel::IsCardCast()
+{
+	if (!CRakNet::GetInstance()->GetOnline()) return false;	//オンラインじゃない
+	if (m_CastCardVector.empty()) return false;				//使われたカードが存在しない
+
+	return true;
+}
+
+//=============================================
+//カードのキャスト処理
+//=============================================
+void My::CDuel::CardCast()
+{
+	//キャストカードの処理
+	for (auto iter : m_CastCardVector)
+	{
+		//自分が使用したカードは飛ばす
+		if (CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx() == iter.nUsePlayer)
+		{
+			continue;
+		}
+
+		//TODOこの下に読み込みこんだカードの処理を追加予定
+	}
+
+	//カード情報のクリア
+	m_CastCardVector.clear();
 }
 
 //=============================================

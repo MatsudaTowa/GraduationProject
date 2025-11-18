@@ -468,6 +468,9 @@ bool CDuel_Data::IsSendUpdate(RakNet::Packet* packet)
 //=====================================
 void CDuel_Data::ReceiveCastCard(RakNet::Packet* packet)
 {
+    //ログ
+    std::cout << "カードの受信\n";
+
     //データの受信
     RakNet::BitStream bsIn(packet->data, packet->length, false);
 
@@ -486,10 +489,13 @@ void CDuel_Data::ReceiveCastCard(RakNet::Packet* packet)
     for (int i = 0; i < nTargetNum; i++)
     {
         int nTarget = 0;                    //ターゲット数
-        bsIn.Read(nTargetNum);              //読み込み
+        bsIn.Read(nTarget);                 //読み込み
 
-        CastInfo.m_TargetIDList.push_back(nTargetNum);  //リストに追加
+        CastInfo.m_TargetIDList.push_back(nTarget);  //リストに追加
     }
+
+    //カード情報を保存
+    m_CastCardList.push_back(CastInfo);
 }
 
 //=====================================
@@ -497,7 +503,10 @@ void CDuel_Data::ReceiveCastCard(RakNet::Packet* packet)
 //=====================================
 void CDuel_Data::SendCastCard(RakNet::BitStream* bsout)
 {
-    return; //TODO : 作業中の為return
+    //return; //TODO : 作業中の為return
+
+    //ログ
+    std::cout << "カードの送信\n";
 
     //キャストされたカード枚数
     bsout->Write((int)m_CastCardList.size());

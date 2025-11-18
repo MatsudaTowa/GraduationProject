@@ -12,6 +12,7 @@
 #include "duel_manager.h"
 #include "zone_manager.h"
 #include <typeinfo>
+#include "raknet.h"
 
 //===========================================================================================================
 // コンストラクタ
@@ -342,6 +343,12 @@ bool My::CCard::CardCastToMouse(CDuelCharacter* duel)
 			if (itr->GetArea() != m_target) { continue; }
 
 			RegistTargetList(itr);
+
+			//オンライン時なら送信
+			if (CRakNet::GetInstance()->GetOnline())
+			{//TODO : カードの対象が複数になったら処理の変更の必要があり
+				CRakNet::GetInstance()->SendCastCard(m_BaseStatus.nCardID, CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx(), itr->GetPlayerIdx());
+			}
 		}
 	}
 
