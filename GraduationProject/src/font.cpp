@@ -50,8 +50,6 @@ My::CFont::~CFont()
 //=============================================
 HRESULT My::CFont::Init()
 {
-	SetColor(COLOR_RED);
-
 	SetVtx();
 
 	return S_OK;
@@ -156,7 +154,7 @@ My::CFont* My::CFont::CreateFontTexture(int thickness, int idx, WCHAR txt)
 		OUT_DEFAULT_PRECIS,
 		CLIP_DEFAULT_PRECIS,
 		CLEARTYPE_NATURAL_QUALITY,              // ←ClearTypeで滑らかに
-		DEFAULT_PITCH | FF_DECORATIVE,
+		FIXED_PITCH | FF_MODERN,
 		_T(FONT_DATA[idx].FONT_NAME)                 // フォントのパスではなくフォントの内部のフォント名で
 	);
 	SelectObject(hDC, hFont);

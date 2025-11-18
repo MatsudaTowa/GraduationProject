@@ -39,7 +39,8 @@ HRESULT My::CReadyButton::Init()
 
 		const wchar_t* txt = L"READY";
 		D3DXVECTOR3 pos = GetPos();
-		m_font_manager->Regist(txt, { pos.x - GetSize().x * 0.55f,pos.y,pos.z }, 30.0f, 35.0f, 50, 6);
+		D3DXVECTOR2 size = GetSize();
+		m_font_manager->Regist(txt, { pos.x - size.x * 0.55f,pos.y,pos.z }, {size.x * 2.0f,size.y * 2.0f}, 30.0f, 35.0f, 50, 6,COLOR_RED);
 	}
 	return S_OK;
 }
@@ -64,22 +65,6 @@ void My::CReadyButton::Uninit()
 //=============================================
 void My::CReadyButton::Update()
 {
-#ifdef _DEBUG
-	if (GET_INPUT_KEYBOARD->GetTrigger(DIK_RIGHT))
-	{
-		const wchar_t* txt = L"CANCEL";
-		D3DXVECTOR3 pos = GetPos();
-
-		m_font_manager->SetText(txt, { pos.x - GetSize().x * 0.55f,pos.y,pos.z }, 30.0f, 35.0f, 50, 6);
-	}
-	if (GET_INPUT_KEYBOARD->GetTrigger(DIK_LEFT))
-	{
-		const wchar_t* txt = L"READY";
-		D3DXVECTOR3 pos = GetPos();
-
-		m_font_manager->SetText(txt, { pos.x - GetSize().x * 0.55f,pos.y,pos.z }, 30.0f, 35.0f, 50, 6);
-	}
-#endif // _DEBUG
 	CButton::Update();
 }
 
@@ -110,19 +95,20 @@ void My::CReadyButton::ButtonTrigger()
 	isReady = isReady ? false : true;
 	lobby_state->SetIsReady(isReady);
 
+	D3DXVECTOR3 pos = GetPos();
+
+	D3DXVECTOR2 size = GetSize();
 	if (isReady)
 	{
 		const wchar_t* txt = L"CANCEL";
-		D3DXVECTOR3 pos = GetPos();
 
-		GetFontManager()->SetText(txt, { pos.x - GetSize().x * 0.6f,pos.y,pos.z }, 25.0f, 30.0f, 50, 6);
+		GetFontManager()->SetText(txt, { pos.x - size.x * 0.6f,pos.y,pos.z }, { size.x * 2.0f,size.y * 2.0f }, 25.0f, 30.0f, 50, 6,COLOR_RED);
 	}
 	else if (!isReady)
 	{
 		const wchar_t* txt = L"READY";
-		D3DXVECTOR3 pos = GetPos();
 
-		GetFontManager()->SetText(txt, { pos.x - GetSize().x * 0.55f,pos.y,pos.z }, 30.0f, 35.0f, 50, 6);
+		GetFontManager()->SetText(txt, { pos.x - size.x * 0.55f,pos.y,pos.z }, { size.x * 2.0f,size.y * 2.0f }, 30.0f, 35.0f, 50, 6, COLOR_RED);
 	}
 
 	if (!CRakNet::GetInstance()->GetOnline()) return;
