@@ -35,7 +35,7 @@ namespace My
 		* @brief 登録
 		* @param [in]ターゲットアローのポインタ
 		*/
-		void Delete();
+		void Remove();
 
 		/**
 		* @brief ターゲットアローリストの取得処理

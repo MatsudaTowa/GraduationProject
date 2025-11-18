@@ -20,6 +20,7 @@ My::CTargetArrowManager::CTargetArrowManager()
 //===========================================================================================================
 My::CTargetArrowManager::~CTargetArrowManager()
 {
+	m_pTargetArrowList.clear();
 }
 
 //===========================================================================================================
@@ -47,12 +48,8 @@ void My::CTargetArrowManager::Regist(CTargetArrow* pTA)
 		}
 		else
 		{
-			// nullptr ÇæÇ¡ÇΩÇÁ
-			if (itr == nullptr)
-			{
-				// ÉäÉXÉgÇ…ìoò^
-				m_pTargetArrowList.push_back(pTA);
-			}
+			// ÉäÉXÉgÇ…ìoò^
+			m_pTargetArrowList.push_back(pTA);
 		}
 	}
 }
@@ -60,7 +57,7 @@ void My::CTargetArrowManager::Regist(CTargetArrow* pTA)
 //===========================================================================================================
 // çÌèú
 //===========================================================================================================
-void My::CTargetArrowManager::Delete()
+void My::CTargetArrowManager::Remove()
 {
 	unsigned int i = 0;
 	for (auto& itr : m_pTargetArrowList)
