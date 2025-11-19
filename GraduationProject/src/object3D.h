@@ -26,6 +26,11 @@ namespace My
 
 		void BindTexture(LPDIRECT3DTEXTURE9 pTex);
 
+		/**
+		 * @brief ワールドマトリックス計算
+		 */
+		virtual void ConversionMtxWorld();
+
 		//色の取得
 		//色の代入
 		inline void SetColor(D3DXCOLOR col)

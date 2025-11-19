@@ -144,7 +144,11 @@ void My::CObject::DrawAll()
 		while (pObj != nullptr)
 		{
 			CObject* pNext = pObj->m_pNext;	//次のポインタを取得
-			pObj->Draw();					//更新処理
+
+			if (pObj->GetisDraw())
+			{
+				pObj->Draw();					//更新処理
+			}
 			pObj = pNext;					//ポインタを進める
 		}
 	}
