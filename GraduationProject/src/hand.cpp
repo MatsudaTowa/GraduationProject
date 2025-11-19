@@ -334,6 +334,7 @@ void My::CHand::HandDraw(int drawnum, CPlayerDuelState* state)
 		m_pHandList.push_back(pDrawCard);
 		pZoneManager->MoveZone(pDrawCard, pZoneManager->GetDeck(), pZoneManager->GetHandZone(), true);
 
+		pDrawCard->SetCurrentZone(CCard::HAND);
 		//SetCard((CCard::CARDTYPE_)rundom);
 		m_TotalNum++;	// èD‚Ì‘”‚ğ‘‚â‚·
 

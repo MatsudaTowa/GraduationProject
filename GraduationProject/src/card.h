@@ -180,6 +180,30 @@ namespace My
 		inline void SetBaseStatus(BaseStatus status) { m_BaseStatus = status; }
 
 		/**
+		 * @brief Œ»İ‚Ìƒ][ƒ“æ“¾
+		 * @return Œ»İ‚Ìƒ][ƒ“
+		 */
+		inline ZONE GetCurrentZone() { return m_CurrentZone; }
+
+		/**
+		 * @brief ‰ß‹‚Ìƒ][ƒ“æ“¾
+		 * @return ‰ß‹‚Ìƒ][ƒ“
+		 */
+		inline ZONE GetOldZone() { return m_OldZone; }
+
+		/**
+		 * @brief Œ»İ‚Ìƒ][ƒ“æ“¾
+		 * @param Œ»İ‚Ìƒ][ƒ“
+		 */
+		inline void SetCurrentZone(ZONE zone) { m_CurrentZone = zone; }
+
+		/**
+		 * @brief ‰ß‹‚Ìƒ][ƒ“æ“¾
+		 * @param ‰ß‹‚Ìƒ][ƒ“
+		 */
+		inline void SetOldZone(ZONE zone) { m_OldZone = zone; }
+
+		/**
 		* @brief ƒjƒ…[ƒgƒ‰ƒ‹ˆÊ’u
 		*/
 		inline void SetTarget(CInputMouse::AREA area) { m_target = area; }

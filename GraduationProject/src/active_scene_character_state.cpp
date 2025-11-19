@@ -63,7 +63,10 @@ My::CDuelCharacter::CDuelCharacter(CActiveSceneCharacter* character) :
 	//ƒJ[ƒh‚ÌID‚©‚ç¶¬
 	for (auto iter : character->GetDeck())
 	{
-		m_pZoneManager->GetDeck()->AddList(My::CCardManager::GetInstance()->CreateCard(iter));
+		CCard* pCard = My::CCardManager::GetInstance()->CreateCard(iter);
+		pCard->SetCurrentZone(CCard::DECK);
+		pCard->Init();
+		m_pZoneManager->GetDeck()->AddList(pCard);
 	}
 }
 

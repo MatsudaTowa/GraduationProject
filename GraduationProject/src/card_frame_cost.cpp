@@ -41,13 +41,23 @@ void My::FrameCost::Uninit()
 void My::FrameCost::Update()
 {
 	CCardFrame::Update();
+
 	if (m_pFontManager != nullptr)
 	{
 	 	std::vector<CFont*> list = m_pFontManager->GetList();
-		int score = GetCard()->GetBaseStatus().nCost;
-		std::wstring wtxt = std::format(L"{}", score);
-		D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), GetPos()); //スクリーン座標に変換
-		const wchar_t* txt = wtxt.c_str();
-		m_pFontManager->SetText(txt, screen_pos, { 800.0f,100.0f }, 80.0f, 10.0f, 0, 1, COLOR_BLACK);
+		for (auto& itr : list)
+		{
+			if (itr == nullptr) { continue; }
+
+			// 山札時はコストを表示しないように TODO:今後はここの条件式を見直す必要あり
+			if (GetCard()->GetCurrentZone() != CCard::DECK) 
+			{ 
+				itr->SetisDraw(true);  
+			}
+			else if (GetCard()->GetCurrentZone() == CCard::DECK)
+			{
+				itr->SetisDraw(false);
+			}
+		}
 	}
 }

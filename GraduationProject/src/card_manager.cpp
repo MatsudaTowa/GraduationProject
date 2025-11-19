@@ -104,7 +104,7 @@ My::CCard* My::CCardManager::CreateCard(int id)
 		pAttack->SetBaseStatus(Status);
 
 		//‰Šú‰»
-		pAttack->Init();
+		//pAttack->Init();
 		return pAttack;
 	}
 		break;
@@ -120,7 +120,7 @@ My::CCard* My::CCardManager::CreateCard(int id)
 			pDeffence->SetBaseStatus(Status);
 
 			//‰Šú‰»
-			pDeffence->Init();
+			//pDeffence->Init();
 
 			return pDeffence;
 		}
@@ -139,7 +139,7 @@ My::CCard* My::CCardManager::CreateCard(int id)
 					pBuff->SetBaseStatus(Status);
 
 					//‰Šú‰»
-					pBuff->Init();
+					//pBuff->Init();
 
 					return pBuff;
 				}
@@ -154,7 +154,7 @@ My::CCard* My::CCardManager::CreateCard(int id)
 					pDebuff->SetBaseStatus(Status);
 
 					//‰Šú‰»
-					pDebuff->Init();
+					//pDebuff->Init();
 
 					return pDebuff;
 				}
