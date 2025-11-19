@@ -196,6 +196,13 @@ bool My::CCardInfo::LoadJson(const nlohmann::json& j)
                 try
                 {
                     outRec.assistParam.BaseParam = outRec.baseParam;
+                    outRec.assistParam.bIsOneTime = item.value("isOneTime", false);                         // 効果が単発かどうか
+
+                    if (!outRec.assistParam.bIsOneTime)
+                    {// 単発じゃないときに時間の設定
+                        outRec.assistParam.nTime = item.value("time", 0);
+                    }
+
                     outRec.assistParam.AssistType = static_cast<AssistType>(item["assisttype"].get<int>()); // アシストの種類
                     switch (outRec.assistParam.AssistType)
                     {// アシストの種類
@@ -223,9 +230,79 @@ bool My::CCardInfo::LoadJson(const nlohmann::json& j)
             default:
                 break;
             }
+
+            return true;
         };
 
         CardRecord newRec{};
+        if (!parseOne(j, newRec))
+        {
+             std::cerr << "パースに失敗" << std::endl;
+             return false;
+        }
+
+        m_Record = std::move(newRec);
+        m_Param = m_Record.baseParam;
+
+        // 型を合わせるために変換
+        CCard_Client::Param clientparam{};
+        clientparam.nPackID = m_Record.baseParam.nPackID;                                                       // パック番号
+        clientparam.nCardID = m_Record.baseParam.nCardID;                                                       // カード番号
+        clientparam.Name = m_Record.baseParam.Name;                                                             // カード名
+        clientparam.Ruby = m_Record.baseParam.Ruby;                                                             // カード名の読み方
+        clientparam.nCost = m_Record.baseParam.nCost;                                                           // コスト
+        clientparam.Maintype = static_cast<CCard_Client::CardType>(m_Record.baseParam.Maintype);                // カードのタイプ
+        clientparam.Raritytype = static_cast<CCard_Client::RARITY>(m_Record.baseParam.Raritytype);              // カードレアリティ
+        clientparam.ImagePath = m_Record.baseParam.ImagePath;                                                   // カードイラスト画像
+
+        switch (m_Record.baseParam.Maintype)
+        {
+        case ATTACK:    // 攻撃タイプ
+            clientparam.Cardparam.attackParam.nDamage = m_Record.attackParam.nDamage;         // 攻撃力
+            clientparam.Cardparam.attackParam.Attacktype = static_cast<CCard_Client::AttackType>(m_Record.attackParam.Attacktype); // 攻撃対象
+            break;
+        case DEFENSE:   // 守備タイプ
+            clientparam.Cardparam.defenseParam.nGuard = m_Record.defenseParam.nGuard;   // ガード値
+            clientparam.Cardparam.defenseParam.Defensetype = static_cast<CCard_Client::DefenseType>(m_Record.defenseParam.Defensetype); // カウンターの有無
+            if (clientparam.Cardparam.defenseParam.Defensetype == COUNTER)
+            {// カウンターするカードのみカウンター値を設定
+                clientparam.Cardparam.defenseParam.nCounter = m_Record.defenseParam.nCounter;
+            }
+
+            break;
+        case ASSIST:    // アシストタイプ
+            clientparam.Cardparam.assistParam.bIsOneTime = m_Record.assistParam.bIsOneTime; // 効果が単発かどうか
+            if (!clientparam.Cardparam.assistParam.bIsOneTime)
+            {// カードの効果が単発じゃないとき
+                clientparam.Cardparam.assistParam.nTime = clientparam.Cardparam.assistParam.nTime;  // 効果時間
+            }
+            clientparam.Cardparam.assistParam.Assisttype = static_cast<CCard_Client::AssistType>(m_Record.assistParam.AssistType);  // アシストの種類
+
+            switch (clientparam.Cardparam.assistParam.Assisttype)
+            {
+            case OBSTRUCT:  // 妨害カードのとき
+                break;
+            case BUFF:      // バフカードのとき
+                clientparam.Cardparam.assistParam.Bufftype = static_cast<CCard_Client::BuffType>(m_Record.assistParam.Bufftype);    // バフの種類
+
+                switch (clientparam.Cardparam.assistParam.Bufftype)
+                {
+                case HEAL:  // 回復カードのとき
+                    clientparam.Cardparam.assistParam.nHeal = clientparam.Cardparam.assistParam.nHeal;  // 回復量
+                    clientparam.Cardparam.assistParam.Healtype = static_cast<CCard_Client::HealType>(m_Record.assistParam.Healtype);    // 回復対象
+                    break;
+                }
+                break;
+            case DEBUFF:    // デバフカードのとき
+                break;
+            }
+            break;
+        }
+
+        // 読み込んだカード情報を登録
+        My::CCardManager::GetInstance()->RegistCardList(clientparam);
+
+        return true;
     }
     catch (const nlohmann::json::exception& je)
     {
@@ -248,7 +325,59 @@ bool My::CCardInfo::LoadJson(const nlohmann::json& j)
 */
 bool My::CCardInfo::LoadBytes(const std::vector<uint8_t>& bytes)
 {
-    return false;
+    if (bytes.empty())
+    {// 情報がない場合
+        std::cerr << "LoadBytes:input bytes empty" << std::endl;
+
+        return false;
+    }
+
+    try
+    {
+        nlohmann::ordered_json root = nlohmann::ordered_json::from_cbor(bytes);
+
+        if (root.is_array())
+        {
+            bool any = false;
+            for (const auto& elem : root)
+            {
+                if (!elem.is_object())
+                {
+                    continue;
+                }
+
+                My::CCardInfo tmp;
+                if (!tmp.LoadJson(elem))
+                {
+                    std::cerr << "LoadBytes: LoadJson failed for an array element; skipping" << std::endl;
+                    continue;
+                }
+                any = true;
+            }
+            return any;
+        }
+        else if (root.is_object())
+        {
+            if (!this->LoadJson(root)) 
+            {
+                std::cerr << "LoadBytes: LoadJson failed for object\n";
+                return false;
+            }
+            return true;
+        }
+        else
+        {
+            std::cerr << "LoadBytes: unexpected CBOR root type\n";
+            return false;
+        }
+    }
+    catch (const std::exception& e) 
+    {
+        std::cerr << "LoadBytes exception: " << e.what() << '\n';
+        return false;
+    }
+
+    return true;
 }
 
 /**
@@ -259,7 +388,62 @@ bool My::CCardInfo::LoadBytes(const std::vector<uint8_t>& bytes)
 */
 bool My::CCardInfo::LoadUrl(const std::string& url, const std::string& token, const std::shared_ptr<IHttpClient>& client)
 {
-    return false;
+    if (!client)
+    {
+        std::cerr << "URLの読み込みに失敗" << std::endl;
+        return false;
+    }
+
+    try
+    {
+        std::vector<uint8_t>bytes;
+
+        if (IsRawGithubUrl(url))
+        {
+            std::string body;
+            std::vector<std::pair<std::string, std::string>>headers;
+            headers.emplace_back("Accept", "application/octet-stream");
+
+            if (!token.empty())
+            {// 認証トークンがない場合
+                headers.emplace_back("Authorization", std::string("token ") + token);
+            }
+
+            int status = client->Get(url, body, headers);
+            if (status != 200)
+            {
+                std::cerr << "LoadUrl: raw GET failed status=" << status << " url=" << url << '\n';
+                return false;
+            }
+            bytes.assign(body.begin(), body.end());
+        }
+        else
+        {
+            std::string owner, repo, branch, path;
+            std::string endpoint;
+
+            if (ParseBlobGithubUrl(url, owner, repo, branch, path))
+            {
+                endpoint = MakeContentsEndpoint(owner, repo, path, branch);
+            }
+            else
+            {
+                size_t p1 = url.find('/');
+                size_t p2 = url.find('/', p1 + 1);
+
+            }
+        }
+    }
+    catch (const nlohmann::json::exception& je) {
+        std::cerr << "LoadUrl json exception: " << je.what() << '\n';
+        return false;
+    }
+    catch (const std::exception& e) {
+        std::cerr << "LoadUrl exception: " << e.what() << '\n';
+        return false;
+    }
+
+    return true;
 }
 
 /**
