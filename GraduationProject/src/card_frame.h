@@ -90,6 +90,8 @@ namespace My
 		inline void SetType(CCardFrame::FRAMETYPE type) { m_type = type; }
 		inline FRAMETYPE GetType() { return m_type; }
 
+		inline CCard* GetCard() { return  m_pParent; }
+
 	private:
 		/** @brief カードのタイプに合わせて色を変える */
 		D3DXCOLOR SetColorCard();
