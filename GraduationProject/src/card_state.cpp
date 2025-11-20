@@ -7,7 +7,7 @@
 #include "card_state.h"
 #include "card.h"
 #include "active_scene_manager.h"
-#include "target_arrow.h""
+#include "target_arrow.h"
 
 //===========================================================================================================
 // 
@@ -42,7 +42,7 @@ void My::CCardState::Copy(CCard* /*cpy*/)
 //=======================================================================================
 // 初期化処理
 //=======================================================================================
-void My::CCardStateNeutral::Init(CCard* cpy, CDuelCharacter* duel)
+void My::CCardStateNeutral::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 {
 	if (cpy == nullptr)
 		return;
@@ -56,7 +56,7 @@ void My::CCardStateNeutral::Init(CCard* cpy, CDuelCharacter* duel)
 //=======================================================================================
 // 更新処理
 //=======================================================================================
-void My::CCardStateNeutral::Update(CCard* cpy, CDuelCharacter* duel)
+void My::CCardStateNeutral::Update(CCard* cpy, CDuelCharacter* /*duel*/)
 {
 	if (cpy == nullptr)
 		return;
@@ -74,7 +74,7 @@ void My::CCardStateNeutral::Update(CCard* cpy, CDuelCharacter* duel)
 //=======================================================================================
 // 初期化処理
 //=======================================================================================
-void My::CCardStatePickup::Init(CCard* cpy, CDuelCharacter* duel)
+void My::CCardStatePickup::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 {
 	if (cpy == nullptr)
 		return;
@@ -89,7 +89,7 @@ void My::CCardStatePickup::Init(CCard* cpy, CDuelCharacter* duel)
 //=======================================================================================
 // 更新処理
 //=======================================================================================
-void My::CCardStatePickup::Update(CCard* cpy, CDuelCharacter* duel)
+void My::CCardStatePickup::Update(CCard* cpy, CDuelCharacter* /*duel*/)
 {
 	if (cpy == nullptr)
 		return;
@@ -109,7 +109,7 @@ void My::CCardStatePickup::Update(CCard* cpy, CDuelCharacter* duel)
 //=======================================================================================
 // 初期化
 //=======================================================================================
-void My::CCardStateCast::Init(CCard* cpy, CDuelCharacter* duel)
+void My::CCardStateCast::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 {
 	if (cpy == nullptr)
 		return;
@@ -126,7 +126,7 @@ void My::CCardStateCast::Init(CCard* cpy, CDuelCharacter* duel)
 //=======================================================================================
 // 更新
 //=======================================================================================
-void My::CCardStateCast::Update(CCard* cpy, CDuelCharacter* duel)
+void My::CCardStateCast::Update(CCard* cpy, CDuelCharacter* /*duel*/)
 {
 	if (cpy == nullptr)
 		return;
@@ -147,7 +147,7 @@ void My::CCardStateCast::Update(CCard* cpy, CDuelCharacter* duel)
 //=======================================================================================
 // 初期化
 //=======================================================================================
-void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* duel)
+void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 {
 	// カウントを初期化
 	m_Staycount = 0;
@@ -164,7 +164,7 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* duel)
 		CActiveSceneCharacter::Status status = iter->GetStatus();
 
 		// コスト分エナジーを減らす
-		status.energy -= cpy->GetParameter().cost;
+		status.energy -= cpy->GetBaseStatus().nCost;
 
 		// エナジーを設定
 		iter->SetStatus(status);

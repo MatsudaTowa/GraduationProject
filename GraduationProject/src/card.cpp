@@ -25,8 +25,6 @@ m_StateNum(CCardState::CARD_NEUTRAL),
 m_CardType(CARDTYPE_::TYPE_ATTACK),
 m_IsChange(true),
 m_target(CInputMouse::AREA::CENTER),
-m_Cost(INT_ZERO),
-m_AttackPower(INT_ZERO),
 m_pTargetArrow(nullptr),
 m_pCardHolder(nullptr),
 m_isUpdate(true),
@@ -71,9 +69,6 @@ HRESULT My::CCard::Init()
 	m_pState = new CCardStateNeutral();
 	m_pState->Init();
 	m_StateNum = CCardState::CARD_NEUTRAL;
-
-	m_Param.power = static_cast<int>(Rundom(1, 10));
-	m_Param.cost = static_cast<int>(Rundom(1, 3));
 
 	// カードフレーム生成
 	for (int i = 0; i < CCardFrame::FRAMETYPE_MAX; i++)
