@@ -13,6 +13,7 @@
 #include "enemy_state.h"
 #include "raknet.h"
 #include "card_manager.h"
+#include "zone_manager.h"
 
 int My::CLobby::m_characterIdx = -1;
 
@@ -424,7 +425,57 @@ void My::CDuel::CardCast()
 			continue;
 		}
 
+		//使用するカードと使用者の状態
+		CCard* pCard = nullptr;
+		CDuelCharacter* DuelState = nullptr;
+
 		//TODOこの下に読み込みこんだカードの処理を追加予定
+		for (auto& Character : CActiveSceneManager::GetInstance()->GetCharacterList())
+		{
+			//通すかの確認
+			if (iter.nUsePlayer != Character->GetPlayerIdx()) continue;				//使用者の番号と一致するか
+			if (typeid(CDuelCharacter*) == typeid(*Character->GetState())) continue;//状態の確認
+
+			//対戦状態にキャスト
+			DuelState = dynamic_cast<CDuelCharacter*>(Character->GetState());
+			
+			if (DuelState == nullptr) continue;	//キャスト成功したかの確認
+
+			//手札のカードを周回し、受信したカードを探す
+			for (auto& Card : DuelState->GetZoneManager()->GetDeck()->GetList())
+			{
+				if (Card->GetBaseStatus().nCardID != iter.nCardID) continue;
+
+				pCard = Card;
+				break;
+			}
+			break;
+		}
+
+		//使用者のエリアを代入
+		for (auto Character : CActiveSceneManager::GetInstance()->GetCharacterList())
+		{
+			//使用者を見つけてエリアを代入
+			if (iter.nUsePlayer != Character->GetPlayerIdx()) continue;
+			pCard->SetUserArea(Character->GetArea());
+			break;
+		}
+
+		//対象の数だけ周回
+		for (auto nTarget : iter.Target)
+		{
+			//対象者のエリアを代入
+			for (auto Character : CActiveSceneManager::GetInstance()->GetCharacterList())
+			{
+				//使用者を見つけてエリアを代入
+				if (nTarget != Character->GetPlayerIdx()) continue;
+				pCard->SetTarget(Character->GetArea());
+				break;
+			}
+		}
+
+		//カードの状態をステイに変更(TODO:守備カードはステイじゃない)
+		pCard->ChangeState(CCardState::CARD_STAY, DuelState);
 	}
 
 	//カード情報のクリア

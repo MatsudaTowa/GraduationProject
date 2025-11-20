@@ -32,10 +32,13 @@ namespace My
 		*/
 		typedef enum
 		{
-			CARD_NEUTRAL = 0,
+			CARD_NONE = 0,
+			CARD_NEUTRAL,
 			CARD_PICKUP,
+			CARD_SELECT,
 			CARD_CAST,
 			CARD_STAY,
+			CARD_WAIT,
 			CARD_TRIGGER,
 			CARD_MAX
 		}CARD_STATE;
@@ -87,6 +90,19 @@ namespace My
 	};
 
 	/**
+	* @brief 選択状態
+	*/
+	class CCardStateSelect :public CCardState
+	{
+	public:
+		/** @brief 初期化 */
+		void Init(CCard* cpy, CDuelCharacter* duel) override;
+
+		/** @brief 更新 */
+		void Update(CCard* cpy, CDuelCharacter* duel)override;
+	};
+
+	/**
 	* @brief 使用状態
 	*/
 	class CCardStateCast :public CCardState
@@ -117,6 +133,21 @@ namespace My
 
 		/** @brief 設定された待機時間 */
 		const unsigned int STAY_TIME = ONE_SECOND * 3;
+	};
+
+	/**
+	* @brief 守備待機状態
+	*/
+	class CCardStateWait :public CCardState
+	{
+	public:
+		/** @brief 初期化 */
+		void Init(CCard* cpy, CDuelCharacter* duel) override;
+
+		/** @brief 更新 */
+		void Update(CCard* cpy, CDuelCharacter* duel)override;
+
+	private:
 	};
 
 	/**

@@ -99,6 +99,44 @@ void My::CCardStatePickup::Update(CCard* cpy, CDuelCharacter* /*duel*/)
 	//cpy->SetSize({ 1.2f * 1.2f,1.2f, 1.2f });
 }
 
+//===========================================================================================================
+// 
+// 選択ステート
+// 
+//===========================================================================================================
+
+//=======================================================================================
+// 初期化処理
+//=======================================================================================
+void My::CCardStateSelect::Init(CCard* cpy, CDuelCharacter* /*duel*/)
+{
+	if (cpy == nullptr)
+		return;
+
+	// カードを見やすくする
+	D3DXVECTOR3 pos = cpy->GetPos();
+	//pos.y += 20.0f;
+	pos.z += 10.0f;
+	cpy->SetPos(pos);
+}
+
+//=======================================================================================
+// 更新処理
+//=======================================================================================
+void My::CCardStateSelect::Update(CCard* cpy, CDuelCharacter* /*duel*/)
+{
+	if (cpy == nullptr)
+		return;
+
+	cpy->SetSize({ 1.5f * 1.2f, 1.5f, 1.5f });
+
+	//倍率
+	float mag = 40.0f;	//元々30
+	cpy->SetSize({ mag * 1.2f,mag,mag });
+
+	//cpy->SetSize({ 1.2f * 1.2f,1.2f, 1.2f });
+}
+
 
 //===========================================================================================================
 // 
@@ -121,12 +159,32 @@ void My::CCardStateCast::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 	//pos.z += 20.0f;
 
 	//cpy->SetPos(pos);
+
+	//リストの取得
+	std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
+
+	//キャラクターの周回
+	for (auto& iter : List)
+	{
+		if (cpy->GetUserArea() != iter->GetArea()) continue;
+
+		// ステータスを取得
+		CActiveSceneCharacter::Status status = iter->GetStatus();
+
+		// コスト分エナジーを減らす
+		status.energy -= cpy->GetBaseStatus().nCost;
+
+		// エナジーを設定
+		iter->SetStatus(status);
+
+		break;
+	}
 }
 
 //=======================================================================================
 // 更新
 //=======================================================================================
-void My::CCardStateCast::Update(CCard* cpy, CDuelCharacter* /*duel*/)
+void My::CCardStateCast::Update(CCard* cpy, CDuelCharacter* duel)
 {
 	if (cpy == nullptr)
 		return;
@@ -134,6 +192,8 @@ void My::CCardStateCast::Update(CCard* cpy, CDuelCharacter* /*duel*/)
 	//倍率
 	float mag = 30.0f;
 	cpy->SetSize({ mag * 1.2f,mag,mag });
+
+	cpy->ChangeState(CCardState::CARD_STATE::CARD_STAY, duel);
 
 	//cpy->ChangeState(CCardState::CARD_STATE::CARD_STAY);
 }
@@ -160,20 +220,8 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 	{
 		if (cpy->GetUserArea() != iter->GetArea()) continue;
 
-		// ステータスを取得
-		CActiveSceneCharacter::Status status = iter->GetStatus();
-
-		// コスト分エナジーを減らす
-		status.energy -= cpy->GetBaseStatus().nCost;
-
-		// エナジーを設定
-		iter->SetStatus(status);
-
-		// ターゲットアローを生成(昔)
-		//cpy->SetTargetArrow(CTargetArrow::Create(cpy->GetUserArea(), cpy->GetTarget()));
-
 		// ターゲットアローをマネージャーに登録
-		iter->GetTargetArrowManeger()->Regist(CTargetArrow::Create(CInputMouse::AREA::DOWN, cpy->GetTarget()));
+		iter->GetTargetArrowManeger()->Regist(CTargetArrow::Create(cpy->GetUserArea(), cpy->GetTarget()));
 
 		break;
 	}
@@ -199,6 +247,41 @@ void My::CCardStateStay::Update(CCard* cpy, CDuelCharacter* duel)
 
 	// カウントを進める
 	m_Staycount++;
+}
+
+//===========================================================================================================
+// 
+// 守備ステイステート(守備カード効果発動待機)
+// 
+//===========================================================================================================
+
+//=======================================================================================
+// 初期化
+//=======================================================================================
+void My::CCardStateWait::Init(CCard* cpy, CDuelCharacter* /*duel*/)
+{
+	//リストの取得
+	std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
+
+	//キャラクターの周回
+	for (auto& iter : List)
+	{
+		if (cpy->GetUserArea() != iter->GetArea()) continue;
+
+		// ターゲットアローをマネージャーに登録
+		iter->GetTargetArrowManeger()->Regist(CTargetArrow::Create(cpy->GetUserArea(), cpy->GetTarget()));
+
+		break;
+	}
+}
+
+//=======================================================================================
+// 更新
+//=======================================================================================
+void My::CCardStateWait::Update(CCard* cpy, CDuelCharacter* duel)
+{
+	if (cpy == nullptr)
+		return;
 }
 
 //===========================================================================================================

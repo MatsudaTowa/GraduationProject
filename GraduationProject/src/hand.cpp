@@ -113,7 +113,7 @@ void My::CHand::Update(CPlayerDuelState* state, CActiveSceneCharacter* player)
 void My::CHand::Select(CDuelCharacter* character)
 {
 	// キャスト状態だったらセレクトさせない
-	if (m_HandState == CAST)
+	if (m_HandState == SELECT)
 	{
 		return;
 	}
@@ -187,7 +187,7 @@ void My::CHand::Cast(CDuelCharacter* character, CActiveSceneCharacter* player)
 
 		// キャスト状態によって手札の状態を変える
 		if (IsCast)
-			m_HandState = CAST;
+			m_HandState = SELECT;
 		else
 			m_HandState = NEUTRAL;
 		break;

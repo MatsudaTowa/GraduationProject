@@ -226,6 +226,10 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state, CDuelCharacter* duel)
 			m_pState = new CCardStatePickup();
 			break;
 
+		case CCardState::CARD_SELECT:
+			m_pState = new CCardStateSelect();
+			break;
+
 		case CCardState::CARD_CAST:
 			m_pState = new CCardStateCast();
 			break;
@@ -233,6 +237,11 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state, CDuelCharacter* duel)
 		case CCardState::CARD_STAY:
 			m_pState = new CCardStateStay();
 			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(m_CurrentZone, duel), duel->GetZoneManager()->GetCastPreviewZone(), true);
+			break;
+
+		case CCardState::CARD_WAIT:
+			m_pState = new CCardStateWait();
+			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(m_CurrentZone, duel), duel->GetZoneManager()->GetWaitZone(), true);
 			break;
 
 		case CCardState::CARD_TRIGGER:
@@ -284,7 +293,8 @@ bool My::CCard::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharacter* pla
 {
 	// 選択状態とキャスト状態以外は通さない
 	if (GetStateNum() != CCardState::CARD_PICKUP &&
-		GetStateNum() != CCardState::CARD_CAST)
+		GetStateNum() != CCardState::CARD_CAST &&
+		GetStateNum() != CCardState::CARD_SELECT)
 	{
 		return false;
 	}
@@ -316,7 +326,7 @@ bool My::CCard::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharacter* pla
 	if (pMouse->GetPress(0))
 	{
 		// キャストステートにする
-		ChangeState(CCardState::CARD_CAST, duel);
+		ChangeState(CCardState::CARD_SELECT, duel);
 		CActiveSceneManager::GetInstance()->ChangeState(new CCardCast);
 
 		screenpos = pMouse->GetMousePos();
@@ -328,13 +338,32 @@ bool My::CCard::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharacter* pla
 	}
 	else if (pMouse->GetRelease(0))
 	{
-		//エリアの取得
-		m_UserArea = player->GetArea();
-
+		//対象のエリア
 		m_target = pMouse->GetArea();
 
+		//キャンセルエリアなら解除
+		if (m_target == CInputMouse::AREA::CENTER)
+		{
+			//通常状態にする
+			ChangeState(CCardState::CARD_NEUTRAL, duel);
+			CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
+			return true;
+		}
+
+		//エナジーが不足しているなら抜ける
+		if (player->GetEnergy() < m_BaseStatus.nCost)
+		{
+			// 通常状態にする
+			ChangeState(CCardState::CARD_NEUTRAL, duel);
+			CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
+			return true;
+		}
+
+		//使用者のエリアの取得
+		m_UserArea = player->GetArea();
+
 		// ステイ遷移
-		ChangeState(CCardState::CARD_STAY, duel);
+		ChangeState(CCardState::CARD_CAST, duel);
 		CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
 
 		CActiveScenePlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();
