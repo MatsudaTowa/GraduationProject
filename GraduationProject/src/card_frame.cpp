@@ -136,11 +136,11 @@ My::CCardFrame* My::CCardFrame::Create(FRAMETYPE type, CCard* pObj)
 	CCardFrame* pCardFrame = nullptr;
 	if (type == FRAMETYPE_COST)
 	{
-		pCardFrame = new FrameCost(10);
+		pCardFrame = new CCardFrameCost(27);
 	}
 	else
 	{
-		pCardFrame = new CCardFrame(10);
+		pCardFrame = new CCardFrame(27);
 	}
 
 	// É^ÉCÉvê›íË

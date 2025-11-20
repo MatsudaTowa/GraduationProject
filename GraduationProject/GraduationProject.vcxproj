@@ -183,6 +183,7 @@
     <ClCompile Include="src\card_frame_name.cpp" />
     <ClCompile Include="src\card_frame_text.cpp" />
     <ClCompile Include="src\card_frame_type.cpp" />
+    <ClCompile Include="src\card_frame_use_font.cpp" />
     <ClCompile Include="src\card_info.cpp" />
     <ClCompile Include="src\card_manager.cpp" />
     <ClCompile Include="src\card_state.cpp" />
@@ -300,6 +301,7 @@
     <ClInclude Include="src\card_frame_name.h" />
     <ClInclude Include="src\card_frame_text.h" />
     <ClInclude Include="src\card_frame_type.h" />
+    <ClInclude Include="src\card_frame_use_font.h" />
     <ClInclude Include="src\card_info.h" />
     <ClInclude Include="src\card_manager.h" />
     <ClInclude Include="src\card_state.h" />

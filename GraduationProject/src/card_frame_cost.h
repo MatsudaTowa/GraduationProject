@@ -8,18 +8,18 @@
 #define _CARD_FRAME_COST_H_
 
 #include "main.h"
-#include "card_frame.h"
+#include "card_frame_use_font.h"
 #include "card.h"
 #include "font_manager.h"
 
 /** @brief My 名前空間 */
 namespace My
 {
-	class FrameCost :public CCardFrame
+	class CCardFrameCost :public CCardFrameUseFont
 	{
 	public:
-		FrameCost(int nPriority);
-		~FrameCost() {};
+		CCardFrameCost(int nPriority);
+		~CCardFrameCost() {};
 		HRESULT Init()override;
 
 		/* @brief 終了 */
@@ -28,7 +28,6 @@ namespace My
 		/* @brief 更新 */
 		void Update()override;
 	private:
-		CFontManager* m_pFontManager;
 	};
 }
 #endif
