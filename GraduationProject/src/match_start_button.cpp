@@ -64,6 +64,15 @@ void My::CMatchStartButton::Uninit()
 	if (m_font_manager != nullptr)
 	{
 		m_font_manager->Uninit();
+		std::vector<CFont*> font_vector = m_font_manager->GetList();
+
+		for (auto& itr : font_vector)
+		{
+			if (itr == nullptr) { continue; }
+			itr->Uninit();
+			itr = nullptr;
+		}
+		font_vector.clear();
 		delete m_font_manager;
 		m_font_manager = nullptr;
 	}

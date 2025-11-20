@@ -73,6 +73,8 @@ namespace My
 		//ƒŠƒXƒg‚Ìæ“¾
 		std::vector<CFont*> GetList() { return m_Font; }
 
+		int GetTextShift() { return m_base_text_shift; }
+
 	private:
 
 		//ƒƒ“ƒo•Ï”

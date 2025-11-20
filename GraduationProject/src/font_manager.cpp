@@ -42,13 +42,7 @@ HRESULT My::CFontManager::Init()
 //================================
 void My::CFontManager::Uninit()
 {
-	for (auto& itr : m_Font)
-	{
-		if (itr == nullptr) { continue; }
-		itr->Uninit();
-		itr = nullptr;
-	}
-	m_Font.clear();
+
 }
 
 //================================

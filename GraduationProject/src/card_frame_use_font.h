@@ -11,6 +11,8 @@
 #include "card_frame.h"
 #include "card.h"
 #include "font_manager.h"
+#include <format>
+
 
 /** @brief My –¼‘O‹óŠÔ */
 namespace My

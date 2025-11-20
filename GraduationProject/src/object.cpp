@@ -69,7 +69,7 @@ void My::CObject::ReleaseAll()
 		{
 			CObject* pNext = pObj->m_pNext;	//次のポインタを取得
 
-			if (pObj->m_type != CObject::OBJECT_TYPE::OBJECT_TYPE_FADE && pObj->m_type != CObject::OBJECT_TYPE::OBJECT_TYPE_FONT)
+			if (pObj->m_type != CObject::OBJECT_TYPE::OBJECT_TYPE_FADE)
 			{
 				pObj->Uninit();					//終了処理
 			}

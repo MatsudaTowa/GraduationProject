@@ -47,12 +47,6 @@ HRESULT My::CCardFrameUseFont::Init()
 //===========================================================================================================================================================
 void My::CCardFrameUseFont::Uninit()
 {
-	if (m_pFontManager != nullptr)
-	{
-		m_pFontManager->Uninit();
-		delete m_pFontManager;
-		m_pFontManager = nullptr;
-	}
 	CCardFrame::Uninit();
 }
 
@@ -66,12 +60,16 @@ void My::CCardFrameUseFont::Update()
 	if (m_pFontManager != nullptr)
 	{
 		std::vector<CFont*> list = m_pFontManager->GetList();
+		D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), GetPos()); //スクリーン座標に変換
+		float text_shift = (float)m_pFontManager->GetTextShift();
+
+		screen_pos.x += m_offsetpos.x;
+		screen_pos.y += m_offsetpos.y;
+		int i = INT_ZERO;
 		for (auto& itr : list)
 		{
 			if (itr == nullptr) { continue; }
-			D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), GetPos()); //スクリーン座標に変換
-			screen_pos.x += m_offsetpos.x;
-			screen_pos.y += m_offsetpos.y;
+			screen_pos.x += text_shift;
 			itr->SetPos(screen_pos);
 			// 山札時はコストを表示しないように TODO:今後はここの条件式を見直す必要あり
 			if (GetCard()->GetCurrentZone() != CCard::DECK)
@@ -82,6 +80,7 @@ void My::CCardFrameUseFont::Update()
 			{
 				itr->SetisDraw(false);
 			}
+			++i;
 		}
 	}
 }

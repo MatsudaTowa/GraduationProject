@@ -1,5 +1,6 @@
 #include "card_frame.h"
 #include "card_frame_cost.h"
+#include "card_frame_name.h"
 // 静的メンバ初期化
 
 /**
@@ -134,13 +135,17 @@ void My::CCardFrame::Draw()
 My::CCardFrame* My::CCardFrame::Create(FRAMETYPE type, CCard* pObj)
 {
 	CCardFrame* pCardFrame = nullptr;
-	if (type == FRAMETYPE_COST)
+	switch (type)
 	{
-		pCardFrame = new CCardFrameCost(27);
-	}
-	else
-	{
-		pCardFrame = new CCardFrame(27);
+	case FRAMETYPE_COST:
+		pCardFrame = new CCardFrameCost(28);
+		break;
+	case FRAMETYPE_NAME:
+		pCardFrame = new CCardFrameName(28);
+		break;
+	default:
+		pCardFrame = new CCardFrame(28);
+		break;
 	}
 
 	// タイプ設定
