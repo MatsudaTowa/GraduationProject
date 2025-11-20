@@ -144,6 +144,13 @@ namespace My
 		{
 			return m_isFinish;
 		}
+
+		/**
+		 * @brief キャラクターをまとめたリストを返す
+		 * @return キャラクターリスト
+		 */
+		std::list<CActiveSceneCharacter*> GetCharacterList();
+
 	private:
 		CEnemyManager* m_pEnemyManager;
 		CAreaManager* m_pAreaManager;

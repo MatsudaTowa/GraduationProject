@@ -18,6 +18,7 @@ namespace My
 	//================
 	class CPlayerDuelState;
 	class CDuelCharacter;
+	class CActiveSceneCharacter;
 
 	/**
 	* @brief 手札のクラス
@@ -71,7 +72,7 @@ namespace My
 		/**
 		* @brief 更新
 		*/
-		void Update(CPlayerDuelState* state);
+		void Update(CPlayerDuelState* state, CActiveSceneCharacter* player);
 
 		/**
 		* @brief 選択
@@ -81,7 +82,7 @@ namespace My
 		/**
 		* @brief 選択
 		*/
-		void Cast(CDuelCharacter* character);
+		void Cast(CDuelCharacter* character, CActiveSceneCharacter* player);
 
 		/**
 		* @brief 手札を引く

@@ -10,6 +10,7 @@
 #include "objectX.h"
 #include "card_state.h"
 #include "card_manager.h"
+#include "card_strategy.h"
 
 namespace My
 {
@@ -78,17 +79,6 @@ namespace My
 		};
 
 		/**
-		* @brief カードパラメーター
-		* @param コスト
-		* @param カードパワー(ここでは攻撃値も防御値も同じ)
-		*/
-		typedef struct
-		{
-			int cost;
-			int power;
-		}Parameter;
-
-		/**
 		 * @brief コンストラクタ
 		 * @param [in]プライオリティ
 		 */
@@ -121,6 +111,16 @@ namespace My
 		void Draw()override;
 
 		/**
+		 * @brief キャスト処理
+		 */
+		virtual void Cast(CDuelCharacter* duel) = 0;
+
+		/**
+		 * @brief トリガー処理
+		 */
+		virtual void Trigger() = 0;
+
+		/**
 		 * @brief カードデータ読み込み
 		 */
 		virtual void LoadCardData();
@@ -135,7 +135,7 @@ namespace My
 		 * @brief カードをマウスでキャストする
 		 * @return [out]カードがキャストされたかどうか判定
 		 */
-		bool CardCastToMouse(CDuelCharacter* duel);
+		bool CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharacter* player);
 
 		/**
 		 * @brief 生成
@@ -209,15 +209,6 @@ namespace My
 		inline void SetTarget(CInputMouse::AREA area) { m_target = area; }
 		inline CInputMouse::AREA GetTarget() { return m_target; }
 
-		inline void SetAttackPower(int num) { m_AttackPower = num; }
-		inline int GetAttackPower() { return m_AttackPower; }
-		
-		inline void SetCost(int num) { m_Cost = num; }
-		inline int GetCost() { return m_Cost; }
-
-		inline void SetParameter(Parameter param) { m_Param = param; }
-		inline Parameter GetParameter() { return m_Param; }
-
 		inline CTargetArrow* GetTargetArrow() { return m_pTargetArrow; }
 
 		inline void SetCardHolder(CActiveScenePlayer* player) { m_pCardHolder = player; }
@@ -247,6 +238,14 @@ namespace My
 		//列挙からゾーンのポインタを返す
 		CZone* CastToEnumZone(ZONE zone, CDuelCharacter* duel);
 
+		//ストラテジーの設定と取得
+		void SetCardStrategy(CCardStrategy_Base* strategy);
+		CCardStrategy_Base* GetCardStrategy() { return m_Strategy; }
+
+		//使用者のエリアを返す
+		inline void SetUserArea(CInputMouse::AREA area) { m_UserArea = area; }
+		inline CInputMouse::AREA GetUserArea() { return m_UserArea; }
+
 	private:
 
 		//static CCard* m_pTop;	//先頭のオブジェクトポインタ
@@ -255,11 +254,6 @@ namespace My
 		//CCard* m_pNext;			//次のオブジェクトのポインタ
 
 		BaseStatus m_BaseStatus;
-
-		Parameter m_Param;	// カードパラメーター
-
-		int m_Cost;
-		int m_AttackPower;
 
 		/**
 		 * @brief ステートをチェンジできるかどうか
@@ -318,6 +312,16 @@ namespace My
 		 */
 		ZONE m_CurrentZone;	//現在のゾーン
 		ZONE m_OldZone;		//昔のゾーン
+
+		/**
+		 * @brief カードのストラテジー
+		 */
+		CCardStrategy_Base* m_Strategy;
+
+		/**
+		* 使用者のエリア
+		*/
+		CInputMouse::AREA m_UserArea;
 	};
 };
 

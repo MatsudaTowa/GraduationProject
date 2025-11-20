@@ -81,3 +81,25 @@ void My::CActiveSceneManager::ChangeState(CActiveSceneState* state)
 		CActiveSceneManager::GetInstance()->SetState(current_state);
 	}
 }
+
+//=============================================
+//キャラクターのリストを返す
+//=============================================
+std::list<My::CActiveSceneCharacter*> My::CActiveSceneManager::GetCharacterList()
+{
+	//返す用のリスト
+	std::list<My::CActiveSceneCharacter*> List;
+	List.clear();
+
+	//プレイヤーの追加
+	List.push_back(m_pPlayer);
+
+	//敵の追加
+	for (auto& iter : m_pEnemyManager->GetList())
+	{
+		List.push_back(iter);
+	}
+
+	//返す
+	return List;
+}

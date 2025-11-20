@@ -83,6 +83,16 @@ namespace My
 		 * @param [in]param
 		 */
 		void LoadUniqueInfo(CCard_Client::Param param) override;
+
+		/**
+		 * @brief キャスト処理
+		 */
+		void Cast(CDuelCharacter* duel) override;
+
+		/**
+		 * @brief トリガー処理
+		 */
+		void Trigger() override;
 	private:
 
 		AttackType m_AttackType;

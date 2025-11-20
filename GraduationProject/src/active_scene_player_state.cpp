@@ -157,7 +157,7 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 	{
 		m_pHand->Start(this);
 
-		m_pHand->Update(this);
+		m_pHand->Update(this, character);
 
 		//TODO:ƒnƒ“ƒh‚Ì‘”‚ð‚±‚±‚ÅŽæ“¾‚µÝ’è
 		//player->SetHandNum(pHand->GetTotal())

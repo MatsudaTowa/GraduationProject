@@ -25,13 +25,13 @@ m_StateNum(CCardState::CARD_NEUTRAL),
 m_CardType(CARDTYPE_::TYPE_ATTACK),
 m_IsChange(true),
 m_target(CInputMouse::AREA::CENTER),
-m_Cost(INT_ZERO),
-m_AttackPower(INT_ZERO),
 m_pTargetArrow(nullptr),
 m_pCardHolder(nullptr),
 m_isUpdate(true),
 m_CurrentZone(ZONE::NONE_ZONE),
-m_OldZone(ZONE::NONE_ZONE)
+m_OldZone(ZONE::NONE_ZONE),
+m_Strategy(nullptr),
+m_UserArea(CInputMouse::AREA::CENTER)
 {
 	m_pTargetPlayerList.clear();
 	//if (m_pTop == nullptr)
@@ -70,9 +70,6 @@ HRESULT My::CCard::Init()
 	m_pState->Init();
 	m_StateNum = CCardState::CARD_NEUTRAL;
 
-	m_Param.power = static_cast<int>(Rundom(1, 10));
-	m_Param.cost = static_cast<int>(Rundom(1, 3));
-
 	// カードフレーム生成
 	for (int i = 0; i < CCardFrame::FRAMETYPE_MAX; i++)
 	{
@@ -87,6 +84,13 @@ HRESULT My::CCard::Init()
 //===========================================================================================================
 void My::CCard::Uninit()
 {
+	//中身があるなら破棄
+	if (m_Strategy != nullptr)
+	{
+		delete m_Strategy;
+		m_Strategy = nullptr;
+	}
+
 	CObject3D::Uninit();
 }
 
@@ -164,14 +168,14 @@ void My::CCard::Draw()
 //===========================================================================================================
 My::CCard* My::CCard::Create(CCard::CARDTYPE_ type)
 {
-	CCard* pCard = new CCard(5);
+	//CCard* pCard = //new CCard(5);
 
-	// カードタイプの設定
-	pCard->m_CardType = type;
+	//// カードタイプの設定
+	//pCard->m_CardType = type;
 
-	pCard->Init();
+	//pCard->Init();
 
-	return pCard;
+	return nullptr;
 }
 
 //===========================================================================================================
@@ -276,7 +280,7 @@ void My::CCard::RemoveTargetList(CActiveSceneCharacter* target_list)
 //===========================================================================================================
 // カードをマウスでキャスト
 //===========================================================================================================
-bool My::CCard::CardCastToMouse(CDuelCharacter* duel)
+bool My::CCard::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharacter* player)
 {
 	// 選択状態とキャスト状態以外は通さない
 	if (GetStateNum() != CCardState::CARD_PICKUP &&
@@ -324,6 +328,9 @@ bool My::CCard::CardCastToMouse(CDuelCharacter* duel)
 	}
 	else if (pMouse->GetRelease(0))
 	{
+		//エリアの取得
+		m_UserArea = player->GetArea();
+
 		m_target = pMouse->GetArea();
 
 		// ステイ遷移
@@ -350,6 +357,9 @@ bool My::CCard::CardCastToMouse(CDuelCharacter* duel)
 				CRakNet::GetInstance()->SendCastCard(m_BaseStatus.nCardID, CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx(), itr->GetPlayerIdx());
 			}
 		}
+
+		//キャスト処理
+		//Cast(duel);
 	}
 
 	return false;
@@ -502,4 +512,23 @@ My::CZone* My::CCard::CastToEnumZone(ZONE zone, CDuelCharacter* duel)
 	}
 
 	return pZone;
+}
+
+//===========================================================================================================
+// ストラテジーの設定
+//===========================================================================================================
+void My::CCard::SetCardStrategy(CCardStrategy_Base* strategy)
+{
+	//nullptrなら抜ける
+	if (strategy == nullptr) return;
+
+	//中身があるなら破棄
+	if (m_Strategy != nullptr)
+	{
+		delete m_Strategy;
+		m_Strategy = nullptr;
+	}
+
+	//代入
+	m_Strategy = strategy;
 }

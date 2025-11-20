@@ -28,6 +28,9 @@ My::CCardAssist_Buff_Heal::~CCardAssist_Buff_Heal()
 HRESULT My::CCardAssist_Buff_Heal::Init()
 {
 	CCardAssist_Buff::Init();
+
+	//トリガー時のストラテジーを代入
+	SetCardStrategy(new CHeal);
 	return S_OK;
 }
 
@@ -53,4 +56,17 @@ void My::CCardAssist_Buff_Heal::Update()
 void My::CCardAssist_Buff_Heal::Draw()
 {
 	CCardAssist_Buff::Draw();
+}
+
+//===========================================================================================================
+//固有情報の読み込み
+//===========================================================================================================
+void My::CCardAssist_Buff_Heal::LoadUniqueInfo(CCard_Client::Param param)
+{
+	//親の固有読み込み
+	My::CCardAssist_Buff::LoadUniqueInfo(param);
+
+	//回復ステータスの読み込み
+	m_HealType = (HealType)param.Healtype;	//バフの種類
+	m_nHeal = param.nHeal;					//回復値
 }

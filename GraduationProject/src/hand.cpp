@@ -72,7 +72,7 @@ void My::CHand::Start(CPlayerDuelState* state)
 //===========================================================================================================
 // 更新処理
 //===========================================================================================================
-void My::CHand::Update(CPlayerDuelState* state)
+void My::CHand::Update(CPlayerDuelState* state, CActiveSceneCharacter* player)
 {
 	// キーボード取得
 	CInputKeyboard* pkeyboad = CManager::GetInstance()->GetKeyboard();
@@ -101,7 +101,7 @@ void My::CHand::Update(CPlayerDuelState* state)
 	Select(state);
 
 	// カードキャスト
-	Cast(state);
+	Cast(state, player);
 
 	// カード除去
 	DeleteCard(state);
@@ -168,7 +168,7 @@ void My::CHand::Select(CDuelCharacter* character)
 //===========================================================================================================
 // カードのキャスト
 //===========================================================================================================
-void My::CHand::Cast(CDuelCharacter* character)
+void My::CHand::Cast(CDuelCharacter* character, CActiveSceneCharacter* player)
 {
 	if (m_SelectNum < 0) return;
 
@@ -183,7 +183,7 @@ void My::CHand::Cast(CDuelCharacter* character)
 		}
 
 		// 返り値でキャスト状態かどうか判断
-		bool IsCast = iter->CardCastToMouse(character);
+		bool IsCast = iter->CardCastToMouse(character, player);
 
 		// キャスト状態によって手札の状態を変える
 		if (IsCast)

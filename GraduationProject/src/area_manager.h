@@ -40,7 +40,7 @@ namespace My
 		 * @brief そこのエリアにカードを実行
 		 * @param [in]area
 		 */
-		void CardTrigger(My::CInputMouse::AREA area);
+		bool CardTrigger(My::CInputMouse::AREA area);
 
 		/**
 		 * @brief エリアの設定
