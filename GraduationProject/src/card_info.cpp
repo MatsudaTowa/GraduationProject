@@ -7,6 +7,7 @@
 
 // include
 #include "card_info.h"
+#include "httplib.h"
 #include <iostream>
 #include <regex>
 #include <cctype>
@@ -315,7 +316,6 @@ bool My::CCardInfo::LoadJson(const nlohmann::json& j)
         return false;
     }
 
-    return true;
 }
 
 /**
@@ -388,62 +388,196 @@ bool My::CCardInfo::LoadBytes(const std::vector<uint8_t>& bytes)
 */
 bool My::CCardInfo::LoadUrl(const std::string& url, const std::string& token, const std::shared_ptr<IHttpClient>& client)
 {
-    if (!client)
-    {
-        std::cerr << "URLの読み込みに失敗" << std::endl;
-        return false;
-    }
-
     try
     {
-        std::vector<uint8_t>bytes;
+        std::vector<uint8_t> bytes;
 
-        if (IsRawGithubUrl(url))
+        // --- client 経路（既存 IHttpClient を使う） ---
+        if (client)
         {
-            std::string body;
-            std::vector<std::pair<std::string, std::string>>headers;
-            headers.emplace_back("Accept", "application/octet-stream");
+            if (IsRawGithubUrl(url))
+            {
+                std::string body;
+                std::vector<std::pair<std::string, std::string>> headers;
+                headers.emplace_back("Accept", "application/octet-stream");
+                if (!token.empty()) headers.emplace_back("Authorization", std::string("token ") + token);
 
-            if (!token.empty())
-            {// 認証トークンがない場合
-                headers.emplace_back("Authorization", std::string("token ") + token);
+                int status = client->Get(url, body, headers);
+                if (status != 200) {
+                    std::cerr << "LoadUrl: raw GET failed status=" << status << " url=" << url << '\n';
+                    return false;
+                }
+                bytes.assign(body.begin(), body.end());
+            }
+            else
+            {
+                std::string owner, repo, branch, path, endpoint;
+                if (ParseBlobGithubUrl(url, owner, repo, branch, path)) {
+                    endpoint = MakeContentsEndpoint(owner, repo, path, branch);
+                }
+                else {
+                    size_t p1 = url.find('/');
+                    size_t p2 = url.find('/', p1 + 1);
+                    if (p1 == std::string::npos || p2 == std::string::npos) {
+                        std::cerr << "LoadUrl: unsupported URL format: " << url << '\n';
+                        return false;
+                    }
+                    owner = url.substr(0, p1);
+                    repo = url.substr(p1 + 1, p2 - p1 - 1);
+                    path = url.substr(p2 + 1);
+                    endpoint = MakeContentsEndpoint(owner, repo, path, "");
+                }
+
+                std::string body;
+                std::vector<std::pair<std::string, std::string>> headers;
+                headers.emplace_back("Accept", "application/vnd.github.v3+json");
+                if (!token.empty()) headers.emplace_back("Authorization", std::string("token ") + token);
+
+                int status = client->Get(endpoint, body, headers);
+                if (status != 200) {
+                    std::cerr << "LoadUrl: Contents API GET failed status=" << status << " endpoint=" << endpoint << '\n';
+                    return false;
+                }
+
+                nlohmann::ordered_json cj = nlohmann::ordered_json::parse(body);
+                if (!cj.contains("content") || cj["content"].is_null()) {
+                    std::cerr << "LoadUrl: Contents API returned no content for " << endpoint << '\n';
+                    return false;
+                }
+                std::string b64 = NormalizeBase64(cj["content"].get<std::string>());
+                bytes = Base64Decode(b64);
             }
 
-            int status = client->Get(url, body, headers);
-            if (status != 200)
-            {
-                std::cerr << "LoadUrl: raw GET failed status=" << status << " url=" << url << '\n';
+            // size checks and pass to LoadBytes
+            constexpr size_t MAX_BYTES = 32 * 1024 * 1024;
+            if (bytes.empty()) {
+                std::cerr << "LoadUrl: fetched data is empty\n";
                 return false;
             }
+            if (bytes.size() > MAX_BYTES) {
+                std::cerr << "LoadUrl: fetched data too large: " << bytes.size() << '\n';
+                return false;
+            }
+            return LoadBytes(bytes);
+        }
+
+        // --- client が nullptr の場合は cpp-httplib を使って取得する（同期） ---
+        // raw.githubusercontent の場合は host/path を分解して直接取得
+        if (IsRawGithubUrl(url))
+        {
+            // Parse raw URL components
+            std::string owner, repo, branch, inner;
+            if (!ParseRawGithubUrl(url, owner, repo, branch, inner)) {
+                std::cerr << "LoadUrl: ParseRawGithubUrl failed for " << url << '\n';
+                return false;
+            }
+
+            std::string host = "raw.githubusercontent.com";
+            std::string path = "/" + owner + "/" + repo + "/" + branch + "/" + inner;
+
+            httplib::Client cli(("https://" + host).c_str());
+            cli.set_follow_location(true);
+            cli.set_connection_timeout(5);
+            cli.set_read_timeout(10);
+            httplib::Headers h;
+            h.insert({ "Accept", "application/octet-stream" });
+            if (!token.empty()) h.insert({ "Authorization", std::string("token ") + token });
+
+            auto res = cli.Get(path.c_str(), h);
+            if (!res) {
+                std::cerr << "LoadUrl: httplib request failed for " << url << '\n';
+                return false;
+            }
+            if (res->status != 200) {
+                std::cerr << "LoadUrl: httplib status=" << res->status << " url=" << url << '\n';
+                return false;
+            }
+            const std::string& body = res->body;
             bytes.assign(body.begin(), body.end());
         }
         else
         {
-            std::string owner, repo, branch, path;
-            std::string endpoint;
-
-            if (ParseBlobGithubUrl(url, owner, repo, branch, path))
-            {
+            // blob or owner/repo/path -> use Contents API via api.github.com
+            std::string owner, repo, branch, path, endpoint;
+            if (ParseBlobGithubUrl(url, owner, repo, branch, path)) {
                 endpoint = MakeContentsEndpoint(owner, repo, path, branch);
             }
-            else
-            {
+            else {
                 size_t p1 = url.find('/');
                 size_t p2 = url.find('/', p1 + 1);
-
+                if (p1 == std::string::npos || p2 == std::string::npos) {
+                    std::cerr << "LoadUrl: unsupported URL format: " << url << '\n';
+                    return false;
+                }
+                owner = url.substr(0, p1);
+                repo = url.substr(p1 + 1, p2 - p1 - 1);
+                path = url.substr(p2 + 1);
+                endpoint = MakeContentsEndpoint(owner, repo, path, "");
             }
+
+            // endpoint is full https://api.github.com/repos/...
+            const std::string apiHost = "api.github.com";
+            std::string apiBase = "https://api.github.com";
+            if (endpoint.rfind(apiBase, 0) != 0) {
+                // defensive: if endpoint isn't full, build path
+                std::string apiPath = endpoint;
+                // ensure leading '/'
+                if (apiPath.empty() || apiPath[0] != '/') apiPath = "/" + apiPath;
+                endpoint = apiBase + apiPath;
+            }
+            std::string apiPath = endpoint.substr(apiBase.size()); // leading '/repos/...'
+
+            httplib::Client cli(("https://" + apiHost).c_str());
+            cli.set_follow_location(true);
+            cli.set_connection_timeout(5);
+            cli.set_read_timeout(10);
+            httplib::Headers h;
+            h.insert({ "Accept", "application/vnd.github.v3+json" });
+            if (!token.empty()) h.insert({ "Authorization", std::string("token ") + token });
+
+            auto res = cli.Get(apiPath.c_str(), h);
+            if (!res) {
+                std::cerr << "LoadUrl: httplib request failed for " << endpoint << '\n';
+                return false;
+            }
+            if (res->status != 200) {
+                std::cerr << "LoadUrl: httplib status=" << res->status << " endpoint=" << endpoint << '\n';
+                return false;
+            }
+
+            // parse Contents API response
+            nlohmann::ordered_json cj = nlohmann::ordered_json::parse(res->body);
+            if (!cj.contains("content") || cj["content"].is_null()) {
+                std::cerr << "LoadUrl: Contents API returned no content for " << endpoint << '\n';
+                return false;
+            }
+            std::string b64 = NormalizeBase64(cj["content"].get<std::string>());
+            bytes = Base64Decode(b64);
         }
+
+        // 最終チェックと LoadBytes 呼び出し
+        constexpr size_t MAX_BYTES = 32 * 1024 * 1024;
+        if (bytes.empty()) {
+            std::cerr << "LoadUrl: fetched data is empty\n";
+            return false;
+        }
+        if (bytes.size() > MAX_BYTES) {
+            std::cerr << "LoadUrl: fetched data too large: " << bytes.size() << '\n';
+            return false;
+        }
+
+        return LoadBytes(bytes);
     }
-    catch (const nlohmann::json::exception& je) {
+    catch (const nlohmann::json::exception& je) 
+    {
         std::cerr << "LoadUrl json exception: " << je.what() << '\n';
         return false;
     }
-    catch (const std::exception& e) {
+    catch (const std::exception& e) 
+    {
         std::cerr << "LoadUrl exception: " << e.what() << '\n';
         return false;
     }
-
-    return true;
 }
 
 /**
