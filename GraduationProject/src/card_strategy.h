@@ -10,7 +10,7 @@
 /** @brief My 名前空間 */
 namespace My
 {
-	class CActiveSceneCharacter;
+	class CDuelCharacter;
 	class CCard;
 	/** @brief カードストラテジーの基底クラス */
 	class CCardStrategy_Base
@@ -23,7 +23,7 @@ namespace My
 		* @param [in]キャラクターポインタ
 		* @param [in]カードポインタ
 		*/
-		virtual void Strategy([[maybe_unused]] CActiveSceneCharacter* character, [[maybe_unused]] CCard* card) {};
+		virtual void Strategy([[maybe_unused]] CDuelCharacter* duel, [[maybe_unused]] CCard* card) {};
 	};
 
 	/** @brief カードストラテジーの攻撃クラス */
@@ -37,7 +37,7 @@ namespace My
 		* @param [in]キャラクターポインタ
 		* @param [in]カードポインタ
 		*/
-		void Strategy(CActiveSceneCharacter* character, CCard* card) override;
+		void Strategy(CDuelCharacter* duel, CCard* card) override;
 	};
 
 	/** @brief カードストラテジーの守備クラス */
@@ -51,7 +51,7 @@ namespace My
 		* @param [in]キャラクターポインタ
 		* @param [in]カードポインタ
 		*/
-		void Strategy(CActiveSceneCharacter* character, CCard* card) override;
+		void Strategy(CDuelCharacter* duel, CCard* card) override;
 	};
 
 	/** @brief カードストラテジー体力回復クラス */
@@ -65,7 +65,7 @@ namespace My
 		* @param [in]キャラクターポインタ
 		* @param [in]カードポインタ
 		*/
-		void Strategy(CActiveSceneCharacter* character, CCard* card) override;
+		void Strategy(CDuelCharacter* duel, CCard* card) override;
 	};
 
 	/** @brief カードストラテジーエナジーの変動クラス */
@@ -79,7 +79,7 @@ namespace My
 		* @param [in]キャラクターポインタ
 		* @param [in]カードポインタ
 		*/
-		void Strategy(CActiveSceneCharacter* character, CCard* card) override;
+		void Strategy(CDuelCharacter* duel, CCard* card) override;
 	};
 }
 #endif // !_CARD_STRATEGY_H_

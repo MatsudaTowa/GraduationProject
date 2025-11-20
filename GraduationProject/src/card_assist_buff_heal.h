@@ -54,6 +54,12 @@ namespace My
 		 */
 		void Draw()override;
 
+		/**
+		 * @brief ŒÅ—Lî•ñ“Ç‚İ‚İ
+		 * @param [in]param
+		 */
+		void LoadUniqueInfo(CCard_Client::Param param) override;
+
 		inline HealType GetHealType() { return m_HealType; }
 		inline int GetHeal() { return m_HealType; }
 

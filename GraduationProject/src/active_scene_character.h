@@ -157,6 +157,7 @@ namespace My
 		{
 			if (energy > MAX_ENERGY)
 			{
+				m_status.energy = MAX_ENERGY;
 				return;
 			}
 			m_status.energy = energy;

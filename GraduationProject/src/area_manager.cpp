@@ -136,52 +136,59 @@ void My::CAreaManager::SelectArea()
 	}
 }
 
-void My::CAreaManager::CardTrigger(My::CInputMouse::AREA area)
+//=============================================
+//カードのトリガー処理
+//=============================================
+bool My::CAreaManager::CardTrigger(My::CInputMouse::AREA area)
 {
 	//TODO:ここに選択されたカードの処理を！
-	//
-	//if (GET_INPUT_MOUSE->GetTrigger(0))
+	if (area == CInputMouse::AREA::CENTER)
 	{
-		if (area == CInputMouse::AREA::CENTER)
+		//TODO:カードを離したらに変更予定
+		if (GET_INPUT_MOUSE->GetTrigger(0))
 		{
-			//ニュートラルに戻す
-			//pCard[TriggerNum]->ChangeState(CCardState::CARD_NEUTRAL);
-
-			//TODO:カードを離したらに変更予定
-			if (GET_INPUT_MOUSE->GetTrigger(0))
-			{
-				CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
-			}
+			CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
 		}
-		else
-		{
-			//登録されているキャラクターを取得
-			CActiveScenePlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();
-			std::list<CEnemy*> enemy_list = CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList();
-			int life;
-			player_cast(player, area, life);
 
-			for (auto& itr : enemy_list)
-			{
-				if (itr == nullptr) { continue; }
-
-				if (itr->GetArea() != area) { continue; }
-
-				life = itr->GetLife();
-				if (life > INT_ZERO)
-				{//TODO:選択できない旨のUI表示
-					--life;
-				}
-				itr->SetLife(life);
-			}
-
-			if (!CRakNet::GetInstance()->GetOnline()) return;
-			//通信処理
-			CRakNet::GetInstance()->SendStatus();
-		}
+		return false;
 	}
+	else
+	{
+		////登録されているキャラクターを取得
+		//CActiveScenePlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();
+		//std::list<CEnemy*> enemy_list = CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList();
+		//int life;
+		//player_cast(player, area, life);
+
+		//for (auto& itr : enemy_list)
+		//{
+		//	if (itr == nullptr) { continue; }
+
+		//	if (itr->GetArea() != area) { continue; }
+
+		//	life = itr->GetLife();
+		//	if (life > INT_ZERO)
+		//	{//TODO:選択できない旨のUI表示
+		//		--life;
+		//	}
+		//	itr->SetLife(life);
+		//}
+
+		////オンライン時は//通信処理
+		//if (CRakNet::GetInstance()->GetOnline())
+		//{
+		//	CRakNet::GetInstance()->SendStatus();
+		//}
+
+		return true;
+	}
+
+	return false;
 }
 
+//=============================================
+//カードのトリガー処理
+//=============================================
 void My::CAreaManager::player_cast(CActiveScenePlayer* player, My::CInputMouse::AREA area, int& life)
 {
 	if (player == nullptr)

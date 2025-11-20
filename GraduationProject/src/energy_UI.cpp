@@ -121,30 +121,28 @@ void My::CEnergy_UI::SetEnergyNumber(int energy)
 //=============================================
 void My::CEnergy_UI::AddDigit(std::vector<int>& pos_texU, int& num_digit, int energy)
 {
-	if (pos_texU[num_digit - 1] == INT_ZERO)
-	{//桁を増やす
-		if (num_digit <= 0 || energy <= 0)
-		{
-			return;
-		}
-		CNumber_2D* pNumber;
+	
+	//弾く条件
+	if (energy < 10) return;						//エナジーが10未満なら抜ける
+	if (num_digit <= 0 || num_digit > 1) return;	//桁数が0以下、2桁以上なら抜ける
 
-		pNumber = CNumber_2D::Create(m_num_pos, NUMBER_SIZE, 1);
-		//座標をずらす
-		m_num_pos.x -= DIGIT_SHIFT;
-		m_pNumber.push_back(pNumber);
+	CNumber_2D* pNumber;
 
-		++num_digit;
+	pNumber = CNumber_2D::Create(m_num_pos, NUMBER_SIZE, 1);
+	//座標をずらす
+	m_num_pos.x -= DIGIT_SHIFT;
+	m_pNumber.push_back(pNumber);
 
-		pos_texU.clear();
-		int nDigit = 1;
-		for (int nCnt = 0; nCnt < num_digit; nCnt++)
-		{
-			pos_texU.push_back(energy / nDigit % 10);
+	++num_digit;
 
-			//桁を進める
-			nDigit *= 10;
-		}
+	pos_texU.clear();
+	int nDigit = 1;
+	for (int nCnt = 0; nCnt < num_digit; nCnt++)
+	{
+		pos_texU.push_back(energy / nDigit % 10);
+
+		//桁を進める
+		nDigit *= 10;
 	}
 }
 

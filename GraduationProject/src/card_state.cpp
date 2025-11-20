@@ -152,31 +152,31 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* duel)
 	// カウントを初期化
 	m_Staycount = 0;
 
-	// プレイヤーを取得
-	CPlayer* pPlayer = CActiveSceneManager::GetInstance()->GetPlayer();
+	//リストの取得
+	std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
 
-	// ステータスを取得
-	CActiveSceneCharacter::Status status = CActiveSceneManager::GetInstance()->GetPlayer()->GetStatus();
+	//キャラクターの周回
+	for (auto& iter : List)
+	{
+		if (cpy->GetUserArea() != iter->GetArea()) continue;
 
-	if (CManager::GetInstance()->GetMouse()->GetArea() == CInputMouse::AREA::CENTER ||
-		status.energy < cpy->GetParameter().cost)
-	{// 真ん中エリアだった場合
-		cpy->ChangeState(CCardState::CARD_NEUTRAL, duel);
-	}
-	else
-	{// そのほかのエリアの場合
+		// ステータスを取得
+		CActiveSceneCharacter::Status status = iter->GetStatus();
 
 		// コスト分エナジーを減らす
 		status.energy -= cpy->GetParameter().cost;
 
 		// エナジーを設定
-		pPlayer->SetStatus(status);
+		iter->SetStatus(status);
+
+		// ターゲットアローを生成(昔)
+		//cpy->SetTargetArrow(CTargetArrow::Create(cpy->GetUserArea(), cpy->GetTarget()));
 
 		// ターゲットアローをマネージャーに登録
-		pPlayer->GetTargetArrowManeger()->Regist(CTargetArrow::Create(CInputMouse::AREA::DOWN, cpy->GetTarget()));
-	}
+		iter->GetTargetArrowManeger()->Regist(CTargetArrow::Create(CInputMouse::AREA::DOWN, cpy->GetTarget()));
 
-	
+		break;
+	}
 }
 
 //=======================================================================================
@@ -186,6 +186,9 @@ void My::CCardStateStay::Update(CCard* cpy, CDuelCharacter* duel)
 {
 	if (cpy == nullptr)
 		return;
+
+	//ディフェンスカードはカウントダウンを始めない
+	if (cpy->GetBaseStatus().maintype == CCard::TYPE_DEFFENCE) return;
 
 	if (m_Staycount >= STAY_TIME)
 	{// カウントが設定された時間を超えたら
@@ -212,8 +215,24 @@ void My::CCardStateTrigger::Init(CCard* cpy, CDuelCharacter* duel)
 	if (cpy == nullptr)
 		return;
 
-	CActiveSceneManager::GetInstance()->GetAreaManager()->CardTrigger(cpy->GetTarget());
+	//リストの取得
+	std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
 
-	// トリガーされた際に消去する
-	CActiveSceneManager::GetInstance()->GetPlayer()->GetTargetArrowManeger()->Remove();
+	//キャラクターの周回
+	for (auto& iter : List)
+	{
+		if (cpy->GetUserArea() != iter->GetArea()) continue;
+
+		//トリガーしたか
+		if (CActiveSceneManager::GetInstance()->GetAreaManager()->CardTrigger(cpy->GetTarget()))
+		{
+			//トリガー処理
+			cpy->GetCardStrategy()->Strategy(duel, cpy);
+		}
+
+		// トリガーされた際に消去する(TODO : 使用者によって変更)
+		iter->GetTargetArrowManeger()->Remove();
+
+		break;
+	}
 }
