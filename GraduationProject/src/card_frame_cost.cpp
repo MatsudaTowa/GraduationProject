@@ -7,57 +7,50 @@
 #include "card_frame_cost.h"
 #include <format>
 
-My::FrameCost::FrameCost(int nPriority):CCardFrame(nPriority),
-m_pFontManager(nullptr)
+namespace
+{
+	D3DXVECTOR3 OFFSET = { -40.0f,-80.0f,0.0f };
+}
+//===========================================================================================================================================================
+// コンストラクタ
+//===========================================================================================================================================================
+My::CCardFrameCost::CCardFrameCost(int nPriority):CCardFrameUseFont(nPriority)
 {
 }
 
-HRESULT My::FrameCost::Init()
+//===========================================================================================================================================================
+// 初期化
+//===========================================================================================================================================================
+HRESULT My::CCardFrameCost::Init()
 {
-	CCardFrame::Init();
-	if (m_pFontManager == nullptr)
+	CCardFrameUseFont::Init();
+
+	CFontManager* pFontmanager = GetFontManager();
+	if (pFontmanager != nullptr)
 	{
-		m_pFontManager = new CFontManager;
-		m_pFontManager->Init();
-		std::wstring wtxt = std::format(L"{}", GetCard()->GetCost());
+		std::wstring wtxt = std::format(L"{}", GetCard()->GetBaseStatus().nCost);
 		D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), GetPos()); //スクリーン座標に変換
 		const wchar_t* txt = wtxt.c_str();
-		m_pFontManager->Regist(txt, screen_pos, { 800.0f,100.0f }, 80.0f, 10.0f, 0, 1, COLOR_BLACK);
+		screen_pos.x -= OFFSET.x;
+		screen_pos.y -= OFFSET.y;
+		pFontmanager->Regist(txt, screen_pos, { 800.0f,100.0f }, 25.0f, 10.0f, 0, 5, COLOR_BLACK);
+		SetOffSetPos(OFFSET);
 	}
 	return S_OK;
 }
 
-void My::FrameCost::Uninit()
+//===========================================================================================================================================================
+// 終了
+//===========================================================================================================================================================
+void My::CCardFrameCost::Uninit()
 {
-	if (m_pFontManager != nullptr)
-	{
-		m_pFontManager->Uninit();
-		delete m_pFontManager;
-		m_pFontManager = nullptr;
-	}
-	CCardFrame::Uninit();
+	CCardFrameUseFont::Uninit();
 }
 
-void My::FrameCost::Update()
+//===========================================================================================================================================================
+// 更新
+//===========================================================================================================================================================
+void My::CCardFrameCost::Update()
 {
-	CCardFrame::Update();
-
-	if (m_pFontManager != nullptr)
-	{
-	 	std::vector<CFont*> list = m_pFontManager->GetList();
-		for (auto& itr : list)
-		{
-			if (itr == nullptr) { continue; }
-
-			// 山札時はコストを表示しないように TODO:今後はここの条件式を見直す必要あり
-			if (GetCard()->GetCurrentZone() != CCard::DECK) 
-			{ 
-				itr->SetisDraw(true);  
-			}
-			else if (GetCard()->GetCurrentZone() == CCard::DECK)
-			{
-				itr->SetisDraw(false);
-			}
-		}
-	}
+	CCardFrameUseFont::Update();
 }

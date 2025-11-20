@@ -81,7 +81,7 @@ void My::CCardStatePickup::Init(CCard* cpy, CDuelCharacter* duel)
 
 	// カードを見やすくする
 	D3DXVECTOR3 pos = cpy->GetPos();
-	pos.y += 20.0f;
+	//pos.y += 20.0f;
 	pos.z += 10.0f;
 	cpy->SetPos(pos);
 }
@@ -116,7 +116,7 @@ void My::CCardStateCast::Init(CCard* cpy, CDuelCharacter* duel)
 
 	//CActiveSceneManager::GetInstance()->ChangeState(new CCardCast);
 
-	//// 今だけわかりやすく位置を変える
+	// 今だけわかりやすく位置を変える
 	//D3DXVECTOR3 pos = cpy->GetPos();
 	//pos.z += 20.0f;
 
@@ -131,6 +131,7 @@ void My::CCardStateCast::Update(CCard* cpy, CDuelCharacter* duel)
 	if (cpy == nullptr)
 		return;
 
+	//倍率
 	float mag = 30.0f;
 	cpy->SetSize({ mag * 1.2f,mag,mag });
 

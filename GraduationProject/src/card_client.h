@@ -89,28 +89,6 @@ public:
 		ONLY_ME,					// 自分だけ
 	};
 
-	//パラメータの構造体
-	struct Param
-	{
-		int nPackID;							// パック番号
-		int nCardID;							// カード番号
-		std::string Name;						// カード名
-		std::string Ruby;						// フリガナ
-		int nCost = 0;							// カードコスト
-		int nDamage = 0;						// ダメージ数
-		int nGuard = 0;							// ガード値
-		int nCounter = 0;						// 反撃値
-		int nHeal = 0;							// 回復値
-		CardType Maintype;						// カードの種類
-		RARITY Raritytype;						// レアリティの種類
-		AssistType Assisttype;					// アシストの種類
-		AttackType Attacktype;					// 攻撃の種類
-		DefenseType Defensetype;				// 守備の種類
-		BuffType Bufftype;						// バフの種類
-		HealType Healtype;						// 回復の種類
-		std::string ImagePath;					// 画像ファイルパス
-	};
-
 	//基本カードのパラメータ
 	struct BaseParam
 	{
@@ -148,6 +126,40 @@ public:
 		int nHeal = 0;					// 回復値
 		BuffType Bufftype;				// バフの種類
 		HealType Healtype;				// 回復の種類
+		AssistType Assisttype;			// アシストの種類
+		bool bIsOneTime;				// カード効果の発動時間(true = 単発,false = 単発じゃない)
+		int nTime;						// 単発じゃないときの発動時間
+	};
+
+	// カード特有のパラメータの構造体まとめ
+	struct CardParam
+	{
+		AttackParam attackParam;
+		DefenseParam defenseParam;
+		AssistParam assistParam;
+	};
+
+	//パラメータの構造体
+	struct Param
+	{
+		int nPackID;							// パック番号
+		int nCardID;							// カード番号
+		std::string Name;						// カード名
+		std::string Ruby;						// フリガナ
+		int nCost = 0;							// カードコスト
+		int nDamage = 0;						// ダメージ数
+		int nGuard = 0;							// ガード値
+		int nCounter = 0;						// 反撃値
+		int nHeal = 0;							// 回復値
+		CardType Maintype;						// カードの種類
+		RARITY Raritytype;						// レアリティの種類
+		AssistType Assisttype;					// アシストの種類
+		AttackType Attacktype;					// 攻撃の種類
+		DefenseType Defensetype;				// 守備の種類
+		BuffType Bufftype;						// バフの種類
+		HealType Healtype;						// 回復の種類
+		std::string ImagePath;					// 画像ファイルパス
+		CardParam Cardparam;					// カード特有のパラメータ種類
 	};
 
 	//列挙

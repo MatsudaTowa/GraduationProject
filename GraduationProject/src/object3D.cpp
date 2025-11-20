@@ -111,6 +111,29 @@ void My::CObject3D::BindTexture(LPDIRECT3DTEXTURE9 pTex)
 	m_pTexture = pTex;
 }
 
+void My::CObject3D::ConversionMtxWorld()
+{
+	//デバイスの取得
+	CRenderer* pRender = CManager::GetInstance()->GetRenderer();
+	LPDIRECT3DDEVICE9 pDevice = pRender->GetDevice();
+	D3DXMATRIX mtxRot, mtxTrans; //計算用マトリックス
+
+	//マトリックスの初期化
+	D3DXMatrixIdentity(&m_mtxWorld);
+
+	//向きを反映
+	D3DXMatrixRotationYawPitchRoll(&mtxRot, m_rot.y, m_rot.x, m_rot.z);
+
+	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
+
+	//位置を反映
+	D3DXMatrixTranslation(&mtxTrans, m_pos.x, m_pos.y, m_pos.z);
+	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
+
+	//ワールドマトリックスの設定
+	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
+}
+
 /**
  * @brief 頂点生成
  * @param [in]法線ベクトル
