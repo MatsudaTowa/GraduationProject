@@ -124,17 +124,17 @@ My::CTargetArrow* My::CTargetArrow::Create(int attacker, int target)
 	CTargetArrow* pTA = new CTargetArrow;
 
 	// –îˆó‚ÌŠp“x‚ðŽZo
-	pTA->m_attacker = SetTargetPos(pTA->m_attacker, attacker);	// UŒ‚ŽÒ‚ÌˆÊ’u
-	pTA->m_target = SetTargetPos(pTA->m_target, target);		// ”íUŒ‚ŽÒ‚ÌˆÊ’u
+	pTA->m_attacker = SetTargetPos(pTA->m_attacker, attacker,0);	// UŒ‚ŽÒ‚ÌˆÊ’u
+	pTA->m_target = SetTargetPos(pTA->m_target, target,1);		// ”íUŒ‚ŽÒ‚ÌˆÊ’u
 
-	if (pTA->m_target.x > SCREEN_WIDTH * 0.5f)
-	{
-		pTA->m_attacker.x += -130.0f;
-	}
-	else if(pTA->m_target.x < SCREEN_WIDTH * 0.5f)
-	{
-		pTA->m_attacker.x += 130.0f;
-	}
+	//if (pTA->m_target.x > SCREEN_WIDTH * 0.5f)
+	//{
+	//	pTA->m_attacker.x += -130.0f;
+	//}
+	//else if(pTA->m_target.x < SCREEN_WIDTH * 0.5f)
+	//{
+	//	pTA->m_attacker.x += 130.0f;
+	//}
 
 	pTA->Init(); 
 
@@ -144,7 +144,7 @@ My::CTargetArrow* My::CTargetArrow::Create(int attacker, int target)
 //===========================================================================================================
 // ƒ^[ƒQƒbƒg‚Ì
 //===========================================================================================================
-D3DXVECTOR2 My::CTargetArrow::SetTargetPos(D3DXVECTOR2& target, int targetnum)
+D3DXVECTOR2 My::CTargetArrow::SetTargetPos(D3DXVECTOR2& target, int targetnum, int type)
 {
 	switch (targetnum)
 	{
@@ -158,10 +158,18 @@ D3DXVECTOR2 My::CTargetArrow::SetTargetPos(D3DXVECTOR2& target, int targetnum)
 
 	case CInputMouse::LEFT:
 		target = arrow_right;
+
+		//if (type == 0)
+			target = arrow_left;
+
 		break;
 
 	case CInputMouse::RIGHT:
 		target = arrow_left;
+
+		//if (type == 0)
+			target = arrow_right;
+
 		break;
 	}
 
@@ -188,11 +196,11 @@ void My::CTargetArrow::SetOnTheLinePos()
 	float ratio = size.y / MAX_SIZE;
 
 	// üŒ`•âŠÔ
-	result.x = std::lerp(m_attacker.x, m_target.x, ratio * -a);
-	result.y = std::lerp(m_attacker.y, m_target.y, ratio *  a);
+	result.x = std::lerp(m_attacker.x, m_target.x, ratio * a);
+	result.y = std::lerp(m_attacker.y, m_target.y, ratio * a);
 
 	// üŒ`•âŠÔ
-	result2.x = std::lerp(m_attacker.x, m_target.x, -ratio * 0.7f);
+	result2.x = std::lerp(m_attacker.x, m_target.x, ratio * 0.7f);
 	result2.y = std::lerp(m_attacker.y, m_target.y, ratio * 0.7f);
 
 	// ˆÊ’u‚ÌÝ’è
@@ -200,6 +208,7 @@ void My::CTargetArrow::SetOnTheLinePos()
 	SetPos(pos);
 
 	m_triangle->SetPos({ result2.x,result2.y,0.0f });
+	m_triangle->SetPos(pos);
 }
 
 //===========================================================================================================
@@ -211,10 +220,25 @@ void My::CTargetArrow::SetAngleLength()
 	D3DXVECTOR3 rot = VEC3_RESET_ZERO;	// ‰Šú‰»
 	float angle = FLOAT_ZERO;	// ‰Šú‰»
 	angle = atan2f(GetSize().x,GetSize().y);	// Ý’è
-	rot.z = atan2f(m_target.y - m_attacker.y, m_target.x - m_attacker.x);	// Ý’è
-	
-	// Œü‚«‚ðÝ’è
-	rot.z += D3DX_PI*0.5f;
+	rot.z = atan2f(m_attacker.y - m_target.y, m_attacker.x - m_target.x);	// Ý’è
+
+	// ‚Ü‚Á‚·‚®c‰¡‚É‚·‚éˆ—
+	// ----------------------------------
+	// TODO : ‚·‚Ý‚Ü‚¹‚ñ‚·‚Ý‚Ü‚¹‚ñ
+	// ‚È‚É‚©‚à‚Á‚Æ‚¢‚¢•û–@‚ª‚ ‚é‚Í‚¸‚Å‚·B
+	if (rot.z >=  HALF_PI && rot.z <  HALF_PI + 0.01f ||
+		rot.z <= -HALF_PI && rot.z > -HALF_PI + 0.01f)
+	{
+		rot.z = 0.0f;
+	}
+	else if (rot.z >=  D3DX_PI && rot.z <  D3DX_PI + 0.01f ||
+			 rot.z <= -D3DX_PI && rot.z > -D3DX_PI + 0.01f ||
+			 rot.z >= 0.0f && rot.z < 0.01f ||
+			 rot.z <= 0.0f && rot.z > -0.01f)
+	{
+		rot.z = HALF_PI;
+	}
+
 	SetRot(rot);
 
 	// ƒTƒCƒY‚ð‘ã“ü
@@ -241,7 +265,11 @@ void My::CTargetArrow::SetAngleLength()
 		float tri_length = FLOAT_ZERO;	// ‰Šú‰»
 		tri_length = sqrtf(tri_dx * tri_dx + tri_dy * tri_dy);	// Ý’è
 
+		// Šp“x‚ÌÝ’è
+		D3DXVECTOR3 tri_rot = VEC3_RESET_ZERO;	// ‰Šú‰»
+		tri_rot.z = atan2f(m_attacker.y - m_target.y, m_attacker.x - m_target.x);	// Ý’è
+
+		m_triangle->SetRot(tri_rot);
 		m_triangle->SetVtx(tri_angle, tri_length);
-		m_triangle->SetRot(rot);
 	}
 }

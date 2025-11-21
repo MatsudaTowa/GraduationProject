@@ -62,7 +62,7 @@ namespace My
 		/**
 		* @brief 標的の位置を設定する
 		*/
-		static D3DXVECTOR2 SetTargetPos(D3DXVECTOR2 &target,int targetnum);
+		static D3DXVECTOR2 SetTargetPos(D3DXVECTOR2 &target,int targetnum,int type);
 
 		/**
 		* @brief 相手と自分の間の線上に位置を設定する
