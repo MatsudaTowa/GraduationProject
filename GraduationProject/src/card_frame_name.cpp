@@ -8,7 +8,7 @@
 
 namespace
 {
-	D3DXVECTOR3 OFFSET = { -30.0f,6.0f,0.0f };
+	D3DXVECTOR3 OFFSET = { -30.0f,7.0f,0.0f };
 }
 
 //===========================================================================================================================================================
@@ -40,7 +40,7 @@ HRESULT My::CCardFrameName::Init()
 		screen_pos.x += offset.x;
 		screen_pos.y += offset.y;
 
-		pFontmanager->Regist(wtxt.c_str(), screen_pos, { 800.0f,100.0f }, 10.0f, 15.0f, 0, 5, COLOR_BLACK);
+		pFontmanager->Regist(wtxt.c_str(), screen_pos, { 100.0f,20.0f}, 8.0f, 12.0f, 0, 5, COLOR_BLACK);
 		SetOffSetPos({ offset });
 	}
 	return S_OK;

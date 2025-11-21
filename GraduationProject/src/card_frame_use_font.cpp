@@ -36,7 +36,7 @@ HRESULT My::CCardFrameUseFont::Init()
 	CCardFrame::Init();
 	if (m_pFontManager == nullptr)
 	{
-		m_pFontManager = new CFontManager;
+		m_pFontManager = new CFontManager(CFontManager::LEFT);
 		m_pFontManager->Init();
 	}
 	return S_OK;
@@ -59,28 +59,28 @@ void My::CCardFrameUseFont::Update()
 
 	if (m_pFontManager != nullptr)
 	{
-		std::vector<CFont*> list = m_pFontManager->GetList();
 		D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), GetPos()); //スクリーン座標に変換
-		float text_shift = (float)m_pFontManager->GetTextShift();
 
 		screen_pos.x += m_offsetpos.x;
 		screen_pos.y += m_offsetpos.y;
-		int i = INT_ZERO;
+
+		m_pFontManager->UpdatePos(screen_pos);
+
+		std::vector<CFont*> list = m_pFontManager->GetList();
 		for (auto& itr : list)
 		{
 			if (itr == nullptr) { continue; }
-			screen_pos.x += text_shift;
-			itr->SetPos(screen_pos);
+			CCard::ZONE current_zone = GetCard()->GetCurrentZone();
+
 			// 山札時はコストを表示しないように TODO:今後はここの条件式を見直す必要あり
-			if (GetCard()->GetCurrentZone() != CCard::DECK)
-			{
-				itr->SetisDraw(true);
-			}
-			else if (GetCard()->GetCurrentZone() == CCard::DECK)
+			if (current_zone == CCard::DECK || current_zone == CCard::CEMETERY)
 			{
 				itr->SetisDraw(false);
 			}
-			++i;
+			else
+			{
+				itr->SetisDraw(true);
+			}
 		}
 	}
 }
