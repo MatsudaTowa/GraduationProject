@@ -247,6 +247,8 @@ namespace My
 		*/
 		BaseParam GetParam();
 
+		//bool FetchContentsApiWithLibcurl(const std::string& apiPath, const std::string& token, std::vector<uint8_t>& out_bytes);
+
 	private:
 		BaseParam m_Param;
 		CardRecord m_Record;
