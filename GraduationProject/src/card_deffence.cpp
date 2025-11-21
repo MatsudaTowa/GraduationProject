@@ -2,6 +2,7 @@
 #include "card_strategy.h"
 #include "active_scene_manager.h"
 #include "raknet.h"
+#include "zone_manager.h"
 
 My::CCardDeffence::CCardDeffence(int nPriority):CCard(nPriority),
 m_DefenceType(),
@@ -73,59 +74,57 @@ void My::CCardDeffence::LoadUniqueInfo(CCard_Client::Param param)
 }
 
 //===========================================================================================================
-//キャスト処理
+//キャストをしたかの確認
 //===========================================================================================================
-void My::CCardDeffence::Cast(CDuelCharacter* duel)
+bool My::CCardDeffence::IsCast(CDuelCharacter* duel)
 {
-	//待機ゾーンに追加
-	//マウスの取得
-	CInputMouse* pMouse = GET_INPUT_MOUSE;
-
-	//ターゲットの生成
-	My::CInputMouse::AREA Target;
-
-	//ステータスの取得
-	BaseStatus Status = GetBaseStatus();
-
-	//ステイゾーンに追加
-	Target = pMouse->GetArea();
-
-	// ステイ遷移
-	ChangeState(CCardState::CARD_STAY, duel);
-	CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
-
-	//プレイヤーの取得
+	//プレイヤーが対象かの確認
 	CActiveScenePlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();
-	if (player->GetArea() == Target)
+	if (player->GetArea() == GetTarget())
 	{
 		RegistTargetList(player);
+		return true;
 	}
 
+	//キャストしたか
+	bool isCast = false;
+
+	//敵が対象かの確認
 	std::list<CEnemy*> enemy_list = CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList();
 	for (auto& itr : enemy_list)
 	{
 		if (itr == nullptr) { continue; }
-		if (itr->GetArea() != Target) { continue; }
+		if (itr->GetArea() != GetTarget()) { continue; }
 
-		//デュエル状態か確認
-		if (typeid(CDuelCharacter) != typeid(*itr->GetState())) return;
+		//対象の状態を取得
+		if (typeid(CDuelCharacter) != typeid(*itr->GetState())) continue;		//中身の一致を確認
+		CDuelCharacter* State = dynamic_cast<CDuelCharacter*>(itr->GetState());	//キャスト
+		if (State == nullptr) continue;											//中身があるか確認
 
-		//状態を取得
-		CDuelCharacter* state = dynamic_cast<CDuelCharacter*>(itr->GetState());
+		//TODO::現在は先に出した攻撃カードを参照するが、将来的には相手のステイ中のカードから選択する
+		if (State->GetZoneManager()->GetCastPreviewZone()->GetList().empty()) continue;
 
-		if (state == nullptr) return;	//中身が無いなら抜ける
+		//キャストゾーンのカード周回
+		for (auto& iter : State->GetZoneManager()->GetCastPreviewZone()->GetList())
+		{
+			//攻撃のカードが存在するかを確認
+			if (iter->GetCardType() != CCard::CARDTYPE_::TYPE_ATTACK) continue;
 
-		RegistTargetList(itr);
-
-		//オンライン時なら送信
-		if (CRakNet::GetInstance()->GetOnline())
-		{//TODO : カードの対象が複数になったら処理の変更の必要があり
-			CRakNet::GetInstance()->SendCastCard(Status.nCardID, CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx(), itr->GetPlayerIdx());
+			RegistTargetList(itr);
+			isCast = true;
 		}
 	}
 
-	//ターゲットの設定
-	SetTarget(Target);
+	//キャストしたかを返す
+	return isCast;
+}
+
+//===========================================================================================================
+//キャスト処理
+//===========================================================================================================
+void My::CCardDeffence::Cast(CDuelCharacter* duel)
+{
+	
 }
 
 //===========================================================================================================

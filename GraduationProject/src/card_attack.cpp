@@ -7,6 +7,7 @@
 #include "card_attack.h"
 #include "active_scene_manager.h"
 #include "raknet.h"
+#include "zone_manager.h"
 
 My::CCardAttack::CCardAttack(int nPriority):CCard(nPriority),
 m_AttackType(),
@@ -75,49 +76,52 @@ void My::CCardAttack::LoadUniqueInfo(CCard_Client::Param param)
 }
 
 //===========================================================================================================
+//キャストをしたかの確認
+//===========================================================================================================
+bool My::CCardAttack::IsCast(CDuelCharacter* duel)
+{
+	//キャラクターリスト
+	for (auto& iter : CActiveSceneManager::GetInstance()->GetCharacterList())
+	{
+		//対象のエリアを持つプレイヤーを探す
+		if (GetTarget() != iter->GetArea()) continue;
+
+		return true;
+	}
+
+	return false;
+}
+
+//===========================================================================================================
 //キャスト処理
 //===========================================================================================================
 void My::CCardAttack::Cast(CDuelCharacter* duel)
 {
-	//マウスの取得
-	CInputMouse* pMouse = GET_INPUT_MOUSE;
-	
-	//ターゲットの生成
-	My::CInputMouse::AREA Target;
-
-	//ステータスの取得
-	BaseStatus Status = GetBaseStatus();
-
-	//ステイゾーンに追加
-	Target = pMouse->GetArea();
-
-	// ステイ遷移
-	ChangeState(CCardState::CARD_STAY, duel);
-	CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
-
-	CActiveScenePlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();
-	if (player->GetArea() == Target)
+	//キャラクターの取得
+	for (auto& iter : CActiveSceneManager::GetInstance()->GetCharacterList())
 	{
-		RegistTargetList(player);
-	}
+		//対象のエリアを持つプレイヤーを探す
+		if (GetTarget() != iter->GetArea()) continue;
+		
+		//デュエル状態にキャスト
+		//if (typeid(CDuelCharacter) != typeid(*iter->GetState())) break;					//状態の確認
+		CDuelCharacter* DuelState = dynamic_cast<CDuelCharacter*>(iter->GetState());	//キャスト
+		if (DuelState == nullptr) break;												//中身の確認
 
-	std::list<CEnemy*> enemy_list = CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList();
-	for (auto& itr : enemy_list)
-	{
-		if (itr == nullptr) { continue; }
-		if (itr->GetArea() != Target) { continue; }
+		//待機状態のカードを確認
+		if (!DuelState->GetZoneManager()->GetWaitZone()->GetList().empty())
+		{
+			CCard* pCard = DuelState->GetZoneManager()->GetWaitZone()->GetList().front();	//先頭のカードの確認
+			if (pCard == nullptr) break;
 
-		RegistTargetList(itr);
-
-		//オンライン時なら送信
-		if (CRakNet::GetInstance()->GetOnline())
-		{//TODO : カードの対象が複数になったら処理の変更の必要があり
-			CRakNet::GetInstance()->SendCastCard(Status.nCardID, CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx(), itr->GetPlayerIdx());
+			//守備カードに自身のエリアを追加し、ステイ状態にする
+			pCard->SetTarget(GetUserArea());
+			pCard->ChangeState(CCardState::CARD_STAY, duel);
 		}
-	}
 
-	//ターゲットの設定
-	SetTarget(Target);
+		break;
+	}
+	
 }
 
 //===========================================================================================================

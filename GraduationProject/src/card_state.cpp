@@ -147,7 +147,7 @@ void My::CCardStateSelect::Update(CCard* cpy, CDuelCharacter* /*duel*/)
 //=======================================================================================
 // 初期化
 //=======================================================================================
-void My::CCardStateCast::Init(CCard* cpy, CDuelCharacter* /*duel*/)
+void My::CCardStateCast::Init(CCard* cpy, CDuelCharacter* duel)
 {
 	if (cpy == nullptr)
 		return;
@@ -179,6 +179,9 @@ void My::CCardStateCast::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 
 		break;
 	}
+
+	//カードのキャスト処理
+	cpy->Cast(duel);
 }
 
 //=======================================================================================
@@ -193,9 +196,35 @@ void My::CCardStateCast::Update(CCard* cpy, CDuelCharacter* duel)
 	float mag = 30.0f;
 	cpy->SetSize({ mag * 1.2f,mag,mag });
 
-	cpy->ChangeState(CCardState::CARD_STATE::CARD_STAY, duel);
+	//状態を変更
+	ChangeToState(cpy, duel);
+
+	//cpy->ChangeState(CCardState::CARD_STATE::CARD_STAY, duel);
 
 	//cpy->ChangeState(CCardState::CARD_STATE::CARD_STAY);
+}
+
+//=======================================================================================
+// 状態を変更
+//=======================================================================================
+void My::CCardStateCast::ChangeToState(CCard* cpy, CDuelCharacter* duel)
+{
+	//守備カードじゃないならステイ状態
+	if (cpy->GetBaseStatus().maintype != CCard::CARDTYPE_::TYPE_DEFFENCE)
+	{
+		cpy->ChangeState(CCardState::CARD_STATE::CARD_STAY, duel);
+		return;
+	}
+
+	//ターゲットが自分なら守備待機状態へ
+	if (cpy->GetTarget() == cpy->GetUserArea())
+	{
+		cpy->ChangeState(CCardState::CARD_STATE::CARD_WAIT, duel);
+		return;
+	}
+
+	//ターゲットが敵ならステイ状態へ
+	cpy->ChangeState(CCardState::CARD_STATE::CARD_STAY, duel);
 }
 
 //===========================================================================================================
@@ -258,21 +287,21 @@ void My::CCardStateStay::Update(CCard* cpy, CDuelCharacter* duel)
 //=======================================================================================
 // 初期化
 //=======================================================================================
-void My::CCardStateWait::Init(CCard* cpy, CDuelCharacter* /*duel*/)
+void My::CCardStateWait::Init(CCard* /*cpy*/, CDuelCharacter* /*duel*/)
 {
-	//リストの取得
-	std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
+	////リストの取得
+	//std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
 
-	//キャラクターの周回
-	for (auto& iter : List)
-	{
-		if (cpy->GetUserArea() != iter->GetArea()) continue;
+	////キャラクターの周回
+	//for (auto& iter : List)
+	//{
+	//	if (cpy->GetUserArea() != iter->GetArea()) continue;
 
-		// ターゲットアローをマネージャーに登録
-		iter->GetTargetArrowManeger()->Regist(CTargetArrow::Create(cpy->GetUserArea(), cpy->GetTarget()));
+	//	// ターゲットアローをマネージャーに登録
+	//	iter->GetTargetArrowManeger()->Regist(CTargetArrow::Create(cpy->GetUserArea(), cpy->GetTarget()));
 
-		break;
-	}
+	//	break;
+	//}
 }
 
 //=======================================================================================
@@ -318,4 +347,19 @@ void My::CCardStateTrigger::Init(CCard* cpy, CDuelCharacter* duel)
 
 		break;
 	}
+
+	//設定
+	cpy->SetSize({ 0.0f * 1.2f, 0.0f, 0.0f });
+
+	//墓地状態にする
+	//cpy->ChangeState(CCardState::CARD_STATE::CARD_CEMETERY, duel);
+}
+
+//=======================================================================================
+// 更新
+//=======================================================================================
+void My::CCardStateTrigger::Update(CCard* cpy, CDuelCharacter* duel)
+{
+	if (cpy == nullptr)
+		return;
 }
