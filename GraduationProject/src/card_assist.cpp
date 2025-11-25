@@ -1,4 +1,5 @@
 #include "card_assist.h"
+#include "active_scene_manager.h"
 
 My::CCardAssist::CCardAssist(int nPriority):CCard(nPriority),
 m_AssistType()
@@ -50,6 +51,23 @@ void My::CCardAssist::LoadUniqueInfo(CCard_Client::Param param)
 {
 	//アシストステータスの読み込み
 	m_AssistType = (AssistType)param.Assisttype;	//アシストの種類
+}
+
+//===========================================================================================================
+//キャストをしたかの確認
+//===========================================================================================================
+bool My::CCardAssist::IsCast(CDuelCharacter* duel)
+{
+	//キャラクターリスト
+	for (auto& iter : CActiveSceneManager::GetInstance()->GetCharacterList())
+	{
+		//対象のエリアを持つプレイヤーを探す
+		if (GetTarget() != iter->GetArea()) continue;
+
+		return true;
+	}
+
+	return false;
 }
 
 //===========================================================================================================

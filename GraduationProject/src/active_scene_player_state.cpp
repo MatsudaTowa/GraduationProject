@@ -162,6 +162,9 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 		//TODO:ハンドの総数をここで取得し設定
 		//player->SetHandNum(pHand->GetTotal())
 	}
+
+	//親の更新
+	CDuelCharacter::Duel(character);
 }
 
 //=============================================

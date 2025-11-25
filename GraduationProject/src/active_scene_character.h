@@ -83,6 +83,12 @@ namespace My
 		void Regist(CCondition* condition);	//登録
 		void Remove(CCondition* condition);	//削除
 
+		/**
+		 * @brief ダメージを受ける
+		 * @param [in]受けるダメージ
+		 */
+		void ReceiveDamage(int damage);
+
 		//リストの取得
 		std::list<CCondition*> GetConditionList() { return m_ConditionList; }
 

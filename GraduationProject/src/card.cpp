@@ -219,7 +219,7 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state, CDuelCharacter* duel)
 		{
 		case CCardState::CARD_NEUTRAL:
 			m_pState = new CCardStateNeutral();
-			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(m_CurrentZone, duel), duel->GetZoneManager()->GetHandZone(), true);
+			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::HAND, duel), duel->GetZoneManager()->GetHandZone(), true);
 			break;
 
 		case CCardState::CARD_PICKUP:
@@ -232,21 +232,27 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state, CDuelCharacter* duel)
 
 		case CCardState::CARD_CAST:
 			m_pState = new CCardStateCast();
+			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::CAST, duel), duel->GetZoneManager()->GetCastPreviewZone(), true);
 			break;
 
 		case CCardState::CARD_STAY:
 			m_pState = new CCardStateStay();
-			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(m_CurrentZone, duel), duel->GetZoneManager()->GetCastPreviewZone(), true);
+			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::CAST, duel), duel->GetZoneManager()->GetCastPreviewZone(), true);
 			break;
 
 		case CCardState::CARD_WAIT:
 			m_pState = new CCardStateWait();
-			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(m_CurrentZone, duel), duel->GetZoneManager()->GetWaitZone(), true);
+			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::WAIT, duel), duel->GetZoneManager()->GetWaitZone(), true);
 			break;
 
 		case CCardState::CARD_TRIGGER:
 			m_pState = new CCardStateTrigger();
-			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(m_CurrentZone, duel), duel->GetZoneManager()->GetCemetery(), true);
+			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::CEMETERY, duel), duel->GetZoneManager()->GetCemetery(), true);
+			break;
+
+		case CCardState::CARD_CEMETERY:
+			m_pState = new CCardStateCemetery();
+			//duel->GetZoneManager()->MoveZone(this, CastToEnumZone(m_CurrentZone, duel), duel->GetZoneManager()->GetCemetery(), true);
 			break;
 
 		default:
@@ -362,30 +368,63 @@ bool My::CCard::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharacter* pla
 		//使用者のエリアの取得
 		m_UserArea = player->GetArea();
 
-		// ステイ遷移
-		ChangeState(CCardState::CARD_CAST, duel);
-		CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
-
-		CActiveScenePlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();
-		if (player->GetArea() == m_target)
+		if (IsCast(duel))
 		{
-			RegistTargetList(player);
-		}
-
-		std::list<CEnemy*> enemy_list = CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList();
-		for (auto& itr : enemy_list)
-		{
-			if (itr == nullptr) { continue; }
-			if (itr->GetArea() != m_target) { continue; }
-
-			RegistTargetList(itr);
+			// キャスト遷移
+			ChangeState(CCardState::CARD_CAST, duel);
+			CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
 
 			//オンライン時なら送信
 			if (CRakNet::GetInstance()->GetOnline())
 			{//TODO : カードの対象が複数になったら処理の変更の必要があり
-				CRakNet::GetInstance()->SendCastCard(m_BaseStatus.nCardID, CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx(), itr->GetPlayerIdx());
+				std::list<CActiveSceneCharacter*> list = CActiveSceneManager::GetInstance()->GetCharacterList();
+
+				//対象を見つけて送信
+				for (auto& itr : list)
+				{
+					if (itr == nullptr) { continue; }
+					if (itr->GetArea() != m_target) { continue; }
+
+					CRakNet::GetInstance()->SendCastCard(m_BaseStatus.nCardID, CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx(), itr->GetPlayerIdx());
+
+					break;
+				}
 			}
+
+			return false;
 		}
+		else
+		{
+			//通常状態にする
+			ChangeState(CCardState::CARD_NEUTRAL, duel);
+			CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
+			return true;
+		}
+
+		//// ステイ遷移
+		//ChangeState(CCardState::CARD_CAST, duel);
+		//CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
+
+		//CActiveScenePlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();
+		//if (player->GetArea() == m_target)
+		//{
+		//	RegistTargetList(player);
+		//}
+
+		//std::list<CEnemy*> enemy_list = CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList();
+		//for (auto& itr : enemy_list)
+		//{
+		//	if (itr == nullptr) { continue; }
+		//	if (itr->GetArea() != m_target) { continue; }
+
+		//	RegistTargetList(itr);
+
+		//	//オンライン時なら送信
+		//	if (CRakNet::GetInstance()->GetOnline())
+		//	{//TODO : カードの対象が複数になったら処理の変更の必要があり
+		//		CRakNet::GetInstance()->SendCastCard(m_BaseStatus.nCardID, CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx(), itr->GetPlayerIdx());
+		//	}
+		//}
 
 		//キャスト処理
 		//Cast(duel);
@@ -402,6 +441,7 @@ bool My::CCard::CardSelectToMouse(CDuelCharacter* duel)
 {
 	if (GetStateNum() == CCardState::CARD_CAST
 		|| GetStateNum() == CCardState::CARD_STAY
+		|| GetStateNum() == CCardState::CARD_WAIT
 		|| GetStateNum() == CCardState::CARD_TRIGGER)
 		return false;
 
@@ -507,7 +547,7 @@ My::CZone* My::CCard::CastToEnumZone(ZONE zone, CDuelCharacter* duel)
 	}
 
 	//ゾーン列挙
-	switch (zone)
+	switch (m_OldZone)
 	{
 	case ZONE::DECK:	//デッキ
 		pZone = duel->GetZoneManager()->GetDeck();
@@ -539,6 +579,9 @@ My::CZone* My::CCard::CastToEnumZone(ZONE zone, CDuelCharacter* duel)
 		m_CurrentZone = ZONE::CEMETERY;	//列挙の登録
 		break;
 	}
+
+	//現在のゾーンの更新
+	m_CurrentZone = zone;
 
 	return pZone;
 }

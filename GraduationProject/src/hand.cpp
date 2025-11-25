@@ -251,10 +251,13 @@ void My::CHand::DeleteCard(CDuelCharacter* character)
 	for (auto& iter : m_pHandList)
 	{
 		//トリガーカードを消去
-		if (iter->GetStateNum() == CCardState::CARD_STATE::CARD_TRIGGER)
+		if (iter->GetStateNum() == CCardState::CARD_STATE::CARD_TRIGGER ||
+			iter->GetStateNum() == CCardState::CARD_STATE::CARD_WAIT ||
+			iter->GetStateNum() == CCardState::CARD_STATE::CARD_STAY ||
+			iter->GetStateNum() == CCardState::CARD_STATE::CARD_CAST)
 		{
 			//削除処理とフラグを立てる
-			iter->Uninit();
+			//iter->Uninit();
 			m_pHandList.remove(iter);
 			isDecrease = true;
 			break;
@@ -271,7 +274,7 @@ void My::CHand::DeleteCard(CDuelCharacter* character)
 	{
 		if (iter->GetStateNum() == CCardState::CARD_STATE::CARD_STAY)
 		{//ステイ中のカードがあったら手札の整理をしない
-			return;
+			//return;
 		}
 	}
 

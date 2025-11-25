@@ -70,3 +70,11 @@ void My::CCardAssist_Buff_Heal::LoadUniqueInfo(CCard_Client::Param param)
 	m_HealType = (HealType)param.Healtype;	//バフの種類
 	m_nHeal = param.nHeal;					//回復値
 }
+
+//===========================================================================================================
+//キャストをしたかの確認
+//===========================================================================================================
+bool My::CCardAssist_Buff_Heal::IsCast(CDuelCharacter* duel)
+{
+	return My::CCardAssist::IsCast(duel);
+}

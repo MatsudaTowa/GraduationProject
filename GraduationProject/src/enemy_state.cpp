@@ -66,6 +66,9 @@ void My::CEnemyDuelState::Duel(CActiveSceneCharacter* character)
 	CreateDuelUI(enemy);
 	//モーション設定
 	enemy->SetMotion(CPlayer::MOTION_NEUTRAL);
+
+	//親の更新
+	CDuelCharacter::Duel(character);
 }
 
 //=============================================

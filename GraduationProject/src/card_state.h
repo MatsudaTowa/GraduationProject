@@ -40,6 +40,7 @@ namespace My
 			CARD_STAY,
 			CARD_WAIT,
 			CARD_TRIGGER,
+			CARD_CEMETERY,
 			CARD_MAX
 		}CARD_STATE;
 
@@ -113,6 +114,11 @@ namespace My
 
 		/** @brief 更新 */
 		void Update(CCard* cpy, CDuelCharacter* duel) override;
+
+	private:
+
+		//キャスト後の状態変更
+		void ChangeToState(CCard* cpy, CDuelCharacter* duel);
 	};
 
 	/**
@@ -128,6 +134,10 @@ namespace My
 		void Update(CCard* cpy, CDuelCharacter* duel)override;
 
 	private:
+
+		/** @brief 対象によってカードの位置を設定 */
+		void SetCardPos(CCard* cpy);
+
 		/** @brief 待機カウント */
 		unsigned int m_Staycount;
 
@@ -158,6 +168,24 @@ namespace My
 	public:
 		/** @brief 初期化 */
 		void Init(CCard* cpy, CDuelCharacter* duel) override;
+
+		/** @brief 更新 */
+		void Update(CCard* cpy, CDuelCharacter* duel)override;
+	};
+
+	/**
+	* @brief 守備待機状態
+	*/
+	class CCardStateCemetery :public CCardState
+	{
+	public:
+		/** @brief 初期化 */
+		void Init(CCard* cpy, CDuelCharacter* duel) override {}
+
+		/** @brief 更新 */
+		void Update(CCard* cpy, CDuelCharacter* duel)override {}
+
+	private:
 	};
 }
 

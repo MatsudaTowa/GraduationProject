@@ -55,6 +55,11 @@ namespace My
 		void Draw()override;
 
 		/**
+		 * @brief キャストしたかの確認
+		 */
+		bool IsCast(CDuelCharacter* duel) override;
+
+		/**
 		 * @brief 固有情報読み込み
 		 * @param [in]param
 		 */

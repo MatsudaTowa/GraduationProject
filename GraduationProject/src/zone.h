@@ -15,6 +15,9 @@
 /** @brief My 名前空間 */
 namespace My
 {
+	//前方宣言
+	class CDuelCharacter;
+
 	/**
 	* @brief ゾーンのクラス
 	*/
@@ -45,7 +48,7 @@ namespace My
 		/**
 		* @brief 更新処理
 		*/
-		void Update();
+		void Update(CDuelCharacter* state);
 
 		/**
 		* @brief リストの取得処理

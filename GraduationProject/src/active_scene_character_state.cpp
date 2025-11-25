@@ -48,6 +48,37 @@ void My::CLobbyCharacter::Lobby(CActiveSceneCharacter* character)
 //===============================================================================
 void My::CDuelCharacter::Duel(CActiveSceneCharacter* /*character*/)
 {
+	//更新するカードを保管するリスト
+	std::list<CCard*> CardList;
+	CardList.clear();
+
+	//カードをリストに追加
+	auto AddList = [&](CZone* zone)
+	{
+		for (auto& iter : zone->GetList())
+		{
+			CardList.push_back(iter);
+		}
+	};
+
+	//更新が必要なカードのゾーンを追加
+	AddList(m_pZoneManager->GetCastPreviewZone());	//キャスト
+	AddList(m_pZoneManager->GetWaitZone());			//守備待機
+
+	//更新
+	for (auto& iter : CardList)
+	{
+		iter->Update(this);
+	}
+
+	//クリア
+	CardList.clear();
+
+	//描画を行いたいゾーンのみ更新
+	//m_pZoneManager->GetCastPreviewZone()->Update(this);		//キャスト
+	//m_pZoneManager->GetHandZone()->Update(this);			//手札
+	//m_pZoneManager->GetWaitZone()->Update(this);			//守備待機ゾーン
+	//m_pZoneManager->GetCemetery()->Update(this);			//墓地ゾーン
 }
 
 //===============================================================================

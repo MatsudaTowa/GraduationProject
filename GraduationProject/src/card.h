@@ -111,9 +111,14 @@ namespace My
 		void Draw()override;
 
 		/**
+		 * @brief キャストしたかの確認
+		 */
+		virtual bool IsCast(CDuelCharacter* duel) = 0;
+
+		/**
 		 * @brief キャスト処理
 		 */
-		virtual void Cast(CDuelCharacter* duel) = 0;
+		virtual void Cast(CDuelCharacter* duel) {};
 
 		/**
 		 * @brief トリガー処理

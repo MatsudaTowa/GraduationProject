@@ -241,7 +241,7 @@ void CRakNet::SendStartSign()
 //=====================================
 void CRakNet::SendStatus()
 {
-    m_Client->SendStatus(m_pPeer);
+    //m_Client->SendStatus(m_pPeer);
 }
 
 //=====================================

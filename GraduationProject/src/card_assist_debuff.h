@@ -61,6 +61,11 @@ namespace My
 		void LoadUniqueInfo(CCard_Client::Param param) override;
 
 		/**
+		 * @brief キャストしたかの確認
+		 */
+		bool IsCast(CDuelCharacter* duel) override;
+
+		/**
 		 * @brief キャスト処理
 		 */
 		void Cast(CDuelCharacter* duel) override;

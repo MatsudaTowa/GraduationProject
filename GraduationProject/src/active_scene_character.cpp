@@ -223,3 +223,15 @@ void My::CActiveSceneCharacter::CreateDeck()
 		m_Deck.push_back(nID);			//リストに保存
 	}
 }
+
+//=============================================
+// デッキの生成
+//=============================================
+void My::CActiveSceneCharacter::ReceiveDamage(int damage)
+{
+	//ダメージを受ける
+	if (m_status.life > INT_ZERO)
+	{
+		m_status.life -= damage;
+	}
+}

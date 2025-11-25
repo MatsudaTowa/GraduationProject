@@ -217,7 +217,7 @@ void CRakNet_Data::LoadCard()
                     }
                     else if (key == "counter")
                     {
-                        Card.GetParam().nGuard = val.get<int>();
+                        Card.GetParam().nCounter = val.get<int>();
                     }
                     else if (key == "assisttype")
                     {
