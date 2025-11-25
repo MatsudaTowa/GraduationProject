@@ -68,7 +68,7 @@ void My::CCardDeffence::LoadCardData()
 void My::CCardDeffence::LoadUniqueInfo(CCard_Client::Param param)
 {
 	//攻撃ステータスの読み込み
-	m_DefenceType = (DefenseType)param.Attacktype;	//防御の種類
+	m_DefenceType = (DefenseType)param.Defensetype;	//防御の種類
 	m_nCounterValue = param.nCounter;				//カウンター値
 	m_nDefenceValue = param.nGuard;					//防御値
 }
@@ -132,5 +132,20 @@ void My::CCardDeffence::Cast(CDuelCharacter* duel)
 //===========================================================================================================
 void My::CCardDeffence::Trigger()
 {
-	//攻撃時に起動
+	//ステイ後に起動
+	std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
+
+	//リスト周回
+	for (auto& itr : List)
+	{
+		if (itr == nullptr) { continue; }
+
+		if (itr->GetArea() != GetTarget()) { continue; }
+
+		//ダメージがあるなら与える
+		if (m_nCounterValue > 0)
+		{
+			itr->ReceiveDamage(m_nCounterValue);
+		}
+	}
 }

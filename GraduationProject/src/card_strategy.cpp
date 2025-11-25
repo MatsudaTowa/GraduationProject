@@ -27,30 +27,33 @@ My::CAttack::~CAttack()
 //===============================================================================
 void My::CAttack::Strategy(CDuelCharacter* /*duel*/, CCard* card)
 {
-	//登録されているキャラクターを取得
-	std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
-	int life;
-	
-	//リスト周回
-	for (auto& itr : List)
-	{
-		if (itr == nullptr) { continue; }
+	//カードのトリガー処理
+	card->Trigger();
 
-		if (itr->GetArea() != card->GetTarget()) { continue; }
+	////登録されているキャラクターを取得
+	//std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
+	//int life;
+	//
+	////リスト周回
+	//for (auto& itr : List)
+	//{
+	//	if (itr == nullptr) { continue; }
 
-		life = itr->GetLife();
-		if (life > INT_ZERO)
-		{//TODO:選択できない旨のUI表示
-			--life;
-		}
-		itr->SetLife(life);
-	}
+	//	if (itr->GetArea() != card->GetTarget()) { continue; }
+
+	//	life = itr->GetLife();
+	//	if (life > INT_ZERO)
+	//	{//TODO:選択できない旨のUI表示
+	//		--life;
+	//	}
+	//	itr->SetLife(life);
+	//}
 
 	//オンライン時は通信処理TODO : カードのやり取りが出来たら必要なし
-	if (CRakNet::GetInstance()->GetOnline())
+	/*if (CRakNet::GetInstance()->GetOnline())
 	{
 		CRakNet::GetInstance()->SendStatus();
-	}
+	}*/
 }
 
 //===============================================================================
@@ -70,8 +73,10 @@ My::CDiffence::~CDiffence()
 //===============================================================================
 // 守備処理
 //===============================================================================
-void My::CDiffence::Strategy(CDuelCharacter* /*duel*/, CCard* /*card*/)
+void My::CDiffence::Strategy(CDuelCharacter* /*duel*/, CCard* card)
 {
+	//カードのトリガー処理
+	card->Trigger();
 }
 
 //===============================================================================

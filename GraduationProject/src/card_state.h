@@ -134,6 +134,10 @@ namespace My
 		void Update(CCard* cpy, CDuelCharacter* duel)override;
 
 	private:
+
+		/** @brief 対象によってカードの位置を設定 */
+		void SetCardPos(CCard* cpy);
+
 		/** @brief 待機カウント */
 		unsigned int m_Staycount;
 

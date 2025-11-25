@@ -434,7 +434,7 @@ void My::CDuel::CardCast()
 		{
 			//通すかの確認
 			if (iter.nUsePlayer != Character->GetPlayerIdx()) continue;				//使用者の番号と一致するか
-			if (typeid(CDuelCharacter*) == typeid(*Character->GetState())) continue;//状態の確認
+			//if (typeid(CDuelCharacter*) == typeid(*Character->GetState())) continue;//状態の確認
 
 			//対戦状態にキャスト
 			DuelState = dynamic_cast<CDuelCharacter*>(Character->GetState());
@@ -475,7 +475,7 @@ void My::CDuel::CardCast()
 		}
 
 		//カードの状態をステイに変更(TODO:守備カードはステイじゃない)
-		pCard->ChangeState(CCardState::CARD_STAY, DuelState);
+		pCard->ChangeState(CCardState::CARD_CAST, DuelState);
 	}
 
 	//カード情報のクリア

@@ -152,6 +152,10 @@ void My::CCardStateCast::Init(CCard* cpy, CDuelCharacter* duel)
 	if (cpy == nullptr)
 		return;
 
+	//倍率
+	float mag = 1.0f;
+	cpy->SetSize({ mag * 1.2f,mag,mag });
+
 	//CActiveSceneManager::GetInstance()->ChangeState(new CCardCast);
 
 	// 今だけわかりやすく位置を変える
@@ -193,7 +197,7 @@ void My::CCardStateCast::Update(CCard* cpy, CDuelCharacter* duel)
 		return;
 
 	//倍率
-	float mag = 30.0f;
+	float mag = 10.0f;
 	cpy->SetSize({ mag * 1.2f,mag,mag });
 
 	//状態を変更
@@ -241,6 +245,9 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 	// カウントを初期化
 	m_Staycount = 0;
 
+	//位置の指定
+	SetCardPos(cpy);
+
 	//リストの取得
 	std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
 
@@ -257,12 +264,44 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 }
 
 //=======================================================================================
+// カードの位置を設定
+//=======================================================================================
+void My::CCardStateStay::SetCardPos(CCard* cpy)
+{
+	cpy->SetPos({ 0.0f, 0.0f, 0.0f });
+	
+	//エリアによって位置を変える
+	switch (cpy->GetUserArea())
+	{
+	case My::CInputMouse::DOWN:	//下
+		cpy->SetPos({ 0.0f, -100.0f, -150.0f });
+		break;
+
+	case My::CInputMouse::RIGHT://右
+		cpy->SetPos({ 200.0f, -100.0f, 50.0f });
+		break;
+
+	case My::CInputMouse::LEFT:	//左
+		cpy->SetPos({ 200.0f, -100.0f, 50.0f });
+		break;
+
+	case My::CInputMouse::UP:	//上
+		cpy->SetPos({ 0.0f, -100.0f, 250.0f });
+		break;
+	}
+}
+
+//=======================================================================================
 // 更新
 //=======================================================================================
 void My::CCardStateStay::Update(CCard* cpy, CDuelCharacter* duel)
 {
 	if (cpy == nullptr)
 		return;
+
+	//倍率
+	float mag = 5.0f;
+	cpy->SetSize({ mag * 1.2f,mag,mag });
 
 	//ディフェンスカードはカウントダウンを始めない
 	if (cpy->GetBaseStatus().maintype == CCard::TYPE_DEFFENCE) return;
