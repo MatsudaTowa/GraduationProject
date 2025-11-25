@@ -222,6 +222,7 @@
     <ClCompile Include="src\card_frame_use_font.cpp">
       <Filter>card\card_frame</Filter>
     </ClCompile>
+    <ClCompile Include="src\font_texture_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -456,6 +457,7 @@
     <ClInclude Include="src\card_frame_use_font.h">
       <Filter>card\card_frame</Filter>
     </ClInclude>
+    <ClInclude Include="src\font_texture_manager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">

@@ -216,6 +216,7 @@
     <ClCompile Include="src\font.cpp" />
     <ClCompile Include="src\font_manager.cpp" />
     <ClCompile Include="src\active_scene.cpp" />
+    <ClCompile Include="src\font_texture_manager.cpp" />
     <ClCompile Include="src\game_camera.cpp" />
     <ClCompile Include="src\game_field.cpp" />
     <ClCompile Include="src\active_scene_manager.cpp" />
@@ -335,6 +336,7 @@
     <ClInclude Include="src\font.h" />
     <ClInclude Include="src\font_manager.h" />
     <ClInclude Include="src\active_scene.h" />
+    <ClInclude Include="src\font_texture_manager.h" />
     <ClInclude Include="src\game_camera.h" />
     <ClInclude Include="src\game_field.h" />
     <ClInclude Include="src\active_scene_manager.h" />

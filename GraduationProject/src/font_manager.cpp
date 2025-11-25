@@ -106,7 +106,6 @@ void My::CFontManager::RegistAdjustFontSize(const wchar_t* text, D3DXVECTOR3 fir
 	m_base_text_shift = base_txt_shift;
 	m_font_area = font_area;
 	m_text = text;
-	D3DXVECTOR3 save_first_pos = first_pos;
 
 	unsigned int text_size = wcslen(m_text);
 
@@ -117,38 +116,39 @@ void My::CFontManager::RegistAdjustFontSize(const wchar_t* text, D3DXVECTOR3 fir
 	D3DXVECTOR3 text_pos = first_pos;
 
 	// 文字数を合わせた分のサイズ
-	float total_wide = m_base_text_shift * m_Font.size();
+	float total_wide = text_shift.x * m_Font.size();
 	switch (m_align)
 	{
 	case RIGHT:
-		text_pos.x = (first_pos.x + m_base_text_shift) + (m_font_area.x - total_wide);
+		text_pos.x = (first_pos.x) + (m_font_area.x - total_wide);
 		break;
 	case CENTER:
-		text_pos.x = (first_pos.x + m_base_text_shift) + (m_font_area.x - total_wide) * HALF;
+		text_pos.x = (first_pos.x) + (m_font_area.x - total_wide) * HALF;
 		break;
 	case LEFT:
-		text_pos.x = (first_pos.x + m_base_text_shift);
+		text_pos.x = (first_pos.x);
 		break;
 	default:
 		assert(false);
 		break;
 	}
+	D3DXVECTOR3 save_first_pos = text_pos;
 	for (unsigned int i = INT_ZERO; i < text_size; ++i)
 	{
 		CFont* font = nullptr;
 
-		if (text_pos.x > first_pos.x + m_font_area.x)
+		if (text_pos.x > save_first_pos.x)
 		{
-			text_pos.x = (first_pos.x + m_base_text_shift);
+			text_pos.x = (save_first_pos.x + m_base_text_shift);
 			text_pos.y += m_base_text_shift;
 		}
 
-		font = CFont::Create(text_pos, m_base_size, thickness, idx, m_text[i]);
+		font = CFont::Create(text_pos, base_size, thickness, idx, m_text[i]);
 		font->SetColor(col);
 
 		m_Font.push_back(font);
 
-		text_pos.x += m_base_text_shift;
+		text_pos.x += text_shift.x;
 	}
 }
 
@@ -181,31 +181,33 @@ void My::CFontManager::UpdatePos(D3DXVECTOR3 first_pos)
 
 	// 文字数を合わせた分のサイズ
 	float total_wide = m_base_text_shift * m_Font.size();
+
 	switch (m_align)
 	{
 	case RIGHT:
 		//右詰め
-		text_pos.x = (first_pos.x + m_base_text_shift) + (m_font_area.x - total_wide);
+		text_pos.x = (first_pos.x) + fabsf(m_font_area.x - total_wide);
 		break;
 	case CENTER:
 		//中央ぞろえ
-		text_pos.x = (first_pos.x + m_base_text_shift) + (m_font_area.x - total_wide) * HALF;
+		text_pos.x = (first_pos.x) + fabsf(m_font_area.x - total_wide) * HALF;
 		break;
 	case LEFT:
 		//左詰め
-		text_pos.x = first_pos.x+ m_base_text_shift;
+		text_pos.x = first_pos.x;
 		break;
 	default:
 		assert(false);
 		break;
 	}
+	D3DXVECTOR3 save_first_pos = text_pos;
 
 	for (auto& itr : m_Font)
 	{
 		if (itr == nullptr) { continue; }
-		if (text_pos.x > first_pos.x + m_font_area.x)
+		if (text_pos.x > save_first_pos.x + m_font_area.x)
 		{
-			text_pos.x = (first_pos.x + m_base_text_shift);
+			text_pos.x = (save_first_pos.x);
 			text_pos.y += m_base_text_shift;
 		}
 		itr->SetPos(text_pos);

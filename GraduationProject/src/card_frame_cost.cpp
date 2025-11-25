@@ -28,11 +28,12 @@ HRESULT My::CCardFrameCost::Init()
 	if (pFontmanager != nullptr)
 	{
 		std::wstring wtxt = std::format(L"{}", GetCard()->GetBaseStatus().nCost);
-		D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), GetPos()); //スクリーン座標に変換
+		D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), GetPos() - GetSize()); //スクリーン座標に変換
+		D3DXVECTOR3 size = GetSize(); //スクリーン座標に変換
 		const wchar_t* txt = wtxt.c_str();
 		screen_pos.x -= OFFSET.x;
 		screen_pos.y -= OFFSET.y;
-		pFontmanager->Regist(txt, screen_pos, { 800.0f,100.0f }, 25.0f, 10.0f, 0, 5, COLOR_BLACK);
+		pFontmanager->RegistAdjustFontSize(txt, screen_pos, { 10.0f,size.y }, 25.0f, 10.0f, 0, 5, COLOR_BLACK);
 		SetOffSetPos(OFFSET);
 	}
 	return S_OK;

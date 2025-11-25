@@ -15,6 +15,7 @@
 #include <string>
 #include <vector>
 #include <list>
+#include <map>
 #include <random>
 #include<iostream>
 #include <algorithm>

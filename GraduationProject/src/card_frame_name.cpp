@@ -28,19 +28,19 @@ HRESULT My::CCardFrameName::Init()
 	CFontManager* pFontmanager = GetFontManager();
 	if (pFontmanager != nullptr)
 	{
-		D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), GetPos()); //スクリーン座標に変換
+		D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), GetPos() - GetSize()); //スクリーン座標に変換
+		D3DXVECTOR3 size = GetSize(); //スクリーン座標に変換
 
 		std::string card_name = GetCard()->GetBaseStatus().name;
-		int len = MultiByteToWideChar(CP_UTF8, 0, card_name.c_str(), -1, NULL, 0);
-
-		std::wstring wtxt(len, L'\0');
+		std::wstring wtxt;
+		int len = MultiByteToWideChar(CP_UTF8, 0, card_name.c_str(), -1, nullptr, 0);
+		wtxt.resize(len - 1);
 		MultiByteToWideChar(CP_UTF8, 0, card_name.c_str(), -1, &wtxt[0], len);
-
-		D3DXVECTOR3 offset = { OFFSET.x * (len / 4) ,OFFSET.y,OFFSET.z };
+		D3DXVECTOR3 offset = { OFFSET.x ,OFFSET.y,OFFSET.z };
 		screen_pos.x += offset.x;
 		screen_pos.y += offset.y;
 
-		pFontmanager->Regist(wtxt.c_str(), screen_pos, { 100.0f,20.0f}, 8.0f, 12.0f, 0, 5, COLOR_BLACK);
+		pFontmanager->RegistAdjustFontSize(wtxt.c_str(), screen_pos, { 85.0,50.0f}, 8.0f, 12.0f, 0, 5, COLOR_BLACK);
 		SetOffSetPos({ offset });
 	}
 	return S_OK;
