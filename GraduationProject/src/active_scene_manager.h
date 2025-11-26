@@ -22,6 +22,23 @@ namespace My
 	class CActiveSceneManager
 	{
 	public:
+
+		//キャストカード情報
+		struct CastCardInfo
+		{
+			int nCardID = 0;			//カードID
+			int nUsePlayer = -1;		//使用者
+			std::vector<int> Target;	//ターゲット
+		};
+
+		//キャスト守備カード情報
+		struct CastDiffenceCardInfo
+		{
+			int nCardID = 0;				//カードID
+			int nUsePlayer = -1;			//使用者
+			std::vector<My::CCardDeffence::DiffenceTarget> DiffenceTarget;	//守備対象
+		};
+
 		/**
 		 * @brief コンストラクタ
 		 */
@@ -151,13 +168,49 @@ namespace My
 		 */
 		std::list<CActiveSceneCharacter*> GetCharacterList();
 
+		/**
+		* @brief カードのキャスト処理
+		*/
+		void CardCast();	//カードのキャスト
+
+		/**
+		* @brief 守備カードのキャスト処理
+		*/
+		void DefCardCast();	//守備カードのキャスト
+
+		/**
+		* @brief キャストカード情報の設定
+		*/
+		void SetCastCardInfo(CastCardInfo info) { m_CastCardVector.push_back(info); }
+		void SetCastDiffenceCardInfo(CastDiffenceCardInfo info) { m_CastDiffenceCardVector.push_back(info); }
+
+		/**
+		* @brief 対戦中の通信処理
+		*/
+		void DuelConnect();
+
 	private:
+
+		/**
+		* @brief キャストカードの確認
+		* @return キャストカードがあるか
+		*/
+		bool IsCardCast();	//キャストされたカードはあるか
+
+		/**
+		* @brief キャスト守備カードの確認
+		* @return キャスト守備カードがあるか
+		*/
+		bool IsDefCardCast();	//キャストされたカードはあるか
+
 		CEnemyManager* m_pEnemyManager;
 		CAreaManager* m_pAreaManager;
 		CActiveSceneState* m_pState;				//!<ゲームのステート状態
 		CActiveScenePlayer* m_pPlayer;				//!<プレイヤー
 		CField* m_pField;					//!<床
 		bool m_isFinish;					//!ゲームの処理を終わらせるか
+		std::vector<CastCardInfo> m_CastCardVector;
+		std::vector<CastDiffenceCardInfo> m_CastDiffenceCardVector;
 	};
 }
 

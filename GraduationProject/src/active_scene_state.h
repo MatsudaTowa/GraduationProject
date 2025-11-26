@@ -122,22 +122,6 @@ namespace My
 	{
 	public:
 
-		//キャストカード情報
-		struct CastCardInfo
-		{
-			int nCardID = 0;			//カードID
-			int nUsePlayer = -1;		//使用者
-			std::vector<int> Target;	//ターゲット
-		};
-
-		//キャスト守備カード情報
-		struct CastDiffenceCardInfo
-		{
-			int nCardID = 0;				//カードID
-			int nUsePlayer = -1;			//使用者
-			std::vector<My::CCardDeffence::DiffenceTarget> DiffenceTarget;	//守備対象
-		};
-
 		CDuel();
 		~CDuel() override;
 		static constexpr int SPECIAL_TIME = 30;	//必殺技状態に移る時間
@@ -151,22 +135,6 @@ namespace My
 		* @param [in]ゲームポインタ
 		*/
 		void Connect(CActiveScene* game) override;
-
-		/**
-		* @brief カードのキャスト処理
-		*/
-		void CardCast();	//カードのキャスト
-
-		/**
-		* @brief 守備カードのキャスト処理
-		*/
-		void DefCardCast();	//守備カードのキャスト
-
-		/**
-		* @brief キャストカード情報の設定
-		*/
-		void SetCastCardInfo(CastCardInfo info) { m_CastCardVector.push_back(info); }
-		void SetCastDiffenceCardInfo(CastDiffenceCardInfo info) { m_CastDiffenceCardVector.push_back(info); }
 
 	private:
 		/**
@@ -182,21 +150,6 @@ namespace My
 		 * @return エリア
 		 */
 		CInputMouse::AREA CharacterArea(float angle);
-
-		/**
-		* @brief キャストカードの確認
-		* @return キャストカードがあるか
-		*/
-		bool IsCardCast();	//キャストされたカードはあるか
-
-		/**
-		* @brief キャスト守備カードの確認
-		* @return キャスト守備カードがあるか
-		*/
-		bool IsDefCardCast();	//キャストされたカードはあるか
-
-		std::vector<CastCardInfo> m_CastCardVector;
-		std::vector<CastDiffenceCardInfo> m_CastDiffenceCardVector;
 	};
 
 	/** @brief ポーズ状態処理クラス */
