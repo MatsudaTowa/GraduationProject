@@ -44,13 +44,10 @@ void My::CTargetArrowManager::Regist(CTargetArrow* pTA)
 			// 寿命を再設定する
 			itr->ResetLife();
 
-			// イテレーターが最後まで回ったら
-			if (itr == m_pTargetArrowList.back())
-			{
-				pTA->SetisDelete(true);
-				return;
-			}
-			continue;
+			// 矢印を生成したくないので登録もせず、ここで消す
+			pTA->SetisDelete(true);
+			return;
+
 		}
 		else
 		{
