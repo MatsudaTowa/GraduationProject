@@ -44,13 +44,10 @@ void My::CTargetArrowManager::Regist(CTargetArrow* pTA)
 			// 寿命を再設定する
 			itr->ResetLife();
 
-			// イテレーターが最後まで回ったら
-			if (itr == m_pTargetArrowList.back())
-			{
-				pTA->SetisDelete(true);
-				return;
-			}
-			continue;
+			// 矢印を生成したくないので登録もせず、ここで消す
+			pTA->SetisDelete(true);
+			return;
+
 		}
 		else
 		{
@@ -65,6 +62,12 @@ void My::CTargetArrowManager::Regist(CTargetArrow* pTA)
 			continue;
 		}		
 	}
+
+	//if (pTA->GetArrowType() == CTargetArrow::ARROWTYPE_PLAYER)
+	//{
+	//	D3DXVECTOR3 pos = pTA->GetPos();
+	//	pTA->SetPos(pTA->GetPos());
+	//}
 
 	// リストに登録
 	m_pTargetArrowList.push_back(pTA);

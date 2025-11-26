@@ -381,8 +381,8 @@ void My::CCardStateTrigger::Init(CCard* cpy, CDuelCharacter* duel)
 			cpy->GetCardStrategy()->Strategy(duel, cpy);
 		}
 
-		// トリガーされた際に消去する(TODO : 使用者によって変更)
-		iter->GetTargetArrowManeger()->Remove();
+		//// トリガーされた際に消去する(TODO : 使用者によって変更)
+		//iter->GetTargetArrowManeger()->Remove();
 
 		break;
 	}
@@ -401,4 +401,19 @@ void My::CCardStateTrigger::Update(CCard* cpy, CDuelCharacter* duel)
 {
 	if (cpy == nullptr)
 		return;
+
+	//リストの取得
+	std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
+
+	//キャラクターの周回
+	for (auto& iter : List)
+	{
+		if (cpy->GetUserArea() != iter->GetArea()) continue;
+
+		// TODO : Init から Update に移設(この処理は重いのか？)
+		// トリガーされた際に消去する(TODO : 使用者によって変更)
+		iter->GetTargetArrowManeger()->Remove();
+
+		break;
+	}
 }
