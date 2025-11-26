@@ -1,4 +1,6 @@
 #include "target_arrow.h"
+#include "active_scene_manager.h"
+#include "zone_manager.h"
 
 namespace
 {
@@ -108,12 +110,15 @@ void My::CTargetArrow::Update()
 //===========================================================================================================
 void My::CTargetArrow::Draw()
 {
+#ifdef _DEBUG
 	LPD3DXFONT pFont = GET_RENDERER->GetFont();
 	RECT rect = { 0,0,SCREEN_WIDTH,SCREEN_HEIGHT };
 	char aStr[512];
 	sprintf(&aStr[0], "\n\n\n\n\n\n\n\n\n\n\n\n\n\n %.3f", GetRot().z);
 	//テキストの描画
 	pFont->DrawText(NULL, &aStr[0], -1, &rect, DT_RIGHT, D3DCOLOR_RGBA(255, 0, 0, 255));
+#endif // _DEBUG
+
 	CObject2D_Anim::Draw();
 }
 
@@ -272,24 +277,6 @@ void My::CTargetArrow::SetAngleLength()
 	float angle = FLOAT_ZERO;	// 初期化
 	angle = atan2f(GetSize().x,GetSize().y);	// 設定
 	rot.z = atan2f(m_attacker.y - m_target.y, m_attacker.x - m_target.x);	// 設定
-
-	//// まっすぐ縦横にする処理
-	//// ----------------------------------
-	//// TODO : すみませんすみません
-	//// なにかもっといい方法があるはずです。
-	//if (rot.z >=  HALF_PI && rot.z <  HALF_PI + 0.01f ||
-	//	rot.z <= -HALF_PI && rot.z > -HALF_PI - 0.01f)
-	//{
-	//	rot.z = 0.0f;
-	//}
-	//else if (rot.z >=  D3DX_PI && rot.z <  D3DX_PI + 0.01f ||
-	//		 rot.z <= -D3DX_PI && rot.z > -D3DX_PI + 0.01f ||
-	//		 rot.z >= 0.0f && rot.z < 0.01f ||
-	//		 rot.z <= 0.0f && rot.z > -0.01f)
-	//{
-	//	rot.z = HALF_PI;
-	//}
-
 	rot.z += HALF_PI;
 	rot.z *= -1;
 

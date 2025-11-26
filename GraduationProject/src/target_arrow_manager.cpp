@@ -66,11 +66,11 @@ void My::CTargetArrowManager::Regist(CTargetArrow* pTA)
 		}		
 	}
 
-	if (pTA->GetArrowType() == CTargetArrow::ARROWTYPE_PLAYER)
-	{
-		D3DXVECTOR3 pos = pTA->GetPos();
-		pTA->SetPos(pTA->GetPos());
-	}
+	//if (pTA->GetArrowType() == CTargetArrow::ARROWTYPE_PLAYER)
+	//{
+	//	D3DXVECTOR3 pos = pTA->GetPos();
+	//	pTA->SetPos(pTA->GetPos());
+	//}
 
 	// ƒŠƒXƒg‚É“o˜^
 	m_pTargetArrowList.push_back(pTA);
