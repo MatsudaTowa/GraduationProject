@@ -9,21 +9,33 @@
 #include "main.h"
 #include "object2D_anim.h"
 
-namespace
-{
-	const D3DXVECTOR2 arrow_up = { SCREEN_WIDTH * 0.5f,SCREEN_HEIGHT * 0.2f };
-	const D3DXVECTOR2 arrow_down = { SCREEN_WIDTH * 0.5f,SCREEN_HEIGHT * 0.8f };
-	const D3DXVECTOR2 arrow_right = { SCREEN_WIDTH * 0.7f,SCREEN_HEIGHT * 0.5f };
-	const D3DXVECTOR2 arrow_left = { SCREEN_WIDTH * 0.3f,SCREEN_HEIGHT * 0.5f };
-}
-
 /** @brief My 名前空間 */
 namespace My
 {
+	namespace
+	{
+		const D3DXVECTOR2 arrow_up = { SCREEN_WIDTH * 0.5f,SCREEN_HEIGHT * 0.3f };
+		const D3DXVECTOR2 arrow_down = { SCREEN_WIDTH * 0.5f,SCREEN_HEIGHT * 0.7f };
+		const D3DXVECTOR2 arrow_right = { SCREEN_WIDTH * 0.7f,SCREEN_HEIGHT * 0.5f };
+		const D3DXVECTOR2 arrow_left = { SCREEN_WIDTH * 0.3f,SCREEN_HEIGHT * 0.5f };
+	}
+
 	/** @brief テクスチャ管理クラス */
 	class CTargetArrow:public CObject2D_Anim
 	{
 	public:
+		/**
+		* @brief アローのターゲットする対象
+		* (TODO : 敵と自分の矢印を判別する際に使う)
+		* @param 自分
+		* @param 相手
+		*/
+		enum ARROWTYPE
+		{
+			ARROWTYPE_PLAYER = 0,
+			ARROWTYPE_ENEMY
+		};
+
 		/**
 		* @brief コンストラクタ
 		*/
@@ -62,7 +74,7 @@ namespace My
 		/**
 		* @brief 標的の位置を設定する
 		*/
-		static D3DXVECTOR2 SetTargetPos(D3DXVECTOR2 &target,int targetnum,int type);
+		D3DXVECTOR2 SetTargetPos(int targetnum,int type);
 
 		/**
 		* @brief 相手と自分の間の線上に位置を設定する
@@ -97,6 +109,18 @@ namespace My
 		*/
 		inline void ResetLife() { m_nLife = ONE_SECOND * 3; };
 
+		/**
+		* @brief 矢印の種類を設定する
+		* @param [in]種類
+		*/
+		inline void SetArrowType(ARROWTYPE type) { m_ArrowType = type; };
+
+		/**
+		* @brief 矢印の種類を取得する
+		* @param [out]種類
+		*/
+		inline ARROWTYPE GetArrowType() { return m_ArrowType; }
+
 	private:
 		/**
 		* @brief 角度と長さを設定
@@ -127,6 +151,11 @@ namespace My
 		* @brief 寿命(矢印自体の寿命)
 		*/
 		int m_nLife;
+
+		/**
+		* @brief 矢印のタイプ
+		*/
+		ARROWTYPE m_ArrowType;
 	};
 }
 
