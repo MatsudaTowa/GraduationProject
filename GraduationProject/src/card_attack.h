@@ -8,6 +8,7 @@
 #define _CARD_ATK_H_
 #include "main.h"
 #include "card.h"
+#include "card_deffence.h"
 
 namespace My
 {
@@ -98,10 +99,18 @@ namespace My
 		 * @brief トリガー処理
 		 */
 		void Trigger() override;
+
+		/**
+		 * @brief 守備カードの追加
+		 * @param [in]attack_value
+		 */
+		inline void AddDefCard(CCardDeffence* defcard) { m_DefCardVector.push_back(defcard); }
+
 	private:
 
 		AttackType m_AttackType;
-		int m_nAttackValue;                        // ダメージ数
+		int m_nAttackValue;								// ダメージ数
+		std::vector<CCardDeffence*> m_DefCardVector;	// 守備カードのベクター
 	};
 }
 

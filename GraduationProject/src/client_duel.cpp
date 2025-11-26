@@ -12,6 +12,7 @@
 #include "active_scene_manager.h"
 #include "raknet.h"
 #include "active_scene_player_state.h"
+#include "card_deffence.h"
 
 //=====================================
 //コンストラクタ
@@ -404,7 +405,8 @@ void CClient_Duel::ReceiveStatus(RakNet::Packet* packet)
     }
 
     //キャストカードの読み込み
-    ReceiveCastCard(&bsIn);
+    ReceiveCastCard(&bsIn);     //通常
+    ReceiveCastDefCard(&bsIn);  //守備
 }
 
 //=====================================
@@ -576,5 +578,62 @@ void CClient_Duel::ReceiveCastCard(RakNet::BitStream* bsin)
 
         //キャストカード情報の読み込み
         pDuel->SetCastCardInfo(CastCardInfo);
+    }
+}
+
+//=====================================
+//キャスト守備カードの受信
+//=====================================
+void CClient_Duel::ReceiveCastDefCard(RakNet::BitStream* bsin)
+{
+    //変数
+    int nCardNum = 0;         //カード数
+
+    bsin->Read(nCardNum);    //カード数の読み込み
+
+     //一時的にダウンキャストを行い、遷移の合図を送る
+    My::CDuel* pDuel = nullptr;
+    pDuel = dynamic_cast<My::CDuel*>(My::CActiveSceneManager::GetInstance()->GetState());
+
+    //キャストが成功していないなら抜ける
+    if (pDuel == nullptr)
+    {
+        return;
+    }
+
+    //カード数の周回
+    for (int i = 0; i < nCardNum; i++)
+    {
+        //変数
+        int nCardID = 0;                //カード番号
+        int nPlayerID = 0;              //プレイヤー番号
+        int nTargetNum = 0;             //ターゲット数
+        std::vector<My::CCardDeffence::DiffenceTarget> TargetVector;  //ターゲットベクター
+        TargetVector.clear();
+
+        //読み込み
+        bsin->Read(nCardID);      //カード番号
+        bsin->Read(nPlayerID);    //プレイヤー番号
+        bsin->Read(nTargetNum);   //ターゲット数
+
+        //ターゲット数分周回
+        for (int j = 0; j < nTargetNum; j++)
+        {
+            My::CCardDeffence::DiffenceTarget Target;
+            bsin->Read(Target.nAttackCardUserId);
+            bsin->Read(Target.nTargetCard);
+
+            //対象の保存
+            TargetVector.push_back(Target);
+        }
+
+        //TODO : キャストカード情報の追加
+        My::CDuel::CastDiffenceCardInfo CastCardInfo;   //構造体
+        CastCardInfo.nCardID = nCardID;                 //カード番号
+        CastCardInfo.nUsePlayer = nPlayerID;            //使用者の番号
+        CastCardInfo.DiffenceTarget = TargetVector;     //対象のベクター
+
+        //キャスト守備カード情報の読み込み
+        pDuel->SetCastDiffenceCardInfo(CastCardInfo);
     }
 }

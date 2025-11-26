@@ -37,6 +37,7 @@ public:
 		ID_DUEL_MESSAGE_SEND_STATUS,	//ステータスを送る
 		ID_DUEL_MESSAGE_STATUS,			//ステータスの通知
 		ID_DUEL_MESSAGE_CAST_CARD,		//キャストカードを通知
+		ID_DUEL_MESSAGE_CAST_DEFCARD,	//キャスト守備カードを通知
 		ID_DUEL_MESSAGE_1,				//対戦時のメッセージ
 	};
 
@@ -58,6 +59,7 @@ public:
 	virtual void AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) = 0;					//CPUの追加
 	virtual void ReceiveStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) = 0;				//ステータスを受信
 	virtual void ReceiveCastCard(RakNet::Packet* packet) = 0;											//キャストカードの受信
+	virtual void ReceiveCastDefCard(RakNet::Packet* packet) = 0;										//キャスト守備カードの受信
 
 	//設定と取得
 

@@ -12,12 +12,15 @@
 
 My::CCardAttack::CCardAttack(int nPriority):CCard(nPriority),
 m_AttackType(),
-m_nAttackValue(INT_ZERO)
+m_nAttackValue(INT_ZERO),
+m_DefCardVector()
 {
+	m_DefCardVector.clear();
 }
 
 My::CCardAttack::~CCardAttack()
 {
+	m_DefCardVector.clear();
 }
 
 //===========================================================================================================
@@ -112,12 +115,15 @@ void My::CCardAttack::Cast(CDuelCharacter* duel)
 		//待機状態のカードを確認
 		if (!DuelState->GetZoneManager()->GetWaitZone()->GetList().empty())
 		{
-			CCard* pCard = DuelState->GetZoneManager()->GetWaitZone()->GetList().front();	//先頭のカードの確認
+			CCardDeffence* pCard = dynamic_cast<CCardDeffence*>(DuelState->GetZoneManager()->GetWaitZone()->GetList().front());	//先頭のカードの確認
 			if (pCard == nullptr) break;
 
 			//守備カードに自身のエリアを追加し、ステイ状態にする
 			pCard->SetTarget(GetUserArea());
 			pCard->ChangeState(CCardState::CARD_STAY, DuelState);
+
+			//守備カードのポインタを保存
+			m_DefCardVector.push_back(pCard);
 		}
 
 		break;
@@ -147,25 +153,37 @@ void My::CCardAttack::Trigger()
 		CDuelCharacter* DuelState = dynamic_cast<CDuelCharacter*>(itr->GetState());	//キャスト
 		if (DuelState == nullptr) continue;											//中身の確認
 
-		//キャスト状態のカードを確認
-		if (!DuelState->GetZoneManager()->GetCastPreviewZone()->GetList().empty())
+		////キャスト状態のカードを確認
+		//if (!DuelState->GetZoneManager()->GetCastPreviewZone()->GetList().empty())
+		//{
+		//	//キャストカードの周回
+		//	for (auto& iter : DuelState->GetZoneManager()->GetCastPreviewZone()->GetList())
+		//	{
+		//		//守備カードかの確認
+		//		if (iter->GetCardType() != CARDTYPE_::TYPE_DEFFENCE) continue;
+
+		//		//TODO : ディフェンスカードを参照できるマネージャーが必要
+		//		CCardDeffence* pCard = dynamic_cast<CCardDeffence*>(iter);
+		//		if (pCard == nullptr) continue;	//キャストに失敗したら飛ばす
+
+		//		//守備の値だけダメージを減らす
+		//		nDamage -= pCard->GetDefenceValue();
+
+		//		//ターゲットの守備カードの状態を変更
+		//		pCard->ChangeState(CCardState::CARD_TRIGGER, DuelState);
+		//	}
+		//}
+
+		//守備カードの周回
+		for (auto& iter : m_DefCardVector)
 		{
-			//キャストカードの周回
-			for (auto& iter : DuelState->GetZoneManager()->GetCastPreviewZone()->GetList())
-			{
-				//守備カードかの確認
-				if (iter->GetCardType() != CARDTYPE_::TYPE_DEFFENCE) continue;
+			if (iter->GetStateNum() != CCardState::CARD_STAY) continue;
 
-				//TODO : ディフェンスカードを参照できるマネージャーが必要
-				CCardDeffence* pCard = dynamic_cast<CCardDeffence*>(iter);
-				if (pCard == nullptr) continue;	//キャストに失敗したら飛ばす
+			//守備の値だけダメージを減らす
+			nDamage -= iter->GetDefenceValue();
 
-				//守備の値だけダメージを減らす
-				nDamage -= pCard->GetDefenceValue();
-
-				//ターゲットの守備カードの状態を変更
-				pCard->ChangeState(CCardState::CARD_TRIGGER, DuelState);
-			}
+			//ターゲットの守備カードの状態を変更
+			iter->ChangeState(CCardState::CARD_TRIGGER, DuelState);
 		}
 
 		//ダメージがあるなら与える
@@ -174,4 +192,7 @@ void My::CCardAttack::Trigger()
 			itr->ReceiveDamage(nDamage);
 		}
 	}
+
+	//カードのクリア
+	m_DefCardVector.clear();
 }

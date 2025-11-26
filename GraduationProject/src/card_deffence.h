@@ -21,6 +21,13 @@ namespace My
 			NOT_COUNTER,        // 反撃できない
 		};
 
+		//守備対象
+		struct DiffenceTarget
+		{
+			int nAttackCardUserId = 0;	//攻撃カードの使用者番号
+			int nTargetCard = 0;		//ターゲットのカード番号(現在のリストの中の番号)
+		};
+
 		/**
 		 * @brief コンストラクタ
 		 */
@@ -52,6 +59,12 @@ namespace My
 		void Draw()override;
 
 		void LoadCardData() override;
+
+		/**
+		 * @brief カードをマウスでキャストする
+		 * @return [out]カードがキャストされたかどうか判定
+		 */
+		bool CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharacter* player) override;
 
 		/**
 		 * @brief 守備のタイプ取得
@@ -115,6 +128,8 @@ namespace My
 		DefenseType m_DefenceType;
 		int m_nDefenceValue;
 		int m_nCounterValue;
+		bool m_isStay;
+		std::vector<DiffenceTarget> m_TargetInfo;
 	};
 }
 

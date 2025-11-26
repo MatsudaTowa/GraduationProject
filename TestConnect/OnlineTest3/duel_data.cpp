@@ -533,6 +533,76 @@ void CDuel_Data::SendCastCard(RakNet::BitStream* bsout)
 }
 
 //=====================================
+//キャスト守備カードの受信
+//=====================================
+void CDuel_Data::ReceiveCastDefCard(RakNet::Packet* packet)
+{
+    //ログ
+    std::cout << "守備カードの受信\n";
+
+    //データの受信
+    RakNet::BitStream bsIn(packet->data, packet->length, false);
+
+    //読み取り
+    bsIn.IgnoreBytes(sizeof(RakNet::MessageID));    //メッセージの読み込み
+    CastDiffenceCardInfo CastInfo = {};             //データの読み込み
+    int nTargetNum = 0;                             //ターゲット数
+
+    //カード情報の読み込み
+    bsIn.Read(CastInfo.nCardID);        //カード情報
+    bsIn.Read(CastInfo.nUsePlayer);     //使用者番号
+
+    bsIn.Read(nTargetNum);              //ターゲット数
+
+    //ターゲット数だけ周回
+    for (int i = 0; i < nTargetNum; i++)
+    {
+        DiffenceTarget Target;
+
+        bsIn.Read(Target.nAttackCardUserId);           //読み込み
+        bsIn.Read(Target.nTargetCard);                 //読み込み
+
+        CastInfo.DiffenceTarget.push_back(Target);  //リストに追加
+    }
+
+    //カード情報を保存
+    m_CastDiffenceCardVector.push_back(CastInfo);
+}
+
+//=====================================
+//キャスト守備カードの送信
+//=====================================
+void CDuel_Data::SendCastDeffenceCard(RakNet::BitStream* bsout)
+{
+    //ログ
+    std::cout << "カードの送信\n";
+
+    //キャストされたカード枚数
+    bsout->Write((int)m_CastDiffenceCardVector.size());
+
+    //キャストカード情報の送信
+    for (auto& iter : m_CastDiffenceCardVector)
+    {
+        bsout->Write(iter.nCardID);     //カード番号
+        bsout->Write(iter.nUsePlayer);  //プレイヤーID
+
+        bsout->Write((int)iter.DiffenceTarget.size());   //対象の数
+
+        //対象の数だけ周回
+        for (auto iter : iter.DiffenceTarget)
+        {
+            bsout->Write(iter.nAttackCardUserId);   //対象カードの使用者の番号
+            bsout->Write(iter.nTargetCard);         //対象カードのベクターの番号
+        }
+
+        //対象者のリストをクリア
+        iter.DiffenceTarget.clear();
+    }
+
+    m_CastDiffenceCardVector.clear();
+}
+
+//=====================================
 //更新の合図を送る
 //=====================================
 void CDuel_Data::SendUpdateSign(RakNet::RakPeerInterface* peer)
@@ -557,7 +627,8 @@ void CDuel_Data::SendUpdateSign(RakNet::RakPeerInterface* peer)
     }
 
     //キャストされたカードを送信
-    SendCastCard(&bsOut);
+    SendCastCard(&bsOut);           //通常カード
+    SendCastDeffenceCard(&bsOut);   //守備カード
 
     //全クライアントにブロードキャスト
     peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);

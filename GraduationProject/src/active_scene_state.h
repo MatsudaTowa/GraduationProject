@@ -7,6 +7,8 @@
 #ifndef _GAME_STATE_H_
 #define _GAME_STATE_H_
 
+#include "card_deffence.h"
+
 /** @brief My 名前空間 */
 namespace My
 {
@@ -128,6 +130,14 @@ namespace My
 			std::vector<int> Target;	//ターゲット
 		};
 
+		//キャスト守備カード情報
+		struct CastDiffenceCardInfo
+		{
+			int nCardID = 0;				//カードID
+			int nUsePlayer = -1;			//使用者
+			std::vector<My::CCardDeffence::DiffenceTarget> DiffenceTarget;	//守備対象
+		};
+
 		CDuel();
 		~CDuel() override;
 		static constexpr int SPECIAL_TIME = 30;	//必殺技状態に移る時間
@@ -148,9 +158,15 @@ namespace My
 		void CardCast();	//カードのキャスト
 
 		/**
+		* @brief 守備カードのキャスト処理
+		*/
+		void DefCardCast();	//守備カードのキャスト
+
+		/**
 		* @brief キャストカード情報の設定
 		*/
 		void SetCastCardInfo(CastCardInfo info) { m_CastCardVector.push_back(info); }
+		void SetCastDiffenceCardInfo(CastDiffenceCardInfo info) { m_CastDiffenceCardVector.push_back(info); }
 
 	private:
 		/**
@@ -173,7 +189,14 @@ namespace My
 		*/
 		bool IsCardCast();	//キャストされたカードはあるか
 
+		/**
+		* @brief キャスト守備カードの確認
+		* @return キャスト守備カードがあるか
+		*/
+		bool IsDefCardCast();	//キャストされたカードはあるか
+
 		std::vector<CastCardInfo> m_CastCardVector;
+		std::vector<CastDiffenceCardInfo> m_CastDiffenceCardVector;
 	};
 
 	/** @brief ポーズ状態処理クラス */
