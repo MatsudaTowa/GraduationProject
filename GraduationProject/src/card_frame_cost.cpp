@@ -8,7 +8,7 @@
 
 namespace
 {
-	D3DXVECTOR3 OFFSET = { -50.0f,-80.0f,0.0f };
+	D3DXVECTOR3 OFFSET = { -55.0f,-80.0f,0.0f };
 }
 //===========================================================================================================================================================
 // コンストラクタ
@@ -23,8 +23,14 @@ My::CCardFrameCost::CCardFrameCost(int nPriority):CCardFrameUseFont(nPriority)
 HRESULT My::CCardFrameCost::Init()
 {
 	CCardFrameUseFont::Init();
-
 	CFontManager* pFontmanager = GetFontManager();
+	if (pFontmanager == nullptr)
+	{
+		pFontmanager = new CFontManager(CFontManager::CENTER);
+		pFontmanager->Init();
+		SetFontManager(pFontmanager);
+	}
+
 	if (pFontmanager != nullptr)
 	{
 		std::wstring wtxt = std::format(L"{}", GetCard()->GetBaseStatus().nCost);
@@ -33,7 +39,7 @@ HRESULT My::CCardFrameCost::Init()
 		const wchar_t* txt = wtxt.c_str();
 		screen_pos.x -= OFFSET.x;
 		screen_pos.y -= OFFSET.y;
-		pFontmanager->RegistAdjustFontSize(txt, screen_pos, { 10.0f,size.y }, 25.0f, 10.0f, 0, 5, COLOR_BLACK);
+		pFontmanager->RegistAdjustFontSize(txt, screen_pos, { 40.0f,size.y }, 20.0f, 18.0f, 0, 5, COLOR_BLACK,false);
 		SetOffSetPos(OFFSET);
 	}
 	return S_OK;

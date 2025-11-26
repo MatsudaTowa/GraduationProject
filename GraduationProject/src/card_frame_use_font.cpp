@@ -34,11 +34,6 @@ My::CCardFrameUseFont::~CCardFrameUseFont()
 HRESULT My::CCardFrameUseFont::Init()
 {
 	CCardFrame::Init();
-	if (m_pFontManager == nullptr)
-	{
-		m_pFontManager = new CFontManager(CFontManager::LEFT);
-		m_pFontManager->Init();
-	}
 	return S_OK;
 }
 

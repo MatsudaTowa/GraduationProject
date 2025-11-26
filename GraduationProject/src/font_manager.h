@@ -73,8 +73,9 @@ namespace My
 		 * @param [in]2文字以降テキストをずらす値
 		 * @param [in]文字の太さ
 		 * @param [in]フォント番号
+		 * @param [in]改行するかどうか
 		 */
-		void RegistAdjustFontSize(const wchar_t* text,D3DXVECTOR3 first_pos, D3DXVECTOR2 font_area, float base_size, float base_txt_shift, int thickness, int idx, D3DXCOLOR col);
+		void RegistAdjustFontSize(const wchar_t* text,D3DXVECTOR3 first_pos, D3DXVECTOR2 font_area, float base_size, float base_txt_shift, int thickness, int idx, D3DXCOLOR col,bool isLinebrake);
 
 		/**
 		 * @brief 
@@ -98,7 +99,7 @@ namespace My
 		 * @param [in]文字の太さ
 		 * @param [in]フォント番号
 		 */
-		void SetTextAdjustFontSize(const wchar_t* text, D3DXVECTOR3 first_pos, D3DXVECTOR2 font_area, float base_size, float base_txt_shift, int thickness, int idx, D3DXCOLOR col);
+		void SetTextAdjustFontSize(const wchar_t* text, D3DXVECTOR3 first_pos, D3DXVECTOR2 font_area, float base_size, float base_txt_shift, int thickness, int idx, D3DXCOLOR col, bool isLinebrake);
 
 		void UpdatePos(D3DXVECTOR3 first_pos);
 
@@ -117,10 +118,13 @@ namespace My
 
 	private:
 
+		void TextShift(D3DXVECTOR3& text_pos, D3DXVECTOR2& text_shift, D3DXVECTOR3& save_first_pos);
+
 		//メンバ変数
 		std::vector<CFont*> m_Font;	//敵を管理
 
 		const wchar_t* m_text;
+		bool m_isLineBreak;  //改行するかどうか
 		int m_base_text_shift; //文字をずらす値
 		int m_thickness; //文字の太さ
 		float m_base_size; //文字の大きさ
