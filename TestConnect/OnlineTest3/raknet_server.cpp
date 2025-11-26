@@ -187,6 +187,11 @@ void CRakNet_Server::Communication(RakNet::RakPeerInterface* peer)
                 m_pRakNetData->ReceiveCastCard(packet);
                 break;
 
+            case CRakNet_Data::GameMessages::ID_DUEL_MESSAGE_CAST_DEFCARD:
+
+                m_pRakNetData->ReceiveCastDefCard(packet);
+                break;
+
             default:
                 std::cout << "Message with identifier " << (int)packet->data[0] << " has arrived.\n";
                 break;

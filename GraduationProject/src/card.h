@@ -140,7 +140,7 @@ namespace My
 		 * @brief カードをマウスでキャストする
 		 * @return [out]カードがキャストされたかどうか判定
 		 */
-		bool CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharacter* player);
+		virtual bool CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharacter* player);
 
 		/**
 		 * @brief 生成

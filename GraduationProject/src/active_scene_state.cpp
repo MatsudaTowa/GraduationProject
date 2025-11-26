@@ -14,6 +14,7 @@
 #include "raknet.h"
 #include "card_manager.h"
 #include "zone_manager.h"
+#include "card_attack.h"
 
 int My::CLobby::m_characterIdx = -1;
 
@@ -231,7 +232,8 @@ void My::CLobby::OnlineChangeToDuel()
 // コンストラクタ
 //=============================================
 My::CDuel::CDuel() :
-	m_CastCardVector()	//キャストカード情報
+	m_CastCardVector(),			//キャストカード情報
+	m_CastDiffenceCardVector()	//守備キャストカード情報
 {
 	GET_CAMERA(GET_CAMERA_IDX)->ChangeCameraState(new CBirdView);
 	GET_CAMERA(GET_CAMERA_IDX)->SetCamera();
@@ -398,6 +400,12 @@ void My::CDuel::Connect(CActiveScene* /*game*/)
 	{
 		CardCast();
 	}
+
+	//カード情報の読み込み
+	if (IsDefCardCast())
+	{
+		DefCardCast();
+	}
 }
 
 //=============================================
@@ -407,6 +415,17 @@ bool My::CDuel::IsCardCast()
 {
 	if (!CRakNet::GetInstance()->GetOnline()) return false;	//オンラインじゃない
 	if (m_CastCardVector.empty()) return false;				//使われたカードが存在しない
+
+	return true;
+}
+
+//=============================================
+//キャストカードの確認
+//=============================================
+bool My::CDuel::IsDefCardCast()
+{
+	if (!CRakNet::GetInstance()->GetOnline()) return false;	//オンラインじゃない
+	if (m_CastDiffenceCardVector.empty()) return false;		//使われたカードが存在しない
 
 	return true;
 }
@@ -480,6 +499,121 @@ void My::CDuel::CardCast()
 
 	//カード情報のクリア
 	m_CastCardVector.clear();
+}
+
+//=============================================
+//守備カードのキャスト処理
+//=============================================
+void My::CDuel::DefCardCast()
+{
+	//キャストカードの処理
+	for (auto iter : m_CastDiffenceCardVector)
+	{
+		//自分が使用したカードは飛ばす
+		if (CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx() == iter.nUsePlayer)
+		{
+			continue;
+		}
+
+		//使用するカードと使用者の状態
+		CCard* pCard = nullptr;
+		CDuelCharacter* DuelState = nullptr;
+
+		//TODOこの下に読み込みこんだカードの処理を追加予定
+		for (auto& Character : CActiveSceneManager::GetInstance()->GetCharacterList())
+		{
+			//通すかの確認
+			if (iter.nUsePlayer != Character->GetPlayerIdx()) continue;				//使用者の番号と一致するか
+			//if (typeid(CDuelCharacter*) == typeid(*Character->GetState())) continue;//状態の確認
+
+			//対戦状態にキャスト
+			DuelState = dynamic_cast<CDuelCharacter*>(Character->GetState());
+
+			if (DuelState == nullptr) continue;	//キャスト成功したかの確認
+
+			//手札のカードを周回し、受信したカードを探す
+			for (auto& Card : DuelState->GetZoneManager()->GetDeck()->GetList())
+			{
+				if (Card->GetBaseStatus().nCardID != iter.nCardID) continue;
+
+				pCard = Card;
+				break;
+			}
+			break;
+		}
+
+		//使用者のエリアを代入
+		for (auto Character : CActiveSceneManager::GetInstance()->GetCharacterList())
+		{
+			//使用者を見つけてエリアを代入
+			if (iter.nUsePlayer != Character->GetPlayerIdx()) continue;
+			pCard->SetUserArea(Character->GetArea());
+			break;
+		}
+
+		//対象の数だけ周回
+		for (auto nTarget : iter.DiffenceTarget)
+		{
+			//対象者のエリアを代入
+			for (auto Character : CActiveSceneManager::GetInstance()->GetCharacterList())
+			{
+				//対象者を見つけてエリアを代入
+				if (nTarget.nAttackCardUserId != Character->GetPlayerIdx()) continue;
+				pCard->SetTarget(Character->GetArea());
+
+				//相手の対戦状態にキャストし、キャストプレビューゾーンを確認
+				CDuelCharacter* EnemyDuelState = nullptr;
+
+				//対戦状態にキャスト
+				EnemyDuelState = dynamic_cast<CDuelCharacter*>(Character->GetState());
+				if (EnemyDuelState == nullptr) continue;	//キャスト成功したかの確認
+				
+				//守備をされたカードを探す
+				int nCount = 0;
+				for (auto& AttackCard : EnemyDuelState->GetZoneManager()->GetCastPreviewZone()->GetList())
+				{
+					//異なるカードなら飛ばす
+					if (nTarget.nTargetCard != nCount)
+					{
+						++nCount;
+						continue;
+					}
+
+					//対象カードを攻撃カードにキャスト
+					CCardAttack* pAttackCard = nullptr;
+					pAttackCard = dynamic_cast<CCardAttack*>(AttackCard);
+					if (pAttackCard == nullptr) break;
+
+					//使用カードを守備カードにキャスト
+					CCardDeffence* pDeffenceCard = nullptr;
+					pDeffenceCard = dynamic_cast<CCardDeffence*>(pCard);
+					if (pDeffenceCard == nullptr) break;
+
+					//守備カードを追加
+					pAttackCard->AddDefCard(pDeffenceCard);
+
+					//TODO守備カードに対象の情報を入れる
+				}
+
+				break;
+			}
+		}
+
+		//対象が自分ならキャスト状態にする
+		if (pCard->GetTarget() == pCard->GetUserArea())
+		{
+			pCard->ChangeState(CCardState::CARD_WAIT, DuelState);
+		}
+		else
+		{
+			pCard->ChangeState(CCardState::CARD_STAY, DuelState);
+		}
+		
+	}
+
+	//カード情報のクリア
+	m_CastCardVector.clear();
+	m_CastDiffenceCardVector.clear();
 }
 
 //=============================================

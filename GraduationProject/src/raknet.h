@@ -14,6 +14,7 @@
 #include "MessageIdentifiers.h"
 #include "BitStream.h"
 #include "client.h"
+#include "card_deffence.h"
 
 //RakNetサーバーのクラス
 class CRakNet
@@ -44,6 +45,7 @@ public:
 		ID_DUEL_MESSAGE_SEND_STATUS,	//ステータスを送る
 		ID_DUEL_MESSAGE_STATUS,			//ステータスの通知
 		ID_DUEL_MESSAGE_CAST_CARD,		//キャストカードを通知
+		ID_DUEL_MESSAGE_CAST_DEFCARD,	//キャスト守備カードを通知
 		ID_DUEL_MESSAGE_1,				//対戦時のメッセージ
 	};
 
@@ -102,6 +104,37 @@ public:
 		for (int Target : std::initializer_list<int>{ args... }) 
 		{
 			bsOut.Write(Target);													//対象者者番号
+		}
+
+		//サーバーに送信
+		RakNet::SystemAddress server_address = m_pPeer->GetSystemAddressFromIndex(0);
+
+		//サーバーの確認
+		if (server_address != RakNet::UNASSIGNED_SYSTEM_ADDRESS)
+		{
+			//サーバーにブロードキャスト
+			m_pPeer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, m_pPeer->GetSystemAddressFromIndex(0), false);
+		}
+	}
+
+	//キャスト守備カードの送信
+	void SendCastDefCard(int cardid, int playerid, std::vector<My::CCardDeffence::DiffenceTarget> target)
+	{
+		//データの作成
+		RakNet::BitStream bsOut;
+		bsOut.Write((RakNet::MessageID)GameMessages::ID_DUEL_MESSAGE_CAST_DEFCARD);    //メッセージ
+		bsOut.Write(cardid);														//カード番号
+		bsOut.Write(playerid);														//使用者番号
+
+		//対象者の数を確認し書き出し
+		int nLength = (int)target.size();
+		bsOut.Write(nLength);
+
+		//攻撃対象の書き出し
+		for (auto Target : target)
+		{
+			bsOut.Write(Target.nAttackCardUserId);	//対象者番号
+			bsOut.Write(Target.nTargetCard);		//カード番号
 		}
 
 		//サーバーに送信

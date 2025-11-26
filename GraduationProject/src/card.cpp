@@ -400,34 +400,6 @@ bool My::CCard::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharacter* pla
 			CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
 			return true;
 		}
-
-		//// ステイ遷移
-		//ChangeState(CCardState::CARD_CAST, duel);
-		//CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
-
-		//CActiveScenePlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();
-		//if (player->GetArea() == m_target)
-		//{
-		//	RegistTargetList(player);
-		//}
-
-		//std::list<CEnemy*> enemy_list = CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList();
-		//for (auto& itr : enemy_list)
-		//{
-		//	if (itr == nullptr) { continue; }
-		//	if (itr->GetArea() != m_target) { continue; }
-
-		//	RegistTargetList(itr);
-
-		//	//オンライン時なら送信
-		//	if (CRakNet::GetInstance()->GetOnline())
-		//	{//TODO : カードの対象が複数になったら処理の変更の必要があり
-		//		CRakNet::GetInstance()->SendCastCard(m_BaseStatus.nCardID, CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx(), itr->GetPlayerIdx());
-		//	}
-		//}
-
-		//キャスト処理
-		//Cast(duel);
 	}
 
 	return false;
