@@ -6,8 +6,8 @@
 /**
 * @brief カードの基本サイズ
 */
-const float My::CCardFrame::CARD_WIDTH = 10.0f;
-const float My::CCardFrame::CARD_HEIGHT = 17.0f;
+const float My::CCardFrame::CARD_WIDTH = 10.0f * 7.0f;
+const float My::CCardFrame::CARD_HEIGHT = 17.0f * 7.0f;
 
 /**
 * @brief カードフレームまでの相対パス
@@ -29,7 +29,7 @@ My::CCardFrame::CardFrameInfo My::CCardFrame::m_FrameInfo[My::CCardFrame::FRAMET
 //===========================================================================================================
 // コンストラクタ
 //===========================================================================================================
-My::CCardFrame::CCardFrame(int priority): CObject3D(priority),
+My::CCardFrame::CCardFrame(int priority): CObject2D(priority),
 m_pParent(nullptr),
 m_type(FRAMETYPE::FRAMETYPE_BASE)
 {
@@ -55,13 +55,13 @@ HRESULT My::CCardFrame::Init()
 	SetPos({ -5000, -5000 ,-5000 });
 
 	// サイズ設定
-	SetSize({CARD_WIDTH,1.0f,CARD_HEIGHT});
+	SetSize({CARD_WIDTH,CARD_HEIGHT});
 
 	// カラー設定
 	SetColor(SetColorCard());
 
 	//頂点設定
-	SetVtx(D3DXVECTOR3(0.0f, 1.0f, 0.0f));
+	SetVtx();
 
 	return S_OK;
 }
@@ -71,7 +71,7 @@ HRESULT My::CCardFrame::Init()
 //===========================================================================================================
 void My::CCardFrame::Uninit()
 {
-	CObject3D::Uninit();
+	CObject2D::Uninit();
 }
 
 //===========================================================================================================
@@ -83,22 +83,21 @@ void My::CCardFrame::Update()
 	D3DXVECTOR3 rot = m_pParent->GetRot();
 
 	//SetPos(offsetpos);
-	SetPos(m_pParent->GetPos());
+	D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), m_pParent->GetPos()); //スクリーン座標に変換
+
+	SetPos(screen_pos);
 	SetRot({0,0,0});
 	SetRot(rot);
 
-	// 親のスケールからサイズを設定している
-	D3DXVECTOR3 size = {
-		CARD_WIDTH* m_pParent->GetSize().x,
-		3.0f * m_pParent->GetSize().y,
-		CARD_HEIGHT* m_pParent->GetSize().z,
-	};
+	//// 親のスケールからサイズを設定している
+	//D3DXVECTOR2 size = {
+	//	CARD_WIDTH* m_pParent->GetSize().x,
+	//	CARD_HEIGHT* m_pParent->GetSize().z,
+	//};
 
-	// サイズ設定
-	SetSize(size);
-
-	//頂点設定
-	SetVtx(D3DXVECTOR3(0.0f, 1.0f, 0.0f));
+	//// サイズ設定
+	//SetSize(size);
+	SetVtx();
 }
 
 //===========================================================================================================
@@ -106,6 +105,12 @@ void My::CCardFrame::Update()
 //===========================================================================================================
 void My::CCardFrame::Draw()
 {
+	CCard::ZONE current_zone = GetCard()->GetCurrentZone();
+	// 山札時はコストを表示しないように TODO:今後はここの条件式を見直す必要あり
+	if (current_zone == CCard::DECK || current_zone == CCard::CEMETERY)
+	{
+		return;
+	}
 	CRenderer* pRender = GET_RENDERER;
 	LPDIRECT3DDEVICE9 pDevice = pRender->GetDevice();
 
@@ -119,7 +124,7 @@ void My::CCardFrame::Draw()
 	pDevice->SetRenderState(D3DRS_ALPHAREF, 0);
 	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
-	CObject3D::Draw();
+	CObject2D::Draw();
 
 	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
 

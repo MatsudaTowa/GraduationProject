@@ -8,7 +8,7 @@
 #define _CARD_FRAME_H_
 
 #include "main.h"
-#include "object3D.h"
+#include "object2D.h"
 #include "card.h"
 
 /** @brief My 名前空間 */
@@ -18,7 +18,7 @@ namespace My
 	 * @brief カードフレームクラス
 	 * @copydoc CObject3D
 	 */
-	class CCardFrame :public CObject3D
+	class CCardFrame :public CObject2D
 	{
 	public:
 		/**

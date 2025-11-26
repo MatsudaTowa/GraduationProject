@@ -8,7 +8,7 @@
 
 namespace
 {
-	D3DXVECTOR3 OFFSET = { -55.0f,-80.0f,0.0f };
+	D3DXVECTOR3 OFFSET = { -55.0f,-90.0f,0.0f };
 }
 //===========================================================================================================================================================
 // コンストラクタ
@@ -34,12 +34,12 @@ HRESULT My::CCardFrameCost::Init()
 	if (pFontmanager != nullptr)
 	{
 		std::wstring wtxt = std::format(L"{}", GetCard()->GetBaseStatus().nCost);
-		D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), GetPos() - GetSize()); //スクリーン座標に変換
-		D3DXVECTOR3 size = GetSize(); //スクリーン座標に変換
+		D3DXVECTOR3 offset_pos = GetPos(); //スクリーン座標に変換
+		D3DXVECTOR2 size = GetSize(); //スクリーン座標に変換
 		const wchar_t* txt = wtxt.c_str();
-		screen_pos.x -= OFFSET.x;
-		screen_pos.y -= OFFSET.y;
-		pFontmanager->RegistAdjustFontSize(txt, screen_pos, { 40.0f,size.y }, 20.0f, 18.0f, 0, 5, COLOR_BLACK,false);
+		offset_pos.x -= OFFSET.x;
+		offset_pos.y -= OFFSET.y;
+		pFontmanager->RegistAdjustFontSize(txt, offset_pos, { 40.0f,size.y }, 20.0f, 18.0f, 0, 5, COLOR_BLACK,false);
 		SetOffSetPos(OFFSET);
 	}
 	return S_OK;

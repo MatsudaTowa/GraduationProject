@@ -54,12 +54,12 @@ void My::CCardFrameUseFont::Update()
 
 	if (m_pFontManager != nullptr)
 	{
-		D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), GetPos()); //スクリーン座標に変換
+		D3DXVECTOR3 offset_pos = GetPos(); //スクリーン座標に変換
 
-		screen_pos.x += m_offsetpos.x;
-		screen_pos.y += m_offsetpos.y;
+		offset_pos.x += m_offsetpos.x;
+		offset_pos.y += m_offsetpos.y;
 
-		m_pFontManager->UpdatePos(screen_pos);
+		m_pFontManager->UpdatePos(offset_pos);
 
 		std::vector<CFont*> list = m_pFontManager->GetList();
 		for (auto& itr : list)
