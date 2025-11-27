@@ -266,10 +266,14 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 	//位置の指定
 	SetCardPos(cpy);
 
-	//数字の設定
-	D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), cpy->GetPos()); //スクリーン座標に変換
-	m_pNumber = m_pNumber->Create(screen_pos, { 50.0f, 50.0f }, 0);
-	m_pNumber->SetNumber(m_nDrawNum * 0.1f, (m_nDrawNum + 1) * 0.1f, COLOR_WHITE);
+	//ディフェンスカードはカウントダウンを始めない
+	if (cpy->GetBaseStatus().maintype != CCard::TYPE_DEFFENCE)
+	{
+		//数字の設定
+		D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), cpy->GetPos()); //スクリーン座標に変換
+		m_pNumber = m_pNumber->Create(screen_pos, { 50.0f, 50.0f }, 0);
+		m_pNumber->SetNumber(m_nDrawNum * 0.1f, (m_nDrawNum + 1) * 0.1f, COLOR_WHITE);
+	}
 
 	//リストの取得
 	std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
