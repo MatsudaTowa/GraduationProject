@@ -273,7 +273,6 @@
     <ClCompile Include="src\title.cpp" />
     <ClCompile Include="src\title_camera.cpp" />
     <ClCompile Include="src\title_screen.cpp" />
-    <ClCompile Include="src\triggertime.cpp" />
     <ClCompile Include="src\useful.cpp" />
     <ClCompile Include="src\wait_zone.cpp" />
     <ClCompile Include="src\zone.cpp" />
@@ -391,7 +390,6 @@
     <ClInclude Include="src\title.h" />
     <ClInclude Include="src\title_camera.h" />
     <ClInclude Include="src\title_screen.h" />
-    <ClInclude Include="src\triggertime.h" />
     <ClInclude Include="src\useful.h" />
     <ClInclude Include="src\wait_zone.h" />
     <ClInclude Include="src\zone.h" />
