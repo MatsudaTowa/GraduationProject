@@ -59,9 +59,12 @@ namespace My
 		{
 			std::string pass;
 			D3DXVECTOR3 offset;
-			D3DXVECTOR3 size;
+			D3DXVECTOR2 size;
 			bool IsChangeable;
 		}CardFrameInfo;
+
+		/** @brief カードフレームの情報構造体の配列*/
+		static CardFrameInfo m_FrameInfo[FRAMETYPE::FRAMETYPE_MAX];
 
 		/* @brief コンストラクタ */
 		CCardFrame(int priority = 10);
@@ -98,9 +101,6 @@ namespace My
 
 		/** @brief カードフレームまでの相対パス */
 		static std::string FramePass;
-
-		/** @brief カードフレームの情報構造体の配列*/
-		static CardFrameInfo m_FrameInfo[FRAMETYPE::FRAMETYPE_MAX];
 
 		/** @brief 親のポインタ */
 		CCard* m_pParent;

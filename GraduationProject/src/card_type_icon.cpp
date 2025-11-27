@@ -8,7 +8,7 @@
 
 namespace
 {
-	const float ICON_SIZE = 12.0f;
+	const float ICON_SIZE = 10.0f;
 
 	const std::string TEX_NAME[My::CCard::CARDTYPE_::TYPE_MAX]
 	{

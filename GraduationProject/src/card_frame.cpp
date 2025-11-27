@@ -13,20 +13,15 @@ const float My::CCardFrame::CARD_WIDTH = 10.0f * 7.0f;
 const float My::CCardFrame::CARD_HEIGHT = 17.0f * 7.0f;
 
 /**
-* @brief カードフレームまでの相対パス
-*/
-std::string My::CCardFrame::FramePass = "../asetto/card_frame/";
-
-/**
 * @brief カードフレームの情報構造体の配列
 */
 My::CCardFrame::CardFrameInfo My::CCardFrame::m_FrameInfo[My::CCardFrame::FRAMETYPE::FRAMETYPE_MAX] = {
-	{"data/TEXTURE/cardframe/bg.png",		{0.0f,0.0f,0.0f},	{CARD_WIDTH,1.0f,CARD_HEIGHT},	true},
-	{"data/TEXTURE/cardframe/illust.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,1.0f,CARD_HEIGHT},	false},
-	{"data/TEXTURE/cardframe/text.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,1.0f,CARD_HEIGHT},	false},
-	{"data/TEXTURE/cardframe/name.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,1.0f,CARD_HEIGHT},	false},
-	{"data/TEXTURE/cardframe/type.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,1.0f,CARD_HEIGHT},	true},
-	{"data/TEXTURE/cardframe/cost.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,1.0f,CARD_HEIGHT},	false}
+	{"data/TEXTURE/cardframe/bg.png",		{0.0f,0.0f,0.0f},	{CARD_WIDTH,CARD_HEIGHT},	true},
+	{"data/TEXTURE/illust/",	{0.0f,-40.0f,0.0f},	{CARD_WIDTH,CARD_HEIGHT},	false},
+	{"data/TEXTURE/cardframe/text.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,CARD_HEIGHT},	false},
+	{"data/TEXTURE/cardframe/name.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,CARD_HEIGHT},	false},
+	{"data/TEXTURE/cardframe/type.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,CARD_HEIGHT},	true},
+	{"data/TEXTURE/cardframe/cost.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,CARD_HEIGHT},	false}
 };
 
 //===========================================================================================================
@@ -52,7 +47,10 @@ HRESULT My::CCardFrame::Init()
 {
 	// テクスチャ設定
 	CTexture* pTex = GET_TEXTURE;
-	BindTexture(pTex->GetAddress(pTex->Regist(&m_FrameInfo[m_type].pass)));
+	if (m_type != FRAMETYPE_ILLUST)
+	{
+		BindTexture(pTex->GetAddress(pTex->Regist(&m_FrameInfo[m_type].pass)));
+	}
 
 	// 見えない位置に設定
 	SetPos({ -5000, -5000 ,-5000 });
@@ -82,13 +80,12 @@ void My::CCardFrame::Uninit()
 //===========================================================================================================
 void My::CCardFrame::Update()
 {
-	D3DXVECTOR3 offsetpos = m_pParent->GetPos() + m_FrameInfo[m_type].offset;
-	D3DXVECTOR3 rot = m_pParent->GetRot();
-
-	//SetPos(offsetpos);
 	D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), m_pParent->GetPos()); //スクリーン座標に変換
 
-	SetPos(screen_pos);
+	D3DXVECTOR3 offsetpos = screen_pos + m_FrameInfo[m_type].offset;
+	D3DXVECTOR3 rot = m_pParent->GetRot();
+
+	SetPos(offsetpos);
 	SetRot({0,0,0});
 	SetRot(rot);
 
@@ -98,8 +95,8 @@ void My::CCardFrame::Update()
 	//	CARD_HEIGHT* m_pParent->GetSize().z,
 	//};
 
-	//// サイズ設定
-	//SetSize(size);
+	// サイズ設定
+	//SetSize(m_FrameInfo[m_type].size);
 	SetVtx();
 }
 
@@ -145,6 +142,9 @@ My::CCardFrame* My::CCardFrame::Create(FRAMETYPE type, CCard* pObj)
 	CCardFrame* pCardFrame = nullptr;
 	switch (type)
 	{
+	case FRAMETYPE_ILLUST:
+		pCardFrame = new CCardFrameIllust(28);
+		break;
 	case FRAMETYPE_NAME:
 		pCardFrame = new CCardFrameName(28);
 		break;
