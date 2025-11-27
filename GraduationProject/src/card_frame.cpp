@@ -18,12 +18,12 @@ std::string My::CCardFrame::FramePass = "../asetto/card_frame/";
 * @brief カードフレームの情報構造体の配列
 */
 My::CCardFrame::CardFrameInfo My::CCardFrame::m_FrameInfo[My::CCardFrame::FRAMETYPE::FRAMETYPE_MAX] = {
-	{"../asetto/cardframe/bg.png",		{0.0f,0.0f,0.0f},	{CARD_WIDTH,1.0f,CARD_HEIGHT},	true},
-	{"../asetto/cardframe/illust.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,1.0f,CARD_HEIGHT},	false},
-	{"../asetto/cardframe/text.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,1.0f,CARD_HEIGHT},	false},
-	{"../asetto/cardframe/name.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,1.0f,CARD_HEIGHT},	false},
-	{"../asetto/cardframe/type.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,1.0f,CARD_HEIGHT},	true},
-	{"../asetto/cardframe/cost.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,1.0f,CARD_HEIGHT},	false}
+	{"data/TEXTURE/cardframe/bg.png",		{0.0f,0.0f,0.0f},	{CARD_WIDTH,1.0f,CARD_HEIGHT},	true},
+	{"data/TEXTURE/cardframe/illust.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,1.0f,CARD_HEIGHT},	false},
+	{"data/TEXTURE/cardframe/text.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,1.0f,CARD_HEIGHT},	false},
+	{"data/TEXTURE/cardframe/name.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,1.0f,CARD_HEIGHT},	false},
+	{"data/TEXTURE/cardframe/type.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,1.0f,CARD_HEIGHT},	true},
+	{"data/TEXTURE/cardframe/cost.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,1.0f,CARD_HEIGHT},	false}
 };
 
 //===========================================================================================================

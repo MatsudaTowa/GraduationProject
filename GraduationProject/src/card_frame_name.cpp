@@ -8,7 +8,7 @@
 
 namespace
 {
-	D3DXVECTOR3 OFFSET = { -30.0f,7.0f,0.0f };
+	D3DXVECTOR3 OFFSET = {-15.0f,9.0f,0.0f };
 }
 
 //===========================================================================================================================================================
@@ -30,7 +30,7 @@ HRESULT My::CCardFrameName::Init()
 	{
 		pFontmanager = new CFontManager(CFontManager::CENTER);
 		pFontmanager->Init();
-		SetFontManager(pFontmanager);
+		SetFontManager(pFontmanager); 
 	}
 	if (pFontmanager != nullptr)
 	{
@@ -42,10 +42,10 @@ HRESULT My::CCardFrameName::Init()
 		wtxt.resize(len - 1);
 		MultiByteToWideChar(CP_UTF8, 0, card_name.c_str(), -1, &wtxt[0], len);
 		D3DXVECTOR3 offset = { OFFSET.x ,OFFSET.y,OFFSET.z };
-		//offset_pos.x += offset.x;
-		//offset_pos.y += offset.y;
+		offset_pos.x += offset.x;
+		offset_pos.y += offset.y;
 
-		pFontmanager->RegistAdjustFontSize(wtxt.c_str(), offset_pos, { 50.0,50.0f}, 8.0f, 12.0f, 0, 5, COLOR_BLACK,false);
+		pFontmanager->RegistAdjustFontSize(wtxt.c_str(), offset_pos, { 50.0,50.0f}, 10.0f, 12.0f, 0, 5, COLOR_BLACK,false);
 		SetOffSetPos({ offset });
 	}
 	return S_OK;

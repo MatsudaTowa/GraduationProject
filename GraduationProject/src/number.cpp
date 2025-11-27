@@ -12,8 +12,8 @@ namespace
 	const int NUM_TEXTURE = 2;
 	const std::string TEXTURE_NAME[NUM_TEXTURE]
 	{
-		 "data\\TEXTURE\\number000.png",
-		 "data\\TEXTURE\\number000.png"
+		 "data\\TEXTURE\\number.png",
+		 "data\\TEXTURE\\number.png"
 	};
 }
 
@@ -63,6 +63,8 @@ void My::CNumber_2D::Update()
 {
 	//親クラスの更新
 	CObject2D::Update();
+
+	SetColor(COLOR_BLACK);
 
 	//頂点生成
 	NumberVtx();
