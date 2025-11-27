@@ -1,6 +1,9 @@
 #include "card_frame.h"
 #include "card_frame_cost.h"
 #include "card_frame_name.h"
+#include "card_frame_illust.h"
+#include "card_frame_type.h"
+#include "card_frame_text.h"
 // ê√ìIÉÅÉìÉoèâä˙âª
 
 /**
@@ -142,11 +145,14 @@ My::CCardFrame* My::CCardFrame::Create(FRAMETYPE type, CCard* pObj)
 	CCardFrame* pCardFrame = nullptr;
 	switch (type)
 	{
-	case FRAMETYPE_COST:
-		pCardFrame = new CCardFrameCost(28);
-		break;
 	case FRAMETYPE_NAME:
 		pCardFrame = new CCardFrameName(28);
+		break;
+	case FRAMETYPE_TYPE:
+		pCardFrame = new CCardFrameType(28);
+		break;
+	case FRAMETYPE_COST:
+		pCardFrame = new CCardFrameCost(28);
 		break;
 	default:
 		pCardFrame = new CCardFrame(28);
