@@ -5,6 +5,8 @@
 //
 //=============================================
 #include "player_UI.h"
+#include "active_scene_player_state.h"
+#include "active_scene_manager.h"
 
 //=============================================
 // コンストラクタ
@@ -70,6 +72,23 @@ void My::CPlayerUI::Update()
 //=============================================
 void My::CPlayerUI::SetCurrentPlayer_UI(D3DXVECTOR3 screen_pos, CActiveSceneCharacter* character)
 {
+	//-Author.Umeda begin--
+
+	// プレイヤーを取得
+	CActiveScenePlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();
+	// いくつずらすか
+	D3DXVECTOR2 ShiftPos = VEC2_RESET_ZERO;
+
+	// プレイヤーと他の敵でずらす位置を変える
+	if (player == character){
+		ShiftPos = { 520.0f,-70.0f };
+	}
+	else{
+		ShiftPos = { 100.0f,0.0f };
+	}
+
+	//-Author.Umeda --end
+
 	if (m_pNumberUI != nullptr)
 	{
 		m_pNumberUI->SetPos({screen_pos.x,screen_pos.y - 100.0f,screen_pos.z});
@@ -122,8 +141,8 @@ void My::CPlayerUI::SetCurrentPlayer_UI(D3DXVECTOR3 screen_pos, CActiveSceneChar
 			if (itr == nullptr) { continue; }
 
 			// TODO: 30.0fは桁ずらし値 取得できるように変更予定
-			// TODO : 2025/11/27 直値でずらしたよ(*/ω＼*)
-			itr->SetPos({ screen_pos.x + 520.0f - (i * 30.0f),screen_pos.y-70.0f,screen_pos.z });
+			// Author.Umeda |-> TODO : 2025/11/27 直値でずらしたよ(*/ω＼*)
+			itr->SetPos({ screen_pos.x + ShiftPos.x - (i * 30.0f),screen_pos.y + ShiftPos.y,screen_pos.z });
 
 			//桁ずらす
 			++i;

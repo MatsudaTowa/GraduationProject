@@ -177,6 +177,9 @@ void My::CPlayerDuelState::CreateDuelUI(CActiveScenePlayer* player)
 		m_pHand = CHand::Create();
 	}
 
+	
+
+
 	D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), player->GetPos()); //スクリーン座標に変換
 
 	if (player->GetPlayerUI()->GetLifeUI() == nullptr)
