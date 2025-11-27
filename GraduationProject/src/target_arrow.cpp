@@ -60,6 +60,7 @@ HRESULT My::CTargetArrow::Init()
 	//’¸“_İ’è
 	SetVtx();
 
+	// õ–½‚ğ‰Šú‰»
 	m_nLife = ONE_SECOND * 3;
 
 	SetAnimFrame(1);

@@ -122,7 +122,8 @@ void My::CPlayerUI::SetCurrentPlayer_UI(D3DXVECTOR3 screen_pos, CActiveSceneChar
 			if (itr == nullptr) { continue; }
 
 			// TODO: 30.0f‚ÍŒ…‚¸‚ç‚µ’l Žæ“¾‚Å‚«‚é‚æ‚¤‚É•ÏX—\’è
-			itr->SetPos({ screen_pos.x + 100.0f - (i * 30.0f),screen_pos.y,screen_pos.z });
+			// TODO : 2025/11/27 ’¼’l‚Å‚¸‚ç‚µ‚½‚æ(*/ƒÖ_*)
+			itr->SetPos({ screen_pos.x + 520.0f - (i * 30.0f),screen_pos.y-70.0f,screen_pos.z });
 
 			//Œ…‚¸‚ç‚·
 			++i;

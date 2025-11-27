@@ -187,7 +187,7 @@ void My::CPlayerDuelState::CreateDuelUI(CActiveScenePlayer* player)
 
 	if (player->GetPlayerUI()->GetEnergyUI() == nullptr)
 	{
-		CEnergy_UI* pEnergyUI = CEnergy_UI::Create({ screen_pos.x + 100.0f,screen_pos.y,screen_pos.z });
+		CEnergy_UI* pEnergyUI = CEnergy_UI::Create({ screen_pos.x + 10000.0f,screen_pos.y,screen_pos.z });
 		player->GetPlayerUI()->SetEnergyUI(pEnergyUI);
 	}
 }
