@@ -223,6 +223,7 @@
       <Filter>card\card_frame</Filter>
     </ClCompile>
     <ClCompile Include="src\font_texture_manager.cpp" />
+    <ClCompile Include="src\triggertime.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -458,6 +459,7 @@
       <Filter>card\card_frame</Filter>
     </ClInclude>
     <ClInclude Include="src\font_texture_manager.h" />
+    <ClInclude Include="src\triggertime.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">

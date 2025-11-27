@@ -517,6 +517,10 @@ My::CZone* My::CCard::CastToEnumZone(ZONE zone, CDuelCharacter* duel)
 	{
 		m_OldZone = m_CurrentZone;
 	}
+	else
+	{
+		return nullptr;
+	}
 
 	//ƒ][ƒ“—ñ‹“
 	switch (m_OldZone)

@@ -83,7 +83,7 @@ void My::CHand::Update(CPlayerDuelState* state, CActiveSceneCharacter* player)
 	// 手札ドロー
 	if (pkeyboad->GetTrigger(DIK_SPACE))
 	{
-		if (status.energy > 0 && m_TotalNum < MAX_HANDSCARD)
+		if (status.energy > 0 && m_TotalNum < MAX_HANDSCARD && !state->GetZoneManager()->GetDeck()->GetList().empty())
 		{// 消費できるエナジーがなかったらドローできない
 
 			HandDraw(1, state);

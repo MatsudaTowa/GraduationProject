@@ -237,6 +237,24 @@ void My::CCardStateCast::ChangeToState(CCard* cpy, CDuelCharacter* duel)
 // 
 //===========================================================================================================
 
+//無名空間
+namespace
+{
+	const int FIRST_COUNT{ 3 };					//最初の数字
+	const D3DXVECTOR2 COUNT_SIZE{50.0f, 50.0f};	//カウントのサイズ
+}
+
+//=======================================================================================
+//コンストラクタ
+//=======================================================================================
+My::CCardStateStay::CCardStateStay() : 
+	m_pNumber(nullptr),			//数字表示用
+	m_nCount(),					//カウント
+	m_nDrawNum(FIRST_COUNT)		//表示する番号
+{
+	
+}
+
 //=======================================================================================
 // 初期化
 //=======================================================================================
@@ -247,6 +265,11 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 
 	//位置の指定
 	SetCardPos(cpy);
+
+	//数字の設定
+	D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), cpy->GetPos()); //スクリーン座標に変換
+	m_pNumber = m_pNumber->Create(screen_pos, { 50.0f, 50.0f }, 0);
+	m_pNumber->SetNumber(m_nDrawNum * 0.1f, (m_nDrawNum + 1) * 0.1f, COLOR_WHITE);
 
 	//リストの取得
 	std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
@@ -309,12 +332,45 @@ void My::CCardStateStay::Update(CCard* cpy, CDuelCharacter* duel)
 	if (m_Staycount >= STAY_TIME)
 	{// カウントが設定された時間を超えたら
 
+		//オブジェクトの破棄
+		if (m_pNumber != nullptr)
+		{
+			m_pNumber->Uninit();
+			m_pNumber = nullptr;
+		}
+
 		// トリガー状態にする
 		cpy->ChangeState(CCardState::CARD_STATE::CARD_TRIGGER, duel);
+		
+		return;
 	}
 
 	// カウントを進める
 	m_Staycount++;
+
+	//カウントダウン処理
+	CountDown();
+}
+
+//=======================================================================================
+// カウントダウン処理
+//=======================================================================================
+void My::CCardStateStay::CountDown()
+{
+	++m_nCount;
+
+	//数字の表記
+	if (m_nCount > 60)
+	{
+		//数値のリセット
+		m_nCount = 0;
+
+		//描画する数値を減らす
+		--m_nDrawNum;
+
+		//数字の設定
+		m_pNumber->SetNumber(m_nDrawNum * 0.1f, (m_nDrawNum + 1) * 0.1f, COLOR_WHITE);
+	}
 }
 
 //===========================================================================================================
@@ -390,20 +446,8 @@ void My::CCardStateTrigger::Init(CCard* cpy, CDuelCharacter* duel)
 	//設定
 	cpy->SetSize({ 0.0f * 1.2f, 0.0f, 0.0f });
 
-	//墓地状態にする
-	//cpy->ChangeState(CCardState::CARD_STATE::CARD_CEMETERY, duel);
-}
-
-//=======================================================================================
-// 更新
-//=======================================================================================
-void My::CCardStateTrigger::Update(CCard* cpy, CDuelCharacter* duel)
-{
-	if (cpy == nullptr)
-		return;
-
 	//リストの取得
-	std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
+	//std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
 
 	//キャラクターの周回
 	for (auto& iter : List)
@@ -416,4 +460,16 @@ void My::CCardStateTrigger::Update(CCard* cpy, CDuelCharacter* duel)
 
 		break;
 	}
+
+	//墓地状態にする
+	//cpy->ChangeState(CCardState::CARD_STATE::CARD_CEMETERY, duel);
+}
+
+//=======================================================================================
+// 更新
+//=======================================================================================
+void My::CCardStateTrigger::Update(CCard* cpy, CDuelCharacter* duel)
+{
+	if (cpy == nullptr)
+		return;
 }

@@ -9,6 +9,7 @@
 
 #include "card_state.h"
 #include "target_arrow.h"
+#include "number.h"
 
 namespace My
 {
@@ -127,6 +128,14 @@ namespace My
 	class CCardStateStay :public CCardState
 	{
 	public:
+
+		/** @brief コンストラクタ */
+		CCardStateStay();
+
+		/** @brief デストラクタ */
+		~CCardStateStay() { m_pNumber = nullptr; }
+
+
 		/** @brief 初期化 */
 		void Init(CCard* cpy, CDuelCharacter* duel) override;
 
@@ -138,11 +147,19 @@ namespace My
 		/** @brief 対象によってカードの位置を設定 */
 		void SetCardPos(CCard* cpy);
 
+		/** @brief 対象によってカードの位置を設定 */
+		void CountDown();
+
 		/** @brief 待機カウント */
 		unsigned int m_Staycount;
 
 		/** @brief 設定された待機時間 */
 		const unsigned int STAY_TIME = ONE_SECOND * 3;
+
+		//変数
+		CNumber_2D* m_pNumber;	//数字表示用オブジェクト
+		int m_nCount;			//カウント値
+		int m_nDrawNum;			//描画する数字
 	};
 
 	/**

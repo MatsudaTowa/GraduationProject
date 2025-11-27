@@ -203,6 +203,9 @@ My::CCastPreviewZone* My::CZoneManager::GetCastPreviewZone()
 */
 bool My::CZoneManager::MoveZone(CCard* pCard, CZone* pCurrentZone, CZone* pNextZone,bool Addflag)
 {
+	//現在のゾーンと次のゾーンが一緒なら移動しない
+	if (pCurrentZone == pNextZone) return false;
+
 	if (pCard == nullptr || pCurrentZone == nullptr || pNextZone == nullptr)
 	{// カードがなかったりゾーンが存在しなかったら
 		return false;
