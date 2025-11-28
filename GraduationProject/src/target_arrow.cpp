@@ -55,7 +55,7 @@ HRESULT My::CTargetArrow::Init()
 
 	//テクスチャ登録
 	CTexture* pTexture = GET_TEXTURE;
-	CObject2D_Anim::BindTexture(pTexture->GetAddress(pTexture->Regist(&TEX_NAME)));	// テクスチャ設定
+	CObject2D_Anim::BindTexture(pTexture->GetAddress(pTexture->Regist(TEX_NAME)));	// テクスチャ設定
 
 	//頂点設定
 	SetVtx();
@@ -71,7 +71,7 @@ HRESULT My::CTargetArrow::Init()
 	if (m_triangle == nullptr)
 	{
 		m_triangle = new CObject2D(5);
-		m_triangle->BindTexture(pTexture->GetAddress(pTexture->Regist(&TRIANGLE_TEX_NAME)));
+		m_triangle->BindTexture(pTexture->GetAddress(pTexture->Regist(TRIANGLE_TEX_NAME)));
 		m_triangle->SetSize({ 50,50 });
 		m_triangle->SetColor(COLOR_WHITE);
 		m_triangle->SetVtx();
