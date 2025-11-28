@@ -138,17 +138,15 @@ void My::CTargetArrowManager::SetOverlappedPos(CTargetArrow* itr, CTargetArrow* 
 			rot = atan2f(itr->GetAttacker().y - itr->GetTarget().y, itr->GetAttacker().x - itr->GetTarget().x);	// Ý’è
 			float a = 1.0f;
 
-			//if (rot >= HALF_PI && rot < HALF_PI+0.01f ||
-			//	rot >= -HALF_PI && rot < HALF_PI -0.0f)
-			//{
-			//	a = 0.5f;
-			//}
+			// ‚¸‚ç‚·ˆÊ’u‚ð‹‚ß‚é
+			shiftpos.x = sinf(rot - (D3DX_PI * 0.5f)) * 50.0f;
+			shiftpos.y = cosf(rot - (D3DX_PI * 0.5f)) * 50.0f;
 
-			shiftpos.x = sinf(rot - (D3DX_PI * 0.5f)) * 100.0f;
-			shiftpos.y = cosf(rot - (D3DX_PI * 0.5f)) * 100.0f;
-
-			if (shiftpos.x == 0.0f)
-			shiftpos.x += 100.0f;
+			// 
+			if (itr->GetPos().x == ptr->GetPos().x)
+				shiftpos.x += 50.0f;
+			else if(itr->GetPos().y == ptr->GetPos().y)
+				shiftpos.y += 50.0f;
 
 			itr->SetShiftPos({ shiftpos.x,shiftpos.y });
 			ptr->SetShiftPos({ -shiftpos.x,-shiftpos.y });
