@@ -24,7 +24,9 @@ m_target(VEC2_RESET_ZERO),
 m_basesize(VEC2_RESET_ZERO),
 m_attacker(VEC2_RESET_ZERO),
 m_triangle(nullptr),
-m_nLife(0)
+m_nLife(0),
+m_IsOverlapped(false),
+m_ShiftPos(VEC2_RESET_ZERO)
 {
 }
 
@@ -241,12 +243,12 @@ void My::CTargetArrow::SetOnTheLinePos()
 	result.y = std::lerp(m_attacker.y, m_target.y, ratio * a);
 
 	// à íuÇÃê›íË
-	pos = { result.x, result.y, 0.0f };
+	pos = { result.x + m_ShiftPos.x, result.y + m_ShiftPos.y, 0.0f };
 	SetPos(pos);
 
 	// ê¸å`ï‚ä‘
-	result2.x = std::lerp(pos.x, m_target.x, ratio);
-	result2.y = std::lerp(pos.y, m_target.y, ratio);
+	result2.x = std::lerp(pos.x, m_target.x + m_ShiftPos.x, ratio);
+	result2.y = std::lerp(pos.y, m_target.y + m_ShiftPos.y, ratio);
 	
 	if (m_triangle != nullptr)
 	{

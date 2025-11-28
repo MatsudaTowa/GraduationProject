@@ -10,7 +10,8 @@
 //===========================================================================================================
 // コンストラクタ
 //===========================================================================================================
-My::CTargetArrowManager::CTargetArrowManager()
+My::CTargetArrowManager::CTargetArrowManager():
+	m_IsOverlapped(false)
 {
 	m_pTargetArrowList.clear();
 }
@@ -37,6 +38,8 @@ void My::CTargetArrowManager::Regist(CTargetArrow* pTA)
 
 	for (auto& itr : m_pTargetArrowList)
 	{
+		SetOverlappedPos(itr,pTA);
+
 		// 攻撃者と標的が同じだったら
 		if (itr->GetAttacker() == pTA->GetAttacker()
 			&& itr->GetTarget() == pTA->GetTarget())
@@ -111,4 +114,44 @@ void My::CTargetArrowManager::Remove()
 std::list < My::CTargetArrow* > My::CTargetArrowManager::GetTargetArrow()
 {
 	return m_pTargetArrowList;
+}
+
+void My::CTargetArrowManager::SetOverlappedPos(CTargetArrow* itr, CTargetArrow* ptr)
+{
+	if (!itr->GetIsOverlapped())
+	{
+		// 互いに同じ攻撃者、標的だったら(逆方向)
+		if (itr->GetAttacker() == ptr->GetTarget()
+			&& itr->GetTarget() == ptr->GetAttacker())
+		{
+			// 真ん中の位置
+			D3DXVECTOR2 centerpos = VEC2_RESET_ZERO;
+			D3DXVECTOR2 shiftpos = VEC2_RESET_ZERO;
+
+			// 攻撃者と標的の間の真ん中の位置を求める
+			centerpos.x = std::lerp(itr->GetTarget().x, itr->GetAttacker().x, 0.5f);
+			centerpos.y = std::lerp(itr->GetTarget().y, itr->GetAttacker().y, 0.5f);
+
+			float rot = 0.0f;
+
+			// 角度を求める
+			rot = atan2f(itr->GetAttacker().y - itr->GetTarget().y, itr->GetAttacker().x - itr->GetTarget().x);	// 設定
+			float a = 1.0f;
+
+			//if (rot >= HALF_PI && rot < HALF_PI+0.01f ||
+			//	rot >= -HALF_PI && rot < HALF_PI -0.0f)
+			//{
+			//	a = 0.5f;
+			//}
+
+			shiftpos.x = sinf(rot - (D3DX_PI * 0.5f)) * 100.0f;
+			shiftpos.y = cosf(rot - (D3DX_PI * 0.5f)) * 100.0f;
+
+			if (shiftpos.x == 0.0f)
+			shiftpos.x += 100.0f;
+
+			itr->SetShiftPos({ shiftpos.x,shiftpos.y });
+			ptr->SetShiftPos({ -shiftpos.x,-shiftpos.y });
+		}
+	}
 }

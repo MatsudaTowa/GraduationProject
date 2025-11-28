@@ -43,6 +43,8 @@ namespace My
 		*/
 		std::list<CTargetArrow*> GetTargetArrow();
 
+		void SetOverlappedPos(CTargetArrow* itr, CTargetArrow* ptr);
+
 	private:
 		/**
 		* @brief ターゲットアローのリスト
@@ -50,9 +52,9 @@ namespace My
 		std::list<CTargetArrow*>m_pTargetArrowList;
 
 		/**
-		* @brief 
+		* @brief arrowが重なっているかどうか
 		*/
-
+		bool m_IsOverlapped;
 	};
 }
 #endif // !TARGET_ARROW_MANAGER_H_

@@ -97,6 +97,30 @@ namespace My
 		*/
 		inline void ResetLife() { m_nLife = ONE_SECOND * 3; };
 
+		/**
+		* @brief arrowが重なっているかどうか設定
+		* @param [in]arrowが重なっているかどうか
+		*/
+		inline void SetIsOverlapped(bool overlapped) { m_IsOverlapped = overlapped; };
+
+		/**
+		* @brief arrowが重なっているかどうか取得
+		* @param [out]arrowが重なっているかどうか
+		*/
+		inline bool GetIsOverlapped() { return m_IsOverlapped; };
+
+		/**
+		* @brief ずらす位置設定
+		* @param [in]ずらす位置
+		*/
+		inline void SetShiftPos(D3DXVECTOR2 shiftpos) { m_ShiftPos = shiftpos; };
+
+		/**
+		* @brief ずらす位置取得
+		* @param [out]ずらす位置
+		*/
+		inline D3DXVECTOR2 GetShiftPos() { return m_ShiftPos; };
+
 	private:
 		/**
 		* @brief 角度と長さを設定
@@ -129,8 +153,14 @@ namespace My
 		int m_nLife;
 
 		/**
-		* @brief 
+		* @brief arrowが重なっているかどうか
 		*/
+		bool m_IsOverlapped;
+
+		/**
+		* @brief ずらす位置
+		*/
+		D3DXVECTOR2 m_ShiftPos;
 	};
 }
 
