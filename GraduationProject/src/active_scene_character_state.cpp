@@ -94,8 +94,22 @@ My::CDuelCharacter::CDuelCharacter(CActiveSceneCharacter* character) :
 	m_pZoneManager = new CZoneManager;
 	m_pZoneManager->Init();
 
-	//カードのIDから生成
+	//デッキを混ぜる処理
+	std::list<int> DeckList = character->GetDeck();
+	std::vector<int> DeckVector;
+
 	for (auto iter : character->GetDeck())
+	{
+		DeckVector.push_back(iter);
+	}
+
+	std::random_device rd;
+	std::mt19937 g(rd());
+
+	std::shuffle(DeckVector.begin(), DeckVector.end(), g);
+
+	//カードのIDから生成
+	for (auto iter : DeckVector)
 	{
 		CCard* pCard = My::CCardManager::GetInstance()->CreateCard(iter);
 		pCard->SetCurrentZone(CCard::DECK);
