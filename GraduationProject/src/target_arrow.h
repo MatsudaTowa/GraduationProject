@@ -25,18 +25,6 @@ namespace My
 	{
 	public:
 		/**
-		* @brief アローのターゲットする対象
-		* (TODO : 敵と自分の矢印を判別する際に使う)
-		* @param 自分
-		* @param 相手
-		*/
-		enum ARROWTYPE
-		{
-			ARROWTYPE_PLAYER = 0,
-			ARROWTYPE_ENEMY
-		};
-
-		/**
 		* @brief コンストラクタ
 		*/
 		CTargetArrow(int nPriority = 5);
@@ -109,18 +97,6 @@ namespace My
 		*/
 		inline void ResetLife() { m_nLife = ONE_SECOND * 3; };
 
-		/**
-		* @brief 矢印の種類を設定する
-		* @param [in]種類
-		*/
-		inline void SetArrowType(ARROWTYPE type) { m_ArrowType = type; };
-
-		/**
-		* @brief 矢印の種類を取得する
-		* @param [out]種類
-		*/
-		inline ARROWTYPE GetArrowType() { return m_ArrowType; }
-
 	private:
 		/**
 		* @brief 角度と長さを設定
@@ -153,9 +129,8 @@ namespace My
 		int m_nLife;
 
 		/**
-		* @brief 矢印のタイプ
+		* @brief 
 		*/
-		ARROWTYPE m_ArrowType;
 	};
 }
 

@@ -148,7 +148,7 @@ void My::CPlayerUI::SetCurrentPlayer_UI(D3DXVECTOR3 screen_pos, CActiveSceneChar
 			++i;
 		}
 	}
-
+	
 }
 
 //=============================================

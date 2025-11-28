@@ -136,16 +136,6 @@ My::CTargetArrow* My::CTargetArrow::Create(int attacker, int target)
 {
 	CTargetArrow* pTA = new CTargetArrow;
 
-	// 攻撃者によってタイプを変える
-	if (attacker == CInputMouse::DOWN)
-	{
-		pTA->m_ArrowType = ARROWTYPE_PLAYER;
-	}
-	else if(attacker != CInputMouse::DOWN)
-	{
-		pTA->m_ArrowType = ARROWTYPE_ENEMY;
-	}
-
 	// 矢印の角度を算出
 	pTA->m_attacker = pTA->SetTargetPos(attacker,0);	// 攻撃者の位置
 	pTA->m_target = pTA->SetTargetPos(target,1);		// 被攻撃者の位置

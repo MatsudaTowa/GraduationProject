@@ -49,6 +49,10 @@ namespace My
 		*/
 		std::list<CTargetArrow*>m_pTargetArrowList;
 
+		/**
+		* @brief 
+		*/
+
 	};
 }
 #endif // !TARGET_ARROW_MANAGER_H_
