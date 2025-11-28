@@ -472,7 +472,7 @@
     <ClInclude Include="src\card_text_icon.h">
       <Filter>card\card_frame</Filter>
     </ClInclude>
-    <ClInclude Include="resorce.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">

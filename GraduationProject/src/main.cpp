@@ -7,7 +7,7 @@
 #pragma comment(lib,"winmm.lib")
 #include "main.h"
 #include "manager.h"
-#include "../../resorce.h"
+#include "../../resource.h"
 
 //=============================================
 //ƒ}ƒNƒ’è‹`

@@ -282,7 +282,7 @@
     <ClCompile Include="src\zone_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resorce.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="src\active_scene_character.h" />
     <ClInclude Include="src\active_scene_character_state.h" />
     <ClInclude Include="src\area.h" />
