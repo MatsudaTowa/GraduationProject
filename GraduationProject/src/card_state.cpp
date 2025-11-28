@@ -266,14 +266,15 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 	//位置の指定
 	SetCardPos(cpy);
 
+	cpy->Stay();
+
 	//ディフェンスカードはカウントダウンを始めない
-	if (cpy->GetBaseStatus().maintype != CCard::TYPE_DEFFENCE)
-	{
-		//数字の設定
-		D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), cpy->GetPos()); //スクリーン座標に変換
-		m_pNumber = m_pNumber->Create(screen_pos, COUNT_SIZE, 0);
-		m_pNumber->SetNumber(m_nDrawNum * 0.1f, (m_nDrawNum + 1) * 0.1f, COLOR_WHITE);
-	}
+	if (cpy->GetBaseStatus().maintype == CCard::TYPE_DEFFENCE) return;
+
+	//数字の設定
+	D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), cpy->GetPos()); //スクリーン座標に変換
+	m_pNumber = m_pNumber->Create(screen_pos, COUNT_SIZE, 0);
+	m_pNumber->SetNumber(m_nDrawNum * 0.1f, (m_nDrawNum + 1) * 0.1f, COLOR_WHITE);
 
 	//リストの取得
 	std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
@@ -295,6 +296,9 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 //=======================================================================================
 void My::CCardStateStay::SetCardPos(CCard* cpy)
 {
+	//ディフェンスカードはカウントダウンを始めない
+	if (cpy->GetBaseStatus().maintype == CCard::TYPE_DEFFENCE) return;
+
 	cpy->SetPos({ 0.0f, 0.0f, 0.0f });
 	
 	//エリアによって位置を変える
@@ -386,21 +390,10 @@ void My::CCardStateStay::CountDown()
 //=======================================================================================
 // 初期化
 //=======================================================================================
-void My::CCardStateWait::Init(CCard* /*cpy*/, CDuelCharacter* /*duel*/)
+void My::CCardStateWait::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 {
-	////リストの取得
-	//std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
-
-	////キャラクターの周回
-	//for (auto& iter : List)
-	//{
-	//	if (cpy->GetUserArea() != iter->GetArea()) continue;
-
-	//	// ターゲットアローをマネージャーに登録
-	//	iter->GetTargetArrowManeger()->Regist(CTargetArrow::Create(cpy->GetUserArea(), cpy->GetTarget()));
-
-	//	break;
-	//}
+	//試しに画面外に飛ばす
+	cpy->SetPos({ -1000.0f, 0.0f, 0.0f });
 }
 
 //=======================================================================================
@@ -452,6 +445,9 @@ void My::CCardStateTrigger::Init(CCard* cpy, CDuelCharacter* duel)
 
 	//リストの取得
 	//std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
+
+	//ディフェンスカードはカウントダウンを始めない
+	if (cpy->GetBaseStatus().maintype == CCard::TYPE_DEFFENCE) return;
 
 	//キャラクターの周回
 	for (auto& iter : List)

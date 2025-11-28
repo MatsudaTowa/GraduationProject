@@ -60,6 +60,11 @@ namespace My
 		bool IsCast(CDuelCharacter* duel) override;
 
 		/**
+		 * @brief ステイ処理
+		 */
+		void Stay() override {}
+
+		/**
 		 * @brief 固有情報読み込み
 		 * @param [in]param
 		 */

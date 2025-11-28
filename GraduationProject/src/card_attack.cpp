@@ -120,6 +120,25 @@ void My::CCardAttack::Cast(CDuelCharacter* duel)
 
 			//守備カードに自身のエリアを追加し、ステイ状態にする
 			pCard->SetTarget(GetUserArea());
+
+			//守備対象のターゲットの作成
+			CCardDeffence::DiffenceTarget Target = {0, 0};
+
+			//キャラクターの周回
+			for (auto character : My::CActiveSceneManager::GetInstance()->GetCharacterList())
+			{
+				//同じエリアのみ通す
+				if (character->GetArea() != GetUserArea()) continue;
+
+				Target.nAttackCardUserId = character->GetPlayerIdx();	//使用者の番号を伝える
+
+				break;
+			}
+
+			//パラメータを代入
+			Target.nTargetCard = duel->GetZoneManager()->GetCastPreviewZone()->GetList().size() - 1;
+			pCard->SetDiffenceTarget(Target);
+
 			pCard->ChangeState(CCardState::CARD_STAY, DuelState);
 
 			//守備カードのポインタを保存
@@ -129,6 +148,18 @@ void My::CCardAttack::Cast(CDuelCharacter* duel)
 		break;
 	}
 	
+}
+
+//===========================================================================================================
+//ステイ処理
+//===========================================================================================================
+void My::CCardAttack::Stay()
+{
+	//守備カードの位置更新
+	for (CCardDeffence* pCard : m_DefCardVector)
+	{
+		pCard->SetPos({ GetPos().x + CCardDeffence::STEY_SPACE, GetPos().y, GetPos().z });
+	}
 }
 
 //===========================================================================================================

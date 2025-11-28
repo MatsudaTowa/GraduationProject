@@ -28,6 +28,9 @@ namespace My
 			int nTargetCard = 0;		//ターゲットのカード番号(現在のリストの中の番号)
 		};
 
+		//定数
+		static constexpr float STEY_SPACE{ 80.0f };	//ステイ時の間隔
+
 		/**
 		 * @brief コンストラクタ
 		 */
@@ -103,6 +106,12 @@ namespace My
 		inline void SetCounterValue(int counter_value) { m_nCounterValue = counter_value; }
 
 		/**
+		 * @brief 対象の設定
+		 * @param 対象
+		 */
+		inline void SetDiffenceTarget(DiffenceTarget target) { m_TargetInfo.push_back(target); }
+
+		/**
 		 * @brief 固有情報設定
 		 * @param [in]param
 		 */
@@ -117,6 +126,11 @@ namespace My
 		 * @brief キャスト処理
 		 */
 		void Cast(CDuelCharacter* duel) override;
+
+		/**
+		 * @brief ステイ処理
+		 */
+		void Stay() override;
 
 		/**
 		 * @brief トリガー処理

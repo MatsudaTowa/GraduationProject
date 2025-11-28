@@ -323,6 +323,7 @@ void My::CActiveSceneManager::DefCardCast()
 					pAttackCard->AddDefCard(pDeffenceCard);
 
 					//TODOŽç”õƒJ[ƒh‚É‘ÎÛ‚Ìî•ñ‚ð“ü‚ê‚é
+					pDeffenceCard->SetDiffenceTarget(nTarget);
 				}
 
 				break;

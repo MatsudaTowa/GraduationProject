@@ -74,6 +74,11 @@ namespace My
 		void Cast(CDuelCharacter* duel) override;
 
 		/**
+		 * @brief ステイ処理
+		 */
+		void Stay() override {}
+
+		/**
 		 * @brief トリガー処理
 		 */
 		void Trigger() override;

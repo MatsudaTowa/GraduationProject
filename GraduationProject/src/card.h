@@ -121,6 +121,11 @@ namespace My
 		virtual void Cast(CDuelCharacter* duel) {};
 
 		/**
+		 * @brief ステイ処理
+		 */
+		virtual void Stay() = 0;
+
+		/**
 		 * @brief トリガー処理
 		 */
 		virtual void Trigger() = 0;

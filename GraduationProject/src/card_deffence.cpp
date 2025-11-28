@@ -219,6 +219,51 @@ void My::CCardDeffence::Cast(CDuelCharacter* duel)
 }
 
 //===========================================================================================================
+//ステイ処理
+//===========================================================================================================
+void My::CCardDeffence::Stay()
+{
+	//対象のカード
+	CCard* pCard = nullptr;
+
+	//ターゲット周回
+	for (auto& iter : m_TargetInfo)
+	{
+		for (auto& Character : My::CActiveSceneManager::GetInstance()->GetCharacterList())
+		{
+			if (iter.nAttackCardUserId != Character->GetPlayerIdx()) continue;
+
+			CDuelCharacter* DuelState = nullptr;
+
+			//対戦状態にキャスト
+			DuelState = dynamic_cast<CDuelCharacter*>(Character->GetState());
+
+			if (DuelState == nullptr) continue;	//キャスト成功したかの確認
+
+			int nCount = 0;
+
+			//手札のカードを周回し、受信したカードを探す
+			for (auto& Card : DuelState->GetZoneManager()->GetCastPreviewZone()->GetList())
+			{
+				if (nCount != iter.nTargetCard)
+				{
+					++nCount;
+					continue;
+				}
+
+				pCard = Card;
+				break;
+			}
+
+			//カード
+			D3DXVECTOR3 pos = pCard->GetPos();
+			SetPos({ pos.x + STEY_SPACE, pos.y, pos.z});
+			
+		}
+	}
+}
+
+//===========================================================================================================
 //トリガー処理
 //===========================================================================================================
 void My::CCardDeffence::Trigger()
