@@ -35,7 +35,7 @@ HRESULT My::CField::Init()
 
 	//テクスチャ設定
 	CTexture* pTexture = GET_TEXTURE;
-	BindTexture(pTexture->GetAddress(pTexture->Regist(&TEX_NAME)));
+	BindTexture(pTexture->GetAddress(pTexture->Regist(TEX_NAME)));
 
 	//頂点設定
 	SetVtx(D3DXVECTOR3(0.0f,1.0f,0.0f));

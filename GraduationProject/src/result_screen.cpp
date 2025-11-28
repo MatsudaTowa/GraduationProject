@@ -101,7 +101,7 @@ My::CResult_Screen* My::CResult_Screen::Create(D3DXVECTOR3 pos)
 
 	pResult_Screen->SetType(OBJECT_TYPE_RESULT); //タイプ設定
 
-	pResult_Screen->BindTexture(pTexture->GetAddress(pTexture->Regist(&TEX_NAME)));	//テクスチャ登録
+	pResult_Screen->BindTexture(pTexture->GetAddress(pTexture->Regist(TEX_NAME)));	//テクスチャ登録
 
 	pResult_Screen->Init();	//初期化
 

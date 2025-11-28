@@ -49,7 +49,7 @@ HRESULT My::CCardFrame::Init()
 	CTexture* pTex = GET_TEXTURE;
 	if (m_type != FRAMETYPE_ILLUST)
 	{
-		BindTexture(pTex->GetAddress(pTex->Regist(&m_FrameInfo[m_type].pass)));
+		BindTexture(pTex->GetAddress(pTex->Regist(m_FrameInfo[m_type].pass)));
 	}
 
 	// Œ©‚¦‚È‚¢ˆÊ’u‚Éİ’è

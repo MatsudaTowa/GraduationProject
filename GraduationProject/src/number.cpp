@@ -96,7 +96,7 @@ My::CNumber_2D* My::CNumber_2D::Create(D3DXVECTOR3 pos, D3DXVECTOR2 size,int idx
 
 	pNumber->SetType(OBJECT_TYPE_NUMBER); //タイプ設定
 
-	pNumber->BindTexture(pTexture->GetAddress(pTexture->Regist(&TEXTURE_NAME[idx]))); //テクスチャ設定
+	pNumber->BindTexture(pTexture->GetAddress(pTexture->Regist(TEXTURE_NAME[idx]))); //テクスチャ設定
 
 	pNumber->Init(); //初期化処理
 
@@ -247,7 +247,7 @@ My::CNumber_3D* My::CNumber_3D::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size)
 
 	pNumber->SetType(OBJECT_TYPE_NUMBER); //タイプ設定
 
-	pNumber->BindTexture(pTexture->GetAddress(pTexture->Regist(&TEXTURE_NAME))); //テクスチャ設定
+	pNumber->BindTexture(pTexture->GetAddress(pTexture->Regist(TEXTURE_NAME))); //テクスチャ設定
 
 	pNumber->Init(); //初期化処理
 

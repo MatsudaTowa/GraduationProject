@@ -81,7 +81,7 @@ My::CCardTypeIcon* My::CCardTypeIcon::Create(D3DXVECTOR3 pos, CCard::CARDTYPE_ t
 
 	//テクスチャ登録
 	CTexture* pTexture = CManager::GetInstance()->GetTexture();
-	pIcon->BindTexture(pTexture->GetAddress(pTexture->Regist(&TEX_NAME[type])));//テクスチャ設定
+	pIcon->BindTexture(pTexture->GetAddress(pTexture->Regist(TEX_NAME[type])));//テクスチャ設定
 
 	pIcon->Init();
 

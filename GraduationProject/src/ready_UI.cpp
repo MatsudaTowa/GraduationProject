@@ -66,7 +66,7 @@ void My::CReadyUI::SetCurrentReady_UI(D3DXVECTOR3 screen_pos, bool isReady)
 	if (m_pReady_txt != nullptr)
 	{
 		m_pReady_txt->SetPos(screen_pos);
-		m_pReady_txt->BindTexture(GET_TEXTURE->GetAddress(GET_TEXTURE->Regist(&TEX_NAME[isReady])));
+		m_pReady_txt->BindTexture(GET_TEXTURE->GetAddress(GET_TEXTURE->Regist(TEX_NAME[isReady])));
 	}
 }
 

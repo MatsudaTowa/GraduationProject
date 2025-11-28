@@ -27,12 +27,11 @@ HRESULT My::CCardFrameIllust::Init()
 	CCardFrame::Init();
 	// テクスチャ設定
 	CTexture* pTex = GET_TEXTURE;
+
 	std::string get_tex_pass = GetCard()->GetBaseStatus().imagePath;
-	std::string tex_pass = m_FrameInfo[GetType()].pass + get_tex_pass;
+	const std::string tex_pass = m_FrameInfo[GetType()].pass + get_tex_pass;
 
-	BindTexture(pTex->GetAddress(pTex->Regist(&tex_pass)));
-
-	get_tex_pass = "";
+	BindTexture(pTex->GetAddress(pTex->Regist(tex_pass)));
 
 	D3DXVECTOR3 offset_pos = GetPos();
 	offset_pos.x += OFFSET.x;

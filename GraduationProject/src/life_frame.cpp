@@ -49,7 +49,7 @@ HRESULT My::CLife_frame::Init()
 
 	//テクスチャ登録
 	CTexture* pTexture = CManager::GetInstance()->GetTexture();
-	CObject2D::BindTexture(pTexture->GetAddress(pTexture->Regist(&LIFE_100)));//テクスチャ設定
+	CObject2D::BindTexture(pTexture->GetAddress(pTexture->Regist(LIFE_100)));//テクスチャ設定
 
 	SetTexPos(VEC2_RESET_ONE);
 
@@ -91,34 +91,34 @@ void My::CLife_frame::Update()
 	{//水色
 			//テクスチャ登録
 		CTexture* pTexture = CManager::GetInstance()->GetTexture();
-		CObject2D::BindTexture(pTexture->GetAddress(pTexture->Regist(&LIFE_100)));//テクスチャ設定
+		CObject2D::BindTexture(pTexture->GetAddress(pTexture->Regist(LIFE_100)));//テクスチャ設定
 	}
 
 	else if (L_Raito <= 0.75 && L_Raito >= HALF)
 	{//緑色
 			//テクスチャ登録
 		CTexture* pTexture = CManager::GetInstance()->GetTexture();
-		CObject2D::BindTexture(pTexture->GetAddress(pTexture->Regist(&LIFE_75)));//テクスチャ設定
+		CObject2D::BindTexture(pTexture->GetAddress(pTexture->Regist(LIFE_75)));//テクスチャ設定
 	}
 
 	else if (L_Raito <= HALF && L_Raito >= 0.25)
 	{//黄色
 			//テクスチャ登録
 		CTexture* pTexture = CManager::GetInstance()->GetTexture();
-		CObject2D::BindTexture(pTexture->GetAddress(pTexture->Regist(&LIFE_50)));//テクスチャ設定
+		CObject2D::BindTexture(pTexture->GetAddress(pTexture->Regist(LIFE_50)));//テクスチャ設定
 	}
 
 	else if (L_Raito <= 0.25 && L_Raito > FLOAT_ZERO)
 	{//赤色
 			//テクスチャ登録
 		CTexture* pTexture = CManager::GetInstance()->GetTexture();
-		CObject2D::BindTexture(pTexture->GetAddress(pTexture->Regist(&LIFE_25)));//テクスチャ設定
+		CObject2D::BindTexture(pTexture->GetAddress(pTexture->Regist(LIFE_25)));//テクスチャ設定
 	}
 
 	else if (L_Raito == FLOAT_ZERO)
 	{
 		CTexture* pTexture = CManager::GetInstance()->GetTexture();
-		CObject2D::BindTexture(pTexture->GetAddress(pTexture->Regist(&DEATH)));//テクスチャ設定
+		CObject2D::BindTexture(pTexture->GetAddress(pTexture->Regist(DEATH)));//テクスチャ設定
 	}
 
 }

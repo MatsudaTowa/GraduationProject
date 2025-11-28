@@ -20,12 +20,11 @@ namespace My
 		CTexture();
 		~CTexture();
 		void Unload(); //テクスチャ破棄
-		int Regist(const std::string* pTex);
+		int Regist(const std::string pTex);
 		LPDIRECT3DTEXTURE9 GetAddress(int nIdx);
 	private:
 		LPDIRECT3DTEXTURE9 m_apTexture[MAX_TEX]; //テクスチャへのポインタ
-		std::string* m_texName[MAX_TEX]; //テクスチャネーム保存用
-		int m_nNumAll; //テクスチャ総数
+		std::string m_texName[MAX_TEX]; //テクスチャネーム保存用
 	};
 }
 

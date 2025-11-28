@@ -93,7 +93,7 @@ My::CTitle_Screen* My::CTitle_Screen::Create(D3DXVECTOR3 pos)
 
 	pTitle_Screen->SetPos(pos); //posê›íË
 
-	pTitle_Screen->BindTexture(pTexture->GetAddress(pTexture->Regist(&TEX_NAME)));
+	pTitle_Screen->BindTexture(pTexture->GetAddress(pTexture->Regist(TEX_NAME)));
 
 	pTitle_Screen->SetType(OBJECT_TYPE_TITLE); //É^ÉCÉvê›íË
 

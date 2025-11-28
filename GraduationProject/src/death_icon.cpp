@@ -35,7 +35,7 @@ HRESULT My::CDeathIcon::Init()
 	SetSize({ POLY_SIZE,POLY_SIZE });
 
 	//テクスチャ読み込み
-	BindTexture(GET_TEXTURE->GetAddress(GET_TEXTURE->Regist(&TEX_NAME)));
+	BindTexture(GET_TEXTURE->GetAddress(GET_TEXTURE->Regist(TEX_NAME)));
 	SetVtx();
 	return S_OK;
 }

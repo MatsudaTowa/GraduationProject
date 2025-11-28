@@ -97,7 +97,7 @@ My::CShadow* My::CShadow::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size)
 
 	pShadow->SetPos(pos); //pos設定
 	pShadow->SetSize(size); //サイズ設定
-	pShadow->BindTexture(pTexture->GetAddress(pTexture->Regist(&TEXTURE_NAME))); //テクスチャ設定
+	pShadow->BindTexture(pTexture->GetAddress(pTexture->Regist(TEXTURE_NAME))); //テクスチャ設定
 	pShadow->SetType(OBJECT_TYPE_SHADOW); //タイプ設定
 	pShadow->Init(); //影の初期化処理
 

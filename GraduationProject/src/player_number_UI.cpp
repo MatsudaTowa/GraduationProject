@@ -73,7 +73,7 @@ My::CPlayerNumberUI* My::CPlayerNumberUI::Create(D3DXVECTOR3 pos, int player_id)
 	CPlayerNumberUI* pUI = new CPlayerNumberUI;
 	if (pUI == nullptr) { return nullptr; }
 	pUI->SetPos(pos);
-	pUI->BindTexture(GET_TEXTURE->GetAddress(GET_TEXTURE->Regist(&CPlayerNumberUI::TEX_NAME[player_id])));
+	pUI->BindTexture(GET_TEXTURE->GetAddress(GET_TEXTURE->Regist(CPlayerNumberUI::TEX_NAME[player_id])));
 	pUI->Init();
 	return pUI;
 }

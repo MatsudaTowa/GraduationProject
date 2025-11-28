@@ -29,7 +29,7 @@ HRESULT My::CReadyTxt::Init()
 	SetColor(COLOR_WHITE);
 
 	//テクスチャ読み込み
-	BindTexture(GET_TEXTURE->GetAddress(GET_TEXTURE->Regist(&CReadyUI::TEX_NAME[0])));
+	BindTexture(GET_TEXTURE->GetAddress(GET_TEXTURE->Regist(CReadyUI::TEX_NAME[0])));
 	SetVtx();
 	return S_OK;
 }

@@ -44,7 +44,7 @@ HRESULT My::CCenterArea::Init()
 
 	//テクスチャ登録
 	CTexture* pTexture = CManager::GetInstance()->GetTexture();
-	CObject2D::BindTexture(pTexture->GetAddress(pTexture->Regist(&TEX_NAME)));//テクスチャ設定
+	CObject2D::BindTexture(pTexture->GetAddress(pTexture->Regist(TEX_NAME)));//テクスチャ設定
 
 	SetTexPos(VEC2_RESET_ONE);
 

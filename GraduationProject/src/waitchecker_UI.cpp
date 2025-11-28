@@ -47,7 +47,7 @@ HRESULT My::CWaitChecker_UI::Init()
 	CTexture* pTexture = CManager::GetInstance()->GetTexture();
 
 	//テクスチャ設定
-	BindTexture(pTexture->GetAddress(pTexture->Regist(&TEXTURE_PATH[m_isWaited])));
+	BindTexture(pTexture->GetAddress(pTexture->Regist(TEXTURE_PATH[m_isWaited])));
 
 	//自分自身のサイズ取得
 	D3DXVECTOR2 size = UI_SIZE;
@@ -135,5 +135,5 @@ void My::CWaitChecker_UI::SetIsWaited(bool wait)
 	m_isWaited = wait;
 
 	//テクスチャ設定
-	BindTexture(pTexture->GetAddress(pTexture->Regist(&TEXTURE_PATH[m_isWaited])));
+	BindTexture(pTexture->GetAddress(pTexture->Regist(TEXTURE_PATH[m_isWaited])));
 }

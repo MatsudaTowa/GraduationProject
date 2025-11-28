@@ -16,8 +16,6 @@ My::CTexture::CTexture()
 	{
 		m_apTexture[nCnt] = nullptr;
 	}
-
-	m_nNumAll = 0;
 }
 
 /**
@@ -38,19 +36,15 @@ void My::CTexture::Unload()
 		{
 			m_apTexture[nCnt]->Release();
 			m_apTexture[nCnt] = nullptr;
-			m_texName[nCnt] = nullptr;
-
 		}
 	}
-	m_nNumAll = 0;
-
 }
 
 /**
  * @brief テクスチャ登録
  * @param [in]テクスチャのファイルパス
  */
-int My::CTexture::Regist(const std::string* pTex)
+int My::CTexture::Regist(const std::string pTex)
 {
 	int nIdx = 0;
 	for (int nCnt = 0; nCnt < MAX_TEX; nCnt++)
@@ -61,13 +55,12 @@ int My::CTexture::Regist(const std::string* pTex)
 
 			//テクスチャの読み込み
 			D3DXCreateTextureFromFile(pDevice,
-				pTex->c_str(),
+				pTex.c_str(),
 				&m_apTexture[nCnt]);
 			
 			//引数のファイルパスを保存
-			m_texName[nCnt] = (std::string*)pTex;
+			m_texName[nCnt] = pTex;
 			nIdx = nCnt;	//番号の保存
-			m_nNumAll++;	//総数のカウントアップ
 			break;
 		}
 		else if (m_texName[nCnt] ==pTex)
