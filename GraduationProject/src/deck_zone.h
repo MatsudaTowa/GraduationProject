@@ -41,6 +41,10 @@ namespace My
 		*/
 		void Shuffle();
 
+		/**
+		* @brief RDØ‚ê‚É‚È‚é‚©
+		*/
+		bool CheckDeckOut();
 	};
 }
 #endif

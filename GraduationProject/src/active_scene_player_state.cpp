@@ -13,6 +13,7 @@
 #include "player_lobby_UI_manager.h"
 #include "ready_button.h"
 #include "match_start_button.h"
+#include "wait_zone.h"
 
 //=============================================
 // コンストラクタ
@@ -69,6 +70,13 @@ void My::CPlayerLobbyState::Lobby(CActiveSceneCharacter* character)
 	// それぞれのマウスのイベントを呼ぶ
 	pReadyButton->ProcessMouseEvent();
 	pStartButton->ProcessMouseEvent();
+}
+
+//デュエルステートで使う定数
+namespace
+{
+	const D3DXVECTOR3 FIRST_POS{ 1050.0f, 660.0f, 0.0f };
+	const float CARD_SPACE{ 40.0f };
 }
 
 //=============================================
@@ -245,4 +253,33 @@ void My::CPlayerDuelState::EnergyUp(CActiveScenePlayer* player)
 void My::CPlayerDuelState::DrawCard()
 {
 
+}
+
+//=============================================
+//待機ゾーンのカード表示処理
+//=============================================
+void My::CPlayerDuelState::ViewWait(CWaitZone* zone)
+{
+	//周回数
+	int nCount = 0;
+
+	//待機カードの周回
+	for (CCard* pCard : zone->GetList())
+	{
+		//座標変換しずらす
+		D3DXVECTOR3 pos = ConvertToWorldPoint(GET_CAMERA(GET_CAMERA_IDX), FIRST_POS, FIRST_POS);
+		pos.x -= CARD_SPACE * nCount;
+		pCard->SetPos(pos);
+
+		//最初のカード以外は小さくする
+		//TODO : カードフレームを取得できないので取得できるようになったら実装
+		if (nCount > 0)
+		{
+			/*pCard->SetSize({ 0.0f, 0.0f, 0.0f });
+			pos.z += 100.0f;
+			pCard->SetPos(pos);*/
+		}
+
+		nCount++;	//カウントアップ
+	}
 }

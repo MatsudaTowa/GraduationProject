@@ -59,6 +59,12 @@ namespace My
 		void Duel(CActiveSceneCharacter* character) override;
 
 		/**
+		 * @brief 待機ゾーンの表示処理
+		 * @param [in]zone
+		 */
+		void ViewWait(CWaitZone* zone) override;
+
+		/**
 		 * @brief エナジー増やすまでのカウント取得
 		 * @return m_EnergyUpFrame
 		 */
@@ -114,6 +120,7 @@ namespace My
 		{
 			m_pHand = pHand;
 		}
+
 	private:
 
 		/**

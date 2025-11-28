@@ -9,6 +9,7 @@
 
 #include "character.h"
 #include "active_scene_character_state.h"
+#include "waitchecker_UI.h"
 
 /** @brief My 名前空間 */
 namespace My
@@ -54,12 +55,21 @@ namespace My
 		* @param [in]キャラクターポインタ
 		*/
 		void Duel(CActiveSceneCharacter* character) override;
+
+		/**
+		 * @brief 待機ゾーンの表示処理
+		 * @param [in]zone
+		 */
+		void ViewWait(CWaitZone* zone) override;
 	private:
 		/**
 		 * @brief UI生成
 		 * @param [in]enemy
 		 */
 		void CreateDuelUI(CEnemy* enemy);
+
+		//変数
+		std::vector<My::CWaitChecker_UI*> m_WaitCheckerVector;
 	};
 }
 #endif // !_ENEMY_STATE_H_

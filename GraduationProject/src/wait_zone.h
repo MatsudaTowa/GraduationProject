@@ -35,6 +35,11 @@ namespace My
 		* @param [in]カードのポインタ
 		*/
 		void SendDefenseCard(CCard*pCard);
+
+		/**
+		* @brief カードを並べる
+		*/
+		void LineUpCard();
 	};
 }
 

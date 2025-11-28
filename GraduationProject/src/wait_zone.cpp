@@ -33,3 +33,15 @@ void My::CWaitZone::SendDefenseCard(CCard* pCard)
 	// カードを追加
 	AddList(pCard);
 }
+
+/**
+* @brief カードを並べる
+*/
+void My::CWaitZone::LineUpCard()
+{
+	//リストの周回
+	for (CCard* pCard : GetList())
+	{
+
+	}
+}

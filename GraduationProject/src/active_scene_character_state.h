@@ -18,6 +18,7 @@ namespace My
 	class CActiveSceneCharacter;
 	class CCharacterLobbyUIManager;
 	class CZoneManager;
+	class CWaitZone;
 	
 	/** @brief キャラクターステートクラス */
 	class CActiveSceneCharacterState
@@ -116,6 +117,12 @@ namespace My
 		~CDuelCharacter() override;
 
 		void Duel(CActiveSceneCharacter* character) override;
+
+		/**
+		 * @brief 待機ゾーンの表示処理
+		 * @param [in]zone
+		 */
+		virtual void ViewWait(CWaitZone* zone) = 0;
 
 		/**
 		 * @brief ゾーンマネージャー設定

@@ -325,8 +325,11 @@ void My::CHand::HandDraw(int drawnum, CPlayerDuelState* state)
 	
 	for (int i = 0; i < drawnum; i++)
 	{
-		//トップのカードを取得
+		//カードを引けるか
 		CZoneManager* pZoneManager = state->GetZoneManager();
+		if (pZoneManager->GetDeck()->CheckDeckOut()) break;
+
+		//トップのカードを取得
 		CCard* pDrawCard = pZoneManager->GetDeck()->GetTopCard();
 		
 		// TODO : 一旦ここでランダムに抽選する

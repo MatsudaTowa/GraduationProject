@@ -63,7 +63,7 @@ void My::CDuelCharacter::Duel(CActiveSceneCharacter* /*character*/)
 
 	//更新が必要なカードのゾーンを追加
 	AddList(m_pZoneManager->GetCastPreviewZone());	//キャスト
-	AddList(m_pZoneManager->GetWaitZone());			//守備待機
+	//AddList(m_pZoneManager->GetWaitZone());			//守備待機
 
 	//更新
 	for (auto& iter : CardList)
@@ -73,6 +73,9 @@ void My::CDuelCharacter::Duel(CActiveSceneCharacter* /*character*/)
 
 	//クリア
 	CardList.clear();
+
+	//待機ゾーンの表示処理
+	ViewWait(m_pZoneManager->GetWaitZone());
 
 	//描画を行いたいゾーンのみ更新
 	//m_pZoneManager->GetCastPreviewZone()->Update(this);		//キャスト

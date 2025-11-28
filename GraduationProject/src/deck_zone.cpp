@@ -72,3 +72,11 @@ void My::CDeckZone::Shuffle()
     list.assign(temp.begin(), temp.end());
 
 }
+
+/**
+* @brief RDØ‚ê‚É‚È‚é‚©
+*/
+bool My::CDeckZone::CheckDeckOut()
+{
+    return GetList().empty();
+}
