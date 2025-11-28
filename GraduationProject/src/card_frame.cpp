@@ -9,8 +9,8 @@
 /**
 * @brief カードの基本サイズ
 */
-const float My::CCardFrame::CARD_WIDTH = 10.0f * 7.0f;
-const float My::CCardFrame::CARD_HEIGHT = 17.0f * 7.0f;
+const float My::CCardFrame::CARD_WIDTH = 70.0f;
+const float My::CCardFrame::CARD_HEIGHT = 110.0f;
 
 /**
 * @brief カードフレームの情報構造体の配列
