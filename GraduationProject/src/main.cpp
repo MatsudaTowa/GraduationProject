@@ -7,12 +7,13 @@
 #pragma comment(lib,"winmm.lib")
 #include "main.h"
 #include "manager.h"
+#include "../../resorce.h"
 
 //=============================================
 //マクロ定義
 //=============================================
 #define CLASS_NAME "WindowClass" //文字列
-#define WINDOW_NAME "流墨拳" //キャプションに表示
+#define WINDOW_NAME "攻護交錯-X DUEL-" //キャプションに表示
 
 //=============================================
 //プロトタイプ宣言
@@ -51,12 +52,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE /*hInstancePrev*
 		0, //通常は使用しない
 		0, //通常は使用しない
 		hInstance, //インスタンスハンドル
-		LoadIcon(NULL,IDI_APPLICATION), //タスクバーのアイコン
+		(HICON)LoadImage(wcex.hInstance, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON, GetSystemMetrics(SM_CXICON), GetSystemMetrics(SM_CYICON),0), //タスクバーのアイコン
 		LoadCursor(NULL,IDC_ARROW), //マウスカーソル
 		(HBRUSH)(COLOR_WINDOW + 1), //背景色
 		NULL, //メニューバー
 		CLASS_NAME, //ウィンドウクラスの名前
-		LoadIcon(NULL,IDI_APPLICATION), //ファイルアイコン
+		(HICON)LoadImage(wcex.hInstance, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON, GetSystemMetrics(SM_CXICON), GetSystemMetrics(SM_CYICON), 0)
 	};
 	HWND hWnd; //ウィンドウハンドル
 	MSG msg; //メッセージを格納する

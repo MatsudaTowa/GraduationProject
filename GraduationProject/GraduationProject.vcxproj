@@ -188,6 +188,7 @@
     <ClCompile Include="src\card_manager.cpp" />
     <ClCompile Include="src\card_state.cpp" />
     <ClCompile Include="src\card_strategy.cpp" />
+    <ClCompile Include="src\card_text_icon.cpp" />
     <ClCompile Include="src\card_type_icon.cpp" />
     <ClCompile Include="src\castpreview_zone.cpp" />
     <ClCompile Include="src\cemetery_zone.cpp" />
@@ -281,6 +282,7 @@
     <ClCompile Include="src\zone_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resorce.h" />
     <ClInclude Include="src\active_scene_character.h" />
     <ClInclude Include="src\active_scene_character_state.h" />
     <ClInclude Include="src\area.h" />
@@ -309,6 +311,7 @@
     <ClInclude Include="src\card_manager.h" />
     <ClInclude Include="src\card_state.h" />
     <ClInclude Include="src\card_strategy.h" />
+    <ClInclude Include="src\card_text_icon.h" />
     <ClInclude Include="src\card_type_icon.h" />
     <ClInclude Include="src\castpreview_zone.h" />
     <ClInclude Include="src\cemetery_zone.h" />
@@ -408,6 +411,12 @@
     <ClInclude Include="thirdparty\EffekseerForDXLib\Effekseer.SIMD.h" />
     <ClInclude Include="thirdparty\EffekseerForDXLib\EffekseerForDXLib.h" />
     <ClInclude Include="thirdparty\EffekseerForDXLib\EffekseerRendererDX9.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GraduationProject.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\Downloads\logo_XDUEL_effect.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

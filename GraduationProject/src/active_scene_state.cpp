@@ -115,7 +115,7 @@ void My::CLobby::CreatePlayers(My::CInputKeyboard* pKeyboard, std::list<My::CEne
 {
 	if (pKeyboard->GetTrigger(DIK_1))
 	{
-		if (enemy.size() < 3)
+		if (enemy.size() < 3 && CActiveSceneManager::GetInstance()->GetPlayer() != nullptr)
 		{
 			++m_characterIdx;
 			CEnemy::Create(VEC3_RESET_ZERO, VEC3_RESET_ZERO, m_characterIdx);

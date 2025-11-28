@@ -227,6 +227,9 @@
       <Filter>card\card_frame</Filter>
     </ClCompile>
     <ClCompile Include="src\waitchecker_UI.cpp" />
+    <ClCompile Include="src\card_text_icon.cpp">
+      <Filter>card\card_frame</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -466,6 +469,10 @@
       <Filter>card\card_frame</Filter>
     </ClInclude>
     <ClInclude Include="src\waitchecker_UI.h" />
+    <ClInclude Include="src\card_text_icon.h">
+      <Filter>card\card_frame</Filter>
+    </ClInclude>
+    <ClInclude Include="resorce.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">
@@ -546,5 +553,11 @@
     <Filter Include="card\card_frame">
       <UniqueIdentifier>{6ca4bae6-aceb-4b52-8eab-8121da17ce72}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GraduationProject.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\Downloads\logo_XDUEL_effect.ico" />
   </ItemGroup>
 </Project>
