@@ -215,12 +215,23 @@ void My::CActiveSceneCharacter::CreateDeck()
 	//カード番号
 	int nCardNum = My::CCardManager::GetInstance()->GetUseCardVector().size();
 
+	int nCount = 1;
+
 	//デッキの枚数分周回
 	for (int i = 0; i < 40; i++)
 	{
+
 		//ランダムで仮生成
-		int nID = static_cast<int>(Rundom(1, nCardNum));
+		//int nID = static_cast<int>(Rundom(1, nCardNum));
+		int nID = nCount;
 		m_Deck.push_back(nID);			//リストに保存
+
+		++nCount;
+
+		if (nCount > nCardNum)
+		{
+			nCount = 1;
+		}
 	}
 }
 
