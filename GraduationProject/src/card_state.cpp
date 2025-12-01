@@ -431,7 +431,16 @@ void My::CCardStateTrigger::Init(CCard* cpy, CDuelCharacter* duel)
 		if (CActiveSceneManager::GetInstance()->GetAreaManager()->CardTrigger(cpy->GetTarget()))
 		{
 			//トリガー処理
-			cpy->GetCardStrategy()->Strategy(duel, cpy);
+			//cpy->GetCardStrategy()->Strategy(duel, cpy);
+
+			//TODO:一旦計算後のストラテジーベクターだけ処理
+			std::vector<CCardStrategy_Base*> strategy_vector = cpy->GetPostCalculateVector();
+
+			for (auto& itr : strategy_vector)
+			{
+				if (itr == nullptr) { continue; }
+				itr->Strategy(duel, cpy);
+			}
 		}
 
 		//// トリガーされた際に消去する(TODO : 使用者によって変更)

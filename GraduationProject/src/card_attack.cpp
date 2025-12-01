@@ -32,7 +32,11 @@ HRESULT My::CCardAttack::Init()
 	CCard::Init();
 
 	//トリガー時のストラテジーを代入
-	SetCardStrategy(new CAttack);
+	//SetCardStrategy(new CAttack);
+
+	std::vector<CCardStrategy_Base*> strategy_vector = GetPostCalculateVector();
+	strategy_vector.push_back(new CAttack);
+	SetpostCalculateStrategyVector(strategy_vector);
 	return S_OK;
 }
 

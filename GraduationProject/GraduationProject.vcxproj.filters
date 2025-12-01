@@ -227,9 +227,6 @@
       <Filter>card\card_frame</Filter>
     </ClCompile>
     <ClCompile Include="src\waitchecker_UI.cpp" />
-    <ClCompile Include="src\card_text_icon.cpp">
-      <Filter>card\card_frame</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -469,9 +466,6 @@
       <Filter>card\card_frame</Filter>
     </ClInclude>
     <ClInclude Include="src\waitchecker_UI.h" />
-    <ClInclude Include="src\card_text_icon.h">
-      <Filter>card\card_frame</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

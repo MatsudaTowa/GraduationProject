@@ -30,10 +30,13 @@ m_pCardHolder(nullptr),
 m_isUpdate(true),
 m_CurrentZone(ZONE::NONE_ZONE),
 m_OldZone(ZONE::NONE_ZONE),
-m_Strategy(nullptr),
+m_PreCalculateStrategy(),
+m_PostCalculateStrategy(),
 m_UserArea(CInputMouse::AREA::CENTER)
 {
 	m_pTargetPlayerList.clear();
+	m_PreCalculateStrategy.clear();
+	m_PostCalculateStrategy.clear();
 	//if (m_pTop == nullptr)
 	//{// top が設定されていなかったら
 	//	m_pPrev = nullptr;	// 
@@ -84,12 +87,21 @@ HRESULT My::CCard::Init()
 //===========================================================================================================
 void My::CCard::Uninit()
 {
-	//中身があるなら破棄
-	if (m_Strategy != nullptr)
+	for (auto& itr : m_PreCalculateStrategy)
 	{
-		delete m_Strategy;
-		m_Strategy = nullptr;
+		if (itr == nullptr) { continue; }
+		delete itr;
+		itr = nullptr;
 	}
+	m_PreCalculateStrategy.clear();
+
+	for (auto& itr : m_PostCalculateStrategy)
+	{
+		if (itr == nullptr) { continue; }
+		delete itr;
+		itr = nullptr;
+	}
+	m_PostCalculateStrategy.clear();
 
 	CObject3D::Uninit();
 }
@@ -560,23 +572,4 @@ My::CZone* My::CCard::CastToEnumZone(ZONE zone, CDuelCharacter* duel)
 	m_CurrentZone = zone;
 
 	return pZone;
-}
-
-//===========================================================================================================
-// ストラテジーの設定
-//===========================================================================================================
-void My::CCard::SetCardStrategy(CCardStrategy_Base* strategy)
-{
-	//nullptrなら抜ける
-	if (strategy == nullptr) return;
-
-	//中身があるなら破棄
-	if (m_Strategy != nullptr)
-	{
-		delete m_Strategy;
-		m_Strategy = nullptr;
-	}
-
-	//代入
-	m_Strategy = strategy;
 }

@@ -244,8 +244,30 @@ namespace My
 		CZone* CastToEnumZone(ZONE zone, CDuelCharacter* duel);
 
 		//ストラテジーの設定と取得
-		void SetCardStrategy(CCardStrategy_Base* strategy);
-		CCardStrategy_Base* GetCardStrategy() { return m_Strategy; }
+
+		/**
+		 * @brief 計算前の効果処理設定
+		 * @param [in]strategy_vector
+		 */
+		void SetPreCalculateStrategyVector(std::vector<CCardStrategy_Base*> strategy_vector) { m_PreCalculateStrategy = strategy_vector; }
+		
+		/**
+		 * @brief 計算後の効果処理設定
+		 * @param [in]strategy_vector
+		 */
+		void SetpostCalculateStrategyVector(std::vector<CCardStrategy_Base*> strategy_vector) { m_PostCalculateStrategy = strategy_vector; }
+
+		/**
+		 * @brief 効果前の効果取得
+		 * @return [in]m_PreCalculateStrategy
+		 */
+		std::vector<CCardStrategy_Base*> GetPreCalculateStrategyVector() { return m_PreCalculateStrategy; }
+
+		/**
+		 * @brief 効果後の効果取得
+		 * @return [in]m_PreCalculateStrategy
+		 */
+		std::vector<CCardStrategy_Base*> GetPostCalculateVector() { return m_PostCalculateStrategy; }
 
 		//使用者のエリアを返す
 		inline void SetUserArea(CInputMouse::AREA area) { m_UserArea = area; }
@@ -316,7 +338,8 @@ namespace My
 		/**
 		 * @brief カードのストラテジー
 		 */
-		CCardStrategy_Base* m_Strategy;
+		std::vector<CCardStrategy_Base*> m_PreCalculateStrategy;	//!<効果前の効果
+		std::vector<CCardStrategy_Base*> m_PostCalculateStrategy;	//!<効果後の効果
 
 		/**
 		* 使用者のエリア

@@ -16,7 +16,11 @@ HRESULT My::CCardAssist::Init()
 	CCard::Init();
 
 	//トリガー時のストラテジーを代入TODO : 仮代入
-	SetCardStrategy(new CEnergyAdjust);
+	//SetCardStrategy(new CEnergyAdjust);
+
+	std::vector<CCardStrategy_Base*> strategy_vector = GetPostCalculateVector();
+	strategy_vector.push_back(new CEnergyAdjust);
+	SetpostCalculateStrategyVector(strategy_vector);
 	return S_OK;
 }
 

@@ -30,7 +30,10 @@ HRESULT My::CCardAssist_Buff_Heal::Init()
 	CCardAssist_Buff::Init();
 
 	//トリガー時のストラテジーを代入
-	SetCardStrategy(new CHeal);
+	//SetCardStrategy(new CHeal);
+	std::vector<CCardStrategy_Base*> strategy_vector = GetPostCalculateVector();
+	strategy_vector.push_back(new CHeal);
+	SetpostCalculateStrategyVector(strategy_vector);
 	return S_OK;
 }
 

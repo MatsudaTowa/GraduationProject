@@ -28,7 +28,11 @@ HRESULT My::CCardDeffence::Init()
 	CCard::Init();
 
 	//トリガー時のストラテジーを代入
-	SetCardStrategy(new CDiffence);
+	//SetCardStrategy(new CDiffence);
+
+	std::vector<CCardStrategy_Base*> strategy_vector = GetPostCalculateVector();
+	strategy_vector.push_back(new CDiffence);
+	SetpostCalculateStrategyVector(strategy_vector);
 	return S_OK;
 }
 
