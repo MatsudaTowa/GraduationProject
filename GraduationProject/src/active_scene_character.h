@@ -282,15 +282,6 @@ namespace My
 			return m_Deck;
 		}
 
-		/**
-		 * @brief ターゲットアローマネージャーの取得
-		 * @return [out] ターゲットアローマネージャー
-		 */
-		inline CTargetArrowManager* GetTargetArrowManeger()
-		{
-			return m_pTargetArrowManager;
-		}
-
 	private:
 		static constexpr int START_DECK = 40;				//!<最初のデッキ枚数
 		static constexpr int START_HAND = 3;				//!<最初の手札枚数
@@ -320,8 +311,6 @@ namespace My
 		CPlayerUI* m_pPlayerUI;
 
 		std::list<int> m_Deck;	//デッキ
-
-		CTargetArrowManager* m_pTargetArrowManager;	// ターゲット矢印のマネージャー
 	};
 }
 #endif

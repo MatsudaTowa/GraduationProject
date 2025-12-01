@@ -189,6 +189,8 @@ namespace My
 		*/
 		void DuelConnect();
 
+		inline CTargetArrowManager* GetTargetArrowManager() { return m_pTargetArrowManager; }
+
 	private:
 
 		/**
@@ -211,6 +213,7 @@ namespace My
 		bool m_isFinish;					//!ゲームの処理を終わらせるか
 		std::vector<CastCardInfo> m_CastCardVector;
 		std::vector<CastDiffenceCardInfo> m_CastDiffenceCardVector;
+		CTargetArrowManager* m_pTargetArrowManager;	// ターゲット矢印のマネージャー
 	};
 }
 

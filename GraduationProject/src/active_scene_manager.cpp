@@ -19,7 +19,8 @@ m_pEnemyManager(),			//エネミーマネージャー
 m_pAreaManager(),			//エリアマネージャー
 m_pPlayer(nullptr),			//プレイヤーのポインタ
 m_pField(nullptr),			//床のポインタ
-m_isFinish(false)
+m_isFinish(false),
+m_pTargetArrowManager(new CTargetArrowManager())
 {
 }
 
@@ -63,6 +64,11 @@ void My::CActiveSceneManager::Uninit()
 	{
 		m_pField->Uninit();
 		m_pField = nullptr;
+	}
+	if(m_pTargetArrowManager != nullptr)
+	{// ターゲットアローマネージャーの破棄
+		delete m_pTargetArrowManager;
+		m_pTargetArrowManager = nullptr;
 	}
 }
 
