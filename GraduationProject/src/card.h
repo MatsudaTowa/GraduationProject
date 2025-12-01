@@ -219,8 +219,6 @@ namespace My
 		inline void SetTarget(CInputMouse::AREA area) { m_target = area; }
 		inline CInputMouse::AREA GetTarget() { return m_target; }
 
-		inline CTargetArrow* GetTargetArrow() { return m_pTargetArrow; }
-
 		inline void SetCardHolder(CActiveScenePlayer* player) { m_pCardHolder = player; }
 		inline CActiveScenePlayer* GetCardHolder() { return m_pCardHolder; }
 
@@ -232,9 +230,6 @@ namespace My
 
 		//リストの取得
 		inline std::list<CActiveSceneCharacter*> GetTargetPlayerList() { return m_pTargetPlayerList; }	
-
-		// ターゲットアローを設定
-		inline void SetTargetArrow(CTargetArrow* pTA) { m_pTargetArrow = pTA; }
 
 		//カード情報の読み込み
 		virtual void LoadInfo(int id);
@@ -302,11 +297,6 @@ namespace My
 		D3DXVECTOR3 m_NeutralPos;
 
 		D3DXVECTOR3 m_outpos;
-
-		/**
-		 * @brief カードのターゲットを示す矢印
-		 */
-		CTargetArrow* m_pTargetArrow;
 
 		CActiveScenePlayer* m_pCardHolder; //!<カードの所有者(一旦プレイヤーで固定)
 

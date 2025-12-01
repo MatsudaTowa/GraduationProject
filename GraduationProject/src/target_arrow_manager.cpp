@@ -142,7 +142,7 @@ void My::CTargetArrowManager::SetOverlappedPos(CTargetArrow* itr, CTargetArrow* 
 			shiftpos.x = sinf(rot - (D3DX_PI * 0.5f)) * 50.0f;
 			shiftpos.y = cosf(rot - (D3DX_PI * 0.5f)) * 50.0f;
 
-			// 
+			// d‚È‚Á‚Ä‚½ê‡AX‚©Y‚Ì‚Ç‚¿‚ç‚©‚ð‚¸‚ç‚·
 			if (itr->GetPos().x == ptr->GetPos().x)
 				shiftpos.x += 50.0f;
 			else if(itr->GetPos().y == ptr->GetPos().y)
