@@ -8,6 +8,7 @@
 #include "card.h"
 #include "active_scene_manager.h"
 #include "target_arrow.h"
+#include "duel_manager.h"
 
 //===========================================================================================================
 // 
@@ -284,11 +285,15 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 	{
 		if (cpy->GetUserArea() != iter->GetArea()) continue;
 
-		// ターゲットアローをマネージャーに登録
-		iter->GetTargetArrowManeger()->Regist(CTargetArrow::Create(cpy->GetUserArea(), cpy->GetTarget()));
+		//// ターゲットアローをマネージャーに登録
+		//iter->GetTargetArrowManeger()->Regist(CTargetArrow::Create(cpy->GetUserArea(), cpy->GetTarget()));
+
+		
 
 		break;
 	}
+
+	CActiveSceneManager::GetInstance()->GetTargetArrowManager()->Regist(CTargetArrow::Create(cpy->GetUserArea(), cpy->GetTarget()));
 }
 
 //=======================================================================================
@@ -449,6 +454,8 @@ void My::CCardStateTrigger::Init(CCard* cpy, CDuelCharacter* duel)
 		break;
 	}
 
+	CActiveSceneManager::GetInstance()->GetTargetArrowManager()->Remove();
+
 	//設定
 	cpy->SetSize({ 0.0f * 1.2f, 0.0f, 0.0f });
 
@@ -463,9 +470,9 @@ void My::CCardStateTrigger::Init(CCard* cpy, CDuelCharacter* duel)
 	{
 		if (cpy->GetUserArea() != iter->GetArea()) continue;
 
-		// TODO : Init から Update に移設(この処理は重いのか？)
-		// トリガーされた際に消去する(TODO : 使用者によって変更)
-		iter->GetTargetArrowManeger()->Remove();
+		//// TODO : Init から Update に移設(この処理は重いのか？)
+		//// トリガーされた際に消去する(TODO : 使用者によって変更)
+		//iter->GetTargetArrowManeger()->Remove();
 
 		break;
 	}
