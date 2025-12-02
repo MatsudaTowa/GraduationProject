@@ -165,3 +165,42 @@ void My::CEnergyAdjust::Strategy(CDuelCharacter* /*duel*/, CCard* card)
 		CRakNet::GetInstance()->SendStatus();
 	}
 }
+
+//===============================================================================
+// コンストラクタ
+//===============================================================================
+My::CHandDestruction::CHandDestruction()
+{
+}
+
+//===============================================================================
+// デストラクタ
+//===============================================================================
+My::CHandDestruction::~CHandDestruction()
+{
+}
+
+//===============================================================================
+// 初期化
+//===============================================================================
+void My::CHandDestruction::Strategy(CDuelCharacter* duel, CCard* card)
+{
+	//登録されているキャラクターを取得
+	std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
+
+	//リスト周回
+	for (auto& itr : List)
+	{
+		if (itr == nullptr) { continue; }
+
+		if (itr->GetArea() != card->GetTarget()) { continue; }
+		
+		itr->GetHand();
+	}
+
+	//オンライン時は通信処理TODO : カードのやり取りが出来たら必要なし
+	if (CRakNet::GetInstance()->GetOnline())
+	{
+		CRakNet::GetInstance()->SendStatus();
+	}
+}

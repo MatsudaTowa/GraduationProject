@@ -14,15 +14,6 @@ namespace My
 	class CCardAssist :public CCard
 	{
 	public:
-
-		enum AssistType
-		{// アシストの種類
-			NONE_ASSIST,        // アシスト以外のときはこれ
-			OBSTRUCT,            // 妨害
-			BUFF,                // バフ
-			DEBUFF                // デバフ
-		};
-
 		/**
 		 * @brief コンストラクタ
 		 */

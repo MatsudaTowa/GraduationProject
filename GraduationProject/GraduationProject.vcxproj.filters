@@ -153,15 +153,6 @@
     <ClCompile Include="src\card.cpp">
       <Filter>card\base</Filter>
     </ClCompile>
-    <ClCompile Include="src\card_assist_debuff.cpp">
-      <Filter>card\assist\debuff</Filter>
-    </ClCompile>
-    <ClCompile Include="src\card_assist_buff.cpp">
-      <Filter>card\assist\buff</Filter>
-    </ClCompile>
-    <ClCompile Include="src\card_assist_buff_heal.cpp">
-      <Filter>card\assist\buff\heal</Filter>
-    </ClCompile>
     <ClCompile Include="src\cemetery_zone.cpp">
       <Filter>zone\cemetery</Filter>
     </ClCompile>
@@ -382,15 +373,6 @@
     <ClInclude Include="src\card.h">
       <Filter>card\base</Filter>
     </ClInclude>
-    <ClInclude Include="src\card_assist_debuff.h">
-      <Filter>card\assist\debuff</Filter>
-    </ClInclude>
-    <ClInclude Include="src\card_assist_buff.h">
-      <Filter>card\assist\buff</Filter>
-    </ClInclude>
-    <ClInclude Include="src\card_assist_buff_heal.h">
-      <Filter>card\assist\buff\heal</Filter>
-    </ClInclude>
     <ClInclude Include="src\cemetery_zone.h">
       <Filter>zone\cemetery</Filter>
     </ClInclude>
@@ -516,18 +498,6 @@
     </Filter>
     <Filter Include="card\base">
       <UniqueIdentifier>{89bb330a-b789-48b4-a667-5043cd96cff4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="card\assist\buff">
-      <UniqueIdentifier>{94034eb9-8c19-46cc-943f-f15c792c1fb0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="card\assist\debuff">
-      <UniqueIdentifier>{1dc116e9-fe57-43f0-ab1c-b881f25d8be1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="card\assist\obstruct">
-      <UniqueIdentifier>{a8168d5a-51aa-4474-a01b-82e7846a1bb4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="card\assist\buff\heal">
-      <UniqueIdentifier>{860ce3f4-5018-4660-b859-10360ee7640c}</UniqueIdentifier>
     </Filter>
     <Filter Include="zone\cemetery">
       <UniqueIdentifier>{8cb04ae9-6320-4716-974a-325f41d192a0}</UniqueIdentifier>

@@ -11,8 +11,6 @@
 #include "card_attack.h"
 #include "card_deffence.h"
 #include "card_manager.h"
-#include "card_assist_buff.h"
-#include "card_assist_debuff.h"
 
 //=====================================
 //コンストラクタ

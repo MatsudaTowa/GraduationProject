@@ -26,6 +26,16 @@ namespace My
 		virtual void Strategy([[maybe_unused]] CDuelCharacter* duel, [[maybe_unused]] CCard* card) {};
 	};
 
+	/** @brief 手札を捨てさせる */
+	class CHandDestruction :public CCardStrategy_Base
+	{
+	public:
+		CHandDestruction();
+		~CHandDestruction() override;
+
+		virtual void Strategy(CDuelCharacter* duel, CCard* card);
+	};
+
 	/** @brief カードストラテジーの攻撃クラス */
 	class CAttack :public CCardStrategy_Base
 	{

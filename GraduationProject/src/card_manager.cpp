@@ -9,8 +9,6 @@
 #include "card_attack.h"
 #include "card_deffence.h"
 #include "card_manager.h"
-#include "card_assist_buff.h"
-#include "card_assist_debuff.h"
 
 //================================
 // コンストラクタ
@@ -129,44 +127,9 @@ My::CCard* My::CCardManager::CreateCard(int id)
 
 	case CCard_Client::CardType::ASSIST:
 		{
-			switch (m_CardVector[id - 1].Assisttype)
-			{
-			case CCard_Client::AssistType::BUFF:
-				{
-					My::CCardAssist_Buff* pBuff = new My::CCardAssist_Buff(5);
-					pBuff->SetAssistType(My::CCardAssist_Buff::AssistType::BUFF);
-					pBuff->SetBuffType(CCardAssist_Buff::BuffType::HEAL);
-					pBuff->SetBaseStatus(Status);
-
-					//初期化
-					//pBuff->Init();
-
-					return pBuff;
-				}
-				
-				break;
-
-			case CCard_Client::AssistType::DEBUFF:
-				{
-					My::CCardAssist_Debuff* pDebuff = new My::CCardAssist_Debuff(5);
-					pDebuff->SetAssistType(My::CCardAssist_Buff::AssistType::DEBUFF);
-					pDebuff->SetDebuffType(My::CCardAssist_Debuff::DebuffType::DEATH);
-					pDebuff->SetBaseStatus(Status);
-
-					//初期化
-					//pDebuff->Init();
-
-					return pDebuff;
-				}
-				
-				break;
-
-			case CCard_Client::AssistType::OBSTRUCT:
-
-				//TODO追加次第実装
-
-				break;
-			}
+			My::CCardAssist* pAssist = new My::CCardAssist(5);
+			pAssist->SetBaseStatus(Status);
+			return pAssist;
 		}
 		break;
 

@@ -66,6 +66,38 @@ namespace My
 			CEMETERY
 		};
 
+		enum AssistType
+		{// アシストの種類
+			NONE_ASSIST,        // アシスト以外のときはこれ
+			OBSTRUCT,            // 妨害
+			BUFF,                // バフ
+			DEBUFF                // デバフ
+		};
+
+		enum BuffType
+		{// バフの種類 TODO:継承によって変わるかも
+			NONE_BUFF,
+			HEAL,                // HP回復
+			NO_NAMEONE,            // 未定①
+			NO_NAMETWO,            // 未定②
+		};
+
+		enum HealType
+		{// 回復の種類 TODO:ヒール側のstrategyに持たせよう
+			NONE_HEAL,                    // 回復しない
+			ALL_HEAL,                    // 全体回復
+			SPECIFIC_HEAL,                // 特定の相手を選んで回復
+			RANDOM_HEAL,                // ランダム回復
+			SELFINTARGET_HEAL,            // 自分を含めてランダム回復
+			ONLY_ME,                    // 自分だけ
+		};
+
+		enum DebuffType
+		{// デバフの種類 TODO:継承によって変わるかも
+			NONE_DEBUFF,
+			DEATH,                // 死亡
+		};
+
 		struct BaseStatus
 		{
 			int nPackID;						  // パック番号
