@@ -78,11 +78,11 @@ namespace My
 		void Strategy(CDuelCharacter* duel, CCard* card) override;
 	};
 
-	class CFlipDeck :public CCardStrategy_Base
+	class CFlipMyDeck :public CCardStrategy_Base
 	{
 	public:
-		CFlipDeck();
-		~CFlipDeck()override;
+		CFlipMyDeck();
+		~CFlipMyDeck()override;
 		void Strategy(CDuelCharacter* duel, CCard* card) override;
 	};
 

@@ -218,6 +218,9 @@
       <Filter>card\card_frame</Filter>
     </ClCompile>
     <ClCompile Include="src\waitchecker_UI.cpp" />
+    <ClCompile Include="src\flip_preview_zone.cpp">
+      <Filter>zone\flip</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -449,6 +452,9 @@
     </ClInclude>
     <ClInclude Include="src\waitchecker_UI.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="src\flip_preview_zone.h">
+      <Filter>zone\flip</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">
@@ -516,6 +522,9 @@
     </Filter>
     <Filter Include="card\card_frame">
       <UniqueIdentifier>{6ca4bae6-aceb-4b52-8eab-8121da17ce72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="zone\flip">
+      <UniqueIdentifier>{b82d6ea9-8963-40ec-aed9-88a76dc31186}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

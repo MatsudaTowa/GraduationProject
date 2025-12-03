@@ -358,6 +358,7 @@ void My::CHand::SetHandCardPos(CDuelCharacter* character)
 		{
 			// 元の位置を設定しておく
 			iter->SetNeutralPos(iter->GetPos());
+
 			// 一度ニュートラルにリセットする
 			iter->ChangeState(CCardState::CARD_STATE::CARD_NEUTRAL, character);
 		}

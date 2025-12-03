@@ -254,32 +254,46 @@ void My::CHandDestruction::Strategy(CDuelCharacter* duel, CCard* card)
 //===============================================================================
 // コンストラクタ
 //===============================================================================
-My::CFlipDeck::CFlipDeck()
+My::CFlipMyDeck::CFlipMyDeck()
 {
 }
 
 //===============================================================================
 // デストラクタ
 //===============================================================================
-My::CFlipDeck::~CFlipDeck()
+My::CFlipMyDeck::~CFlipMyDeck()
 {
 }
 
 //===============================================================================
 // 山札からめくる処理
 //===============================================================================
-void My::CFlipDeck::Strategy(CDuelCharacter* duel, CCard* card)
+void My::CFlipMyDeck::Strategy(CDuelCharacter* duel, CCard* card)
 {
-	std::list<CCard*> card_list = duel->GetZoneManager()->GetDeck()->Flip(1);
+	CZoneManager* pZoneManager = duel->GetZoneManager();
+
+	std::list<CCard*> card_list = pZoneManager->GetDeck()->Flip(1);
 	for (auto& itr : card_list)
 	{
 		if (itr == nullptr) { continue; }
-		////カードを引けるか
-		//CZoneManager* pZoneManager = state->GetZoneManager();
+		//カードを引けるか
 
-
-		//duel->GetZoneManager()->MoveZone(itr,itr->GetCurrentZone(),)
+		duel->GetZoneManager()->MoveZone(itr, pZoneManager->GetDeck(), pZoneManager->GetHandZone(), true);
+		itr->SetCurrentZone(CCard::HAND);
 	}
+
+	CActiveSceneCharacterState* state = CActiveSceneManager::GetInstance()->GetPlayer()->GetState();
+
+	if (typeid(*state) != typeid(CPlayerDuelState))
+	{
+		return;
+	}
+
+	//TODO : デュエル状態を参照できる場所が必要
+	CPlayerDuelState* DuelState = dynamic_cast<CPlayerDuelState*>(state);	//キャスト
+
+	DuelState->GetHand()->SetHandCardPos(duel);
+
 	//オンライン時は通信処理TODO : カードのやり取りが出来たら必要なし
 	if (CRakNet::GetInstance()->GetOnline())
 	{

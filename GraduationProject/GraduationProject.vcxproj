@@ -211,6 +211,7 @@
     <ClCompile Include="src\fade.cpp" />
     <ClCompile Include="src\field.cpp" />
     <ClCompile Include="src\field_zone.cpp" />
+    <ClCompile Include="src\flip_preview_zone.cpp" />
     <ClCompile Include="src\font.cpp" />
     <ClCompile Include="src\font_manager.cpp" />
     <ClCompile Include="src\active_scene.cpp" />
@@ -331,6 +332,7 @@
     <ClInclude Include="src\fade.h" />
     <ClInclude Include="src\field.h" />
     <ClInclude Include="src\field_zone.h" />
+    <ClInclude Include="src\flip_preview_zone.h" />
     <ClInclude Include="src\font.h" />
     <ClInclude Include="src\font_manager.h" />
     <ClInclude Include="src\active_scene.h" />
