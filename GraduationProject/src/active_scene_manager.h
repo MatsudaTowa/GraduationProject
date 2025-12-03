@@ -189,6 +189,14 @@ namespace My
 		*/
 		void DuelConnect();
 
+		/**
+		* @brief ターゲット矢印マネージャーの設定
+		*/
+		inline void SetTargetArrowManager(CTargetArrowManager* pManager) { m_pTargetArrowManager = pManager; }
+
+		/**
+		* @brief ターゲット矢印マネージャーの取得
+		*/
 		inline CTargetArrowManager* GetTargetArrowManager() { return m_pTargetArrowManager; }
 
 	private:

@@ -116,6 +116,9 @@ std::list < My::CTargetArrow* > My::CTargetArrowManager::GetTargetArrow()
 	return m_pTargetArrowList;
 }
 
+//===========================================================================================================
+// d‚È‚Á‚Ä‚¢‚éˆÊ’u‚ÌÝ’è
+//===========================================================================================================
 void My::CTargetArrowManager::SetOverlappedPos(CTargetArrow* itr, CTargetArrow* ptr)
 {
 	if (!itr->GetIsOverlapped())
@@ -148,6 +151,7 @@ void My::CTargetArrowManager::SetOverlappedPos(CTargetArrow* itr, CTargetArrow* 
 			else if(itr->GetPos().y == ptr->GetPos().y)
 				shiftpos.y += 50.0f;
 
+			// ‚¸‚ç‚µ‚½ˆÊ’u‚ðÝ’è‚·‚é
 			itr->SetShiftPos({ shiftpos.x,shiftpos.y });
 			ptr->SetShiftPos({ -shiftpos.x,-shiftpos.y });
 		}
