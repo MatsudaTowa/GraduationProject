@@ -279,7 +279,9 @@ void My::CFlipMyDeck::Strategy(CDuelCharacter* duel, CCard* card)
 		//カードを引けるか
 
 		duel->GetZoneManager()->MoveZone(itr, pZoneManager->GetDeck(), pZoneManager->GetFlipPreviewZone(), true);
-		itr->SetCurrentZone(CCard::HAND);
+
+		//TODO:フリッププレビューゾーンの列挙に
+		//itr->SetCurrentZone(CCard::HAND);
 	}
 
 
@@ -288,4 +290,18 @@ void My::CFlipMyDeck::Strategy(CDuelCharacter* duel, CCard* card)
 	{
 		CRakNet::GetInstance()->SendStatus();
 	}
+}
+
+My::CSendToMyCemetary::CSendToMyCemetary()
+{
+}
+
+My::CSendToMyCemetary::~CSendToMyCemetary()
+{
+}
+
+void My::CSendToMyCemetary::Strategy(CDuelCharacter* duel, CCard* card)
+{
+
+	card->CastToEnumZone(card->GetCurrentZone(), duel);
 }

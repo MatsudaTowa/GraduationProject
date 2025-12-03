@@ -78,11 +78,21 @@ namespace My
 		void Strategy(CDuelCharacter* duel, CCard* card) override;
 	};
 
+	/** @brief カードストラテジーカードを自分のデッキからめくるクラス */
 	class CFlipMyDeck :public CCardStrategy_Base
 	{
 	public:
 		CFlipMyDeck();
 		~CFlipMyDeck()override;
+		void Strategy(CDuelCharacter* duel, CCard* card) override;
+	};
+
+	/** @brief カードストラテジー自分のカードを墓地に送るクラス */
+	class CSendToMyCemetary :public CCardStrategy_Base
+	{
+	public:
+		CSendToMyCemetary();
+		~CSendToMyCemetary()override;
 		void Strategy(CDuelCharacter* duel, CCard* card) override;
 	};
 
