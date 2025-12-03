@@ -35,7 +35,7 @@ HRESULT My::CCardAttack::Init()
 	//SetCardStrategy(new CAttack);
 
 	std::vector<CCardStrategy_Base*> strategy_vector = GetPostCalculateVector();
-	strategy_vector.push_back(new CAttack);
+	strategy_vector.push_back(new CHandDestruction);
 	SetpostCalculateStrategyVector(strategy_vector);
 	return S_OK;
 }

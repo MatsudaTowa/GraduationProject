@@ -28,8 +28,11 @@ My::CDeckZone::~CDeckZone()
 * @brief めくる処理
 * @param [in]枚数
 */
-void My::CDeckZone::Flip(int sheet)
+std::list<My::CCard*> My::CDeckZone::Flip(int sheet)
 {
+    std::list<CCard*> card_list;
+    card_list.clear();
+
     // 変数の初期化
     int count = 0;
 
@@ -46,10 +49,11 @@ void My::CDeckZone::Flip(int sheet)
 
             ++count;
         }
+        card_list.push_back(card);
     }
 
     //TODO:のちのちめくったカードを選択する処理を追加
-
+    return card_list;
 }
 
 /**

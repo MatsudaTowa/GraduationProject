@@ -364,7 +364,7 @@ bool My::CCard::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharacter* pla
 			//通常状態にする
 			ChangeState(CCardState::CARD_NEUTRAL, duel);
 			CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
-			return true;
+			return false;
 		}
 
 		//エナジーが不足しているなら抜ける
@@ -373,7 +373,7 @@ bool My::CCard::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharacter* pla
 			// 通常状態にする
 			ChangeState(CCardState::CARD_NEUTRAL, duel);
 			CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
-			return true;
+			return false;
 		}
 
 		//使用者のエリアの取得
@@ -409,7 +409,7 @@ bool My::CCard::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharacter* pla
 			//通常状態にする
 			ChangeState(CCardState::CARD_NEUTRAL, duel);
 			CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
-			return true;
+			return false;
 		}
 	}
 

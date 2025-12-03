@@ -77,7 +77,7 @@ namespace My
 		/**
 		* @brief 選択
 		*/
-		void Select(CDuelCharacter* character);
+		void Select(CPlayerDuelState* state);
 
 		/**
 		* @brief 選択
@@ -117,7 +117,7 @@ namespace My
 		*/
 		//inline CCard** GetHandCard() { return &m_pCard[0]; }
 
-		CCard* SearchHandList(int num);
+		CCard* SearchHandList(CDuelCharacter* character,int num);
 
 	private:
 		// 手札の状態
@@ -129,14 +129,9 @@ namespace My
 		void SelectStateSet(CDuelCharacter* character);
 
 		/**
-		* @brief 手札のカードの状態変更
-		*/
-		void DeleteCard(CDuelCharacter* character);
-		
-		/**
 		* @brief カードタイプ別生成
 		*/
-		void SetCard(CCard::CARDTYPE_ type);
+		void SetCard(CDuelCharacter* character,CCard::CARDTYPE_ type);
 
 		//===========================================================================================================
 		// メンバ変数
@@ -155,8 +150,6 @@ namespace My
 		* TriggerList : トリガーしたカード
 		*/ 
 		//My::CCard* m_pCard[MAX_HANDSCARD];
-
-		std::list<CCard*>m_pHandList;
 
 		/*My::CCard* m_pHandCard[MAX_HANDSCARD];
 		My::CCard* m_pStayCard[MAX_HANDSCARD];

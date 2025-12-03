@@ -34,7 +34,7 @@ namespace My
 		* @brief ‚ß‚­‚éˆ—
 		* @param [in]–‡”
 		*/
-		void Flip(int sheet);
+		std::list<CCard*> Flip(int sheet);
 
 		/**
 		* @brief ƒVƒƒƒbƒtƒ‹ˆ—

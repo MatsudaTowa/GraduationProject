@@ -25,8 +25,6 @@ My::CHand::CHand() :
 	m_pStayCard(),
 	m_pTriggerCard()*/
 {
-	m_pHandList.clear();
-
 	/*for (int i = 0; i < MAX_HANDSCARD; i++)
 	{
 		m_pCard[i] = nullptr;
@@ -35,7 +33,6 @@ My::CHand::CHand() :
 
 My::CHand::~CHand()
 {
-	m_pHandList.clear();
 }
 
 //===========================================================================================================
@@ -92,7 +89,7 @@ void My::CHand::Update(CPlayerDuelState* state, CActiveSceneCharacter* player)
 		}
 	}
 
-	for (auto& iter : m_pHandList)
+	for (auto& iter : state->GetZoneManager()->GetHandZone()->GetList())
 	{
 		iter->Update(state);
 	}
@@ -103,14 +100,12 @@ void My::CHand::Update(CPlayerDuelState* state, CActiveSceneCharacter* player)
 	// カードキャスト
 	Cast(state, player);
 
-	// カード除去
-	DeleteCard(state);
 }
 
 //===========================================================================================================
 // 選択
 //===========================================================================================================
-void My::CHand::Select(CDuelCharacter* character)
+void My::CHand::Select(CPlayerDuelState* state)
 {
 	// キャスト状態だったらセレクトさせない
 	if (m_HandState == SELECT)
@@ -122,10 +117,10 @@ void My::CHand::Select(CDuelCharacter* character)
 	if (!m_IsPickUp)
 	{
 		int nCount = 0;
-		for (auto& iter : m_pHandList)
+		for (auto& iter : state->GetZoneManager()->GetHandZone()->GetList())
 		{
 			// マウスでカード選択
-			m_IsPickUp = iter->CardSelectToMouse(character);
+			m_IsPickUp = iter->CardSelectToMouse(state);
 
 			if (m_IsPickUp)
 			{// どれかのカードが選択されたら
@@ -142,7 +137,7 @@ void My::CHand::Select(CDuelCharacter* character)
 	{
 		int nCount = 0;
 
-		for (auto& iter : m_pHandList)
+		for (auto& iter : state->GetZoneManager()->GetHandZone()->GetList())
 		{
 			if (nCount != m_SelectNum)
 			{
@@ -158,7 +153,7 @@ void My::CHand::Select(CDuelCharacter* character)
 			else
 			{
 				// 選択番号のカードのみ判定する
-				m_IsPickUp = iter->CardSelectToMouse(character);
+				m_IsPickUp = iter->CardSelectToMouse(state);
 			}
 			break;
 		}
@@ -173,8 +168,9 @@ void My::CHand::Cast(CDuelCharacter* character, CActiveSceneCharacter* player)
 	if (m_SelectNum < 0) return;
 
 	int nCount = 0;
+	int nNum = character->GetZoneManager()->GetHandZone()->GetList().size();
 
-	for (auto& iter : m_pHandList)
+	for (auto& iter : character->GetZoneManager()->GetHandZone()->GetList())
 	{
 		if (nCount != m_SelectNum)
 		{
@@ -183,23 +179,33 @@ void My::CHand::Cast(CDuelCharacter* character, CActiveSceneCharacter* player)
 		}
 
 		// 返り値でキャスト状態かどうか判断
-		bool IsCast = iter->CardCastToMouse(character, player);
+		bool IsSelecting = iter->CardCastToMouse(character, player);
 
 		// キャスト状態によって手札の状態を変える
-		if (IsCast)
+		if (IsSelecting)
+		{
 			m_HandState = SELECT;
+		}
 		else
+		{
 			m_HandState = NEUTRAL;
+		}
+			
 		break;
+	}
+
+	if (nNum != character->GetZoneManager()->GetHandZone()->GetList().size())
+	{
+		SetHandCardPos(character);
 	}
 }
 
-My::CCard* My::CHand::SearchHandList(int num)
+My::CCard* My::CHand::SearchHandList(CDuelCharacter* character,int num)
 {
-	auto itr = m_pHandList.begin();
+	auto itr = character->GetZoneManager()->GetHandZone()->GetList().begin();
 
 	// リスト分回す
-	for (unsigned int i = 0; i < m_pHandList.size(); i++)
+	for (unsigned int i = 0; i < character->GetZoneManager()->GetHandZone()->GetList().size(); i++)
 	{
 		if (i == num){
 			return *itr;
@@ -219,7 +225,7 @@ void My::CHand::SelectStateSet(CDuelCharacter* character)
 	CCard* pCard = nullptr;
 
 	// すべてのカードを選ばれていない状態にする
-	for (auto& iter : m_pHandList)
+	for (auto& iter : character->GetZoneManager()->GetHandZone()->GetList())
 	{
 		///選択中のカードなら代入
 		if (m_SelectNum == nCount)
@@ -242,71 +248,30 @@ void My::CHand::SelectStateSet(CDuelCharacter* character)
 }
 
 //===========================================================================================================
-// カード消去
-//===========================================================================================================
-void My::CHand::DeleteCard(CDuelCharacter* character)
-{
-	bool isDecrease = false;
-
-	for (auto& iter : m_pHandList)
-	{
-		//トリガーカードを消去
-		if (iter->GetStateNum() == CCardState::CARD_STATE::CARD_TRIGGER ||
-			iter->GetStateNum() == CCardState::CARD_STATE::CARD_WAIT ||
-			iter->GetStateNum() == CCardState::CARD_STATE::CARD_STAY ||
-			iter->GetStateNum() == CCardState::CARD_STATE::CARD_CAST)
-		{
-			//削除処理とフラグを立てる
-			//iter->Uninit();
-			m_pHandList.remove(iter);
-			isDecrease = true;
-			break;
-		}
-	}
-
-	//カードが減ってないなら抜ける
-	if (!isDecrease) return;
-
-	//手札総数を減らす
-	m_TotalNum--;
-
-	for (auto& iter : m_pHandList)
-	{
-		if (iter->GetStateNum() == CCardState::CARD_STATE::CARD_STAY)
-		{//ステイ中のカードがあったら手札の整理をしない
-			//return;
-		}
-	}
-
-	// 手札の位置をセットする
-	SetHandCardPos(character);
-}
-
-//===========================================================================================================
 // カード設定
 //===========================================================================================================
-void My::CHand::SetCard(CCard::CARDTYPE_ type)
+void My::CHand::SetCard(CDuelCharacter* character,CCard::CARDTYPE_ type)
 {
-	// 一時的に保管する
-	CCard* pCard = nullptr;
+	//// 一時的に保管する
+	//CCard* pCard = nullptr;
 
-	switch (type)
-	{
-	case CCard::CARDTYPE_::TYPE_ATTACK:
-		pCard = CCardAttack::Create(type);
-		break;
+	//switch (type)
+	//{
+	//case CCard::CARDTYPE_::TYPE_ATTACK:
+	//	pCard = CCardAttack::Create(type);
+	//	break;
 
-	case CCard::CARDTYPE_::TYPE_DEFFENCE:
-		pCard = CCardDeffence::Create(type);
-		break;
+	//case CCard::CARDTYPE_::TYPE_DEFFENCE:
+	//	pCard = CCardDeffence::Create(type);
+	//	break;
 
-	case CCard::CARDTYPE_::TYPE_ASSIST:
-		pCard = CCardAssist::Create(type);
-		break;
-	}
+	//case CCard::CARDTYPE_::TYPE_ASSIST:
+	//	pCard = CCardAssist::Create(type);
+	//	break;
+	//}
 
-	// リストテスト
-	m_pHandList.push_back(pCard);
+	//// リストテスト
+	//character->GetZoneManager()->GetHandZone()->AddHandZone(pCard);
 }
 
 //===========================================================================================================
@@ -337,7 +302,7 @@ void My::CHand::HandDraw(int drawnum, CPlayerDuelState* state)
 		//rundom = static_cast<int>(Rundom(CCard::CARDTYPE_::TYPE_ATTACK, CCard::CARDTYPE_::TYPE_MAX));
 
 		//手札に加える処理
-		m_pHandList.push_back(pDrawCard);
+		//state->GetZoneManager()->GetHandZone()->AddHandZone(pDrawCard);
 		pZoneManager->MoveZone(pDrawCard, pZoneManager->GetDeck(), pZoneManager->GetHandZone(), true);
 
 		pDrawCard->SetCurrentZone(CCard::HAND);
@@ -367,15 +332,16 @@ My::CHand* My::CHand::Create()
 void My::CHand::SetHandCardPos(CDuelCharacter* character)
 {
 	D3DXVECTOR3 firstpos;	// 一番左側の位置(手札の最初の位置)
-	float posInterbal = 25.0f - (20 * m_TotalNum * 0.07f);	// 手札に表示されている時のカードの間隔
+	int nCardNum = character->GetZoneManager()->GetHandZone()->GetList().size();
+	float posInterbal = 25.0f - (20 * nCardNum * 0.07f);	// 手札に表示されている時のカードの間隔
 	float xpos;	// 一枚目のカードのx座標
 	int nCount = 0;	//周回数
 	CCard* pCard = nullptr;	//カードのポインタ
 
 	// x座標の設定 = センター - (現在の合計枚数 * カードの間隔の半分)
-	xpos = (m_CenterPos.x) - ((m_TotalNum-1)* posInterbal*0.5f);
+	xpos = (m_CenterPos.x) - ((nCardNum -1)* posInterbal*0.5f);
 
-	for (auto& iter : m_pHandList)
+	for (auto& iter : character->GetZoneManager()->GetHandZone()->GetList())
 	{
 		if (nCount == 0)
 		{

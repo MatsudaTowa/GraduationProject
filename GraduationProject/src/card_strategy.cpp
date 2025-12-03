@@ -7,6 +7,8 @@
 #include "card_strategy.h"
 #include "active_scene_manager.h"
 #include "raknet.h"
+#include "zone_manager.h"
+#include "enemy_state.h"
 
 //===============================================================================
 // コンストラクタ
@@ -155,6 +157,8 @@ void My::CEnergyAdjust::Strategy(CDuelCharacter* /*duel*/, CCard* card)
 		if (itr->GetArea() != card->GetTarget()) { continue; }
 
 		nEnergy = itr->GetEnergy();
+
+		//TODO:カードのエナジー変動値を代入
 		nEnergy += 10;
 		itr->SetEnergy(nEnergy);
 	}
@@ -195,9 +199,87 @@ void My::CHandDestruction::Strategy(CDuelCharacter* duel, CCard* card)
 
 		if (itr->GetArea() != card->GetTarget()) { continue; }
 		
-		itr->GetHand();
+		CActiveSceneCharacterState* state = itr->GetState();
+
+		if(typeid(*state) != typeid(CEnemyDuelState))
+		{
+			continue;
+		}
+
+		//TODO : デュエル状態を参照できる場所が必要
+		CDuelCharacter* DuelState = dynamic_cast<CDuelCharacter*>(itr->GetState());	//キャスト
+
+		CHandZone* hand_zone = DuelState->GetZoneManager()->GetHandZone();
+		CCemeteryZone* cemetary_zone = DuelState->GetZoneManager()->GetCemetery();
+		std::list<CCard*> hand_list = DuelState->GetZoneManager()->GetHandZone()->GetList();
+
+		int hand_size = hand_list.size();
+
+		if (hand_size == 0)
+		{
+			return;
+		}
+
+		int idx = Rundom(1, hand_list.size());
+
+		int i = 0;
+		for (auto& card_itr : hand_list)
+		{
+			if (card_itr == nullptr) 
+			{ 
+				++i;
+				continue; 
+			}
+
+			if (i != idx)
+			{
+				++i;
+				continue;
+			}
+
+			//カードの状態を墓地に変更
+			card_itr->ChangeState(CCardState::CARD_CEMETERY, DuelState);
+
+			//DuelState->GetZoneManager()->MoveZone(card_itr, hand_zone, cemetary_zone, true);
+		}
 	}
 
+	//オンライン時は通信処理TODO : カードのやり取りが出来たら必要なし
+	if (CRakNet::GetInstance()->GetOnline())
+	{
+		CRakNet::GetInstance()->SendStatus();
+	}
+}
+
+//===============================================================================
+// コンストラクタ
+//===============================================================================
+My::CFlipDeck::CFlipDeck()
+{
+}
+
+//===============================================================================
+// デストラクタ
+//===============================================================================
+My::CFlipDeck::~CFlipDeck()
+{
+}
+
+//===============================================================================
+// 山札からめくる処理
+//===============================================================================
+void My::CFlipDeck::Strategy(CDuelCharacter* duel, CCard* card)
+{
+	std::list<CCard*> card_list = duel->GetZoneManager()->GetDeck()->Flip(1);
+	for (auto& itr : card_list)
+	{
+		if (itr == nullptr) { continue; }
+		////カードを引けるか
+		//CZoneManager* pZoneManager = state->GetZoneManager();
+
+
+		//duel->GetZoneManager()->MoveZone(itr,itr->GetCurrentZone(),)
+	}
 	//オンライン時は通信処理TODO : カードのやり取りが出来たら必要なし
 	if (CRakNet::GetInstance()->GetOnline())
 	{

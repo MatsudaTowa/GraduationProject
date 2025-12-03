@@ -78,6 +78,14 @@ namespace My
 		void Strategy(CDuelCharacter* duel, CCard* card) override;
 	};
 
+	class CFlipDeck :public CCardStrategy_Base
+	{
+	public:
+		CFlipDeck();
+		~CFlipDeck()override;
+		void Strategy(CDuelCharacter* duel, CCard* card) override;
+	};
+
 	/** @brief カードストラテジーエナジーの変動クラス */
 	class CEnergyAdjust :public CCardStrategy_Base
 	{
