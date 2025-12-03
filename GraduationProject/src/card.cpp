@@ -533,8 +533,59 @@ My::CZone* My::CCard::CastToEnumZone(ZONE zone, CDuelCharacter* duel)
 		return nullptr;
 	}
 
+	////ゾーン列挙
+	//switch (m_OldZone)
+	//{
+	//case ZONE::DECK:	//デッキ
+	//	pZone = duel->GetZoneManager()->GetDeck();
+	//	m_CurrentZone = ZONE::DECK;	//列挙の登録
+	//	break;
+
+	//case ZONE::HAND:	//手札
+	//	pZone = duel->GetZoneManager()->GetHandZone();
+	//	m_CurrentZone = ZONE::HAND;	//列挙の登録
+	//	break;
+
+	//case ZONE::CAST:	//キャストプレビュー
+	//	pZone = duel->GetZoneManager()->GetCastPreviewZone();
+	//	m_CurrentZone = ZONE::CAST;	//列挙の登録
+	//	break;
+
+	//case ZONE::WAIT:	//待機
+	//	pZone = duel->GetZoneManager()->GetWaitZone();
+	//	m_CurrentZone = ZONE::WAIT;	//列挙の登録
+	//	break;
+
+	//case ZONE::FIELD:	//フィールド
+	//	pZone = duel->GetZoneManager()->GetFieldZone();
+	//	m_CurrentZone = ZONE::FIELD;	//列挙の登録
+	//	break;
+
+	//case ZONE::CEMETERY:	//墓地
+	//	pZone = duel->GetZoneManager()->GetCemetery();
+	//	m_CurrentZone = ZONE::CEMETERY;	//列挙の登録
+	//	break;
+	//}
+
+	//引数の列挙をポインタに変換
+	pZone = CastToZone(m_OldZone, duel);
+
+	//現在のゾーンの更新
+	m_CurrentZone = zone;
+
+	return pZone;
+}
+
+//===========================================================================================================
+//列挙に対応したゾーンのポインタを返す
+//===========================================================================================================
+My::CZone* My::CCard::CastToZone(ZONE zone, CDuelCharacter* duel)
+{
+	//返す用の変数
+	CZone* pZone = nullptr;
+
 	//ゾーン列挙
-	switch (m_OldZone)
+	switch (zone)
 	{
 	case ZONE::DECK:	//デッキ
 		pZone = duel->GetZoneManager()->GetDeck();
@@ -566,9 +617,6 @@ My::CZone* My::CCard::CastToEnumZone(ZONE zone, CDuelCharacter* duel)
 		m_CurrentZone = ZONE::CEMETERY;	//列挙の登録
 		break;
 	}
-
-	//現在のゾーンの更新
-	m_CurrentZone = zone;
 
 	return pZone;
 }

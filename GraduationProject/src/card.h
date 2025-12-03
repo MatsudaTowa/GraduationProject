@@ -63,6 +63,7 @@ namespace My
 			CAST,
 			WAIT,
 			FIELD,
+			FLIP,
 			CEMETERY
 		};
 
@@ -272,8 +273,8 @@ namespace My
 		//inline CCard* GetTop() { return m_pTop; }
 		//inline CCard* GetPrev() { return m_pPrev; }
 
-		//列挙からゾーンのポインタを返す
-		CZone* CastToEnumZone(ZONE zone, CDuelCharacter* duel);
+		//引数のゾーンの列挙に対応したポインタを返す
+		CZone* CastToZone(ZONE zone, CDuelCharacter* duel);
 
 		//ストラテジーの設定と取得
 
@@ -306,6 +307,9 @@ namespace My
 		inline CInputMouse::AREA GetUserArea() { return m_UserArea; }
 
 	private:
+
+		//次の列挙から過去のゾーンのポインタを返す
+		CZone* CastToEnumZone(ZONE zone, CDuelCharacter* duel);
 
 		//static CCard* m_pTop;	//先頭のオブジェクトポインタ
 		//static CCard* m_pCur;	//現在（最後尾）のポインタ

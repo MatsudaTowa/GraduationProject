@@ -302,6 +302,6 @@ My::CSendToMyCemetary::~CSendToMyCemetary()
 
 void My::CSendToMyCemetary::Strategy(CDuelCharacter* duel, CCard* card)
 {
-
-	card->CastToEnumZone(card->GetCurrentZone(), duel);
+	//次のゾーンのポインタを取得
+	card->CastToZone(card->GetCurrentZone(), duel);
 }
