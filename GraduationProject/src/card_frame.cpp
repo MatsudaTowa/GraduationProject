@@ -80,6 +80,16 @@ void My::CCardFrame::Uninit()
 //===========================================================================================================
 void My::CCardFrame::Update()
 {
+	CCard::ZONE current_zone = GetCard()->GetCurrentZone();
+
+	// 山札時はコストを表示しないように TODO:今後はここの条件式を見直す必要あり
+	if (current_zone == CCard::DECK || current_zone == CCard::CEMETERY)
+	{
+		SetisDraw(false);
+		return;
+	}
+	SetisDraw(true);
+
 	D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), m_pParent->GetPos()); //スクリーン座標に変換
 
 	D3DXVECTOR3 offsetpos = screen_pos + m_FrameInfo[m_type].offset;
@@ -105,12 +115,6 @@ void My::CCardFrame::Update()
 //===========================================================================================================
 void My::CCardFrame::Draw()
 {
-	CCard::ZONE current_zone = GetCard()->GetCurrentZone();
-	// 山札時はコストを表示しないように TODO:今後はここの条件式を見直す必要あり
-	if (current_zone == CCard::DECK || current_zone == CCard::CEMETERY)
-	{
-		return;
-	}
 	CRenderer* pRender = GET_RENDERER;
 	LPDIRECT3DDEVICE9 pDevice = pRender->GetDevice();
 

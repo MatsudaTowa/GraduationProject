@@ -272,6 +272,7 @@ void My::CFlipMyDeck::Strategy(CDuelCharacter* duel, CCard* card)
 {
 	CZoneManager* pZoneManager = duel->GetZoneManager();
 
+	//TODO:ここの数もカードのステータスから
 	std::list<CCard*> card_list = pZoneManager->GetDeck()->Flip(1);
 	for (auto& itr : card_list)
 	{
@@ -281,7 +282,7 @@ void My::CFlipMyDeck::Strategy(CDuelCharacter* duel, CCard* card)
 		duel->GetZoneManager()->MoveZone(itr, pZoneManager->GetDeck(), pZoneManager->GetFlipPreviewZone(), true);
 
 		//TODO:フリッププレビューゾーンの列挙に
-		//itr->SetCurrentZone(CCard::HAND);
+		itr->SetCurrentZone(CCard::FLIP);
 	}
 
 
@@ -302,6 +303,27 @@ My::CSendToMyCemetary::~CSendToMyCemetary()
 
 void My::CSendToMyCemetary::Strategy(CDuelCharacter* duel, CCard* card)
 {
-	//次のゾーンのポインタを取得
-	card->CastToZone(card->GetCurrentZone(), duel);
+	CZoneManager* pZoneManager = duel->GetZoneManager();
+
+	//TODO:ここの数もカードのステータスから
+	std::list<CCard*> card_list = pZoneManager->GetFlipPreviewZone()->GetList();
+
+	//TODO:どの番号とか選択する
+	for (auto& itr : card_list)
+	{
+		if (itr == nullptr) { continue; }
+		//カードを引けるか
+
+		duel->GetZoneManager()->MoveZone(card, itr->CastToZone(card->GetCurrentZone(), duel), pZoneManager->GetCemetery(), true);
+
+		//TODO:フリッププレビューゾーンの列挙に
+		itr->SetCurrentZone(CCard::CEMETERY);
+	}
+
+
+	//オンライン時は通信処理TODO : カードのやり取りが出来たら必要なし
+	if (CRakNet::GetInstance()->GetOnline())
+	{
+		CRakNet::GetInstance()->SendStatus();
+	}
 }
