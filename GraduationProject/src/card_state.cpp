@@ -287,9 +287,9 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 
 		if (itr->GetArea() != cpy->GetTarget()) { continue; }
 
-		CZoneManager* pZoneManager = nullptr;
-		pZoneManager = dynamic_cast<CDuelCharacter*>(itr->GetState())->GetZoneManager();
-		pZoneManager->GetCastPreviewZone()->UsePlayerCard(cpy);
+		//CZoneManager* pZoneManager = nullptr;
+		//pZoneManager = dynamic_cast<CDuelCharacter*>(itr->GetState())->GetZoneManager();
+		//pZoneManager->GetCastPreviewZone()->UsePlayerCard(cpy);
 
 		break;
 	}
