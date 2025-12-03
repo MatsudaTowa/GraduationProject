@@ -10,4 +10,6 @@ My::CFlipPreviewZone::~CFlipPreviewZone()
 
 void My::CFlipPreviewZone::SendToZone(CCard* pCard)
 {
+	// ƒJ[ƒh‚ğ’Ç‰Á
+	AddList(pCard);
 }

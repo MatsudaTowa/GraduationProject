@@ -278,21 +278,10 @@ void My::CFlipMyDeck::Strategy(CDuelCharacter* duel, CCard* card)
 		if (itr == nullptr) { continue; }
 		//カードを引けるか
 
-		duel->GetZoneManager()->MoveZone(itr, pZoneManager->GetDeck(), pZoneManager->GetHandZone(), true);
+		duel->GetZoneManager()->MoveZone(itr, pZoneManager->GetDeck(), pZoneManager->GetFlipPreviewZone(), true);
 		itr->SetCurrentZone(CCard::HAND);
 	}
 
-	CActiveSceneCharacterState* state = CActiveSceneManager::GetInstance()->GetPlayer()->GetState();
-
-	if (typeid(*state) != typeid(CPlayerDuelState))
-	{
-		return;
-	}
-
-	//TODO : デュエル状態を参照できる場所が必要
-	CPlayerDuelState* DuelState = dynamic_cast<CPlayerDuelState*>(state);	//キャスト
-
-	DuelState->GetHand()->SetHandCardPos(duel);
 
 	//オンライン時は通信処理TODO : カードのやり取りが出来たら必要なし
 	if (CRakNet::GetInstance()->GetOnline())

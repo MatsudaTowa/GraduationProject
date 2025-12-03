@@ -17,7 +17,8 @@ My::CZoneManager::CZoneManager():
 	m_pFieldZone(nullptr),
 	m_pHandZone(nullptr),
 	m_pWaitZone(nullptr),
-	m_pCastPreviewZone(nullptr)
+	m_pCastPreviewZone(nullptr),
+	m_pFlipPreviewZone(nullptr)
 {
 
 }
@@ -33,6 +34,7 @@ My::CZoneManager::~CZoneManager()
 	m_pHandZone = nullptr;
 	m_pWaitZone = nullptr;
 	m_pCastPreviewZone = nullptr;
+	m_pFlipPreviewZone = nullptr;
 }
 
 /**
@@ -80,6 +82,11 @@ HRESULT My::CZoneManager::Init()
 	if (m_pHandZone == nullptr)
 	{
 		m_pHandZone = new CHandZone();
+	}
+
+	if (m_pFlipPreviewZone == nullptr)
+	{
+		m_pFlipPreviewZone = new CFlipPreviewZone();
 	}
 
 	return S_OK;
@@ -130,6 +137,13 @@ void My::CZoneManager::Uninit()
 	{
 		delete m_pHandZone;
 		m_pHandZone = nullptr;
+	}
+
+	// フリップゾーンのポインタ生成
+	if (m_pFlipPreviewZone != nullptr)
+	{
+		delete m_pFlipPreviewZone;
+		m_pFlipPreviewZone = nullptr;
 	}
 }
 
@@ -192,6 +206,15 @@ My::CWaitZone* My::CZoneManager::GetWaitZone()
 My::CCastPreviewZone* My::CZoneManager::GetCastPreviewZone()
 {
 	return m_pCastPreviewZone;
+}
+
+/**
+ * @brief フリッププレビューゾーンの取得
+ * @return m_pFlipPreviewZone
+ */
+My::CFlipPreviewZone* My::CZoneManager::GetFlipPreviewZone()
+{
+	return m_pFlipPreviewZone;
 }
 
 /**

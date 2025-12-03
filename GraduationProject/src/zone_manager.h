@@ -15,6 +15,7 @@
 #include "hand_zone.h"
 #include "wait_zone.h"
 #include "castpreview_zone.h"
+#include "flip_preview_zone.h"
 
 /** @brief My 名前空間 */
 namespace My
@@ -88,6 +89,12 @@ namespace My
 		CCastPreviewZone* GetCastPreviewZone();
 
 		/**
+		* @brief フリッププレビューゾーンのポインタ取得
+		* @return フリッププレビューゾーンのポインタ
+		*/
+		CFlipPreviewZone* GetFlipPreviewZone();
+
+		/**
 		* @brief ゾーンの移動処理
 		* @param [in]カードのポインタ
 		* @param [in]現在のゾーン
@@ -104,6 +111,7 @@ namespace My
 		CHandZone* m_pHandZone;					// 手札ゾーンのポインタ
 		CWaitZone* m_pWaitZone;					// 待機ゾーンのポインタ
 		CCastPreviewZone* m_pCastPreviewZone;	// キャストプレビューゾーンのポインタ
+		CFlipPreviewZone* m_pFlipPreviewZone;	// フリッププレビューゾーンのポインタ
 	};
 }
 #endif
