@@ -181,8 +181,23 @@ void My::CCardAttack::Trigger()
 
 		if (itr->GetArea() != GetTarget()) { continue; }
 
+		CZoneManager* pZoneManager = nullptr;
+		pZoneManager = dynamic_cast<CDuelCharacter*>(itr->GetState())->GetZoneManager();
+
+		float totalattackvalue = 0.0f;
+
+		unsigned int size = pZoneManager->GetCastPreviewZone()->GetList().size();
+
+		for (auto& iter : pZoneManager->GetCastPreviewZone()->GetList())
+		{
+			CCardAttack* pAttackCard = dynamic_cast<CCardAttack*>(iter);
+			totalattackvalue += pAttackCard->GetAttackValue();
+		}
+
+		totalattackvalue += m_nAttackValue;
+
 		//ダメージの計算
-		int nDamage = m_nAttackValue;	//与えるダメージ
+		int nDamage = totalattackvalue;	//与えるダメージ
 
 		//TODO : デュエル状態を参照できる場所が必要
 		CDuelCharacter* DuelState = dynamic_cast<CDuelCharacter*>(itr->GetState());	//キャスト

@@ -82,6 +82,13 @@ HRESULT My::CActiveScene::Init()
 	}		
 	CActiveSceneManager::GetInstance()->SetState(current_state);
 
+	CTargetArrowManager* arrow_manager = CActiveSceneManager::GetInstance()->GetTargetArrowManager();
+	if (arrow_manager == nullptr)
+	{
+		arrow_manager = new CTargetArrowManager;
+		CActiveSceneManager::GetInstance()->SetTargetArrowManager(arrow_manager);
+	}
+
 	if (m_pPauseCnt == nullptr)
 	{
 		m_pPauseCnt = new CCount;

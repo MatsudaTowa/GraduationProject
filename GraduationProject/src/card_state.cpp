@@ -8,7 +8,7 @@
 #include "card.h"
 #include "active_scene_manager.h"
 #include "target_arrow.h"
-#include "duel_manager.h"
+#include "zone_manager.h"
 
 //===========================================================================================================
 // 
@@ -280,19 +280,21 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 	//リストの取得
 	std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
 
-	//キャラクターの周回
-	for (auto& iter : List)
+	//リスト周回
+	for (auto& itr : List)
 	{
-		if (cpy->GetUserArea() != iter->GetArea()) continue;
+		if (itr == nullptr) { continue; }
 
-		//// ターゲットアローをマネージャーに登録
-		//iter->GetTargetArrowManeger()->Regist(CTargetArrow::Create(cpy->GetUserArea(), cpy->GetTarget()));
+		if (itr->GetArea() != cpy->GetTarget()) { continue; }
 
-		
+		CZoneManager* pZoneManager = nullptr;
+		pZoneManager = dynamic_cast<CDuelCharacter*>(itr->GetState())->GetZoneManager();
+		pZoneManager->GetCastPreviewZone()->UsePlayerCard(cpy);
 
 		break;
 	}
 
+	// ターゲットアローをマネージャーに登録
 	CActiveSceneManager::GetInstance()->GetTargetArrowManager()->Regist(CTargetArrow::Create(cpy->GetUserArea(), cpy->GetTarget()));
 }
 

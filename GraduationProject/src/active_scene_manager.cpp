@@ -20,7 +20,7 @@ m_pAreaManager(),			//エリアマネージャー
 m_pPlayer(nullptr),			//プレイヤーのポインタ
 m_pField(nullptr),			//床のポインタ
 m_isFinish(false),
-m_pTargetArrowManager(new CTargetArrowManager())
+m_pTargetArrowManager()
 {
 }
 
