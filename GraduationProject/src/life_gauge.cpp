@@ -137,7 +137,7 @@ void My::CLife_Gauge::SetVtx_S()
 	float angle_E = anglestep * (m_nTrapeSegNum + 1) + angleoffset;
 	 
 	//内外半径の設定
-	float rad_I = m_fTrapeRad - 50.0f;//内側（とりあえず厚みは20）
+	float rad_I = m_fTrapeRad - 30.0f;//内側（とりあえず厚みは20）
 	float rad_O = m_fTrapeRad;//外側
 
 	//設定
@@ -152,7 +152,7 @@ void My::CLife_Gauge::CreateLifeUI(float GameHP, float Rad)
 	//インスタンス取得
 	CLife_changer* pLife = CLife_changer::GetInstance();
 
-	CLife_frame::Create({ 260.0f,600.0f,0.0f }, {Rad + 130,Rad +10});
+	CLife_frame::Create({ 140.0f,600.0f,0.0f }, {Rad * 1.25f,Rad *1.25f});
 
 	for (int i = 0; i < SEGMENT_NUM; i++)
 	{

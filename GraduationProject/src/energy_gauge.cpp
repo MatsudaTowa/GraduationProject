@@ -138,7 +138,7 @@ void My::CEnergy_Gauge::CreateEnergy()
 		CEnergy_Gauge::Create({ 1039.0f+ (i * 28.0f),497.0f,FLOAT_ZERO });
 	}
 	//すごく仮置き（体力関連）
-	CLife_Gauge::CreateLifeUI(CActiveSceneCharacter::MAX_LIFE, 110.0f);
+	CLife_Gauge::CreateLifeUI(CActiveSceneCharacter::MAX_LIFE, 70.0f);
 }
 
 //=====================================================================
