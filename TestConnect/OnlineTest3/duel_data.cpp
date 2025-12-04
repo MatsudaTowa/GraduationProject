@@ -98,7 +98,7 @@ void CDuel_Data::SendPlayerNum(RakNet::RakPeerInterface* peer, GameMessages mess
     for (auto iter : m_DuelPlayerList)
     {
         //送信用のデータをまとめる
-        CDuel_Player::DuelData SendData;
+        My::CDuel_Player::DuelData SendData;
         SendData.BaceData.RakNetID = iter->GetRakNetID();
         SendData.BaceData.nIndex = iter->GetIndex();
         SendData.BaceData.Tag = iter->GetTag();
@@ -152,7 +152,7 @@ void CDuel_Data::Ready(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
     for (auto iter : m_DuelPlayerList)
     {
         //送信用のデータをまとめる
-        CDuel_Player::DuelData SendData;
+        My::CDuel_Player::DuelData SendData;
         SendData.BaceData.RakNetID = iter->GetRakNetID();
         SendData.BaceData.nIndex = iter->GetIndex();
         SendData.BaceData.Tag = iter->GetTag();
@@ -201,7 +201,7 @@ void CDuel_Data::SetData(std::list<CPlayer::Data> data)
     for (const auto& iter : data)
     {
         //基底パラメータを代入
-        CDuel_Player* pPlayer = new CDuel_Player; //クラスを作成し代入
+        My::CDuel_Player* pPlayer = new My::CDuel_Player; //クラスを作成し代入
         pPlayer->SetIndex(iter.nIndex);
         pPlayer->SetRakNetID(iter.RakNetID);
         pPlayer->SetTag(iter.Tag);
@@ -247,7 +247,7 @@ void CDuel_Data::SendStartMember(RakNet::RakPeerInterface* peer)
     for (const auto& iter : m_DuelPlayerList)
     {
         //変数宣言
-        CDuel_Player::DuelData DuelData;
+        My::CDuel_Player::DuelData DuelData;
 
         DuelData.BaceData.nIndex = iter->GetIndex();        //番号
         DuelData.BaceData.RakNetID = iter->GetRakNetID();   //RakNetID
@@ -341,8 +341,8 @@ void CDuel_Data::SendStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* pe
     for (int i = 0; i < 4; i++)
     {
         //基底パラメータを代入
-        CDuel_Player* pPlayer = new CDuel_Player; //クラスを作成し代入
-        CDuel_Player::DuelData Data;
+        My::CDuel_Player* pPlayer = new My::CDuel_Player; //クラスを作成し代入
+        My::CDuel_Player::DuelData Data;
         bsIn.Read(Data);
         pPlayer->SetStatus(Data.Status);
         pPlayer->SetRakNetID(Data.BaceData.RakNetID);
@@ -426,7 +426,7 @@ bool CDuel_Data::IsSendUpdate(RakNet::Packet* packet)
    
     //読み取り
     bsIn.IgnoreBytes(sizeof(RakNet::MessageID));    //メッセージの読み込み
-    CDuel_Player::DuelData Data;                    //データの読み込み
+    My::CDuel_Player::DuelData Data;                    //データの読み込み
     bsIn.Read(Data);
 
     //同じ番号のステータスに反映
@@ -618,7 +618,7 @@ void CDuel_Data::SendUpdateSign(RakNet::RakPeerInterface* peer)
     for (auto iter : m_DuelPlayerList)
     {
         //送信用のデータをまとめる
-        CDuel_Player::DuelData SendData;
+        My::CDuel_Player::DuelData SendData;
         SendData.BaceData.RakNetID = iter->GetRakNetID();   //識別番号
         SendData.BaceData.nIndex = iter->GetIndex();        //番号
         SendData.BaceData.Tag = iter->GetTag();             //タグ

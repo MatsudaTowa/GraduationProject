@@ -143,9 +143,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="card.h" />
+    <ClInclude Include="card_assist.h" />
+    <ClInclude Include="card_attack.h" />
     <ClInclude Include="card_client.h" />
+    <ClInclude Include="card_deffence.h" />
+    <ClInclude Include="card_manager.h" />
+    <ClInclude Include="card_state.h" />
+    <ClInclude Include="card_strategy.h" />
+    <ClInclude Include="castpreview_zone.h" />
+    <ClInclude Include="cemetery_zone.h" />
+    <ClInclude Include="deck_zone.h" />
     <ClInclude Include="duel_data.h" />
     <ClInclude Include="duel_player.h" />
+    <ClInclude Include="duel_player_manager.h" />
+    <ClInclude Include="field_zone.h" />
+    <ClInclude Include="hand_zone.h" />
     <ClInclude Include="lobby_data.h" />
     <ClInclude Include="lobby_player.h" />
     <ClInclude Include="main.h" />
@@ -306,11 +318,28 @@
     <ClInclude Include="Source\WSAStartupSingleton.h" />
     <ClInclude Include="Source\XBox360Includes.h" />
     <ClInclude Include="Source\_FindFirst.h" />
+    <ClInclude Include="useful.h" />
+    <ClInclude Include="useful_card.h" />
+    <ClInclude Include="wait_zone.h" />
+    <ClInclude Include="zone.h" />
+    <ClInclude Include="zone_manager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="card.cpp" />
+    <ClCompile Include="card_assist.cpp" />
+    <ClCompile Include="card_attack.cpp" />
     <ClCompile Include="card_client.cpp" />
+    <ClCompile Include="card_deffence.cpp" />
+    <ClCompile Include="card_manager.cpp" />
+    <ClCompile Include="card_state.cpp" />
+    <ClCompile Include="card_strategy.cpp" />
+    <ClCompile Include="castpreview_zone.cpp" />
+    <ClCompile Include="cemetery_zone.cpp" />
+    <ClCompile Include="deck_zone.cpp" />
     <ClCompile Include="duel_data.cpp" />
+    <ClCompile Include="duel_player.cpp" />
+    <ClCompile Include="field_zone.cpp" />
+    <ClCompile Include="hand_zone.cpp" />
     <ClCompile Include="lobby_data.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="raknet_data.cpp" />
@@ -425,6 +454,10 @@
     <ClCompile Include="Source\VitaIncludes.cpp" />
     <ClCompile Include="Source\WSAStartupSingleton.cpp" />
     <ClCompile Include="Source\_FindFirst.cpp" />
+    <ClCompile Include="useful_card.cpp" />
+    <ClCompile Include="wait_zone.cpp" />
+    <ClCompile Include="zone.cpp" />
+    <ClCompile Include="zone_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Source\CMakeLists.txt" />

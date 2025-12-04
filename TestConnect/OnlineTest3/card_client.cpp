@@ -8,6 +8,7 @@
 //ヘッダーのインクルード
 #include "card_client.h"
 #include "card.h"
+#include "card_manager.h"
 
 //静的変数の宣言
 CRakNet_Data* CCard_Client::m_pRakNetData = nullptr;
@@ -173,11 +174,64 @@ void CCard_Client::ReceiveCardInfo(RakNet::Packet* packet)
 
     //人数を取得
     unsigned char messageId;    //メッセージ
-    CCard Card;                 //カード情報
+    My::CCard Card;             //カード情報
    
     //読み込み
     bsIn.Read(messageId);
     bsIn.Read(Card);
 
     //下にカード情報を追加
+}
+
+//=====================================
+//全カード情報の受信
+//=====================================
+void CCard_Client::ReceiveAllCardInfo(RakNet::Packet* packet)
+{
+    //受信側
+    RakNet::BitStream bsIn(packet->data, packet->length, false);
+
+    //人数を取得
+    unsigned char messageId;    //メッセージ
+    int nMax = 0;               //最大枚数
+
+    //読み込み
+    bsIn.Read(messageId);
+    bsIn.Read(nMax);
+
+    //サーバーに登録されている枚数分読み込み
+    for (int i = 0; i < nMax; i++)
+    {
+        Param CardParam = {};       //カード情報
+        RakNet::RakString msg;      //文字列読み込み用
+
+       // bsIn.Read(CardParam);
+        bsIn.Read(CardParam.nPackID);
+        bsIn.Read(CardParam.nCardID);
+        bsIn.Read(msg);
+        CardParam.Name = msg.C_String(); msg.Clear();
+        bsIn.Read(msg);
+        CardParam.Ruby = msg.C_String(); msg.Clear();
+        bsIn.Read(CardParam.nCost);
+        bsIn.Read(CardParam.nDamage);
+        bsIn.Read(CardParam.nGuard);
+        bsIn.Read(CardParam.nCounter);
+        bsIn.Read(CardParam.nHeal);
+        bsIn.Read(CardParam.Maintype);
+        bsIn.Read(CardParam.Raritytype);
+        bsIn.Read(CardParam.Assisttype);
+        bsIn.Read(CardParam.Attacktype);
+        bsIn.Read(CardParam.Defensetype);
+        bsIn.Read(CardParam.Bufftype);
+        bsIn.Read(CardParam.Healtype);
+        bsIn.Read(msg);
+        CardParam.ImagePath = msg.C_String();
+
+        //登録
+        My::CCardManager::GetInstance()->RegistCardList(CardParam);
+
+        //下にカード情報を追加
+        //RegistCard(CardParam);
+    }
+
 }

@@ -16,6 +16,16 @@
 #include <string>
 #include <vector>
 #include <list>
+#include <map>
+#include <random>
+#include<iostream>
+#include <algorithm>
+#include <stdlib.h>
+#include <crtdbg.h>
+#include <fstream>
+#include <cmath>
+#include <assert.h>
+
 #pragma comment(lib,"winmm.lib")	//システム時刻取得に必要
 #pragma comment (lib, "ws2_32.lib")
 

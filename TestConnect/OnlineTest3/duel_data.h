@@ -78,10 +78,10 @@ private:
 	bool IsDisconnectionSendUpdate();											//クライアントが切断時に更新の合図を送信するか
 
 	//変数
-	std::list<CDuel_Player*> m_DuelPlayerList;	//ロビープレイヤー保管用変数
-	bool m_isCheckStart[MAX_CLIENT];			//開始するかのフラグ
-	int m_nReceiveNum;							//ステータスを受信した数
-	std::list<CastCardInfo> m_CastCardList;		//キャストカードのリスト
+	std::list<My::CDuel_Player*> m_DuelPlayerList;	//ロビープレイヤー保管用変数
+	bool m_isCheckStart[MAX_CLIENT];				//開始するかのフラグ
+	int m_nReceiveNum;								//ステータスを受信した数
+	std::list<CastCardInfo> m_CastCardList;			//キャストカードのリスト
 	std::vector<CastDiffenceCardInfo> m_CastDiffenceCardVector;	//キャスト守備カードのリスト
 };
 

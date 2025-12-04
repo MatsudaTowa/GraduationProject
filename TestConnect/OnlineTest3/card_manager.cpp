@@ -1,0 +1,154 @@
+//================================
+//
+//card_manager.cppに必要な宣言[card_manager.cpp]
+//Author:松田永久
+// 
+//================================
+#include "card_manager.h"
+#include "card_assist.h"
+#include "card_attack.h"
+#include "card_deffence.h"
+#include "card_manager.h"
+#include "card_client.h"
+
+//================================
+// コンストラクタ
+//================================
+My::CCardManager::CCardManager()
+{
+	m_CardVector.clear();
+}
+
+//================================
+// デストラクタ
+//================================
+My::CCardManager::~CCardManager()
+{
+	m_CardVector.clear();
+}
+
+//================================
+// 初期化
+//================================
+HRESULT My::CCardManager::Init()
+{
+	return S_OK;
+}
+
+//================================
+// 終了
+//================================
+void My::CCardManager::Uninit()
+{
+}
+
+//================================
+// カードのリストに登録
+//================================
+void My::CCardManager::RegistCardList(CCard_Client::Param card)
+{
+	//ターゲットリストの情報を登録
+	m_CardVector.push_back(card);
+}
+
+//================================
+// カードのリストから削除
+//================================
+void My::CCardManager::RemoveCardList(CCard_Client::Param card)
+{
+	//サイズが0なら抜ける
+	if (m_CardVector.size() == 0)
+	{
+		return;
+	}
+	//カードの情報を削除
+	//m_CardList.remove(card);
+}
+
+//================================
+// リストのリセット
+//================================
+void My::CCardManager::ResetCardList()
+{
+	m_CardVector.clear();
+}
+
+//================================
+//カードの生成
+//================================
+My::CCard* My::CCardManager::CreateCard(int id)
+{
+	if (static_cast<int>(m_CardVector.size()) < id) return nullptr;
+
+	//基本ステータスの代入
+	CCard_Client::BaseParam Status;
+	Status.ImagePath = m_CardVector[id - 1].ImagePath;						//画像パス
+	Status.Maintype = (CCard_Client::CardType)m_CardVector[id - 1].Maintype;	//メインタイプ
+	Status.Name = m_CardVector[id - 1].Name;								//名前
+	Status.nCardID = m_CardVector[id - 1].nCardID;							//カードID
+	Status.nCost = m_CardVector[id - 1].nCost;								//コスト
+	Status.nPackID = m_CardVector[id - 1].nPackID;							//パックID
+	Status.Raritytype = (CCard_Client::RARITY)m_CardVector[id - 1].Raritytype;	//レアリティ
+	Status.Ruby = m_CardVector[id - 1].Ruby;								//フリガナ
+
+	switch (m_CardVector[id - 1].Maintype)
+	{
+	case CCard_Client::CardType::ATTACK:
+	{
+		My::CCardAttack* pAttack = new My::CCardAttack;
+
+		//代入
+		pAttack->SetAttackValue(m_CardVector[id - 1].nDamage);
+		pAttack->SetAttackType((CCardAttack::AttackType)m_CardVector[id - 1].Attacktype);
+		pAttack->SetBaseStatus(Status);
+
+		//初期化
+		//pAttack->Init();
+		return pAttack;
+	}
+		break;
+
+	case CCard_Client::CardType::DEFENSE:
+		{
+			My::CCardDeffence* pDeffence = new My::CCardDeffence;
+
+			//代入
+			pDeffence->SetDefenceType((CCardDeffence::DefenseType)m_CardVector[id - 1].Defensetype);
+			pDeffence->SetDefenceValue(m_CardVector[id - 1].nGuard);
+			pDeffence->SetCounterValue(m_CardVector[id - 1].nCounter);
+			pDeffence->SetBaseStatus(Status);
+
+			//初期化
+			//pDeffence->Init();
+
+			return pDeffence;
+		}
+
+		break;
+
+	case CCard_Client::CardType::ASSIST:
+		{
+			My::CCardAssist* pAssist = new My::CCardAssist;
+			pAssist->SetBaseStatus(Status);
+			return pAssist;
+		}
+		break;
+
+	default:
+		break;
+	}
+
+	return nullptr;
+}
+
+//================================
+//カードの生成
+//================================
+CCard_Client::Param My::CCardManager::GetCardParam(int id)
+{
+	//登録されていない番号ならアサート
+	assert(id <= static_cast<int>(m_CardVector.size()) || id < 1);
+
+	//引数のIDのカードを返す
+	return m_CardVector[id - 1];
+}

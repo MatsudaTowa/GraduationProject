@@ -11,158 +11,134 @@
 
 //ヘッダーのインクルード
 #include "main.h"
+//#include "card_client.h"
+//#include "duel_player.h"
+//#include "card_strategy.h"
+#include "card_state.h"
+#include "card_manager.h"
 
-//カードのクラス
-class CCard
+namespace My
 {
-public:
+	class CDuel_Player;
+	class CCardStrategy_Base;
+	//class CZone;
 
-	enum RARITY
-	{// レアリティの種類
-		NONE_RARITY,
-		COMMON,			// コモン
-		UNCOMMON,		// アンコモン
-		RARE,			// レア
-		SUPERRARE,		// スーパーレア
-		HYPERRARE,		// ハイパーレア
-		ROYALRARE,		// ロイヤルレア
-		EMPERORRARE,	// エンペラーレア
-		GODRARE,		// ゴッドレア
-		XRARE,			// エックスレア
-	};
-
-	enum CardType
-	{// カードの種類
-		NONE,
-		ATTACK,
-		DEFENSE,
-		ASSIST,
-	};
-
-	enum AttackType
-	{// 攻撃の種類
-		NONE_ATTACK,			// 攻撃以外のときはこれ
-		ALL_ATTACK,				// 全体攻撃
-		SPECIFIC_ATTACK,		// 特定の相手を選んで攻撃
-		RANDOM_ATTACK,			// ランダム攻撃
-		SELFINTARGET_ATTACK,	// 自分を含めた攻撃
-	};
-
-	enum DefenseType
-	{// 守備の種類
-		NONE_DEFENSE,		// 守備以外のときはこれ
-		COUNTER,			// 反撃できる
-		NOT_COUNTER,		// 反撃できない
-	};
-
-	enum AssistType
-	{// アシストの種類
-		NONE_ASSIST,		// アシスト以外のときはこれ
-		OBSTRUCT,			// 妨害
-		BUFF,				// バフ
-		DEBUFF				// デバフ
-	};
-
-	enum BuffType
-	{// バフの種類
-		NONE_BUFF,
-		HEAL,				// HP回復
-		NO_NAMEONE,			// 未定①
-		NO_NAMETWO,			// 未定②
-	};
-
-	enum DeBuffType
-	{// デバフの種類
-		NONE_DEBUFF,
-		DEATH,				// 死亡
-	};
-
-	enum HealType
-	{// 回復の種類
-		NONE_HEAL,					// 回復しない
-		ALL_HEAL,					// 全体回復
-		SPECIFIC_HEAL,				// 特定の相手を選んで回復
-		RANDOM_HEAL,				// ランダム回復
-		SELFINTARGET_HEAL,			// 自分を含めてランダム回復
-		ONLY_ME,					// 自分だけ
-	};
-
-	//パラメータの構造体
-	struct Param
+	//カードのクラス
+	class CCard
 	{
-		int nPackID;							// パック番号
-		int nCardID;							// カード番号
-		std::string Name;						// カード名
-		std::string Ruby;						// フリガナ
-		int nCost = 0;							// カードコスト
-		int nDamage = 0;						// ダメージ数
-		int nGuard = 0;							// ガード値
-		int nCounter = 0;						// 反撃値
-		int nHeal = 0;							// 回復値
-		CardType Maintype;						// カードの種類
-		RARITY Raritytype;						// レアリティの種類
-		AssistType Assisttype;					// アシストの種類
-		AttackType Attacktype;					// 攻撃の種類
-		DefenseType Defensetype;				// 守備の種類
-		BuffType Bufftype;						// バフの種類
-		HealType Healtype;						// 回復の種類
-		std::string ImagePath;					// 画像ファイルパス
+	public:
+
+		//ゾーンの列挙
+		enum ZONE
+		{//ゾーンの種類
+			NONE_ZONE,
+			DECK,
+			HAND,
+			CAST,
+			WAIT,
+			FIELD,
+			FLIP,
+			CEMETERY
+		};
+
+		//関数
+		CCard();			//コンストラクタ
+		virtual ~CCard();	//デストラクタ
+
+		/**
+		* @brief 初期化
+		*/
+		virtual HRESULT Init() { return S_OK; }
+
+		/**
+		 * @brief 終了
+		 */
+		virtual void Uninit() {}
+
+		/**
+		 * @brief 更新
+		 */
+		virtual void Update() {}
+		void Update(CDuel_Player* duel) {}
+
+		/**
+		* @brief 固有情報読み込み
+		* @param [in]param
+		*/
+		virtual void LoadUniqueInfo(CCard_Client::Param param) {}
+
+		/**
+		 * @brief キャスト処理
+		 */
+		virtual void Cast(CDuel_Player* player) {}
+
+		/**
+		 * @brief ステイ処理
+		 */
+		virtual void Stay() {}
+
+		/**
+		 * @brief トリガー処理
+		 */
+		virtual void Trigger() {}
+
+		/**
+		 * @brief ステータス取得
+		 * @return m_BaseStatus
+		 */
+		inline CCard_Client::BaseParam GetBaseStatus() { return m_BaseParam; }
+
+		/**
+		 * @brief ステータス設定
+		 * @param [in]status
+		 */
+		inline void SetBaseStatus(CCard_Client::BaseParam status) { m_BaseParam = status; }
+
+		/**
+			* @brief カードタイプ取得
+			*/
+		inline void SetCardType(CCard_Client::CardType type) { m_CardType = type; }
+		inline CCard_Client::CardType GetCardType() { return m_CardType; }
+
+		//効果の追加
+		void AddPreCalculateStrategy(CCardStrategy_Base* strategy) { m_PreCalculateStrategy.push_back(strategy); }		//計算前効果の追加
+		void AddPostCalculateStrategy(CCardStrategy_Base* strategy) { m_PostCalculateStrategy.push_back(strategy); }	//計算後効果の追加
+
+		//設定と取得
+		CCard_Client::Param& GetParam() { return m_Param; }						//基本のパラメータ取得
+		CCard_Client::AttackParam GetAttackParam(CCard_Client::Param param);	//攻撃のパラメータ取得
+		CCard_Client::DefenseParam GetDefenseParam(CCard_Client::Param param);	//防御のパラメータ取得
+		CCard_Client::AssistParam GetAssistParam(CCard_Client::Param param);	//アシストパラメータ取得
+
+		//対象の番号
+		void AddTargetIdVector(int id) { m_TargetIdVector.push_back(id); }	//追加
+		std::vector<int> GetTargetIdVector() { return m_TargetIdVector; }	//取得
+
+		//使用者の番号
+		void SetUserId(int id) { m_nUserId = id; }	//設定
+		int GetUserId() { return m_nUserId; }		//取得
+
+	private:
+
+		//変数
+		CCard_Client::Param m_Param;			//パラメータ
+		CCard_Client::BaseParam m_BaseParam;	//ベースパラメータ
+		CCard_Client::CardType m_CardType;		//カードの種類
+		std::vector<int> m_TargetIdVector;		//対象の番号のベクター
+		int m_nUserId;							//使用者の番号
+
+		/**
+		 * @brief ゾーンの状態
+		 */
+		ZONE m_CurrentZone;	//現在のゾーン
+		ZONE m_OldZone;		//昔のゾーン
+
+		/**
+		* @brief カードのストラテジー
+		*/
+		std::vector<CCardStrategy_Base*> m_PreCalculateStrategy;	//!<効果前の効果
+		std::vector<CCardStrategy_Base*> m_PostCalculateStrategy;	//!<効果後の効果
 	};
-
-	//基本カードのパラメータ
-	struct BaseParam
-	{
-		int nPackID;							// パック番号
-		int nCardID;							// カード番号
-		std::string Name;						// カード名
-		std::string Ruby;						// フリガナ
-		int nCost = 0;							// カードコスト
-		CardType Maintype;						// カードの種類
-		RARITY Raritytype;						// レアリティの種類
-		std::string ImagePath;					// 画像ファイルパス
-	};
-
-	//アタックカードのパラメータ
-	struct AttackParam
-	{
-		BaseParam BaseParam = {};	// 基本パラメータ
-		int nDamage = 0;			// ダメージ数
-		AttackType Attacktype;		// 攻撃の種類
-	};
-
-	//ディフェンスカードのパラメータ
-	struct DefenseParam
-	{
-		BaseParam BaseParam = {};		// 基本パラメータ
-		int nGuard = 0;					// ガード値
-		int nCounter = 0;				// 反撃値
-		DefenseType Defensetype;		// 守備の種類
-	};
-
-	//アシストカードのパラメータ
-	struct AssistParam
-	{
-		BaseParam BaseParam = {};		// 基本パラメータ
-		int nHeal = 0;					// 回復値
-		BuffType Bufftype;				// バフの種類
-		HealType Healtype;				// 回復の種類
-	};
-
-	//関数
-	CCard();			//コンストラクタ
-	~CCard();			//デストラクタ
-	//bool Init();		//初期化処理
-
-	//設定と取得
-	Param& GetParam() { return m_Param; }		//基本のパラメータ取得
-	AttackParam GetAttackParam(Param param);	//攻撃のパラメータ取得
-	DefenseParam GetDefenseParam(Param param);	//防御のパラメータ取得
-	AssistParam GetAssistParam(Param param);	//アシストパラメータ取得
-
-private:
-
-	//変数
-	Param m_Param;	//パラメータ
-};
+}
 
 #endif

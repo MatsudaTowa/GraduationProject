@@ -9,6 +9,8 @@
 #include "raknet_server.h"
 #include "lobby_data.h"
 #include "duel_data.h"
+#include "RakNetTypes.h"
+#include "GetTime.h"
 
 //Ã“I•Ï”‚ÌéŒ¾
 CRakNet_Data* CRakNet_Server::m_pRakNetData = nullptr;
@@ -22,6 +24,8 @@ CRakNet_Server::CRakNet_Server() :
 {
     //“®“IŠm•Û
     m_pRakNetData = new CLobby_Data;
+
+    RakNet::Time now = RakNet::GetTime();
 }
 
 //=====================================

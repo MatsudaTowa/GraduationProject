@@ -11,16 +11,24 @@
 //=====================================
 //コンストラクタ
 //=====================================
-CCard::CCard() : 
-	m_Param()
+My::CCard::CCard() : 
+	m_Param(),							//カードのパラメータ
+	m_CardType(CCard_Client::NONE),		//カードの種類
+	m_PreCalculateStrategy(),			//計算前効果のストラテジー
+	m_PostCalculateStrategy(),			//計算後効果のストラテジー
+	m_TargetIdVector(),					//ターゲット番号
+	m_nUserId(-1),						//使用者番号
+	m_CurrentZone(DECK),				//現在のゾーン
+	m_OldZone(DECK),					//過去のゾーン
+	m_BaseParam()						//ベースのパラメータ
 {
-
+	m_TargetIdVector.clear();
 }
 
 //=====================================
 //デストラクタ
 //=====================================
-CCard::~CCard()
+My::CCard::~CCard()
 {
 
 }
@@ -28,10 +36,10 @@ CCard::~CCard()
 //=====================================
 //攻撃パラメータの取得
 //=====================================
-CCard::AttackParam CCard::GetAttackParam(Param param)
+CCard_Client::AttackParam My::CCard::GetAttackParam(CCard_Client::Param param)
 {
 	//攻撃パラメータ
-	CCard::AttackParam AttackParam;
+	CCard_Client::AttackParam AttackParam;
 
 	//代入
 	AttackParam.BaseParam.nPackID = param.nPackID;		//パックID
@@ -51,10 +59,10 @@ CCard::AttackParam CCard::GetAttackParam(Param param)
 //=====================================
 //防御パラメータの取得
 //=====================================
-CCard::DefenseParam CCard::GetDefenseParam(Param param)
+CCard_Client::DefenseParam My::CCard::GetDefenseParam(CCard_Client::Param param)
 {
 	//攻撃パラメータ
-	CCard::DefenseParam DefenseParam;
+	CCard_Client::DefenseParam DefenseParam;
 
 	//代入
 	DefenseParam.BaseParam.nPackID = param.nPackID;		//パックID
@@ -75,10 +83,10 @@ CCard::DefenseParam CCard::GetDefenseParam(Param param)
 //=====================================
 //アシストパラメータの取得
 //=====================================
-CCard::AssistParam CCard::GetAssistParam(Param param)
+CCard_Client::AssistParam My::CCard::GetAssistParam(CCard_Client::Param param)
 {
 	//攻撃パラメータ
-	CCard::AssistParam AssistParam;
+	CCard_Client::AssistParam AssistParam;
 
 	//代入
 	AssistParam.BaseParam.nPackID = param.nPackID;		//パックID
