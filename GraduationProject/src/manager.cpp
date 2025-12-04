@@ -26,7 +26,9 @@ m_pScene(nullptr),		//シーンポインタ
 m_pTexture(nullptr),		//テクスチャ管理ポインタ
 m_pFontManager(nullptr),	
 m_pEffectManager(nullptr),		// エフェクトマネージャー
-m_CurrentViewCamera(INT_ZERO)	//映すカメラ番号
+m_CurrentViewCamera(INT_ZERO),	//映すカメラ番号
+m_ElapsedTime(0),				//経過時間
+m_OldElapsedTime(0)				//過去の経過時間
 {
 	
 }
@@ -250,6 +252,11 @@ void My::CManager::Update()
 
 	//カードサーバーとの受信
 	CCard_Client::GetInstance()->Communication();
+
+	//時間の更新
+	UpdateTime();
+
+	//オブジェクトの更新
 	CObject::UpdateAll();
 
 	//シーンの更新
@@ -300,6 +307,16 @@ void My::CManager::SetMode(CScene::MODE mode)
 	}
 }
 
+/**
+ * @brief 時間の更新
+ */
+void My::CManager::UpdateTime()
+{
+	//経過時間の算出
+	DWORD CurrentTime = timeGetTime();					//現在の時間を取得
+	m_ElapsedTime = CurrentTime - m_OldElapsedTime;		//現在の時間から過去の時間を引いて経過時間を算出
+	m_OldElapsedTime = CurrentTime;						//過去の時間を更新
+}
 
 /**
  * @brief レンダラー取得

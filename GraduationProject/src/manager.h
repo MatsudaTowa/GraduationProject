@@ -162,7 +162,34 @@ namespace My
 			m_pCamera.push_back(pCamera);
 
 		}
+
+		/**
+		 * @brief 引数の値をデルタタイムを反映した値にして返す
+		 * @param [in]1秒で働く値
+		 * @return デルタタイムを反映した値
+		 */
+		template<typename T>
+		T GetDeltaTimeValue(T value) 
+		{
+			return value * m_ElapsedTime;
+		}
+
+		/**
+		 * @brief １フレームで動く値をデルタタイムで動く値に変換して返す
+		 * @param [in]1秒で働く値
+		 * @return デルタタイムを反映した値
+		 */
+		template<typename T>
+		T ConvertFrameToDeltaTaime(T value)
+		{
+			return value * 60 * m_ElapsedTime;
+		}
+
 	private:
+
+		//時間の更新
+		void UpdateTime();
+
 		unsigned int m_CurrentViewCamera;
 
 		CScene* m_pScene;
@@ -179,6 +206,8 @@ namespace My
 		CFontManager* m_pFontManager;
 		CEffectManager* m_pEffectManager;
 		HWND m_hWnd;
+		DWORD m_ElapsedTime;		//経過時間
+		DWORD m_OldElapsedTime;		//過去の時間
 	};
 }
 
