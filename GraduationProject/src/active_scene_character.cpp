@@ -123,7 +123,7 @@ void My::CActiveSceneCharacter::UpdateUI()
 	//TODO:ã‚Ìˆ—‚ð‚±‚±‚É‚Ü‚Æ‚ß‚æ‚¤
 	if (m_pPlayerUI != nullptr)
 	{
-		m_pPlayerUI->SetCurrentPlayer_UI({screen_pos},this);
+		m_pPlayerUI->SetCurrentCharacter_UI({screen_pos},this);
 	}
 }
 

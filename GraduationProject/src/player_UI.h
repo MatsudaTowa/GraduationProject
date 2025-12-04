@@ -45,7 +45,7 @@ namespace My
 		 * @param [in]2D座標変換後
  		 * @param [in]キャラクターのポインタ
 		 */
-		void SetCurrentPlayer_UI(D3DXVECTOR3 screen_pos, CActiveSceneCharacter* character);
+		void SetCurrentCharacter_UI(D3DXVECTOR3 screen_pos, CActiveSceneCharacter* character);
 
 		/**
 		 * @brief リセット

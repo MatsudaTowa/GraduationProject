@@ -70,7 +70,7 @@ void My::CPlayerUI::Update()
 //=============================================
 // åªç›ÇÃUIê›íË
 //=============================================
-void My::CPlayerUI::SetCurrentPlayer_UI(D3DXVECTOR3 screen_pos, CActiveSceneCharacter* character)
+void My::CPlayerUI::SetCurrentCharacter_UI(D3DXVECTOR3 screen_pos, CActiveSceneCharacter* character)
 {
 	//-Author.Umeda begin--
 
