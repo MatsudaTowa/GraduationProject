@@ -524,12 +524,14 @@ void My::CCard::LoadInfo(int id)
 //===========================================================================================================
 void My::CCard::ResetStayTime(CDuelCharacter* duel)
 {
-	// カードリスト
-	std::list<CCard*> list;
-	list.clear();
+	// TODO 2025/12/05 -----------------------------------------------
+	//	キャスト時にどのプレイヤーにキャストしても
+	//	ステイ時間がリセットされる不具合を修正する
+	//----------------------------------------------------------------
 
 	// カードプレビューゾーンのカードリストを取得
-	list = duel->GetZoneManager()->GetCastPreviewZone()->GetList();
+	std::list<CCard*> list = duel->GetZoneManager()->GetCastPreviewZone()->GetList();
+	std::list<CActiveSceneCharacter*> charalist = CActiveSceneManager::GetInstance()->GetCharacterList();
 
 	// 攻撃カードのステイ時間初期化
 	for (auto& itr : list)
@@ -538,6 +540,12 @@ void My::CCard::ResetStayTime(CDuelCharacter* duel)
 		CCardAttack* attack = dynamic_cast<CCardAttack*>(itr);
 		if (attack == nullptr)
 			continue;
+
+		for (auto& iter : charalist)
+		{
+			if (iter->GetArea() == attack->GetTarget())
+				break;
+		}
 
 		// ステイ時間初期化
 		attack->GetState()->Init(attack, duel);
