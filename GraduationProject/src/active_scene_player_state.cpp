@@ -83,21 +83,11 @@ namespace
 // コンストラクタ
 //=============================================
 My::CPlayerDuelState::CPlayerDuelState(CActiveSceneCharacter* character):CDuelCharacter(character),
-	m_pEnergyUpCount(nullptr),
+	m_nEnergyUpCount(0),
 	m_EnergyUpFrame(INT_ZERO),
 	m_pHand(nullptr)
 {
-	if (m_pEnergyUpCount == nullptr)
-	{
-		m_pEnergyUpCount = new CCount;
-		m_pEnergyUpCount->SetCnt(INT_ZERO);
-		m_pEnergyUpCount->SetFrame(ENERGY_UP_FRAME);
-		m_EnergyUpFrame = ENERGY_UP_FRAME;
-	}
-
-	//手札の生成
-	//m_pHand = new CHand;
-	//m_pHand->Init();
+	m_EnergyUpFrame = ENERGY_UP_FRAME;
 }
 
 //=============================================
@@ -109,12 +99,6 @@ My::CPlayerDuelState::~CPlayerDuelState()
 	{
 		delete m_pHand;
 		m_pHand = nullptr;
-	}
-
-	if (m_pEnergyUpCount != nullptr)
-	{
-		delete m_pEnergyUpCount;
-		m_pEnergyUpCount = nullptr;
 	}
 }
 
@@ -134,7 +118,7 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 
 	if (character->GetEnergy() < CActiveSceneCharacter::MAX_ENERGY)
 	{//エナジーがMAXになったらUIの更新はしない
-		pCharge->Update(static_cast<float>(m_pEnergyUpCount->GetCnt()), m_pEnergyUpCount->GetFrame());
+		pCharge->Update(static_cast<float>(m_nEnergyUpCount), ENERGY_UP_FRAME);
 		EnergyUp(player);
 	}
 
@@ -218,25 +202,24 @@ void My::CPlayerDuelState::EnergyUp(CActiveScenePlayer* player)
 	int energy = player->GetEnergy();
 
 #ifdef _DEBUG
-	int frame = m_pEnergyUpCount->GetFrame();
-
+	
 	if (GET_INPUT_KEYBOARD->GetPress(DIK_1))
 	{
-		--frame;
-		if (frame <= 0)
+		m_EnergyUpFrame  -= 100;
+		if (m_EnergyUpFrame <= 0)
 		{
-			frame = 1;
+			m_EnergyUpFrame = 1;
 		}
 	}
 	else if (GET_INPUT_KEYBOARD->GetPress(DIK_2))
 	{
-		++frame;
+		m_EnergyUpFrame += 100;
 	}
-	m_pEnergyUpCount->SetFrame(frame);
+	
 
 #endif // _DEBUG
 
-	if (m_pEnergyUpCount == nullptr)
+	/*if (m_pEnergyUpCount == nullptr)
 	{
 		return;
 	}
@@ -244,12 +227,24 @@ void My::CPlayerDuelState::EnergyUp(CActiveScenePlayer* player)
 	if (!m_pEnergyUpCount->CountUp())
 	{
 		return;
+	}*/
+
+	//経過時間を取得
+	m_nEnergyUpCount += CManager::GetInstance()->GetElapsedTime();
+
+	//エナジーの更新時間を超えているなら繰り返す
+	while (m_nEnergyUpCount > m_EnergyUpFrame)
+	{
+		m_nEnergyUpCount -= m_EnergyUpFrame;
+
+		//エナジー増加
+		++energy;
 	}
 
 	//エナジー増加
-	++energy;
+	//++energy;
 	player->SetEnergy(energy);
-	m_pEnergyUpCount->SetCnt(INT_ZERO);
+	//m_pEnergyUpCount->SetCnt(INT_ZERO);
 }
 
 

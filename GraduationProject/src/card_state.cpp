@@ -234,6 +234,66 @@ void My::CCardStateCast::ChangeToState(CCard* cpy, CDuelCharacter* duel)
 
 //===========================================================================================================
 // 
+// オンラインキャストステート(カードを使用)
+// 
+//===========================================================================================================
+//=======================================================================================
+// 初期化
+//=======================================================================================
+void My::CCardStateCastOnline::Init(CCard* cpy, CDuelCharacter* duel)
+{
+	if (cpy == nullptr)
+		return;
+
+	//倍率
+	float mag = 1.0f;
+	cpy->SetSize({ mag * 1.2f,mag,mag });
+
+	//カードのキャスト処理(必要か怪しい)
+	cpy->Cast(duel);
+}
+
+//=======================================================================================
+// 更新
+//=======================================================================================
+void My::CCardStateCastOnline::Update(CCard* cpy, CDuelCharacter* duel)
+{
+	if (cpy == nullptr)
+		return;
+
+	//倍率
+	float mag = 10.0f;
+	cpy->SetSize({ mag * 1.2f,mag,mag });
+
+	//状態を変更
+	ChangeToState(cpy, duel);
+}
+
+//=======================================================================================
+// 状態を変更
+//=======================================================================================
+void My::CCardStateCastOnline::ChangeToState(CCard* cpy, CDuelCharacter* duel)
+{
+	//守備カードじゃないならステイ状態
+	if (cpy->GetBaseStatus().maintype != CCard::CARDTYPE_::TYPE_DEFFENCE)
+	{
+		cpy->ChangeState(CCardState::CARD_STATE::CARD_STAY, duel);
+		return;
+	}
+
+	//ターゲットが自分なら守備待機状態へ
+	if (cpy->GetTarget() == cpy->GetUserArea())
+	{
+		cpy->ChangeState(CCardState::CARD_STATE::CARD_WAIT, duel);
+		return;
+	}
+
+	//ターゲットが敵ならステイ状態へ
+	cpy->ChangeState(CCardState::CARD_STATE::CARD_STAY, duel);
+}
+
+//===========================================================================================================
+// 
 // ステイステート(カード効果発動待機)
 // 
 //===========================================================================================================

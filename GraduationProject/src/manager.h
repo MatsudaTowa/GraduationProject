@@ -171,7 +171,7 @@ namespace My
 		template<typename T>
 		T GetDeltaTimeValue(T value) 
 		{
-			return value * m_ElapsedTime;
+			return value * (m_ElapsedTime * 0.001f);
 		}
 
 		/**
@@ -182,8 +182,17 @@ namespace My
 		template<typename T>
 		T ConvertFrameToDeltaTaime(T value)
 		{
-			return value * 60 * m_ElapsedTime;
+			return value * 60.0f * (m_ElapsedTime * 0.001f);
 		}
+
+		/**
+		* @brief 前回の更新からの経過時間取得
+		*/
+		int GetElapsedTime()
+		{
+			return m_ElapsedTime;
+		}
+
 
 	private:
 

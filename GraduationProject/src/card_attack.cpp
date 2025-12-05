@@ -108,8 +108,11 @@ bool My::CCardAttack::IsCast(CDuelCharacter* duel)
 //===========================================================================================================
 void My::CCardAttack::Cast(CDuelCharacter* duel)
 {
+	//キャラクターリストの取得
+	std::list<My::CActiveSceneCharacter*> CharacterList = CActiveSceneManager::GetInstance()->GetCharacterList();
+
 	//キャラクターの取得
-	for (auto& iter : CActiveSceneManager::GetInstance()->GetCharacterList())
+	for (auto& iter : CharacterList)
 	{
 		//対象のエリアを持つプレイヤーを探す
 		if (GetTarget() != iter->GetArea()) continue;
