@@ -251,7 +251,9 @@ namespace
 My::CCardStateStay::CCardStateStay() : 
 	m_pNumber(nullptr),			//数字表示用
 	m_nCount(),					//カウント
-	m_nDrawNum(FIRST_COUNT)		//表示する番号
+	m_nDrawNum(FIRST_COUNT),	//表示する番号
+	m_Staycount(0),
+	m_IsFirstInit(false)
 {
 	
 }
@@ -272,27 +274,18 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 	//ディフェンスカードはカウントダウンを始めない
 	if (cpy->GetBaseStatus().maintype == CCard::TYPE_DEFFENCE) return;
 
-	//数字の設定
-	D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), cpy->GetPos()); //スクリーン座標に変換
-	m_pNumber = m_pNumber->Create(screen_pos, COUNT_SIZE, 0);
-	m_pNumber->SetNumber(m_nDrawNum * 0.1f, (m_nDrawNum + 1) * 0.1f, COLOR_WHITE);
-
-	//リストの取得
-	std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
-
-	//リスト周回
-	for (auto& itr : List)
+	if (!m_IsFirstInit)
 	{
-		if (itr == nullptr) { continue; }
+		//数字の設定
+		D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), cpy->GetPos()); //スクリーン座標に変換
+		m_pNumber = m_pNumber->Create(screen_pos, COUNT_SIZE, 0);
+		m_pNumber->SetNumber(m_nDrawNum * 0.1f, (m_nDrawNum + 1) * 0.1f, COLOR_WHITE);
 
-		if (itr->GetArea() != cpy->GetTarget()) { continue; }
-
-		//CZoneManager* pZoneManager = nullptr;
-		//pZoneManager = dynamic_cast<CDuelCharacter*>(itr->GetState())->GetZoneManager();
-		//pZoneManager->GetCastPreviewZone()->UsePlayerCard(cpy);
-
-		break;
+		m_IsFirstInit = true;
 	}
+
+	m_nDrawNum = FIRST_COUNT;
+	m_pNumber->SetNumber(m_nDrawNum * 0.1f, (m_nDrawNum + 1) * 0.1f, COLOR_WHITE);
 
 	// ターゲットアローをマネージャーに登録
 	CActiveSceneManager::GetInstance()->GetTargetArrowManager()->Regist(CTargetArrow::Create(cpy->GetUserArea(), cpy->GetTarget()));

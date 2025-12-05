@@ -160,6 +160,7 @@ namespace My
 		CNumber_2D* m_pNumber;	//数字表示用オブジェクト
 		int m_nCount;			//カウント値
 		int m_nDrawNum;			//描画する数字
+		bool m_IsFirstInit;			// 最初の初期化かどうか
 	};
 
 	/**
