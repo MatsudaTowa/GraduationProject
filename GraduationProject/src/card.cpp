@@ -13,6 +13,7 @@
 #include "zone_manager.h"
 #include <typeinfo>
 #include "raknet.h"
+#include "card_attack.h"
 
 //===========================================================================================================
 // コンストラクタ
@@ -222,6 +223,10 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state, CDuelCharacter* duel)
 		if (m_StateNum == state || !m_IsChange)
 			return;
 
+		// カードリスト
+		std::list<CCard*> list;
+		list.clear();
+
 		// 削除
 		delete m_pState;
 		m_pState = nullptr;
@@ -249,6 +254,22 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state, CDuelCharacter* duel)
 		case CCardState::CARD_STAY:
 			m_pState = new CCardStateStay();
 			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::CAST, duel), duel->GetZoneManager()->GetCastPreviewZone(), true);
+
+			// カードプレビューゾーンのカードリストを取得
+			list = duel->GetZoneManager()->GetCastPreviewZone()->GetList();
+
+			// 攻撃カードのステイ時間初期化
+			for (auto& itr : list)
+			{
+				// 攻撃カード以外は通さない
+				CCardAttack* attack = dynamic_cast<CCardAttack*>(itr);
+				if (attack == nullptr)
+					continue;
+
+				// ステイ時間初期化
+				attack->GetState()->Init(attack, duel);
+			}
+
 			break;
 
 		case CCardState::CARD_WAIT:

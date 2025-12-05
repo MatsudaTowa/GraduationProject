@@ -184,6 +184,7 @@ void My::CCardAttack::Trigger()
 
 		if (itr->GetArea() != GetTarget()) { continue; }
 
+		// ゾーンマネージャーの取得
 		CZoneManager* pZoneManager = nullptr;
 		pZoneManager = dynamic_cast<CDuelCharacter*>(itr->GetState())->GetZoneManager();
 
