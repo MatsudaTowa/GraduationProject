@@ -223,10 +223,6 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state, CDuelCharacter* duel)
 		if (m_StateNum == state || !m_IsChange)
 			return;
 
-		// カードリスト
-		std::list<CCard*> list;
-		list.clear();
-
 		// 削除
 		delete m_pState;
 		m_pState = nullptr;
@@ -255,21 +251,8 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state, CDuelCharacter* duel)
 			m_pState = new CCardStateStay();
 			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::CAST, duel), duel->GetZoneManager()->GetCastPreviewZone(), true);
 
-			// カードプレビューゾーンのカードリストを取得
-			list = duel->GetZoneManager()->GetCastPreviewZone()->GetList();
-
-			// 攻撃カードのステイ時間初期化
-			for (auto& itr : list)
-			{
-				// 攻撃カード以外は通さない
-				CCardAttack* attack = dynamic_cast<CCardAttack*>(itr);
-				if (attack == nullptr)
-					continue;
-
-				// ステイ時間初期化
-				attack->GetState()->Init(attack, duel);
-			}
-
+			// ステイ時間のリセット
+			ResetStayTime(duel);
 			break;
 
 		case CCardState::CARD_WAIT:
@@ -533,6 +516,31 @@ void My::CCard::LoadInfo(int id)
 			//固有情報の読み込み
 			break;
 		}
+	}
+}
+
+//===========================================================================================================
+// ステイ時間のリセット
+//===========================================================================================================
+void My::CCard::ResetStayTime(CDuelCharacter* duel)
+{
+	// カードリスト
+	std::list<CCard*> list;
+	list.clear();
+
+	// カードプレビューゾーンのカードリストを取得
+	list = duel->GetZoneManager()->GetCastPreviewZone()->GetList();
+
+	// 攻撃カードのステイ時間初期化
+	for (auto& itr : list)
+	{
+		// 攻撃カード以外は通さない
+		CCardAttack* attack = dynamic_cast<CCardAttack*>(itr);
+		if (attack == nullptr)
+			continue;
+
+		// ステイ時間初期化
+		attack->GetState()->Init(attack, duel);
 	}
 }
 
