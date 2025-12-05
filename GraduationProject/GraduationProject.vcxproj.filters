@@ -221,6 +221,7 @@
     <ClCompile Include="src\flip_preview_zone.cpp">
       <Filter>zone\flip</Filter>
     </ClCompile>
+    <ClCompile Include="src\cemetery_button.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -455,6 +456,7 @@
     <ClInclude Include="src\flip_preview_zone.h">
       <Filter>zone\flip</Filter>
     </ClInclude>
+    <ClInclude Include="src\cemetery_button.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">

@@ -11,7 +11,10 @@
 //=============================================
 // コンストラクタ
 //=============================================
-My::CPlayerUI::CPlayerUI():m_pNumberUI(nullptr)
+My::CPlayerUI::CPlayerUI():m_pNumberUI(nullptr),
+m_pCemeteryButton(nullptr),
+m_pEneryUI(nullptr),
+m_pLifeUI(nullptr)
 {
 }
 
@@ -43,6 +46,11 @@ HRESULT My::CPlayerUI::Init(CActiveSceneCharacter* character)
 //=============================================
 void My::CPlayerUI::Uninit()
 {
+	if (m_pCemeteryButton != nullptr)
+	{
+		m_pCemeteryButton->Uninit();
+		m_pCemeteryButton = nullptr;
+	}
 	if (m_pNumberUI != nullptr)
 	{
 		m_pNumberUI->Uninit();
@@ -76,16 +84,6 @@ void My::CPlayerUI::SetCurrentCharacter_UI(D3DXVECTOR3 screen_pos, CActiveSceneC
 
 	// プレイヤーを取得
 	CActiveScenePlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();
-	// いくつずらすか
-	D3DXVECTOR2 ShiftPos = VEC2_RESET_ZERO;
-
-	// プレイヤーと他の敵でずらす位置を変える
-	if (player == character){
-		ShiftPos = { 520.0f,-70.0f };
-	}
-	else{
-		ShiftPos = { 100.0f,0.0f };
-	}
 
 	//-Author.Umeda --end
 
@@ -148,6 +146,19 @@ void My::CPlayerUI::SetCurrentCharacter_UI(D3DXVECTOR3 screen_pos, CActiveSceneC
 
 		for (auto& itr : m_pEneryUI->GetNumVector())
 		{
+			// いくつずらすか
+			D3DXVECTOR2 ShiftPos = VEC2_RESET_ZERO;
+
+			// プレイヤーと他の敵でずらす位置を変える
+			if (player == character) 
+			{
+				ShiftPos = { 520.0f,-70.0f };
+			}
+			else 
+			{
+				ShiftPos = { 100.0f,0.0f };
+			}
+
 			if (itr == nullptr) { continue; }
 
 			// TODO: 30.0fは桁ずらし値 取得できるように変更予定
@@ -158,7 +169,25 @@ void My::CPlayerUI::SetCurrentCharacter_UI(D3DXVECTOR3 screen_pos, CActiveSceneC
 			++i;
 		}
 	}
-	
+	if (m_pCemeteryButton != nullptr)
+	{
+		// いくつずらすか
+		D3DXVECTOR2 ShiftPos = VEC2_RESET_ZERO;
+		// プレイヤーと他の敵でずらす位置を変える TODO:いるエリアに応じてずらしたほうが綺麗
+		if (player == character)
+		{
+			D3DXVECTOR2 ShiftSize{ 60.0f,60.0f };
+			m_pCemeteryButton->SetSize(ShiftSize);
+			ShiftPos = { -400.0f,-100.0f };
+		}
+		else
+		{
+			ShiftPos = { -70.0f,-80.0f };
+		}
+
+		m_pCemeteryButton->SetPos({ screen_pos.x + ShiftPos.x,screen_pos.y + ShiftPos.y,screen_pos.z });
+		m_pCemeteryButton->ProcessMouseEvent();
+	}
 }
 
 //=============================================

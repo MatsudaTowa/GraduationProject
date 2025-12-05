@@ -653,6 +653,11 @@ My::CZone* My::CCard::CastToZone(ZONE zone, CDuelCharacter* duel)
 		pZone = duel->GetZoneManager()->GetCemetery();
 		m_CurrentZone = ZONE::CEMETERY;	//—ñ‹“‚Ì“o˜^
 		break;
+
+	case ZONE::FLIP:	//•æ’n
+		pZone = duel->GetZoneManager()->GetFlipPreviewZone();
+		m_CurrentZone = ZONE::FLIP;	//—ñ‹“‚Ì“o˜^
+		break;
 	}
 
 	return pZone;

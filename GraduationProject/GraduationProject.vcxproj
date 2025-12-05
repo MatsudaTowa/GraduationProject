@@ -187,6 +187,7 @@
     <ClCompile Include="src\card_strategy.cpp" />
     <ClCompile Include="src\card_type_icon.cpp" />
     <ClCompile Include="src\castpreview_zone.cpp" />
+    <ClCompile Include="src\cemetery_button.cpp" />
     <ClCompile Include="src\cemetery_zone.cpp" />
     <ClCompile Include="src\center_area.cpp" />
     <ClCompile Include="src\character.cpp" />
@@ -307,6 +308,7 @@
     <ClInclude Include="src\card_strategy.h" />
     <ClInclude Include="src\card_type_icon.h" />
     <ClInclude Include="src\castpreview_zone.h" />
+    <ClInclude Include="src\cemetery_button.h" />
     <ClInclude Include="src\cemetery_zone.h" />
     <ClInclude Include="src\center_area.h" />
     <ClInclude Include="src\character.h" />

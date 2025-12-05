@@ -314,7 +314,7 @@ void My::CSendToMyCemetary::Strategy(CDuelCharacter* duel, CCard* card)
 		if (itr == nullptr) { continue; }
 		//カードを引けるか
 
-		duel->GetZoneManager()->MoveZone(card, itr->CastToZone(card->GetCurrentZone(), duel), pZoneManager->GetCemetery(), true);
+		pZoneManager->MoveZone(itr, itr->CastToZone(itr->GetCurrentZone(), duel), pZoneManager->GetCemetery(), true);
 
 		//TODO:フリッププレビューゾーンの列挙に
 		itr->SetCurrentZone(CCard::CEMETERY);

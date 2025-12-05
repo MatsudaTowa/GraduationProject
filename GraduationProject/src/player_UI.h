@@ -9,6 +9,7 @@
 #include "main.h"
 #include "player_number_UI.h"
 #include "active_scene_character.h"
+#include "cemetery_button.h"
 
 namespace My
 {
@@ -71,6 +72,15 @@ namespace My
 		}
 
 		/**
+		 * @brief 墓地の設定
+		 * @param [in]ボタンののポインタ
+		 */
+		inline void SetCemeteryButton(CCemeteryButton* pCemeteryButton)
+		{
+			m_pCemeteryButton = pCemeteryButton;
+		}
+
+		/**
 		 * @brief 体力UIの取得
 		 * @return [in]体力UIのポインタ
 		 */
@@ -87,10 +97,20 @@ namespace My
 		{
 			return m_pEneryUI;
 		}
+
+		/**
+		 * @brief 墓地ボタンの取得
+		 * @return [in]墓地ボタンのポインタ
+		 */
+		inline CCemeteryButton* GetCemeteryButton()
+		{
+			return m_pCemeteryButton;
+		}
 	private:
 		CPlayerNumberUI* m_pNumberUI;
-		CLife_UI* m_pLifeUI;			//!<体力UI TODO:UIのインスタンスをキャラクターで持たせないように改良
-		CEnergy_UI* m_pEneryUI;			//!エナジーUI TODO:UIのインスタンスをキャラクターで持たせないように改良
+		CLife_UI* m_pLifeUI;					//!<体力UI TODO:UIのインスタンスをキャラクターで持たせないように改良
+		CEnergy_UI* m_pEneryUI;					//!<エナジーUI TODO:UIのインスタンスをキャラクターで持たせないように改良
+		CCemeteryButton* m_pCemeteryButton;		//!<墓地ボタン
 	};
 }
 

@@ -111,6 +111,11 @@ void My::CEnemyDuelState::CreateDuelUI(CEnemy* enemy)
 {
 	D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), enemy->GetPos()); //スクリーン座標に変換
 
+	if (enemy->GetPlayerUI()->GetCemeteryButton() == nullptr)
+	{
+		CCemeteryButton* pCemeteryButton = CCemeteryButton::Create(screen_pos, enemy);
+		enemy->GetPlayerUI()->SetCemeteryButton(pCemeteryButton);
+	}
 	if (enemy->GetPlayerUI()->GetLifeUI() == nullptr)
 	{
 		CLife_UI* pLifeUI = CLife_UI::Create(screen_pos);

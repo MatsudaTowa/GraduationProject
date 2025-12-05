@@ -190,6 +190,12 @@ void My::CPlayerDuelState::CreateDuelUI(CActiveScenePlayer* player)
 
 	D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), player->GetPos()); //スクリーン座標に変換
 
+	if (player->GetPlayerUI()->GetCemeteryButton() == nullptr)
+	{
+		CCemeteryButton* pCemeteryButton = CCemeteryButton::Create(screen_pos, player);
+		player->GetPlayerUI()->SetCemeteryButton(pCemeteryButton);
+
+	}
 	if (player->GetPlayerUI()->GetLifeUI() == nullptr)
 	{
 		CLife_UI* pLifeUI = CLife_UI::Create(screen_pos);
