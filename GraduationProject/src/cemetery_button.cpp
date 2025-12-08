@@ -79,9 +79,6 @@ void My::CCemeteryButton::Draw()
 //=============================================
 void My::CCemeteryButton::ButtonTrigger()
 {
-	CActiveScenePlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();
-	if (player == nullptr) { return; }
-
 	CActiveSceneCharacterState* state = m_pCharacter->GetState();
 	// ƒƒr[‚¶‚á‚È‚©‚Á‚½‚ç”²‚¯‚é
 	if (typeid(*state) != typeid(CPlayerDuelState) && typeid(*state) != typeid(CEnemyDuelState))
