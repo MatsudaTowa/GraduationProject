@@ -341,3 +341,11 @@ void CLobby_Data::AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
     //全クライアントにブロードキャスト
     peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 }
+
+//======================================
+//シーンの更新
+//======================================
+void CLobby_Data::UpdateScene(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
+{
+
+}

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -154,6 +154,7 @@
     <ClInclude Include="cemetery_zone.h" />
     <ClInclude Include="deck_zone.h" />
     <ClInclude Include="duel_data.h" />
+    <ClInclude Include="duel_manager.h" />
     <ClInclude Include="duel_player.h" />
     <ClInclude Include="duel_player_manager.h" />
     <ClInclude Include="field_zone.h" />

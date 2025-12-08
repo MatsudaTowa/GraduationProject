@@ -19,8 +19,8 @@ class CDuel_Data : public CRakNet_Data
 public:
 
 	//関数
-	CDuel_Data() : m_DuelPlayerList(), m_isCheckStart{ false,false,false,false }, m_nReceiveNum(0), m_CastCardList(), m_CastDiffenceCardVector(){} 	//コンストラクタ
-	~CDuel_Data() {}										//デストラクタ
+	CDuel_Data();			//コンストラクタ
+	~CDuel_Data() {}		//デストラクタ
 
 	//送受信の処理
 	void NewConnection(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;		//新しく接続する処理
@@ -36,6 +36,7 @@ public:
 	void ReceiveStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;		//ステータスを受信
 	void ReceiveCastCard(RakNet::Packet* packet) override;										//キャストカードの受信
 	void ReceiveCastDefCard(RakNet::Packet* packet) override;									//キャスト守備カードの受信
+	void UpdateScene(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;			//シーンの更新
 
 	//プレイヤーのデータリスト
 	void SetData(std::list<CPlayer::Data> data) override;	//設定
@@ -77,12 +78,18 @@ private:
 	void SendUpdateSign(RakNet::RakPeerInterface* peer);						//更新の合図を送る
 	bool IsDisconnectionSendUpdate();											//クライアントが切断時に更新の合図を送信するか
 
+	//対戦シーンの処理関数
+	void UpdateStayCard();				//ステイカードの更新
+	void UpdateDuelPlayer(int delta);	//プレイヤーの更新
+
 	//変数
-	std::list<My::CDuel_Player*> m_DuelPlayerList;	//ロビープレイヤー保管用変数
-	bool m_isCheckStart[MAX_CLIENT];				//開始するかのフラグ
-	int m_nReceiveNum;								//ステータスを受信した数
-	std::list<CastCardInfo> m_CastCardList;			//キャストカードのリスト
+	std::list<My::CDuel_Player*> m_DuelPlayerList;				//ロビープレイヤー保管用変数
+	bool m_isCheckStart[MAX_CLIENT];							//開始するかのフラグ
+	int m_nReceiveNum;											//ステータスを受信した数
+	std::list<CastCardInfo> m_CastCardList;						//キャストカードのリスト
 	std::vector<CastDiffenceCardInfo> m_CastDiffenceCardVector;	//キャスト守備カードのリスト
+	int m_ndeltaTaime;											//デルタタイム
+	int m_nOldTime;												//前回の時間
 };
 
 #endif

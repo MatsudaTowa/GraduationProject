@@ -8,12 +8,13 @@
 #define _CARD_STATE_H_
 
 //#include "card.h"
+#include "duel_player.h"
 
 namespace My
 {
 	// 前方宣言
 	class CCard;
-	class CDuel_Player;
+	//class CDuel_Player;
 
 	/** 
 	* @brief カードのステートクラス 
@@ -145,14 +146,9 @@ namespace My
 		/** @brief 対象によってカードの位置を設定 */
 		void CountDown();
 
-		/** @brief 待機カウント */
-		unsigned int m_Staycount;
-
-		/** @brief 設定された待機時間 */
-		//const unsigned int STAY_TIME = ONE_SECOND * 3;
-
 		//変数
-		double m_dCount;			//カウント値
+		RakNet::Time m_OldTime;		//前回の時間
+		RakNet::Time m_ElapsedTime;	//経過時間
 	};
 
 	/**

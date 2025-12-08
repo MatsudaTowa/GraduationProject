@@ -168,9 +168,9 @@ void CRakNet::Communication(RakNet::RakPeerInterface* peer)
             m_Client->StartBattle();
             break;
 
-        case ID_DUEL_MESSAGE_SEND_STATUS:
+       /* case ID_DUEL_MESSAGE_SEND_STATUS:
             m_Client->ReceiveStatus(packet);
-            break;
+            break;*/
 
             case ID_DUEL_MESSAGE_STATUS:
             m_Client->ReceiveStatus(packet);
@@ -257,6 +257,6 @@ void CRakNet::SendAddEnemy()
 //=====================================
 void CRakNet::SendMyStatus()
 {
-    m_Client->SendMyStatus(m_pPeer);
+    //m_Client->SendMyStatus(m_pPeer);
     m_isUpdate = false;
 }

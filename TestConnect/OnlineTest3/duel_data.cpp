@@ -8,6 +8,25 @@
 //ヘッダーのインクルード
 #include "duel_data.h"
 #include "main.h"
+#include "duel_player_manager.h"
+#include "card.h"
+#include "raknet_server.h"
+
+//=====================================
+//コンストラクタ
+//=====================================
+CDuel_Data::CDuel_Data() :
+    m_DuelPlayerList(),							//対戦プレイヤーのリスト
+    m_isCheckStart{ false,false,false,false },	//開始の合図
+    m_nReceiveNum(0),							//受信した値
+    m_CastCardList(),							//キャストカードのリスト
+    m_CastDiffenceCardVector(),					//キャストされたディフェンスカードのベクター
+    m_ndeltaTaime(0),							//デルタタイム
+    m_nOldTime(0)								//前回の時間
+{
+    //コンストラクタ時の時間を取得
+    m_nOldTime = timeGetTime();
+}
 
 //=====================================
 //新しいクライアントの接続処理
@@ -455,7 +474,7 @@ bool CDuel_Data::IsSendUpdate(RakNet::Packet* packet)
     }
 
     //テスト
-    std::cout << PlayerNum << "/" << m_nReceiveNum << "\n";
+    //::cout << PlayerNum << "/" << m_nReceiveNum << "\n";
 
     //プレイヤーの数だけ受信できていないなら許可しない
     if (m_nReceiveNum != PlayerNum) return false;
@@ -627,8 +646,8 @@ void CDuel_Data::SendUpdateSign(RakNet::RakPeerInterface* peer)
     }
 
     //キャストされたカードを送信
-    SendCastCard(&bsOut);           //通常カード
-    SendCastDeffenceCard(&bsOut);   //守備カード
+    //SendCastCard(&bsOut);           //通常カード
+    //SendCastDeffenceCard(&bsOut);   //守備カード
 
     //全クライアントにブロードキャスト
     peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
@@ -650,10 +669,79 @@ bool CDuel_Data::IsDisconnectionSendUpdate()
     }
 
     //テスト
-    std::cout << PlayerNum << "/" << m_nReceiveNum << "\n";
+    //std::cout << PlayerNum << "/" << m_nReceiveNum << "\n";
 
     //プレイヤーの数だけ受信できていないなら許可しない
     if (m_nReceiveNum != PlayerNum) return false;
 
     return true;
+}
+
+//======================================
+//シーンの更新
+//======================================
+void CDuel_Data::UpdateScene(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
+{
+    //経過時間の算出
+    DWORD CurrentTime = timeGetTime();					//現在の時間を取得
+    m_ndeltaTaime = CurrentTime - m_nOldTime;           //経過した時間を算出
+    m_nOldTime = CurrentTime;                           //現在の時間
+
+    //ステイカードの更新
+    UpdateStayCard();
+
+    //プレイヤーの更新
+    UpdateDuelPlayer(m_ndeltaTaime);
+}
+
+//======================================
+//ステイカードの更新
+//======================================
+void CDuel_Data::UpdateStayCard()
+{
+    //ステイカードの保持
+    std::list<My::CCard*> m_StayCardList;
+
+    //各プレイヤーのステイカードを周回して確認(NOTE : ゾーンが変わる可能性があるので別の場所で更新するため)
+    for (auto& player : My::CDuel_Player_Manager::GetInstance()->GetList())
+    {
+        //更新するカードの取得
+        for (My::CCard* pCard : player->GetZoneManager()->GetCastPreviewZone()->GetList())
+        {
+            m_StayCardList.push_back(pCard);
+        }
+
+        //各レイヤーのステイカードを周回
+        for (My::CCard* pStayCard : m_StayCardList)
+        {
+            pStayCard->Update(player);
+        }
+
+        //周回が終わったらクリア
+        m_StayCardList.clear();
+    }
+}
+
+//======================================
+//プレイヤーの更新
+//======================================
+void CDuel_Data::UpdateDuelPlayer(int delta)
+{
+    //データを送るか
+    bool isSend = false;
+
+    //プレイヤーの更新
+    for (auto& iter : My::CDuel_Player_Manager::GetInstance()->GetList())
+    {
+        if (iter->UpdateEnergy(m_ndeltaTaime))
+        {
+            isSend = true;
+        }
+    }
+
+    //1人でもエナジーの更新があれば送信
+    if (isSend)
+    {
+        CRakNet_Server::GetInstance()->SendStatus();
+    }
 }

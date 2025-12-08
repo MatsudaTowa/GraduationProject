@@ -11,6 +11,8 @@
 #include "duel_data.h"
 #include "RakNetTypes.h"
 #include "GetTime.h"
+#include "duel_player_manager.h"
+#include "duel_player.h"
 
 //静的変数の宣言
 CRakNet_Data* CRakNet_Server::m_pRakNetData = nullptr;
@@ -19,8 +21,11 @@ CRakNet_Data* CRakNet_Server::m_pRakNetData = nullptr;
 //コンストラクタ
 //=====================================
 CRakNet_Server::CRakNet_Server() :
-	m_pPacket(nullptr),	//パケット
-    m_isUpdate(false)   //更新
+	m_pPacket(nullptr),	                    //パケット
+    m_isUpdate(false),                      //更新
+    m_SceneState(CRakNet_Data::SCENE_LOBBY),//シーンの状態
+    m_deltaTime(0),                         //デルタタイム
+    m_pPeer(nullptr)                        //ピア
 {
     //動的確保
     m_pRakNetData = new CLobby_Data;
@@ -58,6 +63,9 @@ bool CRakNet_Server::Init(int nPortNum, RakNet::RakPeerInterface* peer)
     //切断を確認する時間を5秒に変更
     peer->SetTimeoutTime(5000, RakNet::UNASSIGNED_SYSTEM_ADDRESS);
 
+    //ピアの代入
+    m_pPeer = peer;
+
 	return true;
 }
 
@@ -91,6 +99,7 @@ void CRakNet_Server::Communication(RakNet::RakPeerInterface* peer)
         //読み込み処理
         for (packet = peer->Receive(); packet; peer->DeallocatePacket(packet), packet = peer->Receive())
         {
+            //受信したメッセージ
             switch (packet->data[0]) 
             {
             case ID_REMOTE_DISCONNECTION_NOTIFICATION:
@@ -176,10 +185,10 @@ void CRakNet_Server::Communication(RakNet::RakPeerInterface* peer)
                 
                 break;
 
-            case CRakNet_Data::GameMessages::ID_DUEL_MESSAGE_SEND_STATUS:
+            /*case CRakNet_Data::GameMessages::ID_DUEL_MESSAGE_SEND_STATUS:
 
                 m_pRakNetData->SendStatus(packet, peer);
-                break;
+                break;*/
 
             case CRakNet_Data::GameMessages::ID_DUEL_MESSAGE_STATUS:
 
@@ -201,6 +210,9 @@ void CRakNet_Server::Communication(RakNet::RakPeerInterface* peer)
                 break;
             }
         }
+
+        //シーンの更新
+        m_pRakNetData->UpdateScene(packet, peer);
     }
 }
 
@@ -241,4 +253,60 @@ void CRakNet_Server::ChangeData(CRakNet_Data* data)
     //上書き
     m_pRakNetData = data;               //クラスの変更
     m_pRakNetData->SetData(DataList);   //データの引き継ぎ
+}
+
+//=====================================
+//ステータスの送信
+//=====================================
+void CRakNet_Server::SendStatus()
+{
+    // データの作成
+   RakNet::BitStream bsOut;
+  
+   //書き出し
+   bsOut.Write((RakNet::MessageID)CRakNet_Data::GameMessages::ID_DUEL_MESSAGE_STATUS);
+
+   //書き出し
+   for (auto iter : My::CDuel_Player_Manager::GetInstance()->GetList())
+   {
+       //送信用のデータをまとめる
+       My::CDuel_Player::DuelData SendData;
+       SendData.BaceData.RakNetID = iter->GetRakNetID();   //識別番号
+       SendData.BaceData.nIndex = iter->GetIndex();        //番号
+       SendData.BaceData.Tag = iter->GetTag();             //タグ
+       SendData.Status = iter->GetStatus();                //ステータス
+       bsOut.Write(SendData);
+   }
+
+   // 全クライアントにブロードキャスト
+   m_pPeer->Send(&bsOut, IMMEDIATE_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);  //優先的に送ることで反映を先にする
+}
+
+//=====================================
+//キャストカードの送信
+//=====================================
+void CRakNet_Server::SendCastCard(My::CCard* Card)
+{
+    // データの作成
+    RakNet::BitStream bsOut;
+    int PlayerNum = My::CDuel_Player_Manager::GetInstance()->GetList().size();
+
+    //書き出し
+    bsOut.Write((RakNet::MessageID)CRakNet_Data::GameMessages::ID_DUEL_MESSAGE_CAST_CARD);
+
+    //書き出し
+    for (auto iter : My::CDuel_Player_Manager::GetInstance()->GetList())
+    {
+        //送信用のデータをまとめる
+        int nCardID = 0;                //カード番号
+        int nPlayerID = 0;              //プレイヤー番号
+        int nTargetNum = 0;             //ターゲット数
+        std::vector<int> TargetVector;  //ターゲットベクター
+
+        //TODO : この下にカードの書き出し
+        bsOut.Write(Card->GetParam().nCardID);
+    }
+
+    // 全クライアントにブロードキャスト
+    m_pPeer->Send(&bsOut, IMMEDIATE_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);  //優先的に送ることで反映を先にする
 }

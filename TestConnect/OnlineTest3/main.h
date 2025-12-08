@@ -25,6 +25,8 @@
 #include <fstream>
 #include <cmath>
 #include <assert.h>
+#include <windows.h>
+#include <chrono>
 
 #pragma comment(lib,"winmm.lib")	//システム時刻取得に必要
 #pragma comment (lib, "ws2_32.lib")

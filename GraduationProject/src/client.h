@@ -51,6 +51,7 @@ public:
 	virtual void ReceiveIsUpdate([[maybe_unused]] RakNet::Packet* packet) = 0;							//更新可能かを受信する
 	virtual void SendMyStatus([[maybe_unused]] RakNet::RakPeerInterface* peer) = 0;						//自分のステータスを送る
 	virtual void ReceiveCastCard([[maybe_unused]] RakNet::Packet* packet) = 0;							//キャストカードの受信
+	virtual void ReceiveCastDefCard([[maybe_unused]] RakNet::Packet* packet) = 0;						//キャスト守備カードの受信
 
 	//設定と取得
 

@@ -125,7 +125,7 @@ void My::CActiveSceneManager::DuelConnect()
 	CRakNet::GetInstance()->SendMyStatus();
 
 	//全体との更新を合わせる
-	while (!CRakNet::GetInstance()->GetIsUpdate())
+	//while (!CRakNet::GetInstance()->GetIsUpdate())
 	{
 		//通信処理
 		CRakNet::GetInstance()->Communication(CRakNet::GetInstance()->GetPeer());

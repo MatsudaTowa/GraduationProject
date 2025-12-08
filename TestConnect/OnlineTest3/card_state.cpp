@@ -7,6 +7,7 @@
 #include "card_state.h"
 #include "card.h"
 #include "zone_manager.h"
+#include "GetTime.h"
 
 //===========================================================================================================
 // 
@@ -165,22 +166,22 @@ void My::CCardStateCast::Update(CCard* cpy, CDuel_Player* duel)
 //=======================================================================================
 void My::CCardStateCast::ChangeToState(CCard* cpy, CDuel_Player* duel)
 {
-	////守備カードじゃないならステイ状態
-	//if (cpy->GetBaseStatus().maintype != CCard::CARDTYPE_::TYPE_DEFFENCE)
-	//{
-	//	cpy->ChangeState(CCardState::CARD_STATE::CARD_STAY, duel);
-	//	return;
-	//}
+	//守備カードじゃないならステイ状態
+	if (cpy->GetBaseStatus().Maintype != CCard_Client::CardType::DEFENSE)
+	{
+		cpy->ChangeState(CCardState::CARD_STATE::CARD_STAY, duel);
+		return;
+	}
 
-	////ターゲットが自分なら守備待機状態へ
-	//if (cpy->GetTarget() == cpy->GetUserArea())
-	//{
-	//	cpy->ChangeState(CCardState::CARD_STATE::CARD_WAIT, duel);
-	//	return;
-	//}
+	//ターゲットが自分なら守備待機状態へ
+	if (cpy->GetTargetIdVector()[0] == cpy->GetUserId())
+	{
+		cpy->ChangeState(CCardState::CARD_STATE::CARD_WAIT, duel);
+		return;
+	}
 
-	////ターゲットが敵ならステイ状態へ
-	//cpy->ChangeState(CCardState::CARD_STATE::CARD_STAY, duel);
+	//ターゲットが敵ならステイ状態へ
+	cpy->ChangeState(CCardState::CARD_STATE::CARD_STAY, duel);
 }
 
 //===========================================================================================================
@@ -189,11 +190,18 @@ void My::CCardStateCast::ChangeToState(CCard* cpy, CDuel_Player* duel)
 // 
 //===========================================================================================================
 
+//無名空間
+namespace
+{
+	RakNet::Time TrrigerTime{ 3000 };	//トリガーするまでの経過時間
+}
+
 //=======================================================================================
 //コンストラクタ
 //=======================================================================================
 My::CCardStateStay::CCardStateStay() : 
-	m_dCount()	//カウント
+	m_OldTime(0),
+	m_ElapsedTime(0)
 {
 	
 }
@@ -203,8 +211,8 @@ My::CCardStateStay::CCardStateStay() :
 //=======================================================================================
 void My::CCardStateStay::Init(CCard* cpy, CDuel_Player* /*duel*/)
 {
-	// カウントを初期化
-	m_Staycount = 0;
+	//初期化時点の時間を代入
+	m_OldTime = RakNet::GetTime();
 
 	//cpy->Stay();
 }
@@ -217,12 +225,19 @@ void My::CCardStateStay::Update(CCard* cpy, CDuel_Player* duel)
 	if (cpy == nullptr)
 		return;
 
-	////倍率
-	//float mag = 5.0f;
-	//cpy->SetSize({ mag * 1.2f,mag,mag });
+	//ディフェンスカードはカウントダウンを始めない
+	if (cpy->GetBaseStatus().Maintype == CCard_Client::CardType::DEFENSE) return;
 
-	////ディフェンスカードはカウントダウンを始めない
-	//if (cpy->GetBaseStatus().maintype == CCard::TYPE_DEFFENCE) return;
+	//経過時間を取得
+	RakNet::Time CurrentTime = RakNet::GetTime();	//現在の時間を取得
+	m_ElapsedTime = CurrentTime - m_OldTime;		//経過時間を算出
+	m_OldTime = CurrentTime;						//今の時間
+
+	//トリガー時間を迎えたらトリガー状態に変更
+	if (m_ElapsedTime > TrrigerTime)
+	{
+		cpy->ChangeState(CCardState::CARD_STATE::CARD_TRIGGER, duel);
+	}
 
 	//if (m_Staycount >= STAY_TIME)
 	//{// カウントが設定された時間を超えたら
@@ -243,8 +258,8 @@ void My::CCardStateStay::Update(CCard* cpy, CDuel_Player* duel)
 	//// カウントを進める
 	//m_Staycount++;
 
-	////カウントダウン処理
-	//CountDown();
+	//カウントダウン処理
+	CountDown();
 }
 
 //=======================================================================================
@@ -252,20 +267,10 @@ void My::CCardStateStay::Update(CCard* cpy, CDuel_Player* duel)
 //=======================================================================================
 void My::CCardStateStay::CountDown()
 {
-	//++m_nCount;
-
-	////数字の表記
-	//if (m_nCount > 60)
-	//{
-	//	//数値のリセット
-	//	m_nCount = 0;
-
-	//	//描画する数値を減らす
-	//	--m_nDrawNum;
-
-	//	//数字の設定
-	//	m_pNumber->SetNumber(m_nDrawNum * 0.1f, (m_nDrawNum + 1) * 0.1f, COLOR_WHITE);
-	//}
+	//経過時間を取得
+	RakNet::Time CurrentTime = RakNet::GetTime();	//現在の時間を取得
+	m_ElapsedTime = CurrentTime - m_OldTime;		//経過時間を算出
+	m_OldTime = CurrentTime;						//今の時間
 }
 
 //===========================================================================================================

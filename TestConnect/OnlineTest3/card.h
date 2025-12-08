@@ -100,6 +100,17 @@ namespace My
 		inline void SetCardType(CCard_Client::CardType type) { m_CardType = type; }
 		inline CCard_Client::CardType GetCardType() { return m_CardType; }
 
+		/**
+		* @brief 状態を変更する
+		*/
+		//void ChangeState(CCardState* state);
+		void ChangeState(CCardState::CARD_STATE state, CDuel_Player* duel);
+
+		/**
+		* @brief ステート取得
+		*/
+		inline CCardState* GetState() { return m_pState; }
+
 		//効果の追加
 		void AddPreCalculateStrategy(CCardStrategy_Base* strategy) { m_PreCalculateStrategy.push_back(strategy); }		//計算前効果の追加
 		void AddPostCalculateStrategy(CCardStrategy_Base* strategy) { m_PostCalculateStrategy.push_back(strategy); }	//計算後効果の追加
@@ -118,7 +129,14 @@ namespace My
 		void SetUserId(int id) { m_nUserId = id; }	//設定
 		int GetUserId() { return m_nUserId; }		//取得
 
+		//引数のゾーンの列挙に対応したポインタを返す
+		CZone* CastToZone(ZONE zone, CDuel_Player* duel);
+
 	private:
+
+		//関数
+		//次の列挙から過去のゾーンのポインタを返す
+		CZone* CastToEnumZone(ZONE zone, CDuel_Player* duel);
 
 		//変数
 		CCard_Client::Param m_Param;			//パラメータ
@@ -138,6 +156,16 @@ namespace My
 		*/
 		std::vector<CCardStrategy_Base*> m_PreCalculateStrategy;	//!<効果前の効果
 		std::vector<CCardStrategy_Base*> m_PostCalculateStrategy;	//!<効果後の効果
+
+		/**
+		 * @brief カードの状態
+		 */
+		CCardState* m_pState;
+
+		/**
+		 * @brief カードの状態列挙
+		 */
+		My::CCardState::CARD_STATE m_StateNum;
 	};
 }
 

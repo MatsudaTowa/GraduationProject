@@ -47,6 +47,7 @@ public:
 	void ReceiveIsUpdate(RakNet::Packet* /*packet*/) override {}						//更新可能かを受信
 	void SendMyStatus(RakNet::RakPeerInterface* /*peer*/) override {}					//自分のステータスを送る
 	void ReceiveCastCard(RakNet::Packet* /*packet*/) override {}						//キャストカードの受信
+	void ReceiveCastDefCard(RakNet::Packet* /*packet*/) override {}						//キャスト守備カードの受信
 
 	//取得
 	void SetParam(std::list<PlayerParam> list) override;	//設定

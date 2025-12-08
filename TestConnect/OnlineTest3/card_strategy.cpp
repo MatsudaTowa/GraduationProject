@@ -5,6 +5,7 @@
 //
 //===============================================================================
 #include "card_strategy.h"
+#include "duel_player_manager.h"
 
 //===============================================================================
 // コンストラクタ
@@ -72,7 +73,7 @@ My::CHeal::~CHeal()
 void My::CHeal::Strategy(CDuel_Player* /*duel*/, CCard* card)
 {
 	////登録されているキャラクターを取得
-	//std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
+	//std::list<CDuel_Player*> List = CDuel_Player_Manager::GetInstance()->GetList();
 	//int life;
 
 	////リスト周回
@@ -80,7 +81,7 @@ void My::CHeal::Strategy(CDuel_Player* /*duel*/, CCard* card)
 	//{
 	//	if (itr == nullptr) { continue; }
 
-	//	if (itr->GetArea() != card->GetTarget()) { continue; }
+	//	if (itr->GetIndex() != card->GetTargetIdVector()[0]) { continue; }
 
 	//	life = itr->GetLife();
 	//	if (life > INT_ZERO)

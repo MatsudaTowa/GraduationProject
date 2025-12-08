@@ -19,6 +19,7 @@
 #include <queue>
 #include "raknet_server.h"
 
+
 #ifdef _WIN32
 #include <windows.h>
 #else
@@ -45,37 +46,31 @@ enum GameMessages
 //プロトタイプ宣言
 //void networkThread(RakNet::RakPeerInterface* peer); //別スレッドのネットワーク更新
 
+// グローバルな終了フラグ
+static volatile bool g_exit = false;
+
 //=====================================
 //メイン関数
 //=====================================
 int main(void)
 {
     RakNet::RakPeerInterface* peer = RakNet::RakPeerInterface::GetInstance();
-    CRakNet_Server* pServer = new CRakNet_Server();
-    pServer->Init(22333, peer);
+    //CRakNet_Server* pServer = new CRakNet_Server();
 
-    //終わるまで周回
-    /*while (1)
-    {
-        
-    }*/
+    CRakNet_Server::GetInstance()->Init(22333, peer);
+    CRakNet_Server::GetInstance()->Communication(peer);
+    //pServer->Init(22333, peer);
 
     // 通信スレッドを起動
-    std::thread netThread(CRakNet_Server::Communication, peer);
+    //std::thread netThread(CRakNet_Server::Communication, peer);
 
     //スレッドの切り離す
-    netThread.detach();
+    //netThread.detach();
 
-    getchar();
-    rewind(stdin);
+    //実行すると一瞬でコンソールが落ちる場合は「Ctrl+F5」で実行
+    //Console.WriteLine("Hello");
 
     //終了処理
-    if (pServer != nullptr)
-    {
-        pServer->Uninit(peer);
-        delete pServer;
-        pServer = nullptr;
-    }
-
+    CRakNet_Server::GetInstance()->Uninit(peer);
 	return 0;
 }

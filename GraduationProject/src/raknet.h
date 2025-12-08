@@ -42,7 +42,7 @@ public:
 		ID_LOBY_MESSAGE_RECEIVE_START,	//ロビーでの開始合図を受信
 		ID_DUEL_MESSAGE_CLIENT_START,	//クライアントが対戦用に変わったことを通知
 		ID_DUEL_MESSAGE_START,			//対戦の開始を通知
-		ID_DUEL_MESSAGE_SEND_STATUS,	//ステータスを送る
+		//ID_DUEL_MESSAGE_SEND_STATUS,	//ステータスを送る
 		ID_DUEL_MESSAGE_STATUS,			//ステータスの通知
 		ID_DUEL_MESSAGE_CAST_CARD,		//キャストカードを通知
 		ID_DUEL_MESSAGE_CAST_DEFCARD,	//キャスト守備カードを通知

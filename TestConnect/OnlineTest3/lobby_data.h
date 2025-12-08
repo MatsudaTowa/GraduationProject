@@ -36,6 +36,7 @@ public:
 	void ReceiveStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override {}	//ステータスを受信
 	void ReceiveCastCard(RakNet::Packet* packet) override {}								//キャストカードの受信
 	void ReceiveCastDefCard(RakNet::Packet* packet) override {}								//キャスト守備カードの受信
+	void UpdateScene(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;		//シーンの更新
 
 	//プレイヤーのデータリスト
 	void SetData(std::list<CPlayer::Data> data) override;	//設定

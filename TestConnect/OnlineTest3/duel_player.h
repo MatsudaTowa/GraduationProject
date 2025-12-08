@@ -41,6 +41,9 @@ namespace My
 		CDuel_Player(); 	//コンストラクタ
 		~CDuel_Player() {}	//デストラクタ
 
+		//エナジーの更新
+		bool UpdateEnergy(int deltatime);	//エナジーの更新
+
 		//設定と取得
 		//ステータス
 		void SetStatus(Status status) { m_Status = status; }	//設定
@@ -51,8 +54,12 @@ namespace My
 
 	private:
 
+		//定数
+		static constexpr int ENERGY_UP_TIME{ 3000 };
+
 		//変数
 		Status m_Status = { 40, 0, 0, 0, 10 };	//ステータス
+		RakNet::Time m_ElapsedTime;				//経過時間
 
 		//TODOここに対戦中に受け取る変数を追加
 		My::CZoneManager* m_ZoneManager;
