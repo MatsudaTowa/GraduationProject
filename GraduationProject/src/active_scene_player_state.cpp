@@ -241,7 +241,7 @@ void My::CPlayerDuelState::EnergyUp(CActiveScenePlayer* player)
 		++energy;
 	}
 
-	if (!CRakNet::GetInstance()->GetOnline()) return;
+	if (CRakNet::GetInstance()->GetOnline()) return;
 
 	//エナジーの設定
 	player->SetEnergy(energy);
