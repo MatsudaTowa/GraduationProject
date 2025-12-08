@@ -123,6 +123,24 @@ namespace My
 	};
 
 	/**
+	* @brief 使用状態(オンライン)
+	*/
+	class CCardStateCastOnline :public CCardState
+	{
+	public:
+		/** @brief 初期化 */
+		void Init(CCard* cpy, CDuelCharacter* duel) override;
+
+		/** @brief 更新 */
+		void Update(CCard* cpy, CDuelCharacter* duel) override;
+
+	private:
+
+		//キャスト後の状態変更
+		void ChangeToState(CCard* cpy, CDuelCharacter* duel);
+	};
+
+	/**
 	* @brief 発動待機状態
 	*/
 	class CCardStateStay :public CCardState

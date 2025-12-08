@@ -541,6 +541,10 @@ void My::CCard::ResetStayTime(CDuelCharacter* duel)
 		if (attack == nullptr)
 			continue;
 
+		// ステイ状態以外は通さない
+		if(attack->GetStateNum() != CCardState::CARD_STAY)
+			continue;
+
 		for (auto& iter : charalist)
 		{
 			if (iter->GetArea() == attack->GetTarget())

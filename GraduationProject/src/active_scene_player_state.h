@@ -42,7 +42,7 @@ namespace My
 	class CPlayerDuelState :public CDuelCharacter
 	{
 	public:
-		static constexpr int ENERGY_UP_FRAME = 3 * 60;		//!<エナジーが上がるまでのフレーム数 TODO:今後のカードによっては変数に昇格するかも
+		static constexpr int ENERGY_UP_FRAME = 3 * 1000;		//!<エナジーが上がるまでのフレーム数 TODO:今後のカードによっては変数に昇格するかも
 
 		/**
 		 * @brief コンストラクタ
@@ -68,20 +68,20 @@ namespace My
 		 * @brief エナジー増やすまでのカウント取得
 		 * @return m_EnergyUpFrame
 		 */
-		inline CCount* GetEnergyCnt()
+		/*inline CCount* GetEnergyCnt()
 		{
 			return m_pEnergyUpCount;
-		}
+		}*/
 
 		/**
 		 * @brief エナジ増やすまでのカウント設定
 		 * @param [in]nCnt
 		 */
-		inline void SetEnergyCnt(int nCnt)
+		/*inline void SetEnergyCnt(int nCnt)
 		{
 			if (m_pEnergyUpCount == nullptr) { return; }
 			m_pEnergyUpCount->SetCnt(nCnt);
-		}
+		}*/
 
 		/**
 		 * @brief エナジーのフレーム数取得
@@ -98,9 +98,9 @@ namespace My
 		 */
 		inline void SetEnergyFrame(int frame)
 		{
-			if (m_pEnergyUpCount == nullptr) { return; }
+			//if (m_pEnergyUpCount == nullptr) { return; }
 			m_EnergyUpFrame = frame;
-			m_pEnergyUpCount->SetFrame(m_EnergyUpFrame);
+			//m_pEnergyUpCount->SetFrame(m_EnergyUpFrame);
 		}
 
 		/**
@@ -140,7 +140,8 @@ namespace My
 		 */
 		void DrawCard();
 
-		CCount* m_pEnergyUpCount;	//!エナジーを増やすまでのカウント
+		int m_nEnergyUpCount;		//!エナジーを増やすまでのカウント
+		float m_nEnergyUpCountRate;	//!エナジーを増やすまでのカウント
 		int m_EnergyUpFrame;		//!エナジーを増やすフレーム
 		CHand* m_pHand;	// 手札
 	};
