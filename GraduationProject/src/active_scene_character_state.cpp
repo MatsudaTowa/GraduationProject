@@ -52,6 +52,8 @@ void My::CDuelCharacter::Duel(CActiveSceneCharacter* /*character*/)
 	std::list<CCard*> CardList;
 	CardList.clear();
 
+	m_pZoneManager->Update();
+
 	//カードをリストに追加
 	auto AddList = [&](CZone* zone)
 	{

@@ -43,16 +43,8 @@ void My::CZone::Uninit()
 /**
 * @brief 更新処理
 */
-void My::CZone::Update(CDuelCharacter* state)
+void My::CZone::Update()
 {
-	if (m_CardList.empty()) return;
-
-	//自身のカードリストを更新
-	for (CCard* iter : m_CardList)
-	{
-		assert(iter != nullptr);     // null チェック
-		iter->Update(state);
-	}
 }
 
 /**

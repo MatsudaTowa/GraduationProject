@@ -48,7 +48,7 @@ namespace My
 		/**
 		* @brief 更新処理
 		*/
-		void Update(CDuelCharacter* state);
+		virtual void Update();
 
 		/**
 		* @brief リストの取得処理

@@ -57,6 +57,11 @@ namespace My
 		 */
 		bool ProcessMouseEvent()override;
 
+		CActiveSceneCharacter* GetCharacter()
+		{
+			return m_pCharacter;
+		}
+
 		/**
 		 * @brief ê∂ê¨
 		 * @param [in]à íu

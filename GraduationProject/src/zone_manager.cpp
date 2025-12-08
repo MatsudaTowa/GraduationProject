@@ -152,7 +152,47 @@ void My::CZoneManager::Uninit()
 */
 void My::CZoneManager::Update()
 {
-	
+	// デッキのポインタ生成
+	if (m_pDeck != nullptr)
+	{
+		m_pDeck->Update();
+	}
+
+	// 墓地のポインタ生成
+	if (m_pCemetery != nullptr)
+	{
+		m_pCemetery->Update();
+	}
+
+	// フィールドゾーンポインタ生成
+	if (m_pFieldZone != nullptr)
+	{
+		m_pFieldZone->Update();
+	}
+
+	// キャストプレビューゾーンのポインタ生成
+	if (m_pCastPreviewZone != nullptr)
+	{
+		m_pCastPreviewZone->Update();
+	}
+
+	// 待機ゾーンのポインタ生成
+	if (m_pWaitZone != nullptr)
+	{
+		m_pWaitZone->Update();
+	}
+
+	// 手札ゾーンのポインタ生成
+	if (m_pHandZone != nullptr)
+	{
+		m_pHandZone->Update();
+	}
+
+	// フリップゾーンのポインタ生成
+	if (m_pFlipPreviewZone != nullptr)
+	{
+		m_pFlipPreviewZone->Update();
+	}
 }
 
 /**

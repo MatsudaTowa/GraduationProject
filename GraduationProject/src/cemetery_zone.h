@@ -29,6 +29,8 @@ namespace My
 		*/
 		~CCemeteryZone()override;
 
+		void Update() override;
+
 		/**
 		* @brief 墓地にカードを送る
 		* @param [in]カードのポインタ

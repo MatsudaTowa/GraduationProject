@@ -4,6 +4,9 @@
 #include "card_frame_illust.h"
 #include "card_frame_type.h"
 #include "card_frame_text.h"
+#include "active_scene_state.h"
+#include "active_scene_manager.h"
+#include "enemy_state.h"
 // 静的メンバ初期化
 
 /**
@@ -82,13 +85,32 @@ void My::CCardFrame::Update()
 {
 	CCard::ZONE current_zone = GetCard()->GetCurrentZone();
 
+	CActiveScenePlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();
+	if (player == nullptr) { return; }
+
+	CActiveSceneCharacterState* state = player->GetPlayerUI()->GetCemeteryButton()->GetCharacter()->GetState();
+	// ロビーじゃなかったら抜ける
+	if (typeid(*state) != typeid(CPlayerDuelState) && typeid(*state) != typeid(CEnemyDuelState))
+	{
+		return;
+	}
+
+	CDuelCharacter* duel_state = dynamic_cast<CDuelCharacter*>(state);
+
 	// 山札時はコストを表示しないように TODO:今後はここの条件式を見直す必要あり
-	if (current_zone == CCard::DECK || current_zone == CCard::CEMETERY)
+	if (current_zone == CCard::DECK)
 	{
 		SetisDraw(false);
 		return;
 	}
-	SetisDraw(true);
+	if (current_zone == CCard::CEMETERY)
+	{
+		SetisDraw(duel_state->GetIsCemeteryView());
+	}
+	else
+	{
+		SetisDraw(true);
+	}
 
 	D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), m_pParent->GetPos()); //スクリーン座標に変換
 
@@ -96,7 +118,6 @@ void My::CCardFrame::Update()
 	D3DXVECTOR3 rot = m_pParent->GetRot();
 
 	SetPos(offsetpos);
-	SetRot({0,0,0});
 	SetRot(rot);
 
 	//// 親のスケールからサイズを設定している

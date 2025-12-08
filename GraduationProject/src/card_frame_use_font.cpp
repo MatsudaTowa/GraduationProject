@@ -5,6 +5,9 @@
 // 
 //===========================================================================================================================================================
 #include "card_frame_use_font.h"
+#include "active_scene_player_state.h"
+#include "active_scene_manager.h"
+#include "enemy_state.h"
 
 //===========================================================================================================================================================
 // コンストラクタ
@@ -65,17 +68,8 @@ void My::CCardFrameUseFont::Update()
 		for (auto& itr : list)
 		{
 			if (itr == nullptr) { continue; }
-			CCard::ZONE current_zone = GetCard()->GetCurrentZone();
 
-			// 山札時はコストを表示しないように TODO:今後はここの条件式を見直す必要あり
-			if (current_zone == CCard::DECK || current_zone == CCard::CEMETERY)
-			{
-				itr->SetisDraw(false);
-			}
-			else
-			{
-				itr->SetisDraw(true);
-			}
+			itr->SetisDraw(GetisDraw());
 		}
 	}
 }

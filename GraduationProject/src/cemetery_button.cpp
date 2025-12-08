@@ -92,6 +92,10 @@ void My::CCemeteryButton::ButtonTrigger()
 	CDuelCharacter* duel_state = dynamic_cast<CDuelCharacter*>(state);
 	std::list<CCard*> card_list = duel_state->GetZoneManager()->GetCemetery()->GetList();
 
+	//€”õOK‚©Ø‚è‘Ö‚¦
+	bool isView = duel_state->GetIsCemeteryView();
+	isView = isView ? false : true;
+	duel_state->SetIsCemeteryView(isView);
 	for (auto& itr : card_list)
 	{
 		if (itr == nullptr) { continue; }

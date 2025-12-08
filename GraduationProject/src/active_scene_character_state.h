@@ -112,7 +112,7 @@ namespace My
 	{
 	public:
 
-		CDuelCharacter() {}
+		CDuelCharacter():m_isCemeteryView(false){}
 		CDuelCharacter(CActiveSceneCharacter* character);
 		~CDuelCharacter() override;
 
@@ -133,6 +133,11 @@ namespace My
 			m_pZoneManager = zone;
 		}
 
+		inline void SetIsCemeteryView(bool isSemeteryView)
+		{
+			m_isCemeteryView = isSemeteryView;
+		}
+
 		/**
 		 * @brief ゾーンマネージャー取得
 		 * @return ゾーンマネージャー
@@ -142,9 +147,15 @@ namespace My
 			return m_pZoneManager;
 		}
 
+		inline bool GetIsCemeteryView()
+		{
+			return m_isCemeteryView;
+		}
+
 	private:
 
 		CZoneManager* m_pZoneManager;		//ゾーンマネージャー
+		bool m_isCemeteryView;
 	};
 }
 #endif // !_ACTIVE_SCENE_CHARACTER_STATE_H_
