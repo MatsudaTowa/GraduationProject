@@ -32,7 +32,8 @@ m_CurrentZone(ZONE::NONE_ZONE),
 m_OldZone(ZONE::NONE_ZONE),
 m_PreCalculateStrategy(),
 m_PostCalculateStrategy(),
-m_UserArea(CInputMouse::AREA::CENTER)
+m_UserArea(CInputMouse::AREA::CENTER),
+m_nUserId(-1)
 {
 	m_pTargetPlayerList.clear();
 	m_PreCalculateStrategy.clear();

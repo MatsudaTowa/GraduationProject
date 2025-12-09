@@ -309,6 +309,10 @@ namespace My
 		// ステイ時間リセット
 		void ResetStayTime(CDuelCharacter* duel);
 
+		//カードの使用者を記録
+		void SetUserId(int id) { m_nUserId = id; }
+		int GetUserId() { return m_nUserId; }
+
 	private:
 
 		//次の列挙から過去のゾーンのポインタを返す
@@ -384,6 +388,11 @@ namespace My
 		* 使用者のエリア
 		*/
 		CInputMouse::AREA m_UserArea;
+
+		/**
+		* 使用者の番号
+		*/
+		int m_nUserId;
 	};
 };
 

@@ -84,16 +84,18 @@ void My::CCardFrame::Uninit()
 void My::CCardFrame::Update()
 {
 	CCard::ZONE current_zone = GetCard()->GetCurrentZone();
+	CActiveSceneCharacterState* state = nullptr;
 
-	CActiveScenePlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();
-	if (player == nullptr) { return; }
-
-	CActiveSceneCharacterState* state = player->GetPlayerUI()->GetCemeteryButton()->GetCharacter()->GetState();
-	// ƒƒr[‚¶‚á‚È‚©‚Á‚½‚ç”²‚¯‚é
-	if (typeid(*state) != typeid(CPlayerDuelState) && typeid(*state) != typeid(CEnemyDuelState))
+	std::list<CActiveSceneCharacter*> charcter_list = CActiveSceneManager::GetInstance()->GetCharacterList();
+	for (auto& itr : charcter_list)
 	{
-		return;
+		if (m_pParent->GetUserId() != itr->GetPlayerIdx()) continue;
+
+		state = itr->GetState();
+		break;
 	}
+
+	//CActiveSceneCharacterState* state = itr->GetPlayerUI()->GetCemeteryButton()->GetCharacter()->GetState();
 
 	CDuelCharacter* duel_state = dynamic_cast<CDuelCharacter*>(state);
 
@@ -103,7 +105,7 @@ void My::CCardFrame::Update()
 		SetisDraw(false);
 		return;
 	}
-	if (current_zone == CCard::CEMETERY)
+	else if (current_zone == CCard::CEMETERY)
 	{
 		SetisDraw(duel_state->GetIsCemeteryView());
 	}

@@ -8,6 +8,7 @@
 #include "active_scene_manager.h"
 #include "enemy.h"
 #include "wait_zone.h"
+#include "zone_manager.h"
 
 //=============================================
 // コンストラクタ
@@ -58,6 +59,22 @@ My::CEnemyDuelState::CEnemyDuelState(CActiveSceneCharacter* character) : CDuelCh
 
 	//座標変換しずらす
 	D3DXVECTOR3 pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), character->GetPos()); //スクリーン座標に変換
+
+	std::list<CCard*> list = GetZoneManager()->GetDeck()->GetList();
+
+
+#ifdef _DEBUG
+	for (auto& itr : list)
+	{
+		if (itr == nullptr) { continue; }
+		GetZoneManager()->MoveZone(itr, itr->CastToZone(itr->GetCurrentZone(), this), GetZoneManager()->GetCemetery(), true);
+
+		//TODO:フリッププレビューゾーンの列挙に
+		itr->SetCurrentZone(CCard::CEMETERY);
+		return;
+	}
+#endif // _DEBUG
+
 
 	//周回
 	/*for (int i = 0; i < WAIT_CHECKER_NUM; i++)

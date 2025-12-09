@@ -114,6 +114,7 @@ My::CDuelCharacter::CDuelCharacter(CActiveSceneCharacter* character) :
 	for (auto iter : DeckVector)
 	{
 		CCard* pCard = My::CCardManager::GetInstance()->CreateCard(iter);
+		pCard->SetUserId(character->GetPlayerIdx());
 		pCard->SetCurrentZone(CCard::DECK);
 		pCard->Init();
 		m_pZoneManager->GetDeck()->AddList(pCard);

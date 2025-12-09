@@ -51,6 +51,8 @@ namespace My
 		 */
 		void ButtonTrigger()override;
 
+		void CardisView(CDuelCharacter* duel_state);
+
 		/**
 		 * @brief ƒ}ƒEƒX‚Ì”»’è
 		 * @return “–‚½‚Á‚Ä‚¢‚é‚©
