@@ -79,7 +79,19 @@ void My::CCemeteryButton::Draw()
 //=============================================
 void My::CCemeteryButton::ButtonTrigger()
 {
+	CActiveSceneManager::GetInstance()->GetCharacterList();
 	CActiveSceneCharacterState* state = m_pCharacter->GetState();
+
+	std::list<CActiveSceneCharacter*> charcter_list = CActiveSceneManager::GetInstance()->GetCharacterList();
+	for (auto& itr : charcter_list)
+	{
+		// NOTE:¡‘€ì‚·‚é‚à‚Ì‚Í‚¢‚¶‚­‚ç‚È‚¢
+		if (itr == m_pCharacter) { continue; }
+
+		CDuelCharacter* duel_state = dynamic_cast<CDuelCharacter*>(itr->GetState());
+		duel_state->SetIsCemeteryView(false);
+	}
+
 	// ƒƒr[‚¶‚á‚È‚©‚Á‚½‚ç”²‚¯‚é
 	if (typeid(*state) == typeid(CPlayerDuelState))
 	{
