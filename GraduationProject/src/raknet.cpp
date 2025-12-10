@@ -9,6 +9,7 @@
 #include "raknet.h"
 #include "client_lobby.h"
 #include "client_duel.h"
+#include "active_scene_manager.h"
 
 //静的変数宣言
 CClient* CRakNet::m_Client = nullptr;
@@ -155,6 +156,10 @@ void CRakNet::Communication(RakNet::RakPeerInterface* peer)
             m_Client->ReceiveReady(packet);
             break;
 
+        case ID_LOBY_MESSAGE_REQUEST_DECK:  //デッキの要求
+            SendDeck();
+            break;
+
         case ID_LOBY_MESSAGE_RECEIVE_START:
             ChangeClient(new CClient_Duel); //クライアント処理を変更
             m_Client->AddCPU(packet, peer); //コンピューターの追加
@@ -162,6 +167,10 @@ void CRakNet::Communication(RakNet::RakPeerInterface* peer)
 
         case ID_DUEL_MESSAGE_CLIENT_START:
             //ChangeClient(new CClient_Duel);
+            break;
+
+        case ID_DUEL_MESSAGE_DECK:
+            m_Client->ReceiveDeck(packet);
             break;
 
         case ID_DUEL_MESSAGE_START:
@@ -234,6 +243,37 @@ void CRakNet::SendStartSign()
 {
     //開始の合図を送る処理
     m_Client->SendStartSign(m_pPeer);
+}
+
+//=====================================
+//デッキの内容を送信
+//=====================================
+void CRakNet::SendDeck()
+{
+    //データの作成
+    RakNet::BitStream bsOut;    //送信用変数
+    int nDeckNum = My::CActiveSceneManager::GetInstance()->GetPlayer()->GetDeck().size();           //デッキ枚数
+
+    //書き出し
+    bsOut.Write((RakNet::MessageID)CRakNet::GameMessages::ID_DUEL_MESSAGE_DECK);
+    bsOut.Write(My::CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx());
+    bsOut.Write(nDeckNum);
+
+    //プレイヤーのデッキを書き出し
+    for (int id : My::CActiveSceneManager::GetInstance()->GetPlayer()->GetDeck())
+    {
+        bsOut.Write(id);    //カードのiDを書き出す
+    }
+
+    //アドレスを取得
+    RakNet::SystemAddress server_address = m_pPeer->GetSystemAddressFromIndex(0);
+
+    //サーバーの確認
+    if (server_address != RakNet::UNASSIGNED_SYSTEM_ADDRESS)
+    {
+        // 全クライアントにブロードキャスト
+        m_pPeer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, m_pPeer->GetSystemAddressFromIndex(0), false);
+    }
 }
 
 //=====================================

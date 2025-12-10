@@ -37,10 +37,11 @@ public:
 	void ReceiveCastCard(RakNet::Packet* packet) override;										//キャストカードの受信
 	void ReceiveCastDefCard(RakNet::Packet* packet) override;									//キャスト守備カードの受信
 	void UpdateScene(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;			//シーンの更新
+	bool ReceiveDeck(RakNet::Packet* packet) override;											//デッキの受信
 
 	//プレイヤーのデータリスト
-	void SetData(std::list<CPlayer::Data> data) override;	//設定
-	std::list<CPlayer::Data> GetData() override;			//取得
+	void SetData(std::list<CPlayer::ChangeData> data) override;	//設定
+	std::list<CPlayer::ChangeData> GetData() override;			//取得
 
 private:
 
@@ -77,6 +78,7 @@ private:
 	void SendCastDeffenceCard(RakNet::BitStream* bsout);						//キャスト守備カードの送信
 	void SendUpdateSign(RakNet::RakPeerInterface* peer);						//更新の合図を送る
 	bool IsDisconnectionSendUpdate();											//クライアントが切断時に更新の合図を送信するか
+	void SendDeck(RakNet::RakPeerInterface* peer);								//デッキの送信
 
 	//対戦シーンの処理関数
 	void UpdateStayCard();				//ステイカードの更新

@@ -226,7 +226,7 @@ void My::CActiveSceneCharacter::CreateDeck()
 }
 
 //=============================================
-// デッキの生成
+// ダメージを受ける
 //=============================================
 void My::CActiveSceneCharacter::ReceiveDamage(int damage)
 {

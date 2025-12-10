@@ -92,3 +92,37 @@ void CClient::CardCast(RakNet::Packet* /*packet*/)
 {
    
 }
+
+//=====================================
+//デッキの受信処理
+//=====================================
+void CClient::ReceiveDeck(RakNet::Packet* packet)
+{
+    //受信側
+    RakNet::BitStream bsIn(packet->data, packet->length, false);
+
+    //人数を取得
+    unsigned char messageId;    //メッセージ
+    bsIn.Read(messageId);   //メッセージ
+
+    //キャラクターの周回
+    for (My::CActiveSceneCharacter* iter : My::CActiveSceneManager::GetInstance()->GetCharacterList())
+    {
+        int nDeckNum = 0;           //デッキ枚数
+        int nCardId = 0;            //カードの番号
+
+        //中身を削除
+        iter->GetDeck().clear();
+
+        //読み込み
+        bsIn.Read(nDeckNum);   //デッキ枚数
+
+        //デッキ枚数分読み込み
+        for (int i = 0; i < nDeckNum; i++)
+        {
+            //カードのIDを読み込み代入
+            bsIn.Read(nCardId);
+            iter->GetDeck().push_back(nCardId);
+        }
+    }
+}

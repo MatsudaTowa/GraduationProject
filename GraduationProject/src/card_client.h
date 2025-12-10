@@ -199,8 +199,6 @@ private:
 	CCard_Client();														//コンストラクタ
 	void Send(RakNet::RakPeerInterface* peer, RakNet::BitStream* out);	//送信処理
 	void RegistCard(Param param);										//カードの登録
-	//My::CCardAssist* LoadAssistCard(Param param);						//アシストカードの読み込み
-
 
 	//メンバ変数
 	RakNet::Packet* m_pPacket;			//パケット

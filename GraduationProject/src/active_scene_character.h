@@ -277,7 +277,7 @@ namespace My
 		 * @brief デッキの取得
 		 * @return [in]デッキのリスト
 		 */
-		inline std::list<int> GetDeck()
+		inline std::list<int>& GetDeck()
 		{
 			return m_Deck;
 		}

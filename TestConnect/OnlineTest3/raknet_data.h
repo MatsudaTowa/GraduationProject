@@ -41,8 +41,10 @@ public:
 		ID_LOBY_MESSAGE_RECEIVE_READY,  //ロビーでの準備OKを送信
 		ID_LOBY_MESSAGE_SEND_START,		//ロビーでの開始合図を送信
 		ID_LOBY_MESSAGE_RECEIVE_START,	//ロビーでの開始合図を受信
+		ID_LOBY_MESSAGE_REQUEST_DECK,	//デッキ要求のメッセージ
 		ID_DUEL_MESSAGE_CLIENT_START,	//クライアントが対戦用に変わったことを通知
 		ID_DUEL_MESSAGE_START,			//対戦の開始を通知
+		ID_DUEL_MESSAGE_DECK,			//デッキのメッセージ
 		//ID_DUEL_MESSAGE_SEND_STATUS,	//ステータスを送る
 		ID_DUEL_MESSAGE_STATUS,			//ステータスの通知
 		ID_DUEL_MESSAGE_CAST_CARD,		//キャストカードを通知
@@ -70,12 +72,14 @@ public:
 	virtual void ReceiveCastCard(RakNet::Packet* packet) = 0;											//キャストカードの受信
 	virtual void ReceiveCastDefCard(RakNet::Packet* packet) = 0;										//キャスト守備カードの受信
 	virtual void UpdateScene(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) = 0;				//シーンの更新
+	void SendRequestDeck(RakNet::RakPeerInterface* peer);												//デッキの要求
 
 	//設定と取得
 
 	//プレイヤーのデータリスト
-	virtual void SetData(std::list<CPlayer::Data> data) = 0;	//設定
-	virtual std::list<CPlayer::Data> GetData() = 0;				//取得
+	virtual void SetData(std::list<CPlayer::ChangeData> data) = 0;	//設定
+	virtual std::list<CPlayer::ChangeData> GetData() = 0;			//取得
+	virtual bool ReceiveDeck(RakNet::Packet* packet);				//デッキの受信
 
 private:
 

@@ -40,8 +40,10 @@ public:
 		ID_LOBY_MESSAGE_RECEIVE_READY,  //ロビーでの準備OKを受信
 		ID_LOBY_MESSAGE_SEND_START,		//ロビーでの開始合図を送信
 		ID_LOBY_MESSAGE_RECEIVE_START,	//ロビーでの開始合図を受信
+		ID_LOBY_MESSAGE_REQUEST_DECK,	//デッキ要求のメッセージ
 		ID_DUEL_MESSAGE_CLIENT_START,	//クライアントが対戦用に変わったことを通知
 		ID_DUEL_MESSAGE_START,			//対戦の開始を通知
+		ID_DUEL_MESSAGE_DECK,			//デッキのメッセージ
 		//ID_DUEL_MESSAGE_SEND_STATUS,	//ステータスを送る
 		ID_DUEL_MESSAGE_STATUS,			//ステータスの通知
 		ID_DUEL_MESSAGE_CAST_CARD,		//キャストカードを通知
@@ -63,6 +65,7 @@ public:
 	void Uninit();		//終了処理
 	void Communication(RakNet::RakPeerInterface* peer);		//通信処理
 	void SendStartSign();									//開始の合図を送信
+	void SendDeck();										//デッキの内容を送信
 	void SendStatus();										//ステータスの送信
 	void SendAddEnemy();									//敵の追加を送信
 

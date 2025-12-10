@@ -8,6 +8,7 @@
 //ヘッダーのインクルード
 #include "lobby_data.h"
 #include "main.h"
+#include "card_manager.h"
 
 //=====================================
 //新しいクライアントの接続処理
@@ -220,7 +221,7 @@ bool CLobby_Data::ChangeToDuel(RakNet::Packet* packet, RakNet::RakPeerInterface*
 //=====================================
 //プレイヤーリストの設定
 //=====================================
-void CLobby_Data::SetData(std::list<CPlayer::Data> data)
+void CLobby_Data::SetData(std::list<CPlayer::ChangeData> data)
 {
     //リストを削除
     for (auto& iter : m_LobbyPlayerList)
@@ -243,9 +244,10 @@ void CLobby_Data::SetData(std::list<CPlayer::Data> data)
     {
         //基底パラメータを代入
         CLobby_Player* pPlayer = new CLobby_Player; //クラスを作成し代入
-        pPlayer->SetIndex(iter.nIndex);
-        pPlayer->SetRakNetID(iter.RakNetID);
-        pPlayer->SetTag(iter.Tag);
+        pPlayer->SetIndex(iter.OnlineData.nIndex);
+        pPlayer->SetRakNetID(iter.OnlineData.RakNetID);
+        pPlayer->SetTag(iter.OnlineData.Tag);
+        pPlayer->SetDeck(iter.Deck);
 
         //追加
         m_LobbyPlayerList.push_back(pPlayer);
@@ -255,21 +257,22 @@ void CLobby_Data::SetData(std::list<CPlayer::Data> data)
 //=====================================
 //プレイヤーリストの取得
 //=====================================
-std::list<CPlayer::Data> CLobby_Data::GetData()
+std::list<CPlayer::ChangeData> CLobby_Data::GetData()
 {
     //変数宣言
-    std::list<CPlayer::Data> List;
+    std::list<CPlayer::ChangeData> List;
     List.clear();
 
     //現在のリストを基底にコピー
     for (const auto& iter : m_LobbyPlayerList)
     {
         //基底構造体のリストに追加
-        CPlayer::Data Data;                     //変数
-        Data.nIndex = iter->GetIndex();         //番号
-        Data.RakNetID = iter->GetRakNetID();    //RakNetID
-        Data.Tag = iter->GetTag();              //タグ
-        List.push_back(Data);                   //追加
+        CPlayer::ChangeData Data;                           //変数
+        Data.OnlineData.nIndex = iter->GetIndex();         //番号
+        Data.OnlineData.RakNetID = iter->GetRakNetID();    //RakNetID
+        Data.OnlineData.Tag = iter->GetTag();              //タグ
+        Data.Deck = iter->GetDeck();                       //デッキ
+        List.push_back(Data);                              //追加
     }
 
     return List;
@@ -291,6 +294,29 @@ void CLobby_Data::AddStartMember()
         pPlayer->SetRakNetID(static_cast<RakNet::RakNetGUID>(-1));  //RakNetID(CPUとわかるように-1を代入)
         pPlayer->SetTag(CPlayer::TAG_CPU);                          //cpuのタグをつける
         pPlayer->SetReady(true);                                    //敵は準備がいらないのでtrue
+
+        //一時的にカードをランダムに生成
+        //カード番号
+        int nCardNum = My::CCardManager::GetInstance()->GetUseCardVector().size();
+
+        int nCount = 1;
+
+        //デッキの枚数分周回
+        for (int j = 0; j < 40; j++)
+        {
+
+            //ランダムで仮生成
+            //int nID = static_cast<int>(Rundom(1, nCardNum));
+            int nID = nCount;
+            pPlayer->AddDeck(nID);			//リストに保存
+
+            ++nCount;
+
+            if (nCount > nCardNum)
+            {
+                nCount = 1;
+            }
+        }
 
         //追加
         m_LobbyPlayerList.push_back(pPlayer);                       
@@ -348,4 +374,68 @@ void CLobby_Data::AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
 void CLobby_Data::UpdateScene(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
 {
 
+}
+
+//======================================
+//デッキの読み込み
+//======================================
+bool CLobby_Data::ReceiveDeck(RakNet::Packet* packet)
+{
+    //受信数を増やす
+    ++m_nReceiveDeckNum;
+
+    //変数
+    int nPlayerId = 0;  //プレイヤー番号
+    int nDeckNum = 0;   //デッキ枚数
+    int nCardId = 0;    //カード番号
+
+    //データの受信
+    RakNet::BitStream bsIn(packet->data, packet->length, false);
+
+    //読み取り
+    bsIn.IgnoreBytes(sizeof(RakNet::MessageID));    //メッセージの読み込み
+
+    //パラメータ
+    bsIn.Read(nPlayerId);
+    bsIn.Read(nDeckNum);
+
+    //対応したプレイヤーを見つける
+    CPlayer* pPlayer = nullptr;
+
+    //受信したIDのプレイヤーを探す
+    for (auto& iter : m_LobbyPlayerList)
+    {
+        if (nPlayerId != iter->GetIndex()) continue;
+
+        //代入
+        pPlayer = iter;
+        break;
+    }
+
+   //TODO : デッキのクリア
+
+
+    //デッキ枚数の読み込み
+    for (int i = 0; i < nDeckNum; i++)
+    {
+        //デッキカードの読み込み
+        bsIn.Read(nCardId);
+        pPlayer->AddDeck(nCardId);
+    }
+
+    //プレイヤーの数を取得
+    int nPlayerNum = 0;
+    for (auto iter : m_LobbyPlayerList)
+    {
+        if (iter->GetTag() == CPlayer::TAG_PLAYER)
+        {
+            ++nPlayerNum;
+        }
+    }
+
+    //プレイヤーの人数分受信したか
+    if (m_nReceiveDeckNum == nPlayerNum)
+    {
+        return true;
+    }
 }

@@ -19,7 +19,8 @@ class CLobby_Data : public CRakNet_Data
 public:
 	
 	//関数
-	CLobby_Data() {} 	//コンストラクタ
+	CLobby_Data() :
+		m_nReceiveDeckNum(0){} 	//コンストラクタ
 	~CLobby_Data() {}	//デストラクタ
 
 	//送受信の処理
@@ -37,10 +38,11 @@ public:
 	void ReceiveCastCard(RakNet::Packet* packet) override {}								//キャストカードの受信
 	void ReceiveCastDefCard(RakNet::Packet* packet) override {}								//キャスト守備カードの受信
 	void UpdateScene(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;		//シーンの更新
+	bool ReceiveDeck(RakNet::Packet* packet) override;										//デッキの受信
 
 	//プレイヤーのデータリスト
-	void SetData(std::list<CPlayer::Data> data) override;	//設定
-	std::list<CPlayer::Data> GetData() override;			//取得
+	void SetData(std::list<CPlayer::ChangeData> data) override;	//設定
+	std::list<CPlayer::ChangeData> GetData() override;			//取得
 
 private:
 
@@ -49,6 +51,7 @@ private:
 
 	//変数
 	std::list<CLobby_Player*> m_LobbyPlayerList;	//ロビープレイヤー保管用変数
+	int m_nReceiveDeckNum;							//受信したデッキ数
 };
 
 #endif

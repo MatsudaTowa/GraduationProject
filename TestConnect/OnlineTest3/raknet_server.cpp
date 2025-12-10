@@ -66,6 +66,10 @@ bool CRakNet_Server::Init(int nPortNum, RakNet::RakPeerInterface* peer)
     //ピアの代入
     m_pPeer = peer;
 
+    //カード初期化
+    CCard_Client::GetInstance()->Init();
+    CCard_Client::GetInstance()->RequestAllCard();
+
 	return true;
 }
 
@@ -83,6 +87,7 @@ void CRakNet_Server::Accept(void)
 void CRakNet_Server::Uninit(RakNet::RakPeerInterface* peer)
 {
     RakNet::RakPeerInterface::DestroyInstance(peer);
+    CCard_Client::GetInstance()->Uninit();
 }
 
 //=====================================
@@ -96,6 +101,9 @@ void CRakNet_Server::Communication(RakNet::RakPeerInterface* peer)
     //常時周回
     while (1) 
     {
+        //カードサーバーとの受信
+        CCard_Client::GetInstance()->Communication();
+
         //読み込み処理
         for (packet = peer->Receive(); packet; peer->DeallocatePacket(packet), packet = peer->Receive())
         {
@@ -166,11 +174,14 @@ void CRakNet_Server::Communication(RakNet::RakPeerInterface* peer)
                 //ロビーから戦闘に切り替わるフラグを受信したら
                 if (m_pRakNetData->ChangeToDuel(packet, peer))
                 {
+                    //デッキのリクエスト
+                    m_pRakNetData->SendRequestDeck(peer);
+
                     //データの変更
-                    ChangeData(new CDuel_Data);
+                    //ChangeData(new CDuel_Data);
 
                     //開始メンバーの送信処理
-                    m_pRakNetData->SendStartMember(peer);
+                    //m_pRakNetData->SendStartMember(peer);
                 }
                 
                 break;
@@ -189,6 +200,21 @@ void CRakNet_Server::Communication(RakNet::RakPeerInterface* peer)
 
                 m_pRakNetData->SendStatus(packet, peer);
                 break;*/
+
+                //デッキのメッセージ
+            case CRakNet_Data::GameMessages::ID_DUEL_MESSAGE_DECK:
+
+                //全員分取得したか
+                if (m_pRakNetData->ReceiveDeck(packet))
+                {
+                    //データの変更
+                    ChangeData(new CDuel_Data);
+
+                    //開始メンバーの送信処理
+                    m_pRakNetData->SendStartMember(peer);
+                }
+               
+                break;
 
             case CRakNet_Data::GameMessages::ID_DUEL_MESSAGE_STATUS:
 
@@ -233,7 +259,7 @@ void CRakNet_Server::ChangeData(CRakNet_Data* data)
     if (data == nullptr) return;
 
     //変数の上書き
-    std::list<CPlayer::Data> DataList;
+    std::list<CPlayer::ChangeData> DataList;
     DataList.clear();
 
     //メンバーの追加(CPU)

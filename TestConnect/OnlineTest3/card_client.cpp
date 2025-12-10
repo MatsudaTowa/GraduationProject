@@ -10,9 +10,6 @@
 #include "card.h"
 #include "card_manager.h"
 
-//静的変数の宣言
-CRakNet_Data* CCard_Client::m_pRakNetData = nullptr;
-
 //=====================================
 //コンストラクタ
 //=====================================
@@ -29,18 +26,13 @@ CCard_Client::CCard_Client() :
 //=====================================
 CCard_Client::~CCard_Client()
 {
-    //メモリ開放
-    if (m_pRakNetData != nullptr)
-    {
-        delete m_pRakNetData;
-        m_pRakNetData = nullptr;
-    }
+    
 }
 
 //=====================================
 //初期化処理
 //=====================================
-bool CCard_Client::Init(int nPortNum, RakNet::RakPeerInterface* peer)
+bool CCard_Client::Init()
 {
     m_pPeer = RakNet::RakPeerInterface::GetInstance();
 
@@ -57,21 +49,21 @@ bool CCard_Client::Init(int nPortNum, RakNet::RakPeerInterface* peer)
 //=====================================
 //終了処理
 //=====================================
-void CCard_Client::Uninit(RakNet::RakPeerInterface* peer)
+void CCard_Client::Uninit()
 {
-    RakNet::RakPeerInterface::DestroyInstance(peer);
+    RakNet::RakPeerInterface::DestroyInstance(m_pPeer);
 }
 
 //=====================================
 //通信処理
 //=====================================
-void CCard_Client::Communication(RakNet::RakPeerInterface* peer)
+void CCard_Client::Communication()
 {
     //変数宣言
     RakNet::Packet* packet;
 
     //読み込み処理
-    for (packet = peer->Receive(); packet; peer->DeallocatePacket(packet), packet = peer->Receive())
+    for (packet = m_pPeer->Receive(); packet; m_pPeer->DeallocatePacket(packet), packet = m_pPeer->Receive())
     {
         switch (packet->data[0])
         {
@@ -89,29 +81,40 @@ void CCard_Client::Communication(RakNet::RakPeerInterface* peer)
             break;
         case ID_NEW_INCOMING_CONNECTION:
             std::cout << "新しいクライアントが接続しました\n";
-            m_pRakNetData->NewConnection(packet, peer);
             break;
         case ID_NO_FREE_INCOMING_CONNECTIONS:
             std::cout << "サーバーがいっぱいです\n";
             break;
         case ID_DISCONNECTION_NOTIFICATION:
             std::cout << "クライアントが切断されました\n";
-            m_pRakNetData->DisConnection(packet, peer);
             break;
         case ID_CONNECTION_LOST:
             std::cout << "クライアントの接続が失われました\n";
-            m_pRakNetData->DisConnection(packet, peer);
             break;
+
+        case ID_UNCONNECTED_PONG:
+        {
+            RakNet::SystemAddress serverAddress = packet->systemAddress;
+            std::cout << "Server found at: " << serverAddress.ToString() << std::endl;
+
+            // サーバーに接続
+            m_pPeer->Connect(serverAddress.ToString(false), PORT, 0, 0);
+            // std::cout << "Connecting to " << serverAddress.ToString() << "...\n";
+            break;
+        }
+
         case ID_GAME_MESSAGE_1:
 
             break;
         case ID_CARD_MESSAGE_1:
             std::cout << "カード情報\n";
+            ReceiveCardInfo(packet);
             break;
 
         case ID_ALLCARD_MESSAGE_1:
 
             std::cout << "全カード情報\n";
+            ReceiveAllCardInfo(packet);
             break;
 
         default:
@@ -140,7 +143,7 @@ void CCard_Client::Send(RakNet::RakPeerInterface* peer, RakNet::BitStream* out)
 //=====================================
 //特定カード情報のリクエスト
 //=====================================
-void CCard_Client::RequestCard(RakNet::RakPeerInterface* peer, int id)
+void CCard_Client::RequestCard(int id)
 {
     //データの作成
     RakNet::BitStream bsOut;
@@ -148,20 +151,20 @@ void CCard_Client::RequestCard(RakNet::RakPeerInterface* peer, int id)
     bsOut.Write(id);                                                    //番号
    
     //サーバーに送信
-    Send(peer, &bsOut);
+    Send(m_pPeer, &bsOut);
 }
 
 //=====================================
 //全カード情報のリクエスト
 //=====================================
-void CCard_Client::RequestAllCard(RakNet::RakPeerInterface* peer)
+void CCard_Client::RequestAllCard()
 {
     //データの作成
     RakNet::BitStream bsOut;
     bsOut.Write((RakNet::MessageID)GAME_MESSAGE::ID_ALLCARD_MESSAGE_1);    //メッセージ
 
     //サーバーに送信
-    Send(peer, &bsOut);
+    Send(m_pPeer, &bsOut);
 }
 
 //=====================================
