@@ -182,6 +182,17 @@ void My::CCardStateCast::Init(CCard* cpy, CDuelCharacter* duel)
 		// エナジーを設定
 		iter->SetStatus(status);
 
+		// ターゲットエリアが違うならスルー
+		if (iter->GetArea() != cpy->GetTarget()) { continue; }
+
+		// ゾーンマネージャーの取得
+		CZoneManager* pZoneManager = dynamic_cast<CDuelCharacter*>(iter->GetState())->GetZoneManager();
+
+
+		// オーバーラップカードにカードを追加
+		pZoneManager->GetCastPreviewZone()->SetOverlapCard(cpy);
+
+
 		break;
 	}
 
@@ -312,8 +323,7 @@ My::CCardStateStay::CCardStateStay() :
 	m_pNumber(nullptr),			//数字表示用
 	m_nCount(),					//カウント
 	m_nDrawNum(FIRST_COUNT),	//表示する番号
-	m_Staycount(0),
-	m_IsFirstInit(false)
+	m_Staycount(0)
 {
 	
 }
@@ -334,14 +344,12 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 	//ディフェンスカードはカウントダウンを始めない
 	if (cpy->GetBaseStatus().maintype == CCard::TYPE_DEFFENCE) return;
 
-	if (!m_IsFirstInit)
+	if (m_pNumber == nullptr)
 	{
 		//数字の設定
 		D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), cpy->GetPos()); //スクリーン座標に変換
 		m_pNumber = m_pNumber->Create(screen_pos, COUNT_SIZE, 0);
 		m_pNumber->SetNumber(m_nDrawNum * 0.1f, (m_nDrawNum + 1) * 0.1f, COLOR_WHITE);
-
-		m_IsFirstInit = true;
 	}
 
 	m_nDrawNum = FIRST_COUNT;

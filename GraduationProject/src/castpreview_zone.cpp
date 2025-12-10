@@ -11,9 +11,12 @@
 /**
 * @brief コンストラクタ
 */
-My::CCastPreviewZone::CCastPreviewZone()
+My::CCastPreviewZone::CCastPreviewZone():
+	m_OverlapCard(),
+	m_OverlapCardList()
 {
-
+	m_OverlapCard.clear();
+	m_OverlapCardList.clear();
 }
 
 /**
@@ -21,6 +24,8 @@ My::CCastPreviewZone::CCastPreviewZone()
 */
 My::CCastPreviewZone::~CCastPreviewZone()
 {
+	m_OverlapCard.clear();
+	m_OverlapCardList.clear();
 }
 
 /**

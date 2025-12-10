@@ -193,8 +193,6 @@ void My::CCardAttack::Trigger()
 
 		float totalattackvalue = 0.0f;
 
-		unsigned int size = pZoneManager->GetCastPreviewZone()->GetList().size();
-
 		for (auto& iter : pZoneManager->GetCastPreviewZone()->GetList())
 		{
 			CCardAttack* pAttackCard = dynamic_cast<CCardAttack*>(iter);

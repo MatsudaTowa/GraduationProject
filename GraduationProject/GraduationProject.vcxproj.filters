@@ -222,6 +222,7 @@
       <Filter>zone\flip</Filter>
     </ClCompile>
     <ClCompile Include="src\cemetery_button.cpp" />
+    <ClCompile Include="src\overlap_card.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -457,6 +458,7 @@
       <Filter>zone\flip</Filter>
     </ClInclude>
     <ClInclude Include="src\cemetery_button.h" />
+    <ClInclude Include="src\overlap_card.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">

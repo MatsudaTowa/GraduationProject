@@ -37,6 +37,41 @@ namespace My
 		*/
 		void UsePlayerCard(CCard* pCard);
 
+		/*
+		* @brief 重ねたカードを設定
+		* @param [in]重ねたカード
+		*/
+		void SetOverlapCard(CCard* pCard) { m_OverlapCard.push_back(pCard); }
+
+		/*
+		* @brief 重ねたカードリストを設定
+		* @param [in]重ねたカードリスト
+		*/
+		void SetOverlapCardList(const std::list<std::vector<CCard*>>& overlapCardList) { m_OverlapCardList = overlapCardList; }
+
+		/**
+		* @brief カードプレビューゾーンで重ねたカードを取得
+		* @return 重ねたカードのリスト
+		*/
+		std::vector<CCard*>& GetOverlapCard(){ return m_OverlapCard; }
+
+		/*
+		* @brief カードプレビューゾーンで重ねたカードリストを取得
+		* @return 重ねたカードリスト
+		*/
+		std::list<std::vector<CCard*>>& GetOverlapCardList() { return m_OverlapCardList; }
+
+	private:
+
+		/**
+		* @brief カードプレビューゾーンで重ねたカード
+		*/
+		std::vector<CCard*> m_OverlapCard;
+
+		/**
+		* @brief 重ねたカードのリスト
+		*/
+		std::list<std::vector<CCard*>> m_OverlapCardList;
 	};
 }
 #endif
