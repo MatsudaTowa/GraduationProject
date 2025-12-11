@@ -82,10 +82,11 @@ namespace
 //=============================================
 // コンストラクタ
 //=============================================
-My::CPlayerDuelState::CPlayerDuelState(CActiveSceneCharacter* character):CDuelCharacter(character),
-	m_nEnergyUpCount(0),
-	m_EnergyUpFrame(INT_ZERO),
-	m_pHand(nullptr)
+My::CPlayerDuelState::CPlayerDuelState(CActiveSceneCharacter* character) :CDuelCharacter(character),
+m_nEnergyUpCount(0),
+m_EnergyUpFrame(INT_ZERO),
+m_pHand(nullptr),
+m_pCemetery(nullptr)
 {
 	m_EnergyUpFrame = ENERGY_UP_FRAME;
 }
@@ -95,10 +96,15 @@ My::CPlayerDuelState::CPlayerDuelState(CActiveSceneCharacter* character):CDuelCh
 //=============================================
 My::CPlayerDuelState::~CPlayerDuelState()
 {
-	if (m_pHand != nullptr)
+	if (m_pCemetery != nullptr)
 	{
-		delete m_pHand;
-		m_pHand = nullptr;
+		delete m_pCemetery;
+		m_pCemetery = nullptr;
+	}
+	if (m_pCemetery != nullptr)
+	{
+		delete m_pCemetery;
+		m_pCemetery = nullptr;
 	}
 }
 
@@ -155,6 +161,10 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 		//player->SetHandNum(pHand->GetTotal())
 	}
 
+	if (m_pCemetery != nullptr)
+	{
+		m_pCemetery->Update(this, character);
+	}
 	//親の更新
 	CDuelCharacter::Duel(character);
 }
@@ -168,7 +178,10 @@ void My::CPlayerDuelState::CreateDuelUI(CActiveScenePlayer* player)
 	{// 手札生成
 		m_pHand = CHand::Create();
 	}
-
+	if (m_pCemetery == nullptr)
+	{
+		m_pCemetery = CCemetery::Create();
+	}
 	
 
 

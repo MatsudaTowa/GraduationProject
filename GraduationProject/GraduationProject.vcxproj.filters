@@ -224,6 +224,8 @@
     <ClCompile Include="src\cemetery_button.cpp" />
     <ClCompile Include="src\overlap_card.cpp" />
     <ClCompile Include="src\overlap_card_manager.cpp" />
+    <ClCompile Include="src\card_info_view.cpp" />
+    <ClCompile Include="src\cemetery.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -461,6 +463,8 @@
     <ClInclude Include="src\cemetery_button.h" />
     <ClInclude Include="src\overlap_card.h" />
     <ClInclude Include="src\overlap_card_manager.h" />
+    <ClInclude Include="src\card_info_view.h" />
+    <ClInclude Include="src\cemetery.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">

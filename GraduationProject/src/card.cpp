@@ -73,6 +73,7 @@ HRESULT My::CCard::Init()
 	m_pState = new CCardStateNeutral();
 	m_pState->Init();
 	m_StateNum = CCardState::CARD_NEUTRAL;
+	m_OldStateNum = CCardState::CARD_NEUTRAL;
 
 	// カードフレーム生成
 	for (int i = 0; i < CCardFrame::FRAMETYPE_MAX; i++)
@@ -131,6 +132,10 @@ void My::CCard::Update(CDuelCharacter* duel)
 	//CardCastToMouse();
 	
 	m_pState->Update(this, duel);
+
+	//if(m_OldStateNum != m_StateNum)
+	{
+	}
 
 	SetRot(rot);
 }
@@ -232,7 +237,6 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state, CDuelCharacter* duel)
 		{
 		case CCardState::CARD_NEUTRAL:
 			m_pState = new CCardStateNeutral();
-			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::HAND, duel), duel->GetZoneManager()->GetHandZone(), true);
 			break;
 
 		case CCardState::CARD_PICKUP:

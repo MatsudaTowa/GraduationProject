@@ -170,6 +170,11 @@ void My::CZoneManager::Update()
 		m_pFieldZone->Update();
 	}
 
+	if (m_pCemetery != nullptr)
+	{
+		m_pCemetery->Update();
+	}
+
 	// キャストプレビューゾーンのポインタ生成
 	if (m_pCastPreviewZone != nullptr)
 	{

@@ -63,17 +63,16 @@ My::CEnemyDuelState::CEnemyDuelState(CActiveSceneCharacter* character) : CDuelCh
 	std::list<CCard*> list = GetZoneManager()->GetDeck()->GetList();
 
 
-#ifdef _DEBUG
-	for (auto& itr : list)
-	{
-		if (itr == nullptr) { continue; }
-		GetZoneManager()->MoveZone(itr, itr->CastToZone(itr->GetCurrentZone(), this), GetZoneManager()->GetCemetery(), true);
-
-		//TODO:フリッププレビューゾーンの列挙に
-		itr->SetCurrentZone(CCard::CEMETERY);
-		return;
-	}
-#endif // _DEBUG
+//#ifdef _DEBUG
+//	for (auto& itr : list)
+//	{
+//		if (itr == nullptr) { continue; }
+//		GetZoneManager()->MoveZone(itr, itr->CastToZone(itr->GetCurrentZone(), this), GetZoneManager()->GetCemetery(), true);
+//
+//		//TODO:フリッププレビューゾーンの列挙に
+//		itr->SetCurrentZone(CCard::CEMETERY);
+//	}
+//#endif // _DEBUG
 
 
 	//周回

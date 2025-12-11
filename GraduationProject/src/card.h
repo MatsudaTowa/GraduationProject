@@ -356,6 +356,8 @@ namespace My
 		 */
 		My::CCardState::CARD_STATE m_StateNum;
 
+		My::CCardState::CARD_STATE m_OldStateNum;
+
 		/**
 		 * @brief ニュートラル状態の位置(戻すため)
 		 */

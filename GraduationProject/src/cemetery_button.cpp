@@ -13,6 +13,7 @@ namespace
 {
 	const D3DXVECTOR2 POLY_SIZE = { 30.0f,30.0f };
 	const std::string TEX_NAME = "data\\TEXTURE\\cementery_icon.png";
+	const std::string USE_TEX_NAME = "data\\TEXTURE\\cancel.png";	//使われているときのテクスチャの名前
 }
 
 //=============================================
@@ -39,9 +40,6 @@ HRESULT My::CCemeteryButton::Init()
 
 	SetSize(POLY_SIZE);
 
-	//テクスチャ読み込み
-	BindTexture(GET_TEXTURE->GetAddress(GET_TEXTURE->Regist(TEX_NAME)));
-
 	CButton::Init();
 	return S_OK;
 }
@@ -62,7 +60,7 @@ void My::CCemeteryButton::Uninit()
 // 更新
 //=============================================
 void My::CCemeteryButton::Update()
-{
+{	
 	CButton::Update();
 }
 
@@ -88,6 +86,8 @@ void My::CCemeteryButton::ButtonTrigger()
 		// NOTE:今操作するものはいじくらない
 		if (itr == m_pCharacter) { continue; }
 
+
+		// NOTE:他は解除
 		CDuelCharacter* duel_state = dynamic_cast<CDuelCharacter*>(itr->GetState());
 		duel_state->SetIsCemeteryView(false);
 	}
@@ -124,7 +124,33 @@ void My::CCemeteryButton::CardisView(My::CDuelCharacter* duel_state)
 //=============================================
 bool My::CCemeteryButton::ProcessMouseEvent()
 {
+	//TODO:通常時はこれでいいが、墓地を見ているときは墓地のエリア以外の場所を触ったらのboolに変わる
 	bool ishit = CButton::ProcessMouseEvent();
+	CActiveSceneCharacterState* state = m_pCharacter->GetState();
+
+	CDuelCharacter* duel_state = dynamic_cast<CDuelCharacter*>(m_pCharacter->GetState());
+	bool isView = duel_state->GetIsCemeteryView();
+
+	if (isView)
+	{
+		//テクスチャ読み込み
+		BindTexture(GET_TEXTURE->GetAddress(GET_TEXTURE->Regist(USE_TEX_NAME)));
+		SetColor(COLOR_WHITE);
+
+		//墓地を見ているときは
+		if (GET_INPUT_MOUSE->GetTrigger(0))
+		{
+			//押された時の処理の名前
+			ButtonTrigger();
+		}
+		return ishit;
+
+	}
+	else if (!isView)
+	{
+		//テクスチャ読み込み
+		BindTexture(GET_TEXTURE->GetAddress(GET_TEXTURE->Regist(TEX_NAME)));
+	}
 
 	if (ishit)
 	{
@@ -139,6 +165,7 @@ bool My::CCemeteryButton::ProcessMouseEvent()
 	{
 		SetColor({ 0.2f,0.2f,0.2f,1.0f });
 	}
+
 
 	return ishit;
 }

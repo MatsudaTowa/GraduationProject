@@ -182,11 +182,13 @@
     <ClCompile Include="src\card_frame_type.cpp" />
     <ClCompile Include="src\card_frame_use_font.cpp" />
     <ClCompile Include="src\card_info.cpp" />
+    <ClCompile Include="src\card_info_view.cpp" />
     <ClCompile Include="src\card_manager.cpp" />
     <ClCompile Include="src\card_state.cpp" />
     <ClCompile Include="src\card_strategy.cpp" />
     <ClCompile Include="src\card_type_icon.cpp" />
     <ClCompile Include="src\castpreview_zone.cpp" />
+    <ClCompile Include="src\cemetery.cpp" />
     <ClCompile Include="src\cemetery_button.cpp" />
     <ClCompile Include="src\cemetery_zone.cpp" />
     <ClCompile Include="src\center_area.cpp" />
@@ -305,11 +307,13 @@
     <ClInclude Include="src\card_frame_type.h" />
     <ClInclude Include="src\card_frame_use_font.h" />
     <ClInclude Include="src\card_info.h" />
+    <ClInclude Include="src\card_info_view.h" />
     <ClInclude Include="src\card_manager.h" />
     <ClInclude Include="src\card_state.h" />
     <ClInclude Include="src\card_strategy.h" />
     <ClInclude Include="src\card_type_icon.h" />
     <ClInclude Include="src\castpreview_zone.h" />
+    <ClInclude Include="src\cemetery.h" />
     <ClInclude Include="src\cemetery_button.h" />
     <ClInclude Include="src\cemetery_zone.h" />
     <ClInclude Include="src\center_area.h" />
