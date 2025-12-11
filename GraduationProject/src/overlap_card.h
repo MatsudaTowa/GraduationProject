@@ -57,6 +57,11 @@ namespace My
 	//====================================================================
 	class COverlapAttackCard : public COverlapCard
 	{
+		// TODO
+		// こうやってクラス分けするなら
+		// オーバーライドしておいて、
+		// AttackCard のみこのクラスの中に入れる等した方がいいかもしれない
+
 	public:
 		/**
 		* @brief コンストラクタ
@@ -67,6 +72,23 @@ namespace My
 		* @brief デストラクタ
 		*/
 		~COverlapAttackCard()override {};
+	};
+
+	//====================================================================
+	// 重なっている防御カード
+	//====================================================================
+	class COverlapDeffenceCard : public COverlapCard
+	{
+	public:
+		/**
+		* @brief コンストラクタ
+		*/
+		COverlapDeffenceCard() {};
+
+		/**
+		* @brief デストラクタ
+		*/
+		~COverlapDeffenceCard()override {};
 	};
 }
 

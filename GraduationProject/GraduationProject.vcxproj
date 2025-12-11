@@ -247,6 +247,7 @@
     <ClCompile Include="src\objectX.cpp" />
     <ClCompile Include="src\object2D_triangle.cpp" />
     <ClCompile Include="src\overlap_card.cpp" />
+    <ClCompile Include="src\overlap_card_manager.cpp" />
     <ClCompile Include="src\particle.cpp" />
     <ClCompile Include="src\player.cpp" />
     <ClCompile Include="src\player_lobby_UI_manager.cpp" />
@@ -370,6 +371,7 @@
     <ClInclude Include="src\objectX.h" />
     <ClInclude Include="src\object2D_triangle.h" />
     <ClInclude Include="src\overlap_card.h" />
+    <ClInclude Include="src\overlap_card_manager.h" />
     <ClInclude Include="src\particle.h" />
     <ClInclude Include="src\player.h" />
     <ClInclude Include="src\player_lobby_UI_manager.h" />

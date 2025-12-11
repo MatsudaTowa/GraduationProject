@@ -263,7 +263,6 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state, CDuelCharacter* duel)
 
 		case CCardState::CARD_TRIGGER:
 			m_pState = new CCardStateTrigger();
-			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::CEMETERY, duel), duel->GetZoneManager()->GetCemetery(), true);
 			break;
 
 		case CCardState::CARD_CEMETERY:

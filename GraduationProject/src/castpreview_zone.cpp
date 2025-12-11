@@ -11,12 +11,9 @@
 /**
 * @brief コンストラクタ
 */
-My::CCastPreviewZone::CCastPreviewZone():
-	m_OverlapCard(),
-	m_OverlapCardList()
+My::CCastPreviewZone::CCastPreviewZone()
 {
-	m_OverlapCard.clear();
-	m_OverlapCardList.clear();
+	m_pOverlapManager = new COverlapCardManager;
 }
 
 /**
@@ -24,8 +21,6 @@ My::CCastPreviewZone::CCastPreviewZone():
 */
 My::CCastPreviewZone::~CCastPreviewZone()
 {
-	m_OverlapCard.clear();
-	m_OverlapCardList.clear();
 }
 
 /**

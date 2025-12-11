@@ -223,6 +223,7 @@
     </ClCompile>
     <ClCompile Include="src\cemetery_button.cpp" />
     <ClCompile Include="src\overlap_card.cpp" />
+    <ClCompile Include="src\overlap_card_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -459,6 +460,7 @@
     </ClInclude>
     <ClInclude Include="src\cemetery_button.h" />
     <ClInclude Include="src\overlap_card.h" />
+    <ClInclude Include="src\overlap_card_manager.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">

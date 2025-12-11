@@ -182,16 +182,23 @@ void My::CCardStateCast::Init(CCard* cpy, CDuelCharacter* duel)
 		// エナジーを設定
 		iter->SetStatus(status);
 
-		// ターゲットエリアが違うならスルー
-		if (iter->GetArea() != cpy->GetTarget()) { continue; }
-
 		// ゾーンマネージャーの取得
 		CZoneManager* pZoneManager = dynamic_cast<CDuelCharacter*>(iter->GetState())->GetZoneManager();
 
+		//// オーバーラップカードにカードを追加
+		//std::list<COverlapCard*> overlap_list = pZoneManager->GetCastPreviewZone()->GetOverlapCardList();
 
-		// オーバーラップカードにカードを追加
-		pZoneManager->GetCastPreviewZone()->SetOverlapCard(cpy);
+		//
 
+		//for (auto& overlap : overlap_list)
+		//{
+		//	overlap->Regist(cpy);
+		//}
+
+		//pZoneManager->GetCastPreviewZone()->SetOverlapCardList(overlap_list);
+
+		// ターゲットエリアが違うならスルー
+		if (iter->GetArea() != cpy->GetTarget()) { continue; }
 
 		break;
 	}
@@ -511,9 +518,6 @@ void My::CCardStateTrigger::Init(CCard* cpy, CDuelCharacter* duel)
 			}
 		}
 
-		//// トリガーされた際に消去する(TODO : 使用者によって変更)
-		//iter->GetTargetArrowManeger()->Remove();
-
 		break;
 	}
 
@@ -540,8 +544,9 @@ void My::CCardStateTrigger::Init(CCard* cpy, CDuelCharacter* duel)
 		break;
 	}
 
-	//墓地状態にする
-	//cpy->ChangeState(CCardState::CARD_STATE::CARD_CEMETERY, duel);
+	duel->GetZoneManager()->MoveZone(cpy, cpy->CastToZone(cpy->GetCurrentZone(), duel), duel->GetZoneManager()->GetCemetery(), true);
+
+	cpy->SetCurrentZone(CCard::CEMETERY);
 }
 
 //=======================================================================================
