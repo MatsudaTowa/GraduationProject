@@ -53,6 +53,7 @@ public:
 	virtual void ReceiveCastCard([[maybe_unused]] RakNet::Packet* packet) = 0;							//キャストカードの受信
 	virtual void ReceiveCastDefCard([[maybe_unused]] RakNet::Packet* packet) = 0;						//キャスト守備カードの受信
 	void ReceiveDeck(RakNet::Packet* packet);															//デッキの受信
+	virtual void ReceiveDrawCard([[maybe_unused]] RakNet::Packet* packet) = 0;							//カードドローの受信
 
 	//設定と取得
 

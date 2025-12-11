@@ -68,7 +68,7 @@ bool CRakNet_Server::Init(int nPortNum, RakNet::RakPeerInterface* peer)
 
     //ƒJ[ƒh‰Šú‰»
     CCard_Client::GetInstance()->Init();
-    CCard_Client::GetInstance()->RequestAllCard();
+    //CCard_Client::GetInstance()->RequestAllCard();
 
 	return true;
 }
@@ -214,6 +214,11 @@ void CRakNet_Server::Communication(RakNet::RakPeerInterface* peer)
                     m_pRakNetData->SendStartMember(peer);
                 }
                
+                break;
+
+            case CRakNet_Data::GameMessages::ID_DUEL_MESSAGE_DRAW:
+
+                m_pRakNetData->ReceiveDrawCard(packet, peer);
                 break;
 
             case CRakNet_Data::GameMessages::ID_DUEL_MESSAGE_STATUS:

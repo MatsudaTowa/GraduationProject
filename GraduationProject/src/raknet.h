@@ -44,6 +44,7 @@ public:
 		ID_DUEL_MESSAGE_CLIENT_START,	//クライアントが対戦用に変わったことを通知
 		ID_DUEL_MESSAGE_START,			//対戦の開始を通知
 		ID_DUEL_MESSAGE_DECK,			//デッキのメッセージ
+		ID_DUEL_MESSAGE_DRAW,			//カードを引くメッセージ
 		//ID_DUEL_MESSAGE_SEND_STATUS,	//ステータスを送る
 		ID_DUEL_MESSAGE_STATUS,			//ステータスの通知
 		ID_DUEL_MESSAGE_CAST_CARD,		//キャストカードを通知
@@ -88,6 +89,11 @@ public:
 
 	//自身のステータスを送信
 	void SendMyStatus();
+
+	//リクエスト処理
+	void RequestDrawCard();												//カードを引く
+	void RequestCastCard(int usecardid, std::vector<int> target);		//通常カードのキャスト
+	void RequestDefCastCard(int usecardid, int targetid, int target);	//守備カードのキャスト
 
 	//キャストカードの送信
 	template<typename... Args>

@@ -24,21 +24,22 @@ public:
 	~CLobby_Data() {}	//デストラクタ
 
 	//送受信の処理
-	void NewConnection(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;	//新しく接続する処理
-	void DisConnection(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;	//接続切断処理
-	void Ready(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;			//準備確認処理
-	bool ChangeToDuel(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;		//対戦準備中
-	void AddStartMember() override;															//開始メンバーを追加
-	void SendStartMember(RakNet::RakPeerInterface* peer) override {}						//開始メンバーの送信
-	bool CheckStartBattle(RakNet::Packet* packet) override { return false; }				//対戦を開始するか
-	void StartBattle(RakNet::RakPeerInterface* peer) override {}							//対戦の開始
-	void SendStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override {}		//ステータスを送る
-	void AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;			//CPUの追加
-	void ReceiveStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override {}	//ステータスを受信
-	void ReceiveCastCard(RakNet::Packet* packet) override {}								//キャストカードの受信
-	void ReceiveCastDefCard(RakNet::Packet* packet) override {}								//キャスト守備カードの受信
-	void UpdateScene(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;		//シーンの更新
-	bool ReceiveDeck(RakNet::Packet* packet) override;										//デッキの受信
+	void NewConnection(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;			//新しく接続する処理
+	void DisConnection(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;			//接続切断処理
+	void Ready(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;					//準備確認処理
+	bool ChangeToDuel(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;				//対戦準備中
+	void AddStartMember() override;																	//開始メンバーを追加
+	void SendStartMember(RakNet::RakPeerInterface* peer) override {}								//開始メンバーの送信
+	bool CheckStartBattle(RakNet::Packet* packet) override { return false; }						//対戦を開始するか
+	void StartBattle(RakNet::RakPeerInterface* peer) override {}									//対戦の開始
+	void SendStatus(RakNet::Packet* /*packet*/, RakNet::RakPeerInterface* /*peer*/) override {}		//ステータスを送る
+	void AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;					//CPUの追加
+	void ReceiveStatus(RakNet::Packet* /*packet*/, RakNet::RakPeerInterface* /*peer*/) override {}	//ステータスを受信
+	void ReceiveCastCard(RakNet::Packet* /*packet*/) override {}									//キャストカードの受信
+	void ReceiveCastDefCard(RakNet::Packet* /*packet*/) override {}									//キャスト守備カードの受信
+	void UpdateScene(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;				//シーンの更新
+	bool ReceiveDeck(RakNet::Packet* packet) override;												//デッキの受信
+	void ReceiveDrawCard(RakNet::Packet* /*packet*/, RakNet::RakPeerInterface* /*peer*/) override {}//カードのドロー処理の受信
 
 	//プレイヤーのデータリスト
 	void SetData(std::list<CPlayer::ChangeData> data) override;	//設定

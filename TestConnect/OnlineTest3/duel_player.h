@@ -52,6 +52,9 @@ namespace My
 		//ゾーンマネージャーの取得
 		My::CZoneManager* GetZoneManager() { return m_ZoneManager; }	//取得
 
+		//プレイヤーが行う行動の処理
+		bool DrawCard();				//カードのドロー
+
 	private:
 
 		//定数

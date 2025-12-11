@@ -61,7 +61,7 @@ public:
 	//ƒfƒbƒL
 	void AddDeck(int id) { m_Deck.push_back(id); }			//’Ç‰Á
 	void SetDeck(std::vector<int> deck) { m_Deck = deck; }	//İ’è
-	std::vector<int> GetDeck() { return m_Deck; }			//æ“¾
+	std::vector<int>& GetDeck() { return m_Deck; }			//æ“¾
 
 private:
 

@@ -83,6 +83,30 @@ namespace My
 		virtual void Trigger() {}
 
 		/**
+		 * @brief 現在のゾーン取得
+		 * @return 現在のゾーン
+		 */
+		inline ZONE GetCurrentZone() { return m_CurrentZone; }
+
+		/**
+		 * @brief 過去のゾーン取得
+		 * @return 過去のゾーン
+		 */
+		inline ZONE GetOldZone() { return m_OldZone; }
+
+		/**
+		 * @brief 現在のゾーン取得
+		 * @param 現在のゾーン
+		 */
+		inline void SetCurrentZone(ZONE zone) { m_CurrentZone = zone; }
+
+		/**
+		 * @brief 過去のゾーン取得
+		 * @param 過去のゾーン
+		 */
+		inline void SetOldZone(ZONE zone) { m_OldZone = zone; }
+
+		/**
 		 * @brief ステータス取得
 		 * @return m_BaseStatus
 		 */
