@@ -263,6 +263,8 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state, CDuelCharacter* duel)
 		case CCardState::CARD_WAIT:
 			m_pState = new CCardStateWait();
 			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::WAIT, duel), duel->GetZoneManager()->GetWaitZone(), true);
+
+			ResetStayTime(duel);
 			break;
 
 		case CCardState::CARD_TRIGGER:
@@ -533,30 +535,24 @@ void My::CCard::ResetStayTime(CDuelCharacter* duel)
 	//	ステイ時間がリセットされる不具合を修正する
 	//----------------------------------------------------------------
 
-	// カードプレビューゾーンのカードリストを取得
-	std::list<CCard*> list = duel->GetZoneManager()->GetCastPreviewZone()->GetList();
-	std::list<CActiveSceneCharacter*> charalist = CActiveSceneManager::GetInstance()->GetCharacterList();
+	// 重ねたカードの管理取得
+	COverlapCardManager* overlapmanager = duel->GetZoneManager()->GetCastPreviewZone()->GetOverlapManager();
 
-	// 攻撃カードのステイ時間初期化
-	for (auto& itr : list)
+	// 重ねたカードのリスト取得
+	std::list<COverlapCard*>overlaplist = overlapmanager->GetOverlapCardList();
+
+	// リストを回す
+	for (auto& itr : overlaplist)
 	{
-		// 攻撃カード以外は通さない
-		CCardAttack* attack = dynamic_cast<CCardAttack*>(itr);
-		if (attack == nullptr)
-			continue;
-
-		// ステイ状態以外は通さない
-		if(attack->GetStateNum() != CCardState::CARD_STAY)
-			continue;
-
-		for (auto& iter : charalist)
+		// ターゲットが同じであれば
+		if (itr->GetTarget() == GetTarget())
 		{
-			if (iter->GetArea() == attack->GetTarget())
-				break;
+			// 重ねたカードリストを回す
+			for (auto& i : itr->GetOverlapCards())
+			{
+				i->GetState()->Init(i, duel);
+			}
 		}
-
-		// ステイ時間初期化
-		attack->GetState()->Init(attack, duel);
 	}
 }
 

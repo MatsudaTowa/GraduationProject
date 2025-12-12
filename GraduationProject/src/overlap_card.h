@@ -35,6 +35,9 @@ namespace My
 		*/
 		void ReMove(CCard* pCard);
 
+		void SetTarget(CInputMouse::AREA target) { m_target = target; }
+		CInputMouse::AREA GetTarget() { return m_target; }
+
 		/**
 		* @brief クリア
 		*/
@@ -46,6 +49,12 @@ namespace My
 		*/
 		inline std::vector<CCard*> GetOverlapCards() { return m_pOverlapCards; }
 	private:
+
+		/**
+		* @brief 誰がターゲットなのかを判別する変数
+		*/
+		CInputMouse::AREA m_target;
+
 		/**
 		* @brief 重複しているカードのポインタ配列
 		*/

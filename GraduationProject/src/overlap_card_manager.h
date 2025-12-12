@@ -30,7 +30,7 @@ namespace My
 		/**
 		* @brief “o˜^
 		*/
-		void Regist(COverlapCard* pOverlapCard, CDuelCharacter* duel);
+		COverlapCard* Create(CDuelCharacter* duel, CInputMouse::AREA area);
 
 		/**
 		* @brief íœ
