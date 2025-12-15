@@ -65,6 +65,37 @@ My::COverlapCard* My::COverlapCardManager::Create(CDuelCharacter* duel,CInputMou
 	return nullptr;
 }
 
+//===========================================================================================================
+// ステイ時間のリセット
+//===========================================================================================================
+void My::COverlapCardManager::ResetStayTime(CDuelCharacter* duel, CCard* card)
+{
+	// TODO 2025/12/05 -----------------------------------------------
+	//	キャスト時にどのプレイヤーにキャストしても
+	//	ステイ時間がリセットされる不具合を修正する
+	//----------------------------------------------------------------
+
+	// 重ねたカードの管理取得
+	COverlapCardManager* overlapmanager = duel->GetZoneManager()->GetCastPreviewZone()->GetOverlapManager();
+
+	// 重ねたカードのリスト取得
+	std::list<COverlapCard*>overlaplist = overlapmanager->GetOverlapCardList();
+
+	// リストを回す
+	for (auto& itr : overlaplist)
+	{
+		// ターゲットが同じであれば
+		if (itr->GetTarget() == card->GetTarget())
+		{
+			// 重ねたカードリストを回す
+			for (auto& i : itr->GetOverlapCards())
+			{
+				i->GetState()->Init(i, duel);
+			}
+		}
+	}
+}
+
 void My::COverlapCardManager::ReMove(COverlapCard* pOverlapCard)
 {
 }

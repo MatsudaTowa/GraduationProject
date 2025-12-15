@@ -257,14 +257,14 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state, CDuelCharacter* duel)
 			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::CAST, duel), duel->GetZoneManager()->GetCastPreviewZone(), true);
 
 			// ステイ時間のリセット
-			ResetStayTime(duel);
+			duel->GetZoneManager()->GetCastPreviewZone()->GetOverlapManager()->ResetStayTime(duel,this);
 			break;
 
 		case CCardState::CARD_WAIT:
 			m_pState = new CCardStateWait();
 			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::WAIT, duel), duel->GetZoneManager()->GetWaitZone(), true);
 
-			ResetStayTime(duel);
+			//duel->GetZoneManager()->GetCastPreviewZone()->GetOverlapManager()->ResetStayTime(duel);
 			break;
 
 		case CCardState::CARD_TRIGGER:
@@ -525,36 +525,7 @@ void My::CCard::LoadInfo(int id)
 	}
 }
 
-//===========================================================================================================
-// ステイ時間のリセット
-//===========================================================================================================
-void My::CCard::ResetStayTime(CDuelCharacter* duel)
-{
-	// TODO 2025/12/05 -----------------------------------------------
-	//	キャスト時にどのプレイヤーにキャストしても
-	//	ステイ時間がリセットされる不具合を修正する
-	//----------------------------------------------------------------
 
-	// 重ねたカードの管理取得
-	COverlapCardManager* overlapmanager = duel->GetZoneManager()->GetCastPreviewZone()->GetOverlapManager();
-
-	// 重ねたカードのリスト取得
-	std::list<COverlapCard*>overlaplist = overlapmanager->GetOverlapCardList();
-
-	// リストを回す
-	for (auto& itr : overlaplist)
-	{
-		// ターゲットが同じであれば
-		if (itr->GetTarget() == GetTarget())
-		{
-			// 重ねたカードリストを回す
-			for (auto& i : itr->GetOverlapCards())
-			{
-				i->GetState()->Init(i, duel);
-			}
-		}
-	}
-}
 
 //===========================================================================================================
 // 列挙からゾーンのポインタを返す
