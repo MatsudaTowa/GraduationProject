@@ -238,6 +238,7 @@ void My::CInputMouse::Update()
 		
 		m_MouseMove.x = (float)zdiMouseState.lX;
 		m_MouseMove.y = (float)zdiMouseState.lY;
+		m_MouseMove.z = (float)zdiMouseState.lZ;
 
 		SetMouseArea();
 	}

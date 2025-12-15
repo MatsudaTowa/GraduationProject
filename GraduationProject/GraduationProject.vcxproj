@@ -270,6 +270,7 @@
     <ClCompile Include="src\result_screen.cpp" />
     <ClCompile Include="src\result_ui.cpp" />
     <ClCompile Include="src\scene.cpp" />
+    <ClCompile Include="src\selection_range.cpp" />
     <ClCompile Include="src\shadow.cpp" />
     <ClCompile Include="src\target_arrow.cpp" />
     <ClCompile Include="src\target_arrow_manager.cpp" />
@@ -393,6 +394,7 @@
     <ClInclude Include="src\result_screen.h" />
     <ClInclude Include="src\result_ui.h" />
     <ClInclude Include="src\scene.h" />
+    <ClInclude Include="src\selection_range.h" />
     <ClInclude Include="src\shadow.h" />
     <ClInclude Include="src\target_arrow.h" />
     <ClInclude Include="src\target_arrow_manager.h" />

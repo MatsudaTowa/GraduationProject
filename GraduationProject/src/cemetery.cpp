@@ -13,17 +13,19 @@
 #include "active_scene_manager.h"
 #include "active_scene_state.h"
 #include "zone_manager.h"
+#include "card_frame.h"
 
 namespace
 {
-	const D3DXVECTOR3 BASE_POS = { -400.0f,0.0f,300.0f };
-	const float SHIFT_POS = 150.0f;
+	const D3DXVECTOR3 BASE_POS = { 1100.0f,100.0f,0.0f };
+	const float SHIFT_POS = 200.0f;
+	const float CARD_VIEW_CORRECTION = 5.5f;
 }
 
 //===========================================================================================================================================================
 // コンストラクタ
 //===========================================================================================================================================================
-My::CCemetery::CCemetery()
+My::CCemetery::CCemetery():m_pos(VEC3_RESET_ZERO)
 {
 }
 
@@ -32,6 +34,7 @@ My::CCemetery::CCemetery()
 //===========================================================================================================================================================
 My::CCemetery::~CCemetery()
 {
+
 }
 
 //===========================================================================================================================================================
@@ -39,6 +42,7 @@ My::CCemetery::~CCemetery()
 //===========================================================================================================================================================
 void My::CCemetery::Init()
 {
+	m_pos = BASE_POS;
 }
 
 //===========================================================================================================================================================
@@ -46,25 +50,60 @@ void My::CCemetery::Init()
 //===========================================================================================================================================================
 void My::CCemetery::Update(CPlayerDuelState* state, CActiveSceneCharacter* player)
 {
+	if (!state->GetIsCemeteryView())
+	{
+		m_pos = BASE_POS;
+		return;
+	}
 	std::list<CCard*> card_list = state->GetZoneManager()->GetCemetery()->GetList();
 
-	int i = INT_ZERO;
+	int card_size = card_list.size();
+
+	float scroll = GET_INPUT_MOUSE->GetMouseMove().z;
+	float delta_y = scroll * 0.5f;
+
+	float cardHeight = CCardFrame::CARD_HEIGHT;
+	float contentHeight = cardHeight + SHIFT_POS * (card_size - 1);	//全部の高さを取得
+	float viewHeight = SCREEN_HEIGHT;
+
+	// 先頭カードが「下」に行きすぎない最大値 TODO:この補正値
+	float maxY = SCREEN_HEIGHT - cardHeight * CARD_VIEW_CORRECTION;
+
+	// 末尾カードが「上」に行きすぎない最小値
+	float minY = SCREEN_HEIGHT - contentHeight;
+
+	float newY = m_pos.y + delta_y;
+
+	// 上限値の場合に押し戻す処理
+	if (newY < minY)
+	{
+		newY = minY;
+	}
+	if (newY > maxY)
+	{
+		newY = maxY;
+	}
+
+	m_pos.y = newY;
+
+	int i = 0;
 	for (auto& itr : card_list)
 	{
-		if (itr == nullptr) { continue; }
+		if (!itr) { continue; }
 
-		D3DXVECTOR3 pos = BASE_POS;
+		D3DXVECTOR3 pos = m_pos;
+		pos.y += SHIFT_POS * (float)i;
 
-		pos.x += SHIFT_POS * i;
+		D3DXVECTOR3 worldPos = ConvertToWorldPoint(GET_CAMERA(GET_CAMERA_IDX), pos, { 0,0,0 });
 
 		itr->SetCurrentZone(CCard::ZONE::CEMETERY);
 		itr->ChangeState(CCardState::CARD_CEMETERY, state);
-		itr->SetNeutralPos(pos);
-
-		itr->SetPos(pos);
+		itr->SetNeutralPos(worldPos);
+		itr->SetPos(worldPos);
 
 		++i;
 	}
+
 
 	//for (auto& iter : state->GetZoneManager()->GetCemetery()->GetList())
 	//{
@@ -76,7 +115,6 @@ void My::CCemetery::Update(CPlayerDuelState* state, CActiveSceneCharacter* playe
 
 	//// カードキャスト
 	//Cast(state, player);
-
 }
 
 //===========================================================================================================================================================

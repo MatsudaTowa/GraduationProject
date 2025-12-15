@@ -10,7 +10,6 @@
 #include "card.h"
 #include "card_info_view.h"
 
-
 /** @brief My –¼‘O‹óŠÔ */
 namespace My
 {
@@ -64,6 +63,7 @@ namespace My
 		CCard* SearchList(CDuelCharacter* character, int num) override;
 
 	private:
+		D3DXVECTOR3 m_pos = VEC3_RESET_ZERO;
 	};
 }
 

@@ -9,6 +9,7 @@
 
 // include
 #include "zone.h"
+#include "selection_range.h"
 
 /** @brief My 名前空間 */
 namespace My
@@ -36,6 +37,10 @@ namespace My
 		* @param [in]カードのポインタ
 		*/
 		void SendToGrave(CCard* pCard);
+
+		CSelectionRange* GetSelectionRange(){ return m_pRange; }
+	private:
+		CSelectionRange* m_pRange;
 
 	};
 }

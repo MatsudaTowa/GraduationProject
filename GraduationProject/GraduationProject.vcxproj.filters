@@ -226,6 +226,7 @@
     <ClCompile Include="src\overlap_card_manager.cpp" />
     <ClCompile Include="src\card_info_view.cpp" />
     <ClCompile Include="src\cemetery.cpp" />
+    <ClCompile Include="src\selection_range.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -465,6 +466,7 @@
     <ClInclude Include="src\overlap_card_manager.h" />
     <ClInclude Include="src\card_info_view.h" />
     <ClInclude Include="src\cemetery.h" />
+    <ClInclude Include="src\selection_range.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">

@@ -90,6 +90,7 @@ void My::CCemeteryButton::ButtonTrigger()
 		// NOTE:他は解除
 		CDuelCharacter* duel_state = dynamic_cast<CDuelCharacter*>(itr->GetState());
 		duel_state->SetIsCemeteryView(false);
+		duel_state->GetZoneManager()->GetCemetery()->GetSelectionRange()->SetisDraw(false);
 	}
 
 	// ロビーじゃなかったら抜ける
@@ -111,12 +112,14 @@ void My::CCemeteryButton::ButtonTrigger()
 //=============================================
 void My::CCemeteryButton::CardisView(My::CDuelCharacter* duel_state)
 {
-	std::list<CCard*> card_list = duel_state->GetZoneManager()->GetCemetery()->GetList();
+	CCemeteryZone* zone = duel_state->GetZoneManager()->GetCemetery();
+	std::list<CCard*> card_list = zone->GetList();
 
 	//準備OKか切り替え
 	bool isView = duel_state->GetIsCemeteryView();
 	isView = isView ? false : true;
 	duel_state->SetIsCemeteryView(isView);
+	zone->GetSelectionRange()->SetisDraw(isView);
 }
 
 //=============================================
@@ -133,12 +136,14 @@ bool My::CCemeteryButton::ProcessMouseEvent()
 
 	if (isView)
 	{
+		CSelectionRange* range = duel_state->GetZoneManager()->GetCemetery()->GetSelectionRange();
+		bool is_hit_area = GET_COLISION->Check2DPolygonColision(GET_INPUT_MOUSE->GetMousePos(), { 3.0f,3.0f }, { range->GetPos().x,range->GetPos().y,0.0f }, range->GetSize());
 		//テクスチャ読み込み
 		BindTexture(GET_TEXTURE->GetAddress(GET_TEXTURE->Regist(USE_TEX_NAME)));
 		SetColor(COLOR_WHITE);
 
 		//墓地を見ているときは
-		if (GET_INPUT_MOUSE->GetTrigger(0))
+		if (GET_INPUT_MOUSE->GetTrigger(0)&& !is_hit_area)
 		{
 			//押された時の処理の名前
 			ButtonTrigger();
