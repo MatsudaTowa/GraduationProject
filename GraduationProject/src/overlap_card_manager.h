@@ -36,7 +36,7 @@ namespace My
 		/**
 		* @brief 削除
 		*/
-		void ReMove(COverlapCard* pOverlapCard);
+		void ReMove();
 
 		/**
 		* @brief 重なったカードリストの設定

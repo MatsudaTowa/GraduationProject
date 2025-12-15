@@ -34,19 +34,25 @@ My::COverlapCard* My::COverlapCardManager::Create(CDuelCharacter* duel,CInputMou
 	// オーバーラップカードにカードを追加
 	std::list<COverlapCard*> overlap_list = pZoneManager->GetCastPreviewZone()->GetOverlapManager()->GetOverlapCardList();
 
-	bool b = false;
+	// TODO 
+	// 今現在起きているバグ
+	// 重なったカードが最初に登録、二回目はもう中身が空じゃなくなっている
+	// カードを登録できずじまい
+	// 
 
 	// リストのイテレーターを回す
 	for (auto& itr : overlap_list)
 	{
 		// 同じターゲットの重なったカードがあった時
-		if (itr->GetTarget() == area ||
-			overlap_list.size() <= 0)
+		if (itr->GetTarget() == area)
 		{
-			return nullptr;
+			// すでにある overlap を返す(同じターゲット)
+			return itr;
 		}
 	}
 
+	// 同じターゲットのカードリストが存在しなかった場合
+	// overlap 生成
 	COverlapCard* pOverlapCard = new COverlapCard;
 	pOverlapCard->SetTarget(area);
 
@@ -70,32 +76,32 @@ My::COverlapCard* My::COverlapCardManager::Create(CDuelCharacter* duel,CInputMou
 //===========================================================================================================
 void My::COverlapCardManager::ResetStayTime(CDuelCharacter* duel, CCard* card)
 {
-	// TODO 2025/12/05 -----------------------------------------------
-	//	キャスト時にどのプレイヤーにキャストしても
-	//	ステイ時間がリセットされる不具合を修正する
-	//----------------------------------------------------------------
-
-	// 重ねたカードの管理取得
-	COverlapCardManager* overlapmanager = duel->GetZoneManager()->GetCastPreviewZone()->GetOverlapManager();
-
 	// 重ねたカードのリスト取得
-	std::list<COverlapCard*>overlaplist = overlapmanager->GetOverlapCardList();
+	std::list<COverlapCard*>overlaplist = m_pOverlapCardList;
 
 	// リストを回す
 	for (auto& itr : overlaplist)
 	{
-		// ターゲットが同じであれば
-		if (itr->GetTarget() == card->GetTarget())
+		// ターゲットが同じじゃなければ
+		if (itr->GetTarget() != card->GetTarget())
+			continue;
+
+		// 重ねたカードリストを回す
+		for (auto& i : itr->GetOverlapCards())
 		{
-			// 重ねたカードリストを回す
-			for (auto& i : itr->GetOverlapCards())
-			{
-				i->GetState()->Init(i, duel);
-			}
+			i->GetState()->Init(i, duel);
 		}
 	}
 }
 
-void My::COverlapCardManager::ReMove(COverlapCard* pOverlapCard)
+//===========================================================================================================
+// 削除
+//===========================================================================================================
+void My::COverlapCardManager::ReMove()
 {
+	// TODO
+	// オーバーラップリストの削除もそうだが、
+	// オーバーラップカード事態の削除も急用
+	// overlap関連の名前を早急に変えましょう
+	m_pOverlapCardList.clear();
 }
