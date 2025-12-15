@@ -181,12 +181,17 @@ void CRakNet::Communication(RakNet::RakPeerInterface* peer)
             m_Client->ReceiveStatus(packet);
             break;*/
 
-            case ID_DUEL_MESSAGE_STATUS:
+        case ID_DUEL_MESSAGE_DRAW:
+            m_Client->ReceiveDrawCard(packet);
+            //m_isUpdate = true;
+            break;
+
+        case ID_DUEL_MESSAGE_STATUS:
             m_Client->ReceiveStatus(packet);
             m_isUpdate = true;
             break;
 
-            case ID_DUEL_MESSAGE_CAST_CARD:
+        case ID_DUEL_MESSAGE_CAST_CARD:
             m_Client->CardCast(packet);
             break;
 
@@ -299,4 +304,28 @@ void CRakNet::SendMyStatus()
 {
     //m_Client->SendMyStatus(m_pPeer);
     m_isUpdate = false;
+}
+
+//=====================================
+//カードドローのリクエスト処理
+//=====================================
+void CRakNet::RequestDrawCard()
+{
+    //データの作成
+    RakNet::BitStream bsOut;    //送信用変数
+    int nUserId = My::CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx();  //使用者番号
+ 
+    //書き出し
+    bsOut.Write((RakNet::MessageID)CRakNet::GameMessages::ID_DUEL_MESSAGE_DRAW);    //メッセージ
+    bsOut.Write(nUserId);                                                           //使用者番号
+   
+    //アドレスを取得
+    RakNet::SystemAddress server_address = m_pPeer->GetSystemAddressFromIndex(0);
+
+    //サーバーの確認
+    if (server_address != RakNet::UNASSIGNED_SYSTEM_ADDRESS)
+    {
+        // 全クライアントにブロードキャスト
+        m_pPeer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, m_pPeer->GetSystemAddressFromIndex(0), false);
+    }
 }

@@ -32,12 +32,13 @@ public:
 	bool CheckStartBattle(RakNet::Packet* packet) override;										//対戦を開始するか
 	void StartBattle(RakNet::RakPeerInterface* peer) override;									//対戦の開始
 	void SendStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;			//ステータスを送る
-	void AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override {}				//CPUの追加
+	void AddCPU(RakNet::Packet* /*packet*/, RakNet::RakPeerInterface* /*peer*/) override {}		//CPUの追加
 	void ReceiveStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;		//ステータスを受信
 	void ReceiveCastCard(RakNet::Packet* packet) override;										//キャストカードの受信
 	void ReceiveCastDefCard(RakNet::Packet* packet) override;									//キャスト守備カードの受信
 	void UpdateScene(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;			//シーンの更新
 	bool ReceiveDeck(RakNet::Packet* packet) override;											//デッキの受信
+	void ReceiveDrawCard(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;		//カードのドロー処理の受信
 
 	//プレイヤーのデータリスト
 	void SetData(std::list<CPlayer::ChangeData> data) override;	//設定
@@ -79,6 +80,7 @@ private:
 	void SendUpdateSign(RakNet::RakPeerInterface* peer);						//更新の合図を送る
 	bool IsDisconnectionSendUpdate();											//クライアントが切断時に更新の合図を送信するか
 	void SendDeck(RakNet::RakPeerInterface* peer);								//デッキの送信
+	void SendDrawCard(RakNet::RakPeerInterface* peer, int userid);				//カードのドロー情報を送る
 
 	//対戦シーンの処理関数
 	void UpdateStayCard();				//ステイカードの更新

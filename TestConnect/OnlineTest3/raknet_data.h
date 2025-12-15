@@ -46,6 +46,7 @@ public:
 		ID_DUEL_MESSAGE_START,			//対戦の開始を通知
 		ID_DUEL_MESSAGE_DECK,			//デッキのメッセージ
 		//ID_DUEL_MESSAGE_SEND_STATUS,	//ステータスを送る
+		ID_DUEL_MESSAGE_DRAW,			//カードを引くメッセージ
 		ID_DUEL_MESSAGE_STATUS,			//ステータスの通知
 		ID_DUEL_MESSAGE_CAST_CARD,		//キャストカードを通知
 		ID_DUEL_MESSAGE_CAST_DEFCARD,	//キャスト守備カードを通知
@@ -73,6 +74,7 @@ public:
 	virtual void ReceiveCastDefCard(RakNet::Packet* packet) = 0;										//キャスト守備カードの受信
 	virtual void UpdateScene(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) = 0;				//シーンの更新
 	void SendRequestDeck(RakNet::RakPeerInterface* peer);												//デッキの要求
+	virtual void ReceiveDrawCard(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) = 0;			//カードのドロー処理の受信
 
 	//設定と取得
 

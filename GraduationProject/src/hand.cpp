@@ -14,6 +14,7 @@
 #include "active_scene_state.h"
 #include "zone_manager.h"
 #include <algorithm>
+#include "raknet.h"
 
 My::CHand::CHand() :
 	m_SelectNum(-1),
@@ -279,38 +280,46 @@ void My::CHand::SetCard(CDuelCharacter* character,CCard::CARDTYPE_ type)
 //===========================================================================================================
 void My::CHand::HandDraw(int drawnum, CPlayerDuelState* state)
 {
-	/*
+	//オンラインの処理
+	if (CRakNet::GetInstance()->GetOnline())
+	{
+		CRakNet::GetInstance()->RequestDrawCard();
+	}
+	else
+	{
+		/*
 	* @brief 手札が持てるカードの枚数を超えたらドローをしない
 	* TODO : ここの処理は超えたときにMAXの枚数にするか、引けないようにするか検討
 	*/
-	if (m_TotalNum >= MAX_HANDSCARD)
-		return;	
+		if (m_TotalNum >= MAX_HANDSCARD)
+			return;
 
-	// TODO : 今後の実装山札を引く、山札の総数を減らす
-	
-	for (int i = 0; i < drawnum; i++)
-	{
-		//カードを引けるか
-		CZoneManager* pZoneManager = state->GetZoneManager();
-		if (pZoneManager->GetDeck()->CheckDeckOut()) break;
+		// TODO : 今後の実装山札を引く、山札の総数を減らす
 
-		//トップのカードを取得
-		CCard* pDrawCard = pZoneManager->GetDeck()->GetTopCard();
-		
-		// TODO : 一旦ここでランダムに抽選する
-		//int rundom;
-		//rundom = static_cast<int>(Rundom(CCard::CARDTYPE_::TYPE_ATTACK, CCard::CARDTYPE_::TYPE_MAX));
+		for (int i = 0; i < drawnum; i++)
+		{
+			//カードを引けるか
+			CZoneManager* pZoneManager = state->GetZoneManager();
+			if (pZoneManager->GetDeck()->CheckDeckOut()) break;
 
-		//手札に加える処理
-		//state->GetZoneManager()->GetHandZone()->AddHandZone(pDrawCard);
-		pZoneManager->MoveZone(pDrawCard, pZoneManager->GetDeck(), pZoneManager->GetHandZone(), true);
+			//トップのカードを取得
+			CCard* pDrawCard = pZoneManager->GetDeck()->GetTopCard();
 
-		pDrawCard->SetCurrentZone(CCard::HAND);
-		//SetCard((CCard::CARDTYPE_)rundom);
-		m_TotalNum++;	// 手札の総数を増やす
+			// TODO : 一旦ここでランダムに抽選する
+			//int rundom;
+			//rundom = static_cast<int>(Rundom(CCard::CARDTYPE_::TYPE_ATTACK, CCard::CARDTYPE_::TYPE_MAX));
 
-		// 手札の位置整理
-		SetHandCardPos(state);
+			//手札に加える処理
+			//state->GetZoneManager()->GetHandZone()->AddHandZone(pDrawCard);
+			pZoneManager->MoveZone(pDrawCard, pZoneManager->GetDeck(), pZoneManager->GetHandZone(), true);
+
+			pDrawCard->SetCurrentZone(CCard::HAND);
+			//SetCard((CCard::CARDTYPE_)rundom);
+			m_TotalNum++;	// 手札の総数を増やす
+
+			// 手札の位置整理
+			SetHandCardPos(state);
+		}
 	}
 }
 

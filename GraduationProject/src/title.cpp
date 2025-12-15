@@ -72,7 +72,7 @@ void My::CTitle::Update()
     }
 
     //左シフト押したらオンライン
-    if (pKeyboard->GetPress(DIK_LSHIFT))
+    if (pKeyboard->GetTrigger(DIK_LSHIFT))
     {
         //オンライン
         CRakNet::GetInstance()->SetOnline(true);

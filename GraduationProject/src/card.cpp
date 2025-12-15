@@ -257,12 +257,14 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state, CDuelCharacter* duel)
 			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::CAST, duel), duel->GetZoneManager()->GetCastPreviewZone(), true);
 
 			// ステイ時間のリセット
-			ResetStayTime(duel);
+			duel->GetZoneManager()->GetCastPreviewZone()->GetOverlapManager()->ResetStayTime(duel,this);
 			break;
 
 		case CCardState::CARD_WAIT:
 			m_pState = new CCardStateWait();
 			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::WAIT, duel), duel->GetZoneManager()->GetWaitZone(), true);
+
+			//duel->GetZoneManager()->GetCastPreviewZone()->GetOverlapManager()->ResetStayTime(duel);
 			break;
 
 		case CCardState::CARD_TRIGGER:
@@ -523,42 +525,7 @@ void My::CCard::LoadInfo(int id)
 	}
 }
 
-//===========================================================================================================
-// ステイ時間のリセット
-//===========================================================================================================
-void My::CCard::ResetStayTime(CDuelCharacter* duel)
-{
-	// TODO 2025/12/05 -----------------------------------------------
-	//	キャスト時にどのプレイヤーにキャストしても
-	//	ステイ時間がリセットされる不具合を修正する
-	//----------------------------------------------------------------
 
-	// カードプレビューゾーンのカードリストを取得
-	std::list<CCard*> list = duel->GetZoneManager()->GetCastPreviewZone()->GetList();
-	std::list<CActiveSceneCharacter*> charalist = CActiveSceneManager::GetInstance()->GetCharacterList();
-
-	// 攻撃カードのステイ時間初期化
-	for (auto& itr : list)
-	{
-		// 攻撃カード以外は通さない
-		CCardAttack* attack = dynamic_cast<CCardAttack*>(itr);
-		if (attack == nullptr)
-			continue;
-
-		// ステイ状態以外は通さない
-		if(attack->GetStateNum() != CCardState::CARD_STAY)
-			continue;
-
-		for (auto& iter : charalist)
-		{
-			if (iter->GetArea() == attack->GetTarget())
-				break;
-		}
-
-		// ステイ時間初期化
-		attack->GetState()->Init(attack, duel);
-	}
-}
 
 //===========================================================================================================
 // 列挙からゾーンのポインタを返す

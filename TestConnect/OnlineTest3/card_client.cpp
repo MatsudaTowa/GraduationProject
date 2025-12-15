@@ -99,6 +99,7 @@ void CCard_Client::Communication()
 
             // サーバーに接続
             m_pPeer->Connect(serverAddress.ToString(false), PORT, 0, 0);
+            RequestAllCard();
             // std::cout << "Connecting to " << serverAddress.ToString() << "...\n";
             break;
         }

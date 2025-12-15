@@ -37,7 +37,7 @@ public:
 	void ReceiveReady(RakNet::Packet* packet) override;									//準備受信処理
 	void CardCast(RakNet::Packet* packet) override;										//カードのキャスト処理
 	void SendStartSign(RakNet::RakPeerInterface* peer) override;						//開始の合図を送信
-	void AddCPU(RakNet::Packet* /*packet*/, RakNet::RakPeerInterface* /*peer*/) {}			//コンピューターの追加
+	void AddCPU(RakNet::Packet* /*packet*/, RakNet::RakPeerInterface* /*peer*/) {}		//コンピューターの追加
 	void SendSuccessDuelLoad(RakNet::RakPeerInterface* /*peer*/) override {}			//決闘読み込みの成功を送信
 	void StartBattle() override {}														//対戦の開始
 	void SendStatus(RakNet::RakPeerInterface* /*peer*/) override {}						//ステータスを送る
@@ -48,6 +48,7 @@ public:
 	void SendMyStatus(RakNet::RakPeerInterface* /*peer*/) override {}					//自分のステータスを送る
 	void ReceiveCastCard(RakNet::Packet* /*packet*/) override {}						//キャストカードの受信
 	void ReceiveCastDefCard(RakNet::Packet* /*packet*/) override {}						//キャスト守備カードの受信
+	void ReceiveDrawCard(RakNet::Packet* /*packet*/) override {}						//カードドローの受信
 
 	//取得
 	void SetParam(std::list<PlayerParam> list) override;	//設定

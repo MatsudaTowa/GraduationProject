@@ -184,18 +184,17 @@ void My::CCardStateCast::Init(CCard* cpy, CDuelCharacter* duel)
 
 		// ゾーンマネージャーの取得
 		CZoneManager* pZoneManager = dynamic_cast<CDuelCharacter*>(iter->GetState())->GetZoneManager();
+		// オーバーラップカードの格納変数
+		COverlapCard* pOverlapCard = nullptr;
 
-		//// オーバーラップカードにカードを追加
-		//std::list<COverlapCard*> overlap_list = pZoneManager->GetCastPreviewZone()->GetOverlapCardList();
+		// 登録
+		pOverlapCard = pZoneManager->GetCastPreviewZone()->GetOverlapManager()->Create(duel,cpy->GetTarget());
 
-		//
-
-		//for (auto& overlap : overlap_list)
-		//{
-		//	overlap->Regist(cpy);
-		//}
-
-		//pZoneManager->GetCastPreviewZone()->SetOverlapCardList(overlap_list);
+		// 重ねたカードが存在していたら
+		if (pOverlapCard)
+		{
+			pOverlapCard->Regist(cpy);
+		}
 
 		// ターゲットエリアが違うならスルー
 		if (iter->GetArea() != cpy->GetTarget()) { continue; }

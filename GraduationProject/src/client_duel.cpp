@@ -13,6 +13,7 @@
 #include "raknet.h"
 #include "active_scene_player_state.h"
 #include "card_deffence.h"
+#include "zone_manager.h"
 
 //=====================================
 //コンストラクタ
@@ -662,4 +663,55 @@ void CClient_Duel::ReceiveCastDefCard(RakNet::Packet* packet)
         //キャスト守備カード情報の読み込み
         My::CActiveSceneManager::GetInstance()->SetCastDiffenceCardInfo(CastCardInfo);
     }
+}
+
+//=====================================
+//カードドローの受信
+//=====================================
+void CClient_Duel::ReceiveDrawCard(RakNet::Packet* packet)
+{
+    //受信側
+    RakNet::BitStream bsIn(packet->data, packet->length, false);
+
+    //人数を取得
+    unsigned char messageId;                     //メッセージ
+    int nUserId = 0;                             //使用者の番号
+    My::CActiveSceneCharacter::Status Status;    //ステータス
+
+    //読み込み
+    bsIn.Read(messageId); //メッセージ
+    bsIn.Read(nUserId);   //使用者の番号
+    bsIn.Read(Status);    //ステータス
+
+      //プレイヤーのポインタ
+    My::CActiveSceneCharacter* pPlayer = nullptr;
+
+    //受信した番号のプレイヤーを探す
+    for (auto& iter : My::CActiveSceneManager::GetInstance()->GetCharacterList())
+    {
+        if (nUserId != iter->GetPlayerIdx()) continue;
+
+        //プレイヤーの取得
+        pPlayer = iter;
+        break;
+    }
+
+    //対戦状態にキャスト
+    My::CDuelCharacter* pState = dynamic_cast<My::CDuelCharacter*>(pPlayer->GetState());
+
+    //中身がないなら抜ける
+    if (pState == nullptr) return;
+
+    //山札のカードを手札に移動
+    My::CCard* pCard = pState->GetZoneManager()->GetDeck()->GetTopCard();
+    pState->GetZoneManager()->MoveZone(pCard, pState->GetZoneManager()->GetDeck(), pState->GetZoneManager()->GetHandZone(), true);
+    pCard->SetCurrentZone(My::CCard::HAND);
+
+    My::CPlayerDuelState* pPlayerState = nullptr; 
+    pPlayerState = dynamic_cast<My::CPlayerDuelState*>(pPlayer->GetState());
+
+    //中身がないなら抜ける
+    if (pPlayerState == nullptr) return;
+
+    pPlayerState->GetHand()->SetHandCardPos(pPlayerState);
 }

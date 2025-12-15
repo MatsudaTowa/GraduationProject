@@ -50,3 +50,34 @@ bool My::CDuel_Player::UpdateEnergy(int deltatime)
 
 	return true;
 }
+
+//=====================================
+//カードのドロー
+//=====================================
+bool My::CDuel_Player::DrawCard()
+{
+	//対象者のエナジーがあるならカードを引く
+	if (GetStatus().energy <= 0)
+	{
+		return false;
+	}
+
+	//山札切れになるかを確認
+	if (m_ZoneManager->GetDeck()->CheckDeckOut())
+	{
+		return false;
+	}
+
+	//エナジーを消費
+	GetStatus().energy--;
+
+	//カードの移動
+	CCard* pCard = m_ZoneManager->GetDeck()->GetTopCard();
+	m_ZoneManager->MoveZone(pCard, m_ZoneManager->GetDeck(), m_ZoneManager->GetHandZone(), false);
+
+	//ステータスに反映
+	GetStatus().deckSize = m_ZoneManager->GetDeck()->GetList().size();	//デッキ枚数
+	GetStatus().hand++;													//手札枚数
+	
+	return true;
+}

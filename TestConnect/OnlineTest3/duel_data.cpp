@@ -223,6 +223,25 @@ void CDuel_Data::SetData(std::list<CPlayer::ChangeData> data)
         pPlayer->SetTag(iter.OnlineData.Tag);
         pPlayer->SetDeck(iter.Deck);
 
+        //デッキを混ぜる処理
+        //std::list<int> DeckList = iter.Deck();
+        std::vector<int> DeckVector = pPlayer->GetDeck();
+
+        std::random_device rd;
+        std::mt19937 g(rd());
+
+        std::shuffle(DeckVector.begin(), DeckVector.end(), g);
+
+        //カードのIDから生成
+        for (auto iter : DeckVector)
+        {
+            My::CCard* pCard = My::CCardManager::GetInstance()->CreateCard(iter);
+            pCard->SetUserId(pPlayer->GetIndex());
+            pCard->SetCurrentZone(My::CCard::DECK);
+            pCard->Init();
+            pPlayer->GetZoneManager()->GetDeck()->AddList(pCard);
+        }
+
         //追加
         m_DuelPlayerList.push_back(pPlayer);
     }
@@ -784,6 +803,8 @@ bool CDuel_Data::ReceiveDeck(RakNet::Packet* packet)
         break;
     }
 
+    pPlayer->GetDeck().clear();
+
     //デッキ枚数の読み込み
     for (int i = 0; i < nDeckNum; i++)
     {
@@ -822,4 +843,59 @@ void CDuel_Data::SendDeck(RakNet::RakPeerInterface* peer)
 
     //全クライアントにブロードキャスト
     peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+}
+
+//======================================
+//カードドローの受信
+//======================================
+void CDuel_Data::ReceiveDrawCard(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
+{
+    //変数宣言
+    int nPlayerId = 0;                      //プレイヤー番号
+    My::CDuel_Player* pPlayer = nullptr;    //プレイヤーのポインタ
+
+    //データの受信
+    RakNet::BitStream bsIn(packet->data, packet->length, false);
+
+    //読み取り
+    bsIn.IgnoreBytes(sizeof(RakNet::MessageID));    //メッセージの読み込み
+
+    //パラメータ
+    bsIn.Read(nPlayerId);
+
+    //カードドローを送信
+    SendDrawCard(peer, nPlayerId);
+}
+
+//======================================
+//カードドローの送信
+//======================================
+void CDuel_Data::SendDrawCard(RakNet::RakPeerInterface* peer, int userid)
+{
+    //プレイヤーのポインタ
+    My::CDuel_Player* pPlayer = nullptr;
+
+    //受信した番号のプレイヤーを探す
+    for (auto& iter : m_DuelPlayerList)
+    {
+        if (userid != iter->GetIndex()) continue;
+
+        //プレイヤーの取得
+        pPlayer = iter;
+    }
+
+    //カードのドロー処理
+    if (pPlayer->DrawCard())
+    {
+        //データの送信
+        RakNet::BitStream bsOut;
+
+        //書き出し
+        bsOut.Write((RakNet::MessageID)GameMessages::ID_DUEL_MESSAGE_DRAW); //メッセージ
+        bsOut.Write(pPlayer->GetIndex());                                    //使用者番号
+        bsOut.Write(pPlayer->GetStatus());                                   //使用者のステータス
+
+        //全クライアントにブロードキャスト
+        peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+    }
 }

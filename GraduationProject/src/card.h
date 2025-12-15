@@ -306,9 +306,6 @@ namespace My
 		inline void SetUserArea(CInputMouse::AREA area) { m_UserArea = area; }
 		inline CInputMouse::AREA GetUserArea() { return m_UserArea; }
 
-		// ステイ時間リセット
-		void ResetStayTime(CDuelCharacter* duel);
-
 		//カードの使用者を記録
 		void SetUserId(int id) { m_nUserId = id; }
 		int GetUserId() { return m_nUserId; }

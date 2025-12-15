@@ -13,6 +13,7 @@
 */
 My::CCastPreviewZone::CCastPreviewZone()
 {
+	m_pOverlapManager = nullptr;
 	m_pOverlapManager = new COverlapCardManager;
 }
 
@@ -21,6 +22,8 @@ My::CCastPreviewZone::CCastPreviewZone()
 */
 My::CCastPreviewZone::~CCastPreviewZone()
 {
+	delete m_pOverlapManager;
+	m_pOverlapManager = nullptr;
 }
 
 /**
