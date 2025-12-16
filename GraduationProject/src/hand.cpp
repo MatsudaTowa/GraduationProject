@@ -21,11 +21,18 @@ My::CHand::CHand() :
 	m_TotalNum(0),
 	m_IsPassStart(false),
 	m_IsPickUp(false),
+	m_pRange(nullptr),
 	m_HandState(NEUTRAL)/*,
 	m_pHandCard(),
 	m_pStayCard(),
 	m_pTriggerCard()*/
 {
+	if (m_pRange == nullptr)
+	{
+		m_pRange = CSelectionRange::Create({ SCREEN_WIDTH * HALF, 650.0f,0.0f }, { 400.0f, 100.0f });
+		m_pRange->SetColor({ COLOR_RED.r,COLOR_RED.g,COLOR_RED.b,0.5f });
+		m_pRange->SetisDraw(true);
+	}
 	/*for (int i = 0; i < MAX_HANDSCARD; i++)
 	{
 		m_pCard[i] = nullptr;
@@ -34,6 +41,10 @@ My::CHand::CHand() :
 
 My::CHand::~CHand()
 {
+	if (m_pRange == nullptr)
+	{
+		m_pRange = nullptr;
+	}
 }
 
 //===========================================================================================================
@@ -48,7 +59,7 @@ void My::CHand::Init()
 
 	// ƒJƒƒ‰‚ÌˆÊ’u‚ÆŠp“x‚É‡‚í‚¹‚é
 	CCamera* pCamera = CManager::GetInstance()->GetCamera(0);
-	m_CenterPos = { pCamera->GetPosV().x, pCamera->GetPosV().y - 150.0f, pCamera->GetPosV().z + 23.0f };
+	m_CenterPos = { pCamera->GetPosV().x, pCamera->GetPosV().y - 200.0f, pCamera->GetPosV().z + 23.0f };
 }
 
 //===========================================================================================================
@@ -166,6 +177,11 @@ void My::CHand::Select(CPlayerDuelState* state)
 //===========================================================================================================
 void My::CHand::Cast(CDuelCharacter* character, CActiveSceneCharacter* player)
 {
+	bool is_hit_area = GET_COLISION->Check2DPolygonColision(GET_INPUT_MOUSE->GetMousePos(), { 3.0f,3.0f }, { m_pRange->GetPos().x,m_pRange->GetPos().y,0.0f }, m_pRange->GetSize());
+	if (is_hit_area && m_pRange->GetisDraw())
+	{
+		return;
+	}
 	if (m_SelectNum < 0) return;
 
 	int nCount = 0;

@@ -14,6 +14,7 @@
 #include <typeinfo>
 #include "raknet.h"
 #include "card_attack.h"
+#include "hand.h"
 
 //===========================================================================================================
 // コンストラクタ
@@ -352,6 +353,13 @@ bool My::CCard::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharacter* pla
 
 	if (pMouse->GetPress(0))
 	{
+		// ロビーじゃなかったら抜ける
+		if (typeid(*duel) == typeid(CPlayerDuelState))
+		{
+			CPlayerDuelState* duel_state = dynamic_cast<CPlayerDuelState*>(duel);
+			duel_state->GetHand()->GetSelectionRange()->SetisDraw(false);
+		}
+
 		// キャストステートにする
 		ChangeState(CCardState::CARD_SELECT, duel);
 		CActiveSceneManager::GetInstance()->ChangeState(new CCardCast);
@@ -365,6 +373,13 @@ bool My::CCard::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharacter* pla
 	}
 	else if (pMouse->GetRelease(0))
 	{
+		// ロビーじゃなかったら抜ける
+		if (typeid(*duel) == typeid(CPlayerDuelState))
+		{
+			CPlayerDuelState* duel_state = dynamic_cast<CPlayerDuelState*>(duel);
+			duel_state->GetHand()->GetSelectionRange()->SetisDraw(true);
+		}
+
 		//対象のエリア
 		m_target = pMouse->GetArea();
 

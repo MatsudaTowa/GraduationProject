@@ -9,6 +9,7 @@
 #define _HAND_ZONE_H_
 
 #include "zone.h"
+#include "selection_range.h"
 
 /** @brief My –¼‘O‹óŠÔ */
 namespace My

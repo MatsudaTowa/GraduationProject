@@ -134,13 +134,13 @@ namespace My
 			return m_isStop; 
 		}
 
-	protected:
-		void Release(); //©•ª©g‚Ì‰ğ•ú
-
 		inline bool& GetisDraw()
 		{
 			return m_isDraw;
 		}
+	protected:
+		void Release(); //©•ª©g‚Ì‰ğ•ú
+
 
 		inline void SetType(OBJECT_TYPE type)
 		{

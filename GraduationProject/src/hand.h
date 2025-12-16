@@ -8,7 +8,7 @@
 #define _HAND_H_
 #include "main.h"
 #include "card.h"
-
+#include "selection_range.h"
 
 /** @brief My –¼‘O‹óŠÔ */
 namespace My
@@ -119,8 +119,10 @@ namespace My
 
 		CCard* SearchHandList(CDuelCharacter* character,int num);
 
+
+		CSelectionRange* GetSelectionRange() { return m_pRange; }
 	private:
-		// èD‚Ìó‘Ô
+		CSelectionRange* m_pRange;		// èD‚Ìó‘Ô
 		HANDSTATE m_HandState;
 
 		/**

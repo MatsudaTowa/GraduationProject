@@ -21,7 +21,6 @@ My::CHandZone::CHandZone()
 */
 My::CHandZone::~CHandZone()
 {
-
 }
 
 /**
