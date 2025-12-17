@@ -31,7 +31,7 @@ namespace My
 		/**
 		* @brief “o˜^
 		*/
-		COverlapCard* Create(CDuelCharacter* duel, CInputMouse::AREA area);
+		COverlapCard* Create(CDuelCharacter* duel, CCard*pcard);
 
 		/**
 		* @brief íœ

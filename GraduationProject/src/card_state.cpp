@@ -192,7 +192,7 @@ void My::CCardStateCast::Init(CCard* cpy, CDuelCharacter* duel)
 		// 登録
 		for (auto& Target : cpy->GetTargetPlayerList())
 		{
-			pOverlapCard = pZoneManager->GetCastPreviewZone()->GetOverlapManager()->Create(duel, Target->GetArea());
+			pOverlapCard = pZoneManager->GetCastPreviewZone()->GetOverlapManager()->Create(duel, cpy);
 
 			// 重ねたカードが存在していたら
 			if (pOverlapCard)
@@ -455,6 +455,12 @@ void My::CCardStateStay::SetCardPos(CCard* cpy)
 		cpy->SetPos({ 0.0f, -100.0f, 250.0f });
 		break;
 	}
+
+	// TODO : 
+	// ユーザーエリアとターゲットエリアの中間地点に
+	// カードの位置を設定する
+	cpy->GetUserArea();
+
 }
 
 //=======================================================================================

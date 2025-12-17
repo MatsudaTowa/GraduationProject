@@ -264,11 +264,12 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state, CDuelCharacter* duel)
 			m_pState = new CCardStateWait();
 			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::WAIT, duel), duel->GetZoneManager()->GetWaitZone(), true);
 
-			//duel->GetZoneManager()->GetCastPreviewZone()->GetOverlapManager()->ResetStayTime(duel);
 			break;
 
 		case CCardState::CARD_TRIGGER:
 			m_pState = new CCardStateTrigger();
+
+			duel->GetZoneManager()->GetCastPreviewZone()->GetOverlapManager()->ReMove();
 			break;
 
 		case CCardState::CARD_CEMETERY:
