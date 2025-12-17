@@ -105,8 +105,14 @@ void CClient::ReceiveDeck(RakNet::Packet* packet)
     unsigned char messageId;    //メッセージ
     bsIn.Read(messageId);   //メッセージ
 
+    std::list<My::CActiveSceneCharacter*> SortList = My::CActiveSceneManager::GetInstance()->GetCharacterList();
+    SortList.sort([](My::CActiveSceneCharacter* a, My::CActiveSceneCharacter* b) 
+        {
+            return a->GetPlayerIdx() < b->GetPlayerIdx();
+        });
+
     //キャラクターの周回
-    for (My::CActiveSceneCharacter* iter : My::CActiveSceneManager::GetInstance()->GetCharacterList())
+    for (My::CActiveSceneCharacter* iter : SortList)
     {
         int nDeckNum = 0;           //デッキ枚数
         int nCardId = 0;            //カードの番号

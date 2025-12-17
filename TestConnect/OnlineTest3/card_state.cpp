@@ -129,20 +129,20 @@ void My::CCardStateCast::Init(CCard* cpy, CDuel_Player* duel)
 	//{
 	//	if (cpy->GetUserArea() != iter->GetArea()) continue;
 
-	//	// ステータスを取得
-	//	CActiveSceneCharacter::Status status = iter->GetStatus();
+	// ステータスを取得
+	//CActiveSceneCharacter::Status status = iter->GetStatus();
 
-	//	// コスト分エナジーを減らす
-	//	status.energy -= cpy->GetBaseStatus().nCost;
+	// コスト分エナジーを減らす
+	duel->GetStatus().energy -= cpy->GetBaseStatus().nCost;
 
-	//	// エナジーを設定
-	//	iter->SetStatus(status);
+	// エナジーを設定
+	//iter->SetStatus(status);
 
 	//	break;
 	//}
 
-	////カードのキャスト処理
-	//cpy->Cast(duel);
+	//カードのキャスト処理
+	cpy->Cast(duel);
 }
 
 //=======================================================================================

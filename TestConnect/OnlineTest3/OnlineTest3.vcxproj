@@ -157,6 +157,7 @@
     <ClInclude Include="duel_manager.h" />
     <ClInclude Include="duel_player.h" />
     <ClInclude Include="duel_player_manager.h" />
+    <ClInclude Include="duel_timer.h" />
     <ClInclude Include="field_zone.h" />
     <ClInclude Include="hand_zone.h" />
     <ClInclude Include="lobby_data.h" />
@@ -339,6 +340,7 @@
     <ClCompile Include="deck_zone.cpp" />
     <ClCompile Include="duel_data.cpp" />
     <ClCompile Include="duel_player.cpp" />
+    <ClCompile Include="duel_timer.cpp" />
     <ClCompile Include="field_zone.cpp" />
     <ClCompile Include="hand_zone.cpp" />
     <ClCompile Include="lobby_data.cpp" />

@@ -43,7 +43,7 @@ public:
 	virtual void SendStartSign([[maybe_unused]] RakNet::RakPeerInterface* peer) = 0;					//開始の合図を送信
 	virtual void AddCPU([[maybe_unused]] RakNet::Packet* packet, RakNet::RakPeerInterface* peer) = 0;	//コンピューターの追加
 	virtual void SendSuccessDuelLoad([[maybe_unused]] RakNet::RakPeerInterface* peer) = 0;				//決闘読み込みの成功を送信
-	virtual void StartBattle() = 0;																		//対戦の開始
+	virtual void StartBattle([[maybe_unused]] RakNet::Packet* packet) = 0;								//対戦の開始
 	virtual void SendStatus([[maybe_unused]] RakNet::RakPeerInterface* peer) = 0;						//ステータスを送る
 	virtual void ReceiveStatus([[maybe_unused]] RakNet::Packet* packet) = 0;							//ステータスを受信
 	virtual void SendAddEnemy([[maybe_unused]] RakNet::RakPeerInterface* peer) = 0;						//敵の追加を送信

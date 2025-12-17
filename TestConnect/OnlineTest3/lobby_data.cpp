@@ -436,6 +436,8 @@ bool CLobby_Data::ReceiveDeck(RakNet::Packet* packet)
     //プレイヤーの人数分受信したか
     if (m_nReceiveDeckNum == nPlayerNum)
     {
-        return true;
+        return true;    //していたら対戦へ
     }
+
+    return false;   //していないなら待機
 }

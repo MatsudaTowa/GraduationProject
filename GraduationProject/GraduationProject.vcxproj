@@ -202,6 +202,7 @@
     <ClCompile Include="src\debuff.cpp" />
     <ClCompile Include="src\deck_zone.cpp" />
     <ClCompile Include="src\duel_manager.cpp" />
+    <ClCompile Include="src\duel_timer.cpp" />
     <ClCompile Include="src\effect_manager.cpp" />
     <ClCompile Include="src\effect.cpp" />
     <ClCompile Include="src\enemy.cpp" />
@@ -329,6 +330,7 @@
     <ClInclude Include="src\debuff.h" />
     <ClInclude Include="src\deck_zone.h" />
     <ClInclude Include="src\duel_manager.h" />
+    <ClInclude Include="src\duel_timer.h" />
     <ClInclude Include="src\effect.h" />
     <ClInclude Include="src\effect_manager.h" />
     <ClInclude Include="src\enemy.h" />

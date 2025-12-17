@@ -8,6 +8,7 @@
 #include "renderer.h"
 #include "card_client.h"
 #include "effect_manager.h"	// エフェクトマネージャー
+#include "duel_manager.h"
 
 /**
  * @brief コンストラクタ
@@ -252,6 +253,9 @@ void My::CManager::Update()
 
 	//カードサーバーとの受信
 	CCard_Client::GetInstance()->Communication();
+
+	//対戦時間の更新
+	My::CDuel_Manager::GetInstance()->GetDuelTimer().Update();
 
 	//時間の更新
 	UpdateTime();

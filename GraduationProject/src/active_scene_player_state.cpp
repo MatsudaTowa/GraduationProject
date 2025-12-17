@@ -14,6 +14,7 @@
 #include "ready_button.h"
 #include "match_start_button.h"
 #include "wait_zone.h"
+#include "duel_manager.h"
 
 //=============================================
 // コンストラクタ
@@ -128,6 +129,11 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 		EnergyUp(player);
 	}
 
+	if (m_pCemetery != nullptr)
+	{
+		m_pCemetery->Update(this, character);
+	}
+
 	std::list<CCondition*> DebuffList = character->GetConditionList();
 
 	//死んでいたら関数を抜ける
@@ -161,10 +167,6 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 		//player->SetHandNum(pHand->GetTotal())
 	}
 
-	if (m_pCemetery != nullptr)
-	{
-		m_pCemetery->Update(this, character);
-	}
 	//親の更新
 	CDuelCharacter::Duel(character);
 }
@@ -243,7 +245,14 @@ void My::CPlayerDuelState::EnergyUp(CActiveScenePlayer* player)
 	}*/
 
 	//経過時間を取得
-	m_nEnergyUpCount += CManager::GetInstance()->GetElapsedTime();
+	if (CRakNet::GetInstance()->GetOnline())
+	{
+		m_nEnergyUpCount += My::CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime();
+	}
+	else
+	{
+		m_nEnergyUpCount += 17;	//オフライン用
+	}
 
 	//エナジーの更新時間を超えているなら繰り返す
 	while (m_nEnergyUpCount > m_EnergyUpFrame)

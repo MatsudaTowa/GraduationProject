@@ -228,7 +228,7 @@ void CRakNet_Server::Communication(RakNet::RakPeerInterface* peer)
 
             case CRakNet_Data::GameMessages::ID_DUEL_MESSAGE_CAST_CARD:
 
-                m_pRakNetData->ReceiveCastCard(packet);
+                m_pRakNetData->ReceiveCastCard(packet, peer);
                 break;
 
             case CRakNet_Data::GameMessages::ID_DUEL_MESSAGE_CAST_DEFCARD:

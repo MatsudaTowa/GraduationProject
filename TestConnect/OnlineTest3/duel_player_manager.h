@@ -37,6 +37,18 @@ namespace My
 		//リストの設定と取得
 		void AddList(My::CDuel_Player* player) { m_DuelPlayerList.push_back(player); }	//追加
 		std::list<My::CDuel_Player*> GetList() { return m_DuelPlayerList; }				//取得
+
+		//引数のプレイヤーを取得
+		My::CDuel_Player* GetDuelPlayer(int id)
+		{
+			//一致するプレイヤーを探して返す
+			for (CDuel_Player* pPlayer : m_DuelPlayerList)
+			{
+				if (pPlayer->GetIndex() == id) return pPlayer;
+			}
+
+			return nullptr;
+		}
 		
 	private:
 

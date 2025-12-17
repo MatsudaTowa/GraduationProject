@@ -60,15 +60,20 @@ void My::CCardAssist::LoadUniqueInfo(CCard_Client::Param param)
 //===========================================================================================================
 //キャストをしたかの確認
 //===========================================================================================================
-bool My::CCardAssist::IsCast(CDuelCharacter* duel)
+bool My::CCardAssist::IsCast(CDuelCharacter*, CInputMouse::AREA)
 {
-	//キャラクターリスト
-	for (auto& iter : CActiveSceneManager::GetInstance()->GetCharacterList())
-	{
-		//対象のエリアを持つプレイヤーを探す
-		if (GetTarget() != iter->GetArea()) continue;
+	return true;
 
-		return true;
+	for (auto Target : GetTargetPlayerList())
+	{
+		//キャラクターリスト
+		for (auto& iter : CActiveSceneManager::GetInstance()->GetCharacterList())
+		{
+			//対象のエリアを持つプレイヤーを探す
+			if (Target->GetArea() != iter->GetArea()) continue;
+
+			return true;
+		}
 	}
 
 	return false;

@@ -146,7 +146,7 @@ namespace My
 		/**
 		 * @brief キャストしたかの確認
 		 */
-		virtual bool IsCast(CDuelCharacter* duel) = 0;
+		virtual bool IsCast(CDuelCharacter* duel, CInputMouse::AREA area) = 0;
 
 		/**
 		 * @brief キャスト処理
@@ -249,8 +249,8 @@ namespace My
 		/**
 		* @brief ニュートラル位置
 		*/
-		inline void SetTarget(CInputMouse::AREA area) { m_target = area; }
-		inline CInputMouse::AREA GetTarget() { return m_target; }
+		//inline void SetTarget(CInputMouse::AREA area) { m_target = area; }
+		//inline CInputMouse::AREA GetTarget() { return m_target; }
 
 		inline void SetCardHolder(CActiveScenePlayer* player) { m_pCardHolder = player; }
 		inline CActiveScenePlayer* GetCardHolder() { return m_pCardHolder; }
@@ -260,6 +260,7 @@ namespace My
 
 		void RegistTargetList(CActiveSceneCharacter* target_list);	//登録
 		void RemoveTargetList(CActiveSceneCharacter* target_list);	//削除
+		void RemoveAllTargetList() { m_pTargetPlayerList.clear(); }	//全て削除
 
 		//リストの取得
 		inline std::list<CActiveSceneCharacter*> GetTargetPlayerList() { return m_pTargetPlayerList; }	
@@ -310,6 +311,14 @@ namespace My
 		void SetUserId(int id) { m_nUserId = id; }
 		int GetUserId() { return m_nUserId; }
 
+		//同種類の中のカード番号
+		void SetSameTypeId(int id) { m_nSameTypeId = id; }
+		int GetSameTypeId() { return m_nSameTypeId; }
+
+		//キャスト開始時間
+		void SetStartCastTime(uint64_t time) { m_fCastStartTime = time * 0.001f; }
+		float GetStartCastTime() { return m_fCastStartTime; }
+
 	private:
 
 		//次の列挙から過去のゾーンのポインタを返す
@@ -331,7 +340,7 @@ namespace My
 		* どのプレイヤーに対して攻撃するのか
 		* TODO : AttackCardのみに記載
 		*/
-		CInputMouse::AREA m_target;
+		//CInputMouse::AREA m_target;
 
 		/**
 		 * @brief カードを選択しているか否か(trueだったら選択している)
@@ -392,6 +401,16 @@ namespace My
 		* 使用者の番号
 		*/
 		int m_nUserId;
+
+		/**
+		* 同じ種類の何番目のカードか
+		*/
+		int m_nSameTypeId;
+
+		/**
+		* キャスト時間
+		*/
+		float m_fCastStartTime;
 	};
 };
 

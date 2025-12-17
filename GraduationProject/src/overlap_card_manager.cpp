@@ -80,16 +80,20 @@ void My::COverlapCardManager::ResetStayTime(CDuelCharacter* duel, CCard* card)
 	std::list<COverlapCard*>overlaplist = m_pOverlapCardList;
 
 	// リストを回す
-	for (auto& itr : overlaplist)
+	for (auto Target : card->GetTargetPlayerList())
 	{
-		// ターゲットが同じじゃなければ
-		if (itr->GetTarget() != card->GetTarget())
-			continue;
-
-		// 重ねたカードリストを回す
-		for (auto& i : itr->GetOverlapCards())
+		// リストを回す
+		for (auto& itr : overlaplist)
 		{
-			i->GetState()->Init(i, duel);
+			// ターゲットが同じじゃなければ
+			if (itr->GetTarget() != Target->GetArea())
+				continue;
+
+			// 重ねたカードリストを回す
+			for (auto& i : itr->GetOverlapCards())
+			{
+				i->GetState()->Init(i, duel);
+			}
 		}
 	}
 }

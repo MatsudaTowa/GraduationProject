@@ -35,7 +35,7 @@ public:
 	void SendStatus(RakNet::Packet* /*packet*/, RakNet::RakPeerInterface* /*peer*/) override {}		//ステータスを送る
 	void AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;					//CPUの追加
 	void ReceiveStatus(RakNet::Packet* /*packet*/, RakNet::RakPeerInterface* /*peer*/) override {}	//ステータスを受信
-	void ReceiveCastCard(RakNet::Packet* /*packet*/) override {}									//キャストカードの受信
+	void ReceiveCastCard(RakNet::Packet* /*packet*/, RakNet::RakPeerInterface* /*peer*/) override {}//キャストカードの受信
 	void ReceiveCastDefCard(RakNet::Packet* /*packet*/) override {}									//キャスト守備カードの受信
 	void UpdateScene(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;				//シーンの更新
 	bool ReceiveDeck(RakNet::Packet* packet) override;												//デッキの受信

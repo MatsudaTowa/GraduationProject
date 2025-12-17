@@ -1,22 +1,19 @@
 //================================
 //
-// TCP接続のサーバー用のヘッダー[tcp_client.h]
+// デュエルマネージャー用のヘッダー[duel_manager.h]
 // Author:Yuuto Shimadu
 //
 //================================
 
 //二重マクロ防止
-#ifndef _RAKNET_SERVER_H_
-#define _RAKNET_SERVER_H_
+#ifndef _DUEL_MANAGER_H_
+#define _DUEL_MANAGER_H_
 
 //ヘッダーのインクルード
 #include "main.h"
-#include "RakPeerInterface.h"
-#include "MessageIdentifiers.h"
-#include "BitStream.h"
-#include "raknet_data.h"
+#include "duel_timer.h"
 
-//RakNetサーバーのクラス
+//デュエルマネージャークラス
 class CDuel_Manager
 {
 public:
@@ -40,13 +37,18 @@ public:
 		return &instance;
 	}
 
+	//設定と取得
+	DuelRuleParam& GetDuelRuleParam() { return m_DuelRuleParam; }	//対戦時のルールを取得
+	CDuel_Timer& GetDuelTimer() { return m_DuelTimer; }				//対戦時のタイマー
+
 private:
 
 	//関数
-	CDuel_Manager() : m_DuelRuleParam() {}		//コンストラクタ
+	CDuel_Manager() : m_DuelRuleParam(), m_DuelTimer(){}		//コンストラクタ
 
 	//変数
 	DuelRuleParam m_DuelRuleParam;				//対戦のルールパラメータ
+	CDuel_Timer m_DuelTimer;					//対戦時に扱うタイマー
 };
 
 #endif

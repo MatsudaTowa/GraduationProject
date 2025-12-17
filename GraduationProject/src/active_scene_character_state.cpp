@@ -92,6 +92,36 @@ void My::CDuelCharacter::Duel(CActiveSceneCharacter* /*character*/)
 My::CDuelCharacter::CDuelCharacter(CActiveSceneCharacter* character) : 
 	m_pZoneManager(nullptr)	//ゾーンマネージャー
 {
+	//カウント用のマップ
+	std::map<int, int> SameTypeCounter;
+
+	//同じ種類のカードの何番目かを算出
+	auto CalcSameTypeCount = [&SameTypeCounter](int cardid)
+	{
+		//返す用
+		int nCardId = -1;
+
+		//要素を見つける
+		auto nCount = SameTypeCounter.find(cardid);
+
+		//あるなら
+		if (nCount != SameTypeCounter.end())
+		{
+			//カウントアップ
+			nCount->second++;
+			SameTypeCounter[cardid] = nCount->second;
+			nCardId = nCount->second;
+		}
+		else
+		{
+			//0の新しい要素を追加
+			SameTypeCounter[cardid] = 0;
+			nCardId = 0;
+		}
+
+		return nCardId;
+	};
+
 	//ゾーンマネージャーの作成
 	m_pZoneManager = new CZoneManager;
 	m_pZoneManager->Init();
@@ -105,10 +135,11 @@ My::CDuelCharacter::CDuelCharacter(CActiveSceneCharacter* character) :
 		DeckVector.push_back(iter);
 	}
 
-	std::random_device rd;
-	std::mt19937 g(rd());
+	//シャッフル処理
+	//std::random_device rd;
+	//std::mt19937 g(rd());
 
-	std::shuffle(DeckVector.begin(), DeckVector.end(), g);
+	//std::shuffle(DeckVector.begin(), DeckVector.end(), g);
 
 	//カードのIDから生成
 	for (auto iter : DeckVector)
@@ -117,6 +148,7 @@ My::CDuelCharacter::CDuelCharacter(CActiveSceneCharacter* character) :
 		pCard->SetUserId(character->GetPlayerIdx());
 		pCard->SetCurrentZone(CCard::DECK);
 		pCard->Init();
+		pCard->SetSameTypeId(CalcSameTypeCount(pCard->GetBaseStatus().nCardID));
 		m_pZoneManager->GetDeck()->AddList(pCard);
 	}
 }

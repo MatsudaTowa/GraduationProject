@@ -224,7 +224,8 @@ void My::CActiveSceneManager::CardCast()
 			{
 				//使用者を見つけてエリアを代入
 				if (nTarget != Character->GetPlayerIdx()) continue;
-				pCard->SetTarget(Character->GetArea());
+				//pCard->SetTarget(Character->GetArea());
+				pCard->RegistTargetList(Character);
 				break;
 			}
 		}
@@ -295,7 +296,8 @@ void My::CActiveSceneManager::DefCardCast()
 			{
 				//対象者を見つけてエリアを代入
 				if (nTarget.nAttackCardUserId != Character->GetPlayerIdx()) continue;
-				pCard->SetTarget(Character->GetArea());
+				//pCard->SetTarget(Character->GetArea());
+				pCard->RegistTargetList(Character);
 
 				//相手の対戦状態にキャストし、キャストプレビューゾーンを確認
 				CDuelCharacter* EnemyDuelState = nullptr;
@@ -336,19 +338,42 @@ void My::CActiveSceneManager::DefCardCast()
 			}
 		}
 
-		//対象が自分ならキャスト状態にする
-		if (pCard->GetTarget() == pCard->GetUserArea())
+		//周回
+		for (auto Target : pCard->GetTargetPlayerList())
 		{
-			pCard->ChangeState(CCardState::CARD_WAIT, DuelState);
+			//対象が自分ならキャスト状態にする
+			if (Target->GetArea() == pCard->GetUserArea())
+			{
+				pCard->ChangeState(CCardState::CARD_WAIT, DuelState);
+				break;
+			}
+			else
+			{
+				pCard->ChangeState(CCardState::CARD_STAY, DuelState);
+				break;
+			}
 		}
-		else
-		{
-			pCard->ChangeState(CCardState::CARD_STAY, DuelState);
-		}
-
 	}
 
 	//カード情報のクリア
 	m_CastCardVector.clear();
 	m_CastDiffenceCardVector.clear();
+}
+
+//=============================================
+//守備カードのキャスト処理
+//=============================================
+My::CActiveSceneCharacter* My::CActiveSceneManager::GetCharacter(int id)
+{
+	//引数の番号のプレイヤーを探す
+	for (CActiveSceneCharacter* pCharacter : GetCharacterList())
+	{
+		if (pCharacter->GetPlayerIdx() == id)
+		{
+			return pCharacter;
+		}
+	}
+
+	//見つからなかった場合nulを返す
+	return nullptr;
 }

@@ -12,6 +12,7 @@
 //ヘッダーのインクルード
 #include "client.h"
 #include "active_scene_character.h"
+#include "card.h" //←バグったらここ
 
 //Clientのクラス
 class CClient_Duel : public CClient
@@ -40,7 +41,7 @@ public:
 	void SendStartSign(RakNet::RakPeerInterface* /*peer*/) override {}				//開始の合図を送信
 	void AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;	//コンピューターの追加
 	void SendSuccessDuelLoad(RakNet::RakPeerInterface* peer) override;				//決闘読み込みの成功を送信
-	void StartBattle() override;													//対戦の開始
+	void StartBattle(RakNet::Packet* packet) override;								//対戦の開始
 	void SendStatus(RakNet::RakPeerInterface* peer) override;						//ステータスを送る
 	void ReceiveStatus(RakNet::Packet* packet) override;							//ステータスの受信
 	void SendAddEnemy(RakNet::RakPeerInterface* /*peer*/) override {}				//敵の追加を送信
@@ -57,6 +58,7 @@ public:
 	//パラメータ
 	void SetParam(std::list<PlayerParam> list) override;	//設定
 	std::list<PlayerParam> GetParam() override;				//取得
+	My::CCard* GetUsedCastCard(int userid, int cardid, int sametypeid);
 
 private:
 

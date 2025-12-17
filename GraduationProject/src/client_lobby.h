@@ -39,7 +39,7 @@ public:
 	void SendStartSign(RakNet::RakPeerInterface* peer) override;						//開始の合図を送信
 	void AddCPU(RakNet::Packet* /*packet*/, RakNet::RakPeerInterface* /*peer*/) {}		//コンピューターの追加
 	void SendSuccessDuelLoad(RakNet::RakPeerInterface* /*peer*/) override {}			//決闘読み込みの成功を送信
-	void StartBattle() override {}														//対戦の開始
+	void StartBattle(RakNet::Packet* /*packet*/) override {}							//対戦の開始
 	void SendStatus(RakNet::RakPeerInterface* /*peer*/) override {}						//ステータスを送る
 	void ReceiveStatus(RakNet::Packet* /*packet*/) override {}							//ステータスの受信
 	void SendAddEnemy(RakNet::RakPeerInterface* peer) override;							//敵の追加を送信

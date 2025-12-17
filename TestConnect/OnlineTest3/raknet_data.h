@@ -70,7 +70,7 @@ public:
 	virtual void SendStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) = 0;				//ステータスを送る
 	virtual void AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) = 0;					//CPUの追加
 	virtual void ReceiveStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) = 0;				//ステータスを受信
-	virtual void ReceiveCastCard(RakNet::Packet* packet) = 0;											//キャストカードの受信
+	virtual void ReceiveCastCard(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) = 0;			//キャストカードの受信
 	virtual void ReceiveCastDefCard(RakNet::Packet* packet) = 0;										//キャスト守備カードの受信
 	virtual void UpdateScene(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) = 0;				//シーンの更新
 	void SendRequestDeck(RakNet::RakPeerInterface* peer);												//デッキの要求

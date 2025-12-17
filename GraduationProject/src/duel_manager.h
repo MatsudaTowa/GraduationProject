@@ -8,49 +8,47 @@
 #ifndef _DUEL_MANAGER_H_ //このマクロ定義がされていなかったら
 #define _DUEL_MANAGER_H_ //２重インクルード防止のマクロ定義
 
+//ヘッダーのインクルード
+#include "duel_timer.h"
+
 namespace My
 {
-	class CActiveScenePlayer;
-	class CCard;
-	//デュエルマネージャーのクラス
-	class CDuelManager
+	//デュエルマネージャークラス
+	class CDuel_Manager
 	{
 	public:
 
-		//メンバ関数
-		CDuelManager();			//コンストラクタ
-		~CDuelManager();			//デストラクタ
-		HRESULT Init();				//初期化
-
-		/**
-		 * @brief 終了
-		 */
-		void Uninit();
-
-		/**
-		 * @brief 自分自身のインスタンスを生成し取得
-		 */
-		static CDuelManager* GetInstance()
+		//対戦時に決められるルールの構造体
+		struct DuelRuleParam
 		{
-			//静的インスタンス
-			static CDuelManager instance;
+			int nDuelTime;			//対戦時間
+			int nNeedEnergyUpTime;	//エナジーの増加に必要な時間
+			int nCardStayTime;		//カードステイ時間
+			int nStartLife;			//開始時の体力
+		};
+
+		//関数
+		~CDuel_Manager() {}							//デストラクタ
+
+		//シングルトン
+		static CDuel_Manager* GetInstance()
+		{
+			static CDuel_Manager instance; //静的インスタンス
 			return &instance;
 		}
 
-		/**
-		 * @brief カード戦闘処理
-		 * @param [in]attack_card
-		 * @param [in]defence_card
-		 */
-		void ProcessCardBattle(std::list<CCard*> attack_card_list , std::list<CCard*> defence_card_list);
+		//設定と取得
+		DuelRuleParam& GetDuelRuleParam() { return m_DuelRuleParam; }	//対戦時のルールを取得
+		CDuel_Timer& GetDuelTimer() { return m_DuelTimer; }				//対戦時のタイマー
 
-		void RegistUseCardList(CCard* card);	//登録
-		void RemoveUseCardList(CCard* card);	//削除
-
-		//リストの取得
-		inline std::list<CCard*> GetUseCardList() { return m_UseCardList; }
 	private:
-		std::list<CCard*> m_UseCardList; //このゲームで使うカードのリスト
+
+		//関数
+		CDuel_Manager() : m_DuelRuleParam(), m_DuelTimer() {}		//コンストラクタ
+
+		//変数
+		DuelRuleParam m_DuelRuleParam;				//対戦のルールパラメータ
+		CDuel_Timer m_DuelTimer;					//対戦時に扱うタイマー
 	};
 }
 

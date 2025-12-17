@@ -169,6 +169,13 @@ namespace My
 		std::list<CActiveSceneCharacter*> GetCharacterList();
 
 		/**
+		 * @brief 引数の番号を返す
+		 * @param [id]取得したいプレイヤーの番号
+		 * @return キャラクターのポインタ
+		 */
+		CActiveSceneCharacter* GetCharacter(int id);
+
+		/**
 		* @brief カードのキャスト処理
 		*/
 		void CardCast();	//カードのキャスト

@@ -169,14 +169,14 @@ namespace My
 		void CountDown();
 
 		/** @brief 待機カウント */
-		unsigned int m_Staycount;
+		float m_fStaycount;
 
 		/** @brief 設定された待機時間 */
 		const unsigned int STAY_TIME = ONE_SECOND * 3;
 
 		//変数
 		CNumber_2D* m_pNumber;	//数字表示用オブジェクト
-		int m_nCount;			//カウント値
+		float m_fCount;			//カウント値
 		int m_nDrawNum;			//描画する数字
 	};
 

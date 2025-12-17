@@ -8,6 +8,7 @@
 //ヘッダーのインクルード
 #include "duel_player.h"
 #include "duel_player_manager.h"
+#include "card.h"
 
 //=====================================
 //コンストラクタ
@@ -78,6 +79,17 @@ bool My::CDuel_Player::DrawCard()
 	//ステータスに反映
 	GetStatus().deckSize = m_ZoneManager->GetDeck()->GetList().size();	//デッキ枚数
 	GetStatus().hand++;													//手札枚数
+
+	 // コンソールの出力コードページを UTF-8 に変更
+	UINT CP = GetConsoleOutputCP();
 	
+	//const char* log = pCard->GetBaseStatus().Name.c_str();
+
+	//引いたカードの確認用
+	std::cout << "引いたカード : ";
+	SetConsoleOutputCP(CP_UTF8);
+	std::cout << pCard->GetBaseStatus().Name << "\n";
+	SetConsoleOutputCP(CP);
+
 	return true;
 }

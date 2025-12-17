@@ -9,6 +9,8 @@
 #include "active_scene_manager.h"
 #include "target_arrow.h"
 #include "zone_manager.h"
+#include "duel_manager.h"
+#include "raknet.h"
 
 //===========================================================================================================
 // 
@@ -188,19 +190,55 @@ void My::CCardStateCast::Init(CCard* cpy, CDuelCharacter* duel)
 		COverlapCard* pOverlapCard = nullptr;
 
 		// 登録
-		pOverlapCard = pZoneManager->GetCastPreviewZone()->GetOverlapManager()->Create(duel,cpy->GetTarget());
-
-		// 重ねたカードが存在していたら
-		if (pOverlapCard)
+		for (auto& Target : cpy->GetTargetPlayerList())
 		{
-			pOverlapCard->Regist(cpy);
-		}
+			pOverlapCard = pZoneManager->GetCastPreviewZone()->GetOverlapManager()->Create(duel, Target->GetArea());
 
-		// ターゲットエリアが違うならスルー
-		if (iter->GetArea() != cpy->GetTarget()) { continue; }
+			// 重ねたカードが存在していたら
+			if (pOverlapCard)
+			{
+				pOverlapCard->Regist(cpy);
+			}
+
+			// ターゲットエリアが違うならスルー
+			if (iter->GetArea() != Target->GetArea()) { continue; }
+		}
 
 		break;
 	}
+
+	//for (auto& iter : cpy->GetTargetPlayerList())
+	//{
+	//	//if (cpy->GetUserArea() != iter->GetArea()) continue;
+
+	//	// ステータスを取得
+	//	CActiveSceneCharacter::Status status = iter->GetStatus();
+
+	//	// コスト分エナジーを減らす
+	//	status.energy -= cpy->GetBaseStatus().nCost;
+
+	//	// エナジーを設定
+	//	iter->SetStatus(status);
+
+	//	// ゾーンマネージャーの取得
+	//	CZoneManager* pZoneManager = dynamic_cast<CDuelCharacter*>(iter->GetState())->GetZoneManager();
+	//	// オーバーラップカードの格納変数
+	//	COverlapCard* pOverlapCard = nullptr;
+
+	//	// 登録
+	//	pOverlapCard = pZoneManager->GetCastPreviewZone()->GetOverlapManager()->Create(duel, iter->GetArea());
+
+	//	// 重ねたカードが存在していたら
+	//	if (pOverlapCard)
+	//	{
+	//		pOverlapCard->Regist(cpy);
+	//	}
+
+	//	// ターゲットエリアが違うならスルー
+	//	//if (iter->GetArea() != cpy->GetTarget()) { continue; }
+
+	//	break;
+	//}
 
 	//カードのキャスト処理
 	cpy->Cast(duel);
@@ -238,11 +276,21 @@ void My::CCardStateCast::ChangeToState(CCard* cpy, CDuelCharacter* duel)
 		return;
 	}
 
+	////ターゲットが自分なら守備待機状態へ
+	//if (cpy->GetTarget() == cpy->GetUserArea())
+	//{
+	//	cpy->ChangeState(CCardState::CARD_STATE::CARD_WAIT, duel);
+	//	return;
+	//}
+
 	//ターゲットが自分なら守備待機状態へ
-	if (cpy->GetTarget() == cpy->GetUserArea())
+	for (auto& iter : cpy->GetTargetPlayerList())
 	{
-		cpy->ChangeState(CCardState::CARD_STATE::CARD_WAIT, duel);
-		return;
+		if (iter->GetArea() == My::CActiveSceneManager::GetInstance()->GetPlayer()->GetArea())
+		{
+			cpy->ChangeState(CCardState::CARD_STATE::CARD_WAIT, duel);
+			return;
+		}
 	}
 
 	//ターゲットが敵ならステイ状態へ
@@ -298,11 +346,21 @@ void My::CCardStateCastOnline::ChangeToState(CCard* cpy, CDuelCharacter* duel)
 		return;
 	}
 
+	////ターゲットが自分なら守備待機状態へ
+	//if (cpy->GetTarget() == cpy->GetUserArea())
+	//{
+	//	cpy->ChangeState(CCardState::CARD_STATE::CARD_WAIT, duel);
+	//	return;
+	//}
+
 	//ターゲットが自分なら守備待機状態へ
-	if (cpy->GetTarget() == cpy->GetUserArea())
+	for (auto& iter : cpy->GetTargetPlayerList())
 	{
-		cpy->ChangeState(CCardState::CARD_STATE::CARD_WAIT, duel);
-		return;
+		if (iter->GetArea() == My::CActiveSceneManager::GetInstance()->GetPlayer()->GetArea())
+		{
+			cpy->ChangeState(CCardState::CARD_STATE::CARD_WAIT, duel);
+			return;
+		}
 	}
 
 	//ターゲットが敵ならステイ状態へ
@@ -327,9 +385,9 @@ namespace
 //=======================================================================================
 My::CCardStateStay::CCardStateStay() : 
 	m_pNumber(nullptr),			//数字表示用
-	m_nCount(),					//カウント
+	m_fCount(0.0f),				//カウント
 	m_nDrawNum(FIRST_COUNT),	//表示する番号
-	m_Staycount(0)
+	m_fStaycount(0.0f)			//ステイ時間
 {
 	
 }
@@ -340,7 +398,7 @@ My::CCardStateStay::CCardStateStay() :
 void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 {
 	// カウントを初期化
-	m_Staycount = 0;
+	m_fStaycount = static_cast<float>(My::CDuel_Manager::GetInstance()->GetDuelTimer().GetElapsedTime() * 0.001f) - cpy->GetStartCastTime();
 
 	//位置の指定
 	SetCardPos(cpy);
@@ -362,7 +420,10 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 	m_pNumber->SetNumber(m_nDrawNum * 0.1f, (m_nDrawNum + 1) * 0.1f, COLOR_WHITE);
 
 	// ターゲットアローをマネージャーに登録
-	CActiveSceneManager::GetInstance()->GetTargetArrowManager()->Regist(CTargetArrow::Create(cpy->GetUserArea(), cpy->GetTarget()));
+	for (auto& iter : cpy->GetTargetPlayerList())
+	{
+		CActiveSceneManager::GetInstance()->GetTargetArrowManager()->Regist(CTargetArrow::Create(cpy->GetUserArea(), iter->GetArea()));
+	}
 }
 
 //=======================================================================================
@@ -411,7 +472,7 @@ void My::CCardStateStay::Update(CCard* cpy, CDuelCharacter* duel)
 	//ディフェンスカードはカウントダウンを始めない
 	if (cpy->GetBaseStatus().maintype == CCard::TYPE_DEFFENCE) return;
 
-	if (m_Staycount >= STAY_TIME)
+	if (m_fStaycount >= 3.0f)
 	{// カウントが設定された時間を超えたら
 
 		//オブジェクトの破棄
@@ -428,7 +489,14 @@ void My::CCardStateStay::Update(CCard* cpy, CDuelCharacter* duel)
 	}
 
 	// カウントを進める
-	m_Staycount++;
+	if (CRakNet::GetInstance()->GetOnline())
+	{
+		m_fStaycount += My::CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime() * 0.001f;
+	}
+	else
+	{
+		m_fStaycount += 0.016f;
+	}
 
 	//カウントダウン処理
 	CountDown();
@@ -439,13 +507,21 @@ void My::CCardStateStay::Update(CCard* cpy, CDuelCharacter* duel)
 //=======================================================================================
 void My::CCardStateStay::CountDown()
 {
-	++m_nCount;
+	//カウントを経過時間分増加
+	if (CRakNet::GetInstance()->GetOnline())
+	{
+		m_fCount += My::CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime() * 0.001f;
+	}
+	else
+	{
+		m_fCount += 0.016f;
+	}
 
 	//数字の表記
-	if (m_nCount > 60)
+	if (m_fCount > 1.0f)
 	{
 		//数値のリセット
-		m_nCount = 0;
+		m_fCount -= 1.0f;
 
 		//描画する数値を減らす
 		--m_nDrawNum;
@@ -496,28 +572,60 @@ void My::CCardStateTrigger::Init(CCard* cpy, CDuelCharacter* duel)
 	//リストの取得
 	std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
 
-	//キャラクターの周回
-	for (auto& iter : List)
+	////キャラクターの周回
+	//for (auto& iter : List)
+	//{
+	//	//カードの使用者と異なるなら次へ
+	//	if (cpy->GetUserArea() != iter->GetArea()) continue;
+
+	//	//トリガーしたか
+	//	if (CActiveSceneManager::GetInstance()->GetAreaManager()->CardTrigger(cpy->GetTarget()))
+	//	{
+	//		//トリガー処理
+	//		//cpy->GetCardStrategy()->Strategy(duel, cpy);
+
+	//		//TODO:一旦計算後のストラテジーベクターだけ処理
+	//		std::vector<CCardStrategy_Base*> strategy_vector = cpy->GetPostCalculateVector();
+
+	//		for (auto& itr : strategy_vector)
+	//		{
+	//			if (itr == nullptr) { continue; }
+	//			itr->Strategy(duel, cpy);
+	//		}
+	//	}
+
+	//	break;
+	//}
+
+	//周回
+	//for (auto& iter : cpy->GetTargetPlayerList())
+	//{
+	//	//トリガーしたか
+	//	if (CActiveSceneManager::GetInstance()->GetAreaManager()->CardTrigger(iter->GetArea()))
+	//	{
+	//		//トリガー処理
+	//		//cpy->GetCardStrategy()->Strategy(duel, cpy);
+
+	//		//TODO:一旦計算後のストラテジーベクターだけ処理
+	//		std::vector<CCardStrategy_Base*> strategy_vector = cpy->GetPostCalculateVector();
+
+	//		for (auto& itr : strategy_vector)
+	//		{
+	//			if (itr == nullptr) { continue; }
+	//			itr->Strategy(duel, cpy);
+	//		}
+	//	}
+
+	//	//break;
+	//}
+
+	//TODO:一旦計算後のストラテジーベクターだけ処理
+	std::vector<CCardStrategy_Base*> strategy_vector = cpy->GetPostCalculateVector();
+
+	for (auto& itr : strategy_vector)
 	{
-		if (cpy->GetUserArea() != iter->GetArea()) continue;
-
-		//トリガーしたか
-		if (CActiveSceneManager::GetInstance()->GetAreaManager()->CardTrigger(cpy->GetTarget()))
-		{
-			//トリガー処理
-			//cpy->GetCardStrategy()->Strategy(duel, cpy);
-
-			//TODO:一旦計算後のストラテジーベクターだけ処理
-			std::vector<CCardStrategy_Base*> strategy_vector = cpy->GetPostCalculateVector();
-
-			for (auto& itr : strategy_vector)
-			{
-				if (itr == nullptr) { continue; }
-				itr->Strategy(duel, cpy);
-			}
-		}
-
-		break;
+		if (itr == nullptr) { continue; }
+		itr->Strategy(duel, cpy);
 	}
 
 	CActiveSceneManager::GetInstance()->GetTargetArrowManager()->Remove();

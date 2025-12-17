@@ -1,6 +1,6 @@
 //================================
 //
-// TCP接続のサーバー用のcpp[raknet_server.cpp]
+// カードクライアント用のcpp[card_client.cpp]
 // Author:Yuuto Shimadu
 //
 //================================
@@ -78,6 +78,7 @@ void CCard_Client::Communication()
             break;
         case ID_CONNECTION_REQUEST_ACCEPTED:
             std::cout << "接続リクエストが承認されました\n";
+            RequestAllCard();
             break;
         case ID_NEW_INCOMING_CONNECTION:
             std::cout << "新しいクライアントが接続しました\n";
@@ -99,7 +100,6 @@ void CCard_Client::Communication()
 
             // サーバーに接続
             m_pPeer->Connect(serverAddress.ToString(false), PORT, 0, 0);
-            RequestAllCard();
             // std::cout << "Connecting to " << serverAddress.ToString() << "...\n";
             break;
         }

@@ -84,11 +84,11 @@ void My::CCardDeffence::LoadUniqueInfo(CCard_Client::Param param)
 //===========================================================================================================
 //キャストをしたかの確認
 //===========================================================================================================
-bool My::CCardDeffence::IsCast(CDuelCharacter* duel)
+bool My::CCardDeffence::IsCast(CDuelCharacter* duel, CInputMouse::AREA area)
 {
 	//プレイヤーが対象かの確認
 	CActiveScenePlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();
-	if (player->GetArea() == GetTarget())
+	if (player->GetArea() == area)
 	{
 		//自身の対象に追加
 		DiffenceTarget Target;
@@ -272,20 +272,30 @@ void My::CCardDeffence::Stay()
 //===========================================================================================================
 void My::CCardDeffence::Trigger()
 {
-	//ステイ後に起動
-	std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
+	////ステイ後に起動
+	//std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
 
-	//リスト周回
-	for (auto& itr : List)
+	////リスト周回
+	//for (auto& itr : List)
+	//{
+	//	if (itr == nullptr) { continue; }
+
+	//	if (itr->GetArea() != GetTarget()) { continue; }
+
+	//	//ダメージがあるなら与える
+	//	if (m_nCounterValue > 0)
+	//	{
+	//		itr->ReceiveDamage(m_nCounterValue);
+	//	}
+	//}
+
+	//ターゲットの周回
+	for (auto& iter : GetTargetPlayerList())
 	{
-		if (itr == nullptr) { continue; }
-
-		if (itr->GetArea() != GetTarget()) { continue; }
-
 		//ダメージがあるなら与える
 		if (m_nCounterValue > 0)
 		{
-			itr->ReceiveDamage(m_nCounterValue);
+			iter->ReceiveDamage(m_nCounterValue);
 		}
 	}
 }
@@ -346,10 +356,11 @@ bool My::CCardDeffence::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharac
 	else if (pMouse->GetRelease(0))
 	{
 		//対象のエリア
-		SetTarget(pMouse->GetArea());
+		CInputMouse::AREA Area;
+		Area = pMouse->GetArea();
 
 		//キャンセルエリアなら解除
-		if (GetTarget() == CInputMouse::AREA::CENTER)
+		if (Area == CInputMouse::AREA::CENTER)
 		{
 			//通常状態にする
 			ChangeState(CCardState::CARD_NEUTRAL, duel);
@@ -369,7 +380,7 @@ bool My::CCardDeffence::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharac
 		//使用者のエリアの取得
 		SetUserArea(player->GetArea());
 
-		if (IsCast(duel))
+		if (IsCast(duel, Area))
 		{
 			//ステイフラグの確認
 			if (m_isStay)
@@ -394,7 +405,7 @@ bool My::CCardDeffence::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharac
 				for (auto& itr : list)
 				{
 					if (itr == nullptr) { continue; }
-					if (itr->GetArea() != GetTarget()) { continue; }
+					if (itr->GetArea() != Area) { continue; }
 					if (m_TargetInfo.empty()) { continue; }
 
 					CRakNet::GetInstance()->SendCastDefCard(GetBaseStatus().nCardID, CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx(), m_TargetInfo);

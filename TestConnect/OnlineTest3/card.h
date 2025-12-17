@@ -11,9 +11,6 @@
 
 //ヘッダーのインクルード
 #include "main.h"
-//#include "card_client.h"
-//#include "duel_player.h"
-//#include "card_strategy.h"
 #include "card_state.h"
 #include "card_manager.h"
 
@@ -146,8 +143,9 @@ namespace My
 		CCard_Client::AssistParam GetAssistParam(CCard_Client::Param param);	//アシストパラメータ取得
 
 		//対象の番号
-		void AddTargetIdVector(int id) { m_TargetIdVector.push_back(id); }	//追加
-		std::vector<int> GetTargetIdVector() { return m_TargetIdVector; }	//取得
+		void AddTargetIdVector(int id) { m_TargetIdVector.push_back(id); }				//追加
+		void SetTargetIdVector(std::vector<int> vector) { m_TargetIdVector = vector; }	//設定
+		std::vector<int> GetTargetIdVector() { return m_TargetIdVector; }				//取得
 
 		//使用者の番号
 		void SetUserId(int id) { m_nUserId = id; }	//設定
@@ -155,6 +153,10 @@ namespace My
 
 		//引数のゾーンの列挙に対応したポインタを返す
 		CZone* CastToZone(ZONE zone, CDuel_Player* duel);
+
+		//同種類の中のカード番号
+		void SetSameTypeId(int id) { m_nSameTypeId = id; }
+		int GetSameTypeId() { return m_nSameTypeId; }
 
 	private:
 
@@ -190,6 +192,11 @@ namespace My
 		 * @brief カードの状態列挙
 		 */
 		My::CCardState::CARD_STATE m_StateNum;
+
+		/**
+		* 同じ種類の何番目のカードか
+		*/
+		int m_nSameTypeId;
 	};
 }
 

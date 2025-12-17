@@ -59,7 +59,7 @@ namespace My
 		/**
 		 * @brief キャストしたかの確認
 		 */
-		bool IsCast(CDuelCharacter* duel) override;
+		bool IsCast(CDuelCharacter* duel, CInputMouse::AREA area) override;
 
 		/**
 		 * @brief キャスト処理

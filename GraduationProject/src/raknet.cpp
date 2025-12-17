@@ -174,7 +174,7 @@ void CRakNet::Communication(RakNet::RakPeerInterface* peer)
             break;
 
         case ID_DUEL_MESSAGE_START:
-            m_Client->StartBattle();
+            m_Client->StartBattle(packet);
             break;
 
        /* case ID_DUEL_MESSAGE_SEND_STATUS:
@@ -319,6 +319,39 @@ void CRakNet::RequestDrawCard()
     bsOut.Write((RakNet::MessageID)CRakNet::GameMessages::ID_DUEL_MESSAGE_DRAW);    //メッセージ
     bsOut.Write(nUserId);                                                           //使用者番号
    
+    //アドレスを取得
+    RakNet::SystemAddress server_address = m_pPeer->GetSystemAddressFromIndex(0);
+
+    //サーバーの確認
+    if (server_address != RakNet::UNASSIGNED_SYSTEM_ADDRESS)
+    {
+        // 全クライアントにブロードキャスト
+        m_pPeer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, m_pPeer->GetSystemAddressFromIndex(0), false);
+    }
+}
+
+//=====================================
+//カードキャストのリクエスト処理
+//=====================================
+void CRakNet::RequestCastCard(int cardid, int sameid, std::vector<int> targetplayer)
+{
+    //データの作成
+    RakNet::BitStream bsOut;    //送信用変数
+    int nUserId = My::CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx();  //使用者番号
+
+   //書き出し
+    bsOut.Write((RakNet::MessageID)CRakNet::GameMessages::ID_DUEL_MESSAGE_CAST_CARD);   //メッセージ
+    bsOut.Write(nUserId);                                                               //使用者番号
+    bsOut.Write(cardid);                                                                //カード番号
+    bsOut.Write(sameid);                                                                //同種の何番目のカードか
+    bsOut.Write(targetplayer.size());                                                   //対象者の数
+
+    //対象者の番号を書き出し
+    for (int iter : targetplayer)
+    {
+        bsOut.Write(iter);
+    }
+
     //アドレスを取得
     RakNet::SystemAddress server_address = m_pPeer->GetSystemAddressFromIndex(0);
 

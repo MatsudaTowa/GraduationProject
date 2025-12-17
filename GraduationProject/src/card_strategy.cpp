@@ -101,22 +101,33 @@ My::CHeal::~CHeal()
 void My::CHeal::Strategy(CDuelCharacter* /*duel*/, CCard* card)
 {
 	//登録されているキャラクターを取得
-	std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
+	//std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
 	int life;
 
-	//リスト周回
-	for (auto& itr : List)
+	////リスト周回
+	//for (auto& itr : List)
+	//{
+	//	if (itr == nullptr) { continue; }
+
+	//	if (itr->GetArea() != card->GetTarget()) { continue; }
+
+	//	life = itr->GetLife();
+	//	if (life > INT_ZERO)
+	//	{//TODO:選択できない旨のUI表示
+	//		++life;
+	//	}
+	//	itr->SetLife(life);
+	//}
+
+	//ターゲットの周回
+	for (auto& iter : card->GetTargetPlayerList())
 	{
-		if (itr == nullptr) { continue; }
-
-		if (itr->GetArea() != card->GetTarget()) { continue; }
-
-		life = itr->GetLife();
+		life = iter->GetLife();
 		if (life > INT_ZERO)
 		{//TODO:選択できない旨のUI表示
 			++life;
 		}
-		itr->SetLife(life);
+		iter->SetLife(life);
 	}
 
 	//オンライン時は通信処理TODO : カードのやり取りが出来たら必要なし
@@ -146,21 +157,31 @@ My::CEnergyAdjust::~CEnergyAdjust()
 void My::CEnergyAdjust::Strategy(CDuelCharacter* /*duel*/, CCard* card)
 {
 	//登録されているキャラクターを取得
-	std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
+	//std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
 	int nEnergy;
 
 	//リスト周回
-	for (auto& itr : List)
+	//for (auto& itr : List)
+	//{
+	//	if (itr == nullptr) { continue; }
+
+	//	if (itr->GetArea() != card->GetTarget()) { continue; }
+
+	//	nEnergy = itr->GetEnergy();
+
+	//	//TODO:カードのエナジー変動値を代入
+	//	nEnergy += 10;
+	//	itr->SetEnergy(nEnergy);
+	//}
+
+	//ターゲットの周回
+	for (auto& iter : card->GetTargetPlayerList())
 	{
-		if (itr == nullptr) { continue; }
-
-		if (itr->GetArea() != card->GetTarget()) { continue; }
-
-		nEnergy = itr->GetEnergy();
+		nEnergy = iter->GetEnergy();
 
 		//TODO:カードのエナジー変動値を代入
 		nEnergy += 10;
-		itr->SetEnergy(nEnergy);
+		iter->SetEnergy(nEnergy);
 	}
 
 	//オンライン時は通信処理TODO : カードのやり取りが出来たら必要なし
@@ -189,19 +210,67 @@ My::CHandDestruction::~CHandDestruction()
 //===============================================================================
 void My::CHandDestruction::Strategy(CDuelCharacter* duel, CCard* card)
 {
-	//登録されているキャラクターを取得
-	std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
+	////登録されているキャラクターを取得
+	//std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
 
-	//リスト周回
-	for (auto& itr : List)
+	////リスト周回
+	//for (auto& itr : List)
+	//{
+	//	if (itr == nullptr) { continue; }
+
+	//	if (itr->GetArea() != card->GetTarget()) { continue; }
+	//	
+	//	CActiveSceneCharacterState* state = itr->GetState();
+
+	//	if(typeid(*state) != typeid(CEnemyDuelState))
+	//	{
+	//		continue;
+	//	}
+
+	//	//TODO : デュエル状態を参照できる場所が必要
+	//	CDuelCharacter* DuelState = dynamic_cast<CDuelCharacter*>(itr->GetState());	//キャスト
+
+	//	CHandZone* hand_zone = DuelState->GetZoneManager()->GetHandZone();
+	//	CCemeteryZone* cemetary_zone = DuelState->GetZoneManager()->GetCemetery();
+	//	std::list<CCard*> hand_list = DuelState->GetZoneManager()->GetHandZone()->GetList();
+
+	//	int hand_size = hand_list.size();
+
+	//	if (hand_size == 0)
+	//	{
+	//		return;
+	//	}
+
+	//	int idx = Rundom(1, hand_list.size());
+
+	//	int i = 0;
+	//	for (auto& card_itr : hand_list)
+	//	{
+	//		if (card_itr == nullptr) 
+	//		{ 
+	//			++i;
+	//			continue; 
+	//		}
+
+	//		if (i != idx)
+	//		{
+	//			++i;
+	//			continue;
+	//		}
+
+	//		//カードの状態を墓地に変更
+	//		card_itr->ChangeState(CCardState::CARD_CEMETERY, DuelState);
+
+	//		//DuelState->GetZoneManager()->MoveZone(card_itr, hand_zone, cemetary_zone, true);
+	//	}
+	//}
+
+	//ターゲットの周回
+	for (auto& itr : card->GetTargetPlayerList())
 	{
-		if (itr == nullptr) { continue; }
-
-		if (itr->GetArea() != card->GetTarget()) { continue; }
-		
 		CActiveSceneCharacterState* state = itr->GetState();
 
-		if(typeid(*state) != typeid(CEnemyDuelState))
+		if (typeid(*state) != typeid(CEnemyDuelState))
 		{
 			continue;
 		}
@@ -225,10 +294,10 @@ void My::CHandDestruction::Strategy(CDuelCharacter* duel, CCard* card)
 		int i = 0;
 		for (auto& card_itr : hand_list)
 		{
-			if (card_itr == nullptr) 
-			{ 
+			if (card_itr == nullptr)
+			{
 				++i;
-				continue; 
+				continue;
 			}
 
 			if (i != idx)

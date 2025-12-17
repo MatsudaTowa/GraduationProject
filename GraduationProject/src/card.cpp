@@ -26,7 +26,6 @@ m_outpos({ 0,0,0 }),
 m_StateNum(CCardState::CARD_NEUTRAL),
 m_CardType(CARDTYPE_::TYPE_ATTACK),
 m_IsChange(true),
-m_target(CInputMouse::AREA::CENTER),
 m_pCardHolder(nullptr),
 m_isUpdate(true),
 m_CurrentZone(ZONE::NONE_ZONE),
@@ -381,10 +380,11 @@ bool My::CCard::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharacter* pla
 		}
 
 		//対象のエリア
-		m_target = pMouse->GetArea();
+		CInputMouse::AREA Area;
+		Area = pMouse->GetArea();
 
 		//キャンセルエリアなら解除
-		if (m_target == CInputMouse::AREA::CENTER)
+		if (Area == CInputMouse::AREA::CENTER)
 		{
 			//通常状態にする
 			ChangeState(CCardState::CARD_NEUTRAL, duel);
@@ -404,27 +404,55 @@ bool My::CCard::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharacter* pla
 		//使用者のエリアの取得
 		m_UserArea = player->GetArea();
 
-		if (IsCast(duel))
+		if (IsCast(duel, Area))
 		{
+			//キャラクターのリスト
+			std::list<CActiveSceneCharacter*> list = CActiveSceneManager::GetInstance()->GetCharacterList();
+
+			//周回
+			for (auto& iter : list)
+			{
+				if (iter->GetArea() != Area) { continue; }
+
+				//対象のプレイヤーのポインタを代入
+				RegistTargetList(iter);
+				break;
+			}
+
 			// キャスト遷移
-			ChangeState(CCardState::CARD_CAST, duel);
 			CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
 
 			//オンライン時なら送信
 			if (CRakNet::GetInstance()->GetOnline())
 			{//TODO : カードの対象が複数になったら処理の変更の必要があり
-				std::list<CActiveSceneCharacter*> list = CActiveSceneManager::GetInstance()->GetCharacterList();
+				//std::list<CActiveSceneCharacter*> list = CActiveSceneManager::GetInstance()->GetCharacterList();
 
-				//対象を見つけて送信
-				for (auto& itr : list)
+				////対象を見つけて送信
+				//for (auto& itr : list)
+				//{
+				//	if (itr == nullptr) { continue; }
+				//	if (itr->GetArea() != Area) { continue; }
+
+				//	CRakNet::GetInstance()->SendCastCard(m_BaseStatus.nCardID, CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx(), itr->GetPlayerIdx());
+
+				//	break;
+				//}
+
+				//対象者の番号を取得して送信
+				std::vector<int> target;
+
+				for (auto iter : GetTargetPlayerList())
 				{
-					if (itr == nullptr) { continue; }
-					if (itr->GetArea() != m_target) { continue; }
-
-					CRakNet::GetInstance()->SendCastCard(m_BaseStatus.nCardID, CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx(), itr->GetPlayerIdx());
-
-					break;
+					target.push_back(iter->GetPlayerIdx());
 				}
+
+				//キャストのリクエストを送信
+				CRakNet::GetInstance()->RequestCastCard(m_BaseStatus.nCardID, GetSameTypeId(), target);
+			}
+			else
+			{
+				// キャスト遷移
+				ChangeState(CCardState::CARD_CAST, duel);
 			}
 
 			return false;
@@ -509,7 +537,7 @@ void My::CCard::LoadCardData()
 	//TODO:ここに各ステータスの読み込み
 
 	//読み込んだカード情報をリストに登録
-	CDuelManager::GetInstance()->RegistUseCardList(this);
+	//CDuelManager::GetInstance()->RegistUseCardList(this);
 }
 
 //===========================================================================================================

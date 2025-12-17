@@ -23,7 +23,8 @@ My::CCard::CCard() :
 	m_OldZone(DECK),					//過去のゾーン
 	m_BaseParam(),						//ベースのパラメータ
 	m_pState(nullptr),					//状態のポインタ
-	m_StateNum()						//列挙の状態
+	m_StateNum(),						//列挙の状態
+	m_nSameTypeId(0)					//同じ種類のカード番号
 {
 	m_TargetIdVector.clear();
 }

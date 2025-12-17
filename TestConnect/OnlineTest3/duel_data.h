@@ -34,7 +34,7 @@ public:
 	void SendStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;			//ステータスを送る
 	void AddCPU(RakNet::Packet* /*packet*/, RakNet::RakPeerInterface* /*peer*/) override {}		//CPUの追加
 	void ReceiveStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;		//ステータスを受信
-	void ReceiveCastCard(RakNet::Packet* packet) override;										//キャストカードの受信
+	void ReceiveCastCard(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;		//キャストカードの受信
 	void ReceiveCastDefCard(RakNet::Packet* packet) override;									//キャスト守備カードの受信
 	void UpdateScene(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;			//シーンの更新
 	bool ReceiveDeck(RakNet::Packet* packet) override;											//デッキの受信
@@ -76,11 +76,13 @@ private:
 	void SendPlayerNum(RakNet::RakPeerInterface* peer, GameMessages message);	//プレイヤー数を送信する関数
 	bool IsSendUpdate(RakNet::Packet* packet);									//更新の許可を出すか
 	void SendCastCard(RakNet::BitStream* bsout);								//キャストカードの送信
+	void SendCastCard(RakNet::RakPeerInterface* peer, My::CCard* castcard);										//キャストカードの送信
 	void SendCastDeffenceCard(RakNet::BitStream* bsout);						//キャスト守備カードの送信
 	void SendUpdateSign(RakNet::RakPeerInterface* peer);						//更新の合図を送る
 	bool IsDisconnectionSendUpdate();											//クライアントが切断時に更新の合図を送信するか
 	void SendDeck(RakNet::RakPeerInterface* peer);								//デッキの送信
 	void SendDrawCard(RakNet::RakPeerInterface* peer, int userid);				//カードのドロー情報を送る
+	bool CheckDrawCard(int playerid);											//引数のプレイヤーがドローができるか確認
 
 	//対戦シーンの処理関数
 	void UpdateStayCard();				//ステイカードの更新
@@ -92,8 +94,6 @@ private:
 	int m_nReceiveNum;											//ステータスを受信した数
 	std::list<CastCardInfo> m_CastCardList;						//キャストカードのリスト
 	std::vector<CastDiffenceCardInfo> m_CastDiffenceCardVector;	//キャスト守備カードのリスト
-	int m_ndeltaTaime;											//デルタタイム
-	int m_nOldTime;												//前回の時間
 };
 
 #endif

@@ -11,6 +11,8 @@
 #include "duel_player_manager.h"
 #include "card.h"
 #include "raknet_server.h"
+#include "duel_player_manager.h"
+#include "duel_manager.h"
 
 //=====================================
 //コンストラクタ
@@ -20,12 +22,9 @@ CDuel_Data::CDuel_Data() :
     m_isCheckStart{ false,false,false,false },	//開始の合図
     m_nReceiveNum(0),							//受信した値
     m_CastCardList(),							//キャストカードのリスト
-    m_CastDiffenceCardVector(),					//キャストされたディフェンスカードのベクター
-    m_ndeltaTaime(0),							//デルタタイム
-    m_nOldTime(0)								//前回の時間
+    m_CastDiffenceCardVector()					//キャストされたディフェンスカードのベクター
 {
-    //コンストラクタ時の時間を取得
-    m_nOldTime = timeGetTime();
+   
 }
 
 //=====================================
@@ -232,6 +231,36 @@ void CDuel_Data::SetData(std::list<CPlayer::ChangeData> data)
 
         std::shuffle(DeckVector.begin(), DeckVector.end(), g);
 
+        //カウント用のマップ
+        std::map<int, int> SameTypeCounter;
+
+        //同じ種類のカードの何番目かを算出
+        auto CalcSameTypeCount = [&SameTypeCounter](int cardid)
+        {
+            //返す用
+            int nCardId = -1;
+
+            //要素を見つける
+            auto nCount = SameTypeCounter.find(cardid);
+
+            //あるなら
+            if (nCount != SameTypeCounter.end())
+            {
+                //カウントアップ
+                nCount->second++;
+                SameTypeCounter[cardid] = nCount->second;
+                nCardId = nCount->second;
+            }
+            else
+            {
+                //0の新しい要素を追加
+                SameTypeCounter[cardid] = 0;
+                nCardId = 0;
+            }
+
+            return nCardId;
+        };
+
         //カードのIDから生成
         for (auto iter : DeckVector)
         {
@@ -239,8 +268,12 @@ void CDuel_Data::SetData(std::list<CPlayer::ChangeData> data)
             pCard->SetUserId(pPlayer->GetIndex());
             pCard->SetCurrentZone(My::CCard::DECK);
             pCard->Init();
+            pCard->SetSameTypeId(CalcSameTypeCount(pCard->GetBaseStatus().nCardID));
             pPlayer->GetZoneManager()->GetDeck()->AddList(pCard);
         }
+
+        //デッキの設定
+        pPlayer->SetDeck(DeckVector);
 
         //追加
         m_DuelPlayerList.push_back(pPlayer);
@@ -302,7 +335,7 @@ void CDuel_Data::SendStartMember(RakNet::RakPeerInterface* peer)
     peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 
     //デッキを送る
-    SendDeck(peer);
+    //SendDeck(peer);
 }
 
 //=====================================
@@ -342,9 +375,13 @@ bool CDuel_Data::CheckStartBattle(RakNet::Packet* packet)
 //=====================================
 void CDuel_Data::StartBattle(RakNet::RakPeerInterface* peer)
 {
+    //対戦時のタイマーを開始
+    CDuel_Manager::GetInstance()->GetDuelTimer().Start();
+
     //データの作成
     RakNet::BitStream bsOut;
-    bsOut.Write((RakNet::MessageID)GameMessages::ID_DUEL_MESSAGE_START);
+    bsOut.Write((RakNet::MessageID)GameMessages::ID_DUEL_MESSAGE_START);        //メッセージ
+    bsOut.Write(CDuel_Manager::GetInstance()->GetDuelTimer().GetStartTime());   //開始時間
 
     //全クライアントにブロードキャスト
     peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
@@ -509,7 +546,7 @@ bool CDuel_Data::IsSendUpdate(RakNet::Packet* packet)
 //=====================================
 //キャストカードの受信
 //=====================================
-void CDuel_Data::ReceiveCastCard(RakNet::Packet* packet)
+void CDuel_Data::ReceiveCastCard(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
 {
     //ログ
     std::cout << "カードの受信\n";
@@ -517,28 +554,110 @@ void CDuel_Data::ReceiveCastCard(RakNet::Packet* packet)
     //データの受信
     RakNet::BitStream bsIn(packet->data, packet->length, false);
 
-    //読み取り
+    ////読み取り
+    //bsIn.IgnoreBytes(sizeof(RakNet::MessageID));    //メッセージの読み込み
+    //CastCardInfo CastInfo = {};                     //データの読み込み
+    //int nTargetNum = 0;                             //ターゲット数
+
+    ////カード情報の読み込み
+    //bsIn.Read(CastInfo.nCardID);        //カード情報
+    //bsIn.Read(CastInfo.nPlayerID);      //使用者番号
+
+    //bsIn.Read(nTargetNum);              //ターゲット数
+
+    ////ターゲット数だけ周回
+    //for (int i = 0; i < nTargetNum; i++)
+    //{
+    //    int nTarget = 0;                    //ターゲット数
+    //    bsIn.Read(nTarget);                 //読み込み
+
+    //    CastInfo.m_TargetIDList.push_back(nTarget);  //リストに追加
+    //}
+
+    ////カード情報を保存
+    //m_CastCardList.push_back(CastInfo);
     bsIn.IgnoreBytes(sizeof(RakNet::MessageID));    //メッセージの読み込み
-    CastCardInfo CastInfo = {};                     //データの読み込み
+    int nUserId = 0;                                //使用者番号
+    int nCardId = 0;                                //カード番号
+    int nSameId = 0;                                //同種の中の番号
     int nTargetNum = 0;                             //ターゲット数
+    std::vector<int> Target;                        //ターゲットのベクター
 
-    //カード情報の読み込み
-    bsIn.Read(CastInfo.nCardID);        //カード情報
-    bsIn.Read(CastInfo.nPlayerID);      //使用者番号
+    //情報の読み込み
+    bsIn.Read(nUserId);     //使用者番号
+    bsIn.Read(nCardId);     //カード番号
+    bsIn.Read(nSameId);     //同じカードの番号
+    bsIn.Read(nTargetNum);  //ターゲットの数
 
-    bsIn.Read(nTargetNum);              //ターゲット数
-
-    //ターゲット数だけ周回
+    //ターゲットの数だけ周回
     for (int i = 0; i < nTargetNum; i++)
     {
-        int nTarget = 0;                    //ターゲット数
-        bsIn.Read(nTarget);                 //読み込み
-
-        CastInfo.m_TargetIDList.push_back(nTarget);  //リストに追加
+        //ターゲットの読み込み
+        int nTarget = 0;
+        bsIn.Read(nTarget);
+        Target.push_back(nTarget);
     }
 
-    //カード情報を保存
-    m_CastCardList.push_back(CastInfo);
+    //対象のプレイヤーを探す
+    My::CDuel_Player* pPlayer = nullptr;
+    for (auto& iter : m_DuelPlayerList)
+    {
+        if (iter->GetIndex() != nUserId) continue;
+
+        pPlayer = iter; //代入
+        break;
+    }
+
+    //見つからなかったら返す
+    if (pPlayer == nullptr) return;
+
+    //ハンドゾーンで受信したカードを確認
+    My::CCard* pCard = nullptr;
+    for (auto& iter : pPlayer->GetZoneManager()->GetHandZone()->GetList())
+    {
+        //番号で手札に存在するかを確認
+        if (iter->GetBaseStatus().nCardID != nCardId) continue;
+        if (iter->GetSameTypeId() != nSameId) continue;
+
+        pCard = iter;   //代入
+        break;
+    }
+
+    //コストが足りるかを確認(不足しているなら返す)
+    if (pPlayer->GetStatus().energy < pCard->GetBaseStatus().nCost) return;
+    
+    //エナジーを消費してカードをキャスト
+    //pPlayer->GetStatus().energy -= pCard->GetBaseStatus().nCost;    //エナジーを消費
+    pCard->SetUserId(nUserId);
+    pCard->SetTargetIdVector(Target);
+    pCard->ChangeState(My::CCardState::CARD_CAST, pPlayer);
+
+    //キャストカードの送信
+    SendCastCard(peer, pCard);
+}
+
+//=====================================
+//キャストカードの送信
+//=====================================
+void CDuel_Data::SendCastCard(RakNet::RakPeerInterface* peer, My::CCard* castcard)
+{
+    //データの作成
+    RakNet::BitStream bsOut;
+    bsOut.Write((RakNet::MessageID)GameMessages::ID_DUEL_MESSAGE_CAST_CARD);    //メッセージ
+    bsOut.Write(castcard->GetUserId());                                         //使用者番号
+    bsOut.Write(castcard->GetBaseStatus().nCardID);                             //カード番号
+    bsOut.Write(castcard->GetSameTypeId());                                     //同じカードの番号
+    bsOut.Write(CDuel_Manager::GetInstance()->GetDuelTimer().GetElapsedTime()); //経過時間(使用時間)
+    bsOut.Write((int)castcard->GetTargetIdVector().size());                     //ターゲット数
+
+    //ターゲット数だけ周回して書き出し
+    for (int TargetId : castcard->GetTargetIdVector())
+    {
+        bsOut.Write(TargetId);  //数の書き出し
+    }
+
+    //全クライアントにブロードキャスト
+    peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 }
 
 //=====================================
@@ -706,16 +825,14 @@ bool CDuel_Data::IsDisconnectionSendUpdate()
 //======================================
 void CDuel_Data::UpdateScene(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
 {
-    //経過時間の算出
-    DWORD CurrentTime = timeGetTime();					//現在の時間を取得
-    m_ndeltaTaime = CurrentTime - m_nOldTime;           //経過した時間を算出
-    m_nOldTime = CurrentTime;                           //現在の時間
+    //タイマーの更新
+    CDuel_Manager::GetInstance()->GetDuelTimer().Update();
 
     //ステイカードの更新
     UpdateStayCard();
 
     //プレイヤーの更新
-    UpdateDuelPlayer(m_ndeltaTaime);
+    UpdateDuelPlayer(CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime());
 }
 
 //======================================
@@ -757,7 +874,7 @@ void CDuel_Data::UpdateDuelPlayer(int delta)
     //プレイヤーの更新
     for (auto& iter : My::CDuel_Player_Manager::GetInstance()->GetList())
     {
-        if (iter->UpdateEnergy(m_ndeltaTaime))
+        if (iter->UpdateEnergy(delta))
         {
             isSend = true;
         }
@@ -861,10 +978,27 @@ void CDuel_Data::ReceiveDrawCard(RakNet::Packet* packet, RakNet::RakPeerInterfac
     bsIn.IgnoreBytes(sizeof(RakNet::MessageID));    //メッセージの読み込み
 
     //パラメータ
-    bsIn.Read(nPlayerId);
+    bsIn.Read(nPlayerId);   //プレイヤー番号
 
     //カードドローを送信
     SendDrawCard(peer, nPlayerId);
+}
+
+//======================================
+//ドローの確認
+//======================================
+bool CDuel_Data::CheckDrawCard(int playerid)
+{
+    //ドローの条件確認
+    if (playerid < 0 && playerid >= 4) return false;    //対戦中の番号が送られているか
+
+    //番号のプレイヤーを取得
+    My::CDuel_Player* pPlayer = My::CDuel_Player_Manager::GetInstance()->GetDuelPlayer(playerid);
+
+    //中身の確認
+    if (!pPlayer) return false;
+
+
 }
 
 //======================================
