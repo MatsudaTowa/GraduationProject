@@ -342,6 +342,12 @@ bool My::CCardDeffence::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharac
 
 	if (pMouse->GetPress(0))
 	{
+		// ロビーじゃなかったら抜ける
+		if (typeid(*duel) == typeid(CPlayerDuelState))
+		{
+			CPlayerDuelState* duel_state = dynamic_cast<CPlayerDuelState*>(duel);
+			duel_state->GetHand()->GetSelectionRange()->SetisDraw(false);
+		}
 		// キャストステートにする
 		ChangeState(CCardState::CARD_SELECT, duel);
 		CActiveSceneManager::GetInstance()->ChangeState(new CCardCast);
@@ -355,6 +361,12 @@ bool My::CCardDeffence::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharac
 	}
 	else if (pMouse->GetRelease(0))
 	{
+		// ロビーじゃなかったら抜ける
+		if (typeid(*duel) == typeid(CPlayerDuelState))
+		{
+			CPlayerDuelState* duel_state = dynamic_cast<CPlayerDuelState*>(duel);
+			duel_state->GetHand()->GetSelectionRange()->SetisDraw(true);
+		}
 		//対象のエリア
 		CInputMouse::AREA Area;
 		Area = pMouse->GetArea();
