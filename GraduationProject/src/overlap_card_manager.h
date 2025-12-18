@@ -55,6 +55,8 @@ namespace My
 		*/
 		void ResetStayTime(CDuelCharacter* duel, CCard* card);
 
+		void rrrrrr(CDuelCharacter* duel, COverlapCard* overlap);
+
 	private:
 		/**
 		* @brief 重なっているカードのリスト

@@ -28,15 +28,33 @@ namespace My
 		* @brief 登録
 		* @param [in]pCard カードのポインタ
 		*/
-		inline void Regist(CCard* pCard) { m_pOverlapCards.push_back(pCard); }
+		void Regist(CCard* pCard);
 
 		/**
 		* @brief 削除
 		*/
 		void ReMove(CCard* pCard);
 
-		void SetTarget(CInputMouse::AREA target) { m_target = target; }
-		CInputMouse::AREA GetTarget() { return m_target; }
+		/**
+		* @brief カードを重ねる処理
+		*/
+		bool CheckOverlap(CCard* pCard);
+
+		//==================================
+		//			inline関数
+		//==================================
+
+		/**
+		* @brief ターゲットの設定
+		* @param [in]このカード群のターゲットを指し示すもの
+		*/
+		inline void SetTarget(CInputMouse::AREA target) { m_target = target; }
+
+		/**
+		* @brief ターゲットの取得
+		* @return [out]このカード群のターゲットを指し示すもの
+		*/
+		inline CInputMouse::AREA GetTarget() { return m_target; }
 
 		/**
 		* @brief クリア
@@ -48,10 +66,22 @@ namespace My
 		* @return 重複しているカードのポインタ配列
 		*/
 		inline std::vector<CCard*> GetOverlapCards() { return m_pOverlapCards; }
+
+		/**
+		* @brief カードが重なったかどうかの設定
+		* @param 重なったかどうか
+		*/
+		inline void SetIsOverlap(bool b) { m_IsOverlap = b; }
+
+		/**
+		* @biref カードが重なったかどうかの取得
+		* @return 重なったかどうか
+		*/
+		inline bool GetIsOverlap() { return m_IsOverlap; }
 	private:
 
 		/**
-		* @brief 誰がターゲットなのかを判別する変数
+		* @brief このカード群のターゲットを指し示すもの
 		*/
 		CInputMouse::AREA m_target;
 
@@ -59,6 +89,11 @@ namespace My
 		* @brief 重複しているカードのポインタ配列
 		*/
 		std::vector<CCard*> m_pOverlapCards;
+
+		/**
+		* @brief 重なったかどうか
+		*/
+		bool m_IsOverlap;
 	};
 
 	//====================================================================
