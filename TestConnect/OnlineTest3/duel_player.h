@@ -55,6 +55,12 @@ namespace My
 		//プレイヤーが行う行動の処理
 		bool DrawCard();				//カードのドロー
 
+		/**
+		 * @brief ダメージを受ける
+		 * @param [in]受けるダメージ
+		 */
+		void ReceiveDamage(int damage);
+
 	private:
 
 		//定数

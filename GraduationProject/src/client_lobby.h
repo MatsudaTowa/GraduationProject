@@ -49,6 +49,7 @@ public:
 	void ReceiveCastCard(RakNet::Packet* /*packet*/) override {}						//キャストカードの受信
 	void ReceiveCastDefCard(RakNet::Packet* /*packet*/) override {}						//キャスト守備カードの受信
 	void ReceiveDrawCard(RakNet::Packet* /*packet*/) override {}						//カードドローの受信
+	void ReceiveTriggerCard([[maybe_unused]] RakNet::Packet* packet) override {}		//トリガーカードの受信
 
 	//取得
 	void SetParam(std::list<PlayerParam> list) override;	//設定

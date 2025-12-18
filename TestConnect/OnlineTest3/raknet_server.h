@@ -40,8 +40,9 @@ public:
 	}
 
 	//情報の送信
-	void SendStatus();					//ステータスの送信
-	void SendCastCard(My::CCard* Card);	//キャストカードの送信
+	void SendStatus();						//ステータスの送信
+	void SendCastCard(My::CCard* Card);		//キャストカードの送信
+	void SendTriggerCard(My::CCard* Card);	//トリガーカードの送信
 
 private:
 

@@ -336,3 +336,31 @@ void My::CCardAttack::Trigger()
 	//カードのクリア
 	m_DefCardVector.clear();
 }
+
+//===========================================================================================================
+//トリガー受信時の処理
+//===========================================================================================================
+void My::CCardAttack::ReceiveTrigger()
+{
+	//守備カード周回
+	for (auto& iter : m_DefCardVector)
+	{
+		//使用者を見つけゾーンの位置を変更
+		CActiveSceneCharacter* pUsedPlayer = CActiveSceneManager::GetInstance()->GetCharacter(iter->GetUserId());
+		My::CDuelCharacter* pDuelState = dynamic_cast<My::CDuelCharacter*>(pUsedPlayer->GetState());
+
+		//キャスト失敗時にアサート
+		if (!pDuelState) assert(false);
+
+		//状態とゾーンの変更
+		iter->ChangeState(CCardState::CARD_CEMETERY, pDuelState);
+		pDuelState->GetZoneManager()->MoveZone(this, CastToZone(GetCurrentZone(), pDuelState), pDuelState->GetZoneManager()->GetCemetery(), true);
+		iter->SetCurrentZone(CCard::CEMETERY);
+	}
+
+	//カードのクリア
+	m_DefCardVector.clear();
+
+	//親の処理
+	My::CCard::ReceiveTrigger();
+}

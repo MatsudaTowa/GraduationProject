@@ -319,6 +319,9 @@ namespace My
 		void SetStartCastTime(uint64_t time) { m_fCastStartTime = time * 0.001f; }
 		float GetStartCastTime() { return m_fCastStartTime; }
 
+		//トリガーを受信した際の処理
+		virtual void ReceiveTrigger();
+
 	private:
 
 		//次の列挙から過去のゾーンのポインタを返す

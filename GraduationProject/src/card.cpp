@@ -274,6 +274,7 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state, CDuelCharacter* duel)
 
 		case CCardState::CARD_CEMETERY:
 			m_pState = new CCardStateCemetery();
+			duel->GetZoneManager()->MoveZone(this, CastToZone(GetCurrentZone(), duel), duel->GetZoneManager()->GetCemetery(), true);
 			//duel->GetZoneManager()->MoveZone(this, CastToEnumZone(m_CurrentZone, duel), duel->GetZoneManager()->GetCemetery(), true);
 			break;
 
@@ -680,4 +681,24 @@ My::CZone* My::CCard::CastToZone(ZONE zone, CDuelCharacter* duel)
 	}
 
 	return pZone;
+}
+
+//===========================================================================================================
+//トリガーを受信した際の処理
+//===========================================================================================================
+void My::CCard::ReceiveTrigger()
+{
+	//使用者を見つけゾーンの位置を変更
+	CActiveSceneCharacter* pUsedPlayer = CActiveSceneManager::GetInstance()->GetCharacter(GetUserId());
+	My::CDuelCharacter* pDuelState = dynamic_cast<My::CDuelCharacter*>(pUsedPlayer->GetState());
+
+	//キャスト失敗時にアサート
+	if (!pDuelState) assert(false);
+
+	//状態とゾーンの変更
+	ChangeState(CCardState::CARD_CEMETERY, pDuelState);
+	pDuelState->GetZoneManager()->MoveZone(this, CastToZone(GetCurrentZone(), pDuelState), pDuelState->GetZoneManager()->GetCemetery(), true);
+	SetCurrentZone(CCard::CEMETERY);
+
+	CActiveSceneManager::GetInstance()->GetTargetArrowManager()->Remove();
 }

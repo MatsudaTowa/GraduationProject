@@ -341,3 +341,30 @@ void CRakNet_Server::SendCastCard(My::CCard* Card)
     // 全クライアントにブロードキャスト
     m_pPeer->Send(&bsOut, IMMEDIATE_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);  //優先的に送ることで反映を先にする
 }
+
+//=====================================
+//トリガーカードの送信
+//=====================================
+void CRakNet_Server::SendTriggerCard(My::CCard* Card)
+{
+    // データの作成
+    RakNet::BitStream bsOut;
+
+    //書き出し
+    bsOut.Write((RakNet::MessageID)CRakNet_Data::GameMessages::ID_DUEL_MESSAGE_TRIGGER);    //メッセージ
+    bsOut.Write(Card->GetUserId());                                                         //使用者番号
+    bsOut.Write(Card->GetBaseStatus().nCardID);                                             //カード番号
+    bsOut.Write(Card->GetSameTypeId());                                                     //同種類の番号
+    bsOut.Write(Card->GetBaseStatus().Maintype);                                            //カードの種類
+
+    Card->SendTriggerData(&bsOut);  //カードごとの送るデータ
+
+    //各プレイヤーのパラメータを送信
+    for (auto iter : My::CDuel_Player_Manager::GetInstance()->GetList())
+    {
+        bsOut.Write(iter->GetStatus());
+    }
+
+    //全クライアントにブロードキャスト
+    m_pPeer->Send(&bsOut, IMMEDIATE_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);  //優先的に送ることで反映を先にする
+}

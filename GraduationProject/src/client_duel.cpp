@@ -808,3 +808,62 @@ void CClient_Duel::ReceiveDrawCard(RakNet::Packet* packet)
 
     pPlayerState->GetHand()->SetHandCardPos(pPlayerState);
 }
+
+//=====================================
+//トリガーカードの受信
+//=====================================
+void CClient_Duel::ReceiveTriggerCard([[maybe_unused]] RakNet::Packet* packet)
+{
+    //受信側
+    RakNet::BitStream bsIn(packet->data, packet->length, false);
+
+    //人数を取得
+    unsigned char messageId;      //メッセージ
+    int nUserId = 0;              //使用者の番号
+    int nCardId = 0;              //カード番号
+    int nSameTypeId = 0;          //同種類の番号
+    My::CCard::CARDTYPE_ CardType;//カード種類
+    My::CActiveSceneCharacter::Status Status;    //ステータス
+
+    //読み込み
+    bsIn.Read(messageId);   //メッセージ
+    bsIn.Read(nUserId);     //使用者の番号
+    bsIn.Read(nCardId);     //カード番号
+    bsIn.Read(nSameTypeId); //同種類の番号
+    bsIn.Read(CardType);    //カードの種類
+
+    //アクティブシーン
+    My::CActiveSceneCharacter* pUsedPlayer = My::CActiveSceneManager::GetInstance()->GetCharacter(nUserId); //受信した番号のキャラクターを取得
+    My::CDuelCharacter* pDuelState = dynamic_cast<My::CDuelCharacter*>(pUsedPlayer->GetState());            //取得したキャラクターの状態をキャスト
+    My::CCard* TriggerCard = nullptr;                                                                       //トリガーしたカード
+
+    //キャストゾーンのカードを周回
+    for (My::CCard* pCard : pDuelState->GetZoneManager()->GetCastPreviewZone()->GetList())
+    {
+        //受信したデータに一致するカードを探す
+        if (pCard->GetBaseStatus().nCardID != nCardId) continue;    //カード番号
+        if (pCard->GetSameTypeId() != nSameTypeId) continue;        //同種の番号
+
+        //見つけたら代入
+        TriggerCard = pCard;
+        break;
+    }
+    
+    //トリガー受信時の処理
+    TriggerCard->ReceiveTrigger();
+
+    //リストを取得してソートする
+    std::list<My::CActiveSceneCharacter*> SortList = My::CActiveSceneManager::GetInstance()->GetCharacterList();
+    SortList.sort([](My::CActiveSceneCharacter* a, My::CActiveSceneCharacter* b)
+        {
+            return a->GetPlayerIdx() < b->GetPlayerIdx();
+        });
+
+    //番号順に周回
+    for (auto& iter : SortList)
+    {
+        //ステータスの読み込み
+        bsIn.Read(Status);      
+        iter->SetStatus(Status);
+    }
+}

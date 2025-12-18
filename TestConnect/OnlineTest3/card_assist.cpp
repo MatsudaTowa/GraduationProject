@@ -8,6 +8,7 @@
 //ヘッダーのインクルード
 #include "card_assist.h"
 #include "card_strategy.h"
+#include "raknet_server.h"
 
 //===========================================================================================================
 // コンストラクタ
@@ -75,4 +76,6 @@ void My::CCardAssist::Cast(CDuel_Player* /*duel*/)
 void My::CCardAssist::Trigger()
 {
 	//ステイ後に起動
+	//クライアントにトリガー情報を送信
+	CRakNet_Server::GetInstance()->SendTriggerCard(this);
 }

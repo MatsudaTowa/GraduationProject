@@ -99,6 +99,9 @@ namespace My
 		 */
 		inline void AddDefCard(CCardDeffence* defcard) { m_DefCardVector.push_back(defcard); }
 
+		//トリガー時に送るデータ
+		void SendTriggerData(RakNet::BitStream* bsout) override;
+
 	private:
 
 		AttackType m_AttackType;						// 攻撃の種類

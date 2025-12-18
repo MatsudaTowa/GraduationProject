@@ -147,8 +147,10 @@ namespace My
 		void CountDown();
 
 		//変数
-		RakNet::Time m_OldTime;		//前回の時間
-		RakNet::Time m_ElapsedTime;	//経過時間
+		//RakNet::Time m_OldTime;		//前回の時間
+		//RakNet::Time m_ElapsedTime;	//経過時間
+		/** @brief 待機カウント */
+		float m_fStaycount;
 	};
 
 	/**

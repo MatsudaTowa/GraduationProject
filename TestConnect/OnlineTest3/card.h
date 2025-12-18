@@ -13,6 +13,7 @@
 #include "main.h"
 #include "card_state.h"
 #include "card_manager.h"
+#include "BitStream.h"
 
 namespace My
 {
@@ -56,7 +57,7 @@ namespace My
 		 * @brief 更新
 		 */
 		virtual void Update() {}
-		void Update(CDuel_Player* duel) {}
+		void Update(CDuel_Player* duel);
 
 		/**
 		* @brief 固有情報読み込み
@@ -131,6 +132,33 @@ namespace My
 		* @brief ステート取得
 		*/
 		inline CCardState* GetState() { return m_pState; }
+		inline CCardState::CARD_STATE GetStateNum() { return m_StateNum; }
+
+		//ストラテジーの設定と取得
+
+		/**
+		 * @brief 計算前の効果処理設定
+		 * @param [in]strategy_vector
+		 */
+		void SetPreCalculateStrategyVector(std::vector<CCardStrategy_Base*> strategy_vector) { m_PreCalculateStrategy = strategy_vector; }
+
+		/**
+		 * @brief 計算後の効果処理設定
+		 * @param [in]strategy_vector
+		 */
+		void SetpostCalculateStrategyVector(std::vector<CCardStrategy_Base*> strategy_vector) { m_PostCalculateStrategy = strategy_vector; }
+
+		/**
+		 * @brief 効果前の効果取得
+		 * @return [in]m_PreCalculateStrategy
+		 */
+		std::vector<CCardStrategy_Base*> GetPreCalculateStrategyVector() { return m_PreCalculateStrategy; }
+
+		/**
+		 * @brief 効果後の効果取得
+		 * @return [in]m_PreCalculateStrategy
+		 */
+		std::vector<CCardStrategy_Base*> GetPostCalculateVector() { return m_PostCalculateStrategy; }
 
 		//効果の追加
 		void AddPreCalculateStrategy(CCardStrategy_Base* strategy) { m_PreCalculateStrategy.push_back(strategy); }		//計算前効果の追加
@@ -157,6 +185,13 @@ namespace My
 		//同種類の中のカード番号
 		void SetSameTypeId(int id) { m_nSameTypeId = id; }
 		int GetSameTypeId() { return m_nSameTypeId; }
+
+		//キャスト開始時間
+		void SetStartCastTime(uint64_t time) { m_fCastStartTime = time * 0.001f; }
+		float GetStartCastTime() { return m_fCastStartTime; }
+
+		//トリガー時に送るデータ
+		virtual void SendTriggerData(RakNet::BitStream* bsout);
 
 	private:
 
@@ -197,6 +232,11 @@ namespace My
 		* 同じ種類の何番目のカードか
 		*/
 		int m_nSameTypeId;
+
+		/**
+		* キャスト時間
+		*/
+		float m_fCastStartTime;
 	};
 }
 

@@ -7,6 +7,8 @@
 #include "target_arrow.h"
 #include "active_scene_manager.h"
 #include "zone_manager.h"
+#include "duel_manager.h"
+#include "raknet.h"
 
 namespace
 {
@@ -63,7 +65,8 @@ HRESULT My::CTargetArrow::Init()
 	SetVtx();
 
 	// Žõ–½‚ð‰Šú‰»
-	m_nLife = ONE_SECOND * 3;
+	//m_nLife = ONE_SECOND * 3;
+	m_nLife = 3000;
 
 	SetAnimFrame(1);
 
@@ -111,7 +114,14 @@ void My::CTargetArrow::Update()
 	SetOnTheLinePos();
 
 	// Žõ–½‚ðŒ¸‚ç‚·
-	m_nLife--;
+	if (CRakNet::GetInstance()->GetOnline())
+	{
+		m_nLife -= My::CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime();
+	}
+	else
+	{
+		m_nLife -= CManager::GetInstance()->GetElapsedTime();
+	}
 }
 
 //===========================================================================================================

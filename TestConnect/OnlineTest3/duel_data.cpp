@@ -630,6 +630,7 @@ void CDuel_Data::ReceiveCastCard(RakNet::Packet* packet, RakNet::RakPeerInterfac
     //pPlayer->GetStatus().energy -= pCard->GetBaseStatus().nCost;    //エナジーを消費
     pCard->SetUserId(nUserId);
     pCard->SetTargetIdVector(Target);
+    pCard->SetStartCastTime(CDuel_Manager::GetInstance()->GetDuelTimer().GetElapsedTime());
     pCard->ChangeState(My::CCardState::CARD_CAST, pPlayer);
 
     //キャストカードの送信
@@ -998,7 +999,7 @@ bool CDuel_Data::CheckDrawCard(int playerid)
     //中身の確認
     if (!pPlayer) return false;
 
-
+    return true;    //なにこれ
 }
 
 //======================================

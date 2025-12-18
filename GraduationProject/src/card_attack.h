@@ -111,6 +111,9 @@ namespace My
 		 */
 		inline void AddDefCard(CCardDeffence* defcard) { m_DefCardVector.push_back(defcard); }
 
+		//ƒgƒŠƒK[‚ğóM‚µ‚½Û‚Ìˆ—
+		void ReceiveTrigger() override;
+
 	private:
 
 		AttackType m_AttackType;

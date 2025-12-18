@@ -8,6 +8,9 @@
 #include "card.h"
 #include "zone_manager.h"
 #include "GetTime.h"
+#include "duel_manager.h"
+#include "duel_player_manager.h"
+#include "card_strategy.h"
 
 //===========================================================================================================
 // 
@@ -200,8 +203,7 @@ namespace
 //コンストラクタ
 //=======================================================================================
 My::CCardStateStay::CCardStateStay() : 
-	m_OldTime(0),
-	m_ElapsedTime(0)
+	m_fStaycount(0.0f)		//ステイ時間
 {
 	
 }
@@ -211,8 +213,8 @@ My::CCardStateStay::CCardStateStay() :
 //=======================================================================================
 void My::CCardStateStay::Init(CCard* cpy, CDuel_Player* /*duel*/)
 {
-	//初期化時点の時間を代入
-	m_OldTime = RakNet::GetTime();
+	// カウントを初期化
+	m_fStaycount = static_cast<float>(CDuel_Manager::GetInstance()->GetDuelTimer().GetElapsedTime() * 0.001f) - cpy->GetStartCastTime();
 
 	//cpy->Stay();
 }
@@ -228,15 +230,13 @@ void My::CCardStateStay::Update(CCard* cpy, CDuel_Player* duel)
 	//ディフェンスカードはカウントダウンを始めない
 	if (cpy->GetBaseStatus().Maintype == CCard_Client::CardType::DEFENSE) return;
 
-	//経過時間を取得
-	RakNet::Time CurrentTime = RakNet::GetTime();	//現在の時間を取得
-	m_ElapsedTime = CurrentTime - m_OldTime;		//経過時間を算出
-	m_OldTime = CurrentTime;						//今の時間
+	if (m_fStaycount >= 3.0f)
+	{// カウントが設定された時間を超えたら
 
-	//トリガー時間を迎えたらトリガー状態に変更
-	if (m_ElapsedTime > TrrigerTime)
-	{
+		// トリガー状態にする
 		cpy->ChangeState(CCardState::CARD_STATE::CARD_TRIGGER, duel);
+
+		return;
 	}
 
 	//if (m_Staycount >= STAY_TIME)
@@ -258,6 +258,9 @@ void My::CCardStateStay::Update(CCard* cpy, CDuel_Player* duel)
 	//// カウントを進める
 	//m_Staycount++;
 
+	//時間の更新
+	m_fStaycount += CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime() * 0.001f;
+
 	//カウントダウン処理
 	CountDown();
 }
@@ -267,10 +270,10 @@ void My::CCardStateStay::Update(CCard* cpy, CDuel_Player* duel)
 //=======================================================================================
 void My::CCardStateStay::CountDown()
 {
-	//経過時間を取得
-	RakNet::Time CurrentTime = RakNet::GetTime();	//現在の時間を取得
-	m_ElapsedTime = CurrentTime - m_OldTime;		//経過時間を算出
-	m_OldTime = CurrentTime;						//今の時間
+	////経過時間を取得
+	//RakNet::Time CurrentTime = RakNet::GetTime();	//現在の時間を取得
+	//m_ElapsedTime = CurrentTime - m_OldTime;		//経過時間を算出
+	//m_OldTime = CurrentTime;						//今の時間
 }
 
 //===========================================================================================================
@@ -310,10 +313,11 @@ void My::CCardStateTrigger::Init(CCard* cpy, CDuel_Player* duel)
 	if (cpy == nullptr)
 		return;
 
-	////リストの取得
-	//std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
+	//リストの取得
+	//std::list<CDuel_Player*> List = CDuel_Player_Manager::GetInstance()->GetList();
+	CDuel_Player* UserPlayer = CDuel_Player_Manager::GetInstance()->GetDuelPlayer(cpy->GetUserId());
 
-	////キャラクターの周回
+	//キャラクターの周回
 	//for (auto& iter : List)
 	//{
 	//	if (cpy->GetUserArea() != iter->GetArea()) continue;
@@ -339,6 +343,22 @@ void My::CCardStateTrigger::Init(CCard* cpy, CDuel_Player* duel)
 
 	//	break;
 	//}
+
+	//トリガーしたか
+	//if (CActiveSceneManager::GetInstance()->GetAreaManager()->CardTrigger(cpy->GetTarget()))
+	{
+		//トリガー処理
+		//cpy->GetCardStrategy()->Strategy(duel, cpy);
+
+		//TODO:一旦計算後のストラテジーベクターだけ処理
+		std::vector<CCardStrategy_Base*> strategy_vector = cpy->GetPostCalculateVector();
+
+		for (auto& itr : strategy_vector)
+		{
+			if (itr == nullptr) { continue; }
+			itr->Strategy(duel, cpy);
+		}
+	}
 }
 
 //=======================================================================================

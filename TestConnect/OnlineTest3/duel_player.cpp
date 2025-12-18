@@ -93,3 +93,16 @@ bool My::CDuel_Player::DrawCard()
 
 	return true;
 }
+
+//=====================================
+//ƒ_ƒ[ƒW‚ğó‚¯‚éˆ—
+//=====================================
+void My::CDuel_Player::ReceiveDamage(int damage)
+{
+	m_Status.life -= damage;
+
+	if (m_Status.life < 0)
+	{
+		m_Status.life = 0;
+	}
+}

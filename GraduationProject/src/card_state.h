@@ -45,6 +45,12 @@ namespace My
 			CARD_MAX
 		}CARD_STATE;
 
+		/** @brief コンストラクタ */
+		CCardState() {}
+
+		/** @brief デストラクタ */
+		virtual ~CCardState() {}
+
 		/** @brief 初期化 */
 		virtual void Init() {};
 		virtual void Init([[maybe_unused]]CCard* cpy, [[maybe_unused]] CDuelCharacter* duel) {};
@@ -151,7 +157,7 @@ namespace My
 		CCardStateStay();
 
 		/** @brief デストラクタ */
-		~CCardStateStay() { m_pNumber = nullptr; }
+		~CCardStateStay() override;
 
 
 		/** @brief 初期化 */
@@ -209,13 +215,13 @@ namespace My
 	};
 
 	/**
-	* @brief 守備待機状態
+	* @brief 墓地状態
 	*/
 	class CCardStateCemetery :public CCardState
 	{
 	public:
 		/** @brief 初期化 */
-		void Init(CCard* cpy, CDuelCharacter* duel) override {}
+		void Init(CCard* cpy, CDuelCharacter* duel) override;
 
 		/** @brief 更新 */
 		void Update(CCard* cpy, CDuelCharacter* duel)override {}

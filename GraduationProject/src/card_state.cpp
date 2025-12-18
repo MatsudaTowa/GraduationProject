@@ -192,7 +192,7 @@ void My::CCardStateCast::Init(CCard* cpy, CDuelCharacter* duel)
 		// 登録
 		for (auto& Target : cpy->GetTargetPlayerList())
 		{
-			pOverlapCard = pZoneManager->GetCastPreviewZone()->GetOverlapManager()->Create(duel, cpy);
+			pOverlapCard = pZoneManager->GetCastPreviewZone()->GetOverlapManager()->Create(duel, cpy->GetUserArea());
 
 			// 重ねたカードが存在していたら
 			if (pOverlapCard)
@@ -390,6 +390,19 @@ My::CCardStateStay::CCardStateStay() :
 	m_fStaycount(0.0f)			//ステイ時間
 {
 	
+}
+
+//=======================================================================================
+//デストラクタ
+//=======================================================================================
+My::CCardStateStay::~CCardStateStay()
+{
+	//オブジェクトの破棄
+	if (m_pNumber != nullptr)
+	{
+		m_pNumber->Uninit();
+		m_pNumber = nullptr;
+	}
 }
 
 //=======================================================================================

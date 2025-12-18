@@ -109,72 +109,84 @@ CCard_Client::AssistParam My::CCard::GetAssistParam(CCard_Client::Param param)
 }
 
 //===========================================================================================================
+// 更新処理
+//===========================================================================================================
+void My::CCard::Update(CDuel_Player* duel)
+{
+	//状態に応じた更新
+	if (m_pState != nullptr)
+	{
+		m_pState->Update(this, duel);
+	}
+}
+
+//===========================================================================================================
 // ステートを変更する
 //===========================================================================================================
 void My::CCard::ChangeState(CCardState::CARD_STATE state, CDuel_Player* duel)
 {
+	// 同じステートかチェンジできない場合ここを通らない
+	if (m_StateNum == state)
+		return;
+
+	// 削除
 	if (m_pState != nullptr)
 	{
-		// 同じステートかチェンジできない場合ここを通らない
-		if (m_StateNum == state)
-			return;
-
-		// 削除
 		delete m_pState;
 		m_pState = nullptr;
-
-		switch (state)
-		{
-		case CCardState::CARD_NEUTRAL:
-			m_pState = new CCardStateNeutral();
-			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::HAND, duel), duel->GetZoneManager()->GetHandZone(), true);
-			break;
-
-		case CCardState::CARD_PICKUP:
-			m_pState = new CCardStatePickup();
-			break;
-
-		case CCardState::CARD_SELECT:
-			m_pState = new CCardStateSelect();
-			break;
-
-		case CCardState::CARD_CAST:
-			m_pState = new CCardStateCast();
-			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::CAST, duel), duel->GetZoneManager()->GetCastPreviewZone(), true);
-			break;
-
-		case CCardState::CARD_STAY:
-			m_pState = new CCardStateStay();
-			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::CAST, duel), duel->GetZoneManager()->GetCastPreviewZone(), true);
-			break;
-
-		case CCardState::CARD_WAIT:
-			m_pState = new CCardStateWait();
-			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::WAIT, duel), duel->GetZoneManager()->GetWaitZone(), true);
-			break;
-
-		case CCardState::CARD_TRIGGER:
-			m_pState = new CCardStateTrigger();
-			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::CEMETERY, duel), duel->GetZoneManager()->GetCemetery(), true);
-			break;
-
-		case CCardState::CARD_CEMETERY:
-			m_pState = new CCardStateCemetery();
-			//duel->GetZoneManager()->MoveZone(this, CastToEnumZone(m_CurrentZone, duel), duel->GetZoneManager()->GetCemetery(), true);
-			break;
-
-		default:
-			assert(1);
-			break;
-		}
-
-		// ステート番号も保存しておく
-		m_StateNum = state;
-
-		// 初期化
-		m_pState->Init(this, duel);
-		//m_pState->Init();
 	}
+
+	switch (state)
+	{
+	case CCardState::CARD_NEUTRAL:
+		m_pState = new CCardStateNeutral();
+		duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::HAND, duel), duel->GetZoneManager()->GetHandZone(), true);
+		break;
+
+	case CCardState::CARD_PICKUP:
+		m_pState = new CCardStatePickup();
+		break;
+
+	case CCardState::CARD_SELECT:
+		m_pState = new CCardStateSelect();
+		break;
+
+	case CCardState::CARD_CAST:
+		m_pState = new CCardStateCast();
+		duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::CAST, duel), duel->GetZoneManager()->GetCastPreviewZone(), true);
+		break;
+
+	case CCardState::CARD_STAY:
+		m_pState = new CCardStateStay();
+		duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::CAST, duel), duel->GetZoneManager()->GetCastPreviewZone(), true);
+		break;
+
+	case CCardState::CARD_WAIT:
+		m_pState = new CCardStateWait();
+		duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::WAIT, duel), duel->GetZoneManager()->GetWaitZone(), true);
+		break;
+
+	case CCardState::CARD_TRIGGER:
+		m_pState = new CCardStateTrigger();
+		duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::CEMETERY, duel), duel->GetZoneManager()->GetCemetery(), true);
+		break;
+
+	case CCardState::CARD_CEMETERY:
+		m_pState = new CCardStateCemetery();
+		//duel->GetZoneManager()->MoveZone(this, CastToEnumZone(m_CurrentZone, duel), duel->GetZoneManager()->GetCemetery(), true);
+		break;
+
+	default:
+		assert(1);
+		break;
+	}
+
+	// ステート番号も保存しておく
+	m_StateNum = state;
+
+	// 初期化
+	m_pState->Init(this, duel);
+	//m_pState->Init();
 }
 
 //===========================================================================================================
@@ -247,4 +259,12 @@ My::CZone* My::CCard::CastToZone(ZONE zone, CDuel_Player* duel)
 	}
 
 	return pZone;
+}
+
+//===========================================================================================================
+//トリガー時に送るデータ
+//===========================================================================================================
+void My::CCard::SendTriggerData(RakNet::BitStream* bsout)
+{
+
 }
