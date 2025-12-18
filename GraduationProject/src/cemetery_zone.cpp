@@ -35,6 +35,7 @@ My::CCemeteryZone::~CCemeteryZone()
 
 void My::CCemeteryZone::Update()
 {
+	CZone::Update();
 }
 
 /**

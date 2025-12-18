@@ -97,6 +97,13 @@ m_pCemetery(nullptr)
 //=============================================
 My::CPlayerDuelState::~CPlayerDuelState()
 {
+	CCardInfoUI* pUI = CDuel_Manager::GetInstance()->GetCardInfoUI();
+	if (CDuel_Manager::GetInstance()->GetCardInfoUI() != nullptr)
+	{
+		pUI->Uninit();
+		pUI = nullptr;
+		CDuel_Manager::GetInstance()->SetCardInfoUI(pUI);
+	}
 	if (m_pCemetery != nullptr)
 	{
 		delete m_pCemetery;
@@ -185,7 +192,11 @@ void My::CPlayerDuelState::CreateDuelUI(CActiveScenePlayer* player)
 		m_pCemetery = CCemetery::Create();
 	}
 	
-
+	if (CDuel_Manager::GetInstance()->GetCardInfoUI() == nullptr)
+	{
+		CDuel_Manager::GetInstance()->SetCardInfoUI(new CCardInfoUI);
+		CDuel_Manager::GetInstance()->GetCardInfoUI()->Init();
+	}
 
 	D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), player->GetPos()); //スクリーン座標に変換
 

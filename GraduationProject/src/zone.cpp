@@ -7,7 +7,7 @@
 
 // include
 #include "zone.h"
-
+#include "duel_manager.h"
 /**
 * @brief コンストラクタ
 */
@@ -45,6 +45,43 @@ void My::CZone::Uninit()
 */
 void My::CZone::Update()
 {
+	for (auto& itr : m_CardList)
+	{
+		if (itr == nullptr) { continue; }
+		// マウス取得
+		CInputMouse* pMouse = GET_INPUT_MOUSE;
+
+		// カードの座標をスクリーン座標変換した座標を格納する変数
+		D3DXVECTOR3 screenpos;
+
+		// カード座標
+		D3DXVECTOR3 pos = itr->GetPos();
+
+		// カード座標をスクリーン座標変換する
+		screenpos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), pos);
+		// マウス座標
+		D3DXVECTOR2 mousepos = { pMouse->GetMousePos().x, pMouse->GetMousePos().y };
+		// マウスとカードの位置の差
+		D3DXVECTOR2 resultpos;
+		resultpos.x = mousepos.x - screenpos.x;
+		resultpos.y = mousepos.y - screenpos.y;
+
+		if (GET_INPUT_MOUSE->GetTrigger(0))
+		{
+			// 矩形判定
+			if (resultpos.x <= 50.0f * itr->GetSize().x && resultpos.x >= -50.0f * itr->GetSize().x &&
+				resultpos.y <= 100.0f * itr->GetSize().y && resultpos.y >= -100.0f * itr->GetSize().y)
+			{
+				CDuel_Manager::GetInstance()->GetCardInfoUI()->SetisDraw(true);
+				return;
+			}
+			else
+			{
+				CDuel_Manager::GetInstance()->GetCardInfoUI()->SetisDraw(false);
+			}
+		}
+
+	}
 }
 
 /**

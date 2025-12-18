@@ -10,7 +10,7 @@
 
 //ヘッダーのインクルード
 #include "duel_timer.h"
-
+#include "card_info_UI.h"
 namespace My
 {
 	//デュエルマネージャークラス
@@ -28,7 +28,14 @@ namespace My
 		};
 
 		//関数
-		~CDuel_Manager() {}							//デストラクタ
+		~CDuel_Manager()
+		{ 
+			if (m_CardInfoUI != nullptr) 
+			{ 
+				m_CardInfoUI->Uninit(); 
+				m_CardInfoUI = nullptr;
+			} 
+		}							//デストラクタ
 
 		//シングルトン
 		static CDuel_Manager* GetInstance()
@@ -40,15 +47,19 @@ namespace My
 		//設定と取得
 		DuelRuleParam& GetDuelRuleParam() { return m_DuelRuleParam; }	//対戦時のルールを取得
 		CDuel_Timer& GetDuelTimer() { return m_DuelTimer; }				//対戦時のタイマー
+		CCardInfoUI* GetCardInfoUI() { return m_CardInfoUI; }
+
+		void SetCardInfoUI(CCardInfoUI* infoUI) { m_CardInfoUI = infoUI; }
 
 	private:
 
 		//関数
-		CDuel_Manager() : m_DuelRuleParam(), m_DuelTimer() {}		//コンストラクタ
+		CDuel_Manager() : m_DuelRuleParam(), m_DuelTimer(), m_CardInfoUI(nullptr){}		//コンストラクタ
 
 		//変数
 		DuelRuleParam m_DuelRuleParam;				//対戦のルールパラメータ
 		CDuel_Timer m_DuelTimer;					//対戦時に扱うタイマー
+		CCardInfoUI* m_CardInfoUI = nullptr;		//!<UI
 	};
 }
 

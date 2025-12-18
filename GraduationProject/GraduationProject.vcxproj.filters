@@ -228,6 +228,12 @@
     <ClCompile Include="src\cemetery.cpp" />
     <ClCompile Include="src\selection_range.cpp" />
     <ClCompile Include="src\duel_timer.cpp" />
+    <ClCompile Include="src\card_info_UI.cpp">
+      <Filter>card_UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_info_BG.cpp">
+      <Filter>card_UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -469,6 +475,12 @@
     <ClInclude Include="src\cemetery.h" />
     <ClInclude Include="src\selection_range.h" />
     <ClInclude Include="src\duel_timer.h" />
+    <ClInclude Include="src\card_info_UI.h">
+      <Filter>card_UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_info_BG.h">
+      <Filter>card_UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">
@@ -539,6 +551,9 @@
     </Filter>
     <Filter Include="zone\flip">
       <UniqueIdentifier>{b82d6ea9-8963-40ec-aed9-88a76dc31186}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="card_UI">
+      <UniqueIdentifier>{f6f3e16b-c3d9-4805-90fd-4eac07a8fc98}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -192,7 +192,7 @@ void My::CCardStateCast::Init(CCard* cpy, CDuelCharacter* duel)
 		// 登録
 		for (auto& Target : cpy->GetTargetPlayerList())
 		{
-			pOverlapCard = pZoneManager->GetCastPreviewZone()->GetOverlapManager()->Create(duel, cpy->GetUserArea());
+			pOverlapCard = pZoneManager->GetCastPreviewZone()->GetOverlapManager()->Create(duel, cpy);
 
 			// 重ねたカードが存在していたら
 			if (pOverlapCard)
@@ -682,4 +682,14 @@ void My::CCardStateTrigger::Update(CCard* cpy, CDuelCharacter* duel)
 {
 	if (cpy == nullptr)
 		return;
+}
+//===========================================================================================================
+// 
+// セメタリーステート(カード効果発動)
+// 
+//===========================================================================================================
+void My::CCardStateCemetery::Init(CCard* cpy, CDuelCharacter* duel)
+{
+	//対象のリストを削除
+	cpy->RemoveAllTargetList();
 }
