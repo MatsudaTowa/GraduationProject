@@ -256,8 +256,6 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state, CDuelCharacter* duel)
 			m_pState = new CCardStateStay();
 			duel->GetZoneManager()->MoveZone(this, CastToEnumZone(ZONE::CAST, duel), duel->GetZoneManager()->GetCastPreviewZone(), true);
 
-			// ステイ時間のリセット
-			duel->GetZoneManager()->GetCastPreviewZone()->GetOverlapManager()->ResetStayTime(duel,this);
 			break;
 
 		case CCardState::CARD_WAIT:
