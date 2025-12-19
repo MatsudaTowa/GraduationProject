@@ -15,6 +15,7 @@
 #include "match_start_button.h"
 #include "wait_zone.h"
 #include "duel_manager.h"
+#include "zone_manager.h"
 
 //=============================================
 // コンストラクタ
@@ -98,6 +99,7 @@ m_pCemetery(nullptr)
 My::CPlayerDuelState::~CPlayerDuelState()
 {
 	CCardInfoUI* pUI = CDuel_Manager::GetInstance()->GetCardInfoUI();
+
 	if (CDuel_Manager::GetInstance()->GetCardInfoUI() != nullptr)
 	{
 		pUI->Uninit();
@@ -129,6 +131,7 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 
 	//ゲージ用チャージの更新
 	CEnergy_Charge* pCharge = CEnergy_Charge::GetInstance();
+	CDuelCharacter::GetZoneManager()->Update();
 
 	if (character->GetEnergy() < CActiveSceneCharacter::MAX_ENERGY)
 	{//エナジーがMAXになったらUIの更新はしない

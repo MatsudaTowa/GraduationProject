@@ -7,7 +7,7 @@
 
 // include
 #include"zone_manager.h"
-
+#include "duel_manager.h"
 /**
 * @brief コンストラクタ
 */
@@ -152,52 +152,70 @@ void My::CZoneManager::Uninit()
 */
 void My::CZoneManager::Update()
 {
-	// デッキのポインタ生成
-	if (m_pDeck != nullptr)
+	std::vector<CZone*> zone_vector =
 	{
-		m_pDeck->Update();
+		m_pDeck,
+		m_pCemetery,
+		m_pFieldZone,
+		m_pCemetery,
+		m_pCastPreviewZone,
+		m_pWaitZone,
+		m_pHandZone,
+		m_pFlipPreviewZone
+	};
+
+	for (auto& zone_itr : zone_vector)
+	{
+		if(zone_itr == nullptr) { continue; }
+
+		zone_itr->Update();
+
+		if (GET_INPUT_MOUSE->GetTrigger(0))
+		{
+			for (auto& card_itr : zone_itr->GetList())
+			{
+				if (card_itr == nullptr) { continue; }
+				// マウス取得
+				CInputMouse* pMouse = GET_INPUT_MOUSE;
+
+				// カードの座標をスクリーン座標変換した座標を格納する変数
+				D3DXVECTOR3 screenpos;
+
+				// カード座標
+				D3DXVECTOR3 pos = card_itr->GetPos();
+
+				// カード座標をスクリーン座標変換する
+				screenpos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), pos);
+				// マウス座標
+				D3DXVECTOR2 mousepos = { pMouse->GetMousePos().x, pMouse->GetMousePos().y };
+				// マウスとカードの位置の差
+				D3DXVECTOR2 resultpos;
+				resultpos.x = mousepos.x - screenpos.x;
+				resultpos.y = mousepos.y - screenpos.y;
+
+				CCardInfoUI* pUI = CDuel_Manager::GetInstance()->GetCardInfoUI();
+				if (pUI == nullptr)
+				{
+					continue;
+				}
+				// 矩形判定
+				if (resultpos.x <= 50.0f * card_itr->GetSize().x && resultpos.x >= -50.0f * card_itr->GetSize().x &&
+					resultpos.y <= 100.0f * card_itr->GetSize().y && resultpos.y >= -100.0f * card_itr->GetSize().y)
+				{
+					pUI->SetisDraw(true);
+					CDuel_Manager::GetInstance()->SetCardInfoUI(pUI);
+					return;
+				}
+				else
+				{
+					pUI->SetisDraw(false);
+					CDuel_Manager::GetInstance()->SetCardInfoUI(pUI);
+				}
+			}
+		}
 	}
 
-	// 墓地のポインタ生成
-	if (m_pCemetery != nullptr)
-	{
-		m_pCemetery->Update();
-	}
-
-	// フィールドゾーンポインタ生成
-	if (m_pFieldZone != nullptr)
-	{
-		m_pFieldZone->Update();
-	}
-
-	if (m_pCemetery != nullptr)
-	{
-		m_pCemetery->Update();
-	}
-
-	// キャストプレビューゾーンのポインタ生成
-	if (m_pCastPreviewZone != nullptr)
-	{
-		m_pCastPreviewZone->Update();
-	}
-
-	// 待機ゾーンのポインタ生成
-	if (m_pWaitZone != nullptr)
-	{
-		m_pWaitZone->Update();
-	}
-
-	// 手札ゾーンのポインタ生成
-	if (m_pHandZone != nullptr)
-	{
-		m_pHandZone->Update();
-	}
-
-	// フリップゾーンのポインタ生成
-	if (m_pFlipPreviewZone != nullptr)
-	{
-		m_pFlipPreviewZone->Update();
-	}
+	
 }
 
 /**

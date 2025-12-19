@@ -52,6 +52,7 @@ HRESULT My::CCardInfoUI::Init()
 	{
 		m_pBG = CCardInfoBG::Create(BASE_POS, POLY_SIZE[0]);
 	}
+	SetisDraw(false);
 	return S_OK;
 }
 
