@@ -103,6 +103,7 @@ void My::CCardFrame::Update()
 	if (current_zone == CCard::DECK)
 	{
 		SetisDraw(false);
+		GetCard()->SetisDraw(false);
 		return;
 	}
 	else if (current_zone == CCard::CEMETERY)
@@ -112,6 +113,7 @@ void My::CCardFrame::Update()
 	else
 	{
 		SetisDraw(true);
+		GetCard()->SetisDraw(true);
 	}
 
 	D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), m_pParent->GetPos()); //スクリーン座標に変換

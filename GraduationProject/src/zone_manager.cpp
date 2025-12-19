@@ -198,9 +198,9 @@ void My::CZoneManager::Update()
 				{
 					continue;
 				}
+				
 				// ‹éŒ`”»’è
-				if (resultpos.x <= 50.0f * card_itr->GetSize().x && resultpos.x >= -50.0f * card_itr->GetSize().x &&
-					resultpos.y <= 100.0f * card_itr->GetSize().y && resultpos.y >= -100.0f * card_itr->GetSize().y)
+				if (GET_COLISION->Check2DPolygonColision(GET_INPUT_MOUSE->GetMousePos(), { 3.0f,3.0f }, { screenpos.x,screenpos.y,0.0f }, { 50.0f,100.0f }) && card_itr->GetisDraw())
 				{
 					pUI->SetisDraw(true);
 					CDuel_Manager::GetInstance()->SetCardInfoUI(pUI);
@@ -208,7 +208,7 @@ void My::CZoneManager::Update()
 				}
 				else
 				{
-					pUI->SetisDraw(false);
+					CDuel_Manager::GetInstance()->GetCardInfoUI()->SetisDraw(false);
 					CDuel_Manager::GetInstance()->SetCardInfoUI(pUI);
 				}
 			}
