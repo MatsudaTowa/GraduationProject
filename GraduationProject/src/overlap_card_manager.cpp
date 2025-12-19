@@ -73,15 +73,15 @@ My::COverlapCard* My::COverlapCardManager::Create(CDuelCharacter* duel,CCard* pc
 	*/
 
 	// リストのイテレーターを回す
-	for (auto& itr : overlap_list)
+	for (auto& overlap : overlap_list)
 	{
 		for (auto& target : pcard->GetTargetPlayerList())
 		{
 			// 同じターゲットの重なったカードがあった時
-			if (itr->GetTarget() == target->GetArea())
+			if (overlap->GetTarget() == target->GetArea())
 			{
 				// オーバーラップカードからカード検索
-				std::vector<CCard*>card = itr->GetOverlapCards();
+				std::vector<CCard*>overlap_card = overlap->GetOverlapCards();
 
 				// TODO
 				// カードを検索してキャスト時カードの上に重なってたらなどやる場所
@@ -92,13 +92,18 @@ My::COverlapCard* My::COverlapCardManager::Create(CDuelCharacter* duel,CCard* pc
 				// そこで UserArea の取得によって位置を設定。変えます～
 				// カードの位置を変えて、そうしましたらカードを重ねたとき、
 				// ターゲットを設定するときに重ねたカードのターゲットを参照すればできそうですね
-				for (auto& iter : card)
+
+				// カードが重なったかどうかチェックする
+				bool b = overlap->CheckOverlap(pcard);
+
+				// 重ねていたら
+				if (b)
 				{
-					if (iter->GetPos() == pcard->GetPos())
-					{
-						// すでにある overlap を返す(同じターゲット&&同じ重ね方)
-						return itr;
-					}
+					// ステイ時間をリセット
+					rrrrrr(duel, overlap);
+
+					// すでにある overlap を返す(同じターゲット&&同じ重ね方)
+					return overlap;
 				}
 			}
 		}
@@ -113,16 +118,16 @@ My::COverlapCard* My::COverlapCardManager::Create(CDuelCharacter* duel,CCard* pc
 		pOverlapCard->SetTarget(target->GetArea());
 	}
 	// TODO : [OverlapCardList]を[push_back]する時の条件
-		// -------------------------------------------------
-		// リストのサイズがないとき
-		// デュエルキャラクターが違うとき
-		// カードを重ねなかったとき
-	/*if (overlap_list.size() <= 0)*/
-	{
-		overlap_list.push_back(pOverlapCard);
-		SetOverlapCardList(overlap_list);
-		return pOverlapCard;
-	}
+	// -------------------------------------------------
+	// リストのサイズがないとき
+	// デュエルキャラクターが違うとき
+	// カードを重ねなかったとき
+	
+	overlap_list.push_back(pOverlapCard);
+	SetOverlapCardList(overlap_list);
+
+	return pOverlapCard;
+	
 
 	return nullptr;
 }
@@ -151,6 +156,15 @@ void My::COverlapCardManager::ResetStayTime(CDuelCharacter* duel, CCard* card)
 				i->GetState()->Init(i, duel);
 			}
 		}
+	}
+}
+
+void My::COverlapCardManager::rrrrrr(CDuelCharacter* duel, COverlapCard* overlap)
+{
+	// 重ねたカードリストを回す
+	for (auto& i : overlap->GetOverlapCards())
+	{
+		i->GetState()->Init(i, duel);
 	}
 }
 
