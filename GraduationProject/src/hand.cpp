@@ -15,6 +15,7 @@
 #include "zone_manager.h"
 #include <algorithm>
 #include "raknet.h"
+#include "card_frame.h"
 
 My::CHand::CHand() :
 	m_SelectNum(-1),
@@ -29,7 +30,7 @@ My::CHand::CHand() :
 {
 	if (m_pRange == nullptr)
 	{
-		m_pRange = CSelectionRange::Create({ SCREEN_WIDTH * HALF, 650.0f,0.0f }, { 400.0f, 100.0f });
+		m_pRange = CSelectionRange::Create({ SCREEN_WIDTH * HALF, 650.0f,0.0f }, { CCardFrame::CARD_WIDTH, CCardFrame::CARD_HEIGHT });
 		m_pRange->SetColor({ COLOR_RED.r,COLOR_RED.g,COLOR_RED.b,0.5f });
 		m_pRange->SetisDraw(true);
 	}
@@ -104,6 +105,13 @@ void My::CHand::Update(CPlayerDuelState* state, CActiveSceneCharacter* player)
 	for (auto& iter : state->GetZoneManager()->GetHandZone()->GetList())
 	{
 		iter->Update(state);
+	}
+
+	if (m_pRange != nullptr)
+	{
+		int nCardNum = state->GetZoneManager()->GetHandZone()->GetList().size();
+		float posInterbal = CCardFrame::CARD_WIDTH - (5 * nCardNum * 0.1f);	// ŽèŽD‚É•\Ž¦‚³‚ê‚Ä‚¢‚éŽž‚ÌƒJ[ƒh‚ÌŠÔŠu
+		m_pRange->SetSize({((nCardNum - 1) * posInterbal * 0.5f), CCardFrame::CARD_HEIGHT });
 	}
 
 	// ŽèŽD‘I‘ð
