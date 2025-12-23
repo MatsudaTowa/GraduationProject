@@ -34,44 +34,6 @@ My::COverlapCard* My::COverlapCardManager::Create(CDuelCharacter* duel,CCard* pc
 	// オーバーラップカードにカードを追加
 	std::list<COverlapCard*> overlap_list = pZoneManager->GetCastPreviewZone()->GetOverlapManager()->GetOverlapCardList();
 
-	/*
-	{
-		// カメラ取得
-		CCamera* pCamera = GET_CAMERA(0);
-		// マウス取得
-		CInputMouse* pMouse = GET_INPUT_MOUSE;
-
-		// マウス座標
-		D3DXVECTOR2 mousepos = { pMouse->GetMousePos().x, pMouse->GetMousePos().y };
-		// カード座標
-		D3DXVECTOR3 pos = GetPos();
-
-		// カードの座標をスクリーン座標変換した座標を格納する変数
-		D3DXVECTOR3 screenpos, screenposN;
-
-		// カード座標をスクリーン座標変換する
-		screenpos = ConvertToScreenPos(pCamera, pos);
-		// ニュートラル状態のカード座標をスクリーン座標変換する
-		screenposN = ConvertToScreenPos(pCamera, m_NeutralPos);
-
-		// マウスとカードの位置の差
-		D3DXVECTOR2 resultpos;
-		resultpos.x = mousepos.x - screenpos.x;
-		resultpos.y = mousepos.y - screenpos.y;
-
-		// マウスとニュートラル状態のカードの位置の差
-		D3DXVECTOR2 resultposN;
-		resultposN.x = mousepos.x - screenposN.x;
-		resultposN.y = mousepos.y - screenposN.y;
-
-		// 矩形判定
-		if (resultpos.x <= 50.0f * GetSize().x && resultpos.x >= -50.0f * GetSize().x &&
-			resultpos.y <= 100.0f * GetSize().y && resultpos.y >= -100.0f * GetSize().y ||
-			resultposN.x <= 50.0f && resultposN.x >= -50.0f &&
-			resultposN.y <= 100.0f && resultposN.y >= -100.0f)
-	}
-	*/
-
 	// リストのイテレーターを回す
 	for (auto& overlap : overlap_list)
 	{
@@ -95,12 +57,13 @@ My::COverlapCard* My::COverlapCardManager::Create(CDuelCharacter* duel,CCard* pc
 
 				// カードが重なったかどうかチェックする
 				bool b = overlap->CheckOverlap(pcard);
+				b = true;
 
 				// 重ねていたら
 				if (b)
 				{
 					// ステイ時間をリセット
-					rrrrrr(duel, overlap);
+					ResetStayTime(duel, overlap);
 
 					// すでにある overlap を返す(同じターゲット&&同じ重ね方)
 					return overlap;
@@ -127,39 +90,12 @@ My::COverlapCard* My::COverlapCardManager::Create(CDuelCharacter* duel,CCard* pc
 	SetOverlapCardList(overlap_list);
 
 	return pOverlapCard;
-	
-
-	return nullptr;
 }
 
-//===========================================================================================================
+//============================================================================================================
 // ステイ時間のリセット
-//===========================================================================================================
-void My::COverlapCardManager::ResetStayTime(CDuelCharacter* duel, CCard* card)
-{
-	// 重ねたカードのリスト取得
-	std::list<COverlapCard*>overlaplist = m_pOverlapCardList;
-
-	// リストを回す
-	for (auto Target : card->GetTargetPlayerList())
-	{
-		// リストを回す
-		for (auto& itr : overlaplist)
-		{
-			// ターゲットが同じじゃなければ
-			if (itr->GetTarget() != Target->GetArea())
-				continue;
-
-			// 重ねたカードリストを回す
-			for (auto& i : itr->GetOverlapCards())
-			{
-				i->GetState()->Init(i, duel);
-			}
-		}
-	}
-}
-
-void My::COverlapCardManager::rrrrrr(CDuelCharacter* duel, COverlapCard* overlap)
+//============================================================================================================
+void My::COverlapCardManager::ResetStayTime(CDuelCharacter* duel, COverlapCard* overlap)
 {
 	// 重ねたカードリストを回す
 	for (auto& i : overlap->GetOverlapCards())

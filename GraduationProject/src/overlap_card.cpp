@@ -34,7 +34,7 @@ void My::COverlapCard::Regist(CCard* pCard)
 //=========================================================================================
 // 指定されたカードのポインタを検索して削除
 //=========================================================================================
-inline void My::COverlapCard::ReMove(CCard* pCard)
+void My::COverlapCard::ReMove(CCard* pCard)
 {
 	// 指定されたカードのポインタを検索
 	auto it = std::find(m_pOverlapCards.begin(), m_pOverlapCards.end(), pCard);

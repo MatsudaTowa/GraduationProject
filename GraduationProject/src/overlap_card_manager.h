@@ -42,20 +42,24 @@ namespace My
 		* @brief 重なったカードリストの設定
 		* @param [in]m_pOverlapCardList 重なったカードリスト
 		*/
-		void SetOverlapCardList(std::list<COverlapCard*>list) { m_pOverlapCardList = list; }
+		void SetOverlapCardList(std::list<COverlapCard*>list)
+		{
+			m_pOverlapCardList = list;
+		}
 
 		/**
 		* @brief 重なったカードのリスト取得
 		* @return 重なったカードリスト
 		*/
-		std::list<COverlapCard*>& GetOverlapCardList() { return m_pOverlapCardList; }
+		std::list<COverlapCard*>& GetOverlapCardList()
+		{
+			return m_pOverlapCardList;
+		}
 
 		/**
-		* オーバーラップリストのステイ時間のリセット
+		* オーバーラップリストカードのステイ時間のリセット
 		*/
-		void ResetStayTime(CDuelCharacter* duel, CCard* card);
-
-		void rrrrrr(CDuelCharacter* duel, COverlapCard* overlap);
+		void ResetStayTime(CDuelCharacter* duel, COverlapCard* overlap);
 
 	private:
 		/**
