@@ -10,6 +10,7 @@
 #include "player_number_UI.h"
 #include "active_scene_character.h"
 #include "cemetery_button.h"
+#include "button_deckdraw.h"
 
 namespace My
 {
@@ -81,6 +82,15 @@ namespace My
 		}
 
 		/**
+		 * @brief デッキドローボタンの設定
+		 * @param [in]デッキドローボタンのポインタ
+		 */
+		inline void SetDeckDrawButton(CButtonDeckDraw* pDeckDrawButton)
+		{
+			m_pDeckDrawButton = pDeckDrawButton;
+		}
+
+		/**
 		 * @brief 体力UIの取得
 		 * @return [in]体力UIのポインタ
 		 */
@@ -106,11 +116,21 @@ namespace My
 		{
 			return m_pCemeteryButton;
 		}
+
+		/**
+		 * @brief デッキドローボタン取得
+		 * @return [in]デッキドローボタンのポインタ
+		 */
+		inline CButtonDeckDraw* GetDecDrawButton()
+		{
+			return m_pDeckDrawButton;
+		}
 	private:
 		CPlayerNumberUI* m_pNumberUI;
 		CLife_UI* m_pLifeUI;					//!<体力UI TODO:UIのインスタンスをキャラクターで持たせないように改良
 		CEnergy_UI* m_pEneryUI;					//!<エナジーUI TODO:UIのインスタンスをキャラクターで持たせないように改良
 		CCemeteryButton* m_pCemeteryButton;		//!<墓地ボタン
+		CButtonDeckDraw* m_pDeckDrawButton;		// デッキドローボタン
 	};
 }
 

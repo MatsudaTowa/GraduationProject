@@ -166,6 +166,7 @@
     <ClCompile Include="src\area_manager.cpp" />
     <ClCompile Include="src\billboard.cpp" />
     <ClCompile Include="src\button.cpp" />
+    <ClCompile Include="src\button_deckdraw.cpp" />
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\camera_state.cpp" />
     <ClCompile Include="src\card.cpp" />
@@ -295,6 +296,7 @@
     <ClInclude Include="src\area_manager.h" />
     <ClInclude Include="src\billboard.h" />
     <ClInclude Include="src\button.h" />
+    <ClInclude Include="src\button_deckdraw.h" />
     <ClInclude Include="src\camera.h" />
     <ClInclude Include="src\camera_state.h" />
     <ClInclude Include="src\card.h" />

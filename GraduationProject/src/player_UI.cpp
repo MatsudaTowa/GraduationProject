@@ -14,7 +14,8 @@
 My::CPlayerUI::CPlayerUI():m_pNumberUI(nullptr),
 m_pCemeteryButton(nullptr),
 m_pEneryUI(nullptr),
-m_pLifeUI(nullptr)
+m_pLifeUI(nullptr),
+m_pDeckDrawButton(nullptr)
 {
 }
 

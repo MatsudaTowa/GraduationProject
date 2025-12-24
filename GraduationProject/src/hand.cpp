@@ -87,19 +87,10 @@ void My::CHand::Update(CPlayerDuelState* state, CActiveSceneCharacter* player)
 	// キーボード取得
 	CInputKeyboard* pkeyboad = CManager::GetInstance()->GetKeyboard();
 
-	// ステータス取得
-	CActiveSceneCharacter::Status status = CActiveSceneManager::GetInstance()->GetPlayer()->GetStatus();
-
 	// 手札ドロー
 	if (pkeyboad->GetTrigger(DIK_SPACE))
 	{
-		if (status.energy > 0 && m_TotalNum < MAX_HANDSCARD && !state->GetZoneManager()->GetDeck()->GetList().empty())
-		{// 消費できるエナジーがなかったらドローできない
-
-			HandDraw(1, state);
-			--status.energy;
-			CActiveSceneManager::GetInstance()->GetPlayer()->SetStatus(status);
-		}
+		DeckDraw(state);
 	}
 
 	for (auto& iter : state->GetZoneManager()->GetHandZone()->GetList())
@@ -239,6 +230,23 @@ My::CCard* My::CHand::SearchHandList(CDuelCharacter* character,int num)
 	}
 
 	return nullptr;
+}
+
+//===========================================================================================================
+// デッキからドローする処理
+//===========================================================================================================
+void My::CHand::DeckDraw(CPlayerDuelState* state)
+{
+	// ステータス取得
+	CActiveSceneCharacter::Status status = CActiveSceneManager::GetInstance()->GetPlayer()->GetStatus();
+
+	if (status.energy > 0 && m_TotalNum < MAX_HANDSCARD && !state->GetZoneManager()->GetDeck()->GetList().empty())
+	{// 消費できるエナジーがなかったらドローできない
+
+		HandDraw(1, state);
+		--status.energy;
+		CActiveSceneManager::GetInstance()->GetPlayer()->SetStatus(status);
+	}
 }
 
 //===========================================================================================================

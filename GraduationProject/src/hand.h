@@ -121,6 +121,11 @@ namespace My
 
 
 		CSelectionRange* GetSelectionRange() { return m_pRange; }
+
+		/**
+		* @brief デッキからエナジーを消費してドローする処理
+		*/
+		void DeckDraw(CPlayerDuelState* state);
 	private:
 		CSelectionRange* m_pRange;		// 手札の状態
 		HANDSTATE m_HandState;

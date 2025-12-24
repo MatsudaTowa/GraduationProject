@@ -16,6 +16,7 @@
 #include "wait_zone.h"
 #include "duel_manager.h"
 #include "zone_manager.h"
+#include "button_deckdraw.h"
 
 //=============================================
 // コンストラクタ
@@ -177,6 +178,10 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 		//player->SetHandNum(pHand->GetTotal())
 	}
 
+	// ボタンイベント判定
+	CButtonDeckDraw* pDeckDrawButton = player->GetPlayerUI()->GetDecDrawButton();
+	pDeckDrawButton->ProcessMouseEvent(this);
+
 	//親の更新
 	CDuelCharacter::Duel(character);
 }
@@ -219,6 +224,16 @@ void My::CPlayerDuelState::CreateDuelUI(CActiveScenePlayer* player)
 	{
 		CEnergy_UI* pEnergyUI = CEnergy_UI::Create({ screen_pos.x + 10000.0f,screen_pos.y,screen_pos.z });
 		player->GetPlayerUI()->SetEnergyUI(pEnergyUI);
+	}
+
+	if (player->GetPlayerUI()->GetDecDrawButton() == nullptr)
+	{
+		CButtonDeckDraw* pButtonDrawDeck = CButtonDeckDraw::Create(
+			{ screen_pos.x * 0.3f ,500.0f,0.0f },
+			{ 100,100 });
+
+		player->GetPlayerUI()->SetDeckDrawButton(pButtonDrawDeck);
+
 	}
 }
 
