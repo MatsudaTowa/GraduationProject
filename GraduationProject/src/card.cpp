@@ -267,7 +267,7 @@ void My::CCard::ChangeState(CCardState::CARD_STATE state, CDuelCharacter* duel)
 		case CCardState::CARD_TRIGGER:
 			m_pState = new CCardStateTrigger();
 
-			duel->GetZoneManager()->GetCastPreviewZone()->GetOverlapManager()->ReMove();
+			//duel->GetZoneManager()->GetCastPreviewZone()->GetOverlapManager()->ReMove();
 			break;
 
 		case CCardState::CARD_CEMETERY:

@@ -245,6 +245,8 @@
     </ClCompile>
     <ClCompile Include="src\card_info_cost.cpp">
       <Filter>card_UI</Filter>
+    <ClCompile Include="src\button_deckdraw.cpp">
+      <Filter>PlayerInfoUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -505,6 +507,9 @@
     <ClInclude Include="src\card_info_cost.h">
       <Filter>card_UI</Filter>
     </ClInclude>
+    <ClInclude Include="src\button_deckdraw.h">
+      <Filter>PlayerInfoUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="character">
@@ -578,6 +583,9 @@
     </Filter>
     <Filter Include="card_UI">
       <UniqueIdentifier>{f6f3e16b-c3d9-4805-90fd-4eac07a8fc98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PlayerInfoUI">
+      <UniqueIdentifier>{1da12393-a3a8-449f-9fbf-8d11745537be}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

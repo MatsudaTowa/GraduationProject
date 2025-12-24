@@ -293,18 +293,43 @@ void My::CCardAttack::Trigger()
 		CZoneManager* pZoneManager = nullptr;
 		pZoneManager = dynamic_cast<CDuelCharacter*>(iter->GetState())->GetZoneManager();
 
+		// 重なったカードの合計攻撃値
 		float totalattackvalue = 0.0f;
 
-		for (auto& pCard : pZoneManager->GetCastPreviewZone()->GetList())
+		/**
+		* TODO
+		* 現段階の下記コードではまるでOverlapCardListから
+		* カードを取り出して攻撃力加算をしているように見えるが
+		* 全然そんなことはできていなく、
+		* OverlapCardlistの要素が消されているため加算できていない
+		* これは私が直すのか、あるいは島津さんが通信処理と一緒に直してくれるのか...
+		*/
+		for (auto& pOverlapCards : pZoneManager->GetCastPreviewZone()->GetOverlapManager()->GetOverlapCardList())
 		{
-			CCardAttack* pAttackCard = dynamic_cast<CCardAttack*>(pCard);
-
-			if (pAttackCard == nullptr)
+			if (pOverlapCards->GetTarget() != iter->GetArea())
 				continue;
 
-			totalattackvalue += pAttackCard->GetAttackValue();
+			// 重なったカードの動的な配列からカードを抜き出す
+			for (auto& Card : pOverlapCards->GetOverlapCards())
+			{
+				// カードを攻撃カードにキャスト
+				CCardAttack* pAttackCard = dynamic_cast<CCardAttack*>(Card);
+
+				if (pAttackCard == nullptr)
+					continue;
+
+				// カードから攻撃力を取得して合計攻撃力に加算する
+				totalattackvalue += pAttackCard->GetAttackValue();
+
+				// カードを削除
+				pOverlapCards->ReMove(pAttackCard);
+			}
 		}
 
+		// Overlap の vector を削除
+		pZoneManager->GetCastPreviewZone()->GetOverlapManager()->ReMove();
+
+		// 最後にこのカードの攻撃力を加算
 		totalattackvalue += m_nAttackValue;
 
 		//ダメージの計算

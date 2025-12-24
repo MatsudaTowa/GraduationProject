@@ -40,7 +40,10 @@ namespace My
 		/**
 		* @brief 重ねたカードの管理
 		*/
-		inline COverlapCardManager* GetOverlapManager() { return m_pOverlapManager; }
+		inline COverlapCardManager* GetOverlapManager() 
+		{
+			return m_pOverlapManager;
+		}
 		
 	private:
 		COverlapCardManager* m_pOverlapManager;
