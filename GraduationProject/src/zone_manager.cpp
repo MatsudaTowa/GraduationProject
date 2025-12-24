@@ -203,6 +203,7 @@ void My::CZoneManager::Update()
 				if (GET_COLISION->Check2DPolygonColision(GET_INPUT_MOUSE->GetMousePos(), { 3.0f,3.0f }, { screenpos.x,screenpos.y,0.0f }, { 50.0f,100.0f }) && card_itr->GetisDraw())
 				{
 					pUI->SetisDraw(true);
+					pUI->SetCurrentUI(card_itr);
 					CDuel_Manager::GetInstance()->SetCardInfoUI(pUI);
 					return;
 				}

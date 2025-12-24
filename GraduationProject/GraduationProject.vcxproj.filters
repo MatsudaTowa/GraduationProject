@@ -234,6 +234,18 @@
     <ClCompile Include="src\card_info_BG.cpp">
       <Filter>card_UI</Filter>
     </ClCompile>
+    <ClCompile Include="src\card_info_name.cpp">
+      <Filter>card_UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_info_use_font.cpp">
+      <Filter>card_UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_info_base.cpp">
+      <Filter>card_UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_info_cost.cpp">
+      <Filter>card_UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\billboard.h" />
@@ -475,10 +487,22 @@
     <ClInclude Include="src\cemetery.h" />
     <ClInclude Include="src\selection_range.h" />
     <ClInclude Include="src\duel_timer.h" />
+    <ClInclude Include="src\card_info_BG.h">
+      <Filter>card_UI</Filter>
+    </ClInclude>
     <ClInclude Include="src\card_info_UI.h">
       <Filter>card_UI</Filter>
     </ClInclude>
-    <ClInclude Include="src\card_info_BG.h">
+    <ClInclude Include="src\card_info_name.h">
+      <Filter>card_UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_info_use_font.h">
+      <Filter>card_UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_info_base.h">
+      <Filter>card_UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_info_cost.h">
       <Filter>card_UI</Filter>
     </ClInclude>
   </ItemGroup>

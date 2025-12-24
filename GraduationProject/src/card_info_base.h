@@ -4,31 +4,41 @@
 //Author Matsuda Towa
 //
 //=============================================
-#ifndef _CARD_INFO_BG_H_ //これが定義されてないとき
+#ifndef _CARD_INFO_BASE_H_ //これが定義されてないとき
 
-#define _CARD_INFO_BG_H_
+#define _CARD_INFO_BASE_H_
 #include "main.h"
 #include "object2D.h"
-#include "card_info_base.h"
+
 namespace My
 {
+	class CCard;
 	//=============================================
-	//カード情報の背景
+	//カード情報の基底 TODO:フレームと多分処理一緒だから
 	//=============================================
-	class CCardInfoBG : public CCardInfoBase
+	class CCardInfoBase : public CObject2D
 	{
 	public:
-		static const int BG_PRIORITY = 26;  //描画順
+		enum UI_TYPE
+		{
+			BG = 0,
+			COST,
+			STATES,
+			NAME,
+			ILLUST,
+			TEXT,
+			MAX
+		};
 
 		/**
 		 * @brief コンストラクタ
 		 * @param [in]プライオリティ
 		 */
-		CCardInfoBG(int nPriority = BG_PRIORITY);
+		CCardInfoBase(int nPriority);
 		/**
 		 * @brief デストラクタ
 		 */
-		~CCardInfoBG()override;
+		~CCardInfoBase()override;
 		/**
 		 * @brief 初期化
 		 * @return 成功したか
@@ -46,8 +56,20 @@ namespace My
 		 * @brief 描画
 		 */
 		void Draw()override;
-		void SetUI()override {};
+		/**
+		 * @brief 生成
+		 * @param [in]位置
+		 * @param [in]サイズ
+		 * @return
+		 */
+		static CCardInfoBase* Create(D3DXVECTOR3 pos, D3DXVECTOR2 size, UI_TYPE type);
+
+		virtual void SetUI() = 0;
+
+		CCard* GetCard() { return m_pSelectCard; }
+		void SetCard(CCard* select_card) { m_pSelectCard = select_card; }
 	private:
+		CCard* m_pSelectCard;
 	};
 }
 

@@ -8,28 +8,16 @@
 #define _CARD_INFO_UI_H_
 #include "main.h"
 #include "card.h"
-#include "card_info_BG.h"
+#include "card_info_base.h"
 
 namespace My
 {
-	class CCardInfoBG;
 	//=============================================
 	// カードの情報UI
 	//=============================================
 	class CCardInfoUI
 	{
 	public:
-		enum UI_TYPE
-		{
-			BG = 0,
-			COST,
-			STATES,
-			NAME,
-			ILLUST,
-			TEXT,
-			MAX
-		};
-
 		/**
 		 * @brief コンストラクタ
 		 */
@@ -56,14 +44,15 @@ namespace My
 
 		void SetisDraw(bool isDraw)
 		{
-			if (m_pBG != nullptr)
+			for (int i = 0; i < CCardInfoBase::MAX; ++i)
 			{
-				m_pBG->SetisDraw(isDraw);
+				if (m_pCardInfo[i] == nullptr) { continue; }
+				m_pCardInfo[i]->SetisDraw(isDraw);
 			}
 		}
 
 	private:
-		CCardInfoBG* m_pBG;
+		CCardInfoBase* m_pCardInfo[CCardInfoBase::MAX];
 	};
 }
 

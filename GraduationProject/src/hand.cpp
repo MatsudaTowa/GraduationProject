@@ -110,8 +110,8 @@ void My::CHand::Update(CPlayerDuelState* state, CActiveSceneCharacter* player)
 	if (m_pRange != nullptr)
 	{
 		int nCardNum = state->GetZoneManager()->GetHandZone()->GetList().size();
-		float posInterbal = CCardFrame::CARD_WIDTH - (5 * nCardNum * 0.1f);	// 手札に表示されている時のカードの間隔
-		m_pRange->SetSize({((nCardNum - 1) * posInterbal * 0.5f), CCardFrame::CARD_HEIGHT });
+		float posInterbal = CCardFrame::CARD_WIDTH - (5 * nCardNum * 0.5f);	// 手札に表示されている時のカードの間隔
+		m_pRange->SetSize({((nCardNum) * posInterbal), CCardFrame::CARD_HEIGHT });
 	}
 
 	// 手札選択

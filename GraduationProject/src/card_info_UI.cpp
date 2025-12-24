@@ -5,11 +5,11 @@
 //
 //=============================================
 #include "card_info_UI.h"
-
+#include "card_info_base.h"
 namespace
 {
 	const D3DXVECTOR3 BASE_POS = { 210.0f,160.0f,0.0f };
-	const D3DXVECTOR3 OFFSET_POS[My::CCardInfoUI::MAX] =
+	const D3DXVECTOR3 OFFSET_POS[My::CCardInfoBase::MAX] =
 	{
 		{0.0f,0.0f,0.0f},
 		{0.0f,0.0f,0.0f},
@@ -18,7 +18,7 @@ namespace
 		{0.0f,0.0f,0.0f},
 		{0.0f,0.0f,0.0f},
 	};
-	const D3DXVECTOR2 POLY_SIZE[My::CCardInfoUI::MAX] =
+	const D3DXVECTOR2 POLY_SIZE[My::CCardInfoBase::MAX] =
 	{
 		{200.0f,150.0f},
 		{50.0f,50.0f},
@@ -32,7 +32,7 @@ namespace
 //=============================================
 // コンストラクタ
 //=============================================
-My::CCardInfoUI::CCardInfoUI():m_pBG(nullptr)
+My::CCardInfoUI::CCardInfoUI():m_pCardInfo()
 {
 }
 
@@ -48,10 +48,14 @@ My::CCardInfoUI::~CCardInfoUI()
 //=============================================
 HRESULT My::CCardInfoUI::Init()
 {
-	if (m_pBG == nullptr)
+	for (int i = 0; i < CCardInfoBase::MAX - 1; ++i)
 	{
-		m_pBG = CCardInfoBG::Create(BASE_POS, POLY_SIZE[0]);
+		if (m_pCardInfo[i] == nullptr)
+		{
+			m_pCardInfo[i] = CCardInfoBase::Create(BASE_POS, POLY_SIZE[i], (CCardInfoBase::UI_TYPE)i);
+		}
 	}
+
 	SetisDraw(false);
 	return S_OK;
 }
@@ -61,12 +65,14 @@ HRESULT My::CCardInfoUI::Init()
 //=============================================
 void My::CCardInfoUI::Uninit()
 {
-	if (m_pBG != nullptr)
+	for (int i = 0; i < CCardInfoBase::MAX - 1; ++i)
 	{
-		m_pBG->SetisDelete(true);
-		m_pBG = nullptr;
+		if (m_pCardInfo[i] == nullptr) { continue; }
+		
+		m_pCardInfo[i]->Uninit();
+		m_pCardInfo[i] = nullptr;
+		
 	}
-
 	delete this;
 }
 
@@ -82,4 +88,13 @@ void My::CCardInfoUI::Update()
 //=============================================
 void My::CCardInfoUI::SetCurrentUI(CCard* card)
 {
+	for (int i = 0; i < CCardInfoBase::MAX - 1; ++i)
+	{
+		if (m_pCardInfo[i] == nullptr) { continue; }
+
+		if (m_pCardInfo[i]->GetCard() == card) { continue; }
+
+		m_pCardInfo[i]->SetCard(card);
+		m_pCardInfo[i]->SetUI();
+	}
 }
