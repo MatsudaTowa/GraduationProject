@@ -337,24 +337,55 @@ void CRakNet::RequestDrawCard()
 //=====================================
 //カードキャストのリクエスト処理
 //=====================================
-void CRakNet::RequestCastCard(int cardid, int sameid, std::vector<int> targetplayer)
+//void CRakNet::RequestCastCard(int cardid, int sameid, std::vector<int> targetplayer)
+//{
+//    //データの作成
+//    RakNet::BitStream bsOut;    //送信用変数
+//    int nUserId = My::CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx();  //使用者番号
+//
+//   //書き出し
+//    bsOut.Write((RakNet::MessageID)CRakNet::GameMessages::ID_DUEL_MESSAGE_CAST_CARD);   //メッセージ
+//    bsOut.Write(nUserId);                                                               //使用者番号
+//    bsOut.Write(cardid);                                                                //カード番号
+//    bsOut.Write(sameid);                                                                //同種の何番目のカードか
+//    bsOut.Write(targetplayer.size());                                                   //対象者の数
+//
+//    //対象者の番号を書き出し
+//    for (int iter : targetplayer)
+//    {
+//        bsOut.Write(iter);
+//    }
+//
+//    //アドレスを取得
+//    RakNet::SystemAddress server_address = m_pPeer->GetSystemAddressFromIndex(0);
+//
+//    //サーバーの確認
+//    if (server_address != RakNet::UNASSIGNED_SYSTEM_ADDRESS)
+//    {
+//        // 全クライアントにブロードキャスト
+//        m_pPeer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, m_pPeer->GetSystemAddressFromIndex(0), false);
+//    }
+//}
+
+//=====================================
+//カードキャストのリクエスト処理
+//=====================================
+void CRakNet::RequestCastCard(My::CCard* castcard)
 {
     //データの作成
-    RakNet::BitStream bsOut;    //送信用変数
+    RakNet::BitStream bsOut;                                                            //送信用変数
     int nUserId = My::CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx();  //使用者番号
 
-   //書き出し
+    //書き出し
     bsOut.Write((RakNet::MessageID)CRakNet::GameMessages::ID_DUEL_MESSAGE_CAST_CARD);   //メッセージ
+    bsOut.Write(castcard->GetCardType());                                               //カードの種類
     bsOut.Write(nUserId);                                                               //使用者番号
-    bsOut.Write(cardid);                                                                //カード番号
-    bsOut.Write(sameid);                                                                //同種の何番目のカードか
-    bsOut.Write(targetplayer.size());                                                   //対象者の数
+    bsOut.Write(castcard->GetBaseStatus().nCardID);                                     //カード番号
+    bsOut.Write(castcard->GetSameTypeId());                                             //同種の何番目のカードか
+    bsOut.Write(castcard->GetCastDestination());                                        //キャスト先の列挙
 
-    //対象者の番号を書き出し
-    for (int iter : targetplayer)
-    {
-        bsOut.Write(iter);
-    }
+    //カードごとに書き出す情報を変更
+    castcard->SendCardInfo(&bsOut);
 
     //アドレスを取得
     RakNet::SystemAddress server_address = m_pPeer->GetSystemAddressFromIndex(0);
@@ -364,5 +395,34 @@ void CRakNet::RequestCastCard(int cardid, int sameid, std::vector<int> targetpla
     {
         // 全クライアントにブロードキャスト
         m_pPeer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, m_pPeer->GetSystemAddressFromIndex(0), false);
+    }
+}
+
+//=====================================
+//守備カードキャストのリクエスト処理
+//=====================================
+void CRakNet::RequestDefCastCard(My::CCardDeffence* castcard)
+{
+    //データの作成
+    RakNet::BitStream bsOut;    //送信用変数
+    int nUserId = My::CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx();  //使用者番号
+
+    //書き出し
+    bsOut.Write((RakNet::MessageID)CRakNet::GameMessages::ID_DUEL_MESSAGE_CAST_CARD);   //メッセージ
+    bsOut.Write(nUserId);                                                               //使用者番号
+    bsOut.Write(castcard->GetBaseStatus().nCardID);                                     //カード番号
+    bsOut.Write(castcard->GetSameTypeId());                                             //同種の何番目のカードか
+    bsOut.Write(castcard->GetCastDestination());                                        //キャスト先の列挙
+
+    //攻撃カードにキャストされていた場合、攻撃カードの情報を書き出し
+    if (castcard->GetCastDestination() == My::CCardDeffence::CastDestination::CARD)
+    {
+        //守備対象のカードを周回
+        for (auto iter : castcard->GetDiffenceTarget())
+        {
+            bsOut.Write(iter.nAttackCardUserId);  //使用者番号
+            bsOut.Write(iter.nTargetCardId);      //カード番号
+            bsOut.Write(iter.nTargetCardSameId);  //同種の何番目のカードか
+        }
     }
 }

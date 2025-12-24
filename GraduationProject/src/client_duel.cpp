@@ -15,6 +15,7 @@
 #include "card_deffence.h"
 #include "zone_manager.h"
 #include "duel_manager.h"
+#include "card.h"
 
 //=====================================
 //コンストラクタ
@@ -173,34 +174,63 @@ void CClient_Duel::CardCast(RakNet::Packet* packet)
 
     //受信する変数
     //人数を取得
-    unsigned char messageId;    //メッセージ
-    int nUserId = 0;            //使用者番号
-    int nCardId = 0;            //カード番号
-    int nSameTypeId = 0;        //同じカードの番号
-    uint64_t nCastTime = 0;     //キャスト時間
-    int nTargetSize = 0;        //ターゲットの数
-    std::vector<int> Target;    //ターゲット
+    unsigned char messageId;                //メッセージ
+    My::CCard::CARDTYPE_ CardType;          //カードのタイプ
+    My::CCard::CastDestination Destination; //キャスト先
+    int nUserId = 0;                        //使用者番号
+    int nCardId = 0;                        //カード番号
+    int nSameTypeId = 0;                    //同じカードの番号
+    uint64_t nCastTime = 0;                 //キャスト時間
+    int nTargetSize = 0;                    //ターゲットの数
+    std::vector<int> Target;                //ターゲット
 
     //読み込み
     bsIn.Read(messageId);          //メッセージ
+    bsIn.Read(CardType);           //カードの種類
     bsIn.Read(nUserId);            //使用者番号
-    bsIn.Read(nCardId);            //同じカードの番号
-    bsIn.Read(nSameTypeId);        //カード番号
+    bsIn.Read(nCardId);            //カードの番号
+    bsIn.Read(nSameTypeId);        //同じカード番号
+    bsIn.Read(Destination);        //キャスト先
     bsIn.Read(nCastTime);          //キャストした時間
-    bsIn.Read(nTargetSize);        //ターゲットの数
 
-    //周回
-    for (int i = 0; i < nTargetSize; ++i)
-    {
-        //ターゲットの読み込み
-        int nTargetId = 0;
-        bsIn.Read(nTargetId);
-        Target.push_back(nTargetId);
-    }
+    //bsIn.Read(nTargetSize);        //ターゲットの数
+
+    ////周回
+    //for (int i = 0; i < nTargetSize; ++i)
+    //{
+    //    //ターゲットの読み込み
+    //    int nTargetId = 0;
+    //    bsIn.Read(nTargetId);
+    //    Target.push_back(nTargetId);
+    //}
 
     //キャストカードの取得
     My::CCard* pCastCard = GetUsedCastCard(nUserId, nCardId, nSameTypeId);
-    pCastCard->SetStartCastTime(nCastTime); //キャスト時間の設定
+    pCastCard->SetStartCastTime(nCastTime);      //キャスト時間の設定
+    pCastCard->SetCastDestination(Destination);  //キャスト先の送信
+    pCastCard->LoadCardInfo(&bsIn);              //読み込み処理
+
+    //===================================================================================================
+
+     //引数の番号のプレイヤーを取得
+    My::CActiveSceneCharacter* Character = My::CActiveSceneManager::GetInstance()->GetCharacter(nUserId);
+
+    //対戦状態にキャスト
+    My::CDuelCharacter* pState = dynamic_cast<My::CDuelCharacter*>(Character->GetState());
+
+    pCastCard->SetUserArea(My::CActiveSceneManager::GetInstance()->GetCharacter(nUserId)->GetArea());
+
+    //山札のカードを手札に移動
+    pCastCard->ChangeState(My::CCardState::CARD_CAST, pState);
+
+    My::CPlayerDuelState* pPlayerState = nullptr;
+    pPlayerState = dynamic_cast<My::CPlayerDuelState*>(Character->GetState());
+
+    //中身がないなら抜ける
+    if (pPlayerState == nullptr) return;
+
+    //手札の整理
+    pPlayerState->GetHand()->SetHandCardPos(pPlayerState);
 
     ////人数を取得
     //unsigned char messageId;
@@ -249,19 +279,19 @@ My::CCard* CClient_Duel::GetUsedCastCard(int userid, int cardid, int sametypeid)
         break;
     }
 
-    //山札のカードを手札に移動
-    pCastCard->ChangeState(My::CCardState::CARD_CAST, pState);
-    //pState->GetZoneManager()->MoveZone(pCastCard, pState->GetZoneManager()->GetHandZone(), pState->GetZoneManager()->GetCastPreviewZone(), true);
-    //pCastCard->SetCurrentZone(My::CCard::CAST);
+    //pCastCard->SetUserArea(My::CActiveSceneManager::GetInstance()->GetCharacter(userid)->GetArea());
 
-    My::CPlayerDuelState* pPlayerState = nullptr;
-    pPlayerState = dynamic_cast<My::CPlayerDuelState*>(Character->GetState());
+    ////山札のカードを手札に移動
+    //pCastCard->ChangeState(My::CCardState::CARD_CAST, pState);
+   
+    //My::CPlayerDuelState* pPlayerState = nullptr;
+    //pPlayerState = dynamic_cast<My::CPlayerDuelState*>(Character->GetState());
 
-    //中身がないなら抜ける
-    if (pPlayerState == nullptr) return pCastCard;
+    ////中身がないなら抜ける
+    //if (pPlayerState == nullptr) return pCastCard;
 
-    //手札の整理
-    pPlayerState->GetHand()->SetHandCardPos(pPlayerState);
+    ////手札の整理
+    //pPlayerState->GetHand()->SetHandCardPos(pPlayerState);
 
     return pCastCard;
 }
@@ -739,7 +769,7 @@ void CClient_Duel::ReceiveCastDefCard(RakNet::Packet* packet)
         {
             My::CCardDeffence::DiffenceTarget Target;
             bsIn.Read(Target.nAttackCardUserId);
-            bsIn.Read(Target.nTargetCard);
+            bsIn.Read(Target.nTargetCardId);
 
             //対象の保存
             TargetVector.push_back(Target);
@@ -799,6 +829,13 @@ void CClient_Duel::ReceiveDrawCard(RakNet::Packet* packet)
     My::CCard* pCard = pState->GetZoneManager()->GetDeck()->GetTopCard();
     pState->GetZoneManager()->MoveZone(pCard, pState->GetZoneManager()->GetDeck(), pState->GetZoneManager()->GetHandZone(), true);
     pCard->SetCurrentZone(My::CCard::HAND);
+
+    //一時的な処理
+    if (My::CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx() != pCard->GetUserId())
+    {
+        //試しに画面外に飛ばす
+        pCard->SetPos({ -1000.0f, 0.0f, 0.0f });
+    }
 
     My::CPlayerDuelState* pPlayerState = nullptr; 
     pPlayerState = dynamic_cast<My::CPlayerDuelState*>(pPlayer->GetState());

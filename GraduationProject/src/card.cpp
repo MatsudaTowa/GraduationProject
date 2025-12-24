@@ -33,7 +33,8 @@ m_OldZone(ZONE::NONE_ZONE),
 m_PreCalculateStrategy(),
 m_PostCalculateStrategy(),
 m_UserArea(CInputMouse::AREA::CENTER),
-m_nUserId(-1)
+m_nUserId(-1),
+m_CastDestination(NONE)
 {
 	m_pTargetPlayerList.clear();
 	m_PreCalculateStrategy.clear();
@@ -406,6 +407,9 @@ bool My::CCard::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharacter* pla
 
 		if (IsCast(duel, Area))
 		{
+			//キャスト先
+			//m_CastDestination = AREA;	//エリア
+
 			//キャラクターのリスト
 			std::list<CActiveSceneCharacter*> list = CActiveSceneManager::GetInstance()->GetCharacterList();
 
@@ -438,16 +442,11 @@ bool My::CCard::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharacter* pla
 				//	break;
 				//}
 
-				//対象者の番号を取得して送信
-				std::vector<int> target;
-
-				for (auto iter : GetTargetPlayerList())
-				{
-					target.push_back(iter->GetPlayerIdx());
-				}
-
 				//キャストのリクエストを送信
-				CRakNet::GetInstance()->RequestCastCard(m_BaseStatus.nCardID, GetSameTypeId(), target);
+				CRakNet::GetInstance()->RequestCastCard(this);
+
+				//受信するためここで登録したものは破棄
+				RemoveAllTargetList();
 			}
 			else
 			{

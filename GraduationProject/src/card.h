@@ -11,6 +11,7 @@
 #include "card_state.h"
 #include "card_manager.h"
 #include "card_strategy.h"
+#include "BitStream.h"
 
 namespace My
 {
@@ -97,6 +98,14 @@ namespace My
 		{// デバフの種類 TODO:継承によって変わるかも
 			NONE_DEBUFF,
 			DEATH,                // 死亡
+		};
+
+		enum CastDestination
+		{//キャスト先
+			NONE = 0,	//無し
+			AREA,		//エリア
+			CARD,		//カード
+			MAX
 		};
 
 		struct BaseStatus
@@ -252,6 +261,18 @@ namespace My
 		//inline void SetTarget(CInputMouse::AREA area) { m_target = area; }
 		//inline CInputMouse::AREA GetTarget() { return m_target; }
 
+		/**
+		 * @brief キャスト先の列挙取得
+		 * @return キャスト先の列挙
+		 */
+		inline CastDestination GetCastDestination() { return m_CastDestination; }
+
+		/**
+		 * @brief キャスト先の列挙設定
+		 * @param キャスト先の列挙値
+		 */
+		inline void SetCastDestination(CastDestination castdestination) { m_CastDestination = castdestination; }
+
 		inline void SetCardHolder(CActiveScenePlayer* player) { m_pCardHolder = player; }
 		inline CActiveScenePlayer* GetCardHolder() { return m_pCardHolder; }
 
@@ -262,8 +283,11 @@ namespace My
 		void RemoveTargetList(CActiveSceneCharacter* target_list);	//削除
 		void RemoveAllTargetList() { m_pTargetPlayerList.clear(); }	//全て削除
 
+		//ターゲットリストの追加
+		virtual void AddTargetPlayerList(CActiveSceneCharacter* character) { m_pTargetPlayerList.push_back(character); }
+
 		//リストの取得
-		inline std::list<CActiveSceneCharacter*> GetTargetPlayerList() { return m_pTargetPlayerList; }	
+		inline std::list<CActiveSceneCharacter*> GetTargetPlayerList() { return m_pTargetPlayerList; }
 
 		//カード情報の読み込み
 		virtual void LoadInfo(int id);
@@ -321,6 +345,12 @@ namespace My
 
 		//トリガーを受信した際の処理
 		virtual void ReceiveTrigger();
+
+		//カード情報の送信
+		virtual void SendCardInfo(RakNet::BitStream* bsout) = 0;
+
+		//カード情報の読み込み
+		virtual void LoadCardInfo(RakNet::BitStream* bsin) = 0;
 
 	private:
 
@@ -414,6 +444,11 @@ namespace My
 		* キャスト時間
 		*/
 		float m_fCastStartTime;
+
+		/**
+		* キャスト先
+		*/
+		CastDestination m_CastDestination;
 	};
 };
 

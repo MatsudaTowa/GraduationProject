@@ -93,8 +93,9 @@ public:
 
 	//リクエスト処理
 	void RequestDrawCard();														//カードを引く
-	void RequestCastCard(int cardid, int sameid, std::vector<int> targetplayer);//通常カードのキャスト
-	void RequestDefCastCard(int usecardid, int targetplayer, int targetcard);	//守備カードのキャスト
+	//void RequestCastCard(int cardid, int sameid, std::vector<int> targetplayer);//通常カードのキャスト
+	void RequestCastCard(My::CCard* castcard);									//通常カードのキャスト
+	void RequestDefCastCard(My::CCardDeffence* castcard);						//守備カードのキャスト
 
 	//キャストカードの送信
 	//template<typename... Args>
@@ -144,7 +145,7 @@ public:
 		for (auto Target : target)
 		{
 			bsOut.Write(Target.nAttackCardUserId);	//対象者番号
-			bsOut.Write(Target.nTargetCard);		//カード番号
+			bsOut.Write(Target.nTargetCardId);		//カード番号
 		}
 
 		//サーバーに送信

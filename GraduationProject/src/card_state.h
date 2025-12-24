@@ -166,6 +166,9 @@ namespace My
 		/** @brief 更新 */
 		void Update(CCard* cpy, CDuelCharacter* duel)override;
 
+		/** @brief ステイ時間のリセット */
+		void ResetStayTime() { m_fStaycount = 0.0f; }
+
 	private:
 
 		/** @brief 対象によってカードの位置を設定 */

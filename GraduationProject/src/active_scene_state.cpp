@@ -263,6 +263,8 @@ void My::CDuel::Duel(CActiveScene* game)
 	//オブジェクトのアップデートを許可する
 	game->StopObject(false);
 
+	CActiveSceneManager::GetInstance()->GetTargetArrowManager()->Remove();
+
 	ArrangePlayerClockwise(VEC3_RESET_ZERO, 200.0f);
 
 	//入力デバイス取得

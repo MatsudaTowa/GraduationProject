@@ -76,6 +76,12 @@ namespace My
 		 */
 		void Trigger() override;
 
+		//カード情報の送信
+		void SendCardInfo(RakNet::BitStream* bsout) override {}
+
+		//カード情報の読み込み
+		void LoadCardInfo(RakNet::BitStream* bsin) override {}
+
 	private:
 		AssistType m_AssistType;
 	};

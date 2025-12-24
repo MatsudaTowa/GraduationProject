@@ -310,12 +310,16 @@ void My::CActiveSceneManager::DefCardCast()
 				int nCount = 0;
 				for (auto& AttackCard : EnemyDuelState->GetZoneManager()->GetCastPreviewZone()->GetList())
 				{
-					//異なるカードなら飛ばす
-					if (nTarget.nTargetCard != nCount)
-					{
-						++nCount;
-						continue;
-					}
+					////異なるカードなら飛ばす
+					//if (nTarget.nTargetCard != nCount)
+					//{
+					//	++nCount;
+					//	continue;
+					//}
+
+					//確認
+					if (nTarget.nTargetCardId != AttackCard->GetBaseStatus().nCardID) continue;
+					if (nTarget.nTargetCardSameId != AttackCard->GetSameTypeId()) continue;
 
 					//対象カードを攻撃カードにキャスト
 					CCardAttack* pAttackCard = nullptr;

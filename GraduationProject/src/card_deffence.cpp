@@ -1,3 +1,10 @@
+//===========================================================================================================================================================
+// 
+// 守備カードの処理 [card_deffence.cpp]
+// Author : 梅田　爽真
+// 
+//===========================================================================================================================================================
+//ヘッダーのインクルード
 #include "card_deffence.h"
 #include "card_strategy.h"
 #include "active_scene_manager.h"
@@ -5,6 +12,9 @@
 #include "zone_manager.h"
 #include "card_attack.h"
 
+//===========================================================================================================
+// コンストラクタ
+//===========================================================================================================
 My::CCardDeffence::CCardDeffence(int nPriority):CCard(nPriority),
 m_DefenceType(),
 m_nDefenceValue(INT_ZERO),
@@ -15,6 +25,9 @@ m_TargetInfo()
 	m_TargetInfo.clear();
 }
 
+//===========================================================================================================
+// デストラクタ
+//===========================================================================================================
 My::CCardDeffence::~CCardDeffence()
 {
 }
@@ -93,41 +106,19 @@ bool My::CCardDeffence::IsCast(CDuelCharacter* duel, CInputMouse::AREA area)
 		//自身の対象に追加
 		DiffenceTarget Target;
 		Target.nAttackCardUserId = player->GetPlayerIdx();
-		Target.nTargetCard = 0;
+		Target.nTargetCardId = 0;
+		Target.nTargetCardSameId = 0;
 		m_TargetInfo.push_back(Target);
-
 		RegistTargetList(player);
+
+		//キャスト先の代入
+		SetCastDestination(AREA);	//エリア
+
 		return true;
 	}
 
 	//キャストしたか
 	bool isCast = false;
-
-	////敵が対象かの確認
-	//std::list<CEnemy*> enemy_list = CActiveSceneManager::GetInstance()->GetEnemyManager()->GetList();
-	//for (auto& itr : enemy_list)
-	//{
-	//	if (itr == nullptr) { continue; }
-	//	if (itr->GetArea() != GetTarget()) { continue; }
-
-	//	//対象の状態を取得
-	//	if (typeid(CDuelCharacter) != typeid(*itr->GetState())) continue;		//中身の一致を確認
-	//	CDuelCharacter* State = dynamic_cast<CDuelCharacter*>(itr->GetState());	//キャスト
-	//	if (State == nullptr) continue;											//中身があるか確認
-
-	//	//TODO::現在は先に出した攻撃カードを参照するが、将来的には相手のステイ中のカードから選択する
-	//	if (State->GetZoneManager()->GetCastPreviewZone()->GetList().empty()) continue;
-
-	//	//キャストゾーンのカード周回
-	//	for (auto& iter : State->GetZoneManager()->GetCastPreviewZone()->GetList())
-	//	{
-	//		//攻撃のカードが存在するかを確認
-	//		if (iter->GetCardType() != CCard::CARDTYPE_::TYPE_ATTACK) continue;
-
-	//		RegistTargetList(itr);
-	//		isCast = true;
-	//	}
-	//}
 
 	// カメラ取得
 	CCamera* pCamera = GET_CAMERA(0);
@@ -202,8 +193,12 @@ bool My::CCardDeffence::IsCast(CDuelCharacter* duel, CInputMouse::AREA area)
 				//自身の対象に追加
 				DiffenceTarget Target;
 				Target.nAttackCardUserId = itr->GetPlayerIdx();
-				Target.nTargetCard = nListCount;
+				Target.nTargetCardId = iter->GetBaseStatus().nCardID;
+				Target.nTargetCardSameId = iter->GetSameTypeId();
 				m_TargetInfo.push_back(Target);
+
+				//キャスト先の代入
+				SetCastDestination(CARD);	//カード
 			}
 
 			++nListCount;
@@ -249,15 +244,20 @@ void My::CCardDeffence::Stay()
 			//手札のカードを周回し、受信したカードを探す
 			for (auto& Card : DuelState->GetZoneManager()->GetCastPreviewZone()->GetList())
 			{
-				if (nCount != iter.nTargetCard)
+				if (iter.nTargetCardId != Card->GetBaseStatus().nCardID) continue;
+				if (iter.nTargetCardSameId != Card->GetSameTypeId()) continue;
+
+				/*if (nCount != iter.nTargetCard)
 				{
 					++nCount;
 					continue;
-				}
+				}*/
 
 				pCard = Card;
 				break;
 			}
+
+			if (!pCard) return;
 
 			//カード
 			D3DXVECTOR3 pos = pCard->GetPos();
@@ -377,7 +377,7 @@ bool My::CCardDeffence::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharac
 			//通常状態にする
 			ChangeState(CCardState::CARD_NEUTRAL, duel);
 			CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
-			return true;
+			return false;
 		}
 
 		//エナジーが不足しているなら抜ける
@@ -386,7 +386,7 @@ bool My::CCardDeffence::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharac
 			// 通常状態にする
 			ChangeState(CCardState::CARD_NEUTRAL, duel);
 			CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
-			return true;
+			return false;
 		}
 
 		//使用者のエリアの取得
@@ -395,35 +395,43 @@ bool My::CCardDeffence::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharac
 		if (IsCast(duel, Area))
 		{
 			//ステイフラグの確認
-			if (m_isStay)
-			{
-				//ステイステートにする
-				ChangeState(CCardState::CARD_STAY, duel);
-			}
-			else
-			{
-				// キャスト遷移
-				ChangeState(CCardState::CARD_CAST, duel);
-			}
+			//if (m_isStay)
+			//{
+			//	//ステイステートにする
+			//	ChangeState(CCardState::CARD_STAY, duel);
+			//}
+			//else
+			//{
+			//	// キャスト遷移
+			//	ChangeState(CCardState::CARD_CAST, duel);
+			//}
 			
 			CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
 
 			//オンライン時なら送信
 			if (CRakNet::GetInstance()->GetOnline())
 			{//TODO : カードの対象が複数になったら処理の変更の必要があり
-				std::list<CActiveSceneCharacter*> list = CActiveSceneManager::GetInstance()->GetCharacterList();
+				//std::list<CActiveSceneCharacter*> list = CActiveSceneManager::GetInstance()->GetCharacterList();
 
-				//対象を見つけて送信
-				for (auto& itr : list)
-				{
-					if (itr == nullptr) { continue; }
-					if (itr->GetArea() != Area) { continue; }
-					if (m_TargetInfo.empty()) { continue; }
+				////対象を見つけて送信
+				//for (auto& itr : list)
+				//{
+				//	if (itr == nullptr) { continue; }
+				//	if (itr->GetArea() != Area) { continue; }
+				//	if (m_TargetInfo.empty()) { continue; }
 
-					CRakNet::GetInstance()->SendCastDefCard(GetBaseStatus().nCardID, CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx(), m_TargetInfo);
+				//	CRakNet::GetInstance()->SendCastDefCard(GetBaseStatus().nCardID, CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx(), m_TargetInfo);
 
-					break;
-				}
+				//	break;
+				//}
+
+				//キャストのリクエストを送信
+				CRakNet::GetInstance()->RequestCastCard(this);
+			}
+			else
+			{
+				// キャスト遷移
+				ChangeState(CCardState::CARD_CAST, duel);
 			}
 
 			return false;
@@ -439,4 +447,106 @@ bool My::CCardDeffence::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharac
 
 	return false;
 
+}
+
+//===========================================================================================================
+//カード情報の送信
+//===========================================================================================================
+void My::CCardDeffence::SendCardInfo(RakNet::BitStream* bsout)
+{
+	//列挙に応じて処理を送信内容を変更
+	switch (GetCastDestination())
+	{
+	case CastDestination::AREA:	//エリアの場合
+
+		break;
+
+	case CastDestination::CARD:	//カードの場合
+
+		//重ねたカードの書き出し
+		bsout->Write(m_TargetInfo[0].nAttackCardUserId);	//使用者番号
+		bsout->Write(m_TargetInfo[0].nTargetCardId);		//カードID
+		bsout->Write(m_TargetInfo[0].nTargetCardSameId);	//同種類番号
+
+		break;
+	default:
+		break;
+	}
+}
+
+//===========================================================================================================
+//カード情報読み込み
+//===========================================================================================================
+void My::CCardDeffence::LoadCardInfo(RakNet::BitStream* bsin)
+{
+	//列挙に応じて処理を送信内容を変更
+	switch (GetCastDestination())
+	{
+	case CastDestination::AREA:	//エリアの場合
+	{
+		My::CActiveSceneCharacter* pCharacter = My::CActiveSceneManager::GetInstance()->GetCharacter(GetUserId());
+		My::CDuelCharacter* pDuelState = dynamic_cast<My::CDuelCharacter*>(pCharacter->GetState());
+		//ChangeState(My::CCardState::CARD_CAST, pDuelState);
+	}
+		
+		break;
+
+	case CastDestination::CARD:	//カードの場合
+
+		////重ね先のカード情報を送信
+		//bsin->Read(m_TargetInfo[0].nAttackCardUserId);	//対象カードの使用者番号
+		//bsin->Read(m_TargetInfo[0].nTargetCardId);		//カード番号
+		//bsin->Read(m_TargetInfo[0].nTargetCardSameId);	//同種番号
+
+	{
+		//変数宣言
+		int nUserId = 0;	//使用者番号
+		int nCardId = 0;	//カード番号
+		int nSameId = 0;	//同種番号
+		My::CActiveSceneCharacter* pCharacter = nullptr;
+
+		//読み込み
+		bsin->Read(nUserId);
+		bsin->Read(nCardId);
+		bsin->Read(nSameId);
+
+		//番号が一致するプレイヤーの取得
+		pCharacter = My::CActiveSceneManager::GetInstance()->GetCharacter(nUserId);
+
+		if (!pCharacter) return;	//中身の確認
+
+		//対象を代入用の攻撃カードポインタ
+		My::CDuelCharacter* pDuelState = dynamic_cast<My::CDuelCharacter*>(pCharacter->GetState());
+		My::CCardAttack* pAttackCard = nullptr;
+
+		//相手のキャストゾーンのカードを確認
+		for (My::CCard* pCard : pDuelState->GetZoneManager()->GetCastPreviewZone()->GetList())
+		{
+			//受信した対象のカードがあるかを確認
+			if (pCard->GetBaseStatus().maintype != CCard_Client::ATTACK) continue;	//攻撃カードか
+			if (pCard->GetBaseStatus().nCardID != nCardId) continue;				//カード番号
+			if (pCard->GetSameTypeId() != nSameId) continue;						//同種番号
+
+			//攻撃カードにキャストして
+			pAttackCard = dynamic_cast<My::CCardAttack*>(pCard);
+			break;
+		}
+
+		//攻撃カードの中身を確認
+		if (!pAttackCard) return;
+
+		//攻撃カードに自身を登録
+		pAttackCard->AddDefCard(this);
+
+		//ターゲット情報の代入
+		DiffenceTarget Target = { pAttackCard->GetUserId(), pAttackCard->GetBaseStatus().nCardID, pAttackCard->GetSameTypeId() };
+		m_TargetInfo.push_back(Target);
+		ChangeState(My::CCardState::CARD_STAY, pDuelState);
+	}
+
+		break;
+
+	default:
+		break;
+	}
 }

@@ -23,6 +23,7 @@ namespace My
 			RANDOM_ATTACK,            // ランダム攻撃
 			SELFINTARGET_ATTACK,    // 自分を含めた攻撃
 		};
+
 		/**
 		 * @brief コンストラクタ
 		 */
@@ -111,14 +112,63 @@ namespace My
 		 */
 		inline void AddDefCard(CCardDeffence* defcard) { m_DefCardVector.push_back(defcard); }
 
+		/**
+		 * @brief 重ねるカードの追加
+		 * @param [in]重ねるカード
+		 */
+		inline void AddStackCards(CCardAttack* card) { m_StackedCardsList.push_back(card); }
+
+		/**
+		 * @brief 重ねたカードの取得
+		 * @preturn 重なったカードのリスト
+		 */
+		std::list<CCardAttack*> GetStackedCards() { return m_StackedCardsList; }
+
+		/**
+		 * @brief 一番上のキャストカードかのフラグの設定
+		 * @param フラグの設定
+		 */
+		void SetTopCastCard(bool top) { m_isTopCastCard = top; }
+
+		/**
+		 * @brief 一番上のキャストカードかのフラグの取得
+		 * @param フラグの設定
+		 */
+		bool GetTopCastCard() { return m_isTopCastCard; }
+
+		/**
+		 * @brief ダメージ情報の追加
+		 * @param 対象の番号
+		 */
+		void AddDamageInfo(int id) { m_DamageInfo[id] = m_nAttackValue; }
+
+		/**
+		 * @brief ダメージ情報の取得
+		 * @return ダメージ情報
+		 */
+		std::map<int, int>& GetDamageInfo() { return m_DamageInfo; }
+
 		//トリガーを受信した際の処理
 		void ReceiveTrigger() override;
 
+		//カード情報の送信
+		void SendCardInfo(RakNet::BitStream* bsout) override;
+
+		//ターゲットリストの追加
+		void AddTargetPlayerList(CActiveSceneCharacter* character) override;
+
+		//カード情報の読み込み
+		void LoadCardInfo(RakNet::BitStream* bsin) override;
+
 	private:
 
-		AttackType m_AttackType;
+		AttackType m_AttackType;						// 攻撃の種類
 		int m_nAttackValue;								// ダメージ数
+		std::map<int, int> m_DamageInfo;				// ダメージ情報
 		std::vector<CCardDeffence*> m_DefCardVector;	// 守備カードのベクター
+		std::list<CCardAttack*> m_StackedCardsList;		// 重なっているカード
+		bool m_isTopCastCard;							// 一番上のカードか
+		CCardAttack* m_pStackCard;						// 重ねたカード
 	};
 }
 

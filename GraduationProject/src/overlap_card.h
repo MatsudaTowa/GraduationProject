@@ -5,6 +5,7 @@
 // 
 //============================================================================================
 #ifndef _OVERLAP_CARD_
+#define _OVERLAP_CARD_
 #include "main.h"
 #include "card.h"
 

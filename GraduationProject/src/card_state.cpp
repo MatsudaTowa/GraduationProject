@@ -293,6 +293,13 @@ void My::CCardStateCast::ChangeToState(CCard* cpy, CDuelCharacter* duel)
 		}
 	}
 
+	//キャスト先がエリアなら待機状態
+	if (cpy->GetCastDestination() == My::CCard::CastDestination::AREA)
+	{
+		cpy->ChangeState(CCardState::CARD_STATE::CARD_WAIT, duel);
+		return;
+	}
+
 	//ターゲットが敵ならステイ状態へ
 	cpy->ChangeState(CCardState::CARD_STATE::CARD_STAY, duel);
 }

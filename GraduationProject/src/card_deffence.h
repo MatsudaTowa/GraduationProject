@@ -25,7 +25,8 @@ namespace My
 		struct DiffenceTarget
 		{
 			int nAttackCardUserId = 0;	//攻撃カードの使用者番号
-			int nTargetCard = 0;		//ターゲットのカード番号(現在のリストの中の番号)
+			int nTargetCardId = 0;		//ターゲットのカード番号
+			int nTargetCardSameId = 0;	//ターゲットのカード同種番号
 		};
 
 		//定数
@@ -112,6 +113,12 @@ namespace My
 		inline void SetDiffenceTarget(DiffenceTarget target) { m_TargetInfo.push_back(target); }
 
 		/**
+		 * @brief 対象の取得
+		 * @return 対象
+		 */
+		inline std::vector<DiffenceTarget> GetDiffenceTarget() { return m_TargetInfo; }
+
+		/**
 		 * @brief 固有情報設定
 		 * @param [in]param
 		 */
@@ -137,13 +144,20 @@ namespace My
 		 */
 		void Trigger() override;
 
+		//カード情報の送信
+		void SendCardInfo(RakNet::BitStream* bsout) override;
+
+		//カード情報の読み込み
+		void LoadCardInfo(RakNet::BitStream* bsin) override;
+
 	private:
 
-		DefenseType m_DefenceType;
-		int m_nDefenceValue;
-		int m_nCounterValue;
-		bool m_isStay;
-		std::vector<DiffenceTarget> m_TargetInfo;
+		//変数
+		DefenseType m_DefenceType;					//守備の種類
+		int m_nDefenceValue;						//ディフェンス値
+		int m_nCounterValue;						//カウンター値
+		bool m_isStay;								//ステイ状態になるか
+		std::vector<DiffenceTarget> m_TargetInfo;	//対象の情報
 	};
 }
 

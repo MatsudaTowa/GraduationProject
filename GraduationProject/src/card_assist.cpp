@@ -62,6 +62,9 @@ void My::CCardAssist::LoadUniqueInfo(CCard_Client::Param param)
 //===========================================================================================================
 bool My::CCardAssist::IsCast(CDuelCharacter*, CInputMouse::AREA)
 {
+	//キャスト先の代入
+	SetCastDestination(AREA);	//エリア
+
 	return true;
 
 	for (auto Target : GetTargetPlayerList())
