@@ -79,3 +79,11 @@ void My::CCardAssist::Trigger()
 	//クライアントにトリガー情報を送信
 	CRakNet_Server::GetInstance()->SendTriggerCard(this);
 }
+
+//===========================================================================================================
+//キャストカードの読み込み処理
+//===========================================================================================================
+bool My::CCardAssist::LoadCastInfo(RakNet::BitStream* /*bsin*/, CastDestination /*destination*/)
+{
+	return true;
+}

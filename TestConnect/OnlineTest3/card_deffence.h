@@ -11,7 +11,7 @@
 
 namespace My
 {
-	class CCardDeffence :public CCard
+	class CCardDeffence : public CCard
 	{
 	public:
 		enum DefenseType
@@ -21,11 +21,20 @@ namespace My
 			NOT_COUNTER,        // 反撃できない
 		};
 
+		//enum CastDestination
+		//{//キャスト先
+		//	NONE = 0,		//無し
+		//	ZONE,		//待機ゾーン
+		//	CARD,	//攻撃カード
+		//	MAX
+		//};
+
 		//守備対象
 		struct DiffenceTarget
 		{
 			int nAttackCardUserId = 0;	//攻撃カードの使用者番号
-			int nTargetCard = 0;		//ターゲットのカード番号(現在のリストの中の番号)
+			int nTargetCardId = 0;		//ターゲットのカード番号
+			int nTargetCardSameId = 0;	//ターゲットのカード同種番号
 		};
 
 		//定数
@@ -118,6 +127,12 @@ namespace My
 		 * @brief トリガー処理
 		 */
 		void Trigger() override;
+
+		//キャストカードの読み込み
+		bool LoadCastInfo(RakNet::BitStream* bsin, CastDestination destination) override;
+
+		//キャストカードの書き出し
+		void SendCastInfo(RakNet::BitStream* bsout) override;
 
 	private:
 

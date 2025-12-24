@@ -173,18 +173,18 @@ void CCard_Client::RequestAllCard()
 //=====================================
 void CCard_Client::ReceiveCardInfo(RakNet::Packet* packet)
 {
-    //受信側
-    RakNet::BitStream bsIn(packet->data, packet->length, false);
+    ////受信側
+    //RakNet::BitStream bsIn(packet->data, packet->length, false);
 
-    //人数を取得
-    unsigned char messageId;    //メッセージ
-    My::CCard Card;             //カード情報
+    ////人数を取得
+    //unsigned char messageId;    //メッセージ
+    //My::CCard Card;             //カード情報
    
-    //読み込み
-    bsIn.Read(messageId);
-    bsIn.Read(Card);
+    ////読み込み
+    //bsIn.Read(messageId);
+    //bsIn.Read(Card);
 
-    //下にカード情報を追加
+    ////下にカード情報を追加
 }
 
 //=====================================

@@ -7,10 +7,10 @@
 
 #include "card_deffence.h"
 #include "card_strategy.h"
-//#include "active_scene_manager.h"
-//#include "raknet.h"
 #include "zone_manager.h"
 #include "card_attack.h"
+#include "duel_player_manager.h"
+#include "duel_manager.h"
 
 //===========================================================================================================
 // コンストラクタ
@@ -142,4 +142,104 @@ void My::CCardDeffence::Trigger()
 	//		itr->ReceiveDamage(m_nCounterValue);
 	//	}
 	//}
+}
+
+//===========================================================================================================
+//キャストカードの読み込み処理
+//===========================================================================================================
+bool My::CCardDeffence::LoadCastInfo(RakNet::BitStream* bsin, CastDestination destination)
+{
+	//列挙に応じて処理を送信内容を変更
+	switch (destination)
+	{
+	case CastDestination::AREA:	//エリアの場合
+
+		//キャスト状態に変更
+		SetStartCastTime(CDuel_Manager::GetInstance()->GetDuelTimer().GetElapsedTime());
+		ChangeState(My::CCardState::CARD_CAST, CDuel_Player_Manager::GetInstance()->GetDuelPlayer(GetUserId()));
+		return true;
+		break;
+
+	case CastDestination::CARD:	//カードの場合
+
+	{
+		//変数宣言
+		int nUserId = 0;	//使用者番号
+		int nCardId = 0;	//カード番号
+		int nSameId = 0;	//同種番号
+		My::CDuel_Player* pPlayer = nullptr;
+
+		//読み込み
+		bsin->Read(nUserId);
+		bsin->Read(nCardId);
+		bsin->Read(nSameId);
+
+		//番号が一致するプレイヤーの取得
+		pPlayer = My::CDuel_Player_Manager::GetInstance()->GetDuelPlayer(nUserId);
+
+		if (!pPlayer) return false;	//中身の確認
+
+		//対象を代入用の攻撃カードポインタ
+		My::CCardAttack* pAttackCard = nullptr;
+
+		//相手のキャストゾーンのカードを確認
+		for (My::CCard* pCard : pPlayer->GetZoneManager()->GetCastPreviewZone()->GetList())
+		{
+			//受信した対象のカードがあるかを確認
+			if (pCard->GetBaseStatus().Maintype != CCard_Client::ATTACK) continue;	//攻撃カードか
+			if (pCard->GetBaseStatus().nCardID != nCardId) continue;				//カード番号
+			if (pCard->GetSameTypeId() != nSameId) continue;						//同種番号
+
+			//攻撃カードにキャストして
+			pAttackCard = dynamic_cast<My::CCardAttack*>(pCard);
+			break;
+		}
+
+		//攻撃カードの中身を確認
+		if (!pAttackCard) return false;
+
+		//攻撃カードに自身を登録
+		pAttackCard->AddDefCard(this);
+
+		//ターゲット情報の代入
+		DiffenceTarget Target = { pAttackCard->GetUserId(), pAttackCard->GetBaseStatus().nCardID, pAttackCard->GetSameTypeId() };
+		m_TargetInfo.push_back(Target);
+
+		return true;
+	}
+
+		break;
+	default:
+
+		return false;
+		break;
+	}
+
+	return false;
+}
+
+//===========================================================================================================
+//キャスト情報の書き出し
+//===========================================================================================================
+void My::CCardDeffence::SendCastInfo(RakNet::BitStream* bsout)
+{
+	//列挙に応じて処理を送信内容を変更
+	switch (GetCastDestination())
+	{
+	case CastDestination::AREA:	//エリアの場合
+
+		break;
+
+	case CastDestination::CARD:	//カードの場合
+
+		//重ね先のカード情報を送信
+		bsout->Write(m_TargetInfo[0].nAttackCardUserId);	//対象カードの使用者番号
+		bsout->Write(m_TargetInfo[0].nTargetCardId);		//カード番号
+		bsout->Write(m_TargetInfo[0].nTargetCardSameId);	//同種番号
+
+		break;
+
+	default:
+		break;
+	}
 }

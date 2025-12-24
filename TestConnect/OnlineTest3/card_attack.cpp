@@ -11,6 +11,7 @@
 #include "useful_card.h"
 #include "card_strategy.h"
 #include "raknet_server.h"
+#include "duel_manager.h"
 
 //===========================================================================================================
 // コンストラクタ
@@ -18,9 +19,15 @@
 My::CCardAttack::CCardAttack():
 m_AttackType(),
 m_nAttackValue(0),
-m_DefCardVector()
+m_DefCardVector(),
+m_StackedCardsList(),
+m_isTopCastCard(true),
+m_pStackCard(nullptr),
+m_DamageInfo()
 {
+	m_DamageInfo.clear();
 	m_DefCardVector.clear();
+	m_StackedCardsList.clear();
 }
 
 //===========================================================================================================
@@ -28,7 +35,9 @@ m_DefCardVector()
 //===========================================================================================================
 My::CCardAttack::~CCardAttack()
 {
+	m_DamageInfo.clear();
 	m_DefCardVector.clear();
+	m_StackedCardsList.clear();
 }
 
 //===========================================================================================================
@@ -94,7 +103,8 @@ void My::CCardAttack::Cast(CDuel_Player* duel)
 			Target.nAttackCardUserId = GetUserId();
 
 			//パラメータを代入
-			Target.nTargetCard = duel->GetZoneManager()->GetCastPreviewZone()->GetList().size() - 1;
+			Target.nTargetCardId = pCard->GetBaseStatus().nCardID;
+			Target.nTargetCardSameId = pCard->GetSameTypeId();
 			pCard->SetDiffenceTarget(Target);
 
 			//守備カードのポインタを保存
@@ -144,54 +154,78 @@ void My::CCardAttack::Trigger()
 	//m_DefCardVector.clear();
 
 	//周回
-	for (auto& iter : GetTargetPlayer(GetTargetIdVector()))
+	//for (auto& iter : GetTargetPlayer(GetTargetIdVector()))
+	//{
+	//	if (iter == nullptr) { continue; }
+
+	//	//if (iter->GetArea() != GetTarget()) { continue; }
+
+	//	// ゾーンマネージャーの取得
+	//	CZoneManager* pZoneManager = nullptr;
+	//	pZoneManager = dynamic_cast<CZoneManager*>(iter->GetZoneManager());
+
+	//	//攻撃の合計値
+	//	int nTotalAttackValue = 0.0f;
+
+	//	/*for (auto& pCard : pZoneManager->GetCastPreviewZone()->GetList())
+	//	{
+	//		CCardAttack* pAttackCard = dynamic_cast<CCardAttack*>(pCard);
+
+	//		if (pAttackCard == nullptr)
+	//			continue;
+
+	//		nTotalAttackValue += pAttackCard->GetAttackValue();
+	//	}*/
+
+	//	nTotalAttackValue += m_nAttackValue;
+
+	//	//ダメージの計算
+	//	int nDamage = nTotalAttackValue;	//与えるダメージ
+
+	//	////TODO : デュエル状態を参照できる場所が必要
+	//	//CDuelCharacter* DuelState = dynamic_cast<CDuelCharacter*>(iter->GetState());	//キャスト
+	//	//if (DuelState == nullptr) continue;											//中身の確認
+
+	//	//守備カードの周回
+	//	for (auto& pDefCard : m_DefCardVector)
+	//	{
+	//		if (pDefCard->GetStateNum() != CCardState::CARD_STAY) continue;
+
+	//		//守備の値だけダメージを減らす
+	//		nDamage -= pDefCard->GetDefenceValue();
+
+	//		//ターゲットの守備カードの状態を変更
+	//		pDefCard->ChangeState(CCardState::CARD_TRIGGER, iter);
+	//	}
+
+	//	//ダメージがあるなら与える
+	//	if (nDamage > 0)
+	//	{
+	//		iter->ReceiveDamage(nDamage);
+	//	}
+	//}
+
+	for (auto& Damage : m_DamageInfo)
 	{
-		if (iter == nullptr) { continue; }
-
-		//if (iter->GetArea() != GetTarget()) { continue; }
-
-		// ゾーンマネージャーの取得
-		CZoneManager* pZoneManager = nullptr;
-		pZoneManager = dynamic_cast<CZoneManager*>(iter->GetZoneManager());
-
-		//攻撃の合計値
-		int nTotalAttackValue = 0.0f;
-
-		/*for (auto& pCard : pZoneManager->GetCastPreviewZone()->GetList())
-		{
-			CCardAttack* pAttackCard = dynamic_cast<CCardAttack*>(pCard);
-
-			if (pAttackCard == nullptr)
-				continue;
-
-			nTotalAttackValue += pAttackCard->GetAttackValue();
-		}*/
-
-		nTotalAttackValue += m_nAttackValue;
-
-		//ダメージの計算
-		int nDamage = nTotalAttackValue;	//与えるダメージ
-
-		////TODO : デュエル状態を参照できる場所が必要
-		//CDuelCharacter* DuelState = dynamic_cast<CDuelCharacter*>(iter->GetState());	//キャスト
-		//if (DuelState == nullptr) continue;											//中身の確認
+		//対象を取得
+		CDuel_Player* pPlayer = CDuel_Player_Manager::GetInstance()->GetDuelPlayer(Damage.first);
 
 		//守備カードの周回
 		for (auto& pDefCard : m_DefCardVector)
 		{
-			if (pDefCard->GetStateNum() != CCardState::CARD_STAY) continue;
+			if (pDefCard->GetUserId() != Damage.first) continue;
 
 			//守備の値だけダメージを減らす
-			nDamage -= pDefCard->GetDefenceValue();
+			Damage.second -= pDefCard->GetDefenceValue();
 
 			//ターゲットの守備カードの状態を変更
-			pDefCard->ChangeState(CCardState::CARD_TRIGGER, iter);
+			pDefCard->ChangeState(CCardState::CARD_TRIGGER, pPlayer);
 		}
 
 		//ダメージがあるなら与える
-		if (nDamage > 0)
+		if (Damage.second > 0)
 		{
-			iter->ReceiveDamage(nDamage);
+			pPlayer->ReceiveDamage(Damage.second);
 		}
 	}
 
@@ -218,5 +252,156 @@ void My::CCardAttack::SendTriggerData(RakNet::BitStream* bsout)
 		bsout->Write(iter->GetUserId());				//使用者番号
 		bsout->Write(iter->GetBaseStatus().nCardID);	//カード番号
 		bsout->Write(iter->GetSameTypeId());			//同種類番号
+	}
+}
+
+//===========================================================================================================
+//キャストカードの読み込み処理
+//===========================================================================================================
+bool My::CCardAttack::LoadCastInfo(RakNet::BitStream* bsin, CastDestination destination)
+{
+	//列挙に応じて処理を送信内容を変更
+	switch (destination)
+	{
+	case CastDestination::AREA:	//エリアの場合
+
+	{
+		int nTargetNum = 0;
+		bsin->Read(nTargetNum);
+
+		//周回
+		for (int i = 0; i < nTargetNum; i++)
+		{
+			int nId = 0;
+			bsin->Read(nId);
+			AddTargetIdVector(nId);
+		}
+
+		//一番上のカードとして設定
+		m_isTopCastCard = true;
+
+		//キャスト状態に変更
+		SetStartCastTime(CDuel_Manager::GetInstance()->GetDuelTimer().GetElapsedTime());
+		ChangeState(My::CCardState::CARD_CAST, CDuel_Player_Manager::GetInstance()->GetDuelPlayer(GetUserId()));
+
+		////ターゲットの書き出し
+		//bsout->Write((int)GetTargetPlayerList().size());
+
+		////ターゲットの番号
+		//for (auto iter : GetTargetPlayerList())
+		//{
+		//	bsout->Write(iter->GetPlayerIdx());
+		//}
+
+		return true;
+	}
+
+		break;
+
+	case CastDestination::CARD:	//カードの場合
+
+	{
+		//変数宣言
+		int nTargetCardId = 0;
+		int nTagetSameId = 0;
+
+		//読み込み
+		bsin->Read(nTargetCardId);
+		bsin->Read(nTagetSameId);
+
+		//プレイヤーのキャストゾーンを確認
+		My::CDuel_Player* pPlayer = My::CDuel_Player_Manager::GetInstance()->GetDuelPlayer(GetUserId());	//使用者の番号を取得
+		My::CCardAttack* StackAttackCard = nullptr;															//重ね先のカード
+
+		//キャストカードの確認
+		for (My::CCard* pCard : pPlayer->GetZoneManager()->GetCastPreviewZone()->GetList())
+		{
+			//一致の確認
+			if (pCard->GetBaseStatus().nCardID != nTargetCardId) continue;			//カード番号
+			if (pCard->GetSameTypeId() != nTagetSameId) continue;					//同種番号
+			if (pCard->GetBaseStatus().Maintype != CCard_Client::ATTACK) continue;	//攻撃カードか
+
+			StackAttackCard = dynamic_cast<My::CCardAttack*>(pCard);	//攻撃カードにキャスト
+			break;
+		}
+
+		if (!StackAttackCard) return false;	//中身の確認
+
+		//重ねたフラグ
+		m_isTopCastCard = false;				//一番上のフラグを下す
+		StackAttackCard->AddStackCards(this);	//重ね先のカードの重ねカードに自身を追加
+		m_pStackCard = StackAttackCard;			//重ね先の登録
+
+		//キャスト状態に変更(NOTE : 重ねているカードはキャストしなくても良いかも)
+		SetStartCastTime(CDuel_Manager::GetInstance()->GetDuelTimer().GetElapsedTime());
+		ChangeState(My::CCardState::CARD_CAST, CDuel_Player_Manager::GetInstance()->GetDuelPlayer(GetUserId()));
+		return true;
+	}
+
+		break;
+	default:
+
+		return false;
+		break;
+	}
+
+	return false;
+}
+
+//===========================================================================================================
+//ターゲットの追加
+//===========================================================================================================
+void My::CCardAttack::AddTargetIdVector(int id)
+{
+	//ダメージ情報の書き出し
+	m_DamageInfo[id] = m_nAttackValue;
+
+	My::CCard::AddTargetIdVector(id);	//対象の追加
+}
+
+//===========================================================================================================
+//ダメージの追加
+//===========================================================================================================
+void My::CCardAttack::AddDamage(int damage)
+{
+	//現在のダメージを追加
+	for (auto& Damage : m_DamageInfo)
+	{
+		Damage.second += damage;
+	}
+}
+
+//===========================================================================================================
+//キャスト情報の書き出し
+//===========================================================================================================
+void My::CCardAttack::SendCastInfo(RakNet::BitStream* bsout)
+{
+	//列挙に応じて処理を送信内容を変更
+	switch (GetCastDestination())
+	{
+	case CastDestination::AREA:	//エリアの場合
+
+		//ターゲットの数を書き出し(クライアント側でサイズが消失しているため一時的に二つに)
+		bsout->Write((int)GetTargetIdVector().size());
+		bsout->Write((int)GetTargetIdVector().size());
+
+		//ターゲットの番号を書き出し
+		for (int Id : GetTargetIdVector())
+		{
+			bsout->Write(Id);
+		}
+
+		break;
+
+	case CastDestination::CARD:	//カードの場合
+
+		//重ね先のカード情報を送信
+		bsout->Write(GetStackCard()->GetBaseStatus().nCardID);	//カード番号
+		bsout->Write(GetStackCard()->GetSameTypeId());			//同種番号
+
+		break;
+
+	default:
+		break;
 	}
 }

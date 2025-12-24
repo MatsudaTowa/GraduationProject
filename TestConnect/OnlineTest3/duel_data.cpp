@@ -13,6 +13,7 @@
 #include "raknet_server.h"
 #include "duel_player_manager.h"
 #include "duel_manager.h"
+#include "card_client.h"
 
 //=====================================
 //コンストラクタ
@@ -554,6 +555,53 @@ void CDuel_Data::ReceiveCastCard(RakNet::Packet* packet, RakNet::RakPeerInterfac
     //データの受信
     RakNet::BitStream bsIn(packet->data, packet->length, false);
 
+    //=========================================================================================
+
+    //変数宣言
+    CCard_Client::CardType nCardType;               //カードの種類
+    int nUserId = 0;                                //使用者番号
+    int nCardId = 0;                                //カード番号
+    int nSameId = 0;                                //同種の中の番号
+    My::CCard::CastDestination CastDestination;     //キャスト先
+
+     //情報の読み込み
+    bsIn.IgnoreBytes(sizeof(RakNet::MessageID));    //メッセージの読み込み
+    bsIn.Read(nCardType);           //カードの種類
+    bsIn.Read(nUserId);             //使用者番号
+    bsIn.Read(nCardId);             //カード番号
+    bsIn.Read(nSameId);             //同じカードの番号
+    bsIn.Read(CastDestination);     //キャスト先
+
+    //カードを使用したプレイヤーを取得
+    My::CDuel_Player* pPlayer = My::CDuel_Player_Manager::GetInstance()->GetDuelPlayer(nUserId);
+    My::CCard* pCastCard = nullptr;
+    
+    //手札のカードを確認
+    for (My::CCard* pCard : pPlayer->GetZoneManager()->GetHandZone()->GetList())
+    {
+        //一致するカードを確認
+        if (pCard->GetBaseStatus().nCardID != nCardId) continue;
+        if (pCard->GetSameTypeId() != nSameId) continue;
+
+        //カードの代入
+        pCastCard = pCard;
+        break;
+    }
+
+    //カードの中身を確認
+    if (!pCastCard) return;
+
+    //コストが足りるかを確認(不足しているなら返す)
+    if (pPlayer->GetStatus().energy < pCastCard->GetBaseStatus().nCost) return;
+
+    //キャスト先の設定
+    pCastCard->SetCastDestination(CastDestination);
+
+    //キャスト情報の読み込み
+    if (!pCastCard->LoadCastInfo(&bsIn, CastDestination)) return;
+
+    //=========================================================================================
+
     ////読み取り
     //bsIn.IgnoreBytes(sizeof(RakNet::MessageID));    //メッセージの読み込み
     //CastCardInfo CastInfo = {};                     //データの読み込み
@@ -574,67 +622,68 @@ void CDuel_Data::ReceiveCastCard(RakNet::Packet* packet, RakNet::RakPeerInterfac
     //    CastInfo.m_TargetIDList.push_back(nTarget);  //リストに追加
     //}
 
-    ////カード情報を保存
-    //m_CastCardList.push_back(CastInfo);
-    bsIn.IgnoreBytes(sizeof(RakNet::MessageID));    //メッセージの読み込み
-    int nUserId = 0;                                //使用者番号
-    int nCardId = 0;                                //カード番号
-    int nSameId = 0;                                //同種の中の番号
-    int nTargetNum = 0;                             //ターゲット数
-    std::vector<int> Target;                        //ターゲットのベクター
+    //////カード情報を保存
+    ////m_CastCardList.push_back(CastInfo);
+    //bsIn.IgnoreBytes(sizeof(RakNet::MessageID));    //メッセージの読み込み
+    //int nUserId = 0;                                //使用者番号
+    //int nCardId = 0;                                //カード番号
+    //int nSameId = 0;                                //同種の中の番号
+    //int nTargetNum = 0;                             //ターゲット数
+    //std::vector<int> Target;                        //ターゲットのベクター
 
-    //情報の読み込み
-    bsIn.Read(nUserId);     //使用者番号
-    bsIn.Read(nCardId);     //カード番号
-    bsIn.Read(nSameId);     //同じカードの番号
-    bsIn.Read(nTargetNum);  //ターゲットの数
+    ////情報の読み込み
+    //bsIn.Read(nUserId);     //使用者番号
+    //bsIn.Read(nCardId);     //カード番号
+    //bsIn.Read(nSameId);     //同じカードの番号
+    //bsIn.Read(nTargetNum);  //ターゲットの数
 
-    //ターゲットの数だけ周回
-    for (int i = 0; i < nTargetNum; i++)
-    {
-        //ターゲットの読み込み
-        int nTarget = 0;
-        bsIn.Read(nTarget);
-        Target.push_back(nTarget);
-    }
+    ////ターゲットの数だけ周回
+    //for (int i = 0; i < nTargetNum; i++)
+    //{
+    //    //ターゲットの読み込み
+    //    int nTarget = 0;
+    //    bsIn.Read(nTarget);
+    //    Target.push_back(nTarget);
+    //}
 
-    //対象のプレイヤーを探す
-    My::CDuel_Player* pPlayer = nullptr;
-    for (auto& iter : m_DuelPlayerList)
-    {
-        if (iter->GetIndex() != nUserId) continue;
+    ////対象のプレイヤーを探す
+    //My::CDuel_Player* pPlayer = nullptr;
+    //for (auto& iter : m_DuelPlayerList)
+    //{
+    //    if (iter->GetIndex() != nUserId) continue;
 
-        pPlayer = iter; //代入
-        break;
-    }
+    //    pPlayer = iter; //代入
+    //    break;
+    //}
 
-    //見つからなかったら返す
-    if (pPlayer == nullptr) return;
+    ////見つからなかったら返す
+    //if (pPlayer == nullptr) return;
 
-    //ハンドゾーンで受信したカードを確認
-    My::CCard* pCard = nullptr;
-    for (auto& iter : pPlayer->GetZoneManager()->GetHandZone()->GetList())
-    {
-        //番号で手札に存在するかを確認
-        if (iter->GetBaseStatus().nCardID != nCardId) continue;
-        if (iter->GetSameTypeId() != nSameId) continue;
+    ////ハンドゾーンで受信したカードを確認
+    //My::CCard* pCard = nullptr;
+    //for (auto& iter : pPlayer->GetZoneManager()->GetHandZone()->GetList())
+    //{
+    //    //番号で手札に存在するかを確認
+    //    if (iter->GetBaseStatus().nCardID != nCardId) continue;
+    //    if (iter->GetSameTypeId() != nSameId) continue;
 
-        pCard = iter;   //代入
-        break;
-    }
+    //    pCard = iter;   //代入
+    //    break;
+    //}
 
-    //コストが足りるかを確認(不足しているなら返す)
-    if (pPlayer->GetStatus().energy < pCard->GetBaseStatus().nCost) return;
+    ////コストが足りるかを確認(不足しているなら返す)
+    //if (pPlayer->GetStatus().energy < pCard->GetBaseStatus().nCost) return;
     
     //エナジーを消費してカードをキャスト
     //pPlayer->GetStatus().energy -= pCard->GetBaseStatus().nCost;    //エナジーを消費
-    pCard->SetUserId(nUserId);
-    pCard->SetTargetIdVector(Target);
-    pCard->SetStartCastTime(CDuel_Manager::GetInstance()->GetDuelTimer().GetElapsedTime());
-    pCard->ChangeState(My::CCardState::CARD_CAST, pPlayer);
+    pCastCard->SetUserId(nUserId);
+    //pCastCard->SetTargetIdVector(Target);
+    pCastCard->SetStartCastTime(CDuel_Manager::GetInstance()->GetDuelTimer().GetElapsedTime());
+    //pCastCard->ChangeState(My::CCardState::CARD_CAST, pPlayer);
+    //pCastCard->SetCastDestination(CastDestination);
 
     //キャストカードの送信
-    SendCastCard(peer, pCard);
+    SendCastCard(peer, pCastCard);
 }
 
 //=====================================
@@ -645,17 +694,27 @@ void CDuel_Data::SendCastCard(RakNet::RakPeerInterface* peer, My::CCard* castcar
     //データの作成
     RakNet::BitStream bsOut;
     bsOut.Write((RakNet::MessageID)GameMessages::ID_DUEL_MESSAGE_CAST_CARD);    //メッセージ
+    //bsOut.Write(castcard->GetUserId());                                         //使用者番号
+    //bsOut.Write(castcard->GetBaseStatus().nCardID);                             //カード番号
+    //bsOut.Write(castcard->GetSameTypeId());                                     //同じカードの番号
+    //bsOut.Write(CDuel_Manager::GetInstance()->GetDuelTimer().GetElapsedTime()); //経過時間(使用時間)
+    //bsOut.Write((int)castcard->GetTargetIdVector().size());                     //ターゲット数
+
+    bsOut.Write(castcard->GetCardType());                                       //カードの種類
     bsOut.Write(castcard->GetUserId());                                         //使用者番号
     bsOut.Write(castcard->GetBaseStatus().nCardID);                             //カード番号
-    bsOut.Write(castcard->GetSameTypeId());                                     //同じカードの番号
-    bsOut.Write(CDuel_Manager::GetInstance()->GetDuelTimer().GetElapsedTime()); //経過時間(使用時間)
-    bsOut.Write((int)castcard->GetTargetIdVector().size());                     //ターゲット数
+    bsOut.Write(castcard->GetSameTypeId());                                     //同種の何番目のカードか
+    bsOut.Write(castcard->GetCastDestination());                                //キャスト先の列挙
+    bsOut.Write(castcard->GetStartCastTime());                                  //カードのキャスト開始時間
 
-    //ターゲット数だけ周回して書き出し
-    for (int TargetId : castcard->GetTargetIdVector())
-    {
-        bsOut.Write(TargetId);  //数の書き出し
-    }
+    //カード情報の書き出し
+    castcard->SendCastInfo(&bsOut);
+
+    ////ターゲット数だけ周回して書き出し
+    //for (int TargetId : castcard->GetTargetIdVector())
+    //{
+    //    bsOut.Write(TargetId);  //数の書き出し
+    //}
 
     //全クライアントにブロードキャスト
     peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);

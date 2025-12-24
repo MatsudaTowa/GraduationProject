@@ -177,7 +177,7 @@ void My::CCardStateCast::ChangeToState(CCard* cpy, CDuel_Player* duel)
 	}
 
 	//ターゲットが自分なら守備待機状態へ
-	if (cpy->GetTargetIdVector()[0] == cpy->GetUserId())
+	if (cpy->GetCastDestination() == My::CCard::CastDestination::AREA)
 	{
 		cpy->ChangeState(CCardState::CARD_STATE::CARD_WAIT, duel);
 		return;

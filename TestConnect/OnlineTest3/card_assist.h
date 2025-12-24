@@ -67,6 +67,12 @@ namespace My
 		 */
 		void Trigger() override;
 
+		//キャストカードの読み込み
+		bool LoadCastInfo(RakNet::BitStream* bsin, CastDestination destination) override;
+
+		//キャストカードの書き出し
+		void SendCastInfo(RakNet::BitStream* bsout) override {}
+
 	private:
 		CCard_Client::AssistType m_AssistType;
 	};

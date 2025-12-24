@@ -39,6 +39,15 @@ namespace My
 			CEMETERY
 		};
 
+		//キャスト先の列挙
+		enum CastDestination
+		{
+			NONE = 0,	//無し
+			AREA,		//エリア
+			CARD,		//カード
+			MAX
+		};
+
 		//関数
 		CCard();			//コンストラクタ
 		virtual ~CCard();	//デストラクタ
@@ -171,7 +180,7 @@ namespace My
 		CCard_Client::AssistParam GetAssistParam(CCard_Client::Param param);	//アシストパラメータ取得
 
 		//対象の番号
-		void AddTargetIdVector(int id) { m_TargetIdVector.push_back(id); }				//追加
+		virtual void AddTargetIdVector(int id) { m_TargetIdVector.push_back(id); }		//追加
 		void SetTargetIdVector(std::vector<int> vector) { m_TargetIdVector = vector; }	//設定
 		std::vector<int> GetTargetIdVector() { return m_TargetIdVector; }				//取得
 
@@ -192,6 +201,24 @@ namespace My
 
 		//トリガー時に送るデータ
 		virtual void SendTriggerData(RakNet::BitStream* bsout);
+
+		/**
+		 * @brief キャスト先の列挙取得
+		 * @return キャスト先の列挙
+		 */
+		inline CastDestination GetCastDestination() { return m_CastDestination; }
+
+		/**
+		 * @brief キャスト先の列挙設定
+		 * @param キャスト先の列挙値
+		 */
+		inline void SetCastDestination(CastDestination castdestination) { m_CastDestination = castdestination; }
+
+		//キャストカードの読み込み
+		virtual bool LoadCastInfo(RakNet::BitStream* bsin, CastDestination destination) = 0;
+
+		//キャストカードの書き出し
+		virtual void SendCastInfo(RakNet::BitStream* bsout) = 0;
 
 	private:
 
@@ -237,6 +264,11 @@ namespace My
 		* キャスト時間
 		*/
 		float m_fCastStartTime;
+
+		/**
+		* キャスト先
+		*/
+		CastDestination m_CastDestination;
 	};
 }
 
