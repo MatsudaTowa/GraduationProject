@@ -129,19 +129,17 @@ void My::CCardDeffence::Trigger()
 	////ステイ後に起動
 	//std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
 
-	////リスト周回
-	//for (auto& itr : List)
-	//{
-	//	if (itr == nullptr) { continue; }
+	//リスト周回
+	for (auto& itr : m_TargetInfo)
+	{
+		My::CDuel_Player* pPlayer = My::CDuel_Player_Manager::GetInstance()->GetDuelPlayer(itr.nAttackCardUserId);
 
-	//	if (itr->GetArea() != GetTarget()) { continue; }
-
-	//	//ダメージがあるなら与える
-	//	if (m_nCounterValue > 0)
-	//	{
-	//		itr->ReceiveDamage(m_nCounterValue);
-	//	}
-	//}
+		//ダメージがあるなら与える
+		if (m_nCounterValue > 0)
+		{
+			pPlayer->ReceiveDamage(m_nCounterValue);
+		}
+	}
 }
 
 //===========================================================================================================
