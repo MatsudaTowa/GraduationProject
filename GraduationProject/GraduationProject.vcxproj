@@ -187,6 +187,7 @@
     <ClCompile Include="src\card_info_BG.cpp" />
     <ClCompile Include="src\card_info_cost.cpp" />
     <ClCompile Include="src\card_info_name.cpp" />
+    <ClCompile Include="src\card_info_status.cpp" />
     <ClCompile Include="src\card_info_UI.cpp" />
     <ClCompile Include="src\card_info_use_font.cpp" />
     <ClCompile Include="src\card_info_view.cpp" />
@@ -321,6 +322,7 @@
     <ClInclude Include="src\card_info_BG.h" />
     <ClInclude Include="src\card_info_cost.h" />
     <ClInclude Include="src\card_info_name.h" />
+    <ClInclude Include="src\card_info_status.h" />
     <ClInclude Include="src\card_info_UI.h" />
     <ClInclude Include="src\card_info_use_font.h" />
     <ClInclude Include="src\card_info_view.h" />

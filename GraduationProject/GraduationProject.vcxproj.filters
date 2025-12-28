@@ -1,37 +1,114 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <ClCompile Include="src\active_scene_character.cpp" />
+    <ClCompile Include="src\active_scene_character_state.cpp" />
+    <ClCompile Include="src\area.cpp" />
+    <ClCompile Include="src\area_manager.cpp" />
     <ClCompile Include="src\billboard.cpp" />
+    <ClCompile Include="src\button.cpp" />
+    <ClCompile Include="src\button_deckdraw.cpp" />
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\camera_state.cpp" />
+    <ClCompile Include="src\card.cpp" />
+    <ClCompile Include="src\card_assist.cpp" />
+    <ClCompile Include="src\card_attack.cpp" />
+    <ClCompile Include="src\card_client.cpp" />
+    <ClCompile Include="src\card_deffence.cpp" />
+    <ClCompile Include="src\card_frame.cpp" />
+    <ClCompile Include="src\card_frame_base.cpp" />
+    <ClCompile Include="src\card_frame_cost.cpp" />
+    <ClCompile Include="src\card_frame_illust.cpp" />
+    <ClCompile Include="src\card_frame_name.cpp" />
+    <ClCompile Include="src\card_frame_text.cpp" />
+    <ClCompile Include="src\card_frame_type.cpp" />
+    <ClCompile Include="src\card_frame_use_font.cpp" />
+    <ClCompile Include="src\card_info.cpp" />
+    <ClCompile Include="src\card_info_base.cpp" />
+    <ClCompile Include="src\card_info_BG.cpp" />
+    <ClCompile Include="src\card_info_cost.cpp" />
+    <ClCompile Include="src\card_info_name.cpp" />
+    <ClCompile Include="src\card_info_UI.cpp" />
+    <ClCompile Include="src\card_info_use_font.cpp" />
+    <ClCompile Include="src\card_info_view.cpp" />
+    <ClCompile Include="src\card_manager.cpp" />
+    <ClCompile Include="src\card_state.cpp" />
+    <ClCompile Include="src\card_strategy.cpp" />
+    <ClCompile Include="src\card_type_icon.cpp" />
+    <ClCompile Include="src\castpreview_zone.cpp" />
+    <ClCompile Include="src\cemetery.cpp" />
+    <ClCompile Include="src\cemetery_button.cpp" />
+    <ClCompile Include="src\cemetery_zone.cpp" />
+    <ClCompile Include="src\center_area.cpp" />
+    <ClCompile Include="src\character.cpp" />
+    <ClCompile Include="src\client.cpp" />
+    <ClCompile Include="src\client_duel.cpp" />
+    <ClCompile Include="src\client_lobby.cpp" />
     <ClCompile Include="src\colision.cpp" />
+    <ClCompile Include="src\condition.cpp" />
+    <ClCompile Include="src\death_icon.cpp" />
+    <ClCompile Include="src\debuff.cpp" />
+    <ClCompile Include="src\deck_zone.cpp" />
+    <ClCompile Include="src\duel_manager.cpp" />
+    <ClCompile Include="src\duel_timer.cpp" />
+    <ClCompile Include="src\effect_manager.cpp" />
+    <ClCompile Include="src\effect.cpp" />
+    <ClCompile Include="src\enemy.cpp" />
+    <ClCompile Include="src\enemy_manager.cpp" />
     <ClCompile Include="src\energy_charge.cpp" />
     <ClCompile Include="src\energy_frame.cpp" />
     <ClCompile Include="src\energy_gauge.cpp" />
+    <ClCompile Include="src\enemy_state.cpp" />
     <ClCompile Include="src\energy_UI.cpp" />
     <ClCompile Include="src\fade.cpp" />
     <ClCompile Include="src\field.cpp" />
+    <ClCompile Include="src\field_zone.cpp" />
+    <ClCompile Include="src\flip_preview_zone.cpp" />
+    <ClCompile Include="src\font.cpp" />
+    <ClCompile Include="src\font_manager.cpp" />
+    <ClCompile Include="src\active_scene.cpp" />
+    <ClCompile Include="src\font_texture_manager.cpp" />
     <ClCompile Include="src\game_camera.cpp" />
     <ClCompile Include="src\game_field.cpp" />
+    <ClCompile Include="src\active_scene_manager.cpp" />
+    <ClCompile Include="src\game_player.cpp" />
+    <ClCompile Include="src\active_scene_player_state.cpp" />
+    <ClCompile Include="src\active_scene_state.cpp" />
     <ClCompile Include="src\hand.cpp" />
+    <ClCompile Include="src\hand_zone.cpp" />
     <ClCompile Include="src\input.cpp" />
+    <ClCompile Include="src\life_changer.cpp" />
+    <ClCompile Include="src\life_frame.cpp" />
+    <ClCompile Include="src\life_gauge.cpp" />
     <ClCompile Include="src\life_UI.cpp" />
     <ClCompile Include="src\light.cpp" />
+    <ClCompile Include="src\character_lobby_UI_manager.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\manager.cpp" />
+    <ClCompile Include="src\match_start_button.cpp" />
     <ClCompile Include="src\model.cpp" />
     <ClCompile Include="src\model_parts.cpp" />
     <ClCompile Include="src\number.cpp" />
     <ClCompile Include="src\object.cpp" />
     <ClCompile Include="src\object2D.cpp" />
     <ClCompile Include="src\object2D_anim.cpp" />
+    <ClCompile Include="src\object2D_trapezoid.cpp" />
     <ClCompile Include="src\object3D.cpp" />
     <ClCompile Include="src\object3D_anim.cpp" />
     <ClCompile Include="src\objectX.cpp" />
     <ClCompile Include="src\object2D_triangle.cpp" />
+    <ClCompile Include="src\overlap_card.cpp" />
+    <ClCompile Include="src\overlap_card_manager.cpp" />
     <ClCompile Include="src\particle.cpp" />
     <ClCompile Include="src\player.cpp" />
+    <ClCompile Include="src\player_lobby_UI_manager.cpp" />
+    <ClCompile Include="src\player_number_UI.cpp" />
+    <ClCompile Include="src\player_UI.cpp" />
     <ClCompile Include="src\precompile.cpp" />
+    <ClCompile Include="src\raknet.cpp" />
+    <ClCompile Include="src\ready_button.cpp" />
+    <ClCompile Include="src\ready_txt.cpp" />
+    <ClCompile Include="src\ready_UI.cpp" />
     <ClCompile Include="src\renderer.cpp" />
     <ClCompile Include="src\result.cpp" />
     <ClCompile Include="src\result_camera.cpp" />
@@ -39,249 +116,132 @@
     <ClCompile Include="src\result_screen.cpp" />
     <ClCompile Include="src\result_ui.cpp" />
     <ClCompile Include="src\scene.cpp" />
+    <ClCompile Include="src\selection_range.cpp" />
     <ClCompile Include="src\shadow.cpp" />
+    <ClCompile Include="src\target_arrow.cpp" />
+    <ClCompile Include="src\target_arrow_manager.cpp" />
     <ClCompile Include="src\texture.cpp" />
     <ClCompile Include="src\title.cpp" />
     <ClCompile Include="src\title_camera.cpp" />
     <ClCompile Include="src\title_screen.cpp" />
     <ClCompile Include="src\useful.cpp" />
-    <ClCompile Include="src\client.cpp" />
-    <ClCompile Include="src\raknet.cpp" />
-    <ClCompile Include="src\active_scene_character.cpp">
-      <Filter>character</Filter>
-    </ClCompile>
-    <ClCompile Include="src\active_scene_character_state.cpp">
-      <Filter>character</Filter>
-    </ClCompile>
-    <ClCompile Include="src\character.cpp">
-      <Filter>character</Filter>
-    </ClCompile>
-    <ClCompile Include="src\enemy.cpp">
-      <Filter>character</Filter>
-    </ClCompile>
-    <ClCompile Include="src\enemy_manager.cpp">
-      <Filter>character</Filter>
-    </ClCompile>
-    <ClCompile Include="src\enemy_state.cpp">
-      <Filter>character</Filter>
-    </ClCompile>
-    <ClCompile Include="src\game_player.cpp">
-      <Filter>character</Filter>
-    </ClCompile>
-    <ClCompile Include="src\active_scene_player_state.cpp">
-      <Filter>character</Filter>
-    </ClCompile>
-    <ClCompile Include="src\active_scene_manager.cpp">
-      <Filter>active_scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\active_scene_state.cpp">
-      <Filter>active_scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\area.cpp">
-      <Filter>active_scene\area</Filter>
-    </ClCompile>
-    <ClCompile Include="src\area_manager.cpp">
-      <Filter>active_scene\area</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ready_UI.cpp">
-      <Filter>active_scene\lobby</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ready_txt.cpp">
-      <Filter>active_scene\lobby</Filter>
-    </ClCompile>
-    <ClCompile Include="src\font.cpp" />
-    <ClCompile Include="src\client_lobby.cpp">
-      <Filter>active_scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\font_manager.cpp" />
-    <ClCompile Include="src\client_duel.cpp" />
-    <ClCompile Include="src\debuff.cpp">
-      <Filter>character\condition\debuff</Filter>
-    </ClCompile>
-    <ClCompile Include="src\death_icon.cpp" />
-    <ClCompile Include="src\life_frame.cpp" />
-    <ClCompile Include="src\life_gauge.cpp" />
-    <ClCompile Include="src\object2D_trapezoid.cpp" />
-    <ClCompile Include="src\player_number_UI.cpp">
-      <Filter>character</Filter>
-    </ClCompile>
-    <ClCompile Include="src\player_UI.cpp">
-      <Filter>character</Filter>
-    </ClCompile>
-    <ClCompile Include="src\center_area.cpp">
-      <Filter>active_scene\area</Filter>
-    </ClCompile>
-    <ClCompile Include="src\target_arrow.cpp" />
-    <ClCompile Include="src\condition.cpp">
-      <Filter>character\condition</Filter>
-    </ClCompile>
-    <ClCompile Include="src\active_scene.cpp">
-      <Filter>active_scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\zone.cpp">
-      <Filter>zone\base</Filter>
-    </ClCompile>
-    <ClCompile Include="src\zone_manager.cpp">
-      <Filter>zone\manager</Filter>
-    </ClCompile>
-    <ClCompile Include="src\deck_zone.cpp">
-      <Filter>zone\deck</Filter>
-    </ClCompile>
-    <ClCompile Include="src\duel_manager.cpp">
-      <Filter>active_scene</Filter>
-    </ClCompile>
-    <ClCompile Include="src\effect_manager.cpp" />
-    <ClCompile Include="src\effect.cpp" />
-    <ClCompile Include="src\card_client.cpp">
-      <Filter>card</Filter>
-    </ClCompile>
-    <ClCompile Include="src\card_state.cpp">
-      <Filter>card</Filter>
-    </ClCompile>
-    <ClCompile Include="src\card_strategy.cpp">
-      <Filter>card</Filter>
-    </ClCompile>
-    <ClCompile Include="src\card_attack.cpp">
-      <Filter>card\attack</Filter>
-    </ClCompile>
-    <ClCompile Include="src\card_assist.cpp">
-      <Filter>card\assist</Filter>
-    </ClCompile>
-    <ClCompile Include="src\card_deffence.cpp">
-      <Filter>card\defence</Filter>
-    </ClCompile>
-    <ClCompile Include="src\card.cpp">
-      <Filter>card\base</Filter>
-    </ClCompile>
-    <ClCompile Include="src\cemetery_zone.cpp">
-      <Filter>zone\cemetery</Filter>
-    </ClCompile>
-    <ClCompile Include="src\field_zone.cpp">
-      <Filter>zone\field</Filter>
-    </ClCompile>
-    <ClCompile Include="src\hand_zone.cpp">
-      <Filter>zone\hand</Filter>
-    </ClCompile>
-    <ClCompile Include="src\wait_zone.cpp">
-      <Filter>zone\wait</Filter>
-    </ClCompile>
-    <ClCompile Include="src\card_manager.cpp">
-      <Filter>card</Filter>
-    </ClCompile>
-    <ClCompile Include="src\character_lobby_UI_manager.cpp">
-      <Filter>active_scene\lobby</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ready_button.cpp">
-      <Filter>active_scene\lobby</Filter>
-    </ClCompile>
-    <ClCompile Include="src\player_lobby_UI_manager.cpp">
-      <Filter>active_scene\lobby</Filter>
-    </ClCompile>
-    <ClCompile Include="src\match_start_button.cpp">
-      <Filter>active_scene\lobby</Filter>
-    </ClCompile>
-    <ClCompile Include="src\button.cpp" />
-    <ClCompile Include="src\castpreview_zone.cpp">
-      <Filter>zone\cast</Filter>
-    </ClCompile>
-    <ClCompile Include="src\card_info.cpp">
-      <Filter>card</Filter>
-    </ClCompile>
-    <ClCompile Include="src\life_changer.cpp" />
-    <ClCompile Include="src\target_arrow_manager.cpp" />
-    <ClCompile Include="src\card_frame.cpp">
-      <Filter>card\card_frame</Filter>
-    </ClCompile>
-    <ClCompile Include="src\card_frame_base.cpp">
-      <Filter>card\card_frame</Filter>
-    </ClCompile>
-    <ClCompile Include="src\card_frame_illust.cpp">
-      <Filter>card\card_frame</Filter>
-    </ClCompile>
-    <ClCompile Include="src\card_frame_text.cpp">
-      <Filter>card\card_frame</Filter>
-    </ClCompile>
-    <ClCompile Include="src\card_frame_name.cpp">
-      <Filter>card\card_frame</Filter>
-    </ClCompile>
-    <ClCompile Include="src\card_frame_type.cpp">
-      <Filter>card\card_frame</Filter>
-    </ClCompile>
-    <ClCompile Include="src\card_frame_cost.cpp">
-      <Filter>card\card_frame</Filter>
-    </ClCompile>
-    <ClCompile Include="src\card_frame_use_font.cpp">
-      <Filter>card\card_frame</Filter>
-    </ClCompile>
-    <ClCompile Include="src\font_texture_manager.cpp" />
-    <ClCompile Include="src\card_type_icon.cpp">
-      <Filter>card\card_frame</Filter>
-    </ClCompile>
     <ClCompile Include="src\waitchecker_UI.cpp" />
-    <ClCompile Include="src\flip_preview_zone.cpp">
-      <Filter>zone\flip</Filter>
-    </ClCompile>
-    <ClCompile Include="src\cemetery_button.cpp" />
-    <ClCompile Include="src\overlap_card.cpp" />
-    <ClCompile Include="src\overlap_card_manager.cpp" />
-    <ClCompile Include="src\card_info_view.cpp" />
-    <ClCompile Include="src\cemetery.cpp" />
-    <ClCompile Include="src\selection_range.cpp" />
-    <ClCompile Include="src\duel_timer.cpp" />
-    <ClCompile Include="src\card_info_UI.cpp">
-      <Filter>card_UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\card_info_BG.cpp">
-      <Filter>card_UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\card_info_name.cpp">
-      <Filter>card_UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\card_info_use_font.cpp">
-      <Filter>card_UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\card_info_base.cpp">
-      <Filter>card_UI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\card_info_cost.cpp">
-      <Filter>card_UI</Filter>
-    <ClCompile Include="src\button_deckdraw.cpp">
-      <Filter>PlayerInfoUI</Filter>
-    </ClCompile>
+    <ClCompile Include="src\wait_zone.cpp" />
+    <ClCompile Include="src\zone.cpp" />
+    <ClCompile Include="src\zone_manager.cpp" />
+    <ClCompile Include="src\card_info_status.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="src\active_scene_character.h" />
+    <ClInclude Include="src\active_scene_character_state.h" />
+    <ClInclude Include="src\area.h" />
+    <ClInclude Include="src\area_manager.h" />
     <ClInclude Include="src\billboard.h" />
+    <ClInclude Include="src\button.h" />
+    <ClInclude Include="src\button_deckdraw.h" />
     <ClInclude Include="src\camera.h" />
     <ClInclude Include="src\camera_state.h" />
+    <ClInclude Include="src\card.h" />
+    <ClInclude Include="src\card_assist.h" />
+    <ClInclude Include="src\card_attack.h" />
+    <ClInclude Include="src\card_client.h" />
+    <ClInclude Include="src\card_deffence.h" />
+    <ClInclude Include="src\card_frame.h" />
+    <ClInclude Include="src\card_frame_base.h" />
+    <ClInclude Include="src\card_frame_cost.h" />
+    <ClInclude Include="src\card_frame_illust.h" />
+    <ClInclude Include="src\card_frame_name.h" />
+    <ClInclude Include="src\card_frame_text.h" />
+    <ClInclude Include="src\card_frame_type.h" />
+    <ClInclude Include="src\card_frame_use_font.h" />
+    <ClInclude Include="src\card_info.h" />
+    <ClInclude Include="src\card_info_base.h" />
+    <ClInclude Include="src\card_info_BG.h" />
+    <ClInclude Include="src\card_info_cost.h" />
+    <ClInclude Include="src\card_info_name.h" />
+    <ClInclude Include="src\card_info_UI.h" />
+    <ClInclude Include="src\card_info_use_font.h" />
+    <ClInclude Include="src\card_info_view.h" />
+    <ClInclude Include="src\card_manager.h" />
+    <ClInclude Include="src\card_state.h" />
+    <ClInclude Include="src\card_strategy.h" />
+    <ClInclude Include="src\card_type_icon.h" />
+    <ClInclude Include="src\castpreview_zone.h" />
+    <ClInclude Include="src\cemetery.h" />
+    <ClInclude Include="src\cemetery_button.h" />
+    <ClInclude Include="src\cemetery_zone.h" />
+    <ClInclude Include="src\center_area.h" />
+    <ClInclude Include="src\character.h" />
+    <ClInclude Include="src\client.h" />
+    <ClInclude Include="src\client_duel.h" />
+    <ClInclude Include="src\client_lobby.h" />
     <ClInclude Include="src\colision.h" />
+    <ClInclude Include="src\condition.h" />
     <ClInclude Include="src\count.h" />
+    <ClInclude Include="src\death_icon.h" />
+    <ClInclude Include="src\debuff.h" />
+    <ClInclude Include="src\deck_zone.h" />
+    <ClInclude Include="src\duel_manager.h" />
+    <ClInclude Include="src\duel_timer.h" />
+    <ClInclude Include="src\effect.h" />
+    <ClInclude Include="src\effect_manager.h" />
+    <ClInclude Include="src\enemy.h" />
+    <ClInclude Include="src\enemy_manager.h" />
     <ClInclude Include="src\energy_charge.h" />
     <ClInclude Include="src\energy_frame.h" />
     <ClInclude Include="src\energy_gauge.h" />
+    <ClInclude Include="src\enemy_state.h" />
     <ClInclude Include="src\energy_UI.h" />
     <ClInclude Include="src\fade.h" />
     <ClInclude Include="src\field.h" />
+    <ClInclude Include="src\field_zone.h" />
+    <ClInclude Include="src\flip_preview_zone.h" />
+    <ClInclude Include="src\font.h" />
+    <ClInclude Include="src\font_manager.h" />
+    <ClInclude Include="src\active_scene.h" />
+    <ClInclude Include="src\font_texture_manager.h" />
     <ClInclude Include="src\game_camera.h" />
     <ClInclude Include="src\game_field.h" />
+    <ClInclude Include="src\active_scene_manager.h" />
+    <ClInclude Include="src\game_player.h" />
+    <ClInclude Include="src\active_scene_player_state.h" />
+    <ClInclude Include="src\active_scene_state.h" />
     <ClInclude Include="src\hand.h" />
+    <ClInclude Include="src\hand_zone.h" />
     <ClInclude Include="src\input.h" />
+    <ClInclude Include="src\life_changer.h" />
+    <ClInclude Include="src\life_frame.h" />
+    <ClInclude Include="src\life_gauge.h" />
     <ClInclude Include="src\life_UI.h" />
     <ClInclude Include="src\light.h" />
+    <ClInclude Include="src\character_lobby_UI_manager.h" />
     <ClInclude Include="src\main.h" />
     <ClInclude Include="src\manager.h" />
+    <ClInclude Include="src\match_start_button.h" />
     <ClInclude Include="src\model.h" />
     <ClInclude Include="src\model_parts.h" />
     <ClInclude Include="src\number.h" />
     <ClInclude Include="src\object.h" />
     <ClInclude Include="src\object2D.h" />
     <ClInclude Include="src\object2D_anim.h" />
+    <ClInclude Include="src\object2D_trapezoid.h" />
     <ClInclude Include="src\object3D.h" />
     <ClInclude Include="src\object3D_anim.h" />
     <ClInclude Include="src\objectX.h" />
     <ClInclude Include="src\object2D_triangle.h" />
+    <ClInclude Include="src\overlap_card.h" />
+    <ClInclude Include="src\overlap_card_manager.h" />
     <ClInclude Include="src\particle.h" />
     <ClInclude Include="src\player.h" />
+    <ClInclude Include="src\player_lobby_UI_manager.h" />
+    <ClInclude Include="src\player_number_UI.h" />
+    <ClInclude Include="src\player_UI.h" />
     <ClInclude Include="src\precompile.h" />
+    <ClInclude Include="src\raknet.h" />
+    <ClInclude Include="src\ready_button.h" />
+    <ClInclude Include="src\ready_txt.h" />
+    <ClInclude Include="src\ready_UI.h" />
     <ClInclude Include="src\renderer.h" />
     <ClInclude Include="src\result.h" />
     <ClInclude Include="src\result_camera.h" />
@@ -289,177 +249,19 @@
     <ClInclude Include="src\result_screen.h" />
     <ClInclude Include="src\result_ui.h" />
     <ClInclude Include="src\scene.h" />
+    <ClInclude Include="src\selection_range.h" />
     <ClInclude Include="src\shadow.h" />
+    <ClInclude Include="src\target_arrow.h" />
+    <ClInclude Include="src\target_arrow_manager.h" />
     <ClInclude Include="src\texture.h" />
     <ClInclude Include="src\title.h" />
     <ClInclude Include="src\title_camera.h" />
     <ClInclude Include="src\title_screen.h" />
     <ClInclude Include="src\useful.h" />
-    <ClInclude Include="src\client.h" />
-    <ClInclude Include="src\raknet.h" />
-    <ClInclude Include="src\active_scene_character.h">
-      <Filter>character</Filter>
-    </ClInclude>
-    <ClInclude Include="src\active_scene_character_state.h">
-      <Filter>character</Filter>
-    </ClInclude>
-    <ClInclude Include="src\character.h">
-      <Filter>character</Filter>
-    </ClInclude>
-    <ClInclude Include="src\enemy.h">
-      <Filter>character</Filter>
-    </ClInclude>
-    <ClInclude Include="src\enemy_manager.h">
-      <Filter>character</Filter>
-    </ClInclude>
-    <ClInclude Include="src\enemy_state.h">
-      <Filter>character</Filter>
-    </ClInclude>
-    <ClInclude Include="src\game_player.h">
-      <Filter>character</Filter>
-    </ClInclude>
-    <ClInclude Include="src\active_scene_player_state.h">
-      <Filter>character</Filter>
-    </ClInclude>
-    <ClInclude Include="src\active_scene_manager.h">
-      <Filter>active_scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\active_scene_state.h">
-      <Filter>active_scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\active_scene.h">
-      <Filter>active_scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\area.h">
-      <Filter>active_scene\area</Filter>
-    </ClInclude>
-    <ClInclude Include="src\area_manager.h">
-      <Filter>active_scene\area</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ready_txt.h">
-      <Filter>active_scene\lobby</Filter>
-    </ClInclude>
-    <ClInclude Include="src\font.h" />
-    <ClInclude Include="src\client_lobby.h">
-      <Filter>active_scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\font_manager.h" />
-    <ClInclude Include="src\client_duel.h" />
-    <ClInclude Include="src\debuff.h">
-      <Filter>character\condition\debuff</Filter>
-    </ClInclude>
-    <ClInclude Include="src\death_icon.h" />
-    <ClInclude Include="src\life_frame.h" />
-    <ClInclude Include="src\life_gauge.h" />
-    <ClInclude Include="src\object2D_trapezoid.h" />
-    <ClInclude Include="src\player_number_UI.h">
-      <Filter>character</Filter>
-    </ClInclude>
-    <ClInclude Include="src\player_UI.h">
-      <Filter>character</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ready_UI.h">
-      <Filter>active_scene\lobby</Filter>
-    </ClInclude>
-    <ClInclude Include="src\center_area.h">
-      <Filter>active_scene\area</Filter>
-    </ClInclude>
-    <ClInclude Include="src\target_arrow.h" />
-    <ClInclude Include="src\condition.h">
-      <Filter>character\condition</Filter>
-    </ClInclude>
-    <ClInclude Include="src\zone.h">
-      <Filter>zone\base</Filter>
-    </ClInclude>
-    <ClInclude Include="src\zone_manager.h">
-      <Filter>zone\manager</Filter>
-    </ClInclude>
-    <ClInclude Include="src\deck_zone.h">
-      <Filter>zone\deck</Filter>
-    </ClInclude>
-    <ClInclude Include="src\duel_manager.h">
-      <Filter>active_scene</Filter>
-    </ClInclude>
-    <ClInclude Include="src\effect.h" />
-    <ClInclude Include="src\effect_manager.h" />
-    <ClInclude Include="src\card_client.h">
-      <Filter>card</Filter>
-    </ClInclude>
-    <ClInclude Include="src\card_state.h">
-      <Filter>card</Filter>
-    </ClInclude>
-    <ClInclude Include="src\card_strategy.h">
-      <Filter>card</Filter>
-    </ClInclude>
-    <ClInclude Include="src\card_attack.h">
-      <Filter>card\attack</Filter>
-    </ClInclude>
-    <ClInclude Include="src\card_assist.h">
-      <Filter>card\assist</Filter>
-    </ClInclude>
-    <ClInclude Include="src\card_deffence.h">
-      <Filter>card\defence</Filter>
-    </ClInclude>
-    <ClInclude Include="src\card.h">
-      <Filter>card\base</Filter>
-    </ClInclude>
-    <ClInclude Include="src\cemetery_zone.h">
-      <Filter>zone\cemetery</Filter>
-    </ClInclude>
-    <ClInclude Include="src\field_zone.h">
-      <Filter>zone\field</Filter>
-    </ClInclude>
-    <ClInclude Include="src\hand_zone.h">
-      <Filter>zone\hand</Filter>
-    </ClInclude>
-    <ClInclude Include="src\wait_zone.h">
-      <Filter>zone\wait</Filter>
-    </ClInclude>
-    <ClInclude Include="src\card_manager.h">
-      <Filter>card</Filter>
-    </ClInclude>
-    <ClInclude Include="src\character_lobby_UI_manager.h">
-      <Filter>active_scene\lobby</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ready_button.h">
-      <Filter>active_scene\lobby</Filter>
-    </ClInclude>
-    <ClInclude Include="src\player_lobby_UI_manager.h">
-      <Filter>active_scene\lobby</Filter>
-    </ClInclude>
-    <ClInclude Include="src\match_start_button.h">
-      <Filter>active_scene\lobby</Filter>
-    </ClInclude>
-    <ClInclude Include="src\button.h" />
-    <ClInclude Include="src\castpreview_zone.h">
-      <Filter>zone\cast</Filter>
-    </ClInclude>
-    <ClInclude Include="src\card_info.h">
-      <Filter>card</Filter>
-    </ClInclude>
-    <ClInclude Include="src\life_changer.h" />
-    <ClInclude Include="src\target_arrow_manager.h" />
-    <ClInclude Include="src\card_frame.h">
-      <Filter>card\card_frame</Filter>
-    </ClInclude>
-    <ClInclude Include="src\card_frame_base.h">
-      <Filter>card\card_frame</Filter>
-    </ClInclude>
-    <ClInclude Include="src\card_frame_illust.h">
-      <Filter>card\card_frame</Filter>
-    </ClInclude>
-    <ClInclude Include="src\card_frame_name.h">
-      <Filter>card\card_frame</Filter>
-    </ClInclude>
-    <ClInclude Include="src\card_frame_type.h">
-      <Filter>card\card_frame</Filter>
-    </ClInclude>
-    <ClInclude Include="src\card_frame_text.h">
-      <Filter>card\card_frame</Filter>
-    </ClInclude>
-    <ClInclude Include="src\card_frame_cost.h">
-      <Filter>card\card_frame</Filter>
-    </ClInclude>
+    <ClInclude Include="src\waitchecker_UI.h" />
+    <ClInclude Include="src\wait_zone.h" />
+    <ClInclude Include="src\zone.h" />
+    <ClInclude Include="src\zone_manager.h" />
     <ClInclude Include="thirdparty\EffekseerForDXLib\DxCompileConfig.h" />
     <ClInclude Include="thirdparty\EffekseerForDXLib\DxDataType.h" />
     <ClInclude Include="thirdparty\EffekseerForDXLib\DxDataTypeWin.h" />
@@ -470,123 +272,7 @@
     <ClInclude Include="thirdparty\EffekseerForDXLib\Effekseer.SIMD.h" />
     <ClInclude Include="thirdparty\EffekseerForDXLib\EffekseerForDXLib.h" />
     <ClInclude Include="thirdparty\EffekseerForDXLib\EffekseerRendererDX9.h" />
-    <ClInclude Include="src\card_frame_use_font.h">
-      <Filter>card\card_frame</Filter>
-    </ClInclude>
-    <ClInclude Include="src\font_texture_manager.h" />
-    <ClInclude Include="src\card_type_icon.h">
-      <Filter>card\card_frame</Filter>
-    </ClInclude>
-    <ClInclude Include="src\waitchecker_UI.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="src\flip_preview_zone.h">
-      <Filter>zone\flip</Filter>
-    </ClInclude>
-    <ClInclude Include="src\cemetery_button.h" />
-    <ClInclude Include="src\overlap_card.h" />
-    <ClInclude Include="src\overlap_card_manager.h" />
-    <ClInclude Include="src\card_info_view.h" />
-    <ClInclude Include="src\cemetery.h" />
-    <ClInclude Include="src\selection_range.h" />
-    <ClInclude Include="src\duel_timer.h" />
-    <ClInclude Include="src\card_info_BG.h">
-      <Filter>card_UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\card_info_UI.h">
-      <Filter>card_UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\card_info_name.h">
-      <Filter>card_UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\card_info_use_font.h">
-      <Filter>card_UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\card_info_base.h">
-      <Filter>card_UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\card_info_cost.h">
-      <Filter>card_UI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\button_deckdraw.h">
-      <Filter>PlayerInfoUI</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="character">
-      <UniqueIdentifier>{5921e8f8-9523-4b4c-a104-b6bd33f73882}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="active_scene">
-      <UniqueIdentifier>{80462793-f791-4dac-9263-03e8e1424395}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="active_scene\area">
-      <UniqueIdentifier>{56a985dc-c3e1-4095-aed5-5700ac8611cc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="active_scene\lobby">
-      <UniqueIdentifier>{b471ed37-6a4b-4b0f-b87c-f68cee98794f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="character\condition">
-      <UniqueIdentifier>{45545ecf-1b94-4090-8a9a-fa84716f42b6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="character\condition\debuff">
-      <UniqueIdentifier>{1923b1d6-04cd-4db5-a3df-525fb43f5002}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="character\condition\buff">
-      <UniqueIdentifier>{02190a37-3ba9-43c2-9633-05687adb288e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="zone">
-      <UniqueIdentifier>{0a568144-0858-4418-a59f-3b8b68347b7f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="zone\base">
-      <UniqueIdentifier>{393bad63-fce7-4c85-ae36-095fea48d92b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="zone\manager">
-      <UniqueIdentifier>{8ab879bc-9e65-4ae5-a3b8-48ce4abe5295}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="zone\deck">
-      <UniqueIdentifier>{1c75ae80-a79b-49ef-96e6-2aabd3d40622}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="card">
-      <UniqueIdentifier>{3c140a99-ffa4-4a6a-9dbb-dc067b280e3a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="card\attack">
-      <UniqueIdentifier>{cdaf7bcb-eb1c-4c4c-8b49-e519e9b707e9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="card\assist">
-      <UniqueIdentifier>{72e69661-4c3a-42ef-b5da-27fe783c8b68}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="card\defence">
-      <UniqueIdentifier>{1fa71e5f-3e17-4dce-bc59-67a619ba7602}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="card\base">
-      <UniqueIdentifier>{89bb330a-b789-48b4-a667-5043cd96cff4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="zone\cemetery">
-      <UniqueIdentifier>{8cb04ae9-6320-4716-974a-325f41d192a0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="zone\field">
-      <UniqueIdentifier>{29e69845-c778-4e45-af80-a3f4708cb04f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="zone\hand">
-      <UniqueIdentifier>{6b0d6324-9df9-402a-ba9a-f52ea749723f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="zone\wait">
-      <UniqueIdentifier>{87842a2f-d099-4e39-ab0b-9f67a31f890a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="zone\cast">
-      <UniqueIdentifier>{a6e8a991-c72d-405f-8680-b6b2918ab040}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="card\card_frame">
-      <UniqueIdentifier>{6ca4bae6-aceb-4b52-8eab-8121da17ce72}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="zone\flip">
-      <UniqueIdentifier>{b82d6ea9-8963-40ec-aed9-88a76dc31186}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="card_UI">
-      <UniqueIdentifier>{f6f3e16b-c3d9-4805-90fd-4eac07a8fc98}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="PlayerInfoUI">
-      <UniqueIdentifier>{1da12393-a3a8-449f-9fbf-8d11745537be}</UniqueIdentifier>
-    </Filter>
+    <ClInclude Include="src\card_info_status.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GraduationProject.rc" />

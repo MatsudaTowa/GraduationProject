@@ -2,6 +2,7 @@
 #include "card_info_BG.h"
 #include "card_info_cost.h"
 #include "card_info_name.h"
+#include "card_info_status.h"
 
 My::CCardInfoBase::CCardInfoBase(int nPriority):CObject2D(nPriority)
 {
@@ -44,7 +45,7 @@ My::CCardInfoBase* My::CCardInfoBase::Create(D3DXVECTOR3 pos, D3DXVECTOR2 size, 
 		pInfo = new CCardInfoCost;
 		break;
 	case My::CCardInfoBase::STATES:
-		return pInfo;
+		pInfo = new CCardInfoStatus;
 		break;
 	case My::CCardInfoBase::NAME:
 		pInfo = new CCardInfoName;
