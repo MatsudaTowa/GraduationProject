@@ -46,9 +46,9 @@ My::CCardInfoBase* My::CCardInfoBase::Create(D3DXVECTOR3 pos, D3DXVECTOR2 size, 
 	case My::CCardInfoBase::STATES:
 		return pInfo;
 		break;
-	//case My::CCardInfoBase::NAME:
-	//	pInfo = new CCardInfoName;
-	//	break;
+	case My::CCardInfoBase::NAME:
+		pInfo = new CCardInfoName;
+		break;
 	case My::CCardInfoBase::ILLUST:
 		return pInfo;
 		break;

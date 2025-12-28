@@ -17,7 +17,7 @@ namespace My
 	class CCardInfoName :public CCardInfoUseFont
 	{
 	public:
-		CCardInfoName(int nPriority = 25);
+		CCardInfoName(int nPriority = 27);
 		~CCardInfoName() {};
 		HRESULT Init()override;
 

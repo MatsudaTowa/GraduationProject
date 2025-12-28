@@ -50,22 +50,22 @@ void My::CCardInfoUseFont::Uninit()
 //=============================================
 void My::CCardInfoUseFont::Update()
 {
-	//if (m_pFontManager != nullptr)
-	//{
-	//	D3DXVECTOR3 offset_pos = GetPos(); //スクリーン座標に変換
+	if (m_pFontManager != nullptr)
+	{
+		D3DXVECTOR3 offset_pos = GetPos(); //スクリーン座標に変換
 
-	//	offset_pos.x += m_offsetpos.x;
-	//	offset_pos.y += m_offsetpos.y;
+		offset_pos.x += m_offsetpos.x;
+		offset_pos.y += m_offsetpos.y;
 
-	//	m_pFontManager->UpdatePos(offset_pos);
-	//	std::vector<CFont*> list = m_pFontManager->GetList();
-	//	for (auto& itr : list)
-	//	{
-	//		if (itr == nullptr) { continue; }
+		m_pFontManager->UpdatePos(offset_pos);
+		std::vector<CFont*> list = m_pFontManager->GetList();
+		for (auto& itr : list)
+		{
+			if (itr == nullptr) { continue; }
 
-	//		itr->SetisDraw(GetisDraw());
-	//	}
-	//}
+			itr->SetisDraw(GetisDraw());
+		}
+	}
 }
 
 //=============================================
