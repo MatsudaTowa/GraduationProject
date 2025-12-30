@@ -7,9 +7,11 @@
 #include "life_gauge.h"
 #include "life_frame.h"
 #include "life_changer.h"
+#include "active_scene_player_state.h"
+#include "active_scene_manager.h"
 namespace
 {
-	constexpr int SEGMENT_NUM = 100;//分割数
+	constexpr int SEGMENT_NUM = 1000;//分割数
 	constexpr float LIFE_75 = 0.75;//7.5割
 	constexpr float LIFE_50 = 0.5;//5割
 	constexpr float LIFE_25 = 0.25;//2.5割
@@ -59,11 +61,17 @@ void My::CLife_Gauge::Update()
 	//インスタンス取得
 	CLife_changer* pLife = CLife_changer::GetInstance();
 
+	CActiveScenePlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();
+
+	float max_life = player->START_LIFE;
+	float life = player->GetLife();
+	float raito = life / max_life;
+
 	//割合計算
 	float fRaito = pLife->GetLifeRaito();
 
 	//表示していいポリゴンの計算（1つで1％）
-	m_nDrawSegNum = SEGMENT_NUM - (fRaito * SEGMENT_NUM);
+	m_nDrawSegNum = SEGMENT_NUM - (raito * SEGMENT_NUM);
 
 	//割合に応じた色変化
 	if (fRaito > LIFE_75)

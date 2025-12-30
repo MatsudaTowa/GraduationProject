@@ -282,10 +282,11 @@ namespace My
 			return m_Deck;
 		}
 
+		// 割合計算のため public から private に変更
+		static constexpr int START_LIFE = 10;				//!<最初の体力
 	private:
 		static constexpr int START_DECK = 40;				//!<最初のデッキ枚数
 		static constexpr int START_HAND = 3;				//!<最初の手札枚数
-		static constexpr int START_LIFE = 10;				//!<最初の体力
 		static constexpr int START_ENERGY = 1;				//!<最初のエナジー
 
 		/**
