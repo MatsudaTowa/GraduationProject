@@ -92,6 +92,24 @@ namespace My
 			m_FontManagerVector.push_back(font_manager);
 		}
 
+		void ClearFontManager()
+		{
+			for (auto& itr : m_FontManagerVector)
+			{
+				if (itr == nullptr) { continue; }
+
+				itr->Uninit();
+				delete itr;
+				itr = nullptr;
+			}
+			m_FontManagerVector.clear();
+		}
+
+		int GetFontManagerSize()
+		{
+			return m_FontManagerVector.size();
+		}
+
 		/**
 		 * @brief オフセット取得
 		 * @return m_offsetpos
@@ -103,6 +121,18 @@ namespace My
 		 * @param [in]offsetpos
 		 */
 		inline void SetOffSetPos(D3DXVECTOR3 offsetpos) { m_offsetpos = offsetpos; }
+
+		void EnsureFontManagerCount(int required,CFontManager::TextAlign align)
+		{
+			int current = GetFontManagerSize();
+
+			for (int i = current; i < required; ++i)
+			{
+				CFontManager* font_manager = new CFontManager(align);
+				font_manager->Init();
+				PushFontManager(font_manager);
+			}
+		}
 	private:
 		std::vector<CFontManager*> m_FontManagerVector;
 		D3DXVECTOR3 m_offsetpos;

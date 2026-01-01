@@ -11,7 +11,7 @@
 #include "card_deffence.h"
 namespace
 {
-	D3DXVECTOR3 OFFSET = { -170.0f,-60.0f,0.0f };
+	D3DXVECTOR3 OFFSET = { -180.0f,-60.0f,0.0f };
 }
 My::CCardInfoStatus::CCardInfoStatus(int nPriority):CCardInfoUseFont(nPriority)
 {
@@ -19,42 +19,6 @@ My::CCardInfoStatus::CCardInfoStatus(int nPriority):CCardInfoUseFont(nPriority)
 
 HRESULT My::CCardInfoStatus::Init()
 {
-	CFontManager* pFontmanager = GetFontManager(0);
-	if (pFontmanager == nullptr)
-	{
-		pFontmanager = new CFontManager(CFontManager::CENTER);
-		pFontmanager->Init();
-		PushFontManager(pFontmanager);
-	}
-	if (pFontmanager != nullptr)
-	{
-		CCard* card = GetCard();
-		std::wstring wtxt;
-
-		if (card == nullptr) { return S_OK; }
-		if (typeid(*card) == typeid(CCardAttack))
-		{
-			CCardAttack* attack_card = dynamic_cast<CCardAttack*>(card);
-			wtxt = std::format(L"{}", attack_card->GetAttackValue());
-		}
-		else if (typeid(*card) == typeid(CCardDeffence))
-		{
-			CCardDeffence* deffence_card = dynamic_cast<CCardDeffence*>(card);
-			wtxt = std::format(L"{}", deffence_card->GetDefenceValue());
-		}
-		else if (typeid(*card) == typeid(CCardDeffence))
-		{
-			return S_OK;
-		}
-		D3DXVECTOR3 offset_pos = GetPos(); //スクリーン座標に変換
-		D3DXVECTOR2 size = GetSize(); //スクリーン座標に変換
-		const wchar_t* txt = wtxt.c_str();
-		offset_pos.x += OFFSET.x;
-		offset_pos.y += OFFSET.y;
-		pFontmanager->RegistAdjustFontSize(txt, offset_pos, { 40.0f,size.y }, 40.0f, 45.0f, 0, 5, COLOR_WHITE, false);
-		SetOffSetPos(OFFSET);
-	}
-
 	CCardInfoUseFont::Init();
 
 	return S_OK;
@@ -67,40 +31,77 @@ void My::CCardInfoStatus::Uninit()
 
 void My::CCardInfoStatus::Update()
 {
-	CCardInfoUseFont::Update();
+
+	for (int i = 0; i < GetFontManagerSize(); ++i)
+	{
+		CFontManager* fm = GetFontManager(i);
+		for (auto& text : fm->GetList())
+		{
+			if (text == nullptr) { continue; }
+			text->SetisDraw(GetisDraw());
+		}
+	}
 }
 
 void My::CCardInfoStatus::SetUI()
 {
-	CFontManager* pFontmanager = GetFontManager(0);
+	CCard* card = GetCard();
+	if (card == nullptr) { return; }
 
-	if (pFontmanager != nullptr)
+	std::vector<std::wstring> statusText;
+
+	if (typeid(*card) == typeid(CCardAttack))
 	{
-		CCard* card = GetCard();
-		std::wstring wtxt;
+		CCardAttack* attack_card = dynamic_cast<CCardAttack*>(card);
+		statusText.push_back(std::format(L"{}", attack_card->GetAttackValue()));
+	}
+	else if (typeid(*card) == typeid(CCardDeffence))
+	{
+		CCardDeffence* deffence_card = dynamic_cast<CCardDeffence*>(card);
+		statusText.push_back(std::format(L"{}", deffence_card->GetDefenceValue()));
+		if (deffence_card->GetCounterValue() > 0)
+		{
+			statusText.push_back(std::format(L"{}", deffence_card->GetCounterValue()));
+		}
+	}
 
-		if (card == nullptr) { return; }
-		if (typeid(*card) == typeid(CCardAttack))
-		{
-			CCardAttack* attack_card = dynamic_cast<CCardAttack*>(card);
-			wtxt = std::format(L"{}", attack_card->GetAttackValue());
-		}
-		else if (typeid(*card) == typeid(CCardDeffence))
-		{
-			CCardDeffence* deffence_card = dynamic_cast<CCardDeffence*>(card);
-			wtxt = std::format(L"{}", deffence_card->GetDefenceValue());
-		}
-		else if (typeid(*card) == typeid(CCardDeffence))
-		{
-			return;
-		}
-		D3DXVECTOR3 offset_pos = GetPos(); //スクリーン座標に変換
-		D3DXVECTOR2 size = GetSize(); //スクリーン座標に変換
-		const wchar_t* txt = wtxt.c_str();
-		offset_pos.x += OFFSET.x;
-		offset_pos.y += OFFSET.y;
+	EnsureFontManagerCount(statusText.size(), CFontManager::CENTER);
 
-		pFontmanager->SetTextAdjustFontSize(txt, offset_pos, { 40.0f,size.y }, 40.0f, 48.0f, 0, 5, COLOR_WHITE, false);
-		SetOffSetPos(OFFSET);
+	for (int i = 0; i < GetFontManagerSize(); ++i)
+	{
+		CFontManager* fm = GetFontManager(i);
+
+		//文字列を一度リセット
+		fm->Release();
+		if (i >= statusText.size())
+		{
+			// 使わない → 描画OFF
+			for (auto& text : fm->GetList())
+			{
+				if (text) 
+				{ 
+					text->SetisDraw(false); 
+				}
+			}
+			continue;
+		}
+
+		// 使う分だけ更新
+		D3DXVECTOR3 pos = GetPos();
+		D3DXVECTOR2 size = GetSize();
+
+		pos.x += OFFSET.x + (60.0f * i);
+		pos.y += OFFSET.y;
+
+		fm->RegistAdjustFontSize(
+			statusText[i].c_str(),
+			pos,
+			{ 40.0f, size.y },
+			40.0f,
+			45.0f,
+			0, 5,
+			COLOR_WHITE,
+			false
+		);
 	}
 }
