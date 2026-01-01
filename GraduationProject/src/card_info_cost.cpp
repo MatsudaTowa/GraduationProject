@@ -23,12 +23,12 @@ My::CCardInfoCost::CCardInfoCost(int nPriority):CCardInfoUseFont(nPriority)
 //===========================================================================================================================================================
 HRESULT My::CCardInfoCost::Init()
 {
-	CFontManager* pFontmanager = GetFontManager();
+	CFontManager* pFontmanager = GetFontManager(0);
 	if (pFontmanager == nullptr)
 	{
 		pFontmanager = new CFontManager(CFontManager::CENTER);
 		pFontmanager->Init();
-		SetFontManager(pFontmanager);
+		PushFontManager(pFontmanager);
 	}
 	if (pFontmanager != nullptr)
 	{
@@ -53,7 +53,7 @@ HRESULT My::CCardInfoCost::Init()
 //===========================================================================================================================================================
 void My::CCardInfoCost::Uninit()
 {
-	CCardInfoBase::Uninit();
+	CCardInfoUseFont::Uninit();
 }
 
 //===========================================================================================================================================================
@@ -61,13 +61,12 @@ void My::CCardInfoCost::Uninit()
 //===========================================================================================================================================================
 void My::CCardInfoCost::Update()
 {
-
-	CCardInfoBase::Update();
+	CCardInfoUseFont::Update();
 }
 
 void My::CCardInfoCost::SetUI()
 {
-	CFontManager* pFontmanager = GetFontManager();
+	CFontManager* pFontmanager = GetFontManager(0);
 
 	if (pFontmanager != nullptr)
 	{	

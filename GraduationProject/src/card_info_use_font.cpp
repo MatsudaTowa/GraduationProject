@@ -10,9 +10,9 @@
 // コンストラクタ
 //=============================================
 My::CCardInfoUseFont::CCardInfoUseFont(int nPriority):CCardInfoBase(nPriority),
-m_pFontManager(nullptr),
 m_offsetpos(VEC3_RESET_ZERO)
 {
+	m_FontManagerVector.clear();
 }
 
 //=============================================
@@ -20,12 +20,15 @@ m_offsetpos(VEC3_RESET_ZERO)
 //=============================================
 My::CCardInfoUseFont::~CCardInfoUseFont()
 {
-	if (m_pFontManager != nullptr)
+	for (auto& itr : m_FontManagerVector)
 	{
-		m_pFontManager->Uninit();
-		delete m_pFontManager;
-		m_pFontManager = nullptr;
+		if (itr == nullptr) { continue; }
+
+		itr->Uninit();
+		delete itr;
+		itr = nullptr;		
 	}
+	m_FontManagerVector.clear();
 }
 
 //=============================================
@@ -50,22 +53,24 @@ void My::CCardInfoUseFont::Uninit()
 //=============================================
 void My::CCardInfoUseFont::Update()
 {
-	if (m_pFontManager != nullptr)
+	for (auto& itr : m_FontManagerVector)
 	{
+		if (itr == nullptr) { continue; }
 		D3DXVECTOR3 offset_pos = GetPos(); //スクリーン座標に変換
 
 		offset_pos.x += m_offsetpos.x;
 		offset_pos.y += m_offsetpos.y;
 
-		m_pFontManager->UpdatePos(offset_pos);
-		std::vector<CFont*> list = m_pFontManager->GetList();
-		for (auto& itr : list)
+		itr->UpdatePos(offset_pos);
+		std::vector<CFont*> list = itr->GetList();
+		for (auto& card_itr : list)
 		{
-			if (itr == nullptr) { continue; }
+			if (card_itr == nullptr) { continue; }
 
-			itr->SetisDraw(GetisDraw());
+			card_itr->SetisDraw(GetisDraw());
 		}
 	}
+	CCardInfoBase::Update();
 }
 
 //=============================================
