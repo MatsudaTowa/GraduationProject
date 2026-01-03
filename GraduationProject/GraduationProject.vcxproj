@@ -414,6 +414,7 @@
     <ClInclude Include="src\scene.h" />
     <ClInclude Include="src\selection_range.h" />
     <ClInclude Include="src\shadow.h" />
+    <ClInclude Include="src\status_icon.h" />
     <ClInclude Include="src\target_arrow.h" />
     <ClInclude Include="src\target_arrow_manager.h" />
     <ClInclude Include="src\texture.h" />

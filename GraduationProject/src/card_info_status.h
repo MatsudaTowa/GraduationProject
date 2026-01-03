@@ -10,6 +10,7 @@
 #include "main.h"
 #include "card_info_use_font.h"
 #include "card.h"
+#include "card_type_icon.h"
 
 /** @brief My –¼‘O‹óŠÔ */
 namespace My
@@ -30,7 +31,9 @@ namespace My
 		void Update()override;
 
 		void SetUI()override;
+		void SetIcon(std::vector<std::wstring>& statusText, int icon_type);
 	private:
+		std::vector<CCardTypeIcon*> m_IconVector;
 	};
 }
 #endif

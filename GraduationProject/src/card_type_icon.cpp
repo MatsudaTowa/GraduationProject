@@ -10,12 +10,13 @@ namespace
 {
 	const float ICON_SIZE = 12.5f;
 
-	const std::string TEX_NAME[My::CCard::CARDTYPE_::TYPE_MAX]
+	const std::string TEX_NAME[My::CCardTypeIcon::ICONTYPE_::TYPE_MAX]
 	{
 		"",
 		"data\\TEXTURE\\icon\\attack.png",
 		"data\\TEXTURE\\icon\\shield.png",
 		"data\\TEXTURE\\icon\\assist.png",
+		"data\\TEXTURE\\icon\\counter.png",
 	};
 }
 
@@ -72,7 +73,7 @@ void My::CCardTypeIcon::Draw()
 //=============================================
 // 生成
 //=============================================
-My::CCardTypeIcon* My::CCardTypeIcon::Create(D3DXVECTOR3 pos, CCard::CARDTYPE_ type)
+My::CCardTypeIcon* My::CCardTypeIcon::Create(D3DXVECTOR3 pos, int type)
 {
 	CCardTypeIcon* pIcon = new CCardTypeIcon;
 	if (pIcon == nullptr) { return nullptr; }
@@ -86,4 +87,11 @@ My::CCardTypeIcon* My::CCardTypeIcon::Create(D3DXVECTOR3 pos, CCard::CARDTYPE_ t
 	pIcon->Init();
 
 	return pIcon;
+}
+
+void My::CCardTypeIcon::SetTypeTexture(int type)
+{
+	//テクスチャ登録
+	CTexture* pTexture = CManager::GetInstance()->GetTexture();
+	BindTexture(pTexture->GetAddress(pTexture->Regist(TEX_NAME[type])));//テクスチャ設定
 }

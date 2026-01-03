@@ -22,6 +22,22 @@ namespace My
 		static const int PRIORITY = 28;  //描画順
 
 		/**
+		* @brief アイコンタイプの列挙型
+		* @param 攻撃カード
+		* @param 防御カード
+		* @param 補助カード
+		* @param カウンターカード
+		*/
+		enum ICONTYPE_
+		{
+			TYPE_NONE = 0,
+			TYPE_ATTACK,
+			TYPE_DEFFENCE,
+			TYPE_ASSIST,
+			TYPE_COUNTER,
+			TYPE_MAX
+		};
+		/**
 		 * @brief コンストラクタ
 		 * @param [in]プライオリティ
 		 */
@@ -53,7 +69,9 @@ namespace My
 		 * @param [in]カードタイプ
 		 * @return
 		 */
-		static CCardTypeIcon* Create(D3DXVECTOR3 pos, CCard::CARDTYPE_ type);
+		static CCardTypeIcon* Create(D3DXVECTOR3 pos, int type);
+
+		void SetTypeTexture(int type);
 	private:
 	};
 }

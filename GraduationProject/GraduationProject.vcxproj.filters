@@ -273,6 +273,7 @@
     <ClInclude Include="thirdparty\EffekseerForDXLib\EffekseerForDXLib.h" />
     <ClInclude Include="thirdparty\EffekseerForDXLib\EffekseerRendererDX9.h" />
     <ClInclude Include="src\card_info_status.h" />
+    <ClInclude Include="src\status_icon.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GraduationProject.rc" />
