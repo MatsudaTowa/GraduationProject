@@ -51,6 +51,7 @@ public:
 		ID_DUEL_MESSAGE_CAST_CARD,		//キャストカードを通知
 		ID_DUEL_MESSAGE_CAST_DEFCARD,	//キャスト守備カードを通知
 		ID_DUEL_MESSAGE_TRIGGER,		//カードのトリガーを通知
+		ID_DUEL_MESSAGE_GAMESET,		//ゲームの終了の通知
 		ID_DUEL_MESSAGE_1,				//対戦時のメッセージ
 	};
 

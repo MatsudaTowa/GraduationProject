@@ -43,6 +43,7 @@ public:
 	void SendStatus();						//ステータスの送信
 	void SendCastCard(My::CCard* Card);		//キャストカードの送信
 	void SendTriggerCard(My::CCard* Card);	//トリガーカードの送信
+	void SendGameSet();						//ゲーム終了の送信
 
 private:
 
@@ -52,6 +53,7 @@ private:
 	//関数
 	CRakNet_Server();							//コンストラクタ
 	static void ChangeData(CRakNet_Data* data);	//データの変更
+	bool IsSendGameSet();						//終了の合図を送るか
 
 	//メンバ変数
 	RakNet::Packet* m_pPacket;				//パケット

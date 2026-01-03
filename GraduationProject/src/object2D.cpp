@@ -18,7 +18,8 @@ m_tex_pos(VEC2_RESET_ZERO),	//テクスチャ座標の初期化
 m_col(COLOR_NONE),			//色の初期化
 m_size(VEC2_RESET_ZERO),	//サイズの初期化
 m_pTexture(nullptr),		//テクスチャ管理ポインタ初期化
-m_pVtxBuff(nullptr)			//頂点バッファポインタ初期化
+m_pVtxBuff(nullptr),		//頂点バッファポインタ初期化
+m_division(1)				//分割数nの初期化
 {
 }
 
@@ -252,4 +253,28 @@ void My::CObject2D::SetGaugeVtx()
 void My::CObject2D::BindTexture(LPDIRECT3DTEXTURE9 pTex)
 {
 	m_pTexture = pTex;
+}
+
+/**
+ * @brief テクスチャ座標設定
+ * @param [in]テクスチャ座標
+ */
+void My::CObject2D::SetTexPos(D3DXVECTOR2 tex)
+{
+	m_tex_pos = tex;	//代入
+
+	if (!m_pVtxBuff) return;
+
+	VERTEX_2D* pVtx;
+
+	//頂点バッファをロックし頂点情報へのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	pVtx[0].tex = D3DXVECTOR2(m_tex_pos.x, 0.0f);
+	pVtx[1].tex = D3DXVECTOR2(m_tex_pos.x + (1.0f / (float)m_division), 0.0f);
+	pVtx[2].tex = D3DXVECTOR2(m_tex_pos.x, 1.0f);
+	pVtx[3].tex = D3DXVECTOR2(m_tex_pos.x + (1.0f / (float)m_division), 1.0f);
+
+	//アンロック
+	m_pVtxBuff->Unlock();
 }

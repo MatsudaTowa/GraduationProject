@@ -368,3 +368,44 @@ void CRakNet_Server::SendTriggerCard(My::CCard* Card)
     //全クライアントにブロードキャスト
     m_pPeer->Send(&bsOut, IMMEDIATE_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);  //優先的に送ることで反映を先にする
 }
+
+//=====================================
+//ゲーム終了の送信
+//=====================================
+void CRakNet_Server::SendGameSet()
+{
+    if (!IsSendGameSet()) return;
+
+    // データの作成
+    RakNet::BitStream bsOut;
+
+    //書き出し
+    bsOut.Write((RakNet::MessageID)CRakNet_Data::GameMessages::ID_DUEL_MESSAGE_GAMESET);    //メッセージ
+   
+    //全クライアントにブロードキャスト
+    m_pPeer->Send(&bsOut, IMMEDIATE_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);  //優先的に送ることで反映を先にする
+}
+
+//=====================================
+//ゲーム終了の送信をするか
+//=====================================
+bool CRakNet_Server::IsSendGameSet()
+{
+    //生存者数
+    int nLifePlayer = 0;
+
+    //各プレイヤーのパラメータを送信
+    for (auto iter : My::CDuel_Player_Manager::GetInstance()->GetList())
+    {
+        //体力が1以上なら生存者のカウント
+        if (iter->GetStatus().life > 0) nLifePlayer++;
+    }
+
+    //生存者数が1人なら終了
+    if (nLifePlayer <= 1)
+    {
+        return true;
+    }
+
+    return false;
+}

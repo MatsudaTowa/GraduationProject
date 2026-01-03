@@ -45,10 +45,10 @@ namespace My
 		}
 
 		//テクスチャ座標の代入
-		inline void SetTexPos(D3DXVECTOR2 tex)
-		{
+		/*inline */void SetTexPos(D3DXVECTOR2 tex);
+		/*{
 			m_tex_pos = tex;
-		}
+		}*/
 
 		inline void SetVtxBuff(LPDIRECT3DVERTEXBUFFER9 Buff)
 		{
@@ -59,6 +59,12 @@ namespace My
 		inline void SetColor(D3DXCOLOR col)
 		{
 			m_col = col;
+		}
+
+		//分割数の代入
+		inline void SetDivision(int division)
+		{
+			m_division = division;
 		}
 
 		//頂点座標の代入
@@ -110,6 +116,12 @@ namespace My
 			return m_pTexture;
 		}
 
+		//分割数の取得
+		inline int& GetDivision()
+		{
+			return m_division;
+		}
+
 
 	private:
 
@@ -121,6 +133,7 @@ namespace My
 		D3DXVECTOR2 m_size;
 		D3DXVECTOR2 m_tex_pos; //tex座標
 		D3DXCOLOR m_col;
+		int m_division;	//分割数
 	};
 }
 
