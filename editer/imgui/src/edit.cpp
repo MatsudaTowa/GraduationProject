@@ -24,14 +24,10 @@
 #include <iostream>
 #include <map>
 #include <sstream>
-#include "nlohmann/json.hpp"
 #include "imgui/imgui_internal.h"
 #include "tiny_aes/aes.h"
 #include <ShObjIdl.h>
 #pragma comment(lib,"imm32")
-
-// for convenience
-using ordered_json = nlohmann::ordered_json;
 
 // std::string → std::wstring に変換する関数
 std::wstring ConvertToWString(const std::string& str)
@@ -86,6 +82,41 @@ std::vector<uint8_t> AES_Decrypt(const std::vector<uint8_t>& ciphertext,
 	return buffer;
 }
 
+// JSON 安全取得ヘルパー
+static int json_get_int_safe(const ordered_json& j, const char* key, int def = 0) 
+{
+	if (j.contains(key) && j[key].is_number_integer()) return j[key].get<int>();
+	return def;
+}
+
+static float json_get_float_safe(const ordered_json& j, const char* key, float def = 0.0f)
+{
+	if (j.contains(key) && j[key].is_number())
+	{
+		return j[key].get<float>();
+	}
+	return def;
+}
+
+static std::string json_get_string_safe(const ordered_json& j, const char* key, const std::string& def = "") 
+{
+	if (j.contains(key) && j[key].is_string())
+	{
+		return j[key].get<std::string>();
+	}
+	return def;
+}
+
+static bool json_get_bool_safe(const ordered_json& j, const char* key, bool def = true) 
+{
+	if (j.contains(key) && j[key].is_boolean())
+	{
+		return j[key].get<bool>();
+	}
+
+	return def;
+}
+
 /**
  * @brief コンストラクタ
  */
@@ -107,7 +138,9 @@ My::CEdit::CEdit() :
 	m_SelectPack(0),
 	m_PlaceholderTex(),
 	m_bWindowSizeDeck(false),
-	m_bWindowSizeCard(false)
+	m_bWindowSizeCard(false),
+	m_EditingReferenceIndex(-1),
+	m_ForceCentralSelection(false)
 {
 	
 }
@@ -277,6 +310,9 @@ void My::CEdit::Edit()
 	// 中央 : カードデータ編集ビュー
 	ImGui::BeginChild("Editor", ImVec2(600, 0), true);
 
+	// 横スクロール機能追加
+	ImGui::BeginChild("EditorScroll", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
+
 	// 選択パックが有効か確認
 	if (!IsValidPackIndex(m_SelectPack))
 	{
@@ -289,9 +325,48 @@ void My::CEdit::Edit()
 
 		if (ImGui::Button(u8"追加"))
 		{
-			// 新規カードをパックに追加
-			cards.push_back(Card{ u8"名前なし",u8"名前なし", 0, 0, 0, 0, 0,false,0, CardType::ATTACK, RARITY::NONE_RARITY,AssistType::NONE_ASSIST,
-								  AttackType::NONE_ATTACK, DefenseType::NONE_DEFENSE, BuffType::NONE_BUFF,HealType::NONE_HEAL, "", nullptr});
+			// 新規カードをパックに追加(初期化)
+			cards.push_back(Card{ 
+				u8"名前なし",	// カード名
+				u8"名前なし",	// カードの読み方
+				0,				// コスト
+				0,				// ダメージ数
+				0,				// ガード値
+				0,				// 反撃値
+				0,				// 回復値
+				false,			// 効果の発動時間(true = 単発,false = 単発じゃない)
+				0,				// 発動時間
+				false,			// 参照の有無
+				0,				// 参照先(自分 or 自分以外 or 自分を含めた誰か)
+				0,				// 参照先(自分という選択肢以外が選ばれたとき)
+				0,				// 対象先以外が選ばれたときの択(特定の条件 or ランダム)
+				0,				// 自分を含んだ誰かが選ばれたときの択(特定の条件 or ランダム)
+				0,				// 対象物(ゾーン or エナジー or HP or 残り時間)
+				0,				// 参照先ゾーン(山札 / 墓地 / 待機 / 手札 / フィールド)
+				0,				// どっちから見るか(上 or 下)
+				0,				// 見る幅(範囲 or 特定)
+				0,				// 枚数
+				0,				// タイプ設定(すべてのタイプ or 特定のタイプ)
+				0,				// カードタイプ(攻撃 or 守備 or アシスト)
+				0,				// コストの条件の追加の有無
+				0,				// コストの条件(以上 or 以下 or 未満 or それより上 or 等しい)
+				0,				// コストの条件の値
+				0,				// カードタイプ固有の値かどうか
+				0,				// 攻撃カード固有の値(攻撃値)
+				0,				// 守備カード固有の値(守備値 or カウンター値)
+				0,				// 変化先のカードのパック番号
+				0,				// 変化先のカードのカード番号
+				CardType::ATTACK,				// カードのメインタイプ
+				AddEffect::NONE_EFFECT,				// カードの追加効果
+				RARITY::NONE_RARITY,			// カードのレアリティ
+				AssistType::NONE_ASSIST,		// アシストの種類
+				AttackType::NONE_ATTACK,		// 攻撃の種類
+				DefenseType::NONE_DEFENSE,		// 守備の種類
+				HealType::NONE_HEAL,			// 回復の種類
+				"",								// 画像ファイルパス
+				nullptr							// テクスチャのポインタ
+				}
+			);	
 			m_Select = (int)cards.size() - 1;
 		}
 
@@ -381,7 +456,10 @@ void My::CEdit::Edit()
 		}
 
 		ImGui::EndChild();
+
 	}
+
+	ImGui::EndChild(); // EditorScroll
 
 	ImGui::EndChild(); // Editor 終了
 
@@ -397,6 +475,7 @@ void My::CEdit::Edit()
 	// 描画
 	ImGui::Render();
 	ImGui_ImplDX9_RenderDrawData(ImGui::GetDrawData());
+
 }
 
 /**
@@ -414,65 +493,88 @@ void My::CEdit::Save()
 		{
 			const auto& card = pack.cards[cardIdx];
 
-			// データの関連付け
 			ordered_json j;
-			j["Pack ID"] = (int)packIdx + 1;					// パック番号
-			j["Card ID"] = (int)cardIdx + 1;					// カード番号
-			j["Card Name"] = trim_copy(card.name);				// カード名
-			j["Card Name Ruby"] = trim_copy(card.ruby);			// カードの読み方
-			j["image"] = card.imagePath;						// カードのイラスト画像
-			j["cost"] = card.cost;								// コスト
-			j["rarity"] = static_cast<int>(card.raritytype);	// レアリティ
-			j["type"] = static_cast<int>(card.maintype);		// カードのメインタイプ
-
+			j["Pack ID"] = (int)packIdx + 1;                    // パック番号（1始まり）
+			j["Card ID"] = (int)cardIdx + 1;                    // カード番号（1始まり）
+			j["Card Name"] = trim_copy(card.name);
+			j["Card Name Ruby"] = trim_copy(card.ruby);
+			j["image"] = card.imagePath;
+			j["cost"] = card.cost;
+			j["rarity"] = static_cast<int>(card.raritytype);
+			j["type"] = static_cast<int>(card.maintype);
 			j["isOneTime"] = card.isOneTime;
-
-			if (card.isOneTime == false)
-			{// 効果が単発じゃないとき
+			j["addeffect"] = static_cast<int>(card.addeffect);
+			j["target"] = card.target;
+		
+			if (!card.isOneTime)
+			{
 				j["time"] = card.time;
 			}
 
+			// 種別ごとの固有値
 			switch (card.maintype)
 			{
-			case ATTACK:	// 攻撃の場合
-				j["attacktype"] = static_cast<int>(card.attacktype);	// 攻撃対象
-				j["power"] = card.damage;								// 攻撃力
+			case ATTACK:
+				j["attacktype"] = static_cast<int>(card.attacktype);
+				j["power"] = card.damage;
 				break;
-			case DEFENSE:	// 守備の場合
-				j["defensetype"] = static_cast<int>(card.defensetype);	// カウンターの有無
-				j["guard"] = card.guard;								// ガード値
+			case DEFENSE:
+				j["defensetype"] = static_cast<int>(card.defensetype);
+				j["guard"] = card.guard;
 				if (card.defensetype == COUNTER)
-				{// カウンターする場合
-					j["counter"] = card.counter;	// カウンター値
+				{
+					j["counter"] = card.counter;
 				}
 				break;
-			case ASSIST:	// アシストの場合
-				j["assisttype"] = static_cast<int>(card.assisttype);	// アシストの種類
-				j["bufftype"] = static_cast<int>(card.bufftype);		// バフの種類
-				if (card.assisttype == BUFF && card.bufftype == HEAL)
-				{// バフの回復の場合
-					j["healtype"] = static_cast<int>(card.healtype);	// 回復対象
-					j["heal"] = card.heal;								// 回復値
+			case ASSIST:
+				j["assisttype"] = static_cast<int>(card.assisttype);
+				if (card.assisttype == HEAL)
+				{
+					j["healtype"] = static_cast<int>(card.healtype);
+					j["heal"] = card.heal;
 				}
 				break;
+			default:
+				break;
+			}
+
+			// 変化先（存在しない場合は 0 のまま）
+			j["change_target_pack"] = card.changePackID;
+			j["change_target_card"] = card.changeCardID;
+
+			// 参照配列を保存（Reference::ToJson を利用）
+			if (!card.references.empty())
+			{
+				if (card.target == true)
+				{// 参照するときにだけ
+					ordered_json refArray = ordered_json::array();
+					for (const auto& r : card.references)
+					{
+						refArray.push_back(r.ToJson());
+					}
+					j["references"] = refArray;
+				}
 			}
 
 			root[u8"カード"].push_back(j);
 		}
 	}
 
-	// 暗号化
+	// CBOR 変換
 	std::vector<uint8_t> cbor_bytes = ordered_json::to_cbor(root);
 
+	// 固定鍵・IV（既存実装と同じ）
 	std::vector<uint8_t> key(32, 0x01);
 	std::vector<uint8_t> iv(16, 0x02);
 
+	// 暗号化
 	std::vector<uint8_t> encrypted = AES_Encrypt(cbor_bytes, key, iv);
 
-	// バイナリ保存
-	std::ofstream ofs("data\\json\\cards.cbor", std::ios::binary);
+	// ファイル保存
+	const std::string path = "data\\json\\cards.cbor";
+	std::ofstream ofs(path, std::ios::binary);
 	if (!ofs.is_open())
-	{// ファイルが開けなかった場合
+	{
 		MessageBox(m_hWnd, L"暗号化セーブに失敗しました", L"失敗ログ", MB_OK);
 		return;
 	}
@@ -568,11 +670,11 @@ void My::CEdit::Load()
 	// CBOR → JSON に変換
 	ordered_json Json;
 
-	try 
+	try
 	{// 変換に成功した場合
 		Json = ordered_json::from_cbor(decrypted);
 	}
-	catch (const std::exception& e) 
+	catch (const std::exception& e)
 	{// 変換に失敗した場合
 		MessageBox(m_hWnd, L"CBOR の復号またはパースに失敗しました", L"エラー", MB_OK);
 		std::cout << "CBOR parse error: " << e.what() << "\n";
@@ -581,7 +683,7 @@ void My::CEdit::Load()
 
 	// カードキーを探す
 	std::string cardKey;
-	if (Json.contains(u8"カード")) 
+	if (Json.contains(u8"カード"))
 	{
 		cardKey = u8"カード";
 		std::cout << "Exact key u8\"カード\" found via contains()\n";
@@ -592,14 +694,14 @@ void My::CEdit::Load()
 		{
 			const std::string k = it.key();
 			if (k == u8"カード")
-			{ 
-				cardKey = k; 
-				break; 
+			{
+				cardKey = k;
+				break;
 			}
-			if (k.find(u8"カード") != std::string::npos) 
-			{ 
-				cardKey = k; 
-				break; 
+			if (k.find(u8"カード") != std::string::npos)
+			{
+				cardKey = k;
+				break;
 			}
 		}
 	}
@@ -622,7 +724,7 @@ void My::CEdit::Load()
 		int packID = j.value("Pack ID", 1);
 		size_t packIndex = (packID > 0) ? static_cast<size_t>(packID - 1) : 0;
 
-		// データ設定
+		// データ設定（パック数を拡張）
 		while (m_Pack.size() <= packIndex)
 		{
 			Pack pack;
@@ -631,51 +733,71 @@ void My::CEdit::Load()
 		}
 
 		Card card;
-		card.name = j.value("Card Name", j.value("CardName", "名前なし"));				// カード名
-		card.ruby = j.value("Card Name Ruby", j.value("Card Name Ruby", "名前なし"));	// カードの読み方
-		card.imagePath = trim_copy(j.value("image", j.value("Card Img", "")));			// イラスト画像
-		card.cost = j.value("cost", 0);													// コスト
-		card.raritytype = static_cast<My::RARITY>(j.value("rarity", 0));				// レアリティ
-		card.maintype = static_cast<My::CardType>(j.value("type", 0));					// メインタイプ
-		card.isOneTime = j.value("isOneTime", false);									// 単発かどうか
+		card.name = j.value("Card Name", j.value("CardName", "名前なし"));              // カード名
+		card.ruby = j.value("Card Name Ruby", j.value("Card Name Ruby", "名前なし"));   // カードの読み方
+		card.imagePath = trim_copy(j.value("image", j.value("Card Img", "")));          // イラスト画像
+		card.cost = j.value("cost", 0);                                                 // コスト
+		card.raritytype = static_cast<My::RARITY>(j.value("rarity", 0));                // レアリティ
+		card.maintype = static_cast<My::CardType>(j.value("type", 0));                  // メインタイプ
+		card.isOneTime = j.value("isOneTime", false);                                   // 単発かどうか
+		card.addeffect = static_cast<My::AddEffect>(j.value("addeffect",0));			// カードを変化させるかどうか
+		card.target = (j.value("target", 0) != 0);
+
 
 		if (card.isOneTime == false)
 		{// 単発じゃないとき
-			card.time = j.value("time", 0);	// 発動時間
+			card.time = j.value("time", 0); // 発動時間
 		}
 
 		switch (card.maintype)
 		{
-		case ATTACK:	// 攻撃の場合
-			card.attacktype = static_cast<My::AttackType>(j.value("attacktype", 0));	// 攻撃対象
-			card.damage = j.value("power", 0);	// 攻撃力
+		case ATTACK:    // 攻撃の場合
+			card.attacktype = static_cast<My::AttackType>(j.value("attacktype", 0));    // 攻撃対象
+			card.damage = j.value("power", 0);  // 攻撃力
 			break;
-		case DEFENSE:	// 守備の場合
-			card.defensetype = static_cast<My::DefenseType>(j.value("defensetype", 0));	// カウンターの有無
-			card.guard = j.value("guard", 0);	// ガード値
+		case DEFENSE:   // 守備の場合
+			card.defensetype = static_cast<My::DefenseType>(j.value("defensetype", 0)); // カウンターの有無
+			card.guard = j.value("guard", 0);   // ガード値
 			if (card.defensetype == COUNTER)
 			{// カウンターする場合
-				card.counter = j.value("counter", 0);	// カウンター値
+				card.counter = j.value("counter", 0);   // カウンター値
 			}
 			break;
-		case ASSIST:	// アシストの場合
-			card.assisttype = static_cast<My::AssistType>(j.value("assisttype", 0));	// アシストの種類
-			card.bufftype = static_cast<My::BuffType>(j.value("bufftype", 0));			// バフの種類
-			if (card.assisttype == BUFF && card.bufftype == HEAL)
-			{// バフで回復の場合
-				card.healtype = static_cast<My::HealType>(j.value("healtype", 0));	// 回復対象
-				card.heal = j.value("heal", 0);	// 回復値
+		case ASSIST:    // アシストの場合
+			card.assisttype = static_cast<My::AssistType>(j.value("assisttype", 0));    // アシストの種類
+			if (card.assisttype == HEAL)
+			{// アシストで回復の場合
+				card.healtype = static_cast<My::HealType>(j.value("healtype", 0));  // 回復対象
+				card.heal = j.value("heal", 0); // 回復値
 			}
 			break;
 		}
 
+		// 変化先パック/カード番号の復元（保存時は 1 始まりで保存している想定）
+		card.changePackID = j.value("change_target_pack", 0);
+		card.changeCardID = j.value("change_target_card", 0);
+
+		// references 配列があれば復元
+		if (j.contains("references") && j["references"].is_array())
+		{
+			for (const auto& rj : j["references"])
+			{
+				if (rj.is_object())
+				{
+					Reference r = Reference::FromJson(rj);
+					card.references.push_back(r);
+				}
+			}
+		}
+
+		// カードをパックに追加
 		m_Pack[packIndex].cards.push_back(card);
 	};
 
 	if (cardNode.is_array())
 	{
-		for (const auto& j : cardNode) 
-		{ 
+		for (const auto& j : cardNode)
+		{
 			if (j.is_object())
 			{
 				ProcessCardJson(j);
@@ -699,11 +821,15 @@ void My::CEdit::Load()
 		return;
 	}
 
+	// テクスチャ読み込み（カード本体）
 	for (size_t p = 0; p < m_Pack.size(); ++p)
 	{
 		for (size_t c = 0; c < m_Pack[p].cards.size(); ++c)
 		{
 			SetLoadTexture(m_Pack[p].cards[c]);
+
+			// 参照先に画像パス等を追加している場合はここで参照先のテクスチャも読み込む
+			// 例: if (!m_Pack[p].cards[c].references.empty()) { for (auto& r : m_Pack[p].cards[c].references) SetLoadReferenceTexture(r); }
 		}
 	}
 
@@ -1127,7 +1253,37 @@ void My::CEdit::SelectType(int PackID, int ID)
 	ImGui::RadioButton(u8"守備", reinterpret_cast<int*>(&card.maintype), static_cast<int>(DEFENSE));
 	ImGui::RadioButton(u8"アシスト", reinterpret_cast<int*>(&card.maintype), static_cast<int>(ASSIST));
 
-	// 選択によるサブ設定呼び出し（変更があればそれぞれの関数内で処理）
+	// カードの追加効果の設定
+	ImGui::Text(u8"カードの追加効果");
+	ImGui::RadioButton(u8"何もなし", reinterpret_cast<int*>(&card.addeffect), static_cast<int>(NONE));
+	ImGui::RadioButton(u8"変化", reinterpret_cast<int*>(&card.addeffect), static_cast<int>(CHANGE));
+
+	if (card.addeffect == CHANGE)
+	{// 変化を選んだ場合
+		ImGui::Text(u8"変化先のカードのパック番号とカード番号を設定");
+
+		if (card.changePackID < 0)
+		{// 変な値が入らないように初期化
+			card.changePackID = 0;
+		}
+
+		if (card.changeCardID < 0)
+		{// 変な値が入らないように初期化
+			card.changeCardID = 0;
+		}
+
+		// 入力枠
+		ImGui::SetNextItemWidth(100.0f);
+
+		ImGui::InputInt(u8"パック番号", &card.changePackID);
+
+
+		ImGui::SetNextItemWidth(100.0f);
+
+		ImGui::InputInt(u8"カード番号", &card.changeCardID);
+	}
+
+	// メインタイプ選択によるサブ設定呼び出し（変更があればそれぞれの関数内で処理）
 	if (card.maintype == ATTACK)
 	{
 		SetAttack(PackID, ID);
@@ -1150,6 +1306,7 @@ void My::CEdit::SelectType(int PackID, int ID)
 
 /**
 * @brief アシスト設定処理
+* @param [in]パック番号
 * @param [in]カード番号
 */
 void My::CEdit::SetAssist(int PackID, int ID)
@@ -1163,7 +1320,7 @@ void My::CEdit::SetAssist(int PackID, int ID)
 	Card& card = m_Pack[PackID].cards[ID];
 
 	if (card.heal < 0)
-	{// 変な値が入らないように初期化
+	{// 変な値が入らないようにする
 		card.heal = 0;
 	}
 
@@ -1174,65 +1331,55 @@ void My::CEdit::SetAssist(int PackID, int ID)
 
 	ImGui::Text(u8"アシストの種類");
 
-	ImGui::RadioButton(u8"妨害", reinterpret_cast<int*>(&card.assisttype), static_cast<int>(OBSTRUCT));
-	ImGui::RadioButton(u8"バフ", reinterpret_cast<int*>(&card.assisttype), static_cast<int>(BUFF));
-	ImGui::RadioButton(u8"デバフ", reinterpret_cast<int*>(&card.assisttype), static_cast<int>(DEBUFF));
+	ImGui::RadioButton(u8"回復", reinterpret_cast<int*>(&card.assisttype), static_cast<int>(HEAL));
+	ImGui::RadioButton(u8"これから実装①",reinterpret_cast<int*>(&card.assisttype), static_cast<int>(NONAME_ONE));
+	ImGui::RadioButton(u8"これから実装②", reinterpret_cast<int*>(&card.assisttype), static_cast<int>(NONAME_TWO));
 
-	// バフが選択されたらバフタイプ表示
-	if (card.assisttype == BUFF)
-	{
-		ImGui::Text(u8"バフの種類");
+	if (card.assisttype == HEAL)
+	{// アシストの種類が回復のとき
+		ImGui::PushID("heal");
 
-		ImGui::RadioButton(u8"回復", reinterpret_cast<int*>(&card.bufftype), static_cast<int>(HEAL));
-		ImGui::RadioButton(u8"これから実装", reinterpret_cast<int*>(&card.bufftype), static_cast<int>(NO_NAMEONE));
-		ImGui::RadioButton(u8"今後実装", reinterpret_cast<int*>(&card.bufftype), static_cast<int>(NO_NAMETWO));
+		// 回復対象選択
+		ImGui::Text(u8"回復対象");
+		ImGui::RadioButton(u8"全体回復", reinterpret_cast<int*>(&card.healtype), static_cast<int>(ALL_HEAL));
+		ImGui::RadioButton(u8"特定の相手に回復", reinterpret_cast<int*>(&card.healtype), static_cast<int>(SPECIFIC_HEAL));
+		ImGui::RadioButton(u8"ランダム回復", reinterpret_cast<int*>(&card.healtype), static_cast<int>(RANDOM_HEAL));
+		ImGui::RadioButton(u8"自分を含めてランダム回復", reinterpret_cast<int*>(&card.healtype), static_cast<int>(SELFINTARGET_HEAL));
+		ImGui::RadioButton(u8"自分だけ回復", reinterpret_cast<int*>(&card.healtype), static_cast<int>(ONLY_ME));
 
-		// 回復バフの詳細編集
-		if (card.bufftype == HEAL)
+		if (ImGui::Button("-"))
 		{
-			ImGui::PushID("heal");
-
-			// 回復対象選択
-			ImGui::Text(u8"回復対象");
-			ImGui::RadioButton(u8"全体回復", reinterpret_cast<int*>(&card.healtype), static_cast<int>(ALL_HEAL));
-			ImGui::RadioButton(u8"特定の相手に回復", reinterpret_cast<int*>(&card.healtype), static_cast<int>(SPECIFIC_HEAL));
-			ImGui::RadioButton(u8"ランダム回復", reinterpret_cast<int*>(&card.healtype), static_cast<int>(RANDOM_HEAL));
-			ImGui::RadioButton(u8"自分を含めてランダム回復", reinterpret_cast<int*>(&card.healtype), static_cast<int>(SELFINTARGET_HEAL));
-			ImGui::RadioButton(u8"自分だけ回復", reinterpret_cast<int*>(&card.healtype), static_cast<int>(ONLY_ME));
-
-
-			if (ImGui::Button("-"))
-			{
-				card.heal = std::max(0, card.heal - 1);
-			}
-
-			ImGui::SameLine();
-			ImGui::Text("%d", card.heal);
-			ImGui::SameLine();
-
-			if (ImGui::Button("+"))
-			{
-				card.heal += 1;
-			}
-
-			ImGui::SameLine();
-			ImGui::Text(u8"回復量");
-
-			ImGui::PopID();
+			card.heal = std::max(0, card.heal - 1);
 		}
-	}
-	else if (card.assisttype == DEBUFF)
-	{// デバフタイプのとき
+
+		ImGui::SameLine();
+		ImGui::Text("%d", card.heal);
+		ImGui::SameLine();
+
+		if (ImGui::Button("+"))
+		{
+			card.heal += 1;
+		}
+
+		ImGui::SameLine();
+		ImGui::Text(u8"回復量");
+
+		ImGui::PopID();
 
 	}
-	else if (card.assisttype == OBSTRUCT)
-	{// 妨害タイプのとき
-
-	}
-
 	ImGui::PopID();
 	ImGui::PopID();
 	ImGui::PopID();
+}
+
+/**
+* @brief アシスト対象設定
+* @param [in]パック番号
+* @param [in]カード番号
+*/
+void My::CEdit::SetAssistTarget(int packID, int ID)
+{
+	JudgeObject(packID, ID,0);
 }
 
 /**
@@ -1318,26 +1465,46 @@ void My::CEdit::SetAttack(int PackID, int ID)
 	ImGui::RadioButton(u8"ランダム攻撃", reinterpret_cast<int*>(&card.attacktype), static_cast<int>(RANDOM_ATTACK));
 	ImGui::RadioButton(u8"自分を含めてランダム攻撃", reinterpret_cast<int*>(&card.attacktype), static_cast<int>(SELFINTARGET_ATTACK));
 
-	// ダメージ数編集
-	ImGui::PushID("damage");
-	if (ImGui::Button("-"))
+	// 参照の有無設定
+	ImGui::Text(u8"参照の有無");
+	if (ImGui::RadioButton(u8"参照する", card.target))
 	{
-		card.damage = std::max(0, card.damage - 1);
+		card.target = true;
 	}
-	ImGui::SameLine();
-	ImGui::Text("%d", card.damage);
-	ImGui::SameLine();
-	if (ImGui::Button("+"))
+	if (ImGui::RadioButton(u8"参照しない", !card.target))
 	{
-		card.damage += 1;
+		card.target = false;
 	}
-	ImGui::SameLine();
-	ImGui::Text(u8"ダメージ数");
-	ImGui::PopID();
 
-	// 攻撃を選択したので他種はリセット
-	card.assisttype = NONE_ASSIST;
-	card.defensetype = NONE_DEFENSE;
+	if (card.target)
+	{
+		//攻撃カードの詳細設定
+		SetAttackTarget(PackID, ID);
+	}
+	else
+	{
+		// ダメージ数編集
+		ImGui::PushID("damage");
+		if (ImGui::Button("-"))
+		{
+			card.damage = std::max(0, card.damage - 1);
+		}
+		ImGui::SameLine();
+		ImGui::Text("%d", card.damage);
+		ImGui::SameLine();
+		if (ImGui::Button("+"))
+		{
+			card.damage += 1;
+		}
+		ImGui::SameLine();
+		ImGui::Text(u8"ダメージ数");
+		ImGui::PopID();
+
+		// 攻撃を選択したので他種はリセット
+		card.assisttype = NONE_ASSIST;
+		card.defensetype = NONE_DEFENSE;
+
+	}
 
 	ImGui::PopID();
 	ImGui::PopID();
@@ -1345,7 +1512,21 @@ void My::CEdit::SetAttack(int PackID, int ID)
 }
 
 /**
+* @brief 攻撃対象設定
+* @param [in]パック番号
+* @param [in]カード番号
+*/
+void My::CEdit::SetAttackTarget(int packID, int ID)
+{
+	// 対象物の判断
+	//JudgeObject(packID, ID,0);
+
+	DrawReference(packID, ID);
+}
+
+/**
 * @brief 守備設定処理
+* @param [in]パック番号
 * @param [in]カード番号
 */
 void My::CEdit::SetDefense(int PackID, int ID)
@@ -1420,6 +1601,16 @@ void My::CEdit::SetDefense(int PackID, int ID)
 	ImGui::PopID(); // defense
 	ImGui::PopID(); // ID
 	ImGui::PopID(); // PackID
+}
+
+/**
+* @brief 守備対象設定
+* @param [in]パック番号
+* @param [in]カード番号
+*/
+void My::CEdit::SetDefenseTarget(int packID, int ID)
+{
+	JudgeObject(packID, ID,0);
 }
 
 /**
@@ -2627,4 +2818,1301 @@ void My::CEdit::SetCostFrame(int PackID, int CardID, ImVec2 pos)
 	ImGui::SetCursorScreenPos(pos);
 	ImGui::Dummy(CostFrameSize);
 
+}
+
+/**
+* @brief 対象物の判断
+* @param [in]パック番号
+* @param [in]カード番号
+*/
+void My::CEdit::JudgeObject(int PackID, int CardID,int refIndex)
+{
+
+}
+
+/**
+* @brief ゾーンの判断処理
+* @param [in]パック番号
+* @param [in]カード番号
+* @param [in]参照先番号
+*/
+void My::CEdit::JudgeZone(int PackID, int CardID,int refIndex)
+{
+	// 範囲チェック
+	if (!IsValidPackIndex((size_t)PackID) || !IsValidCardIndex((size_t)PackID, (size_t)CardID))
+	{
+		return;
+	}
+
+	// 参照配列を安全に取得
+	auto& refs = m_Pack[PackID].cards[CardID].references;
+	if (refIndex < 0 || refIndex >= (int)refs.size())
+	{
+		return;
+	}
+
+	// 参照先ごとの zone を操作する
+	auto& ref = refs[refIndex];
+
+	// ImGui の ID を参照先ごとにユニークにする
+	ImGui::PushID(("zone" + std::to_string(refIndex)).c_str());
+
+	ImGui::Text(u8"参照先ゾーン");
+
+	// ラジオボタンは ref.zone を直接操作する
+	if (ImGui::RadioButton(u8"山札", ref.zone == 0))
+	{
+		ref.zone = 0;
+	}
+	if (ImGui::RadioButton(u8"墓地", ref.zone == 1))
+	{
+		ref.zone = 1;
+	}
+	if (ImGui::RadioButton(u8"待機", ref.zone == 2))
+	{
+		ref.zone = 2;
+	}
+	if (ImGui::RadioButton(u8"手札", ref.zone == 3))
+	{
+		ref.zone = 3;
+	}
+	if (ImGui::RadioButton(u8"フィールド", ref.zone == 4))
+	{
+		ref.zone = 4;
+	}
+
+	Card& card = m_Pack[PackID].cards[CardID];
+	int prevCardZone = card.zone;
+	card.zone = ref.zone; 
+
+	if (card.zone == 0)
+	{// 山札を選択した場合
+		SetDeck(PackID, CardID,refIndex);
+	}
+	else if (card.zone == 1)
+	{// 墓地ゾーンを選択した場合
+		SetCemetery(PackID, CardID,refIndex);
+	}
+	else if (card.zone == 2)
+	{// 待機ゾーンを選択した倍
+		SetWait(PackID, CardID,refIndex);
+	}
+	else if (card.zone == 3)
+	{// 手札を選択した場合
+		SetHand(PackID, CardID,refIndex);
+	}
+	else if (card.zone == 4)
+	{// フィールドを選択した場合
+		SetField(PackID, CardID,refIndex);
+	}
+
+	// 元に戻す
+	card.zone = prevCardZone;
+
+	ImGui::PopID();
+}
+
+/**
+* @brief 山札の設定処理
+* @param [in]パック番号
+* @param [in]カード番号
+* @param [in]参照先番号
+*/
+void My::CEdit::SetDeck(int PackID, int CardID,int refIndex)
+{
+	// 範囲チェック
+	if (!IsValidPackIndex((size_t)PackID) || !IsValidCardIndex((size_t)PackID, (size_t)CardID))
+	{
+		return;
+	}
+
+	// 参照配列を取得
+	auto& refs = m_Pack[PackID].cards[CardID].references;
+	if (refIndex < 0 || refIndex >= (int)refs.size())
+	{
+		return;
+	}
+
+	Reference& ref = refs[refIndex];
+
+	// 参照先番号のもののみ
+	ImGui::PushID(refIndex);
+
+	if (ref.num < 0)
+	{// 変な値が入らないように初期化
+		ref.num = 0;
+	}
+
+	if (ref.targetselect == 0)
+	{
+		// 見出し
+		ImGui::PushID("startpos");
+		ImGui::Text(u8"参照開始位置");
+
+		if (ImGui::RadioButton(u8"上", ref.startpos == 0))
+		{// 上から見る
+			ref.startpos = 0;
+		}
+		if (ImGui::RadioButton(u8"下", ref.startpos == 1))
+		{// 下から見る
+			ref.startpos = 1;
+		}
+
+		ImGui::PopID();
+
+		//*******************************
+		// 参照幅
+		//*******************************
+		ImGui::PushID("searchwidth");
+
+		ImGui::Text(u8"参照幅");
+
+		// 選択肢
+		if (ImGui::RadioButton(u8"範囲", ref.searchwidth == 0))
+		{// 範囲を決めて見る
+			ref.searchwidth = 0;
+		}
+		if (ImGui::RadioButton(u8"特定", ref.searchwidth == 1))
+		{// 特定の1枚を見る
+			ref.searchwidth = 1;
+		}
+
+		ImGui::PopID();
+
+		//*******************************
+		// 枚数設定 
+		//*******************************
+		ImGui::PushID("num");
+
+		ImGui::Text(u8"枚数設定");
+
+		if (ImGui::Button("-"))
+		{// -ボタンが押されたら
+			ref.num = std::max(1, ref.num - 1);
+		}
+
+		ImGui::SameLine();
+
+		// 数字の表示
+		ImGui::Text("%d", ref.num);
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("+"))
+		{// +ボタンが押されたら
+			ref.num += 1;
+		}
+
+		if (ref.searchwidth == 0)
+		{// 範囲検索だった場合
+			JudgeType(PackID, CardID,refIndex);
+		}
+
+		ImGui::PopID();
+	}
+
+	ImGui::PopID();
+}
+
+/**
+* @brief 墓地の設定処理
+* @param [in]パック番号
+* @param [in]カード番号
+*/
+void My::CEdit::SetCemetery(int PackID, int CardID,int refIndex)
+{
+	// 範囲チェック
+	if (!IsValidPackIndex((size_t)PackID) || !IsValidCardIndex((size_t)PackID, (size_t)CardID))
+	{
+		return;
+	}
+
+	Card& card = m_Pack[PackID].cards[CardID];
+
+	if (card.targetselect == 0)
+	{// 自分のみという選択肢が選ばれたとき
+		// カードのタイプ判断
+		//JudgeType(PackID, CardID);
+	}
+
+}
+
+/**
+* @brief 待機の設定処理
+* @param [in]パック番号
+* @param [in]カード番号
+* @param [in]参照先番号
+*/
+void My::CEdit::SetWait(int PackID, int CardID,int refIndex)
+{
+	// 範囲チェック
+	if (!IsValidPackIndex((size_t)PackID) || !IsValidCardIndex((size_t)PackID, (size_t)CardID))
+	{
+		return;
+	}
+
+	Card& card = m_Pack[PackID].cards[CardID];
+
+	if (card.targetselect == 0)
+	{// 自分のみという選択肢が選ばれた場合
+		//JudgeType(PackID, CardID);
+	}
+
+}
+
+/**
+* @brief 手札の設定処理
+* @param [in]パック番号
+* @param [in]カード番号
+* @param [in]参照先番号
+*/
+void My::CEdit::SetHand(int PackID, int CardID,int refIndex)
+{
+	// 範囲チェック
+	if (!IsValidPackIndex((size_t)PackID) || !IsValidCardIndex((size_t)PackID, (size_t)CardID))
+	{
+		return;
+	}
+
+	Card& card = m_Pack[PackID].cards[CardID];
+
+	if (card.targetselect == 0)
+	{// 自分のみという選択肢が選ばれた場合
+		//JudgeType(PackID, CardID);
+	}
+}
+
+/**
+* @brief フィールドの設定処理
+* @param [in]パック番号
+* @param [in]カード番号
+* @param [in]参照先番号
+*/
+void My::CEdit::SetField(int PackID, int CardID,int refIndex)
+{
+	// 範囲チェック
+	if (!IsValidPackIndex((size_t)PackID) || !IsValidCardIndex((size_t)PackID, (size_t)CardID))
+	{
+		return;
+	}
+
+	Card& card = m_Pack[PackID].cards[CardID];
+
+	if (card.selecttype == 0)
+	{//自分のみという選択肢が選ばれた場合
+		SelectType(PackID, CardID);
+	}
+}
+
+/**
+* @brief タイプの判断
+* @param [in]パック番号
+* @param [in]カード番号
+* @param [in]参照先番号
+*/
+void My::CEdit::JudgeType(int PackID, int CardID,int refIndex)
+{
+	// 範囲チェック
+	if (!IsValidPackIndex((size_t)PackID) || !IsValidCardIndex((size_t)PackID, (size_t)CardID))
+	{
+		return;
+	}
+
+	// 参照配列を取得
+	auto& refs = m_Pack[PackID].cards[CardID].references;
+	if (refIndex < 0 || refIndex >= (int)refs.size())
+	{
+		return;
+	}
+
+	Reference& ref = refs[refIndex];
+
+	// 参照先番号のもののみ
+	ImGui::PushID(refIndex);
+
+	ImGui::PushID("selecttype");
+	ImGui::Text(u8"タイプ制限の有無");
+
+	if (ImGui::RadioButton(u8"すべてのタイプ", ref.selecttype == 0))
+	{
+		ref.selecttype = 0;
+	}
+	if (ImGui::RadioButton(u8"特定のタイプ", ref.selecttype == 1))
+	{
+		ref.selecttype = 1;
+	}
+
+	// 詳細設定
+	if (ref.selecttype == 1)
+	{// 特定のタイプだった場合
+		ImGui::PushID("cardtype");
+		ImGui::Text(u8"対象とするタイプ");
+
+		if (ImGui::RadioButton(u8"攻撃タイプ", ref.cardtype == 0))
+		{
+			ref.cardtype = 0;
+		}
+		if (ImGui::RadioButton(u8"守備タイプ", ref.cardtype == 1))
+		{
+			ref.cardtype = 1;
+		}
+		if (ImGui::RadioButton(u8"アシストタイプ", ref.cardtype == 2))
+		{
+			ref.cardtype = 2;
+		}
+
+		ImGui::PopID();
+	}
+
+	if (ref.selecttype == 0)
+	{// すべてのタイプの場合
+		JudgeCost(PackID, CardID,refIndex);
+	}
+	if (ref.selecttype == 1)
+	{// 特定のタイプの場合
+		JudgeOriginalValue(PackID, CardID,refIndex);
+	}
+	
+	ImGui::PopID();
+	ImGui::PopID();
+}
+
+/**
+* @brief カードの固有の値か判断
+* @param [in]パック番号
+* @param [in]カード番号
+* @param [in]参照先番号
+*/
+void My::CEdit::JudgeOriginalValue(int PackID, int CardID,int refIndex)
+{
+	// 範囲チェック
+	if (!IsValidPackIndex((size_t)PackID) || !IsValidCardIndex((size_t)PackID, (size_t)CardID)) 
+	{ 
+		return; 
+	} 
+
+	// 参照配列を取得 
+	auto& refs = m_Pack[PackID].cards[CardID].references; 
+
+	if (refIndex < 0 || refIndex >= (int)refs.size()) 
+	{ 
+		return; 
+	} 
+
+	Reference& ref = refs[refIndex];
+
+	ImGui::PushID(refIndex); 
+	
+	if (ref.cardtype == 2) 
+	{// アシストは固有の値がないから無条件でコスト判断 
+		ref.judgeoriginalvalue = 1; 
+		JudgeCost(PackID, CardID, refIndex); 
+	} 
+	else 
+	{// カードタイプがアシスト以外のとき
+
+		ImGui::PushID("judgeoriginalvalue"); 
+		ImGui::Text(u8"固有の値追加"); 
+
+		if (ImGui::RadioButton(u8"追加する", ref.judgeoriginalvalue == 0))
+		{
+			ref.judgeoriginalvalue = 0; 
+		} 
+		if (ImGui::RadioButton(u8"追加しない", ref.judgeoriginalvalue == 1))
+		{ 
+			ref.judgeoriginalvalue = 1; 
+			JudgeCost(PackID, CardID, refIndex); 
+		} 
+
+		if (ref.judgeoriginalvalue == 0) 
+		{ 
+			ImGui::PushID("originalvalue");
+			if (ref.cardtype == 0) 
+			{// 攻撃タイプを選んだとき
+				ref.Attackoriginalvalue = 0;	// 固有の値が攻撃値しかないためボタン無し
+			}
+			else if (ref.cardtype == 1) 
+			{// 守備タイプを選んだとき
+				if (ImGui::RadioButton(u8"守備値", ref.Defenseoriginalvalue == 0))
+				{
+					ref.Defenseoriginalvalue = 0; 
+				} 
+				if (ImGui::RadioButton(u8"カウンター値", ref.Defenseoriginalvalue == 1)) 
+				{ 
+					ref.Defenseoriginalvalue = 1;
+				} 
+			} 
+
+			ImGui::PopID(); 
+
+		} 
+
+		ImGui::PopID(); 
+
+	} 
+
+	ImGui::PopID(); 
+	
+}
+
+/**
+* @brief コストの判断
+* @param [in]パック番号
+* @param [in]カード番号
+* @param [in]参照先番号
+*/
+void My::CEdit::JudgeCost(int PackID, int CardID,int refIndex)
+{
+	// 範囲チェック
+	if (!IsValidPackIndex((size_t)PackID) || !IsValidCardIndex((size_t)PackID, (size_t)CardID))
+	{
+		return;
+	}
+
+	Card& card = m_Pack[PackID].cards[CardID];
+
+	if (card.refcost <= 0)
+	{// 変な値が入らないように初期化
+		card.refcost = 0;
+	}
+
+	ImGui::PushID("costjudge");
+
+	if (card.selecttype == 0)
+	{// カードのタイプをすべてにした場合無条件でコスト条件を設定
+		card.addcostcondition = 0;
+	}
+	else if (card.selecttype == 1)
+	{// カードのタイプを特定にした場合
+
+		ImGui::PushID("addcostcondition");
+
+		ImGui::Text(u8"コスト条件");
+		if (ImGui::RadioButton(u8"追加する", card.addcostcondition == 0))
+		{
+			card.addcostcondition = 0;
+		}
+		if (ImGui::RadioButton(u8"追加しない", card.addcostcondition == 1))
+		{
+			card.addcostcondition = 1;
+		}
+
+		ImGui::PopID();
+	}
+
+	if (card.addcostcondition == 0)
+	{// コスト条件を追加するを選択した場合
+		ImGui::PushID("costcondition");
+
+		ImGui::Text(u8"コスト条件");
+
+		if (ImGui::RadioButton(u8"以上", card.costcondition == 0))
+		{
+			card.costcondition = 0;
+		}
+		if (ImGui::RadioButton(u8"以下", card.costcondition == 1))
+		{
+			card.costcondition = 1;
+		}
+		if (ImGui::RadioButton(u8"未満", card.costcondition == 2))
+		{
+			card.costcondition = 2;
+		}
+		if (ImGui::RadioButton(u8"それより上", card.costcondition == 3))
+		{
+			card.costcondition = 3;
+		}
+		if (ImGui::RadioButton(u8"等しい", card.costcondition == 4))
+		{
+			card.costcondition = 4;
+		}
+
+		ImGui::Text(u8"コスト指定");
+
+		if (ImGui::Button("-"))
+		{
+			card.refcost = std::max(0, card.refcost - 1);
+		}
+		ImGui::SameLine();
+		ImGui::Text("%d", card.refcost);
+		ImGui::SameLine();
+		if (ImGui::Button("+"))
+		{
+			card.refcost += 1;
+		}
+		ImGui::SameLine();
+		ImGui::Text(u8"コスト値");
+
+
+		ImGui::PopID();
+
+	}
+	ImGui::PopID();
+}
+
+/**
+* @brief 参照追加処理
+* @param [in]パック番号
+* @param [in]カード番号
+* @param [in]参照の詳細
+*/
+void My::CEdit::AddReference(int PackID, int CardID, int Kind)
+{
+	if (!IsValidPackIndex((size_t)PackID) || !IsValidCardIndex((size_t)PackID, (size_t)CardID))
+	{
+		return;
+	}
+
+	Reference r{};
+	r.kind = Kind;
+	r.label = std::string(u8"参照先");
+	r.targetselect = 0;
+	r.othertargetselect = 0;
+	r.targetobject = 0;
+	r.zone = 0;
+	r.startpos = 0;
+	r.searchwidth = 0;
+	r.selecttype = 0;
+	r.cardtype = 0;
+	r.addcostcondition = 0;
+	r.judgeoriginalvalue = 0;
+	r.Attackoriginalvalue = 0;
+	r.Defenseoriginalvalue = 0;
+	r.num = 0;
+	r.realValue = 0.0f;
+	r.judgeKind = false;
+	r.referencenum = 0;
+
+	r.activeDetail = -1;
+	r.activeReal = -1;
+	r.showInput = false;
+
+	m_Pack[PackID].cards[CardID].references.push_back(r);
+}
+
+
+/**
+* @brief 参照削除処理
+* @param [in]パック番号
+* @param [in]カード番号
+* @param [in]削除番号
+*/
+void My::CEdit::RemoveReference(int PackID, int CardID, int RefIndex)
+{
+	if (!IsValidPackIndex((size_t)PackID) || !IsValidCardIndex((size_t)PackID, (size_t)CardID))
+		return;
+
+	auto& refs = m_Pack[PackID].cards[CardID].references;
+	if (RefIndex < 0 || RefIndex >= (int)refs.size())
+		return;
+
+	// 削除
+	refs.erase(refs.begin() + RefIndex);
+
+	// m_EditingReferenceIndex の補正
+	if (refs.empty())
+	{
+		m_EditingReferenceIndex = -1;
+		m_ForceCentralSelection = false;
+	}
+	else
+	{
+		if (m_EditingReferenceIndex >= (int)refs.size())
+			m_EditingReferenceIndex = (int)refs.size() - 1;
+		if (m_EditingReferenceIndex < 0)
+			m_EditingReferenceIndex = 0;
+	}
+
+	// m_OpInputRefIndex の補正
+	if (m_OpInputRefIndex >= (int)refs.size())
+		m_OpInputRefIndex = (int)refs.size() - 1;
+	if (m_OpInputRefIndex < 0 && !refs.empty())
+		m_OpInputRefIndex = 0;
+
+	// m_OpInputIndex / m_OpImputValue の整合性（存在する参照に合わせる）
+	if (m_OpInputRefIndex >= 0 && m_OpInputRefIndex < (int)refs.size())
+	{
+		m_OpImputValue = static_cast<int>(refs[m_OpInputRefIndex].realValue);
+		m_OpInputIntBackUp = m_OpImputValue;
+	}
+	else
+	{
+		m_OpImputValue = 0;
+		m_OpInputIntBackUp = 0;
+	}
+
+	// 参照の showInput フラグや選択状態が残っている場合は安全に初期化
+	for (auto& r : refs)
+	{
+		if (r.activeDetail < 0 && r.activeReal < 0)
+			r.showInput = false;
+	}
+}
+
+/**
+* @brief 要素移動処理
+* @param [in]パック番号
+* @param [in]カード番号
+* @param [in]移動元
+* @param [in]移動先
+*/
+void My::CEdit::MoveReference(int PackID, int CardID, int srcIndex, int dstIndex)
+{
+	// 範囲チェック
+	if (!IsValidPackIndex((size_t)PackID) || !IsValidCardIndex((size_t)PackID, (size_t)CardID))
+	{
+		return;
+	}
+
+	auto& refs = m_Pack[PackID].cards[CardID].references;
+	
+	if (srcIndex < 0 || srcIndex >= (int)refs.size())
+	{
+		return;
+	}
+
+	if (dstIndex < 0)
+	{
+		dstIndex = 0;
+	}
+
+	if (dstIndex >= (int)refs.size())
+	{
+		dstIndex = (int)refs.size() - 1;
+	}
+
+	if (srcIndex == dstIndex)
+	{
+		return;
+	}
+
+	Reference tmp = refs[srcIndex];
+	refs.erase(refs.begin() + srcIndex);
+	refs.insert(refs.begin() + dstIndex, tmp);
+
+	ReassignReferenceLabels(PackID, CardID);
+
+	if (m_EditingReferenceIndex == srcIndex)
+	{
+		m_EditingReferenceIndex = dstIndex;
+	}
+	else if (m_EditingReferenceIndex > srcIndex && m_EditingReferenceIndex <= dstIndex)
+	{
+		--m_EditingReferenceIndex;
+	}
+	else if (m_EditingReferenceIndex < srcIndex && m_EditingReferenceIndex >= dstIndex)
+	{
+		++m_EditingReferenceIndex;
+	}
+}
+
+/**
+* @brief 指定位置に挿入
+* @param [in]パック番号
+* @param [in]カード番号
+* @param [in]挿入先番号
+*/
+void My::CEdit::MoveLastTo(int PackID, int CardID, int targetIndex)
+{
+	// 範囲チェック
+	if (!IsValidPackIndex((size_t)PackID) || !IsValidCardIndex((size_t)PackID, (size_t)CardID))
+	{
+		return;
+	}
+
+	auto& refs = m_Pack[PackID].cards[CardID].references;
+	if (refs.empty())
+	{
+		return;
+	}
+
+	int last = (int)refs.size() - 1;
+	if (targetIndex < 0)
+	{
+		targetIndex = 0;
+	}
+	if (targetIndex > last)
+	{
+		targetIndex = last;
+	}
+	if (last == targetIndex)
+	{
+		return;
+	}
+
+	Reference tmp = refs[last];
+	refs.erase(refs.begin() + last);
+	refs.insert(refs.begin() + targetIndex, tmp);
+	ReassignReferenceLabels(PackID, CardID);
+}
+
+/**
+* @brief 描画処理
+* @param [in]パック番号
+* @param [in]カード番号
+*/
+void My::CEdit::DrawReference(int PackID, int CardID)
+{
+	// 範囲チェック
+	if (!IsValidPackIndex((size_t)PackID) || !IsValidCardIndex((size_t)PackID, (size_t)CardID))
+		return;
+
+	auto& card = m_Pack[PackID].cards[CardID];
+	auto& refs = card.references;
+
+	// 最低1つは参照を確保
+	if (refs.empty())
+		AddReference(PackID, CardID, 0);
+
+	auto& refsNow = m_Pack[PackID].cards[CardID].references;
+
+	// 編集対象インデックスの整合性
+	if (m_EditingReferenceIndex < 0 || m_EditingReferenceIndex >= (int)refsNow.size())
+		m_EditingReferenceIndex = 0;
+
+	// --- 左列基準矩形 ---
+	ImVec2 headerRectMin(0, 0), headerRectSize(0, 0);
+	ImVec2 lastRadioMin(0, 0), lastRadioSize(0, 0);
+
+	if (!refsNow.empty())
+	{
+		auto& leftRef = refsNow[0];
+
+		ImGui::Text(u8"参照先1");
+		headerRectMin = ImGui::GetItemRectMin();
+		headerRectSize = ImGui::GetItemRectSize();
+
+		ImGui::Text(u8"対象");
+		ImGui::RadioButton(u8"自分##left", &leftRef.targetselect, 0);
+		ImGui::RadioButton(u8"自分以外##left", &leftRef.targetselect, 1);
+		ImGui::RadioButton(u8"自分を含めた誰か##left", &leftRef.targetselect, 2);
+
+		lastRadioMin = ImGui::GetItemRectMin();
+		lastRadioSize = ImGui::GetItemRectSize();
+
+		ImGui::Spacing();
+		ImGui::Text(u8"対象物");
+		ImGui::RadioButton(u8"ゾーン##left_obj", &leftRef.targetobject, 0);
+		ImGui::RadioButton(u8"エナジー##left_obj", &leftRef.targetobject, 1);
+		ImGui::RadioButton(u8"HP##left_obj", &leftRef.targetobject, 2);
+		ImGui::RadioButton(u8"残り時間##left_obj", &leftRef.targetobject, 3);
+
+		if (leftRef.targetobject == 0)
+		{
+			int prev = m_EditingReferenceIndex;
+			m_EditingReferenceIndex = 0;
+			JudgeZone(PackID, CardID, 0);
+			m_EditingReferenceIndex = prev;
+		}
+	}
+	else
+	{
+		// 見出しが無い場合のフォールバック（スクリーン座標）
+		headerRectMin = ImGui::GetCursorScreenPos();
+		headerRectSize = ImVec2(0, ImGui::GetTextLineHeight());
+		lastRadioMin = headerRectMin;
+		lastRadioSize = headerRectSize;
+	}
+
+	// --- ボタン群パラメータ ---
+	const char* detailLabels[MAX_BUTTON] = { u8"＋(詳細設定)", u8"－(詳細設定)", u8"×(詳細設定)", u8"÷(詳細設定)" };
+	const char* realLabels[MAX_BUTTON] = { u8"＋(実数値)",   u8"－(実数値)",   u8"×(実数値)",   u8"÷(実数値)" };
+
+	const float OPERATOR_OFFSET = OPERATOR_POSX;
+	const float btnW = 120.0f;
+	const float btnGap = 4.0f;
+	float       btnH = ImGui::GetFrameHeight();
+
+	// baseX は左列（見出し）右端 + オフセット（headerRectMin はスクリーン座標）
+	float leftColumnW = headerRectSize.x;
+	if (leftColumnW < btnW) leftColumnW = btnW; // フォールバック
+	float baseX = headerRectMin.x + leftColumnW + OPERATOR_OFFSET;
+	float baseY = lastRadioMin.y + (lastRadioSize.y - btnH) * 0.5f;
+
+	// カーソル保存（ウィンドウローカル座標）
+	ImVec2 prevCursorLocal = ImGui::GetCursorPos();
+
+	// --- SafeSetCursorPos ヘルパー ---
+	auto SafeSetCursorPos = [&](float localX, float localY)
+	{
+		ImGui::SetCursorPos(ImVec2(localX, localY));
+		ImGui::Dummy(ImVec2(1.0f, 1.0f));
+		ImGui::SetCursorPos(ImVec2(localX, localY));
+	};
+
+	// 追加要求保留用
+	bool requestAddPending = false;
+	int  pendingPressedIndex = -1;
+	bool pendingPressedIsReal = false;
+	int  pendingFromRefIndex = -1;
+
+	const ImVec4 detailSelectedCol = ImVec4(0.18f, 0.6f, 0.18f, 1.0f);
+	const ImVec4 detailSelectedColHover = ImVec4(0.22f, 0.7f, 0.22f, 1.0f);
+	const ImVec4 detailSelectedColActive = ImVec4(0.15f, 0.5f, 0.15f, 1.0f);
+	const ImVec4 realSelectedCol = ImVec4(0.18f, 0.6f, 0.18f, 1.0f);
+	const ImVec4 realSelectedColHover = ImVec4(0.22f, 0.7f, 0.22f, 1.0f);
+	const ImVec4 realSelectedColActive = ImVec4(0.15f, 0.5f, 0.15f, 1.0f);
+
+	// --- ヘルパ: targetIndex にのみ適用する（隣接のみ） ---
+	auto ApplyOperatorToTarget = [&](int fromIndex, int targetIndex, int opIndex, bool isReal)
+	{
+		// targetIndex が存在すればそこだけに適用する
+		if (targetIndex >= 0 && targetIndex < (int)refsNow.size())
+		{
+			if (isReal)
+			{
+				refsNow[targetIndex].activeReal = opIndex;
+				refsNow[targetIndex].activeDetail = -1;
+				refsNow[targetIndex].showInput = true;
+
+				m_OpInputIndex = opIndex;
+				m_OpInputRefIndex = targetIndex;
+				m_OpImputValue = static_cast<int>(refsNow[targetIndex].realValue);
+				m_OpInputIntBackUp = m_OpImputValue;
+			}
+			else
+			{
+				refsNow[targetIndex].activeDetail = opIndex;
+				refsNow[targetIndex].activeReal = -1;
+				refsNow[targetIndex].showInput = false;
+			}
+		}
+		else
+		{
+			// target が存在しない（末尾の右隣が無い）場合は追加保留にする
+			requestAddPending = true;
+			pendingPressedIndex = opIndex;
+			pendingPressedIsReal = isReal;
+			pendingFromRefIndex = fromIndex;
+		}
+	};
+
+	// --- 中央（参照先1 の右側）ボタン群 ---
+
+	for (int i = 0; i < 8; ++i)
+	{
+		float y = baseY + (btnH + btnGap) * i;
+
+		ImVec2 winPos = ImGui::GetWindowPos();
+		float  scrollX = ImGui::GetScrollX();
+		float  scrollY = ImGui::GetScrollY();
+		float  localX = baseX - winPos.x + scrollX;
+		float  localY = y - winPos.y + scrollY;
+
+		SafeSetCursorPos(localX, localY);
+
+		ImGui::PushID(i);
+
+		int centralTarget = 1;
+
+		if (i < 4)
+		{
+			int  detailIdx = i;
+			bool isSelected = false;
+			if (centralTarget < (int)refsNow.size())
+				isSelected = (refsNow[centralTarget].activeDetail == detailIdx);
+
+			if (isSelected)
+			{
+				ImGui::PushStyleColor(ImGuiCol_Button, detailSelectedCol);
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, detailSelectedColHover);
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, detailSelectedColActive);
+			}
+
+			if (ImGui::Button(detailLabels[detailIdx], ImVec2(btnW, 0)))
+			{
+				ApplyOperatorToTarget(0, centralTarget, detailIdx, false);
+			}
+
+			if (isSelected) ImGui::PopStyleColor(3);
+		}
+		else
+		{
+			int  realIdx = i - 4;
+			bool isSelectedReal = false;
+			if (centralTarget < (int)refsNow.size())
+				isSelectedReal = (refsNow[centralTarget].activeReal == realIdx);
+
+			if (isSelectedReal)
+			{
+				ImGui::PushStyleColor(ImGuiCol_Button, realSelectedCol);
+				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, realSelectedColHover);
+				ImGui::PushStyleColor(ImGuiCol_ButtonActive, realSelectedColActive);
+			}
+
+			if (ImGui::Button(realLabels[realIdx], ImVec2(btnW, 0)))
+			{
+				ApplyOperatorToTarget(0, centralTarget, realIdx, true);
+			}
+
+			if (isSelectedReal) ImGui::PopStyleColor(3);
+		}
+
+		ImGui::PopID();
+	}
+
+	// --- 右側: 参照先2以降（ここはそのまま） ---
+	{
+		auto& refsNow2 = m_Pack[PackID].cards[CardID].references;
+
+		const float innerGap = 8.0f;
+		const float panelW = btnW;
+		const float opInnerGap = 50.0f;
+
+		float topY = headerRectMin.y;
+		float firstRightX = baseX + btnW + innerGap;
+		float nextColX = firstRightX;
+
+		for (int refIndex = 1; refIndex < (int)refsNow2.size(); ++refIndex)
+		{
+			auto& editRef = refsNow2[refIndex];
+			float colX = nextColX;
+
+			ImVec2 winPos = ImGui::GetWindowPos();
+			float scrollX = ImGui::GetScrollX();
+			float scrollY = ImGui::GetScrollY();
+			float localColX = colX - winPos.x + scrollX;
+			float localTopY = topY - winPos.y + scrollY;
+
+			SafeSetCursorPos(localColX, localTopY);
+
+			ImGui::PushID(3000 + refIndex);
+			ImGui::BeginGroup();
+
+			std::string header2 = std::string(u8"参照先") + std::to_string(refIndex + 1);
+			ImGui::Text("%s", header2.c_str());
+
+			ImGui::SameLine();
+			ImGui::PushID(4000 + refIndex);
+			if (ImGui::Button(u8"削除", ImVec2(60.0f, 0)))
+			{
+				if ((int)refsNow2.size() > 1)
+				{
+					RemoveReference(PackID, CardID, refIndex);
+					refIndex = std::max(0, refIndex - 1);
+
+					nextColX = firstRightX;
+					for (int i = 1; i <= refIndex; ++i)
+					{
+						float opsXtmp = nextColX + panelW + opInnerGap;
+						float opsRightTmp = opsXtmp + btnW;
+						nextColX = opsRightTmp + innerGap;
+					}
+
+					ImGui::PopID();
+					ImGui::EndGroup();
+					ImGui::PopID();
+					continue;
+				}
+			}
+			ImGui::PopID();
+
+			if (editRef.activeDetail != -1)
+			{
+				ImGui::Text(u8"対象");
+				ImGui::RadioButton(u8"自分##right", &editRef.targetselect, 0);
+				ImGui::RadioButton(u8"自分以外##right", &editRef.targetselect, 1);
+				ImGui::RadioButton(u8"自分を含めた誰か##right", &editRef.targetselect, 2);
+
+				ImGui::Spacing();
+				ImGui::Text(u8"対象物");
+				ImGui::RadioButton(u8"ゾーン##right", &editRef.targetobject, 0);
+				ImGui::RadioButton(u8"エナジー##right", &editRef.targetobject, 1);
+				ImGui::RadioButton(u8"HP##right", &editRef.targetobject, 2);
+				ImGui::RadioButton(u8"残り時間##right", &editRef.targetobject, 3);
+
+				if (editRef.targetobject == 0)
+					JudgeZone(PackID, CardID, refIndex);
+			}
+			else if (editRef.showInput)
+			{
+				if (m_OpInputRefIndex != refIndex)
+				{
+					m_OpInputRefIndex = refIndex;
+					if (m_OpInputRefIndex >= 0 && m_OpInputRefIndex < (int)refsNow2.size())
+					{
+						m_OpImputValue = static_cast<int>(refsNow2[m_OpInputRefIndex].realValue);
+						m_OpInputIntBackUp = m_OpImputValue;
+					}
+				}
+
+				ImGui::Spacing();
+				ImGui::Text(u8"値");
+				ImGui::PushItemWidth(150.0f);
+				std::string inputId = std::string("##op_input_right_") + std::to_string(refIndex);
+				if (ImGui::InputInt(inputId.c_str(), &m_OpImputValue, 1, 10))
+				{
+					refsNow2[m_OpInputRefIndex].realValue = static_cast<float>(m_OpImputValue);
+				}
+				ImGui::PopItemWidth();
+
+				ImGui::SameLine();
+				if (ImGui::Button((std::string(u8"OK##right_") + std::to_string(refIndex)).c_str()))
+				{
+					refsNow2[m_OpInputRefIndex].realValue = static_cast<float>(m_OpImputValue);
+					editRef.showInput = false;
+				}
+				ImGui::SameLine();
+				if (ImGui::Button((std::string(u8"キャンセル##right_") + std::to_string(refIndex)).c_str()))
+				{
+					m_OpImputValue = m_OpInputIntBackUp;
+					editRef.showInput = false;
+				}
+			}
+			else
+			{
+				ImGui::Text(u8"操作を選択してください");
+			}
+
+			ImGui::EndGroup();
+
+			// --- 各列の右側に +-*/ ボタン群を表示 ---
+			{
+				float opsX = colX + panelW + opInnerGap;
+				float opsBaseY = baseY;
+
+				for (int bi = 0; bi < 8; ++bi)
+				{
+					float by = opsBaseY + (btnH + btnGap) * bi;
+
+					ImVec2 winPos2 = ImGui::GetWindowPos();
+					float scrollX2 = ImGui::GetScrollX();
+					float scrollY2 = ImGui::GetScrollY();
+					float localOpsX = opsX - winPos2.x + scrollX2;
+					float localBy = by - winPos2.y + scrollY2;
+
+					SafeSetCursorPos(localOpsX, localBy);
+
+					ImGui::PushID(10000 + refIndex * 10 + bi);
+
+					int targetIdx = refIndex + 1;
+
+					if (bi < 4)
+					{
+						int detailIdx = bi;
+						bool isSelected = false;
+						if (targetIdx < (int)refsNow2.size())
+							isSelected = (refsNow2[targetIdx].activeDetail == detailIdx);
+
+						if (isSelected)
+						{
+							ImGui::PushStyleColor(ImGuiCol_Button, detailSelectedCol);
+							ImGui::PushStyleColor(ImGuiCol_ButtonHovered, detailSelectedColHover);
+							ImGui::PushStyleColor(ImGuiCol_ButtonActive, detailSelectedColActive);
+						}
+
+						if (ImGui::Button(detailLabels[detailIdx], ImVec2(btnW, 0)))
+						{
+							ApplyOperatorToTarget(refIndex, targetIdx, detailIdx, false);
+						}
+
+						if (isSelected) ImGui::PopStyleColor(3);
+					}
+					else
+					{
+						int realIdx = bi - 4;
+						bool isSelectedReal = false;
+						if (targetIdx < (int)refsNow2.size())
+							isSelectedReal = (refsNow2[targetIdx].activeReal == realIdx);
+
+						if (isSelectedReal)
+						{
+							ImGui::PushStyleColor(ImGuiCol_Button, realSelectedCol);
+							ImGui::PushStyleColor(ImGuiCol_ButtonHovered, realSelectedColHover);
+							ImGui::PushStyleColor(ImGuiCol_ButtonActive, realSelectedColActive);
+						}
+
+						if (ImGui::Button(realLabels[realIdx], ImVec2(btnW, 0)))
+						{
+							ApplyOperatorToTarget(refIndex, targetIdx, realIdx, true);
+						}
+
+						if (isSelectedReal) ImGui::PopStyleColor(3);
+					}
+
+					ImGui::PopID();
+				}
+
+				float opsRight = opsX + btnW;
+				nextColX = opsRight + innerGap;
+			}
+
+			ImGui::PopID(); // 3000 + refIndex の Pop
+		}
+	}
+
+	// --- ループ後: 保留していた追加要求が「末尾の隣接ボタン」かを判定して実行 ---
+	if (requestAddPending)
+	{
+		auto& refsNowAfter = m_Pack[PackID].cards[CardID].references;
+		int lastRefIndex = (int)refsNowAfter.size() - 1;
+
+		// pendingFromRefIndex は「どの演算子群の右隣として追加するか」を示す（fromIndex）
+		// 追加は、押した演算子群の右隣が末尾で存在しなかった場合のみ行う
+		if (pendingFromRefIndex >= 0)
+		{
+			int expectedRightIndex = pendingFromRefIndex + 1;
+			if (expectedRightIndex == (int)refsNowAfter.size())
+			{
+				// 追加実行（末尾の右隣として追加）
+				AddReference(PackID, CardID, 0);
+
+				// 追加後に配列を再取得
+				auto& refsAfter = m_Pack[PackID].cards[CardID].references;
+				int newIndex = (int)refsAfter.size() - 1;
+
+				if (pendingPressedIsReal)
+				{
+					refsAfter[newIndex].activeReal = pendingPressedIndex;
+					refsAfter[newIndex].activeDetail = -1;
+					refsAfter[newIndex].showInput = true;
+					m_OpInputIndex = pendingPressedIndex;
+					m_OpInputRefIndex = newIndex;
+					if (m_OpInputRefIndex >= 0 && m_OpInputRefIndex < (int)refsAfter.size())
+					{
+						m_OpImputValue = static_cast<int>(refsAfter[m_OpInputRefIndex].realValue);
+						m_OpInputIntBackUp = m_OpImputValue;
+					}
+					m_EditingReferenceIndex = newIndex;
+					m_ForceCentralSelection = false;
+				}
+				else
+				{
+					refsAfter[newIndex].activeDetail = pendingPressedIndex;
+					refsAfter[newIndex].activeReal = -1;
+					refsAfter[newIndex].showInput = false;
+					// 編集対象は中央のままにする等、仕様に合わせて調整
+					m_EditingReferenceIndex = pendingFromRefIndex == 0 ? 0 : newIndex;
+					m_ForceCentralSelection = (pendingFromRefIndex == 0);
+				}
+
+				// 追加直後に新列が見えるようにスクロールを合わせる（親ウィンドウがスクロール可能な場合）
+				{
+					const float innerGap = 8.0f;
+					const float panelW = btnW;
+					const float opInnerGap = 50.0f;
+					float firstRightX = baseX + btnW + innerGap;
+					float colX = firstRightX;
+					for (int i = 1; i < newIndex; ++i)
+					{
+						float opsX = colX + panelW + opInnerGap;
+						float opsRight = opsX + btnW;
+						colX = opsRight + innerGap;
+					}
+					float newColX = colX;
+
+					// スクロール調整（ウィンドウローカル座標で計算）
+					ImVec2 winPos = ImGui::GetWindowPos();
+					float scrollX = ImGui::GetScrollX();
+					ImVec2 prevCursor = ImGui::GetCursorPos();
+
+					// newColLocalX はウィンドウ内のコンテンツ座標（SetCursorPos に渡す値）
+					float newColLocalX = newColX - winPos.x + scrollX;
+
+					// 安全に移動してダミーを提出（Y は prevCursor.y を維持）
+					ImGui::SetCursorPos(ImVec2(newColLocalX, prevCursor.y));
+					ImGui::Dummy(ImVec2(1.0f, 1.0f));
+
+					ImGui::SetScrollHereX(0.5f);
+
+					// 元のカーソル位置に戻す
+					ImGui::SetCursorPos(prevCursor);
+				}
+			}
+		}
+
+		// 保留情報をクリア
+		requestAddPending = false;
+		pendingPressedIndex = -1;
+		pendingPressedIsReal = false;
+		pendingFromRefIndex = -1;
+	}
+
+	// ★ ここが修正ポイント ★
+	SafeSetCursorPos(prevCursorLocal.x, prevCursorLocal.y);
+}
+
+
+/**
+* @brief 演算子ボタン描画
+* @param [in]パック番号
+* @param [in]カード番号
+*/
+void My::CEdit::DrawOperatorPanel(int PackID, int CardID)
+{
+
+}
+
+/**
+* @brief 参照ラベル付け処理
+* @param [in]パック番号
+* @param [in]カード番号
+*/
+void My::CEdit::ReassignReferenceLabels(int PackID, int CardID)
+{
+	if (!IsValidPackIndex((size_t)PackID) || !IsValidCardIndex((size_t)PackID, (size_t)CardID))
+	{// 範囲チェック
+		return;
+	}
+
+	auto& refs = m_Pack[PackID].cards[CardID].references;
+	for (size_t i = 0; i < refs.size(); ++i)
+	{
+		refs[i].label = std::string(u8"参照先") + std::to_string(i + 1);
+	}
+}
+
+ordered_json My::Reference::ToJson() const
+{
+	ordered_json j; 
+	j["kind"] = kind; 
+	j["label"] = label; 
+	j["targetselect"] = targetselect; 
+	j["reference"] = reference; 
+	j["othertargetselect"] = othertargetselect; 
+	j["targetobject"] = targetobject;
+	j["zone"] = zone; 
+	j["startpos"] = startpos; 
+	j["searchwidth"] = searchwidth;
+	j["selecttype"] = selecttype; 
+	j["cardtype"] = cardtype; 
+	j["addcostcondition"] = addcostcondition; 
+	j["judgeoriginalvalue"] = judgeoriginalvalue; 
+	j["Attackoriginalvalue"] = Attackoriginalvalue; 
+	j["Defenseoriginalvalue"] = Defenseoriginalvalue;
+	j["num"] = num; 
+	j["realValue"] = realValue; 
+	j["judgeKind"] = judgeKind; 
+	j["referencenum"] = referencenum;
+	j["activeDetail"] = activeDetail; 
+	j["activeReal"] = activeReal; 
+	j["showInput"] = showInput; 
+	return j;
+}
+
+My::Reference My::Reference::FromJson(const ordered_json& j)
+{
+	Reference r; 
+	r.kind = j.value("kind", 0); 
+	r.label = j.value("label", std::string(u8"参照先")); 
+	r.targetselect = j.value("targetselect", 0);
+	r.reference = j.value("reference", 0); 
+	r.othertargetselect = j.value("othertargetselect", 0);
+	r.targetobject = j.value("targetobject", 0); 
+	r.zone = j.value("zone", 0);
+	r.startpos = j.value("startpos", 0); 
+	r.searchwidth = j.value("searchwidth", 0); 
+	r.selecttype = j.value("selecttype", 0); 
+	r.cardtype = j.value("cardtype", 0); 
+	r.addcostcondition = j.value("addcostcondition", 0); 
+	r.judgeoriginalvalue = j.value("judgeoriginalvalue", 0); 
+	r.Attackoriginalvalue = j.value("Attackoriginalvalue", 0); 
+	r.Defenseoriginalvalue = j.value("Defenseoriginalvalue", 0); 
+	r.num = j.value("num", 0); r.realValue = j.value("realValue", 0.0f); 
+	r.judgeKind = j.value("judgeKind", false); 
+	r.referencenum = j.value("referencenum", 0); 
+	r.activeDetail = j.value("activeDetail", -1); 
+	r.activeReal = j.value("activeReal", -1); 
+	r.showInput = j.value("showInput", false); 
+	return r;
 }

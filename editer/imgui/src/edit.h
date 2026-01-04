@@ -16,6 +16,10 @@
 #include <Windows.h>
 #include <type_traits>
 #include "imgui/imgui.h"
+#include "nlohmann/json.hpp"
+
+// for convenience
+using ordered_json = nlohmann::ordered_json;
 
 /** @brief My 名前空間 */
 namespace My
@@ -61,23 +65,9 @@ namespace My
 	enum AssistType
 	{// アシストの種類
 		NONE_ASSIST,		// アシスト以外のときはこれ
-		OBSTRUCT,			// 妨害
-		BUFF,				// バフ
-		DEBUFF				// デバフ
-	};
-
-	enum BuffType
-	{// バフの種類
-		NONE_BUFF,
-		HEAL,				// HP回復
-		NO_NAMEONE,			// 未定①
-		NO_NAMETWO,			// 未定②
-	};
-
-	enum DeBuffType
-	{// デバフの種類
-		NONE_DEBUFF,
-		DEATH,				// 死亡
+		HEAL,				// 回復
+		NONAME_ONE,			// 今後実装①
+		NONAME_TWO,			// 今後実装②
 	};
 
 	enum HealType
@@ -88,6 +78,43 @@ namespace My
 		RANDOM_HEAL,				// ランダム回復
 		SELFINTARGET_HEAL,			// 自分を含めてランダム回復
 		ONLY_ME,					// 自分だけ
+	};
+
+	enum AddEffect
+	{// 追加効果の種類
+		NONE_EFFECT,						// 追加効果なし
+		CHANGE,						// 変化
+	};
+
+	struct Reference
+	{
+		int kind = 0;					// 0 = 詳細, 1 = 実数値
+		std::string label;				// "参照先1" 等
+		int targetselect = 0;			// 自分 / 自分以外 / 自分を含めた誰か
+		int reference = 0;				// カードの対象先 / それ以外 / ランダム
+		int othertargetselect = 0;		// 特定の条件 / ランダム
+		int targetobject = 0;			// ゾーン / エナジー / HP / 残り時間
+		int zone = 0;					// 山札 / 墓地 / 待機 / 手札 / フィールド
+		int startpos = 0;				// 上 or 下
+		int searchwidth = 0;			// 見る幅
+		int selecttype;					// タイプ設定(すべてのタイプ or 特定のタイプ)
+		int cardtype;					// カードタイプ(攻撃 or 守備 or アシスト)
+		int addcostcondition;			// コストの条件の追加の有無(あり or なし)
+		int judgeoriginalvalue;			// そのタイプ固有の値か判断
+		int Attackoriginalvalue;		// 攻撃カード固有の値(攻撃値)
+		int Defenseoriginalvalue;		// 守備カード固有の値(守備値 or カウンター値)
+
+		int num = 0;					// 枚数
+		float realValue = 0.0f;			// 実数値用
+		bool judgeKind = false;			// どっちのボタンを押したか(true = 詳細設定/ false = 実数値)
+		int referencenum = 0;
+		int activeDetail = -1; // 上4つ（詳細）で選択されているボタン index（0..3）。-1 は未選択 
+		int activeReal = -1; // 下4つ（実数）で選択されているボタン index（0..3）。-1 は未選択
+		bool showInput = false; // その参照で実数入力モードを表示するか
+		// 将来の拡張フィールドをここに追加可能
+
+		ordered_json ToJson() const;
+		static Reference FromJson(const ordered_json& j);
 	};
 
 	struct Card
@@ -101,19 +128,41 @@ namespace My
 		int heal;									// 回復値
 		bool isOneTime;								// 効果の発動時間(true = 単発,false = 単発じゃない)
 		int time;									// 発動時間
+		bool target;								// 参照の有無
+		int targetselect;							// 対象先(自分 or 自分以外 or 自分を含めた誰か)
+		int reference;								// 参照先(自分という選択肢以外が選ばれたとき)
+		int othertargetselect;						// 対象先以外が選ばれたときの択(特定の条件 or ランダム)
+		int selfintargetselect;						// 自分を含んだ誰かが選ばれたときの択(特定の条件 or ランダム)
+		int targetobject;							// 対象物(ゾーン or エナジー or HP or 残り時間)
+		int zone;									// 参照先ゾーン(山札 or 墓地 or 待機 or 手札 or フィールド)
+		int startpos;								// どっちから見るか(上 or 下) 
+		int searchwidth;							// 見る幅(範囲 or 特定)
+		int num;									// 枚数
+		int selecttype;								// タイプ設定(すべてのタイプ or 特定のタイプ)
+		int cardtype;								// カードタイプ(攻撃 or 守備 or アシスト)
+		int addcostcondition;						// コストの条件の追加の有無(あり or なし)
+		int costcondition;							// コストの条件(以上 or 以下 or 未満 or それより上 or 等しい)
+		int refcost;								// コスト条件の値
+		int judgeoriginalvalue;						// そのタイプ固有の値か判断
+		int Attackoriginalvalue;					// 攻撃カード固有の値(攻撃値)
+		int Defenseoriginalvalue;					// 守備カード固有の値(守備値 or カウンター値)
+
+		int changePackID;							// 変化先のカードのパック番号
+		int changeCardID;							// 変化先のカードのカード番号
 
 		CardType maintype;							// カードの種類
+		AddEffect addeffect;						// カードの追加効果
 		RARITY raritytype;							// レアリティの種類
 		AssistType assisttype;						// アシストの種類
 		AttackType attacktype;						// 攻撃の種類
 		DefenseType defensetype;					// 守備の種類
-		BuffType bufftype;							// バフの種類
 		HealType healtype;							// 回復の種類
-	
 		std::string imagePath;						// 画像ファイルパス
 		IDirect3DTexture9* ImageTexture = nullptr;	// カードイラストのテクスチャポインタ
 		IDirect3DTexture9* TypeTexture = nullptr;	// カードタイプのテクスチャポインタ
 		LPDIRECT3DTEXTURE9 typeIcon = nullptr;
+
+		std::vector<Reference> references; // 型安全な参照配列
 	};
 
 	struct Pack
@@ -214,9 +263,17 @@ namespace My
 
 		/**
 		* @brief アシスト設定処理
+		* @param [in]パック番号
 		* @param [in]カード番号
 		*/
 		void SetAssist(int packID,int ID);
+
+		/**
+		* @brief アシストの対象設定
+		* @param [in]パック番号
+		* @param [in]カード番号
+		*/
+		void SetAssistTarget(int packID, int ID);
 
 		/**
 		* @brief 効果の発動時間
@@ -227,15 +284,31 @@ namespace My
 
 		/**
 		* @brief 攻撃設定処理
+		* @param [in]パック番号
 		* @param [in]カード番号
 		*/
 		void SetAttack(int packID,int ID);
 
 		/**
+		* @brief 攻撃対象設定
+		* @param [in]パック番号
+		* @param [in]カード番号
+		*/
+		void SetAttackTarget(int packID, int ID);
+
+		/**
 		* @brief 守備設定処理
+		* @param [in]パック番号
 		* @param [in]カード番号
 		*/
 		void SetDefense(int packID,int ID);
+
+		/**
+		* @brief 守備対象設定
+		* @param [in]パック番号
+		* @param [in]カード番号
+		*/
+		void SetDefenseTarget(int packID, int ID);
 
 		/**
 		* @brief プレビュー画面編集
@@ -385,14 +458,6 @@ namespace My
 		void SetTxtFrame(int PackID,int CardID,ImVec2 pos);
 
 		/**
-		* @brief テキストアイコン設定
-		* @param [in]パック番号
-		* @param [in]カード番号
-		* @param [in]位置
-		*/
-
-
-		/**
 		* @brief タイプフレーム設定
 		* @param [in]パック番号
 		* @param [in]カード番号
@@ -415,6 +480,139 @@ namespace My
 		* @param[in]位置
 		*/
 		void SetCostFrame(int PackID,int CardID,ImVec2 pos);
+
+		/**
+		* @brief 対象物の判断
+		* @param [in]パック番号
+		* @param [in]カード番号
+		* @param [in]参照先番号
+		*/
+		void JudgeObject(int PackID, int CardID,int refIndex);
+
+		/**
+		* @brief ゾーンの判断処理
+		* @param [in]パック番号
+		* @param [in]カード番号
+		* @param [in]参照先番号
+		*/
+		void JudgeZone(int PackID, int CardID,int refIndex);
+
+		/**
+		* @brief 山札の設定処理
+		* @param [in]パック番号
+		* @param [in]カード番号
+		* @param [in]参照先番号
+		*/
+		void SetDeck(int PackID, int CardID,int refIndex);
+
+		/**
+		* @brief 墓地の設定処理
+		* @param [in]パック番号
+		* @param [in]カード番号
+		* @param [in]参照先番号
+		*/
+		void SetCemetery(int PackID, int CardID,int refIndex);
+
+		/**
+		* @brief 待機の設定処理
+		* @param [in]パック番号
+		* @param [in]カード番号
+		* @param [in]参照先番号
+		*/
+		void SetWait(int PackID, int CardID,int refIndex);
+
+		/**
+		* @brief 手札の設定処理
+		* @param [in]パック番号
+		* @param [in]カード番号
+		* @param [in]参照先番号
+		*/
+		void SetHand(int PackID, int CardID,int refIndex);
+
+		/**
+		* @brief フィールドの設定処理
+		* @param [in]パック番号
+		* @param [in]カード番号
+		* @param [in]参照先番号
+		*/
+		void SetField(int PackID, int CardID,int refIndex);
+
+		/**
+		* @brief タイプの判断
+		* @param [in]パック番号
+		* @param [in]カード番号
+		* @param [in]参照先番号
+		*/
+		void JudgeType(int PackID, int CardID,int refIndex);
+
+		/**
+		* @brief カードの固有の値か判断
+		* @param [in]パック番号
+		* @param [in]カード番号
+		* @param [in]参照先番号
+		*/
+		void JudgeOriginalValue(int PackID, int CardID,int refIndex);
+
+		/**
+		* @brief コストの判断
+		* @param [in]パック番号
+		* @param [in]カード番号
+		*/
+		void JudgeCost(int PackID, int CardID,int refIndex);
+
+		/**
+		* @brief 参照追加処理
+		* @param [in]パック番号
+		* @param [in]カード番号
+		* @param [in]参照の詳細
+		*/
+		void AddReference(int PackID, int CardID, int Kind);
+
+		/**
+		* @brief 参照削除処理
+		* @param [in]パック番号
+		* @param [in]カード番号
+		* @param [in]参照先番号
+		*/
+		void RemoveReference(int PackID, int CardID, int RefIndex);
+
+		/**
+		* @brief 要素移動処理
+		* @param [in]パック番号
+		* @param [in]カード番号
+		* @param [in]移動元
+		* @param [in]移動先
+		*/
+		void MoveReference(int PackID, int CardID, int srcIndex, int dstIndex);
+
+		/**
+		* @brief 指定位置に挿入
+		* @param [in]パック番号
+		* @param [in]カード番号
+		* @param [in]挿入先番号
+		*/
+		void MoveLastTo(int PackID, int CardID, int targetIndex);
+
+		/**
+		* @brief 描画処理
+		* @param [in]パック番号
+		* @param [in]カード番号
+		*/
+		void DrawReference(int PackID, int CardID);
+
+		/**
+		* @brief 演算子ボタン描画
+		* @param [in]パック番号
+		* @param [in]カード番号
+		*/
+		void DrawOperatorPanel(int PackID, int CardID);
+
+		/**
+		* @brief 参照ラベル付け処理
+		* @param [in]パック番号
+		* @param [in]カード番号
+		*/
+		void ReassignReferenceLabels(int PackID, int CardID);
 
 		HWND m_hWnd;
 
@@ -461,7 +659,25 @@ namespace My
 	
 		bool m_bWindowSizeDeck;	// ウィンドウサイズを変えたかどうか(デッキ編集画面)
 		bool m_bWindowSizeCard;	// ウィンドウサイズを変えたかどうか(カード編集画面)
-};
+
+		int m_EditingReferenceIndex;
+
+		int m_PendingJudgeZoneIndex = -1;          // 遅延で JudgeZone を呼ぶためのインデックス
+		int m_PendingScrollToReferenceIndex = -1;  // 次フレームでスクロールする参照インデックス
+
+		bool m_ShowInput = false;
+		int m_OpInputIndex = -1;
+		int m_OpInputRefIndex = 0;
+		int m_OpImputValue = 0;
+		int m_OpInputIntBackUp = 0;
+		int m_ActiveDetailIndex = -1;	// 詳細設定のボタン
+		int m_ActiveRealIndex = -1;		// 実数値のボタン
+		bool m_ForceCentralSelection;	// 演算子ボタン用のフラグ
+
+		static const int MAX_BUTTON = 4;	// 演算子ボタン(+-*/)
+
+		bool m_IsLoading;
+	};
 }
 
 static const float CARDFRAME_WIDTH = 300.0f;	// フレームイラストの幅
@@ -488,4 +704,5 @@ static const float COSTFRAME_WIDTH = 100.0f;	// コストフレームの幅
 static const float COSTFRAME_HEIGHT = 100.0f;	// コストフレームの高さ
 
 static const float TURN_QUATER = -0.25f;		// 45度回転
+static const float OPERATOR_POSX = 130.0f;		// ボタンを出すまでの間隔
 #endif
