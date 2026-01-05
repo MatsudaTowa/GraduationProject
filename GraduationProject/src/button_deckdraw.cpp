@@ -1,6 +1,9 @@
 #include "button_deckdraw.h"
 #include "active_scene_player_state.h"
 
+//宣言
+const std::string My::CButtonDeckDraw::TEX_NAME = "data\\TEXTURE\\DRAW.png";
+
 //==================================================================================================================
 // コンストラクタ
 //==================================================================================================================
@@ -20,7 +23,9 @@ My::CButtonDeckDraw::~CButtonDeckDraw()
 //==================================================================================================================
 HRESULT My::CButtonDeckDraw::Init()
 {
+	
 	SetColor(COLOR_WHITE);
+	BindTexture(GET_TEXTURE->GetAddress(GET_TEXTURE->Regist(CButtonDeckDraw::TEX_NAME)));
 	CButton::Init();
 
 	return S_OK;

@@ -65,6 +65,8 @@ namespace My
 		static CButtonDeckDraw* Create(D3DXVECTOR3 pos, D3DXVECTOR2 size);
 	private:
 
+		static const std::string TEX_NAME;
+
 	};
 }
 

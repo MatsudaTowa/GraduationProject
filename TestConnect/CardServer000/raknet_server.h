@@ -36,7 +36,7 @@ public:
 private:
 
 	//定数
-	static constexpr int MAX_CLIENTS{ 4 };	//最大クライアント数
+	static constexpr int MAX_CLIENTS{ 99 };	//最大クライアント数
 
 	//関数
 	static void ChangeData(CRakNet_Data* data);	//データの変更
