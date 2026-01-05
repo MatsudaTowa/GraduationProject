@@ -84,7 +84,7 @@ namespace My
 
 	private:
 		//正方形なのでサイズは統一
-		static constexpr float FIELD_SIZE = 200.0f;
+		static constexpr float FIELD_SIZE = 600.0f;
 
 		static constexpr int NUM_PLAYER = 4;
 		static constexpr float RADIUS = 300.0f;

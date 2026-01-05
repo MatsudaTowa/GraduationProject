@@ -9,7 +9,7 @@
 
 namespace
 {
-	std::string TEX_NAME = "data\\TEXTURE\\tatami.jpeg";
+	std::string TEX_NAME = "data\\TEXTURE\\field.png";
 }
 
 //=============================================
@@ -31,7 +31,7 @@ My::CField::~CField()
 //=============================================
 HRESULT My::CField::Init()
 {
-	SetColor(COLOR_GREEN);
+	SetColor(COLOR_WHITE);
 
 	//テクスチャ設定
 	CTexture* pTexture = GET_TEXTURE;

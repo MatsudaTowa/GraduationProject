@@ -9,11 +9,10 @@
 //無名空間
 namespace
 {
-	const D3DXVECTOR2 UI_SIZE{ 20.0f, 20.0f };	//サイズ
-	const std::string TEXTURE_PATH[2] =	//テクスチャパス
+	const D3DXVECTOR2 UI_SIZE{ 10.0f, 10.0f };	//サイズ
+	const std::string TEXTURE_PATH[1] =	//テクスチャパス
 	{
-		{ "data\\TEXTURE\\not_leady.png" },
-		{ "data\\TEXTURE\\leady.png" }
+		{ "data\\TEXTURE\\checker\\in.png" },
 	};
 	
 }
@@ -89,6 +88,15 @@ void My::CWaitChecker_UI::Update()
 	// 親クラスの更新処理を呼ぶ
 	CObject2D::Update();
 
+	if (m_isWaited)
+	{
+		SetColor(COLOR_GREEN);
+	}
+	else
+	{
+		SetColor(COLOR_WHITE);
+	}
+
 	SetVtx();
 }
 
@@ -133,7 +141,4 @@ void My::CWaitChecker_UI::SetIsWaited(bool wait)
 
 	//引数を代入
 	m_isWaited = wait;
-
-	//テクスチャ設定
-	BindTexture(pTexture->GetAddress(pTexture->Regist(TEXTURE_PATH[m_isWaited])));
 }
