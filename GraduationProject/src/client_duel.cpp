@@ -915,3 +915,21 @@ void CClient_Duel::ReceiveTriggerCard([[maybe_unused]] RakNet::Packet* packet)
         }
     }
 }
+
+//=====================================
+//ゲームセットの受信
+//=====================================
+void CClient_Duel::ReceiveGameSet(RakNet::Packet* packet)
+{
+    //受信側
+    RakNet::BitStream bsIn(packet->data, packet->length, false);
+
+    //変数宣言
+    unsigned char messageId;                     //メッセージ
+    
+    //読み込み
+    bsIn.Read(messageId); //メッセージ
+
+    //終章フラグを立てる
+    My::CActiveSceneManager::GetInstance()->SetFinish(true);
+}

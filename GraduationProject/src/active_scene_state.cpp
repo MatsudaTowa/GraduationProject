@@ -236,6 +236,9 @@ My::CDuel::CDuel()
 	GET_CAMERA(GET_CAMERA_IDX)->ChangeCameraState(new CBirdView);
 	GET_CAMERA(GET_CAMERA_IDX)->SetCamera();
 
+	//終了フラグを初期化
+	My::CActiveSceneManager::GetInstance()->SetFinish(false);
+
 	//std::list<CCard*> card_list = CCardManager::GetInstance()->GetUseCardList();
 	//for (auto& itr : card_list)
 	//{

@@ -199,6 +199,9 @@ void CRakNet::Communication(RakNet::RakPeerInterface* peer)
             m_Client->ReceiveTriggerCard(packet);
             break;
 
+        case ID_DUEL_MESSAGE_GAMESET:
+            break;
+
         case ID_UNCONNECTED_PONG:
         {
             RakNet::SystemAddress serverAddress = packet->systemAddress;
