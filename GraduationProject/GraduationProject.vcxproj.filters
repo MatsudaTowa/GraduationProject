@@ -24,12 +24,6 @@
     <ClCompile Include="src\card_frame_type.cpp" />
     <ClCompile Include="src\card_frame_use_font.cpp" />
     <ClCompile Include="src\card_info.cpp" />
-    <ClCompile Include="src\card_info_base.cpp" />
-    <ClCompile Include="src\card_info_BG.cpp" />
-    <ClCompile Include="src\card_info_cost.cpp" />
-    <ClCompile Include="src\card_info_name.cpp" />
-    <ClCompile Include="src\card_info_UI.cpp" />
-    <ClCompile Include="src\card_info_use_font.cpp" />
     <ClCompile Include="src\card_info_view.cpp" />
     <ClCompile Include="src\card_manager.cpp" />
     <ClCompile Include="src\card_state.cpp" />
@@ -129,9 +123,32 @@
     <ClCompile Include="src\wait_zone.cpp" />
     <ClCompile Include="src\zone.cpp" />
     <ClCompile Include="src\zone_manager.cpp" />
-    <ClCompile Include="src\card_info_status.cpp" />
     <ClCompile Include="src\damage_number_UI.cpp" />
     <ClCompile Include="src\damage_number_UI_factory.cpp" />
+    <ClCompile Include="src\card_info_base.cpp">
+      <Filter>CardInfoUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_info_BG.cpp">
+      <Filter>CardInfoUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_info_cost.cpp">
+      <Filter>CardInfoUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_info_name.cpp">
+      <Filter>CardInfoUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_info_status.cpp">
+      <Filter>CardInfoUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_info_UI.cpp">
+      <Filter>CardInfoUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_info_use_font.cpp">
+      <Filter>CardInfoUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\card_info_ruby.cpp">
+      <Filter>CardInfoUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -158,12 +175,6 @@
     <ClInclude Include="src\card_frame_type.h" />
     <ClInclude Include="src\card_frame_use_font.h" />
     <ClInclude Include="src\card_info.h" />
-    <ClInclude Include="src\card_info_base.h" />
-    <ClInclude Include="src\card_info_BG.h" />
-    <ClInclude Include="src\card_info_cost.h" />
-    <ClInclude Include="src\card_info_name.h" />
-    <ClInclude Include="src\card_info_UI.h" />
-    <ClInclude Include="src\card_info_use_font.h" />
     <ClInclude Include="src\card_info_view.h" />
     <ClInclude Include="src\card_manager.h" />
     <ClInclude Include="src\card_state.h" />
@@ -274,15 +285,43 @@
     <ClInclude Include="thirdparty\EffekseerForDXLib\Effekseer.SIMD.h" />
     <ClInclude Include="thirdparty\EffekseerForDXLib\EffekseerForDXLib.h" />
     <ClInclude Include="thirdparty\EffekseerForDXLib\EffekseerRendererDX9.h" />
-    <ClInclude Include="src\card_info_status.h" />
     <ClInclude Include="src\status_icon.h" />
     <ClInclude Include="src\damage_number_UI.h" />
     <ClInclude Include="src\damage_number_UI_factory.h" />
+    <ClInclude Include="src\card_info_base.h">
+      <Filter>CardInfoUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_info_BG.h">
+      <Filter>CardInfoUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_info_cost.h">
+      <Filter>CardInfoUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_info_name.h">
+      <Filter>CardInfoUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_info_status.h">
+      <Filter>CardInfoUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_info_UI.h">
+      <Filter>CardInfoUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_info_use_font.h">
+      <Filter>CardInfoUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\card_info_ruby.h">
+      <Filter>CardInfoUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GraduationProject.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\..\..\Downloads\logo_XDUEL_effect.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CardInfoUI">
+      <UniqueIdentifier>{55eec4f9-92eb-46b2-9bf8-ad0775edff87}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

@@ -9,15 +9,7 @@
 namespace
 {
 	const D3DXVECTOR3 BASE_POS = { 210.0f,160.0f,0.0f };
-	const D3DXVECTOR3 OFFSET_POS[My::CCardInfoBase::MAX] =
-	{
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f},
-	};
+
 	const D3DXVECTOR2 POLY_SIZE[My::CCardInfoBase::MAX] =
 	{
 		{200.0f,150.0f},

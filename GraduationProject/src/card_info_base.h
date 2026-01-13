@@ -25,6 +25,7 @@ namespace My
 			COST,
 			STATES,
 			NAME,
+			RUBY,
 			ILLUST,
 			TEXT,
 			MAX

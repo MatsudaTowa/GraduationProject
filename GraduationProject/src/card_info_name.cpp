@@ -8,7 +8,8 @@
 
 namespace
 {
-	D3DXVECTOR3 OFFSET = { -110.0f,-120.0f,0.0f };
+	D3DXVECTOR3 OFFSET = { -130.0f,-110.0f,0.0f };
+	float FONT_SIZE = 23.5f;
 }
 
 //===========================================================================================================================================================
@@ -45,7 +46,7 @@ HRESULT My::CCardInfoName::Init()
 		offset_pos.x += offset.x;
 		offset_pos.y += offset.y;
 
-		pFontmanager->RegistAdjustFontSize(wtxt.c_str(), offset_pos, { 200.0,50.0f }, 10.0f, 12.0f, 0, 5, COLOR_WHITE, false);
+		pFontmanager->RegistAdjustFontSize(wtxt.c_str(), offset_pos, { 200.0,50.0f }, FONT_SIZE, 12.0f, 0, 5, COLOR_WHITE, false);
 		SetOffSetPos({ offset });
 	}
 	CCardInfoUseFont::Init();
@@ -88,7 +89,7 @@ void My::CCardInfoName::SetUI()
 		offset_pos.x += offset.x;
 		offset_pos.y += offset.y;
 
-		pFontmanager->SetTextAdjustFontSize(wtxt.c_str(), offset_pos, {200.0,50.0f }, 25.0f, 35.0f, 0, 5, COLOR_WHITE, false);
+		pFontmanager->SetTextAdjustFontSize(wtxt.c_str(), offset_pos, {200.0,50.0f }, FONT_SIZE, 35.0f, 0, 5, COLOR_WHITE, false);
 		SetOffSetPos({ offset });
 	}
 }
