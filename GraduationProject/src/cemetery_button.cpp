@@ -119,6 +119,11 @@ void My::CCemeteryButton::CardisView(My::CDuelCharacter* duel_state)
 	bool isView = duel_state->GetIsCemeteryView();
 	isView = isView ? false : true;
 	duel_state->SetIsCemeteryView(isView);
+	for (auto& itr : card_list)
+	{
+		if (itr == nullptr) { continue; }
+		itr->SetisDraw(isView);
+	}
 	zone->GetSelectionRange()->SetisDraw(isView);
 }
 

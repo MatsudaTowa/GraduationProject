@@ -90,7 +90,6 @@ void My::CCemetery::Update(CPlayerDuelState* state, CActiveSceneCharacter* playe
 	for (auto& itr : card_list)
 	{
 		if (!itr) { continue; }
-
 		D3DXVECTOR3 pos = m_pos;
 		pos.y += SHIFT_POS * (float)i;
 
