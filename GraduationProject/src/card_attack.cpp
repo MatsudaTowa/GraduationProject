@@ -44,8 +44,6 @@ HRESULT My::CCardAttack::Init()
 
 	std::vector<CCardStrategy_Base*> strategy_vector = GetPostCalculateVector();
 	strategy_vector.push_back(new CAttack);
-	strategy_vector.push_back(new CFlipMyDeck);
-	strategy_vector.push_back(new CSendToMyCemetary);
 
 	SetpostCalculateStrategyVector(strategy_vector);
 	return S_OK;
