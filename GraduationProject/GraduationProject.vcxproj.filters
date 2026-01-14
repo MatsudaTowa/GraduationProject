@@ -212,7 +212,6 @@
     <ClInclude Include="src\flip_preview_zone.h" />
     <ClInclude Include="src\font.h" />
     <ClInclude Include="src\font_manager.h" />
-    <ClInclude Include="src\active_scene.h" />
     <ClInclude Include="src\font_texture_manager.h" />
     <ClInclude Include="src\game_camera.h" />
     <ClInclude Include="src\game_field.h" />
@@ -310,6 +309,9 @@
       <Filter>CardInfoUI</Filter>
     </ClInclude>
     <ClInclude Include="src\card_info_ruby.h">
+      <Filter>CardInfoUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\active_scene.h">
       <Filter>CardInfoUI</Filter>
     </ClInclude>
   </ItemGroup>
