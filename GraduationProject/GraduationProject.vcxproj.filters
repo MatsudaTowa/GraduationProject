@@ -149,6 +149,12 @@
     <ClCompile Include="src\card_info_ruby.cpp">
       <Filter>CardInfoUI</Filter>
     </ClCompile>
+    <ClCompile Include="src\result_ranking.cpp">
+      <Filter>Result_UI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\result_ui_manager.cpp">
+      <Filter>Result_UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -314,6 +320,12 @@
     <ClInclude Include="src\active_scene.h">
       <Filter>CardInfoUI</Filter>
     </ClInclude>
+    <ClInclude Include="src\result_ranking.h">
+      <Filter>Result_UI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\result_ui_manager.h">
+      <Filter>Result_UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GraduationProject.rc" />
@@ -324,6 +336,9 @@
   <ItemGroup>
     <Filter Include="CardInfoUI">
       <UniqueIdentifier>{55eec4f9-92eb-46b2-9bf8-ad0775edff87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Result_UI">
+      <UniqueIdentifier>{87079a91-688e-4be4-ab75-3269ff93ec16}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

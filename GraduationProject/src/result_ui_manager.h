@@ -45,7 +45,7 @@ namespace My {
 		constexpr float RANKING_TO_NAME_GAP_X = 150.0f;	// 間隔
 
 		const std::string WIN_TEXTURE  = "data\\TEXTURE\\YouWin.png";	// 勝利時テクスチャファイルパス
-		const std::string LOSE_TEXTURE = "data\\TEXTURE\\Youlose.png";	// 敗北時テクスチャファイルパス
+		const std::string LOSE_TEXTURE = "data\\TEXTURE\\YouLose.png";	// 敗北時テクスチャファイルパス
 		const  D3DXVECTOR3 WIN_OR_LOSE_POS =  {500.0f, 500.0f, 0.0f};	// 勝敗表示位置
 		const  D3DXVECTOR3 WIN_OR_LOSE_ROT =  {0.0f, 0.0f, 0.0f};		// 勝敗表示向き
 		const  D3DXVECTOR2 WIN_OR_LOSE_SIZE = {400.0f, 200.0f};			// 勝敗表示大きさ

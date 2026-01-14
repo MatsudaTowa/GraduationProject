@@ -279,8 +279,10 @@
     <ClCompile Include="src\result.cpp" />
     <ClCompile Include="src\result_camera.cpp" />
     <ClCompile Include="src\result_player.cpp" />
+    <ClCompile Include="src\result_ranking.cpp" />
     <ClCompile Include="src\result_screen.cpp" />
     <ClCompile Include="src\result_ui.cpp" />
+    <ClCompile Include="src\result_ui_manager.cpp" />
     <ClCompile Include="src\scene.cpp" />
     <ClCompile Include="src\selection_range.cpp" />
     <ClCompile Include="src\shadow.cpp" />
@@ -415,8 +417,10 @@
     <ClInclude Include="src\result.h" />
     <ClInclude Include="src\result_camera.h" />
     <ClInclude Include="src\result_player.h" />
+    <ClInclude Include="src\result_ranking.h" />
     <ClInclude Include="src\result_screen.h" />
     <ClInclude Include="src\result_ui.h" />
+    <ClInclude Include="src\result_ui_manager.h" />
     <ClInclude Include="src\scene.h" />
     <ClInclude Include="src\selection_range.h" />
     <ClInclude Include="src\shadow.h" />
