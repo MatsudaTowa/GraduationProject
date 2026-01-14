@@ -509,10 +509,10 @@ bool My::CCard::CardSelectToMouse(CDuelCharacter* duel)
 	resultposN.y = mousepos.y - screenposN.y;
 
 	// 矩形判定
-	if (resultpos.x <= 50.0f * GetSize().x && resultpos.x >= -50.0f * GetSize().x &&
-		resultpos.y <= 100.0f * GetSize().y && resultpos.y >= -100.0f * GetSize().y ||
-		resultposN.x <= 50.0f && resultposN.x >= -50.0f &&
-		resultposN.y <= 100.0f && resultposN.y >= -100.0f)
+	if (resultpos.x <= CCardFrame::CARD_WIDTH * GetSize().x && resultpos.x >= -CCardFrame::CARD_WIDTH * GetSize().x &&
+		resultpos.y <= CCardFrame::CARD_HEIGHT * GetSize().y && resultpos.y >= -CCardFrame::CARD_HEIGHT * GetSize().y ||
+		resultposN.x <= CCardFrame::CARD_WIDTH && resultposN.x >= -CCardFrame::CARD_WIDTH &&
+		resultposN.y <= CCardFrame::CARD_HEIGHT && resultposN.y >= -CCardFrame::CARD_HEIGHT)
 	{
 		// カード選択状態にする
 		ChangeState(CCardState::CARD_PICKUP, duel);

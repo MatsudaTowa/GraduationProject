@@ -26,7 +26,7 @@ My::CCardInfoBG::~CCardInfoBG()
 //=============================================
 HRESULT My::CCardInfoBG::Init()
 {
-	SetColor({COLOR_BLACK.r, COLOR_BLACK.g, COLOR_BLACK.b, 0.5f});
+	SetColor({COLOR_BLACK.r, COLOR_BLACK.g, COLOR_BLACK.b, 0.8f});
 	return S_OK;
 }
 
