@@ -441,3 +441,11 @@ bool CLobby_Data::ReceiveDeck(RakNet::Packet* packet)
 
     return false;   //していないなら待機
 }
+
+//======================================
+//プレイヤーが存在するか
+//======================================
+bool CLobby_Data::IsPlayerExist()
+{
+    return !m_LobbyPlayerList.empty();
+}

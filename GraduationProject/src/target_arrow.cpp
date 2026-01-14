@@ -28,8 +28,10 @@ m_attacker(VEC2_RESET_ZERO),
 m_triangle(nullptr),
 m_nLife(0),
 m_IsOverlapped(false),
-m_ShiftPos(VEC2_RESET_ZERO)
+m_ShiftPos(VEC2_RESET_ZERO),
+m_TopCardList()
 {
+	m_TopCardList.clear();
 }
 
 //===========================================================================================================
@@ -37,6 +39,7 @@ m_ShiftPos(VEC2_RESET_ZERO)
 //===========================================================================================================
 My::CTargetArrow::~CTargetArrow()
 {
+	m_TopCardList.clear();
 }
 
 //===========================================================================================================
@@ -144,7 +147,7 @@ void My::CTargetArrow::Draw()
 //===========================================================================================================
 // 生成
 //===========================================================================================================
-My::CTargetArrow* My::CTargetArrow::Create(int attacker, int target)
+My::CTargetArrow* My::CTargetArrow::Create(int attacker, int target, CCard* card)
 {
 	CTargetArrow* pTA = new CTargetArrow;
 
@@ -154,7 +157,53 @@ My::CTargetArrow* My::CTargetArrow::Create(int attacker, int target)
 
 	pTA->Init(); 
 
+	pTA->AddCardList(card);	//カードの位置を設定
+
 	return pTA;
+}
+
+//===========================================================================================================
+// カードの位置を設定
+//===========================================================================================================
+void My::CTargetArrow::SetCardPos(CCard* card)
+{
+	//守備以外のステイカードの数を取得
+	int CardNum = 0;
+	for (auto iter : m_TopCardList)
+	{
+		//守備カードは飛ばす
+		if (iter->GetBaseStatus().maintype == CCard::CARDTYPE_::TYPE_DEFFENCE) continue;
+
+		CardNum++;	//カード数の加算
+	}
+
+	//ワールド座標に変換
+	D3DXVECTOR3 world_attackerpos = ConvertToWorldPoint(GET_CAMERA(GET_CAMERA_IDX), { m_attacker.x, m_attacker.y, 0.0f }, { 0.0f, 0.0f, 0.0f }); //発動者の位置
+	D3DXVECTOR3 world_targetpos = ConvertToWorldPoint(GET_CAMERA(GET_CAMERA_IDX), { m_target.x, m_target.y, 0.0f }, { 0.0f, 0.0f, 0.0f }); //発動者の位置
+
+	// 発動者と標的の座標の差
+	float x = world_attackerpos.x - world_targetpos.x;
+	float z = world_attackerpos.z - world_targetpos.z;
+
+	// 二点の距離を求める
+	float max_size = std::sqrt((x * x) + (z * z));
+
+	//角度を求める
+	float fAngle = atan2f(x, z);	// 設定
+
+	//カード数から幅を算出
+	float fWidth = max_size / (CardNum + 1);	//幅
+	float fLength = fWidth * CardNum;			//長さ
+
+	//置かれた順に配置
+	for (auto& iter : m_TopCardList)
+	{
+		//守備カードは飛ばす
+		if (iter->GetBaseStatus().maintype == CCard::CARDTYPE_::TYPE_DEFFENCE) continue;
+
+		iter->SetPos({ fLength * sinf(fAngle + D3DX_PI) + world_attackerpos.x, 0.0f, fLength * cosf(fAngle + D3DX_PI) + world_attackerpos.z});
+		fLength -= fWidth;	//幅の値だけ減らす
+	}
 }
 
 //===========================================================================================================

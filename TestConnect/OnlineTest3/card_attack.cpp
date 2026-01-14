@@ -328,9 +328,10 @@ bool My::CCardAttack::LoadCastInfo(RakNet::BitStream* bsin, CastDestination dest
 		if (!StackAttackCard) return false;	//中身の確認
 
 		//重ねたフラグ
-		m_isTopCastCard = false;				//一番上のフラグを下す
-		StackAttackCard->AddStackCards(this);	//重ね先のカードの重ねカードに自身を追加
-		m_pStackCard = StackAttackCard;			//重ね先の登録
+		m_isTopCastCard = false;					//一番上のフラグを下す
+		StackAttackCard->AddStackCards(this);		//重ね先のカードの重ねカードに自身を追加
+		m_pStackCard = StackAttackCard;				//重ね先の登録
+		StackAttackCard->AddDamage(m_nAttackValue);	//攻撃力を加算
 
 		//キャスト状態に変更(NOTE : 重ねているカードはキャストしなくても良いかも)
 		SetStartCastTime(CDuel_Manager::GetInstance()->GetDuelTimer().GetElapsedTime());

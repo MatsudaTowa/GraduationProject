@@ -1093,3 +1093,11 @@ void CDuel_Data::SendDrawCard(RakNet::RakPeerInterface* peer, int userid)
         peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
     }
 }
+
+//======================================
+//ÉvÉåÉCÉÑÅ[Ç™ë∂ç›Ç∑ÇÈÇ©
+//======================================
+bool CDuel_Data::IsPlayerExist()
+{
+    return !m_DuelPlayerList.empty();
+}

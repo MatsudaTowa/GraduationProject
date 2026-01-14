@@ -132,6 +132,14 @@ void CRakNet_Server::Communication(RakNet::RakPeerInterface* peer)
             case ID_DISCONNECTION_NOTIFICATION:
                 std::cout << "クライアントが切断されました\n";
                 m_pRakNetData->DisConnection(packet, peer);
+
+                //プレイヤーが存在しないならリセット
+                if (!m_pRakNetData->IsPlayerExist())
+                {
+                    //データの変更
+                    ChangeData(new CLobby_Data);
+                }
+
                 break;
             case ID_CONNECTION_LOST:
                 std::cout << "クライアントの接続が失われました\n";

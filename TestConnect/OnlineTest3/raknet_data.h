@@ -79,6 +79,7 @@ public:
 	virtual void ReceiveDrawCard(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) = 0;			//カードのドロー処理の受信
 
 	//設定と取得
+	virtual bool IsPlayerExist() = 0;	//プレイヤーが存在するか
 
 	//プレイヤーのデータリスト
 	virtual void SetData(std::list<CPlayer::ChangeData> data) = 0;	//設定

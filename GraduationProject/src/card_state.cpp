@@ -442,7 +442,7 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 	// ターゲットアローをマネージャーに登録
 	for (auto& iter : cpy->GetTargetPlayerList())
 	{
-		CActiveSceneManager::GetInstance()->GetTargetArrowManager()->Regist(CTargetArrow::Create(cpy->GetUserArea(), iter->GetArea()));
+		CActiveSceneManager::GetInstance()->GetTargetArrowManager()->Regist(CTargetArrow::Create(cpy->GetUserArea(), iter->GetArea(), cpy), cpy);
 	}
 }
 
@@ -655,6 +655,7 @@ void My::CCardStateTrigger::Init(CCard* cpy, CDuelCharacter* duel)
 	}
 
 	CActiveSceneManager::GetInstance()->GetTargetArrowManager()->Remove();
+	CActiveSceneManager::GetInstance()->GetTargetArrowManager()->CardRemove(cpy);
 
 	//設定
 	cpy->SetSize({ 0.0f * 1.2f, 0.0f, 0.0f });

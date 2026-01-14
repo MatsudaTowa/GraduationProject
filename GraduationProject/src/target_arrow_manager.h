@@ -11,6 +11,7 @@
 namespace My
 {
 	class CTargetArrow;
+	class CCard;
 
 	class CTargetArrowManager
 	{
@@ -29,13 +30,19 @@ namespace My
 		* @brief 登録
 		* @param [in]ターゲットアローのポインタ
 		*/
-		void Regist(CTargetArrow*pTA);
+		void Regist(CTargetArrow*pTA, CCard* card);
 
 		/**
 		* @brief 登録
 		* @param [in]ターゲットアローのポインタ
 		*/
 		void Remove();
+
+		/**
+		* @brief カードリストからの削除
+		* @param [in]カード
+		*/
+		void CardRemove(CCard* card);
 
 		/**
 		* @brief ターゲットアローリストの取得処理

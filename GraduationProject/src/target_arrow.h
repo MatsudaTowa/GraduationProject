@@ -12,6 +12,9 @@
 /** @brief My 名前空間 */
 namespace My
 {
+	//前方宣言
+	class CCard;
+
 	namespace
 	{
 		const D3DXVECTOR2 arrow_up = { SCREEN_WIDTH * 0.5f,SCREEN_HEIGHT * 0.3f };
@@ -57,7 +60,7 @@ namespace My
 		/**
 		* @brief 生成
 		*/
-		static CTargetArrow* Create(int attacker, int target);
+		static CTargetArrow* Create(int attacker, int target, CCard* card);
 
 		/**
 		* @brief 標的の位置を設定する
@@ -121,11 +124,42 @@ namespace My
 		*/
 		inline D3DXVECTOR2 GetShiftPos() { return m_ShiftPos; };
 
+		/**
+		* @brief カードの追加
+		* @param [in]カード
+		*/
+		inline void AddCardList(CCard* card) 
+		{ 
+			m_TopCardList.push_back(card);
+			SetCardPos(card); 
+		}
+
+		/**
+		* @brief カードの削除
+		* @param [in]カード
+		*/
+		inline void DeleteCardList(CCard* card)
+		{
+			m_TopCardList.remove(card);
+			SetCardPos(card);
+		}
+
+		/**
+		* @brief カードリストの取得
+		* @return [in]カードリスト
+		*/
+		std::list<CCard*>& GetCardList() { return m_TopCardList; }
+
 	private:
 		/**
 		* @brief 角度と長さを設定
 		*/
 		void SetAngleLength();
+
+		/**
+		* @brief カードの位置を設定
+		*/
+		void SetCardPos(CCard* card);
 
 		/**
 		* @brief 攻撃対象者
@@ -161,6 +195,11 @@ namespace My
 		* @brief ずらす位置
 		*/
 		D3DXVECTOR2 m_ShiftPos;
+
+		/**
+		* @brief 一番上のカードのリスト
+		*/
+		std::list<CCard*> m_TopCardList;
 	};
 }
 

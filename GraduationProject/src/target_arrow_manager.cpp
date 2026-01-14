@@ -27,7 +27,7 @@ My::CTargetArrowManager::~CTargetArrowManager()
 //===========================================================================================================
 // 登録
 //===========================================================================================================
-void My::CTargetArrowManager::Regist(CTargetArrow* pTA)
+void My::CTargetArrowManager::Regist(CTargetArrow* pTA, CCard* card)
 {
 	/** 処理メモ
 	* 
@@ -46,6 +46,9 @@ void My::CTargetArrowManager::Regist(CTargetArrow* pTA)
 		{
 			// 寿命を再設定する
 			itr->ResetLife();
+
+			//カードのみ追加
+			itr->AddCardList(card);
 
 			// 矢印を生成したくないので登録もせず、ここで消す
 			pTA->SetisDelete(true);
@@ -103,6 +106,30 @@ void My::CTargetArrowManager::Remove()
 			else
 			{// イテレーターの番号を進める
 				i++;
+			}
+		}
+	}
+}
+
+//===========================================================================================================
+// リストからの削除
+//===========================================================================================================
+void My::CTargetArrowManager::CardRemove(CCard* card)
+{
+	//カードのリストから削除
+	for (auto& itr : m_pTargetArrowList)
+	{
+		// nullptr じゃなかったら
+		if (itr == nullptr) continue;
+
+		//カードの周回
+		for (auto& Card : itr->GetCardList())
+		{
+			//同じものがあったら削除して抜ける
+			if (Card == card)
+			{
+				itr->DeleteCardList(card);
+				break;
 			}
 		}
 	}

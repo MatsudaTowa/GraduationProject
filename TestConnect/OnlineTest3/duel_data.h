@@ -84,6 +84,9 @@ private:
 	void SendDrawCard(RakNet::RakPeerInterface* peer, int userid);				//カードのドロー情報を送る
 	bool CheckDrawCard(int playerid);											//引数のプレイヤーがドローができるか確認
 
+	//設定と取得
+	bool IsPlayerExist() override;	//プレイヤーが存在するか
+
 	//対戦シーンの処理関数
 	void UpdateStayCard();				//ステイカードの更新
 	void UpdateDuelPlayer(int delta);	//プレイヤーの更新
