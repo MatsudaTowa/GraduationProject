@@ -61,6 +61,7 @@ void My::CCemeteryButton::Uninit()
 //=============================================
 void My::CCemeteryButton::Update()
 {	
+	CardisView();
 	CButton::Update();
 }
 
@@ -97,12 +98,26 @@ void My::CCemeteryButton::ButtonTrigger()
 	if (typeid(*state) == typeid(CPlayerDuelState))
 	{
 		CPlayerDuelState* duel_state = dynamic_cast<CPlayerDuelState*>(state);
-		CardisView(duel_state);
+		CCemeteryZone* zone = duel_state->GetZoneManager()->GetCemetery();
+		std::list<CCard*> card_list = zone->GetList();
+
+		//準備OKか切り替え
+		bool isView = duel_state->GetIsCemeteryView();
+		isView = isView ? false : true;
+		duel_state->SetIsCemeteryView(isView);
+
+		zone->GetSelectionRange()->SetisDraw(isView);
 	}
 	else if (typeid(*state) == typeid(CEnemyDuelState))
 	{
 		CEnemyDuelState* duel_state = dynamic_cast<CEnemyDuelState*>(state);
-		CardisView(duel_state);
+		CCemeteryZone* zone = duel_state->GetZoneManager()->GetCemetery();
+
+		//準備OKか切り替え
+		bool isView = duel_state->GetIsCemeteryView();
+		isView = isView ? false : true;
+		duel_state->SetIsCemeteryView(isView);
+		zone->GetSelectionRange()->SetisDraw(isView);
 	}
 
 }
@@ -110,21 +125,39 @@ void My::CCemeteryButton::ButtonTrigger()
 //=============================================
 // カードを表示
 //=============================================
-void My::CCemeteryButton::CardisView(My::CDuelCharacter* duel_state)
+void My::CCemeteryButton::CardisView()
 {
-	CCemeteryZone* zone = duel_state->GetZoneManager()->GetCemetery();
-	std::list<CCard*> card_list = zone->GetList();
-
-	//準備OKか切り替え
-	bool isView = duel_state->GetIsCemeteryView();
-	isView = isView ? false : true;
-	duel_state->SetIsCemeteryView(isView);
-	for (auto& itr : card_list)
+	CActiveSceneCharacterState* state = m_pCharacter->GetState();
+	// ロビーじゃなかったら抜ける
+	if (typeid(*state) == typeid(CPlayerDuelState))
 	{
-		if (itr == nullptr) { continue; }
-		itr->SetisDraw(isView);
+		CPlayerDuelState* duel_state = dynamic_cast<CPlayerDuelState*>(state);
+		CCemeteryZone* zone = duel_state->GetZoneManager()->GetCemetery();
+		//準備OKか切り替え
+		bool isView = duel_state->GetIsCemeteryView();
+		std::list<CCard*> card_list = zone->GetList();
+
+		for (auto& itr : card_list)
+		{
+			if (itr == nullptr) { continue; }
+			itr->SetisDraw(isView);
+		}
 	}
-	zone->GetSelectionRange()->SetisDraw(isView);
+	else if (typeid(*state) == typeid(CEnemyDuelState))
+	{
+		CEnemyDuelState* duel_state = dynamic_cast<CEnemyDuelState*>(state);
+		CCemeteryZone* zone = duel_state->GetZoneManager()->GetCemetery();
+		//準備OKか切り替え
+		bool isView = duel_state->GetIsCemeteryView();
+		std::list<CCard*> card_list = zone->GetList();
+
+		for (auto& itr : card_list)
+		{
+			if (itr == nullptr) { continue; }
+			itr->SetisDraw(isView);
+		}
+	}
+
 }
 
 //=============================================
