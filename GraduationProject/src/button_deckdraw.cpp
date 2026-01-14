@@ -70,11 +70,9 @@ bool My::CButtonDeckDraw::ProcessMouseEvent(CPlayerDuelState* state)
 		// 範囲に入っているかわかりやすいように色を変える
 		SetColor(COLOR_RED);
 		
-		if (GET_INPUT_MOUSE->GetTrigger(0))
-		{
-			CHand* pHand = state->GetHand();
-			pHand->DeckDraw(state);
-		}
+		// ボタンが押された時の処理
+		ButtonTrigger(state);
+		
 		return true;
 	}
 
@@ -87,6 +85,18 @@ bool My::CButtonDeckDraw::ProcessMouseEvent(CPlayerDuelState* state)
 void My::CButtonDeckDraw::ButtonTrigger()
 {
 
+}
+
+//==================================================================================================================
+// ボタンが押された時の処理
+//==================================================================================================================
+void My::CButtonDeckDraw::ButtonTrigger(CPlayerDuelState* state)
+{
+	if (GET_INPUT_MOUSE->GetTrigger(0))
+	{
+		CHand* pHand = state->GetHand();
+		pHand->DeckDraw(state);
+	}
 }
 
 //==================================================================================================================
