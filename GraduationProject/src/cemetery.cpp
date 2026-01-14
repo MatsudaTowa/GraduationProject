@@ -18,8 +18,8 @@
 namespace
 {
 	const D3DXVECTOR3 BASE_POS = { 1100.0f,100.0f,0.0f };
-	const float SHIFT_POS = 200.0f;
-	const float CARD_VIEW_CORRECTION = 5.5f;
+	const float SHIFT_POS = 170.0f;
+	const float CARD_VIEW_CORRECTION = 7.0f;
 }
 
 //===========================================================================================================================================================

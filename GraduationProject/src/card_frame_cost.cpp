@@ -8,7 +8,7 @@
 
 namespace
 {
-	D3DXVECTOR3 OFFSET = { -50.0f,-85.0f,0.0f };
+	D3DXVECTOR3 OFFSET = { -40.0f,-65.0f,0.0f };
 }
 //===========================================================================================================================================================
 // コンストラクタ
@@ -39,7 +39,7 @@ HRESULT My::CCardFrameCost::Init()
 		const wchar_t* txt = wtxt.c_str();
 		offset_pos.x -= OFFSET.x;
 		offset_pos.y -= OFFSET.y;
-		pFontmanager->RegistAdjustFontSize(txt, offset_pos, { 40.0f,size.y }, 20.0f, 18.0f, 0, 5, COLOR_BLACK,false);
+		pFontmanager->RegistAdjustFontSize(txt, offset_pos, { 40.0f,size.y }, 15.0f, 18.0f, 0, 5, COLOR_BLACK,false);
 		SetOffSetPos(OFFSET);
 	}
 	return S_OK;

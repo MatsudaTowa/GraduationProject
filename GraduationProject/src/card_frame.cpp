@@ -12,15 +12,15 @@
 /**
 * @brief カードの基本サイズ
 */
-const float My::CCardFrame::CARD_WIDTH = 70.0f;
-const float My::CCardFrame::CARD_HEIGHT = 110.0f;
+const float My::CCardFrame::CARD_WIDTH = 50.0f;
+const float My::CCardFrame::CARD_HEIGHT = 85.0f;
 
 /**
 * @brief カードフレームの情報構造体の配列
 */
 My::CCardFrame::CardFrameInfo My::CCardFrame::m_FrameInfo[My::CCardFrame::FRAMETYPE::FRAMETYPE_MAX] = {
 	{"data/TEXTURE/cardframe/bg.png",		{0.0f,0.0f,0.0f},	{CARD_WIDTH,CARD_HEIGHT},	true},
-	{"data/TEXTURE/illust/",	{0.0f,-40.0f,0.0f},	{CARD_WIDTH,CARD_HEIGHT},	false},
+	{"data/TEXTURE/illust/",	{0.0f,-35.0f,0.0f},	{CARD_WIDTH,CARD_HEIGHT},	false},
 	{"data/TEXTURE/cardframe/text.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,CARD_HEIGHT},	false},
 	{"data/TEXTURE/cardframe/name.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,CARD_HEIGHT},	false},
 	{"data/TEXTURE/cardframe/type.png",	{0.0f,0.0f,0.0f},	{CARD_WIDTH,CARD_HEIGHT},	true},

@@ -8,7 +8,7 @@
 
 namespace
 {
-	const D3DXVECTOR2 ILLUST_SIZE = { 50.0f,35.0f };
+	const D3DXVECTOR2 ILLUST_SIZE = { 40.0f,30.0f };
 	const D3DXVECTOR2 OFFSET = { 0.0f,-80.0f };
 }
 

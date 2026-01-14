@@ -45,7 +45,7 @@ HRESULT My::CCardFrameName::Init()
 		offset_pos.x += offset.x;
 		offset_pos.y += offset.y;
 
-		pFontmanager->RegistAdjustFontSize(wtxt.c_str(), offset_pos, { 70.0,50.0f}, 10.0f, 12.0f, 0, 5, COLOR_BLACK,false);
+		pFontmanager->RegistAdjustFontSize(wtxt.c_str(), offset_pos, { 70.0,50.0f}, 7.0f, 9.0f, 0, 5, COLOR_BLACK,false);
 		SetOffSetPos({ offset });
 	}
 	return S_OK;
