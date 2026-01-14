@@ -63,33 +63,30 @@ void My::CLife_Gauge::Update()
 
 	CActiveScenePlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();
 
-	float max_life = player->START_LIFE;
-	float life = player->GetLife();
-	float raito = life / max_life;
-
-	//割合計算
-	float fRaito = pLife->GetLifeRaito();
+	float max_life = player->START_LIFE;	// プレイヤーの最大体力の取得
+	float life = player->GetLife();	// プレイヤーの現在体力の取得
+	float raito = life / max_life;	// 割合計算
 
 	//表示していいポリゴンの計算（1つで1％）
 	m_nDrawSegNum = SEGMENT_NUM - (raito * SEGMENT_NUM);
 
 	//割合に応じた色変化
-	if (fRaito > LIFE_75)
+	if (raito > LIFE_75)
 	{//水色
 		ChangeColor({ FLOAT_ZERO, FLOAT_ONE, FLOAT_ONE, FLOAT_ONE });
 	}
 
-	else if (fRaito <= LIFE_75 && fRaito >= LIFE_50)
+	else if (raito <= LIFE_75 && raito >= LIFE_50)
 	{//緑色
 		ChangeColor({ FLOAT_ZERO, FLOAT_ONE, FLOAT_ZERO, FLOAT_ONE });
 	}
 
-	else if (fRaito <= 0.5 && fRaito >= LIFE_25)
+	else if (raito <= 0.5 && raito >= LIFE_25)
 	{//黄色
 		ChangeColor({ FLOAT_ONE, FLOAT_ONE, FLOAT_ZERO, FLOAT_ONE });
 	}
 
-	else if (fRaito < LIFE_25)
+	else if (raito < LIFE_25)
 	{//赤色
 		ChangeColor({ FLOAT_ONE, FLOAT_ZERO, FLOAT_ZERO, FLOAT_ONE });
 	}
@@ -168,8 +165,3 @@ void My::CLife_Gauge::CreateLifeUI(float GameHP, float Rad)
 	}
 	pLife->DefMax(GameHP);
 }
-
-//------------------------------------------------------------------------------------------------------------------------//
-//===============================================================================================
-// 
-//===============================================================================================
