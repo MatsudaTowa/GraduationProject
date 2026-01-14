@@ -19,7 +19,8 @@ namespace
 //=============================================
 //コンストラクタ
 //=============================================
-My::CResult::CResult()
+My::CResult::CResult():
+    m_pUIManager(nullptr)
 {
 }
 
@@ -42,9 +43,22 @@ HRESULT My::CResult::Init()
     //地面生成
     CField::Create(VEC3_RESET_ZERO, FIELD_SIZE, new CField);
 
-    CResult_Screen::Create(D3DXVECTOR3(SCREEN_WIDTH * HALF, SCREEN_HEIGHT * HALF, 0.0f));
+    //CResult_Screen::Create(D3DXVECTOR3(SCREEN_WIDTH * HALF, SCREEN_HEIGHT * HALF, 0.0f));
 
    //CResult_Ui::Create(D3DXVECTOR3(SCREEN_WIDTH * HALF, SCREEN_HEIGHT * HALF + 250.0f, 0.0f));
+
+    if (m_pUIManager == nullptr)
+    {
+        //****************************
+        // TODO : 仮で順位を設定している
+        int nPlayerNum = 3; // プレイヤー番号 0 = 1p
+        int nRunking[MAX_RANKING_COUNT] = {0, 1, 2, 3};   // ランキング
+
+        if (m_pUIManager = CResultUIManager::Create(nRunking, nPlayerNum); m_pUIManager == nullptr)
+        {
+            return E_UNEXPECTED;
+        } 
+    }
 
     return S_OK;
 }
@@ -54,6 +68,12 @@ HRESULT My::CResult::Init()
 //=============================================
 void My::CResult::Uninit()
 {
+    if (m_pUIManager != nullptr)
+    {
+        m_pUIManager->Uninit();
+        delete m_pUIManager;
+        m_pUIManager = nullptr;
+    }
     CObject::ReleaseAll();
 }
 
@@ -71,6 +91,10 @@ void My::CResult::Update()
     {
         //タイトルに戻る
         GET_FADE->SetFade(CScene::MODE::MODE_TITLE);
+    }
+    if (m_pUIManager != nullptr)
+    {
+        m_pUIManager->Update();
     }
 }
 

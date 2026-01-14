@@ -11,6 +11,8 @@
 #include "scene.h"
 #include "manager.h"
 
+#include "result_ui_manager.h"	// リザルトUIマネージャー
+
 /** @brief My 名前空間 */
 namespace My
 {
@@ -52,6 +54,7 @@ namespace My
 		 */
 		void Draw() override;
 	private:
+		CResultUIManager* m_pUIManager;	// UIマネージャー
 	};
 }
 
