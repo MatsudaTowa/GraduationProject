@@ -55,6 +55,7 @@ namespace My
 		 * @brief ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚Ìˆ—
 		 */
 		void ButtonTrigger()override;
+		void ButtonTrigger(CPlayerDuelState* state);
 
 		/**
 		 * @brief ¶¬
