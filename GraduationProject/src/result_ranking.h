@@ -16,10 +16,14 @@ namespace My {
 		CResultRanking();
 		~CResultRanking();
 		HRESULT Init();		// èâä˙âª
-		void SetPos(D3DXVECTOR3 pos)	{ CObject2D::SetPos (pos); }
-		void SetRot(D3DXVECTOR3 rot)	{ CObject2D::SetRot (rot); }
-		void SetSize(D3DXVECTOR2 size)	{ CObject2D::SetSize(size); }
-
+		void AddPos(D3DXVECTOR3 pos)	{ SetPos(GetPos() + pos); }		// à íuâ¡éZ
+		void AddRot(D3DXVECTOR3 rot)	{ SetRot(GetRot() + rot); }		// å¸Ç´â¡éZ
+		void AddSize(D3DXVECTOR2 size)	{ SetSize(GetSize() + size); }	// ëÂÇ´Ç≥â¡éZ
+		void AddColor(D3DXCOLOR col)	{
+			D3DXCOLOR color = GetColor();
+			D3DXCOLOR colorA = color + col;
+			SetColor (colorA);
+		}	// êFÇÃâ¡éZ
 		static CResultRanking* Create();	// ê∂ê¨
 	private:
 	};
