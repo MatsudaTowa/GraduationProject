@@ -18,7 +18,7 @@ namespace My
 	class CSelectionRange : public CObject2D
 	{
 	public:
-		static const int PRIORITY = 25;  //描画順
+		static const int PRIORITY = 10;  //描画順
 
 		/**
 		 * @brief コンストラクタ

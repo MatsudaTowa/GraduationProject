@@ -356,7 +356,7 @@ bool My::CCard::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharacter* pla
 		if (typeid(*duel) == typeid(CPlayerDuelState))
 		{
 			CPlayerDuelState* duel_state = dynamic_cast<CPlayerDuelState*>(duel);
-			duel_state->GetHand()->GetSelectionRange()->SetisDraw(false);
+			//duel_state->GetHand()->GetSelectionRange()->SetisDraw(false);
 		}
 
 		// キャストステートにする
@@ -376,7 +376,14 @@ bool My::CCard::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharacter* pla
 		if (typeid(*duel) == typeid(CPlayerDuelState))
 		{
 			CPlayerDuelState* duel_state = dynamic_cast<CPlayerDuelState*>(duel);
-			duel_state->GetHand()->GetSelectionRange()->SetisDraw(true);
+			//キャンセルエリアなら解除
+			if (GET_COLISION->Check2DPolygonColision(GET_INPUT_MOUSE->GetMousePos(), { 3.0f,3.0f }, { duel_state->GetHand()->GetSelectionRange()->GetPos() }, duel_state->GetHand()->GetSelectionRange()->GetSize()))
+			{
+				//通常状態にする
+				ChangeState(CCardState::CARD_NEUTRAL, duel);
+				CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
+				return false;
+			}
 		}
 
 		//対象のエリア

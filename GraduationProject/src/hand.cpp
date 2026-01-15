@@ -102,7 +102,7 @@ void My::CHand::Update(CPlayerDuelState* state, CActiveSceneCharacter* player)
 	{
 		int nCardNum = state->GetZoneManager()->GetHandZone()->GetList().size();
 		float posInterbal = CCardFrame::CARD_WIDTH - (5 * nCardNum * 0.5f);	// ŽèŽD‚É•\Ž¦‚³‚ê‚Ä‚¢‚éŽž‚ÌƒJ[ƒh‚ÌŠÔŠu
-		m_pRange->SetSize({((nCardNum) * posInterbal), CCardFrame::CARD_HEIGHT });
+		m_pRange->SetSize({500.0f,CCardFrame::CARD_HEIGHT});
 	}
 
 	// ŽèŽD‘I‘ð
@@ -177,7 +177,7 @@ void My::CHand::Select(CPlayerDuelState* state)
 void My::CHand::Cast(CDuelCharacter* character, CActiveSceneCharacter* player)
 {
 	bool is_hit_area = GET_COLISION->Check2DPolygonColision(GET_INPUT_MOUSE->GetMousePos(), { 3.0f,3.0f }, { m_pRange->GetPos().x,m_pRange->GetPos().y,0.0f }, m_pRange->GetSize());
-	if (is_hit_area && m_pRange->GetisDraw())
+	if (is_hit_area && m_pRange->GetisDraw() && m_HandState == NEUTRAL)
 	{
 		return;
 	}
