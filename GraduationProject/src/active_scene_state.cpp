@@ -284,6 +284,11 @@ void My::CDuel::Duel(CActiveScene* game)
 	}
 #endif
 
+	if (CActiveSceneManager::GetInstance()->GetFinish())
+	{
+		GET_FADE->SetFade(CScene::MODE::MODE_RESULT);
+	}
+
 	//ポーズ移行
 	if (pKeyboard->GetTrigger(DIK_P) && game->GetPauseKey())
 	{

@@ -234,6 +234,9 @@ void My::CCardAttack::Trigger()
 
 	//カードのクリア
 	m_DefCardVector.clear();
+
+	//ゲームの終了を送る
+	CRakNet_Server::GetInstance()->SendGameSet();
 }
 
 //===========================================================================================================

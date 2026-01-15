@@ -200,6 +200,7 @@ void CRakNet::Communication(RakNet::RakPeerInterface* peer)
             break;
 
         case ID_DUEL_MESSAGE_GAMESET:
+            My::CActiveSceneManager::GetInstance()->SetFinish(true);
             break;
 
         case ID_UNCONNECTED_PONG:

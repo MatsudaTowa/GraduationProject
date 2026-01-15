@@ -119,7 +119,7 @@ bool My::CCardAttack::IsCast(CDuelCharacter*, CInputMouse::AREA)
 	if (State == nullptr) return true;											//中身があるか確認
 
 	//TODO::現在は先に出した攻撃カードを参照するが、将来的には相手のステイ中のカードから選択する
-	if (State->GetZoneManager()->GetCastPreviewZone()->GetList().empty())
+	if (!State->GetZoneManager()->GetCastPreviewZone()->GetList().empty())
 	{
 		//キャストゾーンのカード周回
 		for (auto& iter : State->GetZoneManager()->GetCastPreviewZone()->GetList())
@@ -164,6 +164,8 @@ bool My::CCardAttack::IsCast(CDuelCharacter*, CInputMouse::AREA)
 				{
 					pAttackCard->AddStackCards(this);	//自身を追加
 				}
+
+				m_pStackCard = pAttackCard;			//重ね先の登録
 
 				//キャスト先の代入
 				SetCastDestination(CARD);	//カード
@@ -434,6 +436,15 @@ void My::CCardAttack::Trigger()
 		}
 	}
 
+	//重なっているカードを墓地に送る
+	for (auto& iter : m_StackedCardsList)
+	{
+		CDuelCharacter* duel = dynamic_cast<CDuelCharacter*>(My::CActiveSceneManager::GetInstance()->GetCharacter(iter->GetUserId())->GetState());
+		duel->GetZoneManager()->MoveZone(iter, iter->CastToZone(iter->GetCurrentZone(), duel), duel->GetZoneManager()->GetCemetery(), true);
+
+		iter->SetCurrentZone(CCard::CEMETERY);
+	}
+
 	//カードのクリア
 	m_DefCardVector.clear();
 }
@@ -510,6 +521,9 @@ void My::CCardAttack::SendCardInfo(RakNet::BitStream* bsout)
 		//重ねたカードの書き出し
 		bsout->Write(m_pStackCard->GetBaseStatus().nCardID);	//カードID
 		bsout->Write(m_pStackCard->GetSameTypeId());			//同種類番号
+
+		//読み込みがあるため中身をnullにする
+		m_pStackCard = nullptr;
 
 		break;
 	default:
