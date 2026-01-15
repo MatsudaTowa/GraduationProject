@@ -11,6 +11,7 @@
 #include "active_scene_character_state.h"
 #include "hand.h"
 #include "cemetery.h"
+#include "wait.h"
 
 /** @brief My 名前空間 */
 namespace My
@@ -135,9 +136,27 @@ namespace My
 		 * @brief 墓地設定
 		 * @param [in]pHand
 		 */
-		inline void SetHand(CCemetery* pCemetery)
+		inline void SetCemetery(CCemetery* pCemetery)
 		{
 			m_pCemetery = pCemetery;
+		}
+
+		/**
+		 * @brief 待機取得
+		 * @return 待機
+		 */
+		inline CWait* GetWait()
+		{
+			return m_pWait;
+		}
+
+		/**
+		 * @brief 待機設定
+		 * @param [in]pWait
+		 */
+		inline void SetWait(CWait* pWait)
+		{
+			m_pWait = pWait;
 		}
 	private:
 
@@ -163,6 +182,7 @@ namespace My
 		int m_EnergyUpFrame;		//!エナジーを増やすフレーム
 		CHand* m_pHand;	// 手札
 		CCemetery* m_pCemetery;
+		CWait* m_pWait;
 	};
 
 }

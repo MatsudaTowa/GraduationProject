@@ -63,7 +63,7 @@ void My::CCardFrameType::Update()
 		return;
 	}
 	
-	m_pTypeicon->SetisDraw(true);
+	m_pTypeicon->SetisDraw(GetisDraw());
 
 	D3DXVECTOR3 icon_pos = GetPos();
 	icon_pos.x += OFFSET.x;

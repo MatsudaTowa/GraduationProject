@@ -286,6 +286,7 @@
     <ClCompile Include="src\scene.cpp" />
     <ClCompile Include="src\selection_range.cpp" />
     <ClCompile Include="src\shadow.cpp" />
+    <ClCompile Include="src\wait.cpp" />
     <ClCompile Include="src\target_arrow.cpp" />
     <ClCompile Include="src\target_arrow_manager.cpp" />
     <ClCompile Include="src\texture.cpp" />
@@ -425,6 +426,7 @@
     <ClInclude Include="src\selection_range.h" />
     <ClInclude Include="src\shadow.h" />
     <ClInclude Include="src\status_icon.h" />
+    <ClInclude Include="src\wait.h" />
     <ClInclude Include="src\target_arrow.h" />
     <ClInclude Include="src\target_arrow_manager.h" />
     <ClInclude Include="src\texture.h" />

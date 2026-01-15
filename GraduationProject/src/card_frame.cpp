@@ -102,7 +102,6 @@ void My::CCardFrame::Update()
 	// 山札時はコストを表示しないように TODO:今後はここの条件式を見直す必要あり
 	if (current_zone == CCard::DECK)
 	{
-		SetisDraw(false);
 		GetCard()->SetisDraw(false);
 		return;
 	}
@@ -110,11 +109,12 @@ void My::CCardFrame::Update()
 	{
 		SetisDraw(duel_state->GetIsCemeteryView());
 	}
-	else
+	else if (current_zone == CCard::HAND)
 	{
-		SetisDraw(true);
 		GetCard()->SetisDraw(true);
 	}
+
+	SetisDraw(GetCard()->GetisDraw());
 
 	D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), m_pParent->GetPos()); //スクリーン座標に変換
 

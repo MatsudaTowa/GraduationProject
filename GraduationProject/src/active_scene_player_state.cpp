@@ -89,7 +89,8 @@ My::CPlayerDuelState::CPlayerDuelState(CActiveSceneCharacter* character) :CDuelC
 m_nEnergyUpCount(0),
 m_EnergyUpFrame(INT_ZERO),
 m_pHand(nullptr),
-m_pCemetery(nullptr)
+m_pCemetery(nullptr),
+m_pWait(nullptr)
 {
 	m_EnergyUpFrame = ENERGY_UP_FRAME;
 }
@@ -117,6 +118,11 @@ My::CPlayerDuelState::~CPlayerDuelState()
 		delete m_pCemetery;
 		m_pCemetery = nullptr;
 	}
+	if (m_pWait != nullptr)
+	{
+		delete m_pWait;
+		m_pWait = nullptr;
+	}
 }
 
 //=============================================
@@ -143,6 +149,10 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 	if (m_pCemetery != nullptr)
 	{
 		m_pCemetery->Update(this, character);
+	}
+	if (m_pWait != nullptr)
+	{
+		m_pWait->Update(this, character);
 	}
 
 	std::list<CCondition*> DebuffList = character->GetConditionList();
@@ -198,6 +208,10 @@ void My::CPlayerDuelState::CreateDuelUI(CActiveScenePlayer* player)
 	if (m_pCemetery == nullptr)
 	{
 		m_pCemetery = CCemetery::Create();
+	}
+	if (m_pWait == nullptr)
+	{
+		m_pWait = CWait::Create();
 	}
 	
 	if (CDuel_Manager::GetInstance()->GetCardInfoUI() == nullptr)
@@ -320,16 +334,16 @@ void My::CPlayerDuelState::ViewWait(CWaitZone* zone)
 	{
 		//座標変換しずらす
 		D3DXVECTOR3 pos = ConvertToWorldPoint(GET_CAMERA(GET_CAMERA_IDX), FIRST_POS, FIRST_POS);
+
 		pos.x -= CARD_SPACE * nCount;
 		pCard->SetPos(pos);
-
-		//最初のカード以外は小さくする
-		//TODO : カードフレームを取得できないので取得できるようになったら実装
-		if (nCount > 0)
+		if (nCount == INT_ZERO)
 		{
-			/*pCard->SetSize({ 0.0f, 0.0f, 0.0f });
-			pos.z += 100.0f;
-			pCard->SetPos(pos);*/
+			pCard->SetisDraw(true);
+		}
+		else
+		{
+			pCard->SetisDraw(false);
 		}
 
 		nCount++;	//カウントアップ

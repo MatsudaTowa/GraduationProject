@@ -155,6 +155,7 @@
     <ClCompile Include="src\result_ui_manager.cpp">
       <Filter>Result_UI</Filter>
     </ClCompile>
+    <ClCompile Include="src\wait.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -326,6 +327,7 @@
     <ClInclude Include="src\result_ui_manager.h">
       <Filter>Result_UI</Filter>
     </ClInclude>
+    <ClInclude Include="src\wait.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GraduationProject.rc" />
