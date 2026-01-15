@@ -30,7 +30,7 @@ My::CHand::CHand() :
 {
 	if (m_pRange == nullptr)
 	{
-		m_pRange = CSelectionRange::Create({ SCREEN_WIDTH * HALF, 650.0f,0.0f }, { CCardFrame::CARD_WIDTH, CCardFrame::CARD_HEIGHT });
+		m_pRange = CSelectionRange::Create({ SCREEN_WIDTH * HALF, 650.0f,0.0f }, { 360.0f, CCardFrame::CARD_HEIGHT });
 		m_pRange->SetColor({ COLOR_RED.r,COLOR_RED.g,COLOR_RED.b,0.5f });
 		m_pRange->SetisDraw(true);
 	}
@@ -102,7 +102,7 @@ void My::CHand::Update(CPlayerDuelState* state, CActiveSceneCharacter* player)
 	{
 		int nCardNum = state->GetZoneManager()->GetHandZone()->GetList().size();
 		float posInterbal = CCardFrame::CARD_WIDTH - (5 * nCardNum * 0.5f);	// 手札に表示されている時のカードの間隔
-		m_pRange->SetSize({500.0f,CCardFrame::CARD_HEIGHT});
+		m_pRange->SetSize({ 360.0f,CCardFrame::CARD_HEIGHT});
 	}
 
 	// 手札選択
@@ -374,7 +374,7 @@ void My::CHand::SetHandCardPos(CDuelCharacter* character)
 {
 	D3DXVECTOR3 firstpos;	// 一番左側の位置(手札の最初の位置)
 	int nCardNum = character->GetZoneManager()->GetHandZone()->GetList().size();
-	float posInterbal = 25.0f - (20 * nCardNum * 0.07f);	// 手札に表示されている時のカードの間隔
+	float posInterbal = 25.0f - (20 * nCardNum * 0.05f);	// 手札に表示されている時のカードの間隔
 	float xpos;	// 一枚目のカードのx座標
 	int nCount = 0;	//周回数
 	CCard* pCard = nullptr;	//カードのポインタ

@@ -506,8 +506,8 @@ bool My::CCard::CardSelectToMouse(CDuelCharacter* duel)
 	resultposN.y = mousepos.y - screenposN.y;
 
 	// ‹éŒ`”»’è
-	if (resultpos.x <= CCardFrame::CARD_WIDTH * GetSize().x && resultpos.x >= -CCardFrame::CARD_WIDTH * GetSize().x &&
-		resultpos.y <= CCardFrame::CARD_HEIGHT * GetSize().y && resultpos.y >= -CCardFrame::CARD_HEIGHT * GetSize().y ||
+	if (resultpos.x <= CCardFrame::CARD_WIDTH&& resultpos.x >= -CCardFrame::CARD_WIDTH &&
+		resultpos.y <= CCardFrame::CARD_HEIGHT&& resultpos.y >= -CCardFrame::CARD_HEIGHT||
 		resultposN.x <= CCardFrame::CARD_WIDTH && resultposN.x >= -CCardFrame::CARD_WIDTH &&
 		resultposN.y <= CCardFrame::CARD_HEIGHT && resultposN.y >= -CCardFrame::CARD_HEIGHT)
 	{
