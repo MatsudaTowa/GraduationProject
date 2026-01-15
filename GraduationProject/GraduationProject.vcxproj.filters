@@ -33,7 +33,6 @@
     <ClCompile Include="src\cemetery.cpp" />
     <ClCompile Include="src\cemetery_button.cpp" />
     <ClCompile Include="src\cemetery_zone.cpp" />
-    <ClCompile Include="src\center_area.cpp" />
     <ClCompile Include="src\character.cpp" />
     <ClCompile Include="src\client.cpp" />
     <ClCompile Include="src\client_duel.cpp" />
@@ -191,7 +190,6 @@
     <ClInclude Include="src\cemetery.h" />
     <ClInclude Include="src\cemetery_button.h" />
     <ClInclude Include="src\cemetery_zone.h" />
-    <ClInclude Include="src\center_area.h" />
     <ClInclude Include="src\character.h" />
     <ClInclude Include="src\client.h" />
     <ClInclude Include="src\client_duel.h" />

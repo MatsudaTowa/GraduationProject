@@ -11,7 +11,6 @@
 //ヘッダーのインクルード
 #include "main.h"
 #include "area.h"
-#include "center_area.h"
 
 namespace My
 {
@@ -50,23 +49,11 @@ namespace My
 		void SetArea(CArea* area, int idx) { m_pArea[idx] = area; }
 
 		/**
-		 * @brief 中心エリアの設定
-		 * @param 中心エリア
-		 */
-		void SetCenterArea(CCenterArea* area) { m_pCenterArea = area; }
-
-		/**
 		 * @brief エリアの取得
 		 * @param [in]エリア番号
 		 * @return エリアのポインタ
 		 */
 		CArea* GetArea(int idx) { return m_pArea[idx]; }
-
-		/**
-		 * @brief 中心エリアの取得
-		 * @return 中心エリア
-		 */
-		CCenterArea* GetCenterArea() { return m_pCenterArea; }
 
 		/**
 		 * @brief 選択しているか取得
@@ -95,8 +82,7 @@ namespace My
 		 * @param [in]life
 		 */
 		void player_cast(My::CActiveScenePlayer* player, My::CInputMouse::AREA area, int& life);
-		CArea* m_pArea[CInputMouse::AREA::MAX - 1]; //真ん中のエリア以外に三角形を生成
-		CCenterArea* m_pCenterArea;					//真ん中のエリア
+		CArea* m_pArea[CInputMouse::AREA::MAX]; //真ん中のエリア以外に三角形を生成
 		bool m_isActive; //実行するか
 	};
 }

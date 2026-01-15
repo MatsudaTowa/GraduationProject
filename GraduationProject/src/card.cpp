@@ -32,7 +32,6 @@ m_CurrentZone(ZONE::NONE_ZONE),
 m_OldZone(ZONE::NONE_ZONE),
 m_PreCalculateStrategy(),
 m_PostCalculateStrategy(),
-m_UserArea(CInputMouse::AREA::CENTER),
 m_nUserId(-1),
 m_CastDestination(NONE)
 {
@@ -383,15 +382,6 @@ bool My::CCard::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharacter* pla
 		//対象のエリア
 		CInputMouse::AREA Area;
 		Area = pMouse->GetArea();
-
-		//キャンセルエリアなら解除
-		if (Area == CInputMouse::AREA::CENTER)
-		{
-			//通常状態にする
-			ChangeState(CCardState::CARD_NEUTRAL, duel);
-			CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
-			return false;
-		}
 
 		//エナジーが不足しているなら抜ける
 		if (player->GetEnergy() < m_BaseStatus.nCost)

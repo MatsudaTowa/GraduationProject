@@ -72,7 +72,6 @@ namespace My
 			DOWN,
 			LEFT,
 			RIGHT,
-			CENTER,
 			MAX,
 		};
 		CInputMouse();

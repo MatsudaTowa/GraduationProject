@@ -12,8 +12,7 @@
 // コンストラクタ
 //================================
 My::CAreaManager::CAreaManager():m_isActive(false),
-m_pArea(),
-m_pCenterArea()
+m_pArea()
 {
 }
 
@@ -37,17 +36,12 @@ HRESULT My::CAreaManager::Init()
 //================================
 void My::CAreaManager::Uninit()
 {
-	for (int i = 0; i < CInputMouse::AREA::MAX - 1; ++i)
+	for (int i = 0; i < CInputMouse::AREA::MAX; ++i)
 	{
 		if (m_pArea[i] == nullptr) { continue; }
 		m_pArea[i]->Uninit();
 		m_pArea[i] = nullptr;
 	}
-
-	if (m_pCenterArea == nullptr) { return; }
-
-	m_pCenterArea->Uninit();
-	m_pCenterArea = nullptr;
 }
 
 
@@ -56,7 +50,7 @@ void My::CAreaManager::Uninit()
 //=============================================
 void My::CAreaManager::CreateArea()
 {
-	for (int i = 0; i < CInputMouse::AREA::MAX - 1; ++i)
+	for (int i = 0; i < CInputMouse::AREA::MAX; ++i)
 	{
 		if (m_pArea[i] != nullptr) { continue; }
 
@@ -92,10 +86,6 @@ void My::CAreaManager::CreateArea()
 
 		m_pArea[i] = CArea::Create(triangle_vtx);
 	}
-
-	if (m_pCenterArea != nullptr) { return; }
-	m_pCenterArea = CCenterArea::Create();
-	m_pCenterArea->Init();
 }
 
 //=============================================
@@ -113,22 +103,13 @@ void My::CAreaManager::SelectArea()
 	{
 		if (i != area)
 		{//選択されているエリア以外の
-			if (i == CInputMouse::AREA::CENTER)
-			{//真ん中だったら
-				m_pCenterArea->SetSelect(false);
-			}
-			else
+
 			{//三角形だったら
 				m_pArea[i]->SetSelect(false);
 			}
 		}
 		else
 		{
-			if (i == CInputMouse::AREA::CENTER)
-			{//真ん中だったら
-				m_pCenterArea->SetSelect(true);
-			}
-			else
 			{//三角形だったら
 				m_pArea[i]->SetSelect(true);
 			}
@@ -141,18 +122,18 @@ void My::CAreaManager::SelectArea()
 //=============================================
 bool My::CAreaManager::CardTrigger(My::CInputMouse::AREA area)
 {
-	//TODO:ここに選択されたカードの処理を！
-	if (area == CInputMouse::AREA::CENTER)
-	{
-		//TODO:カードを離したらに変更予定
-		if (GET_INPUT_MOUSE->GetTrigger(0))
-		{
-			CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
-		}
+	////TODO:ここに選択されたカードの処理を！
+	//if (area == CInputMouse::AREA::CENTER)
+	//{
+	//	//TODO:カードを離したらに変更予定
+	//	if (GET_INPUT_MOUSE->GetTrigger(0))
+	//	{
+	//		CActiveSceneManager::GetInstance()->ChangeState(new CDuel);
+	//	}
 
-		return false;
-	}
-	else
+	//	return false;
+	//}
+	//else
 	{
 		////登録されているキャラクターを取得
 		//CActiveScenePlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();

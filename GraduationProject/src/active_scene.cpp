@@ -11,7 +11,6 @@
 #include "enemy.h"
 #include "card.h"
 #include "energy_charge.h"
-#include "center_area.h"
 #include "raknet.h"
 #include "font.h"
 
