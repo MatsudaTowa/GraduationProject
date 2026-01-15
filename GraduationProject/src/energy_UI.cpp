@@ -10,7 +10,7 @@ namespace
 {
 	const int NUM_DIGIT = 1;										//桁数
 	const float DIGIT_SHIFT = 30.0f;								//桁ごとに座標をずらす
-	const D3DXVECTOR2 NUMBER_SIZE = D3DXVECTOR2(20.0f, 30.0f);		//数字のサイズ
+	const D3DXVECTOR2 NUMBER_SIZE = D3DXVECTOR2(15.0f, 25.0f);		//数字のサイズ
 }
 
 //=============================================

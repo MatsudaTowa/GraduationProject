@@ -120,7 +120,7 @@ My::CEnergy_Gauge* My::CEnergy_Gauge::Create(D3DXVECTOR3 pos)
 
 	CEnergy_Gauge* pEnergy = new CEnergy_Gauge(11);
 	pEnergy->SetPos(pos);
-	pEnergy->SetSize({ 13.0f,23.0f });
+	pEnergy->SetSize({ 6.5f,11.5f });
 	pEnergy->SetType(CObject::OBJECT_TYPE::OBJECT_TYPE_PLAYER);
 	pEnergy->m_nPolyNum = PolyCnt;
 	return pEnergy;
@@ -132,10 +132,10 @@ My::CEnergy_Gauge* My::CEnergy_Gauge::Create(D3DXVECTOR3 pos)
 void My::CEnergy_Gauge::CreateEnergy()
 {
 	CEnergy_Charge::Create();
-	CEnergy_frame::Create({ 1150.0f, 580.0f,FLOAT_ZERO }, {130.0f,130.0f});
+	CEnergy_frame::Create({ 100.0f, 450.0f,FLOAT_ZERO }, {65.0f,65.0f});
 	for (int i = 0; i < 10; i++)
 	{
-		CEnergy_Gauge::Create({ 1039.0f+ (i * 28.0f),497.0f,FLOAT_ZERO });
+		CEnergy_Gauge::Create({ 44.5f+ (i * 14.0f),407.0f,FLOAT_ZERO });
 	}
 	//すごく仮置き（体力関連）
 	CLife_Gauge::CreateLifeUI(CActiveSceneCharacter::MAX_LIFE, 70.0f);

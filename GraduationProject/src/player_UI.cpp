@@ -153,7 +153,7 @@ void My::CPlayerUI::SetCurrentCharacter_UI(D3DXVECTOR3 screen_pos, CActiveSceneC
 			// プレイヤーと他の敵でずらす位置を変える
 			if (player == character) 
 			{
-				ShiftPos = { 520.0f,-70.0f };
+				ShiftPos = { -530.0f,-220.0f };
 			}
 			else 
 			{

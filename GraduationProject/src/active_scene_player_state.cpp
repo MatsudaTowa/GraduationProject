@@ -236,18 +236,17 @@ void My::CPlayerDuelState::CreateDuelUI(CActiveScenePlayer* player)
 
 	if (player->GetPlayerUI()->GetEnergyUI() == nullptr)
 	{
-		CEnergy_UI* pEnergyUI = CEnergy_UI::Create({ screen_pos.x + 10000.0f,screen_pos.y,screen_pos.z });
+		CEnergy_UI* pEnergyUI = CEnergy_UI::Create({ screen_pos.x - 10000.0f,screen_pos.y * 0.59f,screen_pos.z });
 		player->GetPlayerUI()->SetEnergyUI(pEnergyUI);
 	}
 
 	if (player->GetPlayerUI()->GetDecDrawButton() == nullptr)
 	{
 		CButtonDeckDraw* pButtonDrawDeck = CButtonDeckDraw::Create(
-			{ screen_pos.x * 0.3f ,screen_pos.y * 0.58f,0.0f } ,
-			{ 100,50 });
+			{ screen_pos.x * 0.4f ,screen_pos.y * 0.59f,0.0f } ,
+			{ 80,40 });
 
 		player->GetPlayerUI()->SetDeckDrawButton(pButtonDrawDeck);
-
 	}
 }
 
