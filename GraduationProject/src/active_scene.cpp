@@ -156,6 +156,12 @@ void My::CActiveScene::Update()
 		CActiveSceneManager::GetInstance()->GameStateExecution(this);
 		return;
 	}
+	else
+	{
+		//ステート初期化
+		CActiveSceneManager::GetInstance()->ChangeState(new CLobby);
+		GET_FADE->SetFade(CScene::MODE::MODE_RESULT);
+	}
 
 	if (!m_pDelayCnt->CountUp())
 	{

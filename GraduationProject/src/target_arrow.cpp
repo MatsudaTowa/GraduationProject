@@ -283,6 +283,7 @@ void My::CTargetArrow::SetOnTheLinePos()
 
 	// “ñ“_‚Ì‹——£‚ğ‹‚ß‚é
 	max_size = std::sqrt((x * x) + (y * y));
+
 	// Œ´“_‚ª’†S‚Ì‚½‚ß”¼•ª‚É‚·‚é
 	max_size *= HALF;
 
