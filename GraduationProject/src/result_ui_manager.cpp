@@ -118,48 +118,62 @@ HRESULT My::CResultUIManager::Init()
 	}
 	// 勝利結果
 	{
+		// plのランクを探す
+		int idx = std::find(m_nRanking, m_nRanking + MAX_RANKING_COUNT, m_nPlayer) - m_nRanking;
+		if (idx == MAX_RANKING_COUNT)  // 見つからなかった場合
+		{
+			MessageBox(hWnd, "Error : result_ui_manager.cpp \n 勝敗結果を正しく生成出来ませんでした", "警告！", MB_ICONWARNING);
+			return E_UNEXPECTED;
+		}
 		if (CResultRanking* pWinOrLose = CResultRanking::Create(); pWinOrLose != nullptr)
 		{
 			m_pWinOrLose = pWinOrLose;
-
-
-			m_pWinOrLose->SetPos (WIN_OR_LOSE_START_POS);	// 位置
-			m_pWinOrLose->SetRot (WIN_OR_LOSE_START_ROT);	// 向き
-			m_pWinOrLose->SetSize(WIN_OR_LOSE_START_SIZE);	// 大きさ
-			m_pWinOrLose->SetColor(WIN_OR_LOSE_START_COL);	// 色
-
-			// plのランクを探す
-			int idx = std::find(m_nRanking, m_nRanking + MAX_RANKING_COUNT, m_nPlayer) - m_nRanking;
-			if (idx == MAX_RANKING_COUNT)  // 見つからなかった場合
-			{
-				MessageBox(hWnd, "Error : result_ui_manager.cpp \n 勝敗結果を正しく生成出来ませんでした", "警告！", MB_ICONWARNING);
-				return E_UNEXPECTED;
-			}
 
 			// 最下位なら
 			if (idx == MAX_RANKING_COUNT - 1)
 			{
 				// 最下位なら
 				m_pWinOrLose->BindTexture(pTexture->GetAddress(pTexture->Regist(LOSE_TEXTURE)));
+				m_pWinOrLose->SetPos	(LOSE_START_POS);	// 位置
+				m_pWinOrLose->SetRot	(LOSE_START_ROT);	// 向き
+				m_pWinOrLose->SetSize	(LOSE_START_SIZE);	// 大きさ
+				m_pWinOrLose->SetColor	(LOSE_START_COL);	// 色
+
+				m_nWinOrLoseMoveDelay =		LOSE_MOVE_DELAY;			// ランキングの出現開始時間
+				m_nWinOrLoseMoveDuration =	LOSE_MOVE_DURATION;	// ランキングの出現時間
+				// 演出０秒出ないなら
+				if (m_nWinOrLoseMoveDuration != 0)
+				{
+					m_nWinOrLoseMovePos = (LOSE_START_POS - WIN_OR_LOSE_END_POS ) / static_cast<float>(LOSE_MOVE_DURATION);	// 位置
+					m_nWinOrLoseMoveRot = (LOSE_START_ROT - WIN_OR_LOSE_END_ROT ) / static_cast<float>(LOSE_MOVE_DURATION);	// 向き
+					m_nWinOrLoseMoveSize= (LOSE_START_SIZE- WIN_OR_LOSE_END_SIZE) / static_cast<float>(LOSE_MOVE_DURATION);	// 大きさ
+					m_nWinOrLoseMoveCol = (LOSE_START_COL- WIN_OR_LOSE_END_COL)   / static_cast<float>(LOSE_MOVE_DURATION);	// 色
+				}
 			}
 			// 最下位でなければ
 			else
 			{
 				// 最下位でないなら
 				m_pWinOrLose->BindTexture(pTexture->GetAddress(pTexture->Regist(WIN_TEXTURE)));
+
+				m_pWinOrLose->SetPos	(WIN_START_POS);	// 位置
+				m_pWinOrLose->SetRot	(WIN_START_ROT);	// 向き
+				m_pWinOrLose->SetSize	(WIN_START_SIZE);	// 大きさ
+				m_pWinOrLose->SetColor	(WIN_START_COL);	// 色
+
+				m_nWinOrLoseMoveDelay =		WIN_MOVE_DELAY;			// ランキングの出現開始時間
+				m_nWinOrLoseMoveDuration =	WIN_MOVE_DURATION;	// ランキングの出現時間
+				// 演出０秒出ないなら
+				if (m_nWinOrLoseMoveDuration != 0)
+				{
+					m_nWinOrLoseMovePos = (WIN_START_POS - WIN_OR_LOSE_END_POS ) / static_cast<float>(WIN_MOVE_DURATION);	// 位置
+					m_nWinOrLoseMoveRot = (WIN_START_ROT - WIN_OR_LOSE_END_ROT ) / static_cast<float>(WIN_MOVE_DURATION);	// 向き
+					m_nWinOrLoseMoveSize= (WIN_START_SIZE- WIN_OR_LOSE_END_SIZE) / static_cast<float>(WIN_MOVE_DURATION);	// 大きさ
+					m_nWinOrLoseMoveCol = (WIN_START_COL- WIN_OR_LOSE_END_COL)   / static_cast<float>(WIN_MOVE_DURATION);		// 色
+				}
 			}
 
 			m_pWinOrLose->SetVtx();	// 頂点の設定
-
-			m_nWinOrLoseMoveDelay = WIN_OR_LOSE_MOVE_DELAY;			// ランキングの出現開始時間
-			m_nWinOrLoseMoveDuration = WIN_OR_LOSE_MOVE_DURATION;	// ランキングの出現時間
-			if (m_nWinOrLoseMoveDuration != 0)
-			{
-				m_nWinOrLoseMovePos = (WIN_OR_LOSE_START_POS - WIN_OR_LOSE_END_POS ) / static_cast<float>(WIN_OR_LOSE_MOVE_DURATION);	// 位置
-				m_nWinOrLoseMoveRot = (WIN_OR_LOSE_START_ROT - WIN_OR_LOSE_END_ROT ) / static_cast<float>(WIN_OR_LOSE_MOVE_DURATION);	// 向き
-				m_nWinOrLoseMoveSize= (WIN_OR_LOSE_START_SIZE- WIN_OR_LOSE_END_SIZE) / static_cast<float>(WIN_OR_LOSE_MOVE_DURATION);	// 大きさ
-				m_nWinOrLoseMoveCol = (WIN_OR_LOSE_START_COL- WIN_OR_LOSE_END_COL) / static_cast<float>(WIN_OR_LOSE_MOVE_DURATION);		// 色
-			}
 		}
 	}
 	// 全体

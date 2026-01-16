@@ -96,28 +96,20 @@ namespace My {
 		const std::string LOSE_TEXTURE = "data\\TEXTURE\\YouLose.png";			// 敗北時テクスチャファイルパス
 		// 生成
 		// 叩きつけるような出現
-		//const D3DXVECTOR3	WIN_OR_LOSE_START_POS  =	{500.0f, 1000.0f, 0.0f};	// 勝敗表示初期位置
-		//const D3DXVECTOR3	WIN_OR_LOSE_START_ROT  =	{VEC3_RESET_ZERO};			// 勝敗表示初期向き
-		//const D3DXVECTOR2	WIN_OR_LOSE_START_SIZE =	{1200.0f, 600.0f};			// 勝敗表示初期大きさ
-		//const D3DXCOLOR		WIN_OR_LOSE_START_COL  =	{0.0f, 0.0f, 0.0f, 0.0f};	// 勝敗表示初期の色
-		// constexpr int WIN_OR_LOSE_MOVE_DELAY	=	20;						// 出現開始までの時間
-		// constexpr int WIN_OR_LOSE_MOVE_DURATION	=	5;						// 出現時間
-		
-		// ふわっと出現する
-		//const D3DXVECTOR3 WIN_OR_LOSE_START_POS	=	{500.0f, 500.0f, 0.0f};		// 勝敗表示初期位置
-		//const D3DXVECTOR3 WIN_OR_LOSE_START_ROT	=	{VEC3_RESET_ZERO};			// 勝敗表示初期向き
-		//const D3DXVECTOR2 WIN_OR_LOSE_START_SIZE=	{0.0f, 0.0f};				// 勝敗表示初期大きさ
-		//const D3DXCOLOR WIN_OR_LOSE_START_COL	=	{0.0f, 0.0f, 0.0f, 0.0f};	// 勝敗表示初期の色
-		//constexpr int WIN_OR_LOSE_MOVE_DELAY	=	10;						// 出現開始までの時間
-		//constexpr int WIN_OR_LOSE_MOVE_DURATION	=	30;						// 出現時間
+		const D3DXVECTOR3	WIN_START_POS  =	{500.0f, 1000.0f, 0.0f};	// 勝敗表示初期位置
+		const D3DXVECTOR3	WIN_START_ROT  =	{VEC3_RESET_ZERO};			// 勝敗表示初期向き
+		const D3DXVECTOR2	WIN_START_SIZE =	{1200.0f, 600.0f};			// 勝敗表示初期大きさ
+		const D3DXCOLOR		WIN_START_COL  =	{0.0f, 0.0f, 0.0f, 0.0f};	// 勝敗表示初期の色
+		constexpr int WIN_MOVE_DELAY	=	20;						// 出現開始までの時間
+		constexpr int WIN_MOVE_DURATION	=	5;						// 出現時間
 
 		// ぐにゃっと出現
-		const D3DXVECTOR3 WIN_OR_LOSE_START_POS	=	{500.0f, 500.0f, 0.0f};		// 勝敗表示初期位置
-		const D3DXVECTOR3 WIN_OR_LOSE_START_ROT	=	{0.0f, 0.0f, 300.0f };			// 勝敗表示初期向き
-		const D3DXVECTOR2 WIN_OR_LOSE_START_SIZE=	{400.0f, 200.0f};				// 勝敗表示初期大きさ
-		const D3DXCOLOR WIN_OR_LOSE_START_COL	=	{0.0f, 0.0f, 0.0f, 0.0f};	// 勝敗表示初期の色
-		constexpr int WIN_OR_LOSE_MOVE_DELAY	=	10;						// 出現開始までの時間
-		constexpr int WIN_OR_LOSE_MOVE_DURATION	=	50;						// 出現時間
+		const D3DXVECTOR3	LOSE_START_POS	=	{500.0f, 500.0f, 0.0f};		// 勝敗表示初期位置
+		const D3DXVECTOR3	LOSE_START_ROT	=	{0.0f, 0.0f, 300.0f };			// 勝敗表示初期向き
+		const D3DXVECTOR2	LOSE_START_SIZE	=	{0.0f, 0.0f};				// 勝敗表示初期大きさ
+		const D3DXCOLOR		LOSE_START_COL	=	{0.0f, 0.0f, 0.0f, 0.0f};	// 勝敗表示初期の色
+		constexpr int LOSE_MOVE_DELAY	=	10;						// 出現開始までの時間
+		constexpr int LOSE_MOVE_DURATION	=	50;						// 出現時間
 
 
 		// 表示
