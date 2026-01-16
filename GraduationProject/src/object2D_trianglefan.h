@@ -86,6 +86,11 @@ namespace My
 		{
 			return m_triangleVtx[idx];
 		}
+
+		/**
+		* @brief ステイ時間の設定
+		*/
+		void SetStayTime(float count);
 	private:
 		/**
 		* @brief 中心座標
@@ -102,6 +107,7 @@ namespace My
 		* 分割数
 		*/
 		int m_Divisionnum = 0;
+		int m_OriginalDivisionnum = 0;
 	};
 }
 #endif

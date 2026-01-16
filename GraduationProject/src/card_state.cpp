@@ -533,6 +533,8 @@ void My::CCardStateStay::Update(CCard* cpy, CDuelCharacter* duel)
 
 	//カウントダウン処理
 	CountDown();
+
+	m_pFan->SetStayTime(m_fStaycount);
 }
 
 //=======================================================================================

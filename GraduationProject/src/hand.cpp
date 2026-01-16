@@ -87,12 +87,6 @@ void My::CHand::Update(CPlayerDuelState* state, CActiveSceneCharacter* player)
 	// キーボード取得
 	CInputKeyboard* pkeyboad = CManager::GetInstance()->GetKeyboard();
 
-	// 手札ドロー
-	if (pkeyboad->GetTrigger(DIK_SPACE))
-	{
-		DeckDraw(state);
-	}
-
 	for (auto& iter : state->GetZoneManager()->GetHandZone()->GetList())
 	{
 		iter->Update(state);

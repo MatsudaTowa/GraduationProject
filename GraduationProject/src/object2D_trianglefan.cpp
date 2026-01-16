@@ -13,7 +13,7 @@
 //=============================================
 My::CObject2D_TriangleFan::CObject2D_TriangleFan(int nPriority) :CObject2D_Triangle(nPriority),
 m_triangleVtx(),
-m_Divisionnum(180)
+m_Divisionnum(300)
 {
 }
 
@@ -29,6 +29,8 @@ My::CObject2D_TriangleFan::~CObject2D_TriangleFan()
 //=============================================
 HRESULT My::CObject2D_TriangleFan::Init()
 {
+    m_OriginalDivisionnum = m_Divisionnum;
+
     CTexture* pTex = GET_TEXTURE;
     BindTexture(pTex->GetAddress(pTex->Regist("data/TEXTURE/cardwaitframe_03.png")));
 
@@ -77,6 +79,15 @@ void My::CObject2D_TriangleFan::Draw()
     SetVtxBuff(vtxBuff);
 }
 
+void My::CObject2D_TriangleFan::SetStayTime(float count)
+{
+    // 割合を計算
+    float ratio = 1.0f - (count / 3.0f);
+
+    // 分割数に割合を掛ける
+    m_Divisionnum = m_OriginalDivisionnum * ratio;
+}
+
 //=============================================
 // 頂点生成
 //=============================================
@@ -101,8 +112,8 @@ void My::CObject2D_TriangleFan::SetVtx()
     float x, y;
 
 	float r = 150.0f;
-    float angle = 0.0f;
-    float a = 0.0f;
+    float angle = -D3DX_PI * 0.5f;
+    //float a = 0.0f;
 
     for (int i = 0; i <= m_Divisionnum; ++i)
     {
@@ -133,7 +144,7 @@ void My::CObject2D_TriangleFan::SetVtx()
             pVtx[i].tex = D3DXVECTOR2(u, v); // テクスチャ使わない
 
             angle += (2.0f * D3DX_PI) / m_Divisionnum;
-            a += 1.0f / m_Divisionnum;
+            //a += 1.0f / m_Divisionnum;
         }
     }
 
