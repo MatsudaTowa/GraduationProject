@@ -116,7 +116,11 @@ namespace My
 		 * @brief 重ねるカードの追加
 		 * @param [in]重ねるカード
 		 */
-		inline void AddStackCards(CCardAttack* card) { m_StackedCardsList.push_back(card); }
+		inline void AddStackCards(CCardAttack* card) 
+		{ 
+			m_StackedCardsList.push_back(card);
+			GetState()->Stack();
+		}
 
 		/**
 		 * @brief 重ねたカードの取得
@@ -160,6 +164,11 @@ namespace My
 		//カード情報の読み込み
 		void LoadCardInfo(RakNet::BitStream* bsin) override;
 
+		//ステイ中に並べるカードか
+		bool IsSetUpStay() override;
+
+		//ステイ時間を表示するか
+		bool IsCreatStayCount() override { return m_isTopCastCard; }
 	private:
 
 		AttackType m_AttackType;						// 攻撃の種類

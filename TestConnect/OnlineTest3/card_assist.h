@@ -71,7 +71,10 @@ namespace My
 		bool LoadCastInfo(RakNet::BitStream* bsin, CastDestination destination) override;
 
 		//キャストカードの書き出し
-		void SendCastInfo(RakNet::BitStream* bsout) override {}
+		void SendCastInfo(RakNet::BitStream& bsout) override {}
+
+		//ステイ中のカウントダウンを行うか
+		bool IsStayCountDown() override { return true; }
 
 	private:
 		CCard_Client::AssistType m_AssistType;

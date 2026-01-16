@@ -708,7 +708,7 @@ void CDuel_Data::SendCastCard(RakNet::RakPeerInterface* peer, My::CCard* castcar
     bsOut.Write(castcard->GetStartCastTime());                                  //カードのキャスト開始時間
 
     //カード情報の書き出し
-    castcard->SendCastInfo(&bsOut);
+    castcard->SendCastInfo(bsOut);
 
     ////ターゲット数だけ周回して書き出し
     //for (int TargetId : castcard->GetTargetIdVector())

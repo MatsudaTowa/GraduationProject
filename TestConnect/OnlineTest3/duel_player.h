@@ -67,7 +67,7 @@ namespace My
 		static constexpr int ENERGY_UP_TIME{ 3000 };
 
 		//変数
-		Status m_Status = { 40, 0, 0, 0, 10 };	//ステータス
+		Status m_Status = { 40, 0, 0, 20, 10 };	//ステータス
 		RakNet::Time m_ElapsedTime;				//経過時間
 
 		//TODOここに対戦中に受け取る変数を追加

@@ -425,8 +425,8 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 
 	cpy->Stay();
 
-	//ディフェンスカードはカウントダウンを始めない
-	if (cpy->GetBaseStatus().maintype == CCard::TYPE_DEFFENCE) return;
+	//カウントを始めないか
+	if (!cpy->IsCreatStayCount()) return;
 
 	if (m_pNumber == nullptr)
 	{
@@ -496,7 +496,7 @@ void My::CCardStateStay::Update(CCard* cpy, CDuelCharacter* duel)
 	cpy->SetSize({ mag * 1.2f,mag,mag });
 
 	//ディフェンスカードはカウントダウンを始めない
-	if (cpy->GetBaseStatus().maintype == CCard::TYPE_DEFFENCE) return;
+	if (!cpy->IsCreatStayCount()) return;
 
 	if (m_fStaycount >= 3.0f)
 	{// カウントが設定された時間を超えたら

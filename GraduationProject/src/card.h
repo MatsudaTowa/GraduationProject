@@ -352,6 +352,12 @@ namespace My
 		//カード情報の読み込み
 		virtual void LoadCardInfo(RakNet::BitStream* bsin) = 0;
 
+		//ステイ中に並べるカードか
+		virtual bool IsSetUpStay() = 0;
+
+		//ステイ時間を表示するか
+		virtual bool IsCreatStayCount() = 0;
+
 	private:
 
 		//次の列挙から過去のゾーンのポインタを返す

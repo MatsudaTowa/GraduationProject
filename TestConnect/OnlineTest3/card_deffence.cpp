@@ -219,7 +219,7 @@ bool My::CCardDeffence::LoadCastInfo(RakNet::BitStream* bsin, CastDestination de
 //===========================================================================================================
 //キャスト情報の書き出し
 //===========================================================================================================
-void My::CCardDeffence::SendCastInfo(RakNet::BitStream* bsout)
+void My::CCardDeffence::SendCastInfo(RakNet::BitStream& bsout)
 {
 	//列挙に応じて処理を送信内容を変更
 	switch (GetCastDestination())
@@ -231,9 +231,9 @@ void My::CCardDeffence::SendCastInfo(RakNet::BitStream* bsout)
 	case CastDestination::CARD:	//カードの場合
 
 		//重ね先のカード情報を送信
-		bsout->Write(m_TargetInfo[0].nAttackCardUserId);	//対象カードの使用者番号
-		bsout->Write(m_TargetInfo[0].nTargetCardId);		//カード番号
-		bsout->Write(m_TargetInfo[0].nTargetCardSameId);	//同種番号
+		bsout.Write(m_TargetInfo[0].nAttackCardUserId);	//対象カードの使用者番号
+		bsout.Write(m_TargetInfo[0].nTargetCardId);		//カード番号
+		bsout.Write(m_TargetInfo[0].nTargetCardSameId);	//同種番号
 
 		break;
 

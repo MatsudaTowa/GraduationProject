@@ -172,7 +172,7 @@ void My::CTargetArrow::SetCardPos(CCard* card)
 	for (auto iter : m_TopCardList)
 	{
 		//守備カードは飛ばす
-		if (iter->GetBaseStatus().maintype == CCard::CARDTYPE_::TYPE_DEFFENCE) continue;
+		if (!iter->IsSetUpStay()) continue;
 
 		CardNum++;	//カード数の加算
 	}
@@ -199,7 +199,7 @@ void My::CTargetArrow::SetCardPos(CCard* card)
 	for (auto& iter : m_TopCardList)
 	{
 		//守備カードは飛ばす
-		if (iter->GetBaseStatus().maintype == CCard::CARDTYPE_::TYPE_DEFFENCE) continue;
+		if (!iter->IsSetUpStay()) continue;
 
 		iter->SetPos({ fLength * sinf(fAngle + D3DX_PI) + world_attackerpos.x, 0.0f, fLength * cosf(fAngle + D3DX_PI) + world_attackerpos.z});
 		fLength -= fWidth;	//幅の値だけ減らす

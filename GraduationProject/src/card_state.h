@@ -64,6 +64,9 @@ namespace My
 		/** @brief 設定 */
 		void Copy([[maybe_unused]]CCard* cpy);
 
+		/** @brief 重ね時の処理 */
+		virtual void Stack() {}
+
 	protected:
 		//My::CCard* m_pCardCpy;
 	private:
@@ -168,6 +171,9 @@ namespace My
 
 		/** @brief ステイ時間のリセット */
 		void ResetStayTime() { m_fStaycount = 0.0f; }
+
+		/** @brief 重ね時の処理 */
+		void Stack() override { ResetStayTime(); }
 
 	private:
 

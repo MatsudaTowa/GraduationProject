@@ -126,85 +126,7 @@ void My::CCardAttack::Stay()
 //===========================================================================================================
 void My::CCardAttack::Trigger()
 {
-	////リスト周回
-	//for (auto& itr : GetTargetPlayer(GetTargetIdVector()))
-	//{
-	//	if (itr == nullptr) { continue; }
-
-	//	//守備カードの周回
-	//	for (auto& iter : m_DefCardVector)
-	//	{
-	//		if (iter->GetStateNum() != CCardState::CARD_STAY) continue;
-
-	//		//守備の値だけダメージを減らす
-	//		nDamage -= iter->GetDefenceValue();
-
-	//		//ターゲットの守備カードの状態を変更
-	//		iter->ChangeState(CCardState::CARD_TRIGGER, DuelState);
-	//	}
-
-	//	//ダメージがあるなら与える
-	//	if (nDamage > 0)
-	//	{
-	//		itr->ReceiveDamage(nDamage);
-	//	}
-	//}
-
-	////カードのクリア
-	//m_DefCardVector.clear();
-
-	//周回
-	//for (auto& iter : GetTargetPlayer(GetTargetIdVector()))
-	//{
-	//	if (iter == nullptr) { continue; }
-
-	//	//if (iter->GetArea() != GetTarget()) { continue; }
-
-	//	// ゾーンマネージャーの取得
-	//	CZoneManager* pZoneManager = nullptr;
-	//	pZoneManager = dynamic_cast<CZoneManager*>(iter->GetZoneManager());
-
-	//	//攻撃の合計値
-	//	int nTotalAttackValue = 0.0f;
-
-	//	/*for (auto& pCard : pZoneManager->GetCastPreviewZone()->GetList())
-	//	{
-	//		CCardAttack* pAttackCard = dynamic_cast<CCardAttack*>(pCard);
-
-	//		if (pAttackCard == nullptr)
-	//			continue;
-
-	//		nTotalAttackValue += pAttackCard->GetAttackValue();
-	//	}*/
-
-	//	nTotalAttackValue += m_nAttackValue;
-
-	//	//ダメージの計算
-	//	int nDamage = nTotalAttackValue;	//与えるダメージ
-
-	//	////TODO : デュエル状態を参照できる場所が必要
-	//	//CDuelCharacter* DuelState = dynamic_cast<CDuelCharacter*>(iter->GetState());	//キャスト
-	//	//if (DuelState == nullptr) continue;											//中身の確認
-
-	//	//守備カードの周回
-	//	for (auto& pDefCard : m_DefCardVector)
-	//	{
-	//		if (pDefCard->GetStateNum() != CCardState::CARD_STAY) continue;
-
-	//		//守備の値だけダメージを減らす
-	//		nDamage -= pDefCard->GetDefenceValue();
-
-	//		//ターゲットの守備カードの状態を変更
-	//		pDefCard->ChangeState(CCardState::CARD_TRIGGER, iter);
-	//	}
-
-	//	//ダメージがあるなら与える
-	//	if (nDamage > 0)
-	//	{
-	//		iter->ReceiveDamage(nDamage);
-	//	}
-	//}
-
+	//ダメージ対象の数だけ周回
 	for (auto& Damage : m_DamageInfo)
 	{
 		//対象を取得
@@ -229,6 +151,18 @@ void My::CCardAttack::Trigger()
 		}
 	}
 
+	//重ねているカードを墓地状態にする
+	for (auto& StackCard : m_StackedCardsList)
+	{
+		//状態とゾーンの変更
+		StackCard->ChangeState(CCardState::CARD_CEMETERY, CDuel_Player_Manager::GetInstance()->GetDuelPlayer(StackCard->GetUserId()));
+		CDuel_Player_Manager::GetInstance()->GetDuelPlayer(StackCard->GetUserId())->GetZoneManager()->MoveZone(this, CastToZone(GetCurrentZone(), CDuel_Player_Manager::GetInstance()->GetDuelPlayer(StackCard->GetUserId())), CDuel_Player_Manager::GetInstance()->GetDuelPlayer(StackCard->GetUserId())->GetZoneManager()->GetCemetery(), true);
+		StackCard->SetCurrentZone(CCard::CEMETERY);
+	}
+
+	//重ねカードのクリア
+	m_StackedCardsList.clear();
+
 	//クライアントにトリガー情報を送信
 	CRakNet_Server::GetInstance()->SendTriggerCard(this);
 
@@ -244,6 +178,9 @@ void My::CCardAttack::Trigger()
 //===========================================================================================================
 void My::CCardAttack::SendTriggerData(RakNet::BitStream* bsout)
 {
+	//カードの書き出し
+	//bsout->Write(m_StackedCardsList.size());	//重ねているカードの数
+
 	return;
 
 	//カードの書き出し
@@ -378,7 +315,7 @@ void My::CCardAttack::AddDamage(int damage)
 //===========================================================================================================
 //キャスト情報の書き出し
 //===========================================================================================================
-void My::CCardAttack::SendCastInfo(RakNet::BitStream* bsout)
+void My::CCardAttack::SendCastInfo(RakNet::BitStream& bsout)
 {
 	//列挙に応じて処理を送信内容を変更
 	switch (GetCastDestination())
@@ -386,13 +323,13 @@ void My::CCardAttack::SendCastInfo(RakNet::BitStream* bsout)
 	case CastDestination::AREA:	//エリアの場合
 
 		//ターゲットの数を書き出し(クライアント側でサイズが消失しているため一時的に二つに)
-		bsout->Write((int)GetTargetIdVector().size());
-		bsout->Write((int)GetTargetIdVector().size());
+		bsout.Write((int)GetTargetIdVector().size());
+		bsout.Write((int)GetTargetIdVector().size());
 
 		//ターゲットの番号を書き出し
 		for (int Id : GetTargetIdVector())
 		{
-			bsout->Write(Id);
+			bsout.Write(Id);
 		}
 
 		break;
@@ -400,9 +337,13 @@ void My::CCardAttack::SendCastInfo(RakNet::BitStream* bsout)
 	case CastDestination::CARD:	//カードの場合
 
 		//重ね先のカード情報を送信
-		bsout->Write(GetStackCard()->GetBaseStatus().nCardID);	//カード番号
-		bsout->Write(GetStackCard()->GetSameTypeId());			//同種番号
-
+	{
+		CCardAttack* pAttackCard = GetStackCard();
+		bsout.Write((int)pAttackCard->GetBaseStatus().nCardID);	//カード番号(謎にここの読み込みが消えているのでもう一つ送るバグです)
+		bsout.Write((int)pAttackCard->GetBaseStatus().nCardID);	//カード番号
+		bsout.Write((int)pAttackCard->GetSameTypeId());			//同種番号
+	}
+		
 		break;
 
 	default:
