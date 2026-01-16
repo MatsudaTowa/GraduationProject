@@ -15,7 +15,7 @@ namespace My
 {
 	// 前方宣言
 	class CCard;
-	//class CDuelCharacter;
+	class CObject2D_TriangleFan;
 
 	/** 
 	* @brief カードのステートクラス 
@@ -63,6 +63,9 @@ namespace My
 
 		/** @brief 設定 */
 		void Copy([[maybe_unused]]CCard* cpy);
+
+		/** @brief 重ね時の処理 */
+		virtual void Stack() {}
 
 	protected:
 		//My::CCard* m_pCardCpy;
@@ -169,6 +172,9 @@ namespace My
 		/** @brief ステイ時間のリセット */
 		void ResetStayTime() { m_fStaycount = 0.0f; }
 
+		/** @brief 重ね時の処理 */
+		void Stack() override { ResetStayTime(); }
+
 	private:
 
 		/** @brief 対象によってカードの位置を設定 */
@@ -187,6 +193,7 @@ namespace My
 		CNumber_2D* m_pNumber;	//数字表示用オブジェクト
 		float m_fCount;			//カウント値
 		int m_nDrawNum;			//描画する数字
+		CObject2D_TriangleFan* m_pFan;	// ステイ時間の視覚的表示
 	};
 
 	/**

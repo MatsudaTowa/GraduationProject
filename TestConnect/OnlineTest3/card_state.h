@@ -57,6 +57,9 @@ namespace My
 		/** @brief 設定 */
 		void Copy([[maybe_unused]]CCard* cpy);
 
+		/** @brief 重ね時の処理 */
+		virtual void Stack() {}
+
 	protected:
 		//My::CCard* m_pCardCpy;
 	private:
@@ -141,14 +144,12 @@ namespace My
 		/** @brief 更新 */
 		void Update(CCard* cpy, CDuel_Player* duel)override;
 
+		/** @brief 重ね時の処理 */
+		void Stack() override { m_fStaycount = 0.0f; }
+
 	private:
 
-		/** @brief 対象によってカードの位置を設定 */
-		void CountDown();
-
 		//変数
-		//RakNet::Time m_OldTime;		//前回の時間
-		//RakNet::Time m_ElapsedTime;	//経過時間
 		/** @brief 待機カウント */
 		float m_fStaycount;
 	};

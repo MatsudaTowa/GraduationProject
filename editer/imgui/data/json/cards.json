@@ -162,8 +162,8 @@
         {
             "Pack ID": 1,
             "Card ID": 12,
-            "Card Name": "ソウルウォール",
-            "Card Name Ruby": "",
+            "Card Name": "魂の壁",
+            "Card Name Ruby": "ソウルウォール",
             "image": "soul_wall.jpg",
             "cost": 5,
             "rarity": 1,

@@ -255,6 +255,7 @@
     <ClCompile Include="src\object2D.cpp" />
     <ClCompile Include="src\object2D_anim.cpp" />
     <ClCompile Include="src\object2D_trapezoid.cpp" />
+    <ClCompile Include="src\object2D_trianglefan.cpp" />
     <ClCompile Include="src\object3D.cpp" />
     <ClCompile Include="src\object3D_anim.cpp" />
     <ClCompile Include="src\objectX.cpp" />
@@ -285,6 +286,7 @@
     <ClCompile Include="src\scene.cpp" />
     <ClCompile Include="src\selection_range.cpp" />
     <ClCompile Include="src\shadow.cpp" />
+    <ClCompile Include="src\stay_number.cpp" />
     <ClCompile Include="src\wait.cpp" />
     <ClCompile Include="src\target_arrow.cpp" />
     <ClCompile Include="src\target_arrow_manager.cpp" />
@@ -396,6 +398,7 @@
     <ClInclude Include="src\object2D.h" />
     <ClInclude Include="src\object2D_anim.h" />
     <ClInclude Include="src\object2D_trapezoid.h" />
+    <ClInclude Include="src\object2D_trianglefan.h" />
     <ClInclude Include="src\object3D.h" />
     <ClInclude Include="src\object3D_anim.h" />
     <ClInclude Include="src\objectX.h" />
@@ -424,6 +427,7 @@
     <ClInclude Include="src\selection_range.h" />
     <ClInclude Include="src\shadow.h" />
     <ClInclude Include="src\status_icon.h" />
+    <ClInclude Include="src\stay_number.h" />
     <ClInclude Include="src\wait.h" />
     <ClInclude Include="src\target_arrow.h" />
     <ClInclude Include="src\target_arrow_manager.h" />

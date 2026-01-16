@@ -11,6 +11,7 @@
 #include "zone_manager.h"
 #include "duel_manager.h"
 #include "raknet.h"
+#include "object2D_trianglefan.h"
 
 //===========================================================================================================
 // 
@@ -394,7 +395,8 @@ My::CCardStateStay::CCardStateStay() :
 	m_pNumber(nullptr),			//数字表示用
 	m_fCount(0.0f),				//カウント
 	m_nDrawNum(FIRST_COUNT),	//表示する番号
-	m_fStaycount(0.0f)			//ステイ時間
+	m_fStaycount(0.0f),			//ステイ時間
+	m_pFan(nullptr)
 {
 	
 }
@@ -425,8 +427,8 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 
 	cpy->Stay();
 
-	//ディフェンスカードはカウントダウンを始めない
-	if (cpy->GetBaseStatus().maintype == CCard::TYPE_DEFFENCE) return;
+	//カウントを始めないか
+	if (!cpy->IsCreatStayCount()) return;
 
 	if (m_pNumber == nullptr)
 	{
@@ -444,6 +446,11 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 	{
 		CActiveSceneManager::GetInstance()->GetTargetArrowManager()->Regist(CTargetArrow::Create(cpy->GetUserArea(), iter->GetArea(), cpy), cpy);
 	}
+
+	m_pFan = new CObject2D_TriangleFan(20);
+	m_pFan->SetPos(ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), cpy->GetPos()));
+	m_pFan->Init();
+
 }
 
 //=======================================================================================
@@ -496,7 +503,7 @@ void My::CCardStateStay::Update(CCard* cpy, CDuelCharacter* duel)
 	cpy->SetSize({ mag * 1.2f,mag,mag });
 
 	//ディフェンスカードはカウントダウンを始めない
-	if (cpy->GetBaseStatus().maintype == CCard::TYPE_DEFFENCE) return;
+	if (!cpy->IsCreatStayCount()) return;
 
 	if (m_fStaycount >= 3.0f)
 	{// カウントが設定された時間を超えたら

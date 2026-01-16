@@ -82,6 +82,12 @@ namespace My
 		//カード情報の読み込み
 		void LoadCardInfo(RakNet::BitStream* bsin) override {}
 
+		//ステイ中に並べるカードか
+		bool IsSetUpStay() override { return true; }
+
+		//ステイ時間を表示するか
+		bool IsCreatStayCount() override { return true; }
+
 	private:
 		AssistType m_AssistType;
 	};

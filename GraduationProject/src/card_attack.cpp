@@ -145,8 +145,8 @@ bool My::CCardAttack::IsCast(CDuelCharacter*, CInputMouse::AREA)
 			resultpos.y = mousepos.y - screenpos.y;
 
 			// 矩形判定
-			if (resultpos.x <= 50.0f * GetSize().x && resultpos.x >= -50.0f * GetSize().x &&
-				resultpos.y <= 100.0f * GetSize().y && resultpos.y >= -100.0f * GetSize().y)
+			if (resultpos.x <= /*50.0f * */GetSize().x && resultpos.x >= -/*50.0f * */GetSize().x &&
+				resultpos.y <= /*100.0f * */GetSize().y && resultpos.y >= -/*100.0f * */GetSize().y)
 			{
 				//攻撃カードにキャストして自身を追加する
 				CCardAttack* pAttackCard = dynamic_cast<CCardAttack*>(iter);
@@ -626,4 +626,12 @@ void My::CCardAttack::LoadCardInfo(RakNet::BitStream* bsin)
 	default:
 		break;
 	}
+}
+
+//===========================================================================================================
+//カード情報読み込み
+//===========================================================================================================
+bool My::CCardAttack::IsSetUpStay()
+{
+	return m_isTopCastCard;
 }

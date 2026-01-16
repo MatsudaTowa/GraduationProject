@@ -218,7 +218,10 @@ namespace My
 		virtual bool LoadCastInfo(RakNet::BitStream* bsin, CastDestination destination) = 0;
 
 		//キャストカードの書き出し
-		virtual void SendCastInfo(RakNet::BitStream* bsout) = 0;
+		virtual void SendCastInfo(RakNet::BitStream& bsout) = 0;
+
+		//ステイ中のカウントダウンを行うか
+		virtual bool IsStayCountDown() = 0;
 
 	private:
 

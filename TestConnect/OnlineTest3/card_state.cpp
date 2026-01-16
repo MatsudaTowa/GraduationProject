@@ -215,8 +215,6 @@ void My::CCardStateStay::Init(CCard* cpy, CDuel_Player* /*duel*/)
 {
 	// カウントを初期化
 	m_fStaycount = static_cast<float>(CDuel_Manager::GetInstance()->GetDuelTimer().GetElapsedTime() * 0.001f) - cpy->GetStartCastTime();
-
-	//cpy->Stay();
 }
 
 //=======================================================================================
@@ -227,53 +225,23 @@ void My::CCardStateStay::Update(CCard* cpy, CDuel_Player* duel)
 	if (cpy == nullptr)
 		return;
 
-	//ディフェンスカードはカウントダウンを始めない
-	if (cpy->GetBaseStatus().Maintype == CCard_Client::CardType::DEFENSE) return;
+	//カウントをしないカードは飛ばす
+	if (!cpy->IsStayCountDown())
+	{
+		return;
+	}
 
+	// カウントが設定された時間を超えたら
 	if (m_fStaycount >= 3.0f)
-	{// カウントが設定された時間を超えたら
-
+	{
 		// トリガー状態にする
 		cpy->ChangeState(CCardState::CARD_STATE::CARD_TRIGGER, duel);
 
 		return;
 	}
 
-	//if (m_Staycount >= STAY_TIME)
-	//{// カウントが設定された時間を超えたら
-
-	//	//オブジェクトの破棄
-	//	if (m_pNumber != nullptr)
-	//	{
-	//		m_pNumber->Uninit();
-	//		m_pNumber = nullptr;
-	//	}
-
-	//	// トリガー状態にする
-	//	cpy->ChangeState(CCardState::CARD_STATE::CARD_TRIGGER, duel);
-	//	
-	//	return;
-	//}
-
-	//// カウントを進める
-	//m_Staycount++;
-
 	//時間の更新
 	m_fStaycount += CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime() * 0.001f;
-
-	//カウントダウン処理
-	CountDown();
-}
-
-//=======================================================================================
-// カウントダウン処理
-//=======================================================================================
-void My::CCardStateStay::CountDown()
-{
-	////経過時間を取得
-	//RakNet::Time CurrentTime = RakNet::GetTime();	//現在の時間を取得
-	//m_ElapsedTime = CurrentTime - m_OldTime;		//経過時間を算出
-	//m_OldTime = CurrentTime;						//今の時間
 }
 
 //===========================================================================================================

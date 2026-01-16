@@ -24,7 +24,7 @@ HRESULT My::CResultRanking::Init()
 {
  	CObject2D::Init();
 
-	SetPos(VEC3_RESET_ZERO);
+	SetPos(VEC3_RESET_ZERO);	// 
 	SetSize(D3DXVECTOR2(50.0f, 50.0f));
 	SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	SetVtx();

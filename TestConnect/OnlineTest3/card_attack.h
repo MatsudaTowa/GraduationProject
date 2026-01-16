@@ -109,7 +109,11 @@ namespace My
 		 * @brief 重ねるカードの追加
 		 * @param [in]重ねるカード
 		 */
-		inline void AddStackCards(CCardAttack* card) { m_StackedCardsList.push_back(card); }
+		inline void AddStackCards(CCardAttack* card) 
+		{ 
+			m_StackedCardsList.push_back(card);
+			GetState()->Stack();
+		}
 
 		/**
 		 * @brief 重ねたカードの取得
@@ -163,7 +167,10 @@ namespace My
 		void AddTargetIdVector(int id) override;	//追加
 
 		//キャストカードの書き出し
-		void SendCastInfo(RakNet::BitStream* bsout) override;
+		void SendCastInfo(RakNet::BitStream& bsout) override;
+
+		//ステイ中のカウントダウンを行うか
+		bool IsStayCountDown() override { return m_isTopCastCard; }
 
 	private:
 
