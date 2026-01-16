@@ -91,11 +91,8 @@ namespace My {
 		constexpr int MY_PLAYER_BLINK = 30;							// 自プレイヤー強調表示間隔
 		constexpr float MY_PLAYER_BLINK_LIGHT_INTENSITY = 0.02f;	// 自プレイヤー強調表示光量
 
-		// 勝敗
+		// 勝利出現設定
 		const std::string WIN_TEXTURE  = "data\\TEXTURE\\YouWin.png";			// 勝利時テクスチャファイルパス
-		const std::string LOSE_TEXTURE = "data\\TEXTURE\\YouLose.png";			// 敗北時テクスチャファイルパス
-		// 生成
-		// 叩きつけるような出現
 		const D3DXVECTOR3	WIN_START_POS  =	{500.0f, 1000.0f, 0.0f};	// 勝敗表示初期位置
 		const D3DXVECTOR3	WIN_START_ROT  =	{VEC3_RESET_ZERO};			// 勝敗表示初期向き
 		const D3DXVECTOR2	WIN_START_SIZE =	{1200.0f, 600.0f};			// 勝敗表示初期大きさ
@@ -103,7 +100,8 @@ namespace My {
 		constexpr int WIN_MOVE_DELAY	=	20;						// 出現開始までの時間
 		constexpr int WIN_MOVE_DURATION	=	5;						// 出現時間
 
-		// ぐにゃっと出現
+		// 敗北出現設定
+		const std::string LOSE_TEXTURE = "data\\TEXTURE\\YouLose.png";			// 敗北時テクスチャファイルパス
 		const D3DXVECTOR3	LOSE_START_POS	=	{500.0f, 500.0f, 0.0f};		// 勝敗表示初期位置
 		const D3DXVECTOR3	LOSE_START_ROT	=	{0.0f, 0.0f, 300.0f };			// 勝敗表示初期向き
 		const D3DXVECTOR2	LOSE_START_SIZE	=	{0.0f, 0.0f};				// 勝敗表示初期大きさ

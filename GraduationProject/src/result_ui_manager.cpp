@@ -298,6 +298,7 @@ void My::CResultUIManager::Update()
 		|| pMouse->GetTrigger(0))
 		&& m_nEffectCount > 0)
 	{
+		m_nEffectCount = 1;
 		// ƒ‰ƒ“ƒLƒ“ƒO
 		for (int nCnt = 0; nCnt < MAX_RANKING_COUNT; nCnt++)
 		{
