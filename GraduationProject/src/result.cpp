@@ -51,7 +51,8 @@ HRESULT My::CResult::Init()
     {
         //****************************
         // TODO : 仮で順位を設定している
-        int nPlayerNum = 3; // プレイヤー番号 0 = 1p
+        //****************************
+        int nPlayerNum = 0; // プレイヤー番号 0 = 1p
         int nRunking[MAX_RANKING_COUNT] = {0, 1, 2, 3};   // ランキング
 
         if (m_pUIManager = CResultUIManager::Create(nRunking, nPlayerNum); m_pUIManager == nullptr)
@@ -86,15 +87,21 @@ void My::CResult::Update()
     CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;
     CInputMouse* pMouse = GET_INPUT_MOUSE;
 
-    if (pKeyboard->GetTrigger(DIK_RETURN) 
-        || pMouse->GetTrigger(0))
-    {
-        //タイトルに戻る
-        GET_FADE->SetFade(CScene::MODE::MODE_TITLE);
-    }
+    bool bIsEndEffect = false;  // エフェクトの終了状態格納用
+    // UIマネージャー更新
     if (m_pUIManager != nullptr)
     {
         m_pUIManager->Update();
+        bIsEndEffect = m_pUIManager->IsEndEffect();
+    }
+    else bIsEndEffect = true;
+
+    if ((pKeyboard->GetTrigger(DIK_RETURN) 
+        || pMouse->GetTrigger(0))
+        && bIsEndEffect)
+    {
+        //タイトルに戻る
+        GET_FADE->SetFade(CScene::MODE::MODE_TITLE);
     }
 }
 
