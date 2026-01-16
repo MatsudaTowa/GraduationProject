@@ -363,9 +363,11 @@ bool My::CCard::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharacter* pla
 		ChangeState(CCardState::CARD_SELECT, duel);
 		CActiveSceneManager::GetInstance()->ChangeState(new CCardCast);
 
+		resultpos = GetPos();
+
 		screenpos = pMouse->GetMousePos();
-		CalcScreenToWorld(&resultpos, screenpos.x, screenpos.y, 1.0f, static_cast<int>(width), static_cast<int>(height), &View, &Proj);
-		resultpos.y += 20.0f;
+		resultpos = ConvertToWorldPoint(GET_CAMERA(GET_CAMERA_IDX), screenpos, VEC3_RESET_ZERO);
+
 		SetPos(resultpos);
 
 		return true;
