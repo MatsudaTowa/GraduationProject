@@ -258,6 +258,12 @@ void My::CPlayerDuelState::EnergyUp(CActiveScenePlayer* player)
 {
 	int energy = player->GetEnergy();
 
+	//エナジー最大なら更新しない
+	if (energy >= 99)
+	{
+		return;
+	}
+
 #ifdef _DEBUG
 	
 	if (GET_INPUT_KEYBOARD->GetPress(DIK_1))

@@ -30,6 +30,12 @@ My::CDuel_Player::CDuel_Player() :
 //=====================================
 bool My::CDuel_Player::UpdateEnergy(int deltatime)
 {
+	//エナジーが最大なら更新しない
+	if (m_Status.energy >= 99)
+	{
+		return false;
+	}
+
 	//デルタタイムの追加
 	m_ElapsedTime += deltatime;
 

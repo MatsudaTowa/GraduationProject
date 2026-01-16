@@ -934,6 +934,7 @@ void CDuel_Data::UpdateDuelPlayer(int delta)
     //プレイヤーの更新
     for (auto& iter : My::CDuel_Player_Manager::GetInstance()->GetList())
     {
+        //エナジーの更新
         if (iter->UpdateEnergy(delta))
         {
             isSend = true;
