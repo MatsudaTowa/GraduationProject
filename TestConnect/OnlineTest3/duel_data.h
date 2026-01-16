@@ -39,6 +39,7 @@ public:
 	void UpdateScene(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;			//シーンの更新
 	bool ReceiveDeck(RakNet::Packet* packet) override;											//デッキの受信
 	void ReceiveDrawCard(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;		//カードのドロー処理の受信
+	bool ReceiveGameSet(RakNet::Packet* packet) override;										//試合終了の受信
 
 	//プレイヤーのデータリスト
 	void SetData(std::list<CPlayer::ChangeData> data) override;	//設定
@@ -97,6 +98,7 @@ private:
 	int m_nReceiveNum;											//ステータスを受信した数
 	std::list<CastCardInfo> m_CastCardList;						//キャストカードのリスト
 	std::vector<CastDiffenceCardInfo> m_CastDiffenceCardVector;	//キャスト守備カードのリスト
+	int m_nGameSetPlayerNum;									//ゲームを終了したプレイヤーの数
 };
 
 #endif

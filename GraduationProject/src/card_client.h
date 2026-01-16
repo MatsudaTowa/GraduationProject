@@ -183,11 +183,12 @@ public:
 	void Uninit();												//終了処理
 
 	//通信
-	void Communication();							//通信処理
-	void RequestCard(int id);						//カードリクエスト
-	void RequestAllCard();							//全カードリクエスト
-	void ReceiveCardInfo(RakNet::Packet* packet);	//カード情報の受信
-	void ReceiveAllCardInfo(RakNet::Packet* packet);//全カード情報の受信
+	void Communication();										//通信処理
+	void RequestCard(int id);									//カードリクエスト
+	void RequestAllCard();										//全カードリクエスト
+	void ReceiveCardInfo(RakNet::Packet* packet);				//カード情報の受信
+	void ReceiveAllCardInfo(RakNet::Packet* packet);			//全カード情報の受信
+	bool GetIsReceiveCardInfo() { return m_isReceiveCardInfo; }	//カードの情報を受信しているか
 
 private:
 
@@ -203,6 +204,7 @@ private:
 	//メンバ変数
 	RakNet::Packet* m_pPacket;			//パケット
 	RakNet::RakPeerInterface* m_pPeer;	//ピア(接続用)
+	bool m_isReceiveCardInfo;			//カード情報を受信しているか
 };
 
 #endif

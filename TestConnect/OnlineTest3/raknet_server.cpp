@@ -13,6 +13,7 @@
 #include "GetTime.h"
 #include "duel_player_manager.h"
 #include "duel_player.h"
+#include "duel_manager.h"
 
 //静的変数の宣言
 CRakNet_Data* CRakNet_Server::m_pRakNetData = nullptr;
@@ -29,8 +30,6 @@ CRakNet_Server::CRakNet_Server() :
 {
     //動的確保
     m_pRakNetData = new CLobby_Data;
-
-    RakNet::Time now = RakNet::GetTime();
 }
 
 //=====================================
@@ -140,10 +139,23 @@ void CRakNet_Server::Communication(RakNet::RakPeerInterface* peer)
                     ChangeData(new CLobby_Data);
                 }
 
+                //接続人数が0になったらリセット
+                if (peer->NumberOfConnections() == 0)
+                {
+                    Reset();
+                }
+
                 break;
             case ID_CONNECTION_LOST:
                 std::cout << "クライアントの接続が失われました\n";
                 m_pRakNetData->DisConnection(packet, peer);
+
+                //接続人数が0になったらリセット
+                if (peer->NumberOfConnections() == 0)
+                {
+                    Reset();
+                }
+
                 break;
             case CRakNet_Data::GameMessages::ID_GAME_MESSAGE_1:
 
@@ -243,6 +255,16 @@ void CRakNet_Server::Communication(RakNet::RakPeerInterface* peer)
 
                 m_pRakNetData->ReceiveCastDefCard(packet);
                 break;
+
+            case CRakNet_Data::GameMessages::ID_DUEL_MESSAGE_GAMESET:
+
+                //プレイヤーの人数分受信したら
+                if (m_pRakNetData->ReceiveGameSet(packet))
+                {
+                    //リセット処理
+                    Reset();
+                }
+                
 
             default:
                 std::cout << "Message with identifier " << (int)packet->data[0] << " has arrived.\n";
@@ -416,4 +438,27 @@ bool CRakNet_Server::IsSendGameSet()
     }
 
     return false;
+}
+
+//=====================================
+//リセット処理
+//=====================================
+void CRakNet_Server::Reset()
+{
+    //データの中身を確認
+    if (m_pRakNetData != nullptr)
+    {
+        //削除
+        delete m_pRakNetData;
+        m_pRakNetData = nullptr;
+    }
+
+    m_pRakNetData = new CLobby_Data;
+
+    //プレイヤーのリストを削除
+    My::CDuel_Player_Manager::GetInstance()->Uninit();
+
+    //対戦時のタイマーを開始
+    CDuel_Manager::GetInstance()->GetDuelTimer().Stop();
+    CDuel_Manager::GetInstance()->GetDuelTimer().Reset();
 }

@@ -201,6 +201,21 @@ void CRakNet::Communication(RakNet::RakPeerInterface* peer)
 
         case ID_DUEL_MESSAGE_GAMESET:
             My::CActiveSceneManager::GetInstance()->SetFinish(true);
+            //peer->CloseConnection(serverAddress, true);
+
+            //一度接続を終了
+            m_pPeer->Shutdown(100); //100ミリ秒後破棄
+
+            //クラスの破棄
+            if (m_Client != nullptr)
+            {
+                delete m_Client;
+                m_Client = nullptr;
+            }
+
+            //オフラインに設定
+            CRakNet::GetInstance()->SetOnline(false);
+
             break;
 
         case ID_UNCONNECTED_PONG:
@@ -218,6 +233,9 @@ void CRakNet::Communication(RakNet::RakPeerInterface* peer)
             std::cout << "Message with identifier " << (int)packet->data[0] << " has arrived.\n";
             break;
         }
+
+        //オフラインなら抜ける
+        if (!m_isOnline) break;
     }
 }
 

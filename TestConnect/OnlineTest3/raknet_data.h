@@ -77,6 +77,7 @@ public:
 	virtual void UpdateScene(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) = 0;				//シーンの更新
 	void SendRequestDeck(RakNet::RakPeerInterface* peer);												//デッキの要求
 	virtual void ReceiveDrawCard(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) = 0;			//カードのドロー処理の受信
+	virtual bool ReceiveGameSet(RakNet::Packet* packet) = 0;											//試合終了の受信
 
 	//設定と取得
 	virtual bool IsPlayerExist() = 0;	//プレイヤーが存在するか

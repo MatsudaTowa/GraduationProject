@@ -16,8 +16,9 @@
 //コンストラクタ
 //=====================================
 CCard_Client::CCard_Client() :
-    m_pPacket(nullptr),	//パケット
-    m_pPeer(nullptr)    //ピア
+    m_pPacket(nullptr),	        //パケット
+    m_pPeer(nullptr),           //ピア
+    m_isReceiveCardInfo(false)  //カード情報を受信したか
 {
    
 }
@@ -358,4 +359,6 @@ void CCard_Client::ReceiveAllCardInfo(RakNet::Packet* packet)
         //RegistCard(CardParam);
     }
 
+    //受信のフラグを立てる
+    m_isReceiveCardInfo = true;
 }

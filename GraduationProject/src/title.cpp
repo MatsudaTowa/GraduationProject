@@ -66,9 +66,17 @@ void My::CTitle::Update()
 
     if (pKeyboard->GetTrigger(DIK_RETURN) || pMouse->GetTrigger(0))
     {
+        CRakNet::GetInstance()->SetOnline(false);
+
 		//チュートリアルに遷移
 		GET_FADE->SetFade(CScene::MODE::MODE_GAME);
-        CCard_Client::GetInstance()->RequestAllCard();
+
+        //受信していなかったらリクエストを送る
+        if (!CCard_Client::GetInstance()->GetIsReceiveCardInfo())
+        {
+            CCard_Client::GetInstance()->RequestAllCard();
+        }
+        
     }
 
     //左シフト押したらオンライン
@@ -79,7 +87,12 @@ void My::CTitle::Update()
 
         //チュートリアルに遷移
         GET_FADE->SetFade(CScene::MODE::MODE_GAME);
-        CCard_Client::GetInstance()->RequestAllCard();
+
+        //受信していなかったらリクエストを送る
+        if (!CCard_Client::GetInstance()->GetIsReceiveCardInfo())
+        {
+            CCard_Client::GetInstance()->RequestAllCard();
+        }
     }
 }
 

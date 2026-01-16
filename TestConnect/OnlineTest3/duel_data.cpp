@@ -1102,3 +1102,35 @@ bool CDuel_Data::IsPlayerExist()
 {
     return !m_DuelPlayerList.empty();
 }
+
+//======================================
+//プレイヤーが存在するか
+//======================================
+bool CDuel_Data::ReceiveGameSet(RakNet::Packet* packet)
+{
+    //データの受信
+    RakNet::BitStream bsIn(packet->data, packet->length, false);
+
+    //読み取り
+    bsIn.IgnoreBytes(sizeof(RakNet::MessageID));    //メッセージの読み込み
+
+    //プレイヤーの人数
+    int nPlayerNum = 0;
+
+    //受信時にカウントを進める
+    m_nGameSetPlayerNum++;
+
+    //対戦プレイヤーの周回
+    for (const auto& iter : m_DuelPlayerList)
+    {
+        if (iter->GetTag() == CPlayer::TAG_PLAYER)
+        {
+            nPlayerNum++;
+        }
+    }
+
+    //プレイヤーの人数分受信したら真を返す
+    if (nPlayerNum == m_nGameSetPlayerNum) return true;
+
+    return false;
+}

@@ -54,6 +54,7 @@ private:
 	CRakNet_Server();							//コンストラクタ
 	static void ChangeData(CRakNet_Data* data);	//データの変更
 	bool IsSendGameSet();						//終了の合図を送るか
+	void Reset();								//サーバーの状態をリセット
 
 	//メンバ変数
 	RakNet::Packet* m_pPacket;				//パケット

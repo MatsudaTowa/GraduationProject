@@ -40,6 +40,7 @@ public:
 	void UpdateScene(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;				//シーンの更新
 	bool ReceiveDeck(RakNet::Packet* packet) override;												//デッキの受信
 	void ReceiveDrawCard(RakNet::Packet* /*packet*/, RakNet::RakPeerInterface* /*peer*/) override {}//カードのドロー処理の受信
+	bool ReceiveGameSet(RakNet::Packet* /*packet*/) override { return false; }						//試合終了の受信
 
 	//設定と取得
 	bool IsPlayerExist() override;	//プレイヤーが存在するか

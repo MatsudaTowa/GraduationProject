@@ -9,7 +9,7 @@
 #include "duel_manager.h"
 
 //宣言
-const std::string My::CDamageNumberUI::TEX_NAME = "data\\TEXTURE\\number000.png";
+const std::string My::CDamageNumberUI::TEX_NAME = "data\\TEXTURE\\number.png";
 
 //=============================================
 // コンストラクタ
@@ -32,7 +32,7 @@ My::CDamageNumberUI::~CDamageNumberUI()
 HRESULT My::CDamageNumberUI::Init()
 {
 	SetSize({ SIZE,SIZE });
-	SetColor(COLOR_WHITE);
+	SetColor(COLOR_RED);
 	SetDivision(10);
 
 	SetVtx();
