@@ -96,7 +96,7 @@ namespace My
 		int targetobject = 0;			// ゾーン / エナジー / HP / 残り時間
 		int zone = 0;					// 山札 / 墓地 / 待機 / 手札 / フィールド
 		int startpos = 0;				// 上 or 下
-		int searchwidth = 0;			// 見る幅
+		int searchwidth = 0;			// 見る幅(範囲/特定)
 		int selecttype;					// タイプ設定(すべてのタイプ or 特定のタイプ)
 		int cardtype;					// カードタイプ(攻撃 or 守備 or アシスト)
 		int addcostcondition;			// コストの条件の追加の有無(あり or なし)
@@ -108,12 +108,12 @@ namespace My
 		float realValue = 0.0f;			// 実数値用
 		bool judgeKind = false;			// どっちのボタンを押したか(true = 詳細設定/ false = 実数値)
 		int referencenum = 0;
-		int activeDetail = -1; // 上4つ（詳細）で選択されているボタン index（0..3）。-1 は未選択 
-		int activeReal = -1; // 下4つ（実数）で選択されているボタン index（0..3）。-1 は未選択
-		bool showInput = false; // その参照で実数入力モードを表示するか
-		// 将来の拡張フィールドをここに追加可能
 
-		ordered_json ToJson() const;
+
+		int operetorbutton = -1;	// -1(未選択状態) & 0～7
+		bool showInput = false; // その参照で実数入力モードを表示するか
+		bool activeDetailExplicit = false;
+		// 将来の拡張フィールドをここに追加可能
 		static Reference FromJson(const ordered_json& j);
 	};
 
@@ -129,23 +129,6 @@ namespace My
 		bool isOneTime;								// 効果の発動時間(true = 単発,false = 単発じゃない)
 		int time;									// 発動時間
 		bool target;								// 参照の有無
-		int targetselect;							// 対象先(自分 or 自分以外 or 自分を含めた誰か)
-		int reference;								// 参照先(自分という選択肢以外が選ばれたとき)
-		int othertargetselect;						// 対象先以外が選ばれたときの択(特定の条件 or ランダム)
-		int selfintargetselect;						// 自分を含んだ誰かが選ばれたときの択(特定の条件 or ランダム)
-		int targetobject;							// 対象物(ゾーン or エナジー or HP or 残り時間)
-		int zone;									// 参照先ゾーン(山札 or 墓地 or 待機 or 手札 or フィールド)
-		int startpos;								// どっちから見るか(上 or 下) 
-		int searchwidth;							// 見る幅(範囲 or 特定)
-		int num;									// 枚数
-		int selecttype;								// タイプ設定(すべてのタイプ or 特定のタイプ)
-		int cardtype;								// カードタイプ(攻撃 or 守備 or アシスト)
-		int addcostcondition;						// コストの条件の追加の有無(あり or なし)
-		int costcondition;							// コストの条件(以上 or 以下 or 未満 or それより上 or 等しい)
-		int refcost;								// コスト条件の値
-		int judgeoriginalvalue;						// そのタイプ固有の値か判断
-		int Attackoriginalvalue;					// 攻撃カード固有の値(攻撃値)
-		int Defenseoriginalvalue;					// 守備カード固有の値(守備値 or カウンター値)
 
 		int changePackID;							// 変化先のカードのパック番号
 		int changeCardID;							// 変化先のカードのカード番号
@@ -232,6 +215,21 @@ namespace My
 		* @brief ロード処理
 		*/
 		void Load();
+
+		/**
+		* @brief Jsonファイル保存処理
+		*/
+		void SaveJson();
+
+		/**
+		* @brief パック名Jsonファイル保存
+		*/
+		void SavePackNameJson();
+
+		/**
+		* @brief Jsonファイル読み込み処理
+		*/
+		void LoadJson();
 
 		/**
 		* @brief テクスチャ設定
@@ -614,6 +612,16 @@ namespace My
 		*/
 		void ReassignReferenceLabels(int PackID, int CardID);
 
+		/**
+		* @brief 保存内容設定
+		*/
+		ordered_json BuildCardsJson();
+
+		/**
+		* @brief 値の正規化
+		*/
+		void NormalizeReference();
+
 		HWND m_hWnd;
 
 		int m_ID;
@@ -670,13 +678,15 @@ namespace My
 		int m_OpInputRefIndex = 0;
 		int m_OpImputValue = 0;
 		int m_OpInputIntBackUp = 0;
-		int m_ActiveDetailIndex = -1;	// 詳細設定のボタン
-		int m_ActiveRealIndex = -1;		// 実数値のボタン
+		int m_OperatorButton = -1;	// -1(未選択状態)&0～7の選択肢
 		bool m_ForceCentralSelection;	// 演算子ボタン用のフラグ
 
-		static const int MAX_BUTTON = 4;	// 演算子ボタン(+-*/)
+		static const int MAX_BUTTON = 8;	// 演算子ボタン(+-*/)
 
 		bool m_IsLoading;
+		bool m_RequestJson;
+		bool m_SavepackName;
+
 	};
 }
 
@@ -704,5 +714,5 @@ static const float COSTFRAME_WIDTH = 100.0f;	// コストフレームの幅
 static const float COSTFRAME_HEIGHT = 100.0f;	// コストフレームの高さ
 
 static const float TURN_QUATER = -0.25f;		// 45度回転
-static const float OPERATOR_POSX = 130.0f;		// ボタンを出すまでの間隔
+static const float OPERATOR_POSX = 110.0f;		// ボタンを出すまでの間隔
 #endif
