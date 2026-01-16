@@ -11,6 +11,7 @@
 #include "zone_manager.h"
 #include "duel_manager.h"
 #include "raknet.h"
+#include "object2D_trianglefan.h"
 
 //===========================================================================================================
 // 
@@ -394,7 +395,8 @@ My::CCardStateStay::CCardStateStay() :
 	m_pNumber(nullptr),			//数字表示用
 	m_fCount(0.0f),				//カウント
 	m_nDrawNum(FIRST_COUNT),	//表示する番号
-	m_fStaycount(0.0f)			//ステイ時間
+	m_fStaycount(0.0f),			//ステイ時間
+	m_pFan(nullptr)
 {
 	
 }
@@ -444,6 +446,11 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 	{
 		CActiveSceneManager::GetInstance()->GetTargetArrowManager()->Regist(CTargetArrow::Create(cpy->GetUserArea(), iter->GetArea(), cpy), cpy);
 	}
+
+	m_pFan = new CObject2D_TriangleFan(20);
+	m_pFan->SetPos(ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), cpy->GetPos()));
+	m_pFan->Init();
+
 }
 
 //=======================================================================================
