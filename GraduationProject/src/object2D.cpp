@@ -107,6 +107,7 @@ void My::CObject2D::SetVtx()
 	//頂点バッファをロックし頂点情報へのポインタを取得
 
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+#if 0
 
 	//頂点座標の設定
 	pVtx[0].pos = D3DXVECTOR3(m_pos.x - m_size.x
@@ -121,6 +122,35 @@ void My::CObject2D::SetVtx()
 	pVtx[3].pos = D3DXVECTOR3(m_pos.x + m_size.x
 		, m_pos.y + m_size.y
 		, 0.0f);
+	
+#else
+	// 対角線の角度を算出する
+	float angle = atan2f(m_size.x, m_size.y);
+	// 対角線の長さを算出する
+	float leng = sqrtf(m_size.x * m_size.x + m_size.y * m_size.y);
+
+	//頂点座標の設定
+	pVtx[0].pos = D3DXVECTOR3(
+		m_pos.x + sinf(m_rot.z + (D3DX_PI + angle)) * leng,
+		m_pos.y + cosf(m_rot.z + (D3DX_PI + angle)) * leng,
+		0.0f);
+
+	pVtx[1].pos = D3DXVECTOR3(
+		m_pos.x + sinf(m_rot.z + (D3DX_PI - angle)) * leng,
+		m_pos.y + cosf(m_rot.z + (D3DX_PI - angle)) * leng,
+		0.0f);
+
+	pVtx[2].pos = D3DXVECTOR3(
+		m_pos.x + sinf(m_rot.z + (-angle)) * leng,
+		m_pos.y + cosf(m_rot.z + (-angle)) * leng,
+		0.0f);
+
+	pVtx[3].pos = D3DXVECTOR3(
+		m_pos.x + sinf(m_rot.z + (angle)) * leng,
+		m_pos.y + cosf(m_rot.z + (angle)) * leng,
+		0.0f);
+
+#endif
 
 	//rhwの設定
 	pVtx[0].rhw = 
