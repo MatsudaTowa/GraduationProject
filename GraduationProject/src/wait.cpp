@@ -23,12 +23,22 @@ namespace
 }
 
 My::CWait::CWait():CCardInfoView(),
-m_pos(VEC3_RESET_ZERO)
+m_pos(VEC3_RESET_ZERO),
+m_pBG(nullptr)
 {
+	if (m_pBG == nullptr)
+	{
+		m_pBG = CWaitZoneBG::Create({ 1050.0f, 660.0f, 0.0f });
+	}
 }
 
 My::CWait::~CWait()
 {
+	if (m_pBG != nullptr)
+	{
+		m_pBG->Uninit();
+		m_pBG = nullptr;
+	}
 }
 
 void My::CWait::Init()
@@ -48,6 +58,7 @@ void My::CWait::Update(CPlayerDuelState* state, CActiveSceneCharacter* player)
 			++i;
 			continue; 
 		}
+		itr->SetPos(ConvertToWorldPoint(GET_CAMERA(GET_CAMERA_IDX), m_pos, VEC3_RESET_ZERO));
 		if (i == INT_ZERO)
 		{
 			itr->SetisDraw(true);

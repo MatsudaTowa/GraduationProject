@@ -9,6 +9,7 @@
 #include "main.h"
 #include "card.h"
 #include "card_info_view.h"
+#include "wait_zone_bg.h"
 
 /** @brief My –¼‘O‹óŠÔ */
 namespace My
@@ -58,6 +59,7 @@ namespace My
 
 	private:
 		D3DXVECTOR3 m_pos = VEC3_RESET_ZERO;
+		CWaitZoneBG* m_pBG;
 	};
 }
 

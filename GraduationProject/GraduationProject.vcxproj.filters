@@ -155,6 +155,9 @@
       <Filter>Result_UI</Filter>
     </ClCompile>
     <ClCompile Include="src\wait.cpp" />
+    <ClCompile Include="src\object2D_trianglefan.cpp" />
+    <ClCompile Include="src\stay_number.cpp" />
+    <ClCompile Include="src\wait_zone_bg.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -326,6 +329,9 @@
       <Filter>Result_UI</Filter>
     </ClInclude>
     <ClInclude Include="src\wait.h" />
+    <ClInclude Include="src\object2D_trianglefan.h" />
+    <ClInclude Include="src\stay_number.h" />
+    <ClInclude Include="src\wait_zone_bg.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GraduationProject.rc" />
