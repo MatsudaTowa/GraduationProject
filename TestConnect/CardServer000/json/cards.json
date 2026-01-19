@@ -9,6 +9,7 @@
             "cost": 1,
             "rarity": 1,
             "type": 1,
+            "addeffect": 0,
             "target": false,
             "attacktype": 2,
             "power": 2
@@ -22,6 +23,7 @@
             "cost": 2,
             "rarity": 1,
             "type": 2,
+            "addeffect": 0,
             "target": false,
             "defensetype": 2,
             "guard": 4
@@ -35,6 +37,7 @@
             "cost": 2,
             "rarity": 1,
             "type": 1,
+            "addeffect": 0,
             "target": false,
             "attacktype": 2,
             "power": 3
@@ -48,6 +51,7 @@
             "cost": 5,
             "rarity": 1,
             "type": 2,
+            "addeffect": 0,
             "target": false,
             "defensetype": 2,
             "guard": 6
@@ -61,6 +65,7 @@
             "cost": 2,
             "rarity": 1,
             "type": 1,
+            "addeffect": 0,
             "target": false,
             "attacktype": 2,
             "power": 1
@@ -74,6 +79,7 @@
             "cost": 2,
             "rarity": 1,
             "type": 1,
+            "addeffect": 0,
             "target": false,
             "attacktype": 2,
             "power": 1
@@ -87,6 +93,7 @@
             "cost": 5,
             "rarity": 1,
             "type": 1,
+            "addeffect": 0,
             "target": false,
             "attacktype": 2,
             "power": 3
@@ -100,6 +107,7 @@
             "cost": 3,
             "rarity": 1,
             "type": 2,
+            "addeffect": 0,
             "target": false,
             "defensetype": 2,
             "guard": 2
@@ -113,6 +121,7 @@
             "cost": 3,
             "rarity": 1,
             "type": 1,
+            "addeffect": 0,
             "target": false,
             "attacktype": 2,
             "power": 2
@@ -126,6 +135,7 @@
             "cost": 5,
             "rarity": 1,
             "type": 1,
+            "addeffect": 0,
             "target": false,
             "attacktype": 2,
             "power": 3
@@ -139,6 +149,7 @@
             "cost": 3,
             "rarity": 1,
             "type": 2,
+            "addeffect": 0,
             "target": false,
             "defensetype": 1,
             "guard": 3,
