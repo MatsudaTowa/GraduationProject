@@ -20,8 +20,7 @@ CClient* CRakNet::m_Client = nullptr;
 CRakNet::CRakNet() :
     m_pPacket(nullptr),	 //パケット
     m_pPeer(nullptr),    //ピア
-    m_isOnline(false),   //オンラインか
-    m_isUpdate(false)    //更新しても良いか
+    m_isOnline(false)   //オンラインか
 {
    
 }
@@ -177,10 +176,6 @@ void CRakNet::Communication(RakNet::RakPeerInterface* peer)
             m_Client->StartBattle(packet);
             break;
 
-       /* case ID_DUEL_MESSAGE_SEND_STATUS:
-            m_Client->ReceiveStatus(packet);
-            break;*/
-
         case ID_DUEL_MESSAGE_DRAW:
             m_Client->ReceiveDrawCard(packet);
             //m_isUpdate = true;
@@ -188,7 +183,7 @@ void CRakNet::Communication(RakNet::RakPeerInterface* peer)
 
         case ID_DUEL_MESSAGE_STATUS:
             m_Client->ReceiveStatus(packet);
-            m_isUpdate = true;
+            //m_isUpdate = true;
             break;
 
         case ID_DUEL_MESSAGE_CAST_CARD:
@@ -235,7 +230,10 @@ void CRakNet::Communication(RakNet::RakPeerInterface* peer)
         }
 
         //オフラインなら抜ける
-        if (!m_isOnline) break;
+        if (!m_isOnline)
+        {
+            break;
+        }
     }
 }
 
@@ -328,8 +326,7 @@ void CRakNet::SendAddEnemy()
 //=====================================
 void CRakNet::SendMyStatus()
 {
-    //m_Client->SendMyStatus(m_pPeer);
-    m_isUpdate = false;
+   
 }
 
 //=====================================

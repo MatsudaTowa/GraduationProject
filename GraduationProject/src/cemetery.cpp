@@ -48,7 +48,7 @@ void My::CCemetery::Init()
 //===========================================================================================================================================================
 // 更新
 //===========================================================================================================================================================
-void My::CCemetery::Update(CPlayerDuelState* state, CActiveSceneCharacter* player)
+void My::CCemetery::Update(CDuelCharacter* state, CActiveSceneCharacter* player)
 {
 	if (!state->GetIsCemeteryView())
 	{
@@ -119,7 +119,7 @@ void My::CCemetery::Update(CPlayerDuelState* state, CActiveSceneCharacter* playe
 //===========================================================================================================================================================
 // 選択
 //===========================================================================================================================================================
-void My::CCemetery::Select(CPlayerDuelState* state)
+void My::CCemetery::Select(CDuelCharacter* state)
 {
 	// キャスト状態だったらセレクトさせない
 	if (GetInfoState() == SELECT)

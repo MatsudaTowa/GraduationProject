@@ -79,10 +79,6 @@ public:
 	void SetOnline(bool online) { m_isOnline = online; }	//設定
 	bool GetOnline() { return m_isOnline; }					//取得
 
-	//更新の許可
-	void SetIsUpdate(bool update) { m_isUpdate = update; }	//設定
-	bool GetIsUpdate() { return m_isUpdate; }				//取得
-
 	//クライアントクラスの取得
 	CClient* GetClient() { return m_Client; }
 
@@ -94,71 +90,8 @@ public:
 
 	//リクエスト処理
 	void RequestDrawCard();														//カードを引く
-	//void RequestCastCard(int cardid, int sameid, std::vector<int> targetplayer);//通常カードのキャスト
 	void RequestCastCard(My::CCard* castcard);									//通常カードのキャスト
 	void RequestDefCastCard(My::CCardDeffence* castcard);						//守備カードのキャスト
-
-	//キャストカードの送信
-	//template<typename... Args>
-	//void SendCastCard(int cardid, int playerid, Args... args)
-	//{
-	//	//データの作成
-	//	RakNet::BitStream bsOut;
-	//	bsOut.Write((RakNet::MessageID)GameMessages::ID_DUEL_MESSAGE_CAST_CARD);    //メッセージ
-	//	bsOut.Write(cardid);														//カード番号
-	//	bsOut.Write(playerid);														//使用者番号
-
-	//	//対象者の数を確認し書き出し
-	//	int nLength = sizeof...(args);
-	//	bsOut.Write(nLength);
-
-	//	//攻撃対象の書き出し
-	//	for (int Target : std::initializer_list<int>{ args... }) 
-	//	{
-	//		bsOut.Write(Target);													//対象者者番号
-	//	}
-
-	//	//サーバーに送信
-	//	RakNet::SystemAddress server_address = m_pPeer->GetSystemAddressFromIndex(0);
-
-	//	//サーバーの確認
-	//	if (server_address != RakNet::UNASSIGNED_SYSTEM_ADDRESS)
-	//	{
-	//		//サーバーにブロードキャスト
-	//		m_pPeer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, m_pPeer->GetSystemAddressFromIndex(0), false);
-	//	}
-	//}
-
-	//キャスト守備カードの送信
-	void SendCastDefCard(int cardid, int playerid, std::vector<My::CCardDeffence::DiffenceTarget> target)
-	{
-		//データの作成
-		RakNet::BitStream bsOut;
-		bsOut.Write((RakNet::MessageID)GameMessages::ID_DUEL_MESSAGE_CAST_DEFCARD);    //メッセージ
-		bsOut.Write(cardid);														//カード番号
-		bsOut.Write(playerid);														//使用者番号
-
-		//対象者の数を確認し書き出し
-		int nLength = (int)target.size();
-		bsOut.Write(nLength);
-
-		//攻撃対象の書き出し
-		for (auto Target : target)
-		{
-			bsOut.Write(Target.nAttackCardUserId);	//対象者番号
-			bsOut.Write(Target.nTargetCardId);		//カード番号
-		}
-
-		//サーバーに送信
-		RakNet::SystemAddress server_address = m_pPeer->GetSystemAddressFromIndex(0);
-
-		//サーバーの確認
-		if (server_address != RakNet::UNASSIGNED_SYSTEM_ADDRESS)
-		{
-			//サーバーにブロードキャスト
-			m_pPeer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, m_pPeer->GetSystemAddressFromIndex(0), false);
-		}
-	}
 
 private:
 
@@ -172,8 +105,7 @@ private:
 	RakNet::Packet* m_pPacket;			//パケット
 	RakNet::RakPeerInterface* m_pPeer;	//ピア(接続用)
 	bool m_isOnline;					//オンラインか
-	bool m_isUpdate;					//更新しても良いか
-
+	
 	//静的変数
 	static CClient* m_Client;			//クライアントクラス
 };

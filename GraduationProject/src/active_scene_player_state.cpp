@@ -89,7 +89,6 @@ My::CPlayerDuelState::CPlayerDuelState(CActiveSceneCharacter* character) :CDuelC
 m_nEnergyUpCount(0),
 m_EnergyUpFrame(INT_ZERO),
 m_pHand(nullptr),
-m_pCemetery(nullptr),
 m_pWait(nullptr)
 {
 	m_EnergyUpFrame = ENERGY_UP_FRAME;
@@ -108,20 +107,16 @@ My::CPlayerDuelState::~CPlayerDuelState()
 		pUI = nullptr;
 		CDuel_Manager::GetInstance()->SetCardInfoUI(pUI);
 	}
-	if (m_pCemetery != nullptr)
-	{
-		delete m_pCemetery;
-		m_pCemetery = nullptr;
-	}
-	if (m_pCemetery != nullptr)
-	{
-		delete m_pCemetery;
-		m_pCemetery = nullptr;
-	}
 	if (m_pWait != nullptr)
 	{
 		delete m_pWait;
 		m_pWait = nullptr;
+	}
+
+	if (m_pHand != nullptr)
+	{
+		delete m_pHand;
+		m_pHand = nullptr;
 	}
 }
 
@@ -146,10 +141,6 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 		EnergyUp(player);
 	}
 
-	if (m_pCemetery != nullptr)
-	{
-		m_pCemetery->Update(this, character);
-	}
 	if (m_pWait != nullptr)
 	{
 		m_pWait->Update(this, character);
@@ -205,10 +196,7 @@ void My::CPlayerDuelState::CreateDuelUI(CActiveScenePlayer* player)
 	{// éËéDê∂ê¨
 		m_pHand = CHand::Create();
 	}
-	if (m_pCemetery == nullptr)
-	{
-		m_pCemetery = CCemetery::Create();
-	}
+
 	if (m_pWait == nullptr)
 	{
 		m_pWait = CWait::Create();

@@ -6,9 +6,6 @@
 //===========================================================================================================================================================
 #ifndef _CARD_INFO_VIEW_H_
 #define _CARD_INFO_VIEW_H_
-#include "main.h"
-#include "card.h"
-
 
 /** @brief My 名前空間 */
 namespace My
@@ -16,9 +13,9 @@ namespace My
 	//================
 	//前方宣言
 	//================
-	class CPlayerDuelState;
 	class CDuelCharacter;
 	class CActiveSceneCharacter;
+	class CCard;
 
 	/**
 	* @brief 手札のクラス
@@ -58,12 +55,12 @@ namespace My
 		/**
 		* @brief 更新
 		*/
-		virtual void Update(CPlayerDuelState* state, CActiveSceneCharacter* player);
+		virtual void Update(CDuelCharacter* state, CActiveSceneCharacter* player);
 
 		/**
 		* @brief 選択
 		*/
-		virtual void Select(CPlayerDuelState* state);
+		virtual void Select(CDuelCharacter* state);
 
 		/**
 		* @brief 選択

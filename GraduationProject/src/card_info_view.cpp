@@ -29,11 +29,11 @@ void My::CCardInfoView::Init()
 {
 }
 
-void My::CCardInfoView::Update(CPlayerDuelState* state, CActiveSceneCharacter* player)
+void My::CCardInfoView::Update(CDuelCharacter* state, CActiveSceneCharacter* player)
 {
 }
 
-void My::CCardInfoView::Select(CPlayerDuelState* state)
+void My::CCardInfoView::Select(CDuelCharacter* state)
 {
 }
 

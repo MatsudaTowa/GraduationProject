@@ -50,8 +50,6 @@ public:
 	virtual void ReceiveAddEnemy([[maybe_unused]] RakNet::Packet* packet) = 0;							//敵の追加を受信
 	virtual void ReceiveIsUpdate([[maybe_unused]] RakNet::Packet* packet) = 0;							//更新可能かを受信する
 	virtual void SendMyStatus([[maybe_unused]] RakNet::RakPeerInterface* peer) = 0;						//自分のステータスを送る
-	virtual void ReceiveCastCard([[maybe_unused]] RakNet::Packet* packet) = 0;							//キャストカードの受信
-	virtual void ReceiveCastDefCard([[maybe_unused]] RakNet::Packet* packet) = 0;						//キャスト守備カードの受信
 	void ReceiveDeck(RakNet::Packet* packet);															//デッキの受信
 	virtual void ReceiveDrawCard([[maybe_unused]] RakNet::Packet* packet) = 0;							//カードドローの受信
 	virtual void ReceiveTriggerCard([[maybe_unused]] RakNet::Packet* packet) = 0;						//トリガーカードの受信

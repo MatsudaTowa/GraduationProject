@@ -302,6 +302,16 @@ bool My::CZoneManager::MoveZone(CCard* pCard, CZone* pCurrentZone, CZone* pNextZ
 		// 現在のゾーンのリストから削除
 		pCurrentZone->DeleteList(pCard);
 
+		//移動先にカードが無いか確認
+		for (auto iter : pNextZone->GetList())
+		{
+			//同じカードがあれば通さない
+			if (iter == pCard)
+			{
+				return false;
+			}
+		}
+
 		if (pNextZone == m_pDeck)
 		{// ゾーンの移動先が山札の場合Addflagがtrueならpush_front、falseならpush_back
 			pNextZone->SelectAddList(pCard, Addflag);

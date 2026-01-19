@@ -10,7 +10,6 @@
 #include "character.h"
 #include "active_scene_character_state.h"
 #include "hand.h"
-#include "cemetery.h"
 #include "wait.h"
 
 /** @brief My 名前空間 */
@@ -124,24 +123,6 @@ namespace My
 		}
 
 		/**
-		 * @brief 墓地取得
-		 * @return 手札
-		 */
-		inline CCemetery* GetCemetery()
-		{
-			return m_pCemetery;
-		}
-
-		/**
-		 * @brief 墓地設定
-		 * @param [in]pHand
-		 */
-		inline void SetCemetery(CCemetery* pCemetery)
-		{
-			m_pCemetery = pCemetery;
-		}
-
-		/**
 		 * @brief 待機取得
 		 * @return 待機
 		 */
@@ -181,7 +162,6 @@ namespace My
 		float m_nEnergyUpCountRate;	//!エナジーを増やすまでのカウント
 		int m_EnergyUpFrame;		//!エナジーを増やすフレーム
 		CHand* m_pHand;	// 手札
-		CCemetery* m_pCemetery;
 		CWait* m_pWait;
 	};
 

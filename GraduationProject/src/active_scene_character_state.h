@@ -8,6 +8,7 @@
 #define _ACTIVE_SCENE_CHARACTER_STATE_H_
 
 #include "character.h"
+#include "cemetery.h"
 
 /** @brief My 名前空間 */
 namespace My
@@ -152,10 +153,30 @@ namespace My
 			return m_isCemeteryView;
 		}
 
+		/**
+		 * @brief 墓地取得
+		 * @return 手札
+		 */
+		inline CCemetery* GetCemetery()
+		{
+			return m_pCemetery;
+		}
+
+		/**
+		 * @brief 墓地設定
+		 * @param [in]pHand
+		 */
+		inline void SetCemetery(CCemetery* pCemetery)
+		{
+			m_pCemetery = pCemetery;
+		}
+
+
 	private:
 
 		CZoneManager* m_pZoneManager;		//ゾーンマネージャー
 		bool m_isCemeteryView;
+		CCemetery* m_pCemetery;
 	};
 }
 #endif // !_ACTIVE_SCENE_CHARACTER_STATE_H_

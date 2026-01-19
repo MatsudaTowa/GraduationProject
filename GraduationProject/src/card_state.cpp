@@ -160,14 +160,6 @@ void My::CCardStateCast::Init(CCard* cpy, CDuelCharacter* duel)
 	float mag = 1.0f;
 	cpy->SetSize({ mag * 1.2f,mag,mag });
 
-	//CActiveSceneManager::GetInstance()->ChangeState(new CCardCast);
-
-	// 今だけわかりやすく位置を変える
-	//D3DXVECTOR3 pos = cpy->GetPos();
-	//pos.z += 20.0f;
-
-	//cpy->SetPos(pos);
-
 	//リストの取得
 	std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
 
@@ -208,39 +200,6 @@ void My::CCardStateCast::Init(CCard* cpy, CDuelCharacter* duel)
 		break;
 	}
 
-	//for (auto& iter : cpy->GetTargetPlayerList())
-	//{
-	//	//if (cpy->GetUserArea() != iter->GetArea()) continue;
-
-	//	// ステータスを取得
-	//	CActiveSceneCharacter::Status status = iter->GetStatus();
-
-	//	// コスト分エナジーを減らす
-	//	status.energy -= cpy->GetBaseStatus().nCost;
-
-	//	// エナジーを設定
-	//	iter->SetStatus(status);
-
-	//	// ゾーンマネージャーの取得
-	//	CZoneManager* pZoneManager = dynamic_cast<CDuelCharacter*>(iter->GetState())->GetZoneManager();
-	//	// オーバーラップカードの格納変数
-	//	COverlapCard* pOverlapCard = nullptr;
-
-	//	// 登録
-	//	pOverlapCard = pZoneManager->GetCastPreviewZone()->GetOverlapManager()->Create(duel, iter->GetArea());
-
-	//	// 重ねたカードが存在していたら
-	//	if (pOverlapCard)
-	//	{
-	//		pOverlapCard->Regist(cpy);
-	//	}
-
-	//	// ターゲットエリアが違うならスルー
-	//	//if (iter->GetArea() != cpy->GetTarget()) { continue; }
-
-	//	break;
-	//}
-
 	//カードのキャスト処理
 	cpy->Cast(duel);
 }
@@ -259,10 +218,6 @@ void My::CCardStateCast::Update(CCard* cpy, CDuelCharacter* duel)
 
 	//状態を変更
 	ChangeToState(cpy, duel);
-
-	//cpy->ChangeState(CCardState::CARD_STATE::CARD_STAY, duel);
-
-	//cpy->ChangeState(CCardState::CARD_STATE::CARD_STAY);
 }
 
 //=======================================================================================
@@ -276,13 +231,6 @@ void My::CCardStateCast::ChangeToState(CCard* cpy, CDuelCharacter* duel)
 		cpy->ChangeState(CCardState::CARD_STATE::CARD_STAY, duel);
 		return;
 	}
-
-	////ターゲットが自分なら守備待機状態へ
-	//if (cpy->GetTarget() == cpy->GetUserArea())
-	//{
-	//	cpy->ChangeState(CCardState::CARD_STATE::CARD_WAIT, duel);
-	//	return;
-	//}
 
 	//ターゲットが自分なら守備待機状態へ
 	for (auto& iter : cpy->GetTargetPlayerList())
@@ -307,76 +255,6 @@ void My::CCardStateCast::ChangeToState(CCard* cpy, CDuelCharacter* duel)
 
 //===========================================================================================================
 // 
-// オンラインキャストステート(カードを使用)
-// 
-//===========================================================================================================
-//=======================================================================================
-// 初期化
-//=======================================================================================
-void My::CCardStateCastOnline::Init(CCard* cpy, CDuelCharacter* duel)
-{
-	if (cpy == nullptr)
-		return;
-
-	//倍率
-	float mag = 1.0f;
-	cpy->SetSize({ mag * 1.2f,mag,mag });
-
-	//カードのキャスト処理(必要か怪しい)
-	cpy->Cast(duel);
-}
-
-//=======================================================================================
-// 更新
-//=======================================================================================
-void My::CCardStateCastOnline::Update(CCard* cpy, CDuelCharacter* duel)
-{
-	if (cpy == nullptr)
-		return;
-
-	//倍率
-	float mag = 10.0f;
-	cpy->SetSize({ mag * 1.2f,mag,mag });
-
-	//状態を変更
-	ChangeToState(cpy, duel);
-}
-
-//=======================================================================================
-// 状態を変更
-//=======================================================================================
-void My::CCardStateCastOnline::ChangeToState(CCard* cpy, CDuelCharacter* duel)
-{
-	//守備カードじゃないならステイ状態
-	if (cpy->GetBaseStatus().maintype != CCard::CARDTYPE_::TYPE_DEFFENCE)
-	{
-		cpy->ChangeState(CCardState::CARD_STATE::CARD_STAY, duel);
-		return;
-	}
-
-	////ターゲットが自分なら守備待機状態へ
-	//if (cpy->GetTarget() == cpy->GetUserArea())
-	//{
-	//	cpy->ChangeState(CCardState::CARD_STATE::CARD_WAIT, duel);
-	//	return;
-	//}
-
-	//ターゲットが自分なら守備待機状態へ
-	for (auto& iter : cpy->GetTargetPlayerList())
-	{
-		if (iter->GetArea() == My::CActiveSceneManager::GetInstance()->GetPlayer()->GetArea())
-		{
-			cpy->ChangeState(CCardState::CARD_STATE::CARD_WAIT, duel);
-			return;
-		}
-	}
-
-	//ターゲットが敵ならステイ状態へ
-	cpy->ChangeState(CCardState::CARD_STATE::CARD_STAY, duel);
-}
-
-//===========================================================================================================
-// 
 // ステイステート(カード効果発動待機)
 // 
 //===========================================================================================================
@@ -392,9 +270,6 @@ namespace
 //コンストラクタ
 //=======================================================================================
 My::CCardStateStay::CCardStateStay() : 
-	m_pNumber(nullptr),			//数字表示用
-	m_fCount(0.0f),				//カウント
-	m_nDrawNum(FIRST_COUNT),	//表示する番号
 	m_fStaycount(0.0f),			//ステイ時間
 	m_pFan(nullptr)
 {
@@ -406,12 +281,7 @@ My::CCardStateStay::CCardStateStay() :
 //=======================================================================================
 My::CCardStateStay::~CCardStateStay()
 {
-	//オブジェクトの破棄
-	if (m_pNumber != nullptr)
-	{
-		m_pNumber->Uninit();
-		m_pNumber = nullptr;
-	}
+	
 }
 
 //=======================================================================================
@@ -430,26 +300,15 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 	//カウントを始めないか
 	if (!cpy->IsCreatStayCount()) return;
 
-	if (m_pNumber == nullptr)
-	{
-		//数字の設定
-		D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), cpy->GetPos()); //スクリーン座標に変換
-		m_pNumber = m_pNumber->Create(screen_pos, COUNT_SIZE, 0);
-		m_pNumber->SetNumber(m_nDrawNum * 0.1f, (m_nDrawNum + 1) * 0.1f, COLOR_WHITE);
-	}
-
-	m_nDrawNum = FIRST_COUNT;
-	m_pNumber->SetNumber(m_nDrawNum * 0.1f, (m_nDrawNum + 1) * 0.1f, COLOR_WHITE);
-
 	// ターゲットアローをマネージャーに登録
 	for (auto& iter : cpy->GetTargetPlayerList())
 	{
 		CActiveSceneManager::GetInstance()->GetTargetArrowManager()->Regist(CTargetArrow::Create(cpy->GetUserArea(), iter->GetArea(), cpy), cpy);
 	}
 
-	m_pFan = new CObject2D_TriangleFan(20);
-	m_pFan->SetPos(ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), cpy->GetPos()));
-	m_pFan->Init();
+	//m_pFan = new CObject2D_TriangleFan(20);
+	//m_pFan->SetPos(ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), cpy->GetPos()));
+	//m_pFan->Init();
 
 }
 
@@ -461,27 +320,6 @@ void My::CCardStateStay::SetCardPos(CCard* cpy)
 	//ディフェンスカードはカウントダウンを始めない
 	if (cpy->GetBaseStatus().maintype == CCard::TYPE_DEFFENCE) return;
 
-	cpy->SetPos({ 0.0f, 0.0f, 0.0f });
-	
-	//エリアによって位置を変える
-	switch (cpy->GetUserArea())
-	{
-	case My::CInputMouse::DOWN:	//下
-		cpy->SetPos({ 0.0f, -100.0f, -150.0f });
-		break;
-
-	case My::CInputMouse::RIGHT://右
-		cpy->SetPos({ 200.0f, -100.0f, 50.0f });
-		break;
-
-	case My::CInputMouse::LEFT:	//左
-		cpy->SetPos({ 200.0f, -100.0f, 50.0f });
-		break;
-
-	case My::CInputMouse::UP:	//上
-		cpy->SetPos({ 0.0f, -100.0f, 250.0f });
-		break;
-	}
 
 	// TODO : 
 	// ユーザーエリアとターゲットエリアの中間地点に
@@ -508,13 +346,6 @@ void My::CCardStateStay::Update(CCard* cpy, CDuelCharacter* duel)
 	if (m_fStaycount >= 3.0f)
 	{// カウントが設定された時間を超えたら
 
-		//オブジェクトの破棄
-		if (m_pNumber != nullptr)
-		{
-			m_pNumber->Uninit();
-			m_pNumber = nullptr;
-		}
-
 		// トリガー状態にする
 		cpy->ChangeState(CCardState::CARD_STATE::CARD_TRIGGER, duel);
 		
@@ -531,39 +362,7 @@ void My::CCardStateStay::Update(CCard* cpy, CDuelCharacter* duel)
 		m_fStaycount += 0.016f;
 	}
 
-	//カウントダウン処理
-	CountDown();
-
-	m_pFan->SetStayTime(m_fStaycount);
-}
-
-//=======================================================================================
-// カウントダウン処理
-//=======================================================================================
-void My::CCardStateStay::CountDown()
-{
-	//カウントを経過時間分増加
-	if (CRakNet::GetInstance()->GetOnline())
-	{
-		m_fCount += My::CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime() * 0.001f;
-	}
-	else
-	{
-		m_fCount += 0.016f;
-	}
-
-	//数字の表記
-	if (m_fCount > 1.0f)
-	{
-		//数値のリセット
-		m_fCount -= 1.0f;
-
-		//描画する数値を減らす
-		--m_nDrawNum;
-
-		//数字の設定
-		m_pNumber->SetNumber(m_nDrawNum * 0.1f, (m_nDrawNum + 1) * 0.1f, COLOR_WHITE);
-	}
+	//m_pFan->SetStayTime(m_fStaycount);
 }
 
 //===========================================================================================================

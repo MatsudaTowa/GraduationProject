@@ -46,7 +46,7 @@ void My::CLobbyCharacter::Lobby(CActiveSceneCharacter* character)
 //===============================================================================
 // 戦闘
 //===============================================================================
-void My::CDuelCharacter::Duel(CActiveSceneCharacter* /*character*/)
+void My::CDuelCharacter::Duel(CActiveSceneCharacter* character)
 {
 	//更新するカードを保管するリスト
 	std::list<CCard*> CardList;
@@ -76,6 +76,12 @@ void My::CDuelCharacter::Duel(CActiveSceneCharacter* /*character*/)
 	//待機ゾーンの表示処理
 	ViewWait(m_pZoneManager->GetWaitZone());
 
+	//墓地の更新
+	if (m_pCemetery != nullptr)
+	{
+		m_pCemetery->Update(this, character);
+	}
+
 	//描画を行いたいゾーンのみ更新
 	//m_pZoneManager->GetCastPreviewZone()->Update(this);		//キャスト
 	//m_pZoneManager->GetHandZone()->Update(this);			//手札
@@ -87,7 +93,8 @@ void My::CDuelCharacter::Duel(CActiveSceneCharacter* /*character*/)
 // コンストラクタ
 //===============================================================================
 My::CDuelCharacter::CDuelCharacter(CActiveSceneCharacter* character) : 
-	m_pZoneManager(nullptr)	//ゾーンマネージャー
+	m_pZoneManager(nullptr),	//ゾーンマネージャー
+	m_pCemetery(nullptr)
 {
 	//カウント用のマップ
 	std::map<int, int> SameTypeCounter;
@@ -148,6 +155,11 @@ My::CDuelCharacter::CDuelCharacter(CActiveSceneCharacter* character) :
 		pCard->SetSameTypeId(CalcSameTypeCount(pCard->GetBaseStatus().nCardID));
 		m_pZoneManager->GetDeck()->AddList(pCard);
 	}
+
+	if (m_pCemetery == nullptr)
+	{
+		m_pCemetery = CCemetery::Create();
+	}
 }
 
 //===============================================================================
@@ -161,5 +173,12 @@ My::CDuelCharacter::~CDuelCharacter()
 		m_pZoneManager->Uninit();
 		delete m_pZoneManager;
 		m_pZoneManager = nullptr;
+	}
+
+	//墓地ポインタの削除
+	if (m_pCemetery != nullptr)
+	{
+		delete m_pCemetery;
+		m_pCemetery = nullptr;
 	}
 }

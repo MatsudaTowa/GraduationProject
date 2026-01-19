@@ -38,7 +38,7 @@ namespace My
 		/**
 		* @brief XV
 		*/
-		void Update(CPlayerDuelState* state, CActiveSceneCharacter* player) override;
+		void Update(CPlayerDuelState* state, CActiveSceneCharacter* player);
 
 		/**
 		* @brief ‘I‘ğ

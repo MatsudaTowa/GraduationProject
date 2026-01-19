@@ -6,8 +6,7 @@
 //===========================================================================================================================================================
 #ifndef _CEMETERY_H_
 #define _CEMETERY_H_
-#include "main.h"
-#include "card.h"
+
 #include "card_info_view.h"
 
 /** @brief My 名前空間 */
@@ -38,12 +37,12 @@ namespace My
 		/**
 		* @brief 更新
 		*/
-		void Update(CPlayerDuelState* state, CActiveSceneCharacter* player) override;
+		void Update(CDuelCharacter* state, CActiveSceneCharacter* player) override;
 
 		/**
 		* @brief 選択
 		*/
-		void Select(CPlayerDuelState* state) override;
+		void Select(CDuelCharacter* state) override;
 
 		/**
 		* @brief 選択
@@ -63,7 +62,7 @@ namespace My
 		CCard* SearchList(CDuelCharacter* character, int num) override;
 
 	private:
-		D3DXVECTOR3 m_pos = VEC3_RESET_ZERO;
+		D3DXVECTOR3 m_pos = {0.0f, 0.0f, 0.0f};
 	};
 }
 

@@ -132,24 +132,6 @@ namespace My
 	};
 
 	/**
-	* @brief 使用状態(オンライン)
-	*/
-	class CCardStateCastOnline :public CCardState
-	{
-	public:
-		/** @brief 初期化 */
-		void Init(CCard* cpy, CDuelCharacter* duel) override;
-
-		/** @brief 更新 */
-		void Update(CCard* cpy, CDuelCharacter* duel) override;
-
-	private:
-
-		//キャスト後の状態変更
-		void ChangeToState(CCard* cpy, CDuelCharacter* duel);
-	};
-
-	/**
 	* @brief 発動待機状態
 	*/
 	class CCardStateStay :public CCardState
@@ -180,19 +162,12 @@ namespace My
 		/** @brief 対象によってカードの位置を設定 */
 		void SetCardPos(CCard* cpy);
 
-		/** @brief 対象によってカードの位置を設定 */
-		void CountDown();
+		/** @brief 設定された待機時間 */
+		const unsigned int STAY_TIME = ONE_SECOND * 3;
 
 		/** @brief 待機カウント */
 		float m_fStaycount;
 
-		/** @brief 設定された待機時間 */
-		const unsigned int STAY_TIME = ONE_SECOND * 3;
-
-		//変数
-		CNumber_2D* m_pNumber;	//数字表示用オブジェクト
-		float m_fCount;			//カウント値
-		int m_nDrawNum;			//描画する数字
 		CObject2D_TriangleFan* m_pFan;	// ステイ時間の視覚的表示
 	};
 
