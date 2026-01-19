@@ -158,6 +158,7 @@
     <ClCompile Include="src\object2D_trianglefan.cpp" />
     <ClCompile Include="src\stay_number.cpp" />
     <ClCompile Include="src\wait_zone_bg.cpp" />
+    <ClCompile Include="src\wait_next_UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -332,6 +333,7 @@
     <ClInclude Include="src\object2D_trianglefan.h" />
     <ClInclude Include="src\stay_number.h" />
     <ClInclude Include="src\wait_zone_bg.h" />
+    <ClInclude Include="src\wait_next_UI.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GraduationProject.rc" />

@@ -12,9 +12,8 @@ namespace
 	const D3DXVECTOR2 UI_SIZE{ 51.0f, 80.0f };	//サイズ
 	const std::string TEXTURE_PATH =	//テクスチャパス
 	{
-		{ "data\\TEXTURE\\checker\\in.png" },
+		{ "data\\TEXTURE\\WatingUI\\wait_bg.png" },
 	};
-
 }
 //=============================================
 // コンストラクタ
@@ -42,7 +41,7 @@ HRESULT My::CWaitZoneBG::Init()
 	CTexture* pTexture = CManager::GetInstance()->GetTexture();
 
 	//テクスチャ設定
-	//BindTexture(pTexture->GetAddress(pTexture->Regist(TEXTURE_PATH)));
+	BindTexture(pTexture->GetAddress(pTexture->Regist(TEXTURE_PATH)));
 
 	//自分自身のサイズ取得
 	D3DXVECTOR2 size = UI_SIZE;
@@ -56,7 +55,7 @@ HRESULT My::CWaitZoneBG::Init()
 	//カラー取得
 	D3DXCOLOR col = GetColor();
 
-	col = {0.5f,0.5f,0.5f,1.0f};
+	col = {0.8f,0.8f,0.8f,1.0f};
 
 	//カラーを代入
 	SetColor(col);

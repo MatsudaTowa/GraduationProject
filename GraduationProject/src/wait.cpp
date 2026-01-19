@@ -24,11 +24,16 @@ namespace
 
 My::CWait::CWait():CCardInfoView(),
 m_pos(VEC3_RESET_ZERO),
-m_pBG(nullptr)
+m_pBG(nullptr),
+m_pNext(nullptr)
 {
 	if (m_pBG == nullptr)
 	{
 		m_pBG = CWaitZoneBG::Create({ 1050.0f, 660.0f, 0.0f });
+	}
+	if (m_pNext == nullptr)
+	{
+		m_pNext = CWaitNextUI::Create({ 1050.0f,560.0f,0.0f });
 	}
 }
 
@@ -38,6 +43,11 @@ My::CWait::~CWait()
 	{
 		m_pBG->Uninit();
 		m_pBG = nullptr;
+	}
+	if (m_pNext != nullptr)
+	{
+		m_pNext->Uninit();
+		m_pNext = nullptr;
 	}
 }
 
