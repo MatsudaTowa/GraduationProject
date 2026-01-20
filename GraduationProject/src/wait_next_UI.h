@@ -19,7 +19,7 @@ namespace My
 	class CWaitNextUI : public CObject2D
 	{
 	public:
-		static constexpr int PRIORITY = 29;	//!<描画順
+		static constexpr int PRIORITY = 25;	//!<描画順
 
 		/**
 		 * @brief コンストラクタ
