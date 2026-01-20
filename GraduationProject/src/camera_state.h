@@ -49,18 +49,5 @@ namespace My
 		//バードビュー時のYの距離	
 		static constexpr float LENGTH_Y = 580.0f;
 	};
-
-	/** @brief 軌跡を描く際の視点クラス */
-	class CSideView : public CCameraState
-	{
-	public:
-		/**
-		* @brief 横からの視点
-		* @param [in]カメラのポインタ
-		*/
-		virtual void SideView(CCamera* camera)override;
-	private:
-		static constexpr float LENGTH = -300.0f;//サイドビュー時の距離
-	};
 }
 #endif // !_CAMERA_STATE_H
