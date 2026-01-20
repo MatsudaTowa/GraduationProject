@@ -159,6 +159,8 @@
     <ClCompile Include="src\stay_number.cpp" />
     <ClCompile Include="src\wait_zone_bg.cpp" />
     <ClCompile Include="src\wait_next_UI.cpp" />
+    <ClCompile Include="src\selectable_zone.cpp" />
+    <ClCompile Include="src\pseudo_card_frame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -334,6 +336,8 @@
     <ClInclude Include="src\stay_number.h" />
     <ClInclude Include="src\wait_zone_bg.h" />
     <ClInclude Include="src\wait_next_UI.h" />
+    <ClInclude Include="src\selectable_zone.h" />
+    <ClInclude Include="src\pseudo_card_frame.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GraduationProject.rc" />

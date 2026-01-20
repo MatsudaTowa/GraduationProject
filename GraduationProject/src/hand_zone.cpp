@@ -7,13 +7,12 @@
 
 // include
 #include "hand_zone.h"
-
+#include "card_frame.h"
 /**
 * @brief コンストラクタ
 */
 My::CHandZone::CHandZone()
 {
-
 }
 
 /**

@@ -139,6 +139,16 @@ namespace My
 		{
 			m_pWait = pWait;
 		}
+
+		inline bool GetIsWaitView()
+		{
+			return m_isWaitView;
+		}
+
+		inline void SetIsWaitView(bool isView)
+		{
+			m_isWaitView = isView;
+		}
 	private:
 
 		/**
@@ -161,6 +171,7 @@ namespace My
 		int m_nEnergyUpCount;		//!エナジーを増やすまでのカウント
 		float m_nEnergyUpCountRate;	//!エナジーを増やすまでのカウント
 		int m_EnergyUpFrame;		//!エナジーを増やすフレーム
+		bool m_isWaitView;
 		CHand* m_pHand;	// 手札
 		CWait* m_pWait;
 	};

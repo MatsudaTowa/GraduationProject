@@ -368,8 +368,9 @@ bool My::CCardDeffence::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharac
 		if (typeid(*duel) == typeid(CPlayerDuelState))
 		{
 			CPlayerDuelState* duel_state = dynamic_cast<CPlayerDuelState*>(duel);
+			CSelectionRange* pRange = duel->GetZoneManager()->GetHandZone()->GetSelectionRange();
 			//キャンセルエリアなら解除
-			if (GET_COLISION->Check2DPolygonColision(GET_INPUT_MOUSE->GetMousePos(), { 3.0f,3.0f }, { duel_state->GetHand()->GetSelectionRange()->GetPos() }, duel_state->GetHand()->GetSelectionRange()->GetSize()))
+			if (GET_COLISION->Check2DPolygonColision(GET_INPUT_MOUSE->GetMousePos(), { 3.0f,3.0f }, { pRange->GetPos() }, pRange->GetSize()))
 			{
 				//通常状態にする
 				ChangeState(CCardState::CARD_NEUTRAL, duel);

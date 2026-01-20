@@ -143,21 +143,6 @@ void My::CCemeteryButton::CardisView()
 			itr->SetisDraw(isView);
 		}
 	}
-	else if (typeid(*state) == typeid(CEnemyDuelState))
-	{
-		CEnemyDuelState* duel_state = dynamic_cast<CEnemyDuelState*>(state);
-		CCemeteryZone* zone = duel_state->GetZoneManager()->GetCemetery();
-		//€”õOK‚©Ø‚è‘Ö‚¦
-		bool isView = duel_state->GetIsCemeteryView();
-		std::list<CCard*> card_list = zone->GetList();
-
-		for (auto& itr : card_list)
-		{
-			if (itr == nullptr) { continue; }
-			itr->SetisDraw(isView);
-		}
-	}
-
 }
 
 //=============================================

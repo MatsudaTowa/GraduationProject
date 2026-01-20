@@ -23,7 +23,7 @@
 #include <crtdbg.h>
 #include <fstream>
 #include <cmath>
-
+#include <shellapi.h>
 //#define new ::new(_NORMAL_BLOCK, __FILE__, __LINE__)
 # include <memory.h>
 #ifdef _DEBUG

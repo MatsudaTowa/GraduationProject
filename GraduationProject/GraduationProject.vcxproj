@@ -271,6 +271,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\pseudo_card_frame.cpp" />
     <ClCompile Include="src\raknet.cpp" />
     <ClCompile Include="src\ready_button.cpp" />
     <ClCompile Include="src\ready_txt.cpp" />
@@ -284,6 +285,7 @@
     <ClCompile Include="src\result_ui.cpp" />
     <ClCompile Include="src\result_ui_manager.cpp" />
     <ClCompile Include="src\scene.cpp" />
+    <ClCompile Include="src\selectable_zone.cpp" />
     <ClCompile Include="src\selection_range.cpp" />
     <ClCompile Include="src\shadow.cpp" />
     <ClCompile Include="src\stay_number.cpp" />
@@ -413,6 +415,7 @@
     <ClInclude Include="src\player_number_UI.h" />
     <ClInclude Include="src\player_UI.h" />
     <ClInclude Include="src\precompile.h" />
+    <ClInclude Include="src\pseudo_card_frame.h" />
     <ClInclude Include="src\raknet.h" />
     <ClInclude Include="src\ready_button.h" />
     <ClInclude Include="src\ready_txt.h" />
@@ -426,6 +429,7 @@
     <ClInclude Include="src\result_ui.h" />
     <ClInclude Include="src\result_ui_manager.h" />
     <ClInclude Include="src\scene.h" />
+    <ClInclude Include="src\selectable_zone.h" />
     <ClInclude Include="src\selection_range.h" />
     <ClInclude Include="src\shadow.h" />
     <ClInclude Include="src\status_icon.h" />

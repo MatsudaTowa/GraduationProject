@@ -11,14 +11,16 @@
 /**
 * @brief コンストラクタ
 */
-My::CCemeteryZone::CCemeteryZone() :m_pRange(nullptr)
+My::CCemeteryZone::CCemeteryZone()
 {
-	if (m_pRange == nullptr)
+	CSelectionRange* pRange = GetSelectionRange();
+	if (pRange == nullptr)
 	{
-		m_pRange = CSelectionRange::Create({ 1100.0f, 10.0f,0.0f }, { 100.0f, 1000.0f });
-		m_pRange->SetColor({ COLOR_BLACK.r,COLOR_BLACK.g,COLOR_BLACK.b,0.5f });
-		m_pRange->SetisDraw(false);
+		pRange = CSelectionRange::Create({ 1200.0f, 10.0f,0.0f }, { 100.0f, 1000.0f });
+		pRange->SetColor({ COLOR_BLACK.r,COLOR_BLACK.g,COLOR_BLACK.b,0.5f });
+		pRange->SetisDraw(false);
 	}
+	SetSelectionRange(pRange);
 }
 
 /**
@@ -26,11 +28,6 @@ My::CCemeteryZone::CCemeteryZone() :m_pRange(nullptr)
 */
 My::CCemeteryZone::~CCemeteryZone()
 {
-	if (m_pRange == nullptr)
-	{
-		m_pRange->SetisDelete(true);
-		m_pRange = nullptr;
-	}
 }
 
 void My::CCemeteryZone::Update()

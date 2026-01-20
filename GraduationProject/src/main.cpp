@@ -34,6 +34,16 @@ RECT g_windowRect;// ウィンドウを切り替えるための変数
 //=============================================
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE /*hInstancePrev*/, _In_ LPSTR /*lpCmdLine*/, _In_ int nCmdShow)
 {
+	//// TODO:これでexeが立ち上がる
+	//ShellExecute(
+	//	nullptr,
+	//	"open",
+	//	"サーバー.exe",
+	//	nullptr,
+	//	nullptr,
+	//	SW_SHOWNORMAL
+	//);
+
 	//_CrtSetBreakAlloc(246); // 必ずプログラムの最初に実行する
 #ifdef _DEBUG
 	_CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);

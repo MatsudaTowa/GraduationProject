@@ -5,7 +5,8 @@
 //
 //=============================================
 #include "wait_zone_bg.h"
-
+#include "active_scene_manager.h"
+#include "zone_manager.h"
 //無名空間
 namespace
 {
@@ -18,7 +19,7 @@ namespace
 //=============================================
 // コンストラクタ
 //=============================================
-My::CWaitZoneBG::CWaitZoneBG(int nPriority)
+My::CWaitZoneBG::CWaitZoneBG(int nPriority) :CButton(nPriority)
 {
 }
 
@@ -36,6 +37,22 @@ HRESULT My::CWaitZoneBG::Init()
 {
 	//親クラスの初期化処理を呼ぶ
 	CObject2D::Init();
+
+	for (int i = 0; i < NUM_CARD; ++i)
+	{
+		D3DXVECTOR3 pos = GetPos();
+		pos.x += (NUM_CARD - 1 - i) * 10.0f;
+
+		for (int j = 0; j < CCardFrame::FRAMETYPE_MAX; ++j)
+		{
+			m_pPseundCard[i].card_frame[j] =
+				CPsendCardFrame::Create(
+					(CCardFrame::FRAMETYPE)j,
+					pos,
+					VEC3_RESET_ZERO
+				);
+		}
+	}
 
 	//テクスチャ情報の取得
 	CTexture* pTexture = CManager::GetInstance()->GetTexture();
@@ -71,6 +88,14 @@ HRESULT My::CWaitZoneBG::Init()
 //=============================================
 void My::CWaitZoneBG::Uninit()
 {
+	for (int i = 0; i < NUM_CARD; ++i)
+	{
+		// カードフレーム生成
+		for (int j = 0; j < CCardFrame::FRAMETYPE_MAX; ++j)
+		{
+			m_pPseundCard[i].card_frame[j]->Uninit();
+		}
+	}
 	//親クラスの終了処理を呼ぶ
 	CObject2D::Uninit();
 }
@@ -94,6 +119,35 @@ void My::CWaitZoneBG::Draw()
 {	
 	// 親クラスの描画処理を呼ぶ
 	CObject2D::Draw();
+}
+
+void My::CWaitZoneBG::ButtonTrigger()
+{
+	CActiveSceneCharacterState* state = CActiveSceneManager::GetInstance()->GetPlayer()->GetState();
+
+	// ロビーじゃなかったら抜ける
+	if (typeid(*state) == typeid(CPlayerDuelState))
+	{
+		CPlayerDuelState* duel_state = dynamic_cast<CPlayerDuelState*>(state);
+		CWaitZone* zone = duel_state->GetZoneManager()->GetWaitZone();
+		std::list<CCard*> card_list = zone->GetList();
+
+		//準備OKか切り替え
+		bool isView = duel_state->GetIsCemeteryView();
+		isView = isView ? false : true;
+		duel_state->SetIsWaitView(isView);
+
+		zone->GetSelectionRange()->SetisDraw(isView);
+	}
+}
+
+bool My::CWaitZoneBG::ProcessMouseEvent()
+{
+	return false;
+}
+
+void My::CWaitZoneBG::CardisView()
+{
 }
 
 //=============================================

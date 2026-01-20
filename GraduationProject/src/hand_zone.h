@@ -8,7 +8,7 @@
 #ifndef _HAND_ZONE_H_
 #define _HAND_ZONE_H_
 
-#include "zone.h"
+#include "selectable_zone.h"
 #include "selection_range.h"
 
 /** @brief My 名前空間 */
@@ -17,7 +17,7 @@ namespace My
 	/**
 	* @brief 手札ゾーンクラス
 	*/
-	class CHandZone : public CZone
+	class CHandZone : public CSelectableZone
 	{
 	public:
 		/**

@@ -22,18 +22,11 @@ My::CHand::CHand() :
 	m_TotalNum(0),
 	m_IsPassStart(false),
 	m_IsPickUp(false),
-	m_pRange(nullptr),
 	m_HandState(NEUTRAL)/*,
 	m_pHandCard(),
 	m_pStayCard(),
 	m_pTriggerCard()*/
 {
-	if (m_pRange == nullptr)
-	{
-		m_pRange = CSelectionRange::Create({ SCREEN_WIDTH * HALF, 650.0f,0.0f }, { 360.0f, CCardFrame::CARD_HEIGHT });
-		m_pRange->SetColor({ COLOR_RED.r,COLOR_RED.g,COLOR_RED.b,0.5f });
-		m_pRange->SetisDraw(true);
-	}
 	/*for (int i = 0; i < MAX_HANDSCARD; i++)
 	{
 		m_pCard[i] = nullptr;
@@ -42,10 +35,6 @@ My::CHand::CHand() :
 
 My::CHand::~CHand()
 {
-	if (m_pRange == nullptr)
-	{
-		m_pRange = nullptr;
-	}
 }
 
 //===========================================================================================================
@@ -90,13 +79,6 @@ void My::CHand::Update(CPlayerDuelState* state, CActiveSceneCharacter* player)
 	for (auto& iter : state->GetZoneManager()->GetHandZone()->GetList())
 	{
 		iter->Update(state);
-	}
-
-	if (m_pRange != nullptr)
-	{
-		int nCardNum = state->GetZoneManager()->GetHandZone()->GetList().size();
-		float posInterbal = CCardFrame::CARD_WIDTH - (5 * nCardNum * 0.5f);	// ŽèŽD‚É•\Ž¦‚³‚ê‚Ä‚¢‚éŽž‚ÌƒJ[ƒh‚ÌŠÔŠu
-		m_pRange->SetSize({ 360.0f,CCardFrame::CARD_HEIGHT});
 	}
 
 	// ŽèŽD‘I‘ð
@@ -170,8 +152,9 @@ void My::CHand::Select(CPlayerDuelState* state)
 //===========================================================================================================
 void My::CHand::Cast(CDuelCharacter* character, CActiveSceneCharacter* player)
 {
-	bool is_hit_area = GET_COLISION->Check2DPolygonColision(GET_INPUT_MOUSE->GetMousePos(), { 3.0f,3.0f }, { m_pRange->GetPos().x,m_pRange->GetPos().y,0.0f }, m_pRange->GetSize());
-	if (is_hit_area && m_pRange->GetisDraw() && m_HandState == NEUTRAL && GET_INPUT_MOUSE->GetMouseMove().x == 0.0f)
+	CSelectionRange* pRange = character->GetZoneManager()->GetHandZone()->GetSelectionRange();
+	bool is_hit_area = GET_COLISION->Check2DPolygonColision(GET_INPUT_MOUSE->GetMousePos(), { 3.0f,3.0f }, { pRange->GetPos().x,pRange->GetPos().y,0.0f }, pRange->GetSize());
+	if (is_hit_area && pRange->GetisDraw() && m_HandState == NEUTRAL && GET_INPUT_MOUSE->GetMouseMove().x == 0.0f)
 	{
 		return;
 	}

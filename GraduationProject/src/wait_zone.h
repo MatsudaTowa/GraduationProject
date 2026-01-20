@@ -9,7 +9,7 @@
 #define _WAIT_ZONE_H_
 
 // include
-#include "zone.h"
+#include "selectable_zone.h"
 
 /** @brief My 名前空間 */
 namespace My
@@ -17,7 +17,7 @@ namespace My
 	/**
 	* @brief 待機ゾーンクラス
 	*/
-	class CWaitZone : public CZone
+	class CWaitZone : public CSelectableZone
 	{
 	public:
 		/**
