@@ -26,7 +26,7 @@ m_target(VEC2_RESET_ZERO),
 m_basesize(VEC2_RESET_ZERO),
 m_attacker(VEC2_RESET_ZERO),
 m_triangle(nullptr),
-m_nLife(0),
+m_fLife(0.0f),
 m_IsOverlapped(false),
 m_ShiftPos(VEC2_RESET_ZERO),
 m_TopCardList()
@@ -69,7 +69,7 @@ HRESULT My::CTargetArrow::Init()
 
 	// Žõ–½‚ð‰Šú‰»
 	//m_nLife = ONE_SECOND * 3;
-	m_nLife = 3000;
+	m_fLife = 3.0f;
 
 	SetAnimFrame(1);
 
@@ -119,11 +119,11 @@ void My::CTargetArrow::Update()
 	// Žõ–½‚ðŒ¸‚ç‚·
 	if (CRakNet::GetInstance()->GetOnline())
 	{
-		m_nLife -= My::CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime();
+		m_fLife -= My::CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime();
 	}
 	else
 	{
-		m_nLife -= CManager::GetInstance()->GetElapsedTime();
+		m_fLife -= 0.017f;
 	}
 }
 

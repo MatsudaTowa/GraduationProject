@@ -160,25 +160,25 @@ void My::CCardStateCast::Init(CCard* cpy, CDuelCharacter* duel)
 	float mag = 1.0f;
 	cpy->SetSize({ mag * 1.2f,mag,mag });
 
-	//リストの取得
-	std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
-
-	//キャラクターの周回
-	for (auto& iter : List)
+	//オフライン時の処理
+	if (!CRakNet::GetInstance()->GetOnline())
 	{
-		if (cpy->GetUserArea() != iter->GetArea()) continue;
+		//リストの取得
+		std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
+
+		CActiveSceneCharacter* pCharacter = My::CActiveSceneManager::GetInstance()->GetCharacter(cpy->GetUserId());
 
 		// ステータスを取得
-		CActiveSceneCharacter::Status status = iter->GetStatus();
+		CActiveSceneCharacter::Status status = pCharacter->GetStatus();
 
 		// コスト分エナジーを減らす
 		status.energy -= cpy->GetBaseStatus().nCost;
 
 		// エナジーを設定
-		iter->SetStatus(status);
+		pCharacter->SetStatus(status);
 
 		// ゾーンマネージャーの取得
-		CZoneManager* pZoneManager = dynamic_cast<CDuelCharacter*>(iter->GetState())->GetZoneManager();
+		CZoneManager* pZoneManager = dynamic_cast<CDuelCharacter*>(pCharacter->GetState())->GetZoneManager();
 		// オーバーラップカードの格納変数
 		COverlapCard* pOverlapCard = nullptr;
 
@@ -194,10 +194,8 @@ void My::CCardStateCast::Init(CCard* cpy, CDuelCharacter* duel)
 			}
 
 			// ターゲットエリアが違うならスルー
-			if (iter->GetArea() != Target->GetArea()) { continue; }
+			if (pCharacter->GetArea() != Target->GetArea()) { continue; }
 		}
-
-		break;
 	}
 
 	//カードのキャスト処理
@@ -290,7 +288,7 @@ My::CCardStateStay::~CCardStateStay()
 void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 {
 	// カウントを初期化
-	m_fStaycount = static_cast<float>(My::CDuel_Manager::GetInstance()->GetDuelTimer().GetElapsedTime() * 0.001f) - cpy->GetStartCastTime();
+	m_fStaycount = 0.0f;
 
 	//位置の指定
 	SetCardPos(cpy);
@@ -306,9 +304,9 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 		CActiveSceneManager::GetInstance()->GetTargetArrowManager()->Regist(CTargetArrow::Create(cpy->GetUserArea(), iter->GetArea(), cpy), cpy);
 	}
 
-	//m_pFan = new CObject2D_TriangleFan(20);
-	//m_pFan->SetPos(ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), cpy->GetPos()));
-	//m_pFan->Init();
+	m_pFan = new CObject2D_TriangleFan(20);
+	m_pFan->SetPos(ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), cpy->GetPos()));
+	m_pFan->Init();
 
 }
 
@@ -337,32 +335,37 @@ void My::CCardStateStay::Update(CCard* cpy, CDuelCharacter* duel)
 		return;
 
 	//倍率
-	float mag = 5.0f;
+	float mag = 5.0f; static float a = 0;
 	cpy->SetSize({ mag * 1.2f,mag,mag });
 
 	//ディフェンスカードはカウントダウンを始めない
 	if (!cpy->IsCreatStayCount()) return;
+	
+	//オフライン時の処理
+	if (!CRakNet::GetInstance()->GetOnline())
+	{
+		if (m_fStaycount >= 3.0f)
+		{// カウントが設定された時間を超えたら
 
-	if (m_fStaycount >= 3.0f)
-	{// カウントが設定された時間を超えたら
+			// トリガー状態にする
+			cpy->ChangeState(CCardState::CARD_STATE::CARD_TRIGGER, duel);
 
-		// トリガー状態にする
-		cpy->ChangeState(CCardState::CARD_STATE::CARD_TRIGGER, duel);
-		
-		return;
+			return;
+		}
 	}
 
 	// カウントを進める
 	if (CRakNet::GetInstance()->GetOnline())
 	{
-		m_fStaycount += My::CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime() * 0.001f;
+		std::chrono::duration<float>(My::CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime()).count();
+		m_fStaycount += My::CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime()/* * 0.001f*/;
 	}
 	else
 	{
 		m_fStaycount += 0.016f;
 	}
 
-	//m_pFan->SetStayTime(m_fStaycount);
+	m_pFan->SetStayTime(m_fStaycount);
 }
 
 //===========================================================================================================

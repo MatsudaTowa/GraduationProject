@@ -411,6 +411,13 @@ void CRakNet_Server::SendGameSet()
 
     //書き出し
     bsOut.Write((RakNet::MessageID)CRakNet_Data::GameMessages::ID_DUEL_MESSAGE_GAMESET);    //メッセージ
+
+    //順位の書き出し
+    for (auto iter : CDuel_Manager::GetInstance()->GetRankMap())
+    {
+        bsOut.Write(iter.first);    //プレイヤーの番号
+        bsOut.Write(iter.second);   //順位
+    }
    
     //全クライアントにブロードキャスト
     m_pPeer->Send(&bsOut, IMMEDIATE_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);  //優先的に送ることで反映を先にする
@@ -422,18 +429,28 @@ void CRakNet_Server::SendGameSet()
 bool CRakNet_Server::IsSendGameSet()
 {
     //生存者数
-    int nLifePlayer = 0;
+    //int nLifePlayer = 0;
+    std::vector<int> AlivePlayer;
 
-    //各プレイヤーのパラメータを送信
+    //各プレイヤーのパラメータを確認
     for (auto iter : My::CDuel_Player_Manager::GetInstance()->GetList())
     {
         //体力が1以上なら生存者のカウント
-        if (iter->GetStatus().life > 0) nLifePlayer++;
+        if (iter->GetStatus().life > 0) AlivePlayer.push_back(iter->GetIndex());
     }
 
     //生存者数が1人なら終了
-    if (nLifePlayer <= 1)
+    if (AlivePlayer.size() <= 1)
     {
+        //1人だけ残っていたら1位として順位に追加
+        if (AlivePlayer.size() == 1)
+        {
+            CDuel_Manager::GetInstance()->GetRankMap()[AlivePlayer[0]] = 0;
+           /* std::map<int, int> RankMap = CDuel_Manager::GetInstance()->GetRankMap();
+            RankMap = { AlivePlayer[0], 0 };
+            CDuel_Manager::GetInstance()->SetRankMap(RankMap);*/
+        }
+
         return true;
     }
 

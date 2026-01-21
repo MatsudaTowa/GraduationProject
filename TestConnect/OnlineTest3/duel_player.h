@@ -61,17 +61,23 @@ namespace My
 		 */
 		void ReceiveDamage(int damage);
 
+		//設定と取得
+		//死亡フラグ
+		void SetIsDeath(bool death) { m_isDeath = death; }	//設定
+		bool GetIsDeath() { return m_isDeath; }				//取得
+
 	private:
 
 		//定数
 		static constexpr int ENERGY_UP_TIME{ 3000 };
 
 		//変数
-		Status m_Status = { 40, 0, 0, 2, 10 };	//ステータス
+		Status m_Status = { 40, 0, 0, 92, 10 };	//ステータス
 		RakNet::Time m_ElapsedTime;				//経過時間
 
 		//TODOここに対戦中に受け取る変数を追加
 		My::CZoneManager* m_ZoneManager;
+		bool m_isDeath;
 	};
 }
 

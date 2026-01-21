@@ -87,14 +87,14 @@ namespace
 // コンストラクタ
 //=============================================
 My::CPlayerDuelState::CPlayerDuelState(CActiveSceneCharacter* character) :CDuelCharacter(character),
-m_nEnergyUpCount(0),
-m_EnergyUpFrame(INT_ZERO),
+m_fEnergyUpCount(0),
+m_fEnergyUpFrame(INT_ZERO),
 m_pHand(nullptr),
 m_pWait(nullptr)
 {
 	GetZoneManager()->GetHandZone()->CreateRange({ SCREEN_WIDTH * HALF, 650.0f,0.0f }, { 360.0f, CCardFrame::CARD_HEIGHT }, { COLOR_RED.r,COLOR_RED.g,COLOR_RED.b,0.5f }, true);
 	GetZoneManager()->GetWaitZone()->CreateRange({ 1200.0f, 10.0f,0.0f }, { 100.0f, 1000.0f }, { COLOR_BLUE.r,COLOR_BLUE.g,COLOR_BLUE.b,0.5f }, true);
-	m_EnergyUpFrame = ENERGY_UP_FRAME;
+	m_fEnergyUpFrame = ENERGY_UP_FRAME;
 }
 
 //=============================================
@@ -140,7 +140,7 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 
 	if (character->GetEnergy() < CActiveSceneCharacter::MAX_ENERGY)
 	{//エナジーがMAXになったらUIの更新はしない
-		pCharge->Update(static_cast<float>(m_nEnergyUpCount), ENERGY_UP_FRAME);
+		pCharge->Update(static_cast<float>(m_fEnergyUpCount), ENERGY_UP_FRAME);
 		EnergyUp(player);
 	}
 
@@ -259,15 +259,15 @@ void My::CPlayerDuelState::EnergyUp(CActiveScenePlayer* player)
 	
 	if (GET_INPUT_KEYBOARD->GetPress(DIK_1))
 	{
-		m_EnergyUpFrame  -= 100;
-		if (m_EnergyUpFrame <= 0)
+		m_fEnergyUpFrame  -= 100;
+		if (m_fEnergyUpFrame <= 0)
 		{
-			m_EnergyUpFrame = 1;
+			m_fEnergyUpFrame = 1;
 		}
 	}
 	else if (GET_INPUT_KEYBOARD->GetPress(DIK_2))
 	{
-		m_EnergyUpFrame += 100;
+		m_fEnergyUpFrame += 100;
 	}
 	
 
@@ -286,17 +286,17 @@ void My::CPlayerDuelState::EnergyUp(CActiveScenePlayer* player)
 	//経過時間を取得
 	if (CRakNet::GetInstance()->GetOnline())
 	{
-		m_nEnergyUpCount += My::CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime();
+		m_fEnergyUpCount += My::CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime();
 	}
 	else
 	{
-		m_nEnergyUpCount += 17;	//オフライン用
+		m_fEnergyUpCount += 0.017f;	//オフライン用
 	}
 
 	//エナジーの更新時間を超えているなら繰り返す
-	while (m_nEnergyUpCount > m_EnergyUpFrame)
+	while (m_fEnergyUpCount > m_fEnergyUpFrame)
 	{
-		m_nEnergyUpCount -= m_EnergyUpFrame;
+		m_fEnergyUpCount -= m_fEnergyUpFrame;
 
 		//エナジー増加
 		++energy;

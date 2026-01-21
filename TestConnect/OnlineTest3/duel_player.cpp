@@ -15,7 +15,8 @@
 //=====================================
 My::CDuel_Player::CDuel_Player() : 
 	m_ZoneManager(nullptr),		//ゾーンマネージャー
-	m_ElapsedTime(0)			//経過時間
+	m_ElapsedTime(0),			//経過時間
+	m_isDeath(false)			//死亡フラグ
 {
 	//リストに追加
 	My::CDuel_Player_Manager::GetInstance()->AddList(this);

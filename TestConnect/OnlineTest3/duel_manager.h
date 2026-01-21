@@ -28,7 +28,10 @@ public:
 	};
 
 	//関数
-	~CDuel_Manager() {}							//デストラクタ
+	~CDuel_Manager() 
+	{
+		m_RankMap.clear();
+	}	//デストラクタ
 	
 	//シングルトン
 	static CDuel_Manager* GetInstance()
@@ -37,18 +40,24 @@ public:
 		return &instance;
 	}
 
+	//関数
+	void RankReset();
+
 	//設定と取得
 	DuelRuleParam& GetDuelRuleParam() { return m_DuelRuleParam; }	//対戦時のルールを取得
 	CDuel_Timer& GetDuelTimer() { return m_DuelTimer; }				//対戦時のタイマー
+	std::map<int, int>& GetRankMap() { return m_RankMap; }			//順位のマップ取得
+	void SetRankMap(std::map<int, int> map) { m_RankMap = map; }	//順位のマップ設定
 
 private:
 
 	//関数
-	CDuel_Manager() : m_DuelRuleParam(), m_DuelTimer(){}		//コンストラクタ
+	CDuel_Manager() : m_DuelRuleParam(), m_DuelTimer(), m_RankMap(){}		//コンストラクタ
 
 	//変数
 	DuelRuleParam m_DuelRuleParam;				//対戦のルールパラメータ
 	CDuel_Timer m_DuelTimer;					//対戦時に扱うタイマー
+	std::map<int, int> m_RankMap;				//順位のマップ(番号、順位)
 };
 
 #endif

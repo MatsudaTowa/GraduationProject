@@ -91,7 +91,13 @@ namespace My
 		 * @brief プレイヤーの設定
 		 * @param [in]プレイヤーのポインタ
 		 */		
-		void SetPlayer(CActiveScenePlayer* player) { m_pPlayer = player; }
+		void SetPlayer(CActiveScenePlayer* player) 
+		{ 
+			m_pPlayer = player; 
+
+			if (player == nullptr) return;
+			m_nPlayerId = player->GetPlayerIdx();	//プレイヤーの番号の保持
+		}
 
 		/**
 		 * @brief プレイヤーの取得
@@ -190,14 +196,21 @@ namespace My
 		*/
 		inline CTargetArrowManager* GetTargetArrowManager() { return m_pTargetArrowManager; }
 
+		/**
+		 * @brief プレイヤーの番号取得
+		 * @return プレイヤーの番号
+		 */
+		int GetPlayerIndex() { return m_nPlayerId; }
+
 	private:
 
 		CEnemyManager* m_pEnemyManager;
 		CAreaManager* m_pAreaManager;
 		CActiveSceneState* m_pState;				//!<ゲームのステート状態
 		CActiveScenePlayer* m_pPlayer;				//!<プレイヤー
-		CField* m_pField;					//!<床
-		bool m_isFinish;					//!ゲームの処理を終わらせるか
+		CField* m_pField;							//!<床
+		bool m_isFinish;							//!ゲームの処理を終わらせるか
+		int m_nPlayerId;							//!プレイヤーの番号(Resultで使う為)
 		CTargetArrowManager* m_pTargetArrowManager;	// ターゲット矢印のマネージャー
 	};
 }

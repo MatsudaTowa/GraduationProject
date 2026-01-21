@@ -15,6 +15,7 @@
 #include "card_manager.h"
 #include "zone_manager.h"
 #include "card_attack.h"
+#include "duel_manager.h"
 
 int My::CLobby::m_characterIdx = -1;
 
@@ -235,6 +236,9 @@ My::CDuel::CDuel()
 {
 	GET_CAMERA(GET_CAMERA_IDX)->ChangeCameraState(new CBirdView);
 	GET_CAMERA(GET_CAMERA_IDX)->SetCamera();
+
+	//デュエル情報の初期化
+	CDuel_Manager::GetInstance()->Init();
 
 	//終了フラグを初期化
 	My::CActiveSceneManager::GetInstance()->SetFinish(false);

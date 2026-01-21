@@ -12,14 +12,14 @@
 //コンストラクタ
 //=====================================
 CDuel_Timer::CDuel_Timer() :
-	m_StartTime(0),			//開始時間
-	m_ElapsedTime(0),		//経過時間
-	m_OldElapsedTime(0),	//前回の経過時間
-	m_deltaTime(0),			//デルタタイム
+	m_StartTime(),			//開始時間
+	m_ElapsedTime(),		//経過時間
+	m_OldElapsedTime(),		//前回の経過時間
+	m_deltaTime(0.0f),		//デルタタイム
 	m_isUpdate(false)		//更新フラグ
 {
 	//現在の時間を開始時間として保存
-	m_StartTime = RakNet::GetTime();
+	m_StartTime = std::chrono::high_resolution_clock::now();
 }
 
 //=====================================
@@ -36,8 +36,8 @@ CDuel_Timer::~CDuel_Timer()
 void CDuel_Timer::Reset()
 {
 	//経過時間のリセット
-	m_ElapsedTime = 0;
-	m_OldElapsedTime = 0;
+	//m_ElapsedTime. = 0;
+	//m_OldElapsedTime = 0;
 }
 
 //=====================================
@@ -49,10 +49,24 @@ void CDuel_Timer::Update()
 	if (!m_isUpdate) return;
 
 	//経過時間を取得
-	RakNet::Time RakNetTime = RakNet::GetTime();	//現在の時間を取得
-	m_OldElapsedTime = m_ElapsedTime;				//前回の経過時間を保存
-	m_ElapsedTime = RakNetTime - m_StartTime;		//経過時間を算出
-	m_deltaTime = m_ElapsedTime - m_OldElapsedTime;	//デルタタイムを算出
+	//std::chrono::high_resolution_clock::time_point CurrentTime = std::chrono::high_resolution_clock::now();;	//現在の時間を取得
+	//m_OldElapsedTime = m_ElapsedTime;				//前回の経過時間を保存
+	//m_ElapsedTime = CurrentTime - m_StartTime;		//経過時間を算出
+	//m_deltaTime = m_ElapsedTime - m_OldElapsedTime;	//デルタタイムを算出
+
+	//auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(CurrentTime - m_ElapsedTime).count();
+	// 現在の時間を次のループの基準時間に更新
+	//m_OldElapsedTime = CurrentTime;
+
+	auto currentTime = std::chrono::high_resolution_clock::now();
+	// デルタタイムを計算 (ミリ秒単位に変換)
+	auto deltaTime = currentTime - m_OldElapsedTime;
+	// 現在の時間を次のループの基準時間に更新
+	m_OldElapsedTime = currentTime;
+	//デルタタイムをタイマーに加算
+	m_deltaTime = std::chrono::duration<float>(deltaTime).count();
+	// デルタタイムを利用して処理を行う
+	//std::cout << "経過秒数" << timer_count << std::endl;
 }
 
 //=====================================
@@ -67,7 +81,7 @@ void CDuel_Timer::Start()
 	m_isUpdate = true;
 
 	//現在の時間を開始時間として保存
-	m_StartTime = RakNet::GetTime();
+	m_StartTime = std::chrono::high_resolution_clock::now();
 }
 
 //=====================================

@@ -144,12 +144,21 @@ void My::CCardAttack::Trigger()
 			pDefCard->ChangeState(CCardState::CARD_TRIGGER, pPlayer);
 		}
 
+		//体力が0以下なら飛ばす
+		if (pPlayer->GetStatus().life <= 0)
+		{
+			continue;
+		}
+
 		//ダメージがあるなら与える
 		if (Damage.second > 0)
 		{
 			pPlayer->ReceiveDamage(Damage.second);
 		}
 	}
+
+	//死亡したプレイヤーの確認
+	CheckDeathPlayer();
 
 	//重ねているカードを墓地状態にする
 	for (auto& StackCard : m_StackedCardsList)
@@ -323,7 +332,7 @@ void My::CCardAttack::SendCastInfo(RakNet::BitStream& bsout)
 	case CastDestination::AREA:	//エリアの場合
 
 		//ターゲットの数を書き出し(クライアント側でサイズが消失しているため一時的に二つに)
-		bsout.Write((int)GetTargetIdVector().size());
+		//bsout.Write((int)GetTargetIdVector().size());
 		bsout.Write((int)GetTargetIdVector().size());
 
 		//ターゲットの番号を書き出し
@@ -339,7 +348,7 @@ void My::CCardAttack::SendCastInfo(RakNet::BitStream& bsout)
 		//重ね先のカード情報を送信
 	{
 		CCardAttack* pAttackCard = GetStackCard();
-		bsout.Write((int)pAttackCard->GetBaseStatus().nCardID);	//カード番号(謎にここの読み込みが消えているのでもう一つ送るバグです)
+		//bsout.Write((int)pAttackCard->GetBaseStatus().nCardID);	//カード番号(謎にここの読み込みが消えているのでもう一つ送るバグです)
 		bsout.Write((int)pAttackCard->GetBaseStatus().nCardID);	//カード番号
 		bsout.Write((int)pAttackCard->GetSameTypeId());			//同種番号
 	}
@@ -349,4 +358,40 @@ void My::CCardAttack::SendCastInfo(RakNet::BitStream& bsout)
 	default:
 		break;
 	}
+}
+
+//===========================================================================================================
+//死亡したプレイヤーの確認
+//===========================================================================================================
+bool My::CCardAttack::CheckDeathPlayer()
+{
+	//人数格納用変数
+	std::vector<int> PlayerIndexVector;	//現在死んだプレイヤー番号の保存用
+	int nDiedPlayer = 0;				//すでに死んでいたプレイヤー数のカウント用
+
+	//プレイヤーを周回して死んだ人数をカウント
+	for (auto iter : CDuel_Player_Manager::GetInstance()->GetList())
+	{
+		//現在の攻撃で死んだプレイヤーの数を数える
+		if (iter->GetStatus().life > 0) continue;	//体力が０ではないなら飛ばす
+
+		//すでに死んでいるプレイヤーならカウントして飛ばす
+		if (iter->GetIsDeath())
+		{
+			nDiedPlayer++;
+			continue;
+		}
+
+		//死んだプレイヤーの番号を保存
+		PlayerIndexVector.push_back(iter->GetIndex());	//番号を保存
+		iter->SetIsDeath(true);							//死亡フラグを立てる
+	}
+
+	//死亡したプレイヤーの順位を算出
+	for (int Index : PlayerIndexVector)
+	{
+		CDuel_Manager::GetInstance()->GetRankMap()[Index] = 3 - nDiedPlayer;
+	}
+
+	return true;	//NOTE : 返り値は必要ない可能性
 }

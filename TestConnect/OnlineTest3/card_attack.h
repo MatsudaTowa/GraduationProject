@@ -174,6 +174,10 @@ namespace My
 
 	private:
 
+		//関数
+		bool CheckDeathPlayer();	//死亡したプレイヤーがいるか
+
+		//変数
 		AttackType m_AttackType;						// 攻撃の種類
 		int m_nAttackValue;								// ダメージ数
 		std::map<int, int> m_DamageInfo;				// ダメージ情報

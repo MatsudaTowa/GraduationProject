@@ -12,6 +12,7 @@
 //ヘッダーのインクルード
 #include "main.h"
 #include "GetTime.h"
+#include <chrono>
 
 //デュエルマネージャークラス
 class CDuel_Timer
@@ -23,12 +24,12 @@ public:
 	CDuel_Timer();			//コンストラクタ
 	void Reset();			//タイマーのリセット
 	void Update();			//更新
-	uint64_t GetdeltaTime() { return m_deltaTime; }	//デルタタイムの取得
-	uint64_t GetStartTime() { return m_StartTime; }	//対戦開始時間の取得
-	uint64_t GetElapsedTime() { return m_ElapsedTime; }	//経過時間の取得
+	float GetdeltaTime() { return m_deltaTime; }		//デルタタイムの取得
+	std::chrono::high_resolution_clock::time_point GetStartTime() { return m_StartTime; }		//対戦開始時間の取得
+	std::chrono::high_resolution_clock::time_point GetElapsedTime() { return m_ElapsedTime; }	//経過時間の取得
 	void Start();			//開始
 	void Stop();			//停止
-	void SetStartTime(uint64_t time) { m_StartTime = time; }	//開始時間の設定
+	void SetStartTime(std::chrono::high_resolution_clock::time_point time) { m_StartTime = time; }	//開始時間の設定
 
 	//デルタタイムを反映した値を返す
 	template<typename T>
@@ -40,10 +41,10 @@ public:
 private:
 
 	//変数
-	RakNet::Time m_StartTime;		//開始時間
-	RakNet::Time m_ElapsedTime;		//経過時間
-	RakNet::Time m_OldElapsedTime;	//前回の経過時間
-	RakNet::Time m_deltaTime;		//デルタタイム
+	std::chrono::high_resolution_clock::time_point m_StartTime;		//開始時間
+	std::chrono::high_resolution_clock::time_point m_ElapsedTime;	//経過時間
+	std::chrono::high_resolution_clock::time_point m_OldElapsedTime;//前回の経過時間
+	float m_deltaTime;				//デルタタイム
 	bool m_isUpdate;				//更新フラグ
 };
 

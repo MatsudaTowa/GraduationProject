@@ -5,6 +5,7 @@
 //
 //=============================================
 #include "result_ui_manager.h"	//リザルトUIマネージャー
+#include "active_scene_manager.h"
 
 #include <algorithm>	// findを使うのに必要
 
@@ -350,7 +351,7 @@ void My::CResultUIManager::SetRanking(_In_ int nRanking[MAX_RANKING_COUNT],_In_ 
 		m_nRanking[nCnt] = nRanking[nCnt];
 	}
 	// プレイヤー番号をコピー
-	m_nPlayer = nPlayer;
+	m_nPlayer = My::CActiveSceneManager::GetInstance()->GetPlayerIndex();
 }
 
 //=============================================

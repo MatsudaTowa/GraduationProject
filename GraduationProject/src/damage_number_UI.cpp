@@ -15,7 +15,7 @@ const std::string My::CDamageNumberUI::TEX_NAME = "data\\TEXTURE\\number.png";
 // コンストラクタ
 //=============================================
 My::CDamageNumberUI::CDamageNumberUI(int nPriority) :CObject2D(nPriority),
-	m_nLife(1000)
+	m_fLife(1.0f)
 {
 }
 
@@ -58,15 +58,15 @@ void My::CDamageNumberUI::Update()
 	//経過時間を取得
 	if (CRakNet::GetInstance()->GetOnline())
 	{
-		m_nLife -= My::CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime();
+		m_fLife -= My::CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime();
 	}
 	else
 	{
-		m_nLife -= 17;	//オフライン用
+		m_fLife -= 0.017f;	//オフライン用
 	}
 
 	//0以下なら破棄
-	if (m_nLife <= 0)
+	if (m_fLife <= 0.0f)
 	{
 		Uninit();
 	}

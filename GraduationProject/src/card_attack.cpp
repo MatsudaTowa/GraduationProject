@@ -187,56 +187,6 @@ bool My::CCardAttack::IsCast(CDuelCharacter*, CInputMouse::AREA)
 //===========================================================================================================
 void My::CCardAttack::Cast(CDuelCharacter* duel)
 {
-	////キャラクターリストの取得
-	//std::list<My::CActiveSceneCharacter*> CharacterList = CActiveSceneManager::GetInstance()->GetCharacterList();
-
-	////キャラクターの取得
-	//for (auto& iter : CharacterList)
-	//{
-	//	//対象のエリアを持つプレイヤーを探す
-	//	if (GetTarget() != iter->GetArea()) continue;
-	//	
-	//	//デュエル状態にキャスト
-	//	//if (typeid(CDuelCharacter) != typeid(*iter->GetState())) break;					//状態の確認
-	//	CDuelCharacter* DuelState = dynamic_cast<CDuelCharacter*>(iter->GetState());	//キャスト
-	//	if (DuelState == nullptr) break;												//中身の確認
-
-	//	//待機状態のカードを確認
-	//	if (!DuelState->GetZoneManager()->GetWaitZone()->GetList().empty())
-	//	{
-	//		CCardDeffence* pCard = dynamic_cast<CCardDeffence*>(DuelState->GetZoneManager()->GetWaitZone()->GetList().front());	//先頭のカードの確認
-	//		if (pCard == nullptr) break;
-
-	//		//守備カードに自身のエリアを追加し、ステイ状態にする
-	//		pCard->SetTarget(GetUserArea());
-
-	//		//守備対象のターゲットの作成
-	//		CCardDeffence::DiffenceTarget Target = {0, 0};
-
-	//		//キャラクターの周回
-	//		for (auto character : My::CActiveSceneManager::GetInstance()->GetCharacterList())
-	//		{
-	//			//同じエリアのみ通す
-	//			if (character->GetArea() != GetUserArea()) continue;
-
-	//			Target.nAttackCardUserId = character->GetPlayerIdx();	//使用者の番号を伝える
-
-	//			break;
-	//		}
-
-	//		//パラメータを代入
-	//		Target.nTargetCard = duel->GetZoneManager()->GetCastPreviewZone()->GetList().size() - 1;
-	//		pCard->SetDiffenceTarget(Target);
-
-	//		pCard->ChangeState(CCardState::CARD_STAY, DuelState);
-
-	//		//守備カードのポインタを保存
-	//		m_DefCardVector.push_back(pCard);
-	//	}
-
-	//	break;
-	//}
-	
 	//ターゲットの周回
 	for (auto& Target : GetTargetPlayerList())
 	{
@@ -306,60 +256,6 @@ void My::CCardAttack::Trigger()
 	//ステイ後に起動
 	std::list<CActiveSceneCharacter*> List = CActiveSceneManager::GetInstance()->GetCharacterList();
 	
-	////リスト周回
-	//for (auto& itr : List)
-	//{
-	//	if (itr == nullptr) { continue; }
-
-	//	if (itr->GetArea() != GetTarget()) { continue; }
-
-	//	// ゾーンマネージャーの取得
-	//	CZoneManager* pZoneManager = nullptr;
-	//	pZoneManager = dynamic_cast<CDuelCharacter*>(itr->GetState())->GetZoneManager();
-
-	//	float totalattackvalue = 0.0f;
-
-	//	for (auto& iter : pZoneManager->GetCastPreviewZone()->GetList())
-	//	{
-	//		CCardAttack* pAttackCard = dynamic_cast<CCardAttack*>(iter);
-
-	//		if (pAttackCard == nullptr)
-	//			continue;
-
-	//		totalattackvalue += pAttackCard->GetAttackValue();
-	//	}
-
-	//	totalattackvalue += m_nAttackValue;
-
-	//	//ダメージの計算
-	//	int nDamage = totalattackvalue;	//与えるダメージ
-
-	//	//TODO : デュエル状態を参照できる場所が必要
-	//	CDuelCharacter* DuelState = dynamic_cast<CDuelCharacter*>(itr->GetState());	//キャスト
-	//	if (DuelState == nullptr) continue;											//中身の確認
-
-	//	//守備カードの周回
-	//	for (auto& iter : m_DefCardVector)
-	//	{
-	//		if (iter->GetStateNum() != CCardState::CARD_STAY) continue;
-
-	//		//守備の値だけダメージを減らす
-	//		nDamage -= iter->GetDefenceValue();
-
-	//		//ターゲットの守備カードの状態を変更
-	//		iter->ChangeState(CCardState::CARD_TRIGGER, DuelState);
-	//	}
-
-	//	//ダメージがあるなら与える
-	//	if (nDamage > 0)
-	//	{
-	//		itr->ReceiveDamage(nDamage);
-	//	}
-	//}
-
-	////カードのクリア
-	//m_DefCardVector.clear();
-
 	//周回
 	for (auto& iter : GetTargetPlayerList())
 	{
@@ -618,7 +514,7 @@ void My::CCardAttack::LoadCardInfo(RakNet::BitStream* bsin)
 		if (StayState) { StayState->ResetStayTime(); }
 
 		//キャスト状態に変更(NOTE : 重ねているカードはキャストしなくても良いかも)
-		ChangeState(My::CCardState::CARD_CAST, pDuelState);
+		//ChangeState(My::CCardState::CARD_CAST, pDuelState);
 
 		break;
 	}

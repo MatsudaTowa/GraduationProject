@@ -339,6 +339,7 @@
     <ClCompile Include="cemetery_zone.cpp" />
     <ClCompile Include="deck_zone.cpp" />
     <ClCompile Include="duel_data.cpp" />
+    <ClCompile Include="duel_manager.cpp" />
     <ClCompile Include="duel_player.cpp" />
     <ClCompile Include="duel_timer.cpp" />
     <ClCompile Include="field_zone.cpp" />

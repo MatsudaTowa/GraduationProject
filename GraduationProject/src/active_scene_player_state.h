@@ -43,7 +43,7 @@ namespace My
 	class CPlayerDuelState :public CDuelCharacter
 	{
 	public:
-		static constexpr int ENERGY_UP_FRAME = 3 * 1000;		//!<エナジーが上がるまでのフレーム数 TODO:今後のカードによっては変数に昇格するかも
+		static constexpr float ENERGY_UP_FRAME = 3.0f;		//!<エナジーが上がるまでのフレーム数 TODO:今後のカードによっては変数に昇格するかも
 
 		/**
 		 * @brief コンストラクタ
@@ -168,9 +168,9 @@ namespace My
 		 */
 		void DrawCard();
 
-		int m_nEnergyUpCount;		//!エナジーを増やすまでのカウント
-		float m_nEnergyUpCountRate;	//!エナジーを増やすまでのカウント
-		int m_EnergyUpFrame;		//!エナジーを増やすフレーム
+		float m_fEnergyUpCount;		//!エナジーを増やすまでのカウント
+		float m_fEnergyUpCountRate;	//!エナジーを増やすまでのカウント
+		float m_fEnergyUpFrame;		//!エナジーを増やすフレーム
 		bool m_isWaitView;
 		CHand* m_pHand;	// 手札
 		CWait* m_pWait;

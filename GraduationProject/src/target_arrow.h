@@ -86,19 +86,19 @@ namespace My
 		* @brief 寿命設定
 		* @param [in]寿命
 		*/
-		inline void SetLife(int life) { m_nLife = life; };
+		inline void SetLife(float life) { m_fLife = life; };
 
 		/**
 		* @brief 寿命設定
 		* @param [out]寿命
 		*/
-		inline int GetLife() { return m_nLife; };
+		inline float GetLife() { return m_fLife; };
 
 		/**
 		* @brief 寿命リセット
 		* @param [in]寿命
 		*/
-		inline void ResetLife() { m_nLife = ONE_SECOND * 3; };
+		inline void ResetLife() { m_fLife = 3.0f; };
 
 		/**
 		* @brief arrowが重なっているかどうか設定
@@ -184,7 +184,7 @@ namespace My
 		/**
 		* @brief 寿命(矢印自体の寿命)
 		*/
-		int m_nLife;
+		float m_fLife;
 
 		/**
 		* @brief arrowが重なっているかどうか

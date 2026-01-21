@@ -133,7 +133,7 @@ void My::CActiveSceneManager::DuelConnect()
 }
 
 //=============================================
-//守備カードのキャスト処理
+//キャラクターの取得
 //=============================================
 My::CActiveSceneCharacter* My::CActiveSceneManager::GetCharacter(int id)
 {

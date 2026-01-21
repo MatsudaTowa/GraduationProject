@@ -56,7 +56,7 @@ namespace My
 	private:
 		static constexpr float SIZE = 25.0f;
 		static const std::string TEX_NAME;
-		int m_nLife;
+		float m_fLife;
 	};
 }
 

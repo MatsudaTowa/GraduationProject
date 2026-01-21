@@ -59,11 +59,11 @@ void My::CEnergy_Charge::Uninit()
 //======================================================================
 // 更新
 //======================================================================
-void My::CEnergy_Charge::Update(float spend_time, int charge_time)
+void My::CEnergy_Charge::Update(float spend_time, float charge_time)
 {
 	//ローカル変数宣言
 	float SpendTime = spend_time;
-	int ChargeTime = charge_time;
+	float ChargeTime = charge_time;
 
 	//floatの絶対値で差を算出
 	float EffectLv = 1.0f - (float)std::fabs(ChargeTime - CPlayerDuelState::ENERGY_UP_FRAME) / CPlayerDuelState::ENERGY_UP_FRAME;

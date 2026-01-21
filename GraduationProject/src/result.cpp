@@ -11,6 +11,8 @@
 #include "result_camera.h"
 #include "field.h"
 #include "result_player.h"
+#include "active_scene_manager.h"
+#include "duel_manager.h"
 
 namespace
 {
@@ -52,8 +54,23 @@ HRESULT My::CResult::Init()
         //****************************
         // TODO : 仮で順位を設定している
         //****************************
-        int nPlayerNum = 3; // プレイヤー番号 0 = 1p
-        int nRunking[MAX_RANKING_COUNT] = {0, 1, 2, 3};   // ランキング
+        int nPlayerNum = MAX_RANKING_COUNT - 1;             // プレイヤー番号 0 = 1p
+        int nRunking[MAX_RANKING_COUNT]/* = { 0, 1, 2, 3 }*/;   // ランキング
+        int nCount = 0;                                     // 周回カウント
+
+        //順位の周回
+        for (int i = 0; i < MAX_RANKING_COUNT; i++)
+        {
+            for (auto iter : My::CDuel_Manager::GetInstance()->GetRankMap())
+            {
+                //確認したい順位のプレイヤーの番号を見つけて代入
+                if (i == iter.second)
+                {
+                    nRunking[i] = iter.first;
+                    break;
+                }
+            }
+        }
 
         if (m_pUIManager = CResultUIManager::Create(nRunking, nPlayerNum); m_pUIManager == nullptr)
         {

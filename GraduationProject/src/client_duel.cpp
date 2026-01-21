@@ -17,6 +17,7 @@
 #include "duel_manager.h"
 #include "card.h"
 #include "damage_number_UI_factory.h"
+#include "duel_manager.h"
 
 //=====================================
 //コンストラクタ
@@ -181,7 +182,7 @@ void CClient_Duel::CardCast(RakNet::Packet* packet)
     int nUserId = 0;                        //使用者番号
     int nCardId = 0;                        //カード番号
     int nSameTypeId = 0;                    //同じカードの番号
-    uint64_t nCastTime = 0;                 //キャスト時間
+    float fCastTime = 0;                    //キャスト時間
     int nTargetSize = 0;                    //ターゲットの数
     std::vector<int> Target;                //ターゲット
 
@@ -192,22 +193,12 @@ void CClient_Duel::CardCast(RakNet::Packet* packet)
     bsIn.Read(nCardId);            //カードの番号
     bsIn.Read(nSameTypeId);        //同じカード番号
     bsIn.Read(Destination);        //キャスト先
-    bsIn.Read(nCastTime);          //キャストした時間
+    bsIn.Read(fCastTime);          //キャストした時間
 
-    //bsIn.Read(nTargetSize);        //ターゲットの数
-
-    ////周回
-    //for (int i = 0; i < nTargetSize; ++i)
-    //{
-    //    //ターゲットの読み込み
-    //    int nTargetId = 0;
-    //    bsIn.Read(nTargetId);
-    //    Target.push_back(nTargetId);
-    //}
-
+    uint64_t a = fCastTime * 1000;
     //キャストカードの取得
     My::CCard* pCastCard = GetUsedCastCard(nUserId, nCardId, nSameTypeId);
-    pCastCard->SetStartCastTime(nCastTime);      //キャスト時間の設定
+    pCastCard->SetStartCastTime(fCastTime * 1000.0f); //キャスト時間の設定
     pCastCard->SetCastDestination(Destination);  //キャスト先の送信
     pCastCard->LoadCardInfo(&bsIn);              //読み込み処理
 
@@ -384,7 +375,7 @@ void CClient_Duel::StartBattle(RakNet::Packet* packet)
 
     //対戦時のタイマーを開始
     My::CDuel_Manager::GetInstance()->GetDuelTimer().Start();
-    My::CDuel_Manager::GetInstance()->GetDuelTimer().SetStartTime(StartTime);
+    //My::CDuel_Manager::GetInstance()->GetDuelTimer().SetStartTime(StartTime);
 
     //ロビーから対戦に遷移
     //一時的にダウンキャストを行い、遷移の合図を送る
@@ -691,10 +682,22 @@ void CClient_Duel::ReceiveGameSet(RakNet::Packet* packet)
     RakNet::BitStream bsIn(packet->data, packet->length, false);
 
     //変数宣言
-    unsigned char messageId;                     //メッセージ
+    unsigned char messageId;    //メッセージ
+    int nPlayerIndex = 0;       //プレイヤーの番号
+    int nRank = 0;              //順位
     
     //読み込み
     bsIn.Read(messageId); //メッセージ
+
+    //4人分の順位を読み込み
+    for (int i = 0; i < 4; i++)
+    {
+        bsIn.Read(nPlayerIndex); //プレイヤーの番号
+        bsIn.Read(nRank);        //順位
+
+        //マップに追加
+        My::CDuel_Manager::GetInstance()->GetRankMap()[nPlayerIndex] = nRank;
+    }
 
     //終章フラグを立てる
     My::CActiveSceneManager::GetInstance()->SetFinish(true);

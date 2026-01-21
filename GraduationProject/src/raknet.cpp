@@ -195,9 +195,8 @@ void CRakNet::Communication(RakNet::RakPeerInterface* peer)
             break;
 
         case ID_DUEL_MESSAGE_GAMESET:
-            My::CActiveSceneManager::GetInstance()->SetFinish(true);
-            //peer->CloseConnection(serverAddress, true);
-
+            m_Client->ReceiveGameSet(packet);
+          
             //ˆê“xÚ‘±‚ğI—¹
             m_pPeer->Shutdown(100); //100ƒ~ƒŠ•bŒã”jŠü
 
