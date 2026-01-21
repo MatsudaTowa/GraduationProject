@@ -1475,6 +1475,7 @@ void My::CEdit::SetAttack(int PackID, int ID)
 	ImGui::RadioButton(u8"特定の相手に攻撃", reinterpret_cast<int*>(&card.attacktype), static_cast<int>(SPECIFIC_ATTACK));
 	ImGui::RadioButton(u8"ランダム攻撃", reinterpret_cast<int*>(&card.attacktype), static_cast<int>(RANDOM_ATTACK));
 	ImGui::RadioButton(u8"自分を含めてランダム攻撃", reinterpret_cast<int*>(&card.attacktype), static_cast<int>(SELFINTARGET_ATTACK));
+	ImGui::RadioButton(u8"自分以外", reinterpret_cast<int*>(&card.attacktype), static_cast<int>(OTHER_MYSELF));
 
 	// 参照の有無設定
 	ImGui::Text(u8"参照の有無");

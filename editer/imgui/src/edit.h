@@ -53,6 +53,7 @@ namespace My
 		SPECIFIC_ATTACK,		// “Á’è‚Ì‘ŠŽè‚ð‘I‚ñ‚ÅUŒ‚
 		RANDOM_ATTACK,			// ƒ‰ƒ“ƒ_ƒ€UŒ‚
 		SELFINTARGET_ATTACK,	// Ž©•ª‚ðŠÜ‚ß‚½UŒ‚
+		OTHER_MYSELF			// Ž©•ªˆÈŠO
 	};
 
 	enum DefenseType
