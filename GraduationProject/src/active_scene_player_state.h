@@ -88,19 +88,19 @@ namespace My
 		 * @brief エナジーのフレーム数取得
 		 * @return m_EnergyUpFrame
 		 */
-		inline int GetEnergyFrame()
+		inline float GetEnergyFrame()
 		{
-			return m_EnergyUpFrame;
+			return m_fEnergyUpFrame;
 		}
 
 		/**
 		 * @brief エナジーフレーム設定
 		 * @param [in]frame
 		 */
-		inline void SetEnergyFrame(int frame)
+		inline void SetEnergyFrame(float frame)
 		{
 			//if (m_pEnergyUpCount == nullptr) { return; }
-			m_EnergyUpFrame = frame;
+			m_fEnergyUpFrame = frame;
 			//m_pEnergyUpCount->SetFrame(m_EnergyUpFrame);
 		}
 
