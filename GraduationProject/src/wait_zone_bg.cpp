@@ -102,6 +102,8 @@ void My::CWaitZoneBG::Uninit()
 //=============================================
 void My::CWaitZoneBG::Update()
 {
+	CardisView();
+
 	for (int i = 0; i < NUM_CARD; ++i)
 	{
 		D3DXVECTOR3 card_pos = GetPos();
@@ -148,7 +150,7 @@ void My::CWaitZoneBG::ButtonTrigger()
 		std::list<CCard*> card_list = zone->GetList();
 
 		//準備OKか切り替え
-		bool isView = duel_state->GetIsCemeteryView();
+		bool isView = duel_state->GetIsWaitView();
 		isView = isView ? false : true;
 		duel_state->SetIsWaitView(isView);
 
@@ -165,6 +167,23 @@ bool My::CWaitZoneBG::ProcessMouseEvent()
 
 	if (ishit)
 	{
+		CActiveSceneCharacterState* state = CActiveSceneManager::GetInstance()->GetPlayer()->GetState();
+
+		// ロビーじゃなかったら抜ける
+		if (typeid(*state) == typeid(CPlayerDuelState))
+		{
+			CPlayerDuelState* duel_state = dynamic_cast<CPlayerDuelState*>(state);
+			CSelectionRange* range = duel_state->GetZoneManager()->GetWaitZone()->GetSelectionRange();
+			bool is_hit_area = GET_COLISION->Check2DPolygonColision(GET_INPUT_MOUSE->GetMousePos(), { 3.0f,3.0f }, { range->GetPos().x,range->GetPos().y,0.0f }, range->GetSize());
+
+
+			//墓地を見ているときは
+			if (GET_INPUT_MOUSE->GetTrigger(0) && !is_hit_area)
+			{
+				//押された時の処理の名前
+				ButtonTrigger();
+			}
+		}
 		D3DXVECTOR3 pos = GetPos();
 		pos.y = UI_POS.y - CARD_SHIFT_Y;
 		SetPos(pos);
@@ -183,6 +202,22 @@ bool My::CWaitZoneBG::ProcessMouseEvent()
 
 void My::CWaitZoneBG::CardisView()
 {
+	CActiveSceneCharacterState* state = CActiveSceneManager::GetInstance()->GetPlayer()->GetState();
+	// ロビーじゃなかったら抜ける
+	if (typeid(*state) == typeid(CPlayerDuelState))
+	{
+		CPlayerDuelState* duel_state = dynamic_cast<CPlayerDuelState*>(state);
+		CWaitZone* zone = duel_state->GetZoneManager()->GetWaitZone();
+		//準備OKか切り替え
+		bool isView = duel_state->GetIsWaitView();
+		std::list<CCard*> card_list = zone->GetList();
+
+		for (auto& itr : card_list)
+		{
+			if (itr == nullptr) { continue; }
+			itr->SetisDraw(isView);
+		}
+	}
 }
 
 //=============================================

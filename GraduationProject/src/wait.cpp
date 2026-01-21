@@ -17,7 +17,7 @@
 
 namespace
 {
-	const D3DXVECTOR3 BASE_POS = { 1300.0f,100.0f,0.0f };
+	const D3DXVECTOR3 BASE_POS = { 1200.0f,100.0f,0.0f };
 	const float SHIFT_POS = 170.0f;
 	const float CARD_VIEW_CORRECTION = 7.0f;
 }
@@ -58,25 +58,56 @@ void My::CWait::Init()
 
 void My::CWait::Update(CPlayerDuelState* state, CActiveSceneCharacter* player)
 {
+	if (!state->GetIsWaitView())
+	{
+		m_pos = BASE_POS;
+
+		return;
+	}
 	std::list<CCard*> card_list = state->GetZoneManager()->GetWaitZone()->GetList();
 
-	int i = INT_ZERO;
+	int card_size = card_list.size();
+
+	float scroll = GET_INPUT_MOUSE->GetMouseMove().z;
+	float delta_y = scroll * 0.5f;
+
+	float cardHeight = CCardFrame::CARD_HEIGHT;
+	float contentHeight = cardHeight + SHIFT_POS * (card_size - 1);	//全部の高さを取得
+	float viewHeight = SCREEN_HEIGHT;
+
+	// 先頭カードが「下」に行きすぎない最大値 TODO:この補正値
+	float maxY = SCREEN_HEIGHT - cardHeight * CARD_VIEW_CORRECTION;
+
+	// 末尾カードが「上」に行きすぎない最小値
+	float minY = SCREEN_HEIGHT - contentHeight;
+
+	float newY = m_pos.y + delta_y;
+
+	// 上限値の場合に押し戻す処理
+	if (newY < minY)
+	{
+		newY = minY;
+	}
+	if (newY > maxY)
+	{
+		newY = maxY;
+	}
+
+	m_pos.y = newY;
+
+	int i = 0;
 	for (auto& itr : card_list)
 	{
-		if (itr == nullptr) 
-		{
-			++i;
-			continue; 
-		}
-		itr->SetPos(ConvertToWorldPoint(GET_CAMERA(GET_CAMERA_IDX), m_pos, VEC3_RESET_ZERO));
-		if (i == INT_ZERO)
-		{
-			itr->SetisDraw(true);
-		}
-		else
-		{
-			itr->SetisDraw(false);
-		}
+		if (!itr) { continue; }
+		D3DXVECTOR3 pos = m_pos;
+		pos.y += SHIFT_POS * (float)i;
+
+		D3DXVECTOR3 worldPos = ConvertToWorldPoint(GET_CAMERA(GET_CAMERA_IDX), pos, { 0,0,0 });
+
+		itr->SetCurrentZone(CCard::ZONE::CEMETERY);
+		itr->ChangeState(CCardState::CARD_CEMETERY, state);
+		itr->SetNeutralPos(worldPos);
+		itr->SetPos(worldPos);
 
 		++i;
 	}

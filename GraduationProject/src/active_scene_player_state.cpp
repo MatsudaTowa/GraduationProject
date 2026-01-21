@@ -90,7 +90,8 @@ My::CPlayerDuelState::CPlayerDuelState(CActiveSceneCharacter* character) :CDuelC
 m_fEnergyUpCount(0),
 m_fEnergyUpFrame(INT_ZERO),
 m_pHand(nullptr),
-m_pWait(nullptr)
+m_pWait(nullptr),
+m_isWaitView(false)
 {
 	GetZoneManager()->GetHandZone()->CreateRange({ SCREEN_WIDTH * HALF, 650.0f,0.0f }, { 360.0f, CCardFrame::CARD_HEIGHT }, { COLOR_RED.r,COLOR_RED.g,COLOR_RED.b,0.5f }, true);
 	GetZoneManager()->GetWaitZone()->CreateRange({ 1200.0f, 10.0f,0.0f }, { 100.0f, 1000.0f }, { COLOR_BLUE.r,COLOR_BLUE.g,COLOR_BLUE.b,0.5f }, true);
@@ -325,26 +326,26 @@ void My::CPlayerDuelState::DrawCard()
 //=============================================
 void My::CPlayerDuelState::ViewWait(CWaitZone* zone)
 {
-	//周回数
-	int nCount = 0;
+	////周回数
+	//int nCount = 0;
 
-	//待機カードの周回
-	for (CCard* pCard : zone->GetList())
-	{
-		//座標変換しずらす
-		D3DXVECTOR3 pos = ConvertToWorldPoint(GET_CAMERA(GET_CAMERA_IDX), FIRST_POS, FIRST_POS);
+	////待機カードの周回
+	//for (CCard* pCard : zone->GetList())
+	//{
+	//	//座標変換しずらす
+	//	D3DXVECTOR3 pos = ConvertToWorldPoint(GET_CAMERA(GET_CAMERA_IDX), FIRST_POS, FIRST_POS);
 
-		pos.x -= CARD_SPACE * nCount;
-		pCard->SetPos(pos);
-		if (nCount == INT_ZERO)
-		{
-			pCard->SetisDraw(true);
-		}
-		else
-		{
-			pCard->SetisDraw(false);
-		}
+	//	pos.x -= CARD_SPACE * nCount;
+	//	pCard->SetPos(pos);
+	//	if (nCount == INT_ZERO)
+	//	{
+	//		pCard->SetisDraw(true);
+	//	}
+	//	else
+	//	{
+	//		pCard->SetisDraw(false);
+	//	}
 
-		nCount++;	//カウントアップ
-	}
+	//	nCount++;	//カウントアップ
+	//}
 }
