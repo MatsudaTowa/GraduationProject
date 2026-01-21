@@ -58,6 +58,8 @@ namespace My
 
 		CCard* SearchList(CDuelCharacter* character, int num) override;
 
+		CWaitZoneBG* GetBG() { return m_pBG; }
+
 	private:
 		D3DXVECTOR3 m_pos = VEC3_RESET_ZERO;
 		CWaitZoneBG* m_pBG;

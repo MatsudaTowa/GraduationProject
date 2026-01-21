@@ -186,6 +186,9 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 	CButtonDeckDraw* pDeckDrawButton = player->GetPlayerUI()->GetDecDrawButton();
 	pDeckDrawButton->ProcessMouseEvent(this);
 
+	CWaitZoneBG* pBG = GetWait()->GetBG();
+	pBG->ProcessMouseEvent();
+
 	//e‚ÌXV
 	CDuelCharacter::Duel(character);
 }

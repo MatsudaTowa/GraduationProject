@@ -10,7 +10,9 @@
 //無名空間
 namespace
 {
+	const D3DXVECTOR3 UI_POS{ 1050.0f, 690.0f, 0.0f };
 	const D3DXVECTOR2 UI_SIZE{ 51.0f, 80.0f };	//サイズ
+	const float CARD_SHIFT_Y = 30.0f;
 	const std::string TEXTURE_PATH =	//テクスチャパス
 	{
 		{ "data\\TEXTURE\\WatingUI\\wait_bg.png" },
@@ -38,17 +40,20 @@ HRESULT My::CWaitZoneBG::Init()
 	//親クラスの初期化処理を呼ぶ
 	CObject2D::Init();
 
+	SetPos(UI_POS);
+
 	for (int i = 0; i < NUM_CARD; ++i)
 	{
-		D3DXVECTOR3 pos = GetPos();
-		pos.x += (NUM_CARD - 1 - i) * 10.0f;
+		D3DXVECTOR3 card_pos = GetPos();
+		card_pos.x += (NUM_CARD - 1 - i) * 4.0f;
+		card_pos.y += ((NUM_CARD - 1 - i) * 4.0f);
 
 		for (int j = 0; j < CCardFrame::FRAMETYPE_MAX; ++j)
 		{
 			m_pPseundCard[i].card_frame[j] =
 				CPsendCardFrame::Create(
 					(CCardFrame::FRAMETYPE)j,
-					pos,
+					card_pos,
 					VEC3_RESET_ZERO
 				);
 		}
@@ -68,14 +73,6 @@ HRESULT My::CWaitZoneBG::Init()
 
 	//サイズを代入
 	SetSize(size);
-
-	//カラー取得
-	D3DXCOLOR col = GetColor();
-
-	col = {0.8f,0.8f,0.8f,1.0f};
-
-	//カラーを代入
-	SetColor(col);
 
 	//頂点設定
 	SetVtx();
@@ -105,11 +102,31 @@ void My::CWaitZoneBG::Uninit()
 //=============================================
 void My::CWaitZoneBG::Update()
 {
+	for (int i = 0; i < NUM_CARD; ++i)
+	{
+		D3DXVECTOR3 card_pos = GetPos();
+		card_pos.x += (NUM_CARD - 1 - i) * 4.0f;
+
+		card_pos.y += ((NUM_CARD - 1 - i) * 4.0f);
+
+		for (int j = 0; j < CCardFrame::FRAMETYPE_MAX; ++j)
+		{
+			m_pPseundCard[i].card_frame[j]->SetPos(card_pos);
+		}
+	}
+
 	// 親クラスの更新処理を呼ぶ
 	CObject2D::Update();
 
+	//カラー取得
+	D3DXCOLOR col = GetColor();
+
+	col = { 0.8f,0.8f,0.8f,0.0f };
+
+	//カラーを代入
+	SetColor(col);
 	//頂点設定
-	SetVtx();
+	//SetVtx();
 }
 
 //=============================================
@@ -117,8 +134,6 @@ void My::CWaitZoneBG::Update()
 //=============================================
 void My::CWaitZoneBG::Draw()
 {	
-	// 親クラスの描画処理を呼ぶ
-	CObject2D::Draw();
 }
 
 void My::CWaitZoneBG::ButtonTrigger()
@@ -143,6 +158,26 @@ void My::CWaitZoneBG::ButtonTrigger()
 
 bool My::CWaitZoneBG::ProcessMouseEvent()
 {
+	// 標準の色に設定
+	SetColor(COLOR_WHITE);
+	// 当たっているかどうか
+	bool ishit = CButton::ProcessMouseEvent();
+
+	if (ishit)
+	{
+		D3DXVECTOR3 pos = GetPos();
+		pos.y = UI_POS.y - CARD_SHIFT_Y;
+		SetPos(pos);
+
+		return true;
+	}
+	else if (!ishit)
+	{
+		D3DXVECTOR3 pos = GetPos();
+		pos.y = UI_POS.y;
+		SetPos(pos);
+	}
+
 	return false;
 }
 
@@ -153,15 +188,12 @@ void My::CWaitZoneBG::CardisView()
 //=============================================
 // 生成
 //=============================================
-My::CWaitZoneBG* My::CWaitZoneBG::Create(D3DXVECTOR3 pos)
+My::CWaitZoneBG* My::CWaitZoneBG::Create()
 {
 	CWaitZoneBG* pObject = new CWaitZoneBG();
 
 	//nullならnullを返す
 	if (pObject == nullptr) { return nullptr; }
-
-	//pos設定
-	pObject->SetPos(pos);
 
 	//初期化
 	pObject->Init();

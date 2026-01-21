@@ -53,6 +53,8 @@ void My::CPsendCardFrame::Uninit()
 
 void My::CPsendCardFrame::Update()
 {
+	//í∏ì_ê›íË
+	SetVtx();
 }
 
 void My::CPsendCardFrame::Draw()

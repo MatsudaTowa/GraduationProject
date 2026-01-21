@@ -29,7 +29,7 @@ m_pNext(nullptr)
 {
 	if (m_pBG == nullptr)
 	{
-		m_pBG = CWaitZoneBG::Create({ 1050.0f, 660.0f, 0.0f });
+		m_pBG = CWaitZoneBG::Create();
 	}
 	if (m_pNext == nullptr)
 	{

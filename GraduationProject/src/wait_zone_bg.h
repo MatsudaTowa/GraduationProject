@@ -72,7 +72,7 @@ namespace My
 		 * @param [in] 位置
 		 * @return UIのポインタ
 		 */
-		static CWaitZoneBG* Create(D3DXVECTOR3 pos);
+		static CWaitZoneBG* Create();
 	private:
 
 		static constexpr int NUM_CARD = 3;
