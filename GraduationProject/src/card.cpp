@@ -694,7 +694,6 @@ void My::CCard::ReceiveTrigger()
 
 	//ó‘Ô‚Æƒ][ƒ“‚Ì•ÏX
 	ChangeState(CCardState::CARD_CEMETERY, pDuelState);
-	pDuelState->GetZoneManager()->MoveZone(this, CastToZone(GetCurrentZone(), pDuelState), pDuelState->GetZoneManager()->GetCemetery(), true);
 	SetCurrentZone(CCard::CEMETERY);
 
 	CActiveSceneManager::GetInstance()->GetTargetArrowManager()->Remove();
