@@ -93,6 +93,14 @@ void My::CWaitZoneBG::Uninit()
 			m_pPseundCard[i].card_frame[j]->Uninit();
 		}
 	}
+
+	// カードフレーム生成
+	for (int i = 0; i < CCardFrame::FRAMETYPE_MAX; ++i)
+	{
+		if (m_pTopCardFrame[i] == nullptr) { continue; }
+		m_pTopCardFrame[i]->Uninit();
+		m_pTopCardFrame[i] = nullptr;
+	}
 	//親クラスの終了処理を呼ぶ
 	CObject2D::Uninit();
 }
@@ -114,6 +122,35 @@ void My::CWaitZoneBG::Update()
 		for (int j = 0; j < CCardFrame::FRAMETYPE_MAX; ++j)
 		{
 			m_pPseundCard[i].card_frame[j]->SetPos(card_pos);
+		}
+	}
+
+	CActiveSceneCharacterState* state = CActiveSceneManager::GetInstance()->GetPlayer()->GetState();
+	// ロビーじゃなかったら抜ける
+	if (typeid(*state) == typeid(CPlayerDuelState))
+	{
+		CPlayerDuelState* duel_state = dynamic_cast<CPlayerDuelState*>(state);
+		CWaitZone* zone = duel_state->GetZoneManager()->GetWaitZone();
+		//準備OKか切り替え
+		bool isView = duel_state->GetIsWaitView();
+		std::list<CCard*> card_list = zone->GetList();
+
+		if (!card_list.empty())
+		{
+			CCard* top_card = *card_list.begin();
+			// カードフレーム生成
+			for (int i = 0; i < CCardFrame::FRAMETYPE_MAX; i++)
+			{
+				if (m_pTopCardFrame[i] == nullptr)
+				{
+					m_pTopCardFrame[i] = CCardFrame::Create((CCardFrame::FRAMETYPE)i, top_card);
+				}
+				else if(m_pTopCardFrame[i] != nullptr)
+				{
+					m_pTopCardFrame[i]->SetParent(top_card);
+					m_pTopCardFrame[i]->SetPos(UI_POS);
+				}
+			}
 		}
 	}
 
@@ -175,7 +212,6 @@ bool My::CWaitZoneBG::ProcessMouseEvent()
 			CPlayerDuelState* duel_state = dynamic_cast<CPlayerDuelState*>(state);
 			CSelectionRange* range = duel_state->GetZoneManager()->GetWaitZone()->GetSelectionRange();
 			bool is_hit_area = GET_COLISION->Check2DPolygonColision(GET_INPUT_MOUSE->GetMousePos(), { 3.0f,3.0f }, { range->GetPos().x,range->GetPos().y,0.0f }, range->GetSize());
-
 
 			//墓地を見ているときは
 			if (GET_INPUT_MOUSE->GetTrigger(0) && !is_hit_area)

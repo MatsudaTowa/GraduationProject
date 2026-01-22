@@ -94,7 +94,7 @@ m_pWait(nullptr),
 m_isWaitView(false)
 {
 	GetZoneManager()->GetHandZone()->CreateRange({ SCREEN_WIDTH * HALF, 650.0f,0.0f }, { 360.0f, CCardFrame::CARD_HEIGHT }, { COLOR_RED.r,COLOR_RED.g,COLOR_RED.b,0.5f }, true);
-	GetZoneManager()->GetWaitZone()->CreateRange({ 1200.0f, 10.0f,0.0f }, { 100.0f, 1000.0f }, { COLOR_BLUE.r,COLOR_BLUE.g,COLOR_BLUE.b,0.5f }, true);
+	GetZoneManager()->GetWaitZone()->CreateRange({ 1200.0f, 10.0f,0.0f }, { 100.0f, 1000.0f }, { COLOR_BLUE.r,COLOR_BLUE.g,COLOR_BLUE.b,0.5f }, false);
 	m_fEnergyUpFrame = ENERGY_UP_FRAME;
 }
 

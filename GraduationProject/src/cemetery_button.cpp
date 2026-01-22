@@ -80,6 +80,7 @@ void My::CCemeteryButton::ButtonTrigger()
 {
 	CActiveSceneManager::GetInstance()->GetCharacterList();
 	CActiveSceneCharacterState* state = m_pCharacter->GetState();
+	bool isView = false;
 
 	std::list<CActiveSceneCharacter*> charcter_list = CActiveSceneManager::GetInstance()->GetCharacterList();
 	for (auto& itr : charcter_list)
@@ -102,8 +103,9 @@ void My::CCemeteryButton::ButtonTrigger()
 		std::list<CCard*> card_list = zone->GetList();
 
 		//€”õOK‚©Ø‚è‘Ö‚¦
-		bool isView = duel_state->GetIsCemeteryView();
+		isView = duel_state->GetIsCemeteryView();
 		isView = isView ? false : true;
+
 		duel_state->SetIsCemeteryView(isView);
 
 		zone->GetSelectionRange()->SetisDraw(isView);
@@ -114,10 +116,18 @@ void My::CCemeteryButton::ButtonTrigger()
 		CCemeteryZone* zone = duel_state->GetZoneManager()->GetCemetery();
 
 		//€”õOK‚©Ø‚è‘Ö‚¦
-		bool isView = duel_state->GetIsCemeteryView();
+		isView = duel_state->GetIsCemeteryView();
 		isView = isView ? false : true;
 		duel_state->SetIsCemeteryView(isView);
 		zone->GetSelectionRange()->SetisDraw(isView);
+	}
+
+	if (isView)
+	{
+		CActiveSceneCharacterState* player_state = CActiveSceneManager::GetInstance()->GetPlayer()->GetState();
+		CPlayerDuelState* duel_state = dynamic_cast<CPlayerDuelState*>(player_state);
+
+		duel_state->SetIsWaitView(false);
 	}
 
 }

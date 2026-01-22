@@ -81,6 +81,8 @@ namespace My
 			CPsendCardFrame* card_frame[CCardFrame::FRAMETYPE_MAX];
 		};
 		PseundCard m_pPseundCard[NUM_CARD];
+
+		CCardFrame* m_pTopCardFrame[CCardFrame::FRAMETYPE_MAX];
 	};
 }
 

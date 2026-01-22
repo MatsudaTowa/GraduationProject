@@ -58,6 +58,7 @@ void My::CWait::Init()
 
 void My::CWait::Update(CPlayerDuelState* state, CActiveSceneCharacter* player)
 {
+	state->GetZoneManager()->GetWaitZone()->GetSelectionRange()->SetisDraw(state->GetIsWaitView());
 	if (!state->GetIsWaitView())
 	{
 		m_pos = BASE_POS;
