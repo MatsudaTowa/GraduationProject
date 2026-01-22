@@ -8,6 +8,7 @@
 #define _LOBBY_UI_MANAGER_H_
 #include "main.h"
 #include "active_scene_character.h"
+#include "lobby_character_icon_UI.h"
 namespace My
 {
 	class CReadyUI;
@@ -50,8 +51,29 @@ namespace My
 			m_pReadyUI = readyUI;
 		}
 
+		inline CLobbyCharacterIconUI* GetIconUI()
+		{
+			return m_pIconUI;
+		}
+
+		inline void SetIconUI(CLobbyCharacterIconUI* iconUI)
+		{
+			m_pIconUI = iconUI;
+		}
+
+		static CCharacterLobbyUIManager* GetInstance()
+		{
+			static CCharacterLobbyUIManager instance;
+			return &instance;
+		}
+
 	private:
 		CReadyUI* m_pReadyUI;
+
+		/**
+		* @brief ロビーキャラクターアイコンUI
+		*/
+		CLobbyCharacterIconUI* m_pIconUI;
 	};
 }
 

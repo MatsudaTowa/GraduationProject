@@ -304,9 +304,15 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 		CActiveSceneManager::GetInstance()->GetTargetArrowManager()->Regist(CTargetArrow::Create(cpy->GetUserArea(), iter->GetArea(), cpy), cpy);
 	}
 
-	m_pFan = new CObject2D_TriangleFan(20);
-	m_pFan->SetPos(ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), cpy->GetPos()));
-	m_pFan->Init();
+	if (m_pFan == nullptr)
+	{
+		m_pFan = new CObject2D_TriangleFan(20);
+
+		if (m_pFan == nullptr) return;
+		m_pFan->SetPos(ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), cpy->GetPos()));
+		m_pFan->Init();
+	}
+
 
 }
 
@@ -365,7 +371,11 @@ void My::CCardStateStay::Update(CCard* cpy, CDuelCharacter* duel)
 		m_fStaycount += 0.016f;
 	}
 
-	m_pFan->SetStayTime(m_fStaycount);
+	if (m_pFan != nullptr)
+	{
+		m_pFan->SetStayTime(m_fStaycount);
+	}
+
 	m_pFan->SetPos(ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), cpy->GetPos()));
 }
 

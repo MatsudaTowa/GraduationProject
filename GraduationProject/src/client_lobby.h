@@ -11,6 +11,10 @@
 
 //ヘッダーのインクルード
 #include "client.h"
+namespace My
+{
+	class CLobbyCharacterIconUI;
+}
 
 //Clientのクラス
 class CClient_Lobby : public CClient
@@ -61,6 +65,7 @@ private:
 
 	//変数
 	std::list<LobbyPlayerParam> m_LobbyPlayerList;	//ロビープレイヤーリスト
+	My::CLobbyCharacterIconUI* m_IconUI[4]; //キャラクターアイコンUIリスト
 };
 
 #endif

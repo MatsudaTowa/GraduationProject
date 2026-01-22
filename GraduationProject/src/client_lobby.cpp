@@ -12,6 +12,8 @@
 #include "active_scene_manager.h"
 #include "raknet.h"
 #include "active_scene_player_state.h"
+#include "lobby_character_icon_UI.h"
+#include "character_lobby_UI_manager.h"
 
 //=====================================
 //コンストラクタ
@@ -34,7 +36,7 @@ CClient_Lobby::~CClient_Lobby()
 //初期化処理
 //=====================================
 bool CClient_Lobby::Init()
-{
+{ 
     return true;
 }
 
@@ -61,7 +63,7 @@ void CClient_Lobby::Regist(RakNet::Packet* packet)
     bsIn.Read(nPlayerNum);
 
     //接続人数が0以下なら抜ける
-    if (nPlayerNum <= 0) return;
+    if (nPlayerNum <= 0) return;    
 
     //中身を空に
     m_LobbyPlayerList.clear();
@@ -76,7 +78,10 @@ void CClient_Lobby::Regist(RakNet::Packet* packet)
         //敵を生成するか
         if (CheckEnemyCreate(i, nPlayerNum))
         {
-            My::CEnemy::Create({ i * 100.0f + 50.0f, 0.0f, 0.0f }, VEC3_RESET_ZERO, i);
+            My::CCharacterLobbyUIManager*charalobbymanager = My::CCharacterLobbyUIManager::GetInstance();
+
+            My::CEnemy::Create({ i * 50.0f + 50.0f, 0.0f, 0.0f }, VEC3_RESET_ZERO, i);
+            //m_IconUI[i] = My::CLobbyCharacterIconUI::Create({1010.0f,80.0f + (i * 120.0f),0.0f}, COLOR_BLUE);
         }
     }
 
@@ -94,6 +99,7 @@ void CClient_Lobby::Regist(RakNet::Packet* packet)
         if (My::CActiveSceneManager::GetInstance()->GetPlayer() == nullptr && nLap == static_cast<int>(m_LobbyPlayerList.size() - 1))
         {
             My::CPlayer::Create(new My::CActiveScenePlayer, VEC3_RESET_ZERO, VEC3_RESET_ZERO, m_LobbyPlayerList.size() - 1);
+            //m_IconUI[m_LobbyPlayerList.size() - 1] = My::CLobbyCharacterIconUI::Create({ 1010.0f,80.0f + ((m_LobbyPlayerList.size() - 1) * 120.0f),0.0f }, COLOR_WHITE);
         }
 
         ++nLap; //インクリメント
@@ -172,20 +178,28 @@ void CClient_Lobby::Delete(RakNet::Packet* packet)
         if (iter->GetPlayerIdx() > nStart)
         {
             iter->SetPlayerIdx(iter->GetPlayerIdx() - 1);
+
+			//m_IconUI[iter->GetPlayerIdx()]->SetPos({ 1010.0f,80.0f + ((nStart)* 120.0f),0.0f });
         }
         else if (iter->GetPlayerIdx() == nStart)
         {//消える番号と一致したプレイヤーは削除
             iter->SetisDelete(true);
             My::CActiveSceneManager::GetInstance()->GetEnemyManager()->Remove(iter);
+
+			//m_IconUI[nStart]->SetisDelete(true);
+            
         }
     }
 
     //プレイヤーの番号がずれるかを確認
     if (My::CActiveSceneManager::GetInstance()->GetPlayer() != nullptr)
     {
-        if (My::CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx() > nStart)
+        My::CActiveScenePlayer*player = My::CActiveSceneManager::GetInstance()->GetPlayer();
+
+        if (player->GetPlayerIdx() > nStart)
         {
-            My::CActiveSceneManager::GetInstance()->GetPlayer()->SetPlayerIdx(My::CActiveSceneManager::GetInstance()->GetPlayer()->GetPlayerIdx() - 1);
+            //m_IconUI[player->GetPlayerIdx()]->SetPos({ 1010.0f,80.0f + (nStart * 120.0f),0.0f });
+            player->SetPlayerIdx(player->GetPlayerIdx() - 1);
         }
     }
 }
