@@ -138,19 +138,19 @@ void My::CWaitZoneBG::Update()
 		if (!card_list.empty())
 		{
 			CCard* top_card = *card_list.begin();
-			// カードフレーム生成
-			for (int i = 0; i < CCardFrame::FRAMETYPE_MAX; i++)
-			{
-				if (m_pTopCardFrame[i] == nullptr)
-				{
-					m_pTopCardFrame[i] = CCardFrame::Create((CCardFrame::FRAMETYPE)i, top_card);
-				}
-				else if(m_pTopCardFrame[i] != nullptr)
-				{
-					m_pTopCardFrame[i]->SetParent(top_card);
-					m_pTopCardFrame[i]->SetPos(UI_POS);
-				}
-			}
+			//// カードフレーム生成
+			//for (int i = 0; i < CCardFrame::FRAMETYPE_MAX; i++)
+			//{
+			//	if (m_pTopCardFrame[i] == nullptr)
+			//	{
+			//		m_pTopCardFrame[i] = CCardFrame::Create((CCardFrame::FRAMETYPE)i, top_card);
+			//	}
+			//	else if(m_pTopCardFrame[i] != nullptr)
+			//	{
+			//		m_pTopCardFrame[i]->SetParent(top_card);
+			//		m_pTopCardFrame[i]->SetPos(UI_POS);
+			//	}
+			//}
 		}
 	}
 
