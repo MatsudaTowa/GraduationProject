@@ -200,20 +200,19 @@ void CClient_Duel::CardCast(RakNet::Packet* packet)
     My::CCard* pCastCard = GetUsedCastCard(nUserId, nCardId, nSameTypeId);
     pCastCard->SetStartCastTime(fCastTime * 1000.0f); //キャスト時間の設定
     pCastCard->SetCastDestination(Destination);  //キャスト先の送信
+    pCastCard->SetUserArea(My::CActiveSceneManager::GetInstance()->GetCharacter(nUserId)->GetArea());
     pCastCard->LoadCardInfo(&bsIn);              //読み込み処理
 
     //===================================================================================================
 
-     //引数の番号のプレイヤーを取得
+    //引数の番号のプレイヤーを取得
     My::CActiveSceneCharacter* Character = My::CActiveSceneManager::GetInstance()->GetCharacter(nUserId);
 
     //対戦状態にキャスト
     My::CDuelCharacter* pState = dynamic_cast<My::CDuelCharacter*>(Character->GetState());
 
-    pCastCard->SetUserArea(My::CActiveSceneManager::GetInstance()->GetCharacter(nUserId)->GetArea());
-
-    //山札のカードを手札に移動
-    pCastCard->ChangeState(My::CCardState::CARD_CAST, pState);
+    //手札のカードを手札に移動
+    //pCastCard->ChangeState(My::CCardState::CARD_CAST, pState);
 
     My::CPlayerDuelState* pPlayerState = nullptr;
     pPlayerState = dynamic_cast<My::CPlayerDuelState*>(Character->GetState());

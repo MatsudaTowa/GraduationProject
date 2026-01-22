@@ -9,29 +9,41 @@
 
 #include <algorithm>	// findを使うのに必要
 
+
 //=============================================
 // コンストラクタ
 //=============================================
 My::CResultUIManager::CResultUIManager():
-	// ランキング変数
+#if Json
+	// 定数
+	RANKINGS{},
+	PLAYER_IDS{},
+	MY_PLAYER_BLINK (0),
+	MY_PLAYER_BLINK_LIGHT_INTENSITY (0.0f),
+	WIN{},
+	LOSE{},
+#endif // !Json
+	// 試合結果
 	m_nRanking{-1,-1,-1,-1},	// ランキング初期化
 	m_nPlayer(-1),				// プレイヤー番号初期化
-	m_pRankingUI{nullptr, nullptr, nullptr, nullptr},		// ランキングオブジェクト初期化
-	m_pRankingNamesUI{nullptr, nullptr, nullptr, nullptr},	// ランキングプレイヤー初期化
-	m_nRankingMoveDelay{INT_ZERO, INT_ZERO, INT_ZERO, INT_ZERO},	// ランキング出現開始までの時間初期化
-	m_nRankingMoveDuration{INT_ZERO, INT_ZERO, INT_ZERO, INT_ZERO},	// ランキング出現時間初期化
-	m_nRankingMovePos{{VEC3_RESET_ZERO}, {VEC3_RESET_ZERO}, {VEC3_RESET_ZERO}, {VEC3_RESET_ZERO}},	// ランキング移動量初期化
-	m_nRankingMoveRot{{VEC3_RESET_ZERO}, {VEC3_RESET_ZERO}, {VEC3_RESET_ZERO}, {VEC3_RESET_ZERO}},	// ランキング回転量初期化
-	m_nRankingMoveSize{{VEC2_RESET_ZERO}, {VEC2_RESET_ZERO}, {VEC2_RESET_ZERO}, {VEC2_RESET_ZERO}},							// ランキング拡縮量初期化
-	m_nMyPlayerBlink(MY_PLAYER_BLINK),	// 自プレイヤー点滅カウント
+	// ランキング
+	m_pRankingsObject{nullptr, nullptr, nullptr, nullptr},		// ランキングオブジェクト初期化
+	m_RankingsAnimation {},				// ランキングアニメーション
+	m_RankingsDelayTime {0, 0, 0, 0},	// アニメーションするまでの時間
+	m_RankingsElapsedTime {0, 0, 0, 0},	// アニメーションに掛かる時間
+	// プレイヤーID表示
+	m_pPlayerIDsObject {nullptr, nullptr, nullptr, nullptr},	// プレイヤーIDオブジェクト初期化
+	m_PlayerIDsAnimation {},				// プレイヤーIDアニメーション
+	m_PlayerIDsDelayTime {0, 0, 0, 0},		// アニメーションするまでの時間
+	m_PlayerIDsElapsedTime {0, 0, 0, 0},	// アニメーションに掛かる時間
+	// 強調表示
+	m_nMyPlayerBlink(0),	// 自プレイヤー点滅カウント
 	m_isUpMyPlayerBlink(false),			// 自プレイヤー点滅が明るくなっているか
-	// 勝敗変数
-	m_pWinOrLose(nullptr),	// 勝敗オブジェクト初期化
-	m_nWinOrLoseMoveDelay(INT_ZERO),	// 勝敗出現開始までの時間初期化
-	m_nWinOrLoseMoveDuration(INT_ZERO),// 勝敗出現時間初期化
-	m_nWinOrLoseMovePos{VEC3_RESET_ZERO},	// 勝敗移動量初期化
-	m_nWinOrLoseMoveRot{VEC3_RESET_ZERO},	// 勝敗回転量初期化
-	m_nWinOrLoseMoveSize{VEC2_RESET_ZERO},		// 勝敗拡縮量初期化
+	// 勝敗表示
+	m_pWinOrLoseObject(nullptr),	// 勝敗オブジェクト初期化
+	m_pWinOrLoseAnimation{},		// 勝敗アニメーション
+	m_nWinOrLoseMoveDelay(0),		// アニメーションするまでの時間
+	m_nWinOrLoseMoveDuration(0),	// アニメーションに掛かる時間
 	// 全体
 	m_nEffectCount(INT_ZERO)
 {
@@ -51,6 +63,239 @@ HRESULT My::CResultUIManager::Init()
 {
 	CTexture* pTexture = GET_TEXTURE;// テクスチャ取得
 	HWND hWnd = GET_MANAGER->GetHwnd();
+
+	json j;
+#if SaveJson
+	// ランキング
+	for (int nCnt = 0; nCnt < 4; nCnt++)
+	{
+		std::string key = "PL_" + std::to_string(nCnt + 1);	// PL番号
+															//テクスチャ
+		j["Ranking"][key]["Texture"] = RANKINGS[nCnt].texture;
+		// 開始設定
+		j["Ranking"][key]["Start"]["Pos" ] = json::array({ RANKINGS[nCnt].start.pos.x, RANKINGS[nCnt].start.pos.y, RANKINGS[nCnt].start.pos.z });								// 位置
+		j["Ranking"][key]["Start"]["Rot" ] = json::array({ RANKINGS[nCnt].start.rot.x, RANKINGS[nCnt].start.rot.y, RANKINGS[nCnt].start.rot.z });								// 向き
+		j["Ranking"][key]["Start"]["Size"] = json::array({ RANKINGS[nCnt].start.size.x,RANKINGS[nCnt].start.size.y });															// 大きさ
+		j["Ranking"][key]["Start"]["Col" ] = json::array({ RANKINGS[nCnt].start.col.r, RANKINGS[nCnt].start.col.g, RANKINGS[nCnt].start.col.b, RANKINGS[nCnt].start.col.b });	// 色
+		// 終了設定
+		j["Ranking"][key]["End"]["Pos" ] = json::array({ RANKINGS[nCnt].end.pos.x, RANKINGS[nCnt].end.pos.y, RANKINGS[nCnt].end.pos.z });								// 位置
+		j["Ranking"][key]["End"]["Rot" ] = json::array({ RANKINGS[nCnt].end.rot.x, RANKINGS[nCnt].end.rot.y, RANKINGS[nCnt].end.rot.z });								// 向き
+		j["Ranking"][key]["End"]["Size"] = json::array({ RANKINGS[nCnt].end.size.x,RANKINGS[nCnt].end.size.y });														// 大きさ
+		j["Ranking"][key]["End"]["Col" ] = json::array({ RANKINGS[nCnt].end.col.r, RANKINGS[nCnt].end.col.g, RANKINGS[nCnt].end.col.b, RANKINGS[nCnt].end.col.a });		// 色
+		// 時間
+		j["Ranking"][key]["DelayTime"] = RANKINGS[nCnt].delayTime;		// 開始までの時間
+		j["Ranking"][key]["ElapsedTime"] = RANKINGS[nCnt].elapsedTim	// 終了までの時間
+	}
+	// プレイヤーID
+	for (int nCnt = 0; nCnt < MAX_RANKING_COUNT; nCnt++)
+	{
+		std::string key = "PL_" + std::to_string(nCnt + 1);	// PL番号
+															//テクスチャ
+		j["PlayerIDs"][key]["Texture"] = PLAYER_IDS[nCnt].texture;
+		// 開始設定
+		j["PlayerIDs"][key]["Start"]["Pos" ] = json::array({ PLAYER_IDS[nCnt].start.pos.x, PLAYER_IDS[nCnt].start.pos.y, PLAYER_IDS[nCnt].start.pos.z });									// 位置
+		j["PlayerIDs"][key]["Start"]["Rot" ] = json::array({ PLAYER_IDS[nCnt].start.rot.x, PLAYER_IDS[nCnt].start.rot.y, PLAYER_IDS[nCnt].start.rot.z });									// 向き
+		j["PlayerIDs"][key]["Start"]["Size"] = json::array({ PLAYER_IDS[nCnt].start.size.x,PLAYER_IDS[nCnt].start.size.y });																// 大きさ
+		j["PlayerIDs"][key]["Start"]["Col" ] = json::array({ PLAYER_IDS[nCnt].start.col.r, PLAYER_IDS[nCnt].start.col.g, PLAYER_IDS[nCnt].start.col.b, PLAYER_IDS[nCnt].start.col.b });		// 色
+		// 終了設定
+		j["PlayerIDs"][key]["End"]["Pos" ] = json::array({ PLAYER_IDS[nCnt].end.pos.x, PLAYER_IDS[nCnt].end.pos.y, PLAYER_IDS[nCnt].end.pos.z });									// 位置
+		j["PlayerIDs"][key]["End"]["Rot" ] = json::array({ PLAYER_IDS[nCnt].end.rot.x, PLAYER_IDS[nCnt].end.rot.y, PLAYER_IDS[nCnt].end.rot.z });									// 向き
+		j["PlayerIDs"][key]["End"]["Size"] = json::array({ PLAYER_IDS[nCnt].end.size.x,PLAYER_IDS[nCnt].end.size.y });																// 大きさ
+		j["PlayerIDs"][key]["End"]["Col" ] = json::array({ PLAYER_IDS[nCnt].end.col.r, PLAYER_IDS[nCnt].end.col.g, PLAYER_IDS[nCnt].end.col.b, PLAYER_IDS[nCnt].end.col.b });		// 色
+		// 時間
+		j["PlayerIDs"][key]["DelayTime"] = PLAYER_IDS[nCnt].delayTime;		// 開始までの時間
+		j["PlayerIDs"][key]["ElapsedTime"] = PLAYER_IDS[nCnt].elapsedTime;	// 終了までの時間
+	}
+	// 勝敗
+	{
+		// 勝利
+		{
+			//テクスチャ
+			j["Win"]["Texture"] = WIN.texture;
+			// 開始設
+			j["Win"]["Start"]["Pos" ] = json::array({WIN.start.pos.x, WIN.start.pos.y, WIN.start.pos.z });						// 位置
+			j["Win"]["Start"]["Rot" ] = json::array({WIN.start.rot.x, WIN.start.rot.y, WIN.start.rot.z });						// 向き
+			j["Win"]["Start"]["Size"] = json::array({WIN.start.size.x,WIN.start.size.y });										// 大きさ
+			j["Win"]["Start"]["Col" ] = json::array({WIN.start.col.r, WIN.start.col.g, WIN.start.col.b,WIN.start.col.a });		// 色
+			// 終了設
+			j["Win"]["End"]["Pos" ] = json::array({WIN.end.pos.x, WIN.end.pos.y, WIN.end.pos.z });
+			j["Win"]["End"]["Rot" ] = json::array({WIN.end.rot.x, WIN.end.rot.y, WIN.end.rot.z });
+			j["Win"]["End"]["Size"] = json::array({WIN.end.size.x,WIN.end.size.y });
+			j["Win"]["End"]["Col" ] = json::array({WIN.end.col.r, WIN.end.col.g, WIN.end.col.b,WIN.end.col.a });
+			// 時間
+			j["Win"]["DelayTime"] = WIN.delayTime;		// 開始までの時間
+			j["Win"]["ElapsedTime"] = WIN.elapsedTime;	// 終了までの時間
+		}
+		// 敗北
+		{
+			//テクスチャ
+			j["Lose"]["Texture"] = LOSE.texture;
+			// 開始設
+			j["Lose"]["Start"]["Pos" ] = json::array({LOSE.start.pos.x, LOSE.start.pos.y, LOSE.start.pos.z });					// 位置
+			j["Lose"]["Start"]["Rot" ] = json::array({LOSE.start.rot.x, LOSE.start.rot.y, LOSE.start.rot.z });					// 向き
+			j["Lose"]["Start"]["Size"] = json::array({LOSE.start.size.x,LOSE.start.size.y });									// 大きさ
+			j["Lose"]["Start"]["Col" ] = json::array({LOSE.start.col.r, LOSE.start.col.g, LOSE.start.col.b,LOSE.start.col.b });	// 色
+			// 終了設
+			j["Lose"]["End"]["Pos" ] = json::array({LOSE.end.pos.x, LOSE.end.pos.y, LOSE.end.pos.z });					// 位置
+			j["Lose"]["End"]["Rot" ] = json::array({LOSE.end.rot.x, LOSE.end.rot.y, LOSE.end.rot.z });					// 向き
+			j["Lose"]["End"]["Size"] = json::array({LOSE.end.size.x,LOSE.end.size.y });									// 大きさ
+			j["Lose"]["End"]["Col" ] = json::array({LOSE.end.col.r, LOSE.end.col.g, LOSE.end.col.b,LOSE.end.col.a });	// 色
+			// 時間
+			j["Lose"]["DelayTime"] = LOSE.delayTime;		// 開始までの時間
+			j["Lose"]["ElapsedTime"] = LOSE.elapsedTime;	// 終了までの時間
+		}
+	}
+	// 強調表示
+	{
+		j["MY_PLAYER_BLINK"] = MY_PLAYER_BLINK;
+		j["MY_PLAYER_BLINK_LIGHT_INTENSITY"] = MY_PLAYER_BLINK_LIGHT_INTENSITY;
+	}
+	// 保存
+	SaveAnimation(ANIMATION_DATA_FILE_PATH, j);
+#endif // SaveJson
+#if Json
+	// 読み込み処理
+	j = LoadAnimation(ANIMATION_DATA_FILE_PATH);
+	// 順位
+	for (int nCnt = 0; nCnt < MAX_RANKING_COUNT; nCnt++)
+	{
+		std::string key = "PL_" + std::to_string(nCnt + 1);	// PL番号
+		// テクスチャ
+		RANKINGS[nCnt].texture =	 j["Ranking"][key]["Texture"];
+		// 開始設定
+		RANKINGS[nCnt].start.pos.x = j["Ranking"][key]["Start"]["Pos"][0];	// 位置X
+		RANKINGS[nCnt].start.pos.y = j["Ranking"][key]["Start"]["Pos"][1];	// 位置Y
+		RANKINGS[nCnt].start.pos.z = j["Ranking"][key]["Start"]["Pos"][2];	// 位置Z
+		RANKINGS[nCnt].start.rot.x = j["Ranking"][key]["Start"]["Rot"][0];	// 向きX
+		RANKINGS[nCnt].start.rot.y = j["Ranking"][key]["Start"]["Rot"][1];	// 向きY
+		RANKINGS[nCnt].start.rot.z = j["Ranking"][key]["Start"]["Rot"][2];	// 向きZ
+		RANKINGS[nCnt].start.size.x =j["Ranking"][key]["Start"]["Size"][0];	// 大きさX
+		RANKINGS[nCnt].start.size.y =j["Ranking"][key]["Start"]["Size"][1];	// 大きさY
+		RANKINGS[nCnt].start.col.r = j["Ranking"][key]["Start"]["Col"][0];	// 色R
+		RANKINGS[nCnt].start.col.g = j["Ranking"][key]["Start"]["Col"][1];	// 色G
+		RANKINGS[nCnt].start.col.b = j["Ranking"][key]["Start"]["Col"][2];	// 色B
+		RANKINGS[nCnt].start.col.a = j["Ranking"][key]["Start"]["Col"][3];	// 色A
+		// 終了処理
+		RANKINGS[nCnt].end.pos.x = j["Ranking"][key]["End"]["Pos"][0];	// 位置X
+		RANKINGS[nCnt].end.pos.y = j["Ranking"][key]["End"]["Pos"][1];	// 位置Y
+		RANKINGS[nCnt].end.pos.z = j["Ranking"][key]["End"]["Pos"][2];	// 位置Z
+		RANKINGS[nCnt].end.rot.x = j["Ranking"][key]["End"]["Rot"][0];	// 向きX
+		RANKINGS[nCnt].end.rot.y = j["Ranking"][key]["End"]["Rot"][1];	// 向きY
+		RANKINGS[nCnt].end.rot.z = j["Ranking"][key]["End"]["Rot"][2];	// 向きZ
+		RANKINGS[nCnt].end.size.x =j["Ranking"][key]["End"]["Size"][0];	// 大きさ
+		RANKINGS[nCnt].end.size.y =j["Ranking"][key]["End"]["Size"][1];	// 大きさ
+		RANKINGS[nCnt].end.col.r = j["Ranking"][key]["End"]["Col"][0];	// 色R
+		RANKINGS[nCnt].end.col.g = j["Ranking"][key]["End"]["Col"][1];	// 色G
+		RANKINGS[nCnt].end.col.b = j["Ranking"][key]["End"]["Col"][2];	// 色B
+		RANKINGS[nCnt].end.col.a = j["Ranking"][key]["End"]["Col"][3];	// 色A
+		// 時間
+		RANKINGS[nCnt].delayTime = j["Ranking"][key]["DelayTime"];		// 開始までの時間
+		RANKINGS[nCnt].elapsedTime = j["Ranking"][key]["ElapsedTime"];	// 終了までの時間
+	}
+
+	// プレイヤーID
+	for (int nCnt = 0; nCnt < MAX_RANKING_COUNT; nCnt++)
+	{
+		std::string key = "PL_" + std::to_string(nCnt + 1);	// PL番号
+		// テクスチャ
+		PLAYER_IDS[nCnt].texture =	 j["PlayerIDs"][key]["Texture"];
+		// 開始設定
+		PLAYER_IDS[nCnt].start.pos.x = j["PlayerIDs"][key]["Start"]["Pos"][0];	// 位置X
+		PLAYER_IDS[nCnt].start.pos.y = j["PlayerIDs"][key]["Start"]["Pos"][1];	// 位置Y
+		PLAYER_IDS[nCnt].start.pos.z = j["PlayerIDs"][key]["Start"]["Pos"][2];	// 位置Z
+		PLAYER_IDS[nCnt].start.rot.x = j["PlayerIDs"][key]["Start"]["Rot"][0];	// 向きX
+		PLAYER_IDS[nCnt].start.rot.y = j["PlayerIDs"][key]["Start"]["Rot"][1];	// 向きY
+		PLAYER_IDS[nCnt].start.rot.z = j["PlayerIDs"][key]["Start"]["Rot"][2];	// 向きZ
+		PLAYER_IDS[nCnt].start.size.x =j["PlayerIDs"][key]["Start"]["Size"][0];	// 大きさ
+		PLAYER_IDS[nCnt].start.size.y =j["PlayerIDs"][key]["Start"]["Size"][1];	// 大きさ
+		PLAYER_IDS[nCnt].start.col.r = j["PlayerIDs"][key]["Start"]["Col"][0];	// 色R
+		PLAYER_IDS[nCnt].start.col.g = j["PlayerIDs"][key]["Start"]["Col"][1];	// 色G
+		PLAYER_IDS[nCnt].start.col.b = j["PlayerIDs"][key]["Start"]["Col"][2];	// 色B
+		PLAYER_IDS[nCnt].start.col.a = j["PlayerIDs"][key]["Start"]["Col"][3];	// 色A
+		// 終了処理
+		PLAYER_IDS[nCnt].end.pos.x = j["PlayerIDs"][key]["End"]["Pos"][0];	// 位置X
+		PLAYER_IDS[nCnt].end.pos.y = j["PlayerIDs"][key]["End"]["Pos"][1];	// 位置Y
+		PLAYER_IDS[nCnt].end.pos.z = j["PlayerIDs"][key]["End"]["Pos"][2];	// 位置Z
+		PLAYER_IDS[nCnt].end.rot.x = j["PlayerIDs"][key]["End"]["Pos"][0];	// 向きX
+		PLAYER_IDS[nCnt].end.rot.y = j["PlayerIDs"][key]["End"]["Pos"][1];	// 向きY
+		PLAYER_IDS[nCnt].end.rot.z = j["PlayerIDs"][key]["End"]["Pos"][2];	// 向きZ
+		PLAYER_IDS[nCnt].end.size.x =j["PlayerIDs"][key]["End"]["Size"][0];	// 大きさ
+		PLAYER_IDS[nCnt].end.size.y =j["PlayerIDs"][key]["End"]["Size"][1];	// 大きさ
+		PLAYER_IDS[nCnt].end.col.r = j["PlayerIDs"][key]["End"]["Col"][0];	// 色R
+		PLAYER_IDS[nCnt].end.col.g = j["PlayerIDs"][key]["End"]["Col"][1];	// 色G
+		PLAYER_IDS[nCnt].end.col.b = j["PlayerIDs"][key]["End"]["Col"][2];	// 色B
+		PLAYER_IDS[nCnt].end.col.a = j["PlayerIDs"][key]["End"]["Col"][3];	// 色A
+		// 時間
+		PLAYER_IDS[nCnt].delayTime = j["PlayerIDs"][key]["DelayTime"];		// 開始までの時間
+		PLAYER_IDS[nCnt].elapsedTime = j["PlayerIDs"][key]["ElapsedTime"];	// 終了までの時間
+	}
+	// 勝敗
+	{
+		// テクスチャ
+		WIN.texture =	 j["Win"]["Texture"];
+		// 開始設定
+		WIN.start.pos.x = j["Win"]["Start"]["Pos"][0];	// 位置X
+		WIN.start.pos.y = j["Win"]["Start"]["Pos"][1];	// 位置Y
+		WIN.start.pos.z = j["Win"]["Start"]["Pos"][2];	// 位置Z
+		WIN.start.rot.x = j["Win"]["Start"]["Rot"][0];	// 向きX
+		WIN.start.rot.y = j["Win"]["Start"]["Rot"][1];	// 向きY
+		WIN.start.rot.z = j["Win"]["Start"]["Rot"][2];	// 向きZ
+		WIN.start.size.x =j["Win"]["Start"]["Size"][0];	// 大きさ
+		WIN.start.size.y =j["Win"]["Start"]["Size"][1];	// 大きさ
+		WIN.start.col.r = j["Win"]["Start"]["Col"][0];	// 色R
+		WIN.start.col.g = j["Win"]["Start"]["Col"][1];	// 色G
+		WIN.start.col.b = j["Win"]["Start"]["Col"][2];	// 色B
+		WIN.start.col.a = j["Win"]["Start"]["Col"][3];	// 色A
+		// 終了処理
+		WIN.end.pos.x = j["Win"]["End"]["Pos"][0];	// 位置X
+		WIN.end.pos.y = j["Win"]["End"]["Pos"][1];	// 位置Y
+		WIN.end.pos.z = j["Win"]["End"]["Pos"][2];	// 位置Z
+		WIN.end.rot.x = j["Win"]["End"]["Rot"][0];	// 向きX
+		WIN.end.rot.y = j["Win"]["End"]["Rot"][1];	// 向きY
+		WIN.end.rot.z = j["Win"]["End"]["Rot"][2];	// 向きZ
+		WIN.end.size.x =j["Win"]["End"]["Size"][0];	// 大きさ
+		WIN.end.size.y =j["Win"]["End"]["Size"][1];	// 大きさ
+		WIN.end.col.r = j["Win"]["End"]["Col"][0];	// 色R
+		WIN.end.col.g = j["Win"]["End"]["Col"][1];	// 色G
+		WIN.end.col.b = j["Win"]["End"]["Col"][2];	// 色B
+		WIN.end.col.a = j["Win"]["End"]["Col"][3];	// 色A
+		// 時間
+		WIN.delayTime = j["Win"]["DelayTime"];		// 開始までの時間
+		WIN.elapsedTime = j["Win"]["ElapsedTime"];	// 終了までの時間
+
+		// テクスチャ
+		LOSE.texture =	 j["Lose"] ["Texture"];
+		// 開始設定
+		LOSE.start.pos.x = j["Lose"]["Start"]["Pos"][0];	// 位置X
+		LOSE.start.pos.y = j["Lose"]["Start"]["Pos"][1];	// 位置Y
+		LOSE.start.pos.z = j["Lose"]["Start"]["Pos"][2];	// 位置Z
+		LOSE.start.rot.x = j["Lose"]["Start"]["Rot"][0];	// 向きX
+		LOSE.start.rot.y = j["Lose"]["Start"]["Rot"][1];	// 向きY
+		LOSE.start.rot.z = j["Lose"]["Start"]["Rot"][2];	// 向きZ
+		LOSE.start.size.x =j["Lose"]["Start"]["Size"][0];	// 大きさ
+		LOSE.start.size.y =j["Lose"]["Start"]["Size"][1];	// 大きさ
+		LOSE.start.col.r = j["Lose"]["Start"]["Col"][0];	// 色R
+		LOSE.start.col.g = j["Lose"]["Start"]["Col"][1];	// 色G
+		LOSE.start.col.b = j["Lose"]["Start"]["Col"][2];	// 色B
+		LOSE.start.col.a = j["Lose"]["Start"]["Col"][3];	// 色A
+		// 終了処理
+		LOSE.end.pos.x = j["Lose"]["End"]["Pos"][0];	// 位置X
+		LOSE.end.pos.y = j["Lose"]["End"]["Pos"][1];	// 位置Y
+		LOSE.end.pos.z = j["Lose"]["End"]["Pos"][2];	// 位置Z
+		LOSE.end.rot.x = j["Lose"]["End"]["Rot"][0];	// 向きX
+		LOSE.end.rot.y = j["Lose"]["End"]["Rot"][1];	// 向きY
+		LOSE.end.rot.z = j["Lose"]["End"]["Rot"][2];	// 向きZ
+		LOSE.end.size.x =j["Lose"]["End"]["Size"][0];	// 大きさ
+		LOSE.end.size.y =j["Lose"]["End"]["Size"][1];	// 大きさ
+		LOSE.end.col.r = j["Lose"]["End"]["Col"][0];	// 色R
+		LOSE.end.col.g = j["Lose"]["End"]["Col"][1];	// 色G
+		LOSE.end.col.b = j["Lose"]["End"]["Col"][2];	// 色B
+		LOSE.end.col.a = j["Lose"]["End"]["Col"][3];	// 色A
+		// 時間
+		LOSE.delayTime = j["Lose"]["DelayTime"];		// 開始までの時間
+		LOSE.elapsedTime = j["Lose"]["ElapsedTime"];	// 終了までの時間
+	}
+#endif // !Json
 	// ランキング
 	{
 		// 順位表示
@@ -60,16 +305,26 @@ HRESULT My::CResultUIManager::Init()
 			if (CResultRanking* pRanking = CResultRanking::Create(); pRanking != nullptr)
 			{
 				// 生成正常に生成出来たら格納
-				m_pRankingUI[nCnt] = pRanking;
+				m_pRankingsObject[nCnt] = pRanking;
 
-				m_pRankingUI[nCnt]->SetPos(RANKING_START_POS[nCnt]);	// 位置
-				m_pRankingUI[nCnt]->SetRot(RANKING_START_ROT[nCnt]);	// 向き
-				m_pRankingUI[nCnt]->SetSize(RANKING_START_SIZE[nCnt]);	// 大きさ
-				m_pRankingUI[nCnt]->SetColor(RANKING_START_COL[nCnt]);	// 色
+				m_pRankingsObject[nCnt]->BindTexture(pTexture->GetAddress(pTexture->Regist(RANKINGS[nCnt].texture)));	// テクスチャ設定
+				m_pRankingsObject[nCnt]->SetPos(RANKINGS[nCnt].start.pos);	// 位置
+				m_pRankingsObject[nCnt]->SetRot(RANKINGS[nCnt].start.rot);	// 向き
+				m_pRankingsObject[nCnt]->SetSize(RANKINGS[nCnt].start.size);	// 大きさ
+				m_pRankingsObject[nCnt]->SetColor(RANKINGS[nCnt].start.col);	// 色
+				m_pRankingsObject[nCnt]->SetVtx();	// 頂点の設定
 
-				m_pRankingUI[nCnt]->BindTexture(pTexture->GetAddress(pTexture->Regist(RANKING_TEXTURE[nCnt])));	// テクスチャ設定
+				// アニメーション設定(0 = アニメーションしない)
+				if (RANKINGS[nCnt].elapsedTime > 0)
+				{// アニメーションをしなかったら
+					m_RankingsDelayTime[nCnt] = RANKINGS[nCnt].delayTime;	// アニメーション開始までの時間
+					m_RankingsElapsedTime[nCnt] = RANKINGS[nCnt].elapsedTime;// アニメーションの時間
 
-				m_pRankingUI[nCnt]->SetVtx();	// 頂点の設定
+					m_RankingsAnimation[nCnt].pos = (RANKINGS[nCnt].start.pos - RANKINGS[nCnt].end.pos ) / static_cast<float>(RANKINGS[nCnt].elapsedTime);	// 位置
+					m_RankingsAnimation[nCnt].rot = (RANKINGS[nCnt].start.rot - RANKINGS[nCnt].end.rot ) / static_cast<float>(RANKINGS[nCnt].elapsedTime);	// 向き
+					m_RankingsAnimation[nCnt].size= (RANKINGS[nCnt].start.size- RANKINGS[nCnt].end.size) / static_cast<float>(RANKINGS[nCnt].elapsedTime);	// 大きさ
+					m_RankingsAnimation[nCnt].col = (RANKINGS[nCnt].start.col - RANKINGS[nCnt].end.col ) / static_cast<float>(RANKINGS[nCnt].elapsedTime);	// 色
+				}
 			}
 			else
 			{
@@ -78,42 +333,38 @@ HRESULT My::CResultUIManager::Init()
 				return E_UNEXPECTED;	// エラーを返す
 			}
 		}
+		
 		// プレイヤー表示
 		for (int nCnt = 0; nCnt < MAX_RANKING_COUNT; nCnt++)
 		{
 			if (CResultRanking* pRanking = CResultRanking::Create(); pRanking != nullptr)
 			{
 				// 生成正常に生成出来たら格納
-				m_pRankingNamesUI[nCnt] = pRanking;
+				m_pPlayerIDsObject[nCnt] = pRanking;
 
-				m_pRankingNamesUI[nCnt]->SetPos(D3DXVECTOR3(RANKING_START_POS[nCnt].x + RANKING_TO_NAME_GAP_X, RANKING_START_POS[nCnt].y, RANKING_START_POS[nCnt].z));	// 位置
-				m_pRankingNamesUI[nCnt]->SetRot(RANKING_START_ROT[nCnt]);	// 向き
-				m_pRankingNamesUI[nCnt]->SetSize(RANKING_START_SIZE[nCnt]);	// 大きさ
-				m_pRankingNamesUI[nCnt]->SetColor(RANKING_START_COL[nCnt]);	// 色
+				m_pPlayerIDsObject[nCnt]->BindTexture(pTexture->GetAddress(pTexture->Regist(PLAYER_IDS[m_nRanking[nCnt]].texture)));	// テクスチャ
+				m_pPlayerIDsObject[nCnt]->SetPos(PLAYER_IDS[nCnt].start.pos);	// 位置
+				m_pPlayerIDsObject[nCnt]->SetRot(PLAYER_IDS[nCnt].start.rot);	// 向き
+				m_pPlayerIDsObject[nCnt]->SetSize(PLAYER_IDS[nCnt].start.size);	// 大きさ
+				m_pPlayerIDsObject[nCnt]->SetColor(PLAYER_IDS[nCnt].start.col);	// 色
+				m_pPlayerIDsObject[nCnt]->SetVtx();	// 頂点の設定
 
-				m_pRankingNamesUI[nCnt]->BindTexture(pTexture->GetAddress(pTexture->Regist(RANKING_NAME_TEXTURE[m_nRanking[nCnt]])));	// テクスチャ
+				if (PLAYER_IDS[nCnt].elapsedTime > 0)
+				{
+					m_PlayerIDsDelayTime[nCnt] = PLAYER_IDS[nCnt].delayTime;	// アニメーション開始までの時間
+					m_PlayerIDsElapsedTime[nCnt] = PLAYER_IDS[nCnt].elapsedTime;// アニメーションの時間
 
-				m_pRankingNamesUI[nCnt]->SetVtx();	// 頂点の設定
+					m_PlayerIDsAnimation[nCnt].pos = (PLAYER_IDS[nCnt].start.pos - PLAYER_IDS[nCnt].end.pos ) / static_cast<float>(PLAYER_IDS[nCnt].elapsedTime);	// 位置
+					m_PlayerIDsAnimation[nCnt].rot = (PLAYER_IDS[nCnt].start.rot - PLAYER_IDS[nCnt].end.rot ) / static_cast<float>(PLAYER_IDS[nCnt].elapsedTime);	// 向き			}
+					m_PlayerIDsAnimation[nCnt].size= (PLAYER_IDS[nCnt].start.size- PLAYER_IDS[nCnt].end.size) / static_cast<float>(PLAYER_IDS[nCnt].elapsedTime);	// 大きさ
+					m_PlayerIDsAnimation[nCnt].col = (PLAYER_IDS[nCnt].start.col - PLAYER_IDS[nCnt].end.col ) / static_cast<float>(PLAYER_IDS[nCnt].elapsedTime);	// 色
+				}
 			}
 			else
 			{
 				// 生成正常に生成出来無かったら
 				MessageBox(hWnd, "Error : result_ui_manager.cpp \n 正常なランキングの生成を出来ませんでした", "警告！", MB_ICONWARNING);	// 警告表示
 				return E_UNEXPECTED;	// エラーを返す
-			}
-		}
-		// 出現
-		for (int nCnt = 0; nCnt < MAX_RANKING_COUNT; nCnt++)
-		{
-			m_nRankingMoveDelay[nCnt] = RANKING_MOVE_DELAY[nCnt];		// ランキングの出現開始時間
-			m_nRankingMoveDuration[nCnt] = RANKING_MOVE_DURATION[nCnt];	// ランキングの出現時間
-			// 出現時間が0でなければ
-			if (m_nRankingMoveDuration[nCnt] != 0)
-			{
-				m_nRankingMovePos[nCnt] = (RANKING_START_POS[nCnt] - RANKING_END_POS[nCnt] ) / static_cast<float>(RANKING_MOVE_DURATION[nCnt]);	// 位置
-				m_nRankingMoveRot[nCnt] = (RANKING_START_ROT[nCnt] - RANKING_END_ROT[nCnt] ) / static_cast<float>(RANKING_MOVE_DURATION[nCnt]);	// 向き			}
-				m_nRankingMoveSize[nCnt]= (RANKING_START_SIZE[nCnt]- RANKING_END_SIZE[nCnt]) / static_cast<float>(RANKING_MOVE_DURATION[nCnt]);	// 大きさ
-				m_nRankingMoveCol[nCnt] = (RANKING_START_COL[nCnt]- RANKING_END_COL[nCnt]) / static_cast<float>(RANKING_MOVE_DURATION[nCnt]);	// 色
 			}
 		}
 	}
@@ -128,53 +379,54 @@ HRESULT My::CResultUIManager::Init()
 		}
 		if (CResultRanking* pWinOrLose = CResultRanking::Create(); pWinOrLose != nullptr)
 		{
-			m_pWinOrLose = pWinOrLose;
+			m_pWinOrLoseObject = pWinOrLose;
 
 			// 最下位なら
 			if (idx == MAX_RANKING_COUNT - 1)
 			{
 				// 最下位なら
-				m_pWinOrLose->BindTexture(pTexture->GetAddress(pTexture->Regist(LOSE_TEXTURE)));
-				m_pWinOrLose->SetPos	(LOSE_START_POS);	// 位置
-				m_pWinOrLose->SetRot	(LOSE_START_ROT);	// 向き
-				m_pWinOrLose->SetSize	(LOSE_START_SIZE);	// 大きさ
-				m_pWinOrLose->SetColor	(LOSE_START_COL);	// 色
+				m_pWinOrLoseObject->BindTexture(pTexture->GetAddress(pTexture->Regist(LOSE.texture)));
+				m_pWinOrLoseObject->SetPos		(LOSE.start.pos);	// 位置
+				m_pWinOrLoseObject->SetRot		(LOSE.start.rot);	// 向き
+				m_pWinOrLoseObject->SetSize		(LOSE.start.size);	// 大きさ
+				m_pWinOrLoseObject->SetColor	(LOSE.start.col);	// 色
 
-				m_nWinOrLoseMoveDelay =		LOSE_MOVE_DELAY;			// ランキングの出現開始時間
-				m_nWinOrLoseMoveDuration =	LOSE_MOVE_DURATION;	// ランキングの出現時間
-				// 演出０秒出ないなら
-				if (m_nWinOrLoseMoveDuration != 0)
+				// 演出０秒じゃないなら
+				if (WIN.elapsedTime != 0)
 				{
-					m_nWinOrLoseMovePos = (LOSE_START_POS - WIN_OR_LOSE_END_POS ) / static_cast<float>(LOSE_MOVE_DURATION);	// 位置
-					m_nWinOrLoseMoveRot = (LOSE_START_ROT - WIN_OR_LOSE_END_ROT ) / static_cast<float>(LOSE_MOVE_DURATION);	// 向き
-					m_nWinOrLoseMoveSize= (LOSE_START_SIZE- WIN_OR_LOSE_END_SIZE) / static_cast<float>(LOSE_MOVE_DURATION);	// 大きさ
-					m_nWinOrLoseMoveCol = (LOSE_START_COL- WIN_OR_LOSE_END_COL)   / static_cast<float>(LOSE_MOVE_DURATION);	// 色
+					m_nWinOrLoseMoveDelay =		LOSE.delayTime;			// ランキングの出現開始時間
+					m_nWinOrLoseMoveDuration =	LOSE.elapsedTime;	// ランキングの出現時間
+
+					m_pWinOrLoseAnimation.pos = (LOSE.start.pos - LOSE.end.pos ) / static_cast<float>(LOSE.elapsedTime);	// 位置
+					m_pWinOrLoseAnimation.rot = (LOSE.start.rot - LOSE.end.rot ) / static_cast<float>(LOSE.elapsedTime);	// 向き
+					m_pWinOrLoseAnimation.size= (LOSE.start.size- LOSE.end.size) / static_cast<float>(LOSE.elapsedTime);	// 大きさ
+					m_pWinOrLoseAnimation.col = (LOSE.start.col - LOSE.end.col ) / static_cast<float>(LOSE.elapsedTime);	// 色
 				}
 			}
 			// 最下位でなければ
 			else
 			{
-				// 最下位でないなら
-				m_pWinOrLose->BindTexture(pTexture->GetAddress(pTexture->Regist(WIN_TEXTURE)));
+				// 最下位なら
+				m_pWinOrLoseObject->BindTexture(pTexture->GetAddress(pTexture->Regist(WIN.texture)));
+				m_pWinOrLoseObject->SetPos		(WIN.start.pos);	// 位置
+				m_pWinOrLoseObject->SetRot		(WIN.start.rot);	// 向き
+				m_pWinOrLoseObject->SetSize		(WIN.start.size);	// 大きさ
+				m_pWinOrLoseObject->SetColor	(WIN.start.col);	// 色
 
-				m_pWinOrLose->SetPos	(WIN_START_POS);	// 位置
-				m_pWinOrLose->SetRot	(WIN_START_ROT);	// 向き
-				m_pWinOrLose->SetSize	(WIN_START_SIZE);	// 大きさ
-				m_pWinOrLose->SetColor	(WIN_START_COL);	// 色
-
-				m_nWinOrLoseMoveDelay =		WIN_MOVE_DELAY;			// ランキングの出現開始時間
-				m_nWinOrLoseMoveDuration =	WIN_MOVE_DURATION;	// ランキングの出現時間
-				// 演出０秒出ないなら
-				if (m_nWinOrLoseMoveDuration != 0)
+																	// 演出０秒じゃないなら
+				if (WIN.elapsedTime != 0)
 				{
-					m_nWinOrLoseMovePos = (WIN_START_POS - WIN_OR_LOSE_END_POS ) / static_cast<float>(WIN_MOVE_DURATION);	// 位置
-					m_nWinOrLoseMoveRot = (WIN_START_ROT - WIN_OR_LOSE_END_ROT ) / static_cast<float>(WIN_MOVE_DURATION);	// 向き
-					m_nWinOrLoseMoveSize= (WIN_START_SIZE- WIN_OR_LOSE_END_SIZE) / static_cast<float>(WIN_MOVE_DURATION);	// 大きさ
-					m_nWinOrLoseMoveCol = (WIN_START_COL- WIN_OR_LOSE_END_COL)   / static_cast<float>(WIN_MOVE_DURATION);		// 色
+					m_nWinOrLoseMoveDelay =		WIN.delayTime;			// ランキングの出現開始時間
+					m_nWinOrLoseMoveDuration =	WIN.elapsedTime;	// ランキングの出現時間
+
+					m_pWinOrLoseAnimation.pos = (WIN.start.pos - WIN.end.pos ) / static_cast<float>(WIN.elapsedTime);	// 位置
+					m_pWinOrLoseAnimation.rot = (WIN.start.rot - WIN.end.rot ) / static_cast<float>(WIN.elapsedTime);	// 向き
+					m_pWinOrLoseAnimation.size= (WIN.start.size- WIN.end.size) / static_cast<float>(WIN.elapsedTime);	// 大きさ
+					m_pWinOrLoseAnimation.col = (WIN.start.col - WIN.end.col ) / static_cast<float>(WIN.elapsedTime);	// 色
 				}
 			}
 
-			m_pWinOrLose->SetVtx();	// 頂点の設定
+			m_pWinOrLoseObject->SetVtx();	// 頂点の設定
 		}
 	}
 	// 全体
@@ -184,12 +436,23 @@ HRESULT My::CResultUIManager::Init()
 		// ランキング
 		for (int nCnt = 0; nCnt < MAX_RANKING_COUNT; nCnt++)
 		{
-			int nTime = m_nRankingMoveDelay[nCnt] + m_nRankingMoveDuration[nCnt]; // 総合時間格納
+			int nTime = m_RankingsDelayTime[nCnt] + m_RankingsElapsedTime[nCnt]; // 総合時間格納
 			if (nTime > m_nEffectCount)
 			{
 				m_nEffectCount = nTime;
 			}
 		}
+
+		// プレイヤーID
+		for (int nCnt = 0; nCnt < MAX_RANKING_COUNT; nCnt++)
+		{
+			int nTime = m_PlayerIDsDelayTime[nCnt] + m_PlayerIDsElapsedTime[nCnt]; // 総合時間格納
+			if (nTime > m_nEffectCount)
+			{
+				m_nEffectCount = nTime;
+			}
+		}
+
 		// 勝敗
 		if (int nTime = m_nWinOrLoseMoveDelay + m_nWinOrLoseMoveDuration; nTime > m_nEffectCount)
 		{
@@ -217,26 +480,20 @@ void My::CResultUIManager::Update()
 	for (int nCnt = 0; nCnt < MAX_RANKING_COUNT; nCnt++)
 	{
 		// 出現開始時間が経過していなかったらカウントする
-		if (m_nRankingMoveDelay[nCnt] > 0){m_nRankingMoveDelay[nCnt]--;}
+		if (m_RankingsDelayTime[nCnt] > 0){m_RankingsDelayTime[nCnt]--;}
 		// 出現開始時間が経過していたら
 		else
 		{
 			// 出現時間が経過していなかったら
-			if (m_nRankingMoveDuration[nCnt] > 0)
+			if (m_RankingsElapsedTime[nCnt] > 0)
 			{
-				m_nRankingMoveDuration[nCnt]--;
+				m_RankingsElapsedTime[nCnt]--;
 				// 出現処理
-				m_pRankingUI[nCnt]->AddPos	(-m_nRankingMovePos[nCnt] );	// 位置
-				m_pRankingUI[nCnt]->AddRot	(-m_nRankingMoveRot[nCnt] );	// 向き
-				m_pRankingUI[nCnt]->AddSize	(-m_nRankingMoveSize[nCnt]);	// 大きさ
-				m_pRankingUI[nCnt]->AddColor(-m_nRankingMoveCol[nCnt]);		// 色
-				m_pRankingUI[nCnt]->SetVtx();	// 頂点の設定
-
-				m_pRankingNamesUI[nCnt]->AddPos		(-m_nRankingMovePos[nCnt] );	// 位置
-				m_pRankingNamesUI[nCnt]->AddRot		(-m_nRankingMoveRot[nCnt] );	// 向き
-				m_pRankingNamesUI[nCnt]->AddSize	(-m_nRankingMoveSize[nCnt]);	// 大きさ
-				m_pRankingNamesUI[nCnt]->AddColor	(-m_nRankingMoveCol[nCnt]);		// 色
-				m_pRankingNamesUI[nCnt]->SetVtx();	// 頂点の設定
+				m_pRankingsObject[nCnt]->AddPos		(-m_RankingsAnimation[nCnt].pos );	// 位置
+				m_pRankingsObject[nCnt]->AddRot		(-m_RankingsAnimation[nCnt].rot );	// 向き
+				m_pRankingsObject[nCnt]->AddSize	(-m_RankingsAnimation[nCnt].size);	// 大きさ
+				m_pRankingsObject[nCnt]->AddColor	(-m_RankingsAnimation[nCnt].col );	// 色
+				m_pRankingsObject[nCnt]->SetVtx();	// 頂点の設定
 			}
 			// 出現時間が経過していたら自プレイヤーを強調表示する
 			else if (nCnt == m_nPlayer)
@@ -248,10 +505,62 @@ void My::CResultUIManager::Update()
 					// カウントが０になっていたら
 					if (m_nMyPlayerBlink <= 0)
 					{
+						m_nMyPlayerBlink = MY_PLAYER_BLINK;	// カウントリセット
+						m_isUpMyPlayerBlink = false;		// 暗くするに設定
+					}
+					// 色
+					m_pPlayerIDsObject[nCnt]->AddColor	(D3DXCOLOR(MY_PLAYER_BLINK_LIGHT_INTENSITY, MY_PLAYER_BLINK_LIGHT_INTENSITY, MY_PLAYER_BLINK_LIGHT_INTENSITY, 0.0f));
+				}
+				else
+				{// 暗くなっている
+					m_nMyPlayerBlink--;	// カウントする
+					// カウントが０になっていたら
+					if (m_nMyPlayerBlink <= 0)
+					{
+						m_nMyPlayerBlink = MY_PLAYER_BLINK;	// カウントリセット
+						m_isUpMyPlayerBlink = true;			// 明るくするに設定
+					}
+					// 色
+					m_pPlayerIDsObject[nCnt]->AddColor	(D3DXCOLOR(-MY_PLAYER_BLINK_LIGHT_INTENSITY, -MY_PLAYER_BLINK_LIGHT_INTENSITY, -MY_PLAYER_BLINK_LIGHT_INTENSITY, 0.0f));
+				}
+				m_pPlayerIDsObject[nCnt]->SetVtx();	// 頂点の設定
+			}
+		}
+	}
+
+	// プレイヤーID
+	for (int nCnt = 0; nCnt < MAX_RANKING_COUNT; nCnt++)
+	{
+		// 出現開始時間が経過していなかったらカウントする
+		if (m_PlayerIDsDelayTime[nCnt] > 0){m_PlayerIDsDelayTime[nCnt]--;}
+		// 出現開始時間が経過していたら
+		else
+		{
+			// 出現時間が経過していなかったら
+			if (m_PlayerIDsElapsedTime[nCnt] > 0)
+			{
+				m_PlayerIDsElapsedTime[nCnt]--;
+				// 出現処理
+				m_pPlayerIDsObject[nCnt]->AddPos	(-m_PlayerIDsAnimation[nCnt].pos );	// 位置
+				m_pPlayerIDsObject[nCnt]->AddRot	(-m_PlayerIDsAnimation[nCnt].rot );	// 向き
+				m_pPlayerIDsObject[nCnt]->AddSize	(-m_PlayerIDsAnimation[nCnt].size);	// 大きさ
+				m_pPlayerIDsObject[nCnt]->AddColor	(-m_PlayerIDsAnimation[nCnt].col );	// 色
+				m_pPlayerIDsObject[nCnt]->SetVtx();	// 頂点の設定
+			}
+			// 出現時間が経過していたら自プレイヤーを強調表示する
+			else if (nCnt == m_nPlayer)
+			{
+				// 強調表示が明るくなっているかどうか
+				if (m_isUpMyPlayerBlink == true)
+				{
+					m_nMyPlayerBlink--;	// カウントする
+										// カウントが０になっていたら
+					if (m_nMyPlayerBlink <= 0)
+					{
 						m_nMyPlayerBlink = MY_PLAYER_BLINK;
 						m_isUpMyPlayerBlink = false;
 					}
-					m_pRankingNamesUI[nCnt]->AddColor	(D3DXCOLOR(MY_PLAYER_BLINK_LIGHT_INTENSITY, MY_PLAYER_BLINK_LIGHT_INTENSITY, MY_PLAYER_BLINK_LIGHT_INTENSITY, 0.0f));	// 色
+					m_pPlayerIDsObject[nCnt]->AddColor	(D3DXCOLOR(MY_PLAYER_BLINK_LIGHT_INTENSITY, MY_PLAYER_BLINK_LIGHT_INTENSITY, MY_PLAYER_BLINK_LIGHT_INTENSITY, 0.0f));	// 色
 				}
 				else
 				{// 暗くなっている
@@ -262,10 +571,10 @@ void My::CResultUIManager::Update()
 						m_nMyPlayerBlink = MY_PLAYER_BLINK;
 						m_isUpMyPlayerBlink = true;
 					}
-					m_pRankingNamesUI[nCnt]->AddColor	(D3DXCOLOR(-MY_PLAYER_BLINK_LIGHT_INTENSITY, -MY_PLAYER_BLINK_LIGHT_INTENSITY, -MY_PLAYER_BLINK_LIGHT_INTENSITY, 0.0f));	// 色
+					m_pPlayerIDsObject[nCnt]->AddColor	(D3DXCOLOR(-MY_PLAYER_BLINK_LIGHT_INTENSITY, -MY_PLAYER_BLINK_LIGHT_INTENSITY, -MY_PLAYER_BLINK_LIGHT_INTENSITY, 0.0f));	// 色
 				}
 
-				m_pRankingNamesUI[nCnt]->SetVtx();	// 頂点の設定
+				m_pPlayerIDsObject[nCnt]->SetVtx();	// 頂点の設定
 			}
 		}
 	}
@@ -278,14 +587,15 @@ void My::CResultUIManager::Update()
 		// 出現時間が経過していなかったら
 		if (m_nWinOrLoseMoveDuration > 0)
 		{
+			// カウントを進める
 			m_nWinOrLoseMoveDuration--;
-			// 出現処理
 
-			m_pWinOrLose->AddPos	(-m_nWinOrLoseMovePos );	// 位置
-			m_pWinOrLose->AddRot	(-m_nWinOrLoseMoveRot );	// 向き
-			m_pWinOrLose->AddSize	(-m_nWinOrLoseMoveSize);	// 大きさ
-			m_pWinOrLose->AddColor	(-m_nWinOrLoseMoveCol);		// 色
-			m_pWinOrLose->SetVtx();	// 頂点の設定
+			// 出現処理
+			m_pWinOrLoseObject->AddPos		(-m_pWinOrLoseAnimation.pos );	// 位置
+			m_pWinOrLoseObject->AddRot		(-m_pWinOrLoseAnimation.rot );	// 向き
+			m_pWinOrLoseObject->AddSize		(-m_pWinOrLoseAnimation.size);	// 大きさ
+			m_pWinOrLoseObject->AddColor	(-m_pWinOrLoseAnimation.col );		// 色
+			m_pWinOrLoseObject->SetVtx();	// 頂点の設定
 		}
 	}
 	// 全体経過時間
@@ -295,6 +605,7 @@ void My::CResultUIManager::Update()
 	CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;
 	CInputMouse* pMouse = GET_INPUT_MOUSE;
 
+	// 演出スキップ
 	if ((pKeyboard->GetTrigger(DIK_RETURN)
 		|| pMouse->GetTrigger(0))
 		&& m_nEffectCount > 0)
@@ -304,39 +615,52 @@ void My::CResultUIManager::Update()
 		for (int nCnt = 0; nCnt < MAX_RANKING_COUNT; nCnt++)
 		{
 			// カウントを０にする
-			m_nRankingMoveDelay[nCnt] = 0;
-			m_nRankingMoveDuration[nCnt] = 0;
+			m_RankingsDelayTime[nCnt] = 0;
+			m_RankingsElapsedTime[nCnt] = 0;
 			
 			// 出現処理
-			m_pRankingUI[nCnt]->SetPos	(RANKING_END_POS[nCnt] );	// 位置
-			m_pRankingUI[nCnt]->SetRot	(RANKING_END_ROT[nCnt] );	// 向き
-			m_pRankingUI[nCnt]->SetSize	(RANKING_END_SIZE[nCnt]);	// 大きさ
-			m_pRankingUI[nCnt]->SetColor(RANKING_END_COL[nCnt]);	// 色
-			m_pRankingUI[nCnt]->SetVtx();	// 頂点の設定
+			m_pRankingsObject[nCnt]->SetPos	 (RANKINGS[nCnt].end.pos);	// 位置
+			m_pRankingsObject[nCnt]->SetRot	 (RANKINGS[nCnt].end.rot);	// 向き
+			m_pRankingsObject[nCnt]->SetSize (RANKINGS[nCnt].end.size);	// 大きさ
+			m_pRankingsObject[nCnt]->SetColor(RANKINGS[nCnt].end.col);	// 色
+			m_pRankingsObject[nCnt]->SetVtx();	// 頂点の設定
+		}
+		// ランキング
+		for (int nCnt = 0; nCnt < MAX_RANKING_COUNT; nCnt++)
+		{
+			// カウントを０にする
+			m_PlayerIDsDelayTime[nCnt] = 0;
+			m_PlayerIDsElapsedTime[nCnt] = 0;
 
-			m_pRankingNamesUI[nCnt]->SetPos		(D3DXVECTOR3(RANKING_END_POS[nCnt].x + RANKING_TO_NAME_GAP_X, RANKING_END_POS[nCnt].y, RANKING_END_POS[nCnt].z));
-			m_pRankingNamesUI[nCnt]->SetSize	(RANKING_END_SIZE[nCnt]);	// 大きさ
-			m_pRankingNamesUI[nCnt]->SetColor	(RANKING_END_COL[nCnt]);		// 色
-			m_pRankingNamesUI[nCnt]->SetVtx();	// 頂点の設定
+			// 出現処理
+			m_pPlayerIDsObject[nCnt]->SetPos	(PLAYER_IDS[nCnt].end.pos );
+			m_pRankingsObject[nCnt]->SetRot		(PLAYER_IDS[nCnt].end.rot );	// 向き
+			m_pPlayerIDsObject[nCnt]->SetSize	(PLAYER_IDS[nCnt].end.size);	// 大きさ
+			m_pPlayerIDsObject[nCnt]->SetColor	(PLAYER_IDS[nCnt].end.col );	// 色
+			m_pPlayerIDsObject[nCnt]->SetVtx();	// 頂点の設定
 		}
 		// カウントを０にする
 		m_nWinOrLoseMoveDelay = 0;
 		m_nWinOrLoseMoveDuration = 0;
 
-		// 出現処理
-		m_pWinOrLose->SetPos	(WIN_OR_LOSE_END_POS );	// 位置
-		m_pWinOrLose->SetRot	(WIN_OR_LOSE_END_ROT );	// 向き
-		m_pWinOrLose->SetSize	(WIN_OR_LOSE_END_SIZE);	// 大きさ
-		m_pWinOrLose->SetColor	(WIN_OR_LOSE_END_COL );	// 色
-		m_pWinOrLose->SetVtx();	// 頂点の設定
+		if (std::find(m_nRanking, m_nRanking + MAX_RANKING_COUNT, m_nPlayer) - m_nRanking == MAX_RANKING_COUNT - 1)
+		{
+			// 出現処理
+			m_pWinOrLoseObject->SetPos		(LOSE.end.pos );	// 位置
+			m_pWinOrLoseObject->SetRot		(LOSE.end.rot );	// 向き
+			m_pWinOrLoseObject->SetSize		(LOSE.end.size);	// 大きさ
+			m_pWinOrLoseObject->SetColor	(LOSE.end.col );	// 色
+		}
+		else
+		{
+			// 出現処理
+			m_pWinOrLoseObject->SetPos		(WIN.end.pos );	// 位置
+			m_pWinOrLoseObject->SetRot		(WIN.end.rot );	// 向き
+			m_pWinOrLoseObject->SetSize		(WIN.end.size);	// 大きさ
+			m_pWinOrLoseObject->SetColor	(WIN.end.col );	// 色
+		}
+		m_pWinOrLoseObject->SetVtx();	// 頂点の設定
 	}
-}
-//=============================================
-// エフェクトが終わっているか
-//=============================================
-bool My::CResultUIManager::IsEndEffect()
-{
-	return m_nEffectCount <= 0;
 }
 //=============================================
 // 生成処理
@@ -352,6 +676,48 @@ void My::CResultUIManager::SetRanking(_In_ int nRanking[MAX_RANKING_COUNT],_In_ 
 	}
 	// プレイヤー番号をコピー
 	m_nPlayer = My::CActiveSceneManager::GetInstance()->GetPlayerIndex();
+}
+
+//=============================================
+// エフェクトが終わっているか
+//=============================================
+bool My::CResultUIManager::IsEndEffect()
+{
+	return m_nEffectCount <= 0;
+}
+
+//=============================================
+// エフェクト情報取得
+//=============================================
+json My::CResultUIManager::LoadAnimation(const std::string& path)
+{
+	std::ifstream ifs(path);
+	if (!ifs) {
+		return json::object();
+	}
+	json j;
+	try{
+		ifs >> j;
+	}
+	catch (...)
+	{
+		// JSON が壊れている → 空の json を返す
+		return json::object();
+	}
+	return j;
+}
+
+//=============================================
+// エフェクト情報保存
+//=============================================
+void My::CResultUIManager::SaveAnimation(const std::string& path, const json& j)
+{
+	std::ofstream ofs(path);
+	if (!ofs) {
+		throw std::runtime_error("Failed to open file: " + path);
+	}
+
+	ofs << j.dump(4);  // 4 はインデント幅
 }
 
 //=============================================

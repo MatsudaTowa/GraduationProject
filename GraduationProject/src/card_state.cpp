@@ -357,7 +357,7 @@ void My::CCardStateStay::Update(CCard* cpy, CDuelCharacter* duel)
 	// カウントを進める
 	if (CRakNet::GetInstance()->GetOnline())
 	{
-		std::chrono::duration<float>(My::CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime()).count();
+		//std::chrono::duration<float>(My::CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime()).count();
 		m_fStaycount += My::CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime()/* * 0.001f*/;
 	}
 	else
@@ -366,6 +366,7 @@ void My::CCardStateStay::Update(CCard* cpy, CDuelCharacter* duel)
 	}
 
 	m_pFan->SetStayTime(m_fStaycount);
+	m_pFan->SetPos(ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), cpy->GetPos()));
 }
 
 //===========================================================================================================
@@ -509,6 +510,9 @@ void My::CCardStateTrigger::Update(CCard* cpy, CDuelCharacter* duel)
 //===========================================================================================================
 void My::CCardStateCemetery::Init(CCard* cpy, CDuelCharacter* duel)
 {
+	//墓地に移動した際に描画を消す
+	//cpy->SetisDraw(false);
+
 	//対象のリストを削除
 	cpy->RemoveAllTargetList();
 }

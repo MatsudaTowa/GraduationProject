@@ -188,11 +188,11 @@ bool My::CCardAttack::IsCast(CDuelCharacter*, CInputMouse::AREA)
 void My::CCardAttack::Cast(CDuelCharacter* duel)
 {
 	//ターゲットの周回
-	for (auto& Target : GetTargetPlayerList())
+	for (CActiveSceneCharacter* TargetCharacter : GetTargetPlayerList())
 	{
 		//デュエル状態にキャスト
-		CDuelCharacter* DuelState = dynamic_cast<CDuelCharacter*>(Target->GetState());	//キャスト
-		if (DuelState == nullptr) break;												//中身の確認
+		CDuelCharacter* DuelState = dynamic_cast<CDuelCharacter*>(TargetCharacter->GetState());	//キャスト
+		if (DuelState == nullptr) break;														//中身の確認
 
 		//待機状態のカードを確認
 		if (!DuelState->GetZoneManager()->GetWaitZone()->GetList().empty())
@@ -239,6 +239,12 @@ void My::CCardAttack::Cast(CDuelCharacter* duel)
 //===========================================================================================================
 void My::CCardAttack::Stay()
 {
+	//1番上のカードでは無いなら画面外に飛ばす
+	if (!m_isTopCastCard)
+	{
+		SetPos({ -1000.0f, 0.0f, 0.0f });
+	}
+
 	//守備カードの位置更新
 	for (CCardDeffence* pCard : m_DefCardVector)
 	{
@@ -362,7 +368,6 @@ void My::CCardAttack::ReceiveTrigger()
 
 		//状態とゾーンの変更
 		iter->ChangeState(CCardState::CARD_CEMETERY, pDuelState);
-		pDuelState->GetZoneManager()->MoveZone(this, CastToZone(GetCurrentZone(), pDuelState), pDuelState->GetZoneManager()->GetCemetery(), true);
 		iter->SetCurrentZone(CCard::CEMETERY);
 	}
 
@@ -380,7 +385,6 @@ void My::CCardAttack::ReceiveTrigger()
 
 		//状態とゾーンの変更
 		iter->ChangeState(CCardState::CARD_CEMETERY, pDuelState);
-		pDuelState->GetZoneManager()->MoveZone(this, CastToZone(GetCurrentZone(), pDuelState), pDuelState->GetZoneManager()->GetCemetery(), true);
 		iter->SetCurrentZone(CCard::CEMETERY);
 	}
 
@@ -522,6 +526,15 @@ void My::CCardAttack::LoadCardInfo(RakNet::BitStream* bsin)
 	default:
 		break;
 	}
+
+	//引数の番号のプレイヤーを取得
+	My::CActiveSceneCharacter* Character = My::CActiveSceneManager::GetInstance()->GetCharacter(GetUserId());
+
+	//対戦状態にキャスト
+	My::CDuelCharacter* pState = dynamic_cast<My::CDuelCharacter*>(Character->GetState());
+
+	//手札のカードを手札に移動
+	ChangeState(My::CCardState::CARD_CAST, pState);
 }
 
 //===========================================================================================================

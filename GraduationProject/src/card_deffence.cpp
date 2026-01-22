@@ -488,7 +488,7 @@ void My::CCardDeffence::LoadCardInfo(RakNet::BitStream* bsin)
 	{
 		My::CActiveSceneCharacter* pCharacter = My::CActiveSceneManager::GetInstance()->GetCharacter(GetUserId());
 		My::CDuelCharacter* pDuelState = dynamic_cast<My::CDuelCharacter*>(pCharacter->GetState());
-		//ChangeState(My::CCardState::CARD_CAST, pDuelState);
+		ChangeState(My::CCardState::CARD_CAST, pDuelState);
 	}
 		
 		break;
@@ -543,7 +543,11 @@ void My::CCardDeffence::LoadCardInfo(RakNet::BitStream* bsin)
 		//ターゲット情報の代入
 		DiffenceTarget Target = { pAttackCard->GetUserId(), pAttackCard->GetBaseStatus().nCardID, pAttackCard->GetSameTypeId() };
 		m_TargetInfo.push_back(Target);
-		ChangeState(My::CCardState::CARD_STAY, pDuelState);
+
+		//ステイ状態に変更
+		My::CActiveSceneCharacter* pPlayer = My::CActiveSceneManager::GetInstance()->GetCharacter(GetUserId());
+		My::CDuelCharacter* pPlayerDuelState = dynamic_cast<My::CDuelCharacter*>(pPlayer->GetState());
+		ChangeState(My::CCardState::CARD_STAY, pPlayerDuelState);
 	}
 
 		break;

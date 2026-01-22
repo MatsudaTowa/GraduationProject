@@ -75,6 +75,7 @@ void CRakNet::Uninit()
     {
         m_pPeer->Shutdown(300); //300ƒ~ƒŠ•bŒã”jŠü
         RakNet::RakPeerInterface::DestroyInstance(m_pPeer);
+        m_pPeer = nullptr;
     }
 
     //ƒNƒ‰ƒX‚Ì”jŠü
