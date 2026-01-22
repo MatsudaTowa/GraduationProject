@@ -105,8 +105,8 @@ void My::CWait::Update(CPlayerDuelState* state, CActiveSceneCharacter* player)
 
 		D3DXVECTOR3 worldPos = ConvertToWorldPoint(GET_CAMERA(GET_CAMERA_IDX), pos, { 0,0,0 });
 
-		itr->SetCurrentZone(CCard::ZONE::CEMETERY);
-		itr->ChangeState(CCardState::CARD_CEMETERY, state);
+		itr->SetCurrentZone(CCard::ZONE::WAIT);
+		itr->ChangeState(CCardState::CARD_WAIT, state);
 		itr->SetNeutralPos(worldPos);
 		itr->SetPos(worldPos);
 

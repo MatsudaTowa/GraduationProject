@@ -95,6 +95,8 @@ namespace My
 
 		inline CCard* GetCard() { return  m_pParent; }
 
+		void SetisLink(bool card_link) { m_isCardLink = card_link; }
+
 	private:
 		/** @brief カードのタイプに合わせて色を変える */
 		D3DXCOLOR SetColorCard();
@@ -107,6 +109,8 @@ namespace My
 
 		/** @brief 何のフレームかを判別するタイプ */
 		FRAMETYPE m_type;
+
+		bool m_isCardLink;
 	};
 }
 
