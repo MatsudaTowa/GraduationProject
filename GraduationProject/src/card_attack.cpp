@@ -225,6 +225,7 @@ void My::CCardAttack::Cast(CDuelCharacter* duel)
 			pCard->SetDiffenceTarget(Target);
 
 			pCard->ChangeState(CCardState::CARD_STAY, DuelState);
+			pCard->SetisDraw(true);
 
 			//守備カードのポインタを保存
 			m_DefCardVector.push_back(pCard);
