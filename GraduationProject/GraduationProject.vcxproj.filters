@@ -163,6 +163,8 @@
     <ClCompile Include="src\pseudo_card_frame.cpp" />
     <ClCompile Include="src\wait_next_illust.cpp" />
     <ClCompile Include="src\ready_check.cpp" />
+    <ClCompile Include="src\lobby_character_icon_UI.cpp" />
+    <ClCompile Include="src\hand_range.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -342,6 +344,8 @@
     <ClInclude Include="src\pseudo_card_frame.h" />
     <ClInclude Include="src\wait_next_illust.h" />
     <ClInclude Include="src\ready_check.h" />
+    <ClInclude Include="src\lobby_character_icon_UI.h" />
+    <ClInclude Include="src\hand_range.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GraduationProject.rc" />

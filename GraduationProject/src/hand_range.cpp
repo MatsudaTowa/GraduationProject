@@ -4,27 +4,26 @@
 //Author Matsuda Towa
 //
 //=============================================
-#include "selection_range.h"
 #include "hand_range.h"
 
 //=============================================
 // コンストラクタ
 //=============================================
-My::CSelectionRange::CSelectionRange(int nPriority):CObject2D(nPriority)
+My::CHandRange::CHandRange(int nPriority) :CSelectionRange(nPriority)
 {
 }
 
 //=============================================
 // デストラクタ
 //=============================================
-My::CSelectionRange::~CSelectionRange()
+My::CHandRange::~CHandRange()
 {
 }
 
 //=============================================
 // 初期化
 //=============================================
-HRESULT My::CSelectionRange::Init()
+HRESULT My::CHandRange::Init()
 {
 	SetVtx();
 	return S_OK;
@@ -33,7 +32,7 @@ HRESULT My::CSelectionRange::Init()
 //=============================================
 // 終了
 //=============================================
-void My::CSelectionRange::Uninit()
+void My::CHandRange::Uninit()
 {
 	CObject2D::Uninit();
 }
@@ -41,7 +40,7 @@ void My::CSelectionRange::Uninit()
 //=============================================
 // 更新
 //=============================================
-void My::CSelectionRange::Update()
+void My::CHandRange::Update()
 {
 	CObject2D::Update();
 	SetVtx();
@@ -50,38 +49,7 @@ void My::CSelectionRange::Update()
 //=============================================
 // 描画
 //=============================================
-void My::CSelectionRange::Draw()
+void My::CHandRange::Draw()
 {
 	CObject2D::Draw();
-}
-
-//=============================================
-// 生成
-//=============================================
-My::CSelectionRange* My::CSelectionRange::Create(D3DXVECTOR3 pos, D3DXVECTOR2 size, RANGE_TYPE range)
-{
-	CSelectionRange* pObject = nullptr;
-
-	if (range == HAND)
-	{
-		pObject = new CHandRange();
-	}
-	else
-	{
-		pObject = new CSelectionRange();
-	}
-
-	//nullならnullを返す
-	if (pObject == nullptr) { return nullptr; }
-
-	//pos設定
-	pObject->SetPos(pos);
-
-	//タイプ設定
-	pObject->SetSize(size);
-
-	//初期化
-	pObject->Init();
-
-	return pObject;
 }

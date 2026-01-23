@@ -237,6 +237,7 @@
     <ClCompile Include="src\active_scene_player_state.cpp" />
     <ClCompile Include="src\active_scene_state.cpp" />
     <ClCompile Include="src\hand.cpp" />
+    <ClCompile Include="src\hand_range.cpp" />
     <ClCompile Include="src\hand_zone.cpp" />
     <ClCompile Include="src\input.cpp" />
     <ClCompile Include="src\life_changer.cpp" />
@@ -387,6 +388,7 @@
     <ClInclude Include="src\active_scene_player_state.h" />
     <ClInclude Include="src\active_scene_state.h" />
     <ClInclude Include="src\hand.h" />
+    <ClInclude Include="src\hand_range.h" />
     <ClInclude Include="src\hand_zone.h" />
     <ClInclude Include="src\input.h" />
     <ClInclude Include="src\life_changer.h" />

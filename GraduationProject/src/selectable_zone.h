@@ -30,7 +30,7 @@ namespace My
 		*/
 		~CSelectableZone()override;
 
-		void CreateRange(D3DXVECTOR3 pos,D3DXVECTOR2 size,D3DXCOLOR col,bool isDraw);
+		void CreateRange(D3DXVECTOR3 pos,D3DXVECTOR2 size,D3DXCOLOR col,bool isDraw, CSelectionRange::RANGE_TYPE type);
 
 		void Update() override;
 

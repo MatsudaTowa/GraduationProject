@@ -16,7 +16,7 @@ My::CCemeteryZone::CCemeteryZone()
 	CSelectionRange* pRange = GetSelectionRange();
 	if (pRange == nullptr)
 	{
-		pRange = CSelectionRange::Create({ 1200.0f, 10.0f,0.0f }, { 100.0f, 1000.0f });
+		pRange = CSelectionRange::Create({ 1200.0f, 10.0f,0.0f }, { 100.0f, 1000.0f }, CSelectionRange::OTHER);
 		pRange->SetColor({ COLOR_BLACK.r,COLOR_BLACK.g,COLOR_BLACK.b,0.5f });
 		pRange->SetisDraw(false);
 	}

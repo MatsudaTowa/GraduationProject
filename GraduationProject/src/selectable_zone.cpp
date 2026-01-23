@@ -13,11 +13,11 @@ My::CSelectableZone::~CSelectableZone()
 	}
 }
 
-void My::CSelectableZone::CreateRange(D3DXVECTOR3 pos, D3DXVECTOR2 size, D3DXCOLOR col, bool isDraw)
+void My::CSelectableZone::CreateRange(D3DXVECTOR3 pos, D3DXVECTOR2 size, D3DXCOLOR col, bool isDraw, CSelectionRange::RANGE_TYPE type)
 {
 	if (m_pRange == nullptr)
 	{
-		m_pRange = CSelectionRange::Create(pos, size);
+		m_pRange = CSelectionRange::Create(pos, size, type);
 		m_pRange->SetColor(col);
 		m_pRange->SetisDraw(isDraw);
 	}

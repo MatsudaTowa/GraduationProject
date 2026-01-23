@@ -4,37 +4,30 @@
 //Author Matsuda Towa
 //
 //=============================================
-#ifndef _SELECTION_RANGE_H_ //これが定義されてないとき
-
-#define _SELECTION_RANGE_H_
+#ifndef _HAND_RANGE_H_ //これが定義されてないとき
+#define _HAND_RANGE_H_
 #include "main.h"
-#include "object2D.h"
+#include "selection_range.h"
 
 namespace My
 {
 	//=============================================
 	//カードを選択出来る範囲
 	//=============================================
-	class CSelectionRange : public CObject2D
+	class CHandRange : public CSelectionRange
 	{
 	public:
-		static const int PRIORITY = 10;  //描画順
-
-		enum RANGE_TYPE
-		{
-			HAND = 0,
-			OTHER
-		};
+		static const int HAND_PRIORITY = 28;  //描画順
 
 		/**
 		 * @brief コンストラクタ
 		 * @param [in]プライオリティ
 		 */
-		CSelectionRange(int nPriority = PRIORITY);
+		CHandRange(int nPriority = HAND_PRIORITY);
 		/**
 		 * @brief デストラクタ
 		 */
-		~CSelectionRange()override;
+		~CHandRange()override;
 		/**
 		 * @brief 初期化
 		 * @return 成功したか
@@ -52,13 +45,6 @@ namespace My
 		 * @brief 描画
 		 */
 		void Draw()override;
-		/**
-		 * @brief 生成
-		 * @param [in]位置
-		 * @param [in]サイズ
-		 * @return
-		 */
-		static CSelectionRange* Create(D3DXVECTOR3 pos, D3DXVECTOR2 size, RANGE_TYPE range);
 	private:
 	};
 }
