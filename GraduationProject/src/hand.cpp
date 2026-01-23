@@ -164,7 +164,7 @@ void My::CHand::Cast(CDuelCharacter* character, CActiveSceneCharacter* player)
 {
 	CSelectionRange* pRange = character->GetZoneManager()->GetHandZone()->GetSelectionRange();
 	bool is_hit_area = GET_COLISION->Check2DPolygonColision(GET_INPUT_MOUSE->GetMousePos(), { 3.0f,3.0f }, { pRange->GetPos().x,pRange->GetPos().y,0.0f }, pRange->GetSize());
-	if (is_hit_area && pRange->GetisDraw() && m_HandState == NEUTRAL && GET_INPUT_MOUSE->GetMouseMove().x == 0.0f)
+	if (is_hit_area && m_HandState == NEUTRAL && GET_INPUT_MOUSE->GetMouseMove().x == 0.0f)
 	{
 		return;
 	}
