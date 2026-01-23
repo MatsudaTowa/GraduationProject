@@ -11,7 +11,8 @@
 // コンストラクタ
 //=============================================
 My::CCharacterLobbyUIManager::CCharacterLobbyUIManager():
-	m_pReadyUI(nullptr)
+	m_pReadyUI(nullptr),
+	m_pIconUI(nullptr)
 {
 }
 
@@ -33,6 +34,12 @@ HRESULT My::CCharacterLobbyUIManager::Init(CActiveSceneCharacter* character)
 		m_pReadyUI->Init(character);
 	}
 
+	//if(m_pIconUI == nullptr)
+	//{
+	//	m_pIconUI = CLobbyCharacterIconUI::Create({ 0.0f,0.0f,0.0f }, COLOR_BLUE);
+	//	m_pIconUI->Init();
+	//}
+
 	return S_OK;
 }
 
@@ -46,6 +53,11 @@ void My::CCharacterLobbyUIManager::Uninit()
 		m_pReadyUI->Uninit();
 		delete m_pReadyUI;
 		m_pReadyUI = nullptr;
+	}
+
+	if(m_pIconUI != nullptr)
+	{
+		m_pIconUI->Uninit();
 	}
 }
 

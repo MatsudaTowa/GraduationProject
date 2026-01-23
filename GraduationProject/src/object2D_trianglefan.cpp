@@ -13,7 +13,7 @@
 //=============================================
 My::CObject2D_TriangleFan::CObject2D_TriangleFan(int nPriority) :CObject2D_Triangle(nPriority),
 m_triangleVtx(),
-m_Divisionnum(300)
+m_Divisionnum(30)
 {
 }
 
@@ -41,6 +41,9 @@ HRESULT My::CObject2D_TriangleFan::Init()
     return S_OK;
 }
 
+//=============================================
+// 終了
+//=============================================
 void My::CObject2D_TriangleFan::Uninit()
 {
     CObject2D::Uninit();
@@ -79,6 +82,9 @@ void My::CObject2D_TriangleFan::Draw()
     SetVtxBuff(vtxBuff);
 }
 
+//=============================================
+// ステイ時間の設定
+//=============================================
 void My::CObject2D_TriangleFan::SetStayTime(float count)
 {
     // 割合を計算
@@ -101,7 +107,7 @@ void My::CObject2D_TriangleFan::SetVtx()
     // 三角形は頂点3つ
     if (vtxBuff == nullptr)
     {
-        pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * m_Divisionnum*3, D3DUSAGE_WRITEONLY, FVF_VERTEX_2D, D3DPOOL_MANAGED, &vtxBuff, NULL);
+        pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * (m_Divisionnum * 2) + 1, D3DUSAGE_WRITEONLY, FVF_VERTEX_2D, D3DPOOL_MANAGED, &vtxBuff, NULL);
     }
 
     VERTEX_2D* pVtx;
@@ -115,8 +121,10 @@ void My::CObject2D_TriangleFan::SetVtx()
     float angle = -D3DX_PI * 0.5f;
     //float a = 0.0f;
 
+	// 分割数分だけ頂点を生成
     for (int i = 0; i <= m_Divisionnum; ++i)
     {
+		// 中心点
         if (i == 0)
         {
             pVtx[i].pos = D3DXVECTOR3(m_CenterPos.x, m_CenterPos.y, 0.0f);
@@ -124,16 +132,20 @@ void My::CObject2D_TriangleFan::SetVtx()
             pVtx[i].col = COLOR_WHITE;
 			pVtx[i].tex = D3DXVECTOR2(0.5f, 0.5f); // テクスチャ使わない
         }
+		// その他の頂点
         else
         {
+			// 頂点座標計算
             x = r * cosf(angle);
             y = r * sinf(angle);
 
+			// テクスチャ座標計算
 			float u = 0.5f + cosf(angle) * 0.5f;
 			float v = 0.5f + sinf(angle) * 0.5f;
 
             pVtx[i].pos = D3DXVECTOR3(m_CenterPos.x + x, m_CenterPos.y + y, 0.0f);
 
+			// 最後の頂点は最初の頂点(中心点じゃない)と同じ位置にする
             if(i == m_Divisionnum)
             {
                 pVtx[i].pos = D3DXVECTOR3(m_CenterPos.x + r, m_CenterPos.y, 0.0f);
@@ -143,20 +155,10 @@ void My::CObject2D_TriangleFan::SetVtx()
             pVtx[i].col = COLOR_WHITE;
             pVtx[i].tex = D3DXVECTOR2(u, v); // テクスチャ使わない
 
+            // 角度を次の頂点に進める
             angle += (2.0f * D3DX_PI) / m_Divisionnum;
-            //a += 1.0f / m_Divisionnum;
         }
     }
-
-
-    //for (int i = 0; i < NUM_VERTEX; ++i)
-    //{
-    //    pVtx[i].pos = D3DXVECTOR3(m_triangleVtx[i].x, m_triangleVtx[i].y, 0.0f);
-
-    //    pVtx[i].rhw = 1.0f;
-    //    pVtx[i].col = GetColor();
-    //    pVtx[i].tex = D3DXVECTOR2(0, 0); // テクスチャ使わない
-    //}
 
     vtxBuff->Unlock();
     SetVtxBuff(vtxBuff);

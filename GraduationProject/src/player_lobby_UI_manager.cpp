@@ -30,11 +30,11 @@ HRESULT My::CPlayerLobbyUIManager::Init(CActiveSceneCharacter* character)
 {
 	if (m_pReadyButton == nullptr)
 	{
-		m_pReadyButton = CReadyButton::Create({ 1000.0f,300.0f,0.0f }, { 100.0f,50.0f });
+		m_pReadyButton = CReadyButton::Create({ 1000.0f,550.0f,0.0f }, { 150.0f,50.0f });
 	}
 	if (m_pStartButton == nullptr)
 	{
-		m_pStartButton = CMatchStartButton::Create({ 1000.0f,450.0f,0.0f }, { 100.0f,50.0f });
+		m_pStartButton = CMatchStartButton::Create({ 1100.0f,660.0f,0.0f }, { 150.0f,50.0f });
 	}
 	CCharacterLobbyUIManager::Init(character);
 	return S_OK;

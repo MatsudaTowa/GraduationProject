@@ -155,7 +155,6 @@ void My::CZoneManager::Update()
 	std::vector<CZone*> zone_vector =
 	{
 		m_pDeck,
-		m_pCemetery,
 		m_pFieldZone,
 		m_pCemetery,
 		m_pCastPreviewZone,
