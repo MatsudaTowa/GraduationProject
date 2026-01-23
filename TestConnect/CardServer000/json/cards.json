@@ -154,6 +154,20 @@
             "defensetype": 1,
             "guard": 3,
             "counter": 1
+        },
+        {
+            "Pack ID": 1,
+            "Card ID": 12,
+            "Card Name": "裁かれるサバ",
+            "Card Name Ruby": "",
+            "image": "sabakarerusaba.png",
+            "cost": 1,
+            "rarity": 1,
+            "type": 2,
+            "addeffect": 0,
+            "target": false,
+            "defensetype": 2,
+            "guard": 2
         }
     ]
 }
