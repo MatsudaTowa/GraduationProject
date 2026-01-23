@@ -276,6 +276,15 @@ void My::CObject2D::SetGaugeVtx()
 	m_pVtxBuff->Unlock();
 }
 
+void My::CObject2D::SetTexPath(const std::string tex_path)
+{
+	//テクスチャ情報の取得
+	CTexture* pTexture = CManager::GetInstance()->GetTexture();
+
+	//テクスチャ設定
+	BindTexture(pTexture->GetAddress(pTexture->Regist(tex_path)));
+}
+
 /**
  * @brief テクスチャ設定
  * @param [in]テクスチャポインタ

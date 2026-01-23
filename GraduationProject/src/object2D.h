@@ -9,6 +9,8 @@
 #define _OBJECT2D_H_
 #include "main.h"
 #include "object.h"
+#include "manager.h"
+#include "texture.h"
 
 /** @brief My 名前空間 */
 namespace My
@@ -123,6 +125,7 @@ namespace My
 		}
 
 
+		void SetTexPath(const std::string tex_path);
 	private:
 
 		LPDIRECT3DTEXTURE9 m_pTexture; //テクスチャへのポインタ

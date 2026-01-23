@@ -80,6 +80,16 @@ void My::CHand::Update(CPlayerDuelState* state, CActiveSceneCharacter* player)
 	{
 		iter->Update(state);
 	}
+	CSelectionRange* pRange = state->GetZoneManager()->GetHandZone()->GetSelectionRange();
+	if (typeid(*CActiveSceneManager::GetInstance()->GetState()) == typeid(CCardCast))
+	{
+		pRange->SetisDraw(true);
+		pRange->SetTexPath("data\\TEXTURE\\cast_cancel.png");
+	}
+	else
+	{
+		pRange->SetisDraw(false);
+	}
 
 	// èD‘I‘ğ
 	Select(state);

@@ -180,7 +180,7 @@ void My::CWaitZoneBG::DrawTop()
 				const std::string illust_folder = "data/TEXTURE/illust/";
 				const std::string tex_pass = illust_folder + get_tex_pass;
 
-				m_pNextIllust->SetIllust(tex_pass);
+				m_pNextIllust->SetTexPath(tex_pass);
 				m_pNextIllust->SetisDraw(true);
 
 
@@ -199,7 +199,7 @@ void My::CWaitZoneBG::DrawTop()
 			if (m_pNextIllust != nullptr)
 			{
 				//テクスチャを空にして描画もしない
-				m_pNextIllust->SetIllust("");
+				m_pNextIllust->SetTexPath("");
 				m_pNextIllust->SetisDraw(false);
 			}
 		}

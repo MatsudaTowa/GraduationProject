@@ -59,15 +59,6 @@ namespace My
 		 * @return UIのポインタ
 		 */
 		static CWaitNextIllust* Create(D3DXVECTOR3 pos,D3DXVECTOR2 size);
-
-		void SetIllust(const std::string tex_path)
-		{
-			//テクスチャ情報の取得
-			CTexture* pTexture = CManager::GetInstance()->GetTexture();
-
-			//テクスチャ設定
-			BindTexture(pTexture->GetAddress(pTexture->Regist(tex_path)));
-		}
 	private:
 	};
 }
