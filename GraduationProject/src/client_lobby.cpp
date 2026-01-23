@@ -223,6 +223,10 @@ void CClient_Lobby::Delete(RakNet::Packet* packet)
         {
             m_IconUI[player->GetPlayerIdx()]->SetPos({ 1010.0f,80.0f + (nStart * 120.0f),0.0f });
             m_IconUI[player->GetPlayerIdx()+4]->SetPos({ 1010.0f,80.0f + (nStart * 120.0f),0.0f });
+            // クソ設計
+			m_IconUI[player->GetPlayerIdx() - 1] = m_IconUI[player->GetPlayerIdx()];
+			m_IconUI[player->GetPlayerIdx() - 1+4] = m_IconUI[player->GetPlayerIdx()+4];
+
             player->SetPlayerIdx(player->GetPlayerIdx() - 1);
         }
     }
@@ -308,6 +312,8 @@ void CClient_Lobby::ReceiveReady(RakNet::Packet* packet)
                 if (pState != nullptr)
                 {
                     pState->SetIsReady(ready);  //代入
+                    // 後で変更しますpart3
+                    m_IconUI[id + 4]->SwitchKindTexture(ready);
                 }
                 return;
             }
@@ -325,6 +331,8 @@ void CClient_Lobby::ReceiveReady(RakNet::Packet* packet)
                 if (pState != nullptr)
                 {
                     pState->SetIsReady(ready);  //代入
+                    // 後で変更しますpart3
+                    m_IconUI[id + 4]->SwitchKindTexture(ready);
                 }
             }
         }
@@ -340,7 +348,6 @@ void CClient_Lobby::ReceiveReady(RakNet::Packet* packet)
         //代入
         iter.isReady = isReady;
         CheckTarget(nCount, isReady);
-		m_IconUI[nCount + 4]->SwitchKindTexture(isReady);
 
         //カウントアップ
         nCount++;
