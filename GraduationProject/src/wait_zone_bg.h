@@ -9,6 +9,7 @@
 
 #include "button.h"
 #include "pseudo_card_frame.h"
+#include "wait_next_illust.h"
 /** @brief My –¼‘O‹óŠÔ */
 namespace My
 {
@@ -49,6 +50,8 @@ namespace My
 		 */
 		void Update()override;
 
+		void DrawTop();
+
 		/**
 		 * @brief •`‰æˆ—
 		 */
@@ -82,7 +85,7 @@ namespace My
 		};
 		PseundCard m_pPseundCard[NUM_CARD];
 
-		CCardFrame* m_pTopCardFrame[CCardFrame::FRAMETYPE_MAX];
+		CWaitNextIllust* m_pNextIllust;
 	};
 }
 

@@ -12,7 +12,10 @@ namespace
 {
 	const D3DXVECTOR3 UI_POS{ 1050.0f, 690.0f, 0.0f };
 	const D3DXVECTOR2 UI_SIZE{ 51.0f, 80.0f };	//サイズ
+	const D3DXCOLOR OFF_COLOR{ 0.6f,0.6f,0.6f,1.0f };
+	const D3DXCOLOR ON_COLOR{ COLOR_WHITE };
 	const float CARD_SHIFT_Y = 30.0f;
+	const float ILLUST_SHIFT_Y = -32.5f;
 	const std::string TEXTURE_PATH =	//テクスチャパス
 	{
 		{ "data\\TEXTURE\\WatingUI\\wait_bg.png" },
@@ -21,7 +24,8 @@ namespace
 //=============================================
 // コンストラクタ
 //=============================================
-My::CWaitZoneBG::CWaitZoneBG(int nPriority) :CButton(nPriority)
+My::CWaitZoneBG::CWaitZoneBG(int nPriority) :CButton(nPriority),
+m_pNextIllust(nullptr)
 {
 }
 
@@ -56,8 +60,23 @@ HRESULT My::CWaitZoneBG::Init()
 					card_pos,
 					VEC3_RESET_ZERO
 				);
+			if (j != CCardFrame::FRAMETYPE_ILLUST)
+			{
+				continue;
+			}
+
+			if (i != NUM_CARD - 1)
+			{
+				continue;
+			}
+
+			if (m_pNextIllust == nullptr)
+			{
+				m_pNextIllust = CWaitNextIllust::Create({UI_POS.x,UI_POS.y + ILLUST_SHIFT_Y ,UI_POS.z}, { 35.0f,30.0f });
+			}
 		}
 	}
+
 
 	//テクスチャ情報の取得
 	CTexture* pTexture = CManager::GetInstance()->GetTexture();
@@ -95,11 +114,10 @@ void My::CWaitZoneBG::Uninit()
 	}
 
 	// カードフレーム生成
-	for (int i = 0; i < CCardFrame::FRAMETYPE_MAX; ++i)
+	if (m_pNextIllust)
 	{
-		if (m_pTopCardFrame[i] == nullptr) { continue; }
-		m_pTopCardFrame[i]->Uninit();
-		m_pTopCardFrame[i] = nullptr;
+		m_pNextIllust->Uninit();
+		m_pNextIllust = nullptr;
 	}
 	//親クラスの終了処理を呼ぶ
 	CObject2D::Uninit();
@@ -122,9 +140,27 @@ void My::CWaitZoneBG::Update()
 		for (int j = 0; j < CCardFrame::FRAMETYPE_MAX; ++j)
 		{
 			m_pPseundCard[i].card_frame[j]->SetPos(card_pos);
+			m_pPseundCard[i].card_frame[j]->SetColor(GetColor());
 		}
 	}
 
+	if (m_pNextIllust != nullptr)
+	{
+		D3DXVECTOR3 card_pos = GetPos();
+		m_pNextIllust->SetPos({ card_pos.x,card_pos.y + ILLUST_SHIFT_Y,card_pos.z});
+		m_pNextIllust->SetColor(GetColor());
+	}
+
+	DrawTop();
+
+	// 親クラスの更新処理を呼ぶ
+	CObject2D::Update();
+	//頂点設定
+	//SetVtx();
+}
+
+void My::CWaitZoneBG::DrawTop()
+{
 	CActiveSceneCharacterState* state = CActiveSceneManager::GetInstance()->GetPlayer()->GetState();
 	// ロビーじゃなかったら抜ける
 	if (typeid(*state) == typeid(CPlayerDuelState))
@@ -137,35 +173,37 @@ void My::CWaitZoneBG::Update()
 
 		if (!card_list.empty())
 		{
-			CCard* top_card = *card_list.begin();
-			//// カードフレーム生成
-			//for (int i = 0; i < CCardFrame::FRAMETYPE_MAX; i++)
-			//{
-			//	if (m_pTopCardFrame[i] == nullptr)
-			//	{
-			//		m_pTopCardFrame[i] = CCardFrame::Create((CCardFrame::FRAMETYPE)i, top_card);
-			//	}
-			//	else if(m_pTopCardFrame[i] != nullptr)
-			//	{
-			//		m_pTopCardFrame[i]->SetParent(top_card);
-			//		m_pTopCardFrame[i]->SetPos(UI_POS);
-			//	}
-			//}
+			CCard* pCard = *card_list.begin();
+			if (m_pNextIllust != nullptr)
+			{
+				std::string get_tex_pass = pCard->GetBaseStatus().imagePath;
+				const std::string illust_folder = "data/TEXTURE/illust/";
+				const std::string tex_pass = illust_folder + get_tex_pass;
+
+				m_pNextIllust->SetIllust(tex_pass);
+				m_pNextIllust->SetisDraw(true);
+
+
+				for (int j = 0; j < CCardFrame::FRAMETYPE_MAX; ++j)
+				{
+					if (j == CCardFrame::FRAMETYPE_ILLUST || j == CCardFrame::FRAMETYPE_COST || j == CCardFrame::FRAMETYPE_NAME || j == CCardFrame::FRAMETYPE_TEXT)
+					{
+						continue;
+					}
+					m_pPseundCard[NUM_CARD - 1].card_frame[j]->SetColor(COLOR_BLUE);
+				}
+			}
+		}
+		else
+		{
+			if (m_pNextIllust != nullptr)
+			{
+				//テクスチャを空にして描画もしない
+				m_pNextIllust->SetIllust("");
+				m_pNextIllust->SetisDraw(false);
+			}
 		}
 	}
-
-	// 親クラスの更新処理を呼ぶ
-	CObject2D::Update();
-
-	//カラー取得
-	D3DXCOLOR col = GetColor();
-
-	col = { 0.8f,0.8f,0.8f,0.0f };
-
-	//カラーを代入
-	SetColor(col);
-	//頂点設定
-	//SetVtx();
 }
 
 //=============================================
@@ -224,6 +262,8 @@ bool My::CWaitZoneBG::ProcessMouseEvent()
 		pos.y = UI_POS.y - CARD_SHIFT_Y;
 		SetPos(pos);
 
+		SetColor(ON_COLOR);
+
 		return true;
 	}
 	else if (!ishit)
@@ -231,6 +271,8 @@ bool My::CWaitZoneBG::ProcessMouseEvent()
 		D3DXVECTOR3 pos = GetPos();
 		pos.y = UI_POS.y;
 		SetPos(pos);
+
+		SetColor(OFF_COLOR);
 	}
 
 	return false;

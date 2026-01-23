@@ -5,6 +5,7 @@
 //
 //=============================================
 #include "button.h"
+#include "active_scene_manager.h"
 
 //=============================================
 // コンストラクタ
@@ -60,5 +61,9 @@ void My::CButton::Draw()
 //=============================================
 bool My::CButton::ProcessMouseEvent()
 {
+	if (typeid(*CActiveSceneManager::GetInstance()->GetState()) == typeid(CCardCast))
+	{
+		return false;
+	}
 	return GET_COLISION->Check2DPolygonColision(GET_INPUT_MOUSE->GetMousePos(), { 3.0f,3.0f }, {GetPos().x,GetPos().y,0.0f }, GetSize());
 }

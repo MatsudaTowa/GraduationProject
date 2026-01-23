@@ -298,6 +298,7 @@
     <ClCompile Include="src\title_screen.cpp" />
     <ClCompile Include="src\useful.cpp" />
     <ClCompile Include="src\waitchecker_UI.cpp" />
+    <ClCompile Include="src\wait_next_illust.cpp" />
     <ClCompile Include="src\wait_next_UI.cpp" />
     <ClCompile Include="src\wait_zone.cpp" />
     <ClCompile Include="src\wait_zone_bg.cpp" />
@@ -443,6 +444,7 @@
     <ClInclude Include="src\title_screen.h" />
     <ClInclude Include="src\useful.h" />
     <ClInclude Include="src\waitchecker_UI.h" />
+    <ClInclude Include="src\wait_next_illust.h" />
     <ClInclude Include="src\wait_next_UI.h" />
     <ClInclude Include="src\wait_zone.h" />
     <ClInclude Include="src\wait_zone_bg.h" />
