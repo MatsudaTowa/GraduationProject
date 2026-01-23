@@ -5,6 +5,15 @@
 // 
 //===================================================================================
 #include "lobby_character_icon_UI.h"
+#include "active_scene_player_state.h"
+#include "active_scene_manager.h"
+
+const char* TEX_KIND_ICON[] =
+{
+	"data/TEXTURE/lobby_character_icon.png",
+	"data/TEXTURE/check.png",
+	"data/TEXTURE/check_not.png"
+};
 
 //===================================================================================
 // コンストラクタ
@@ -26,14 +35,13 @@ My::CLobbyCharacterIconUI::~CLobbyCharacterIconUI()
 //===================================================================================
 HRESULT My::CLobbyCharacterIconUI::Init()
 {
-	// テクスチャの登録
-	BindTexture(GET_TEXTURE->GetAddress(GET_TEXTURE->Regist("data/TEXTURE/lobby_character_icon.png")));
-
 	// サイズの設定
-	SetSize(D3DXVECTOR2(160.0f, 120.0f));
+	//SetSize(D3DXVECTOR2(160.0f, 120.0f));
 
 	// 頂点座標の設定
 	SetVtx();
+
+	CActiveScenePlayer* player = CActiveSceneManager::GetInstance()->GetPlayer();
 
 	return S_OK;
 }
@@ -51,7 +59,8 @@ void My::CLobbyCharacterIconUI::Uninit()
 //===================================================================================
 void My::CLobbyCharacterIconUI::Update()
 {
-	CObject2D::Update();
+	// 頂点座標の設定
+	SetVtx();
 }
 
 //===================================================================================
@@ -62,14 +71,34 @@ void My::CLobbyCharacterIconUI::Draw()
 	CObject2D::Draw();
 }
 
-My::CLobbyCharacterIconUI* My::CLobbyCharacterIconUI::Create(D3DXVECTOR3 pos, D3DXCOLOR color)
+My::CLobbyCharacterIconUI* My::CLobbyCharacterIconUI::Create(D3DXVECTOR3 pos, D3DXVECTOR2 size, D3DXCOLOR color,unsigned int kind)
 {
 	CLobbyCharacterIconUI* pInstance = new CLobbyCharacterIconUI();
+
+	// 位置の設定
 	pInstance->SetPos(pos);
+
+	// サイズの設定
+	pInstance->SetSize(D3DXVECTOR2(size.x, size.y));
 
 	// 色の設定
 	pInstance->SetColor(color);
 
+	// テクスチャの登録
+	pInstance->BindTexture(GET_TEXTURE->GetAddress(GET_TEXTURE->Regist(TEX_KIND_ICON[kind])));
+
 	pInstance->Init();
 	return pInstance;
+}
+
+void My::CLobbyCharacterIconUI::SwitchKindTexture(bool check)
+{
+	if (check)
+	{
+		BindTexture(GET_TEXTURE->GetAddress(GET_TEXTURE->Regist(TEX_KIND_ICON[1])));
+	}
+	else
+	{
+		BindTexture(GET_TEXTURE->GetAddress(GET_TEXTURE->Regist(TEX_KIND_ICON[2])));
+	}
 }

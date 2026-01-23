@@ -65,7 +65,7 @@ private:
 
 	//変数
 	std::list<LobbyPlayerParam> m_LobbyPlayerList;	//ロビープレイヤーリスト
-	My::CLobbyCharacterIconUI* m_IconUI[4]; //キャラクターアイコンUIリスト
+	My::CLobbyCharacterIconUI* m_IconUI[8]; //キャラクターアイコンUIリスト
 };
 
 #endif

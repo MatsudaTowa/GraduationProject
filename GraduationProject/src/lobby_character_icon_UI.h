@@ -1,11 +1,17 @@
 #ifndef _CLOBBY_CHARACTER_ICON_UI_
 #define _CLOBBY_CHARACTER_ICON_UI_
 
+
+
 namespace My
 {
+	
+
 	class CLobbyCharacterIconUI:public CObject2D
 	{
 	public:
+		
+
 		/**
 		* @brief コンストラクタ
 		*/
@@ -39,7 +45,7 @@ namespace My
 		/**
 		* @brief 生成
 		*/
-		static CLobbyCharacterIconUI* Create(D3DXVECTOR3 pos, D3DXCOLOR color);
+		static CLobbyCharacterIconUI* Create(D3DXVECTOR3 pos, D3DXVECTOR2 size,D3DXCOLOR color, unsigned int kind);
 
 		void SetIndex(int index)
 		{
@@ -50,8 +56,11 @@ namespace My
 		{
 			return m_Idx;
 		}
+
+		void SwitchKindTexture(bool check);
 	private:
 		int m_Idx;
+		unsigned int m_Kinds;
 	};
 }
 

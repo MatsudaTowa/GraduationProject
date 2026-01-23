@@ -7,6 +7,7 @@
 #include "enemy.h"
 #include "active_scene_manager.h"
 #include "enemy_state.h"
+#include "lobby_character_icon_UI.h"
 
 //=============================================
 // コンストラクタ
@@ -42,6 +43,8 @@ HRESULT My::CEnemy::Init()
 	SetMotion(MOTION_NEUTRAL);
 
 	Motion(); //モーション処理
+
+	//CLobbyCharacterIconUI::Create()
 
 	return S_OK;
 }

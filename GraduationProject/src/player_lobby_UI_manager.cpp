@@ -24,7 +24,7 @@ My::CPlayerLobbyUIManager::~CPlayerLobbyUIManager()
 }
 
 //=============================================
-// ‰Šú‰»
+// ‰Šú‰»                             
 //=============================================
 HRESULT My::CPlayerLobbyUIManager::Init(CActiveSceneCharacter* character)
 {

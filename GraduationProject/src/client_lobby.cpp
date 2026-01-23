@@ -29,7 +29,15 @@ CClient_Lobby::CClient_Lobby() :
 //=====================================
 CClient_Lobby::~CClient_Lobby()
 {
-
+    for (int i = 0; i < 8; i++)
+    {
+        if (m_IconUI[i] != nullptr)
+        {
+            m_IconUI[i]->SetisDelete(true);
+			m_IconUI[i] = nullptr;
+        }
+    }
+    
 }
 
 //=====================================
@@ -80,8 +88,14 @@ void CClient_Lobby::Regist(RakNet::Packet* packet)
         {
             My::CCharacterLobbyUIManager*charalobbymanager = My::CCharacterLobbyUIManager::GetInstance();
 
-            My::CEnemy::Create({ i * 50.0f + 50.0f, 0.0f, 0.0f }, VEC3_RESET_ZERO, i);
-            //m_IconUI[i] = My::CLobbyCharacterIconUI::Create({1010.0f,80.0f + (i * 120.0f),0.0f}, COLOR_BLUE);
+            My::CEnemy::Create(
+                VEC3_RESET_ZERO,
+                VEC3_RESET_ZERO, 
+                i);
+
+			// 変えますpart1
+            m_IconUI[i] = My::CLobbyCharacterIconUI::Create({ 1010.0f,80.0f + (i * 120.0f),0.0f }, { 160.0f, 120.0f } ,COLOR_WHITE, 0);
+            m_IconUI[i+4] = My::CLobbyCharacterIconUI::Create({ 1020.0f,80.0f + (i * 120.0f),0.0f }, { 30.0f, 30.0f }, COLOR_WHITE, 2);
         }
     }
 
@@ -98,8 +112,15 @@ void CClient_Lobby::Regist(RakNet::Packet* packet)
         //初期状態なら最後の番号を代入
         if (My::CActiveSceneManager::GetInstance()->GetPlayer() == nullptr && nLap == static_cast<int>(m_LobbyPlayerList.size() - 1))
         {
-            My::CPlayer::Create(new My::CActiveScenePlayer, VEC3_RESET_ZERO, VEC3_RESET_ZERO, m_LobbyPlayerList.size() - 1);
-            //m_IconUI[m_LobbyPlayerList.size() - 1] = My::CLobbyCharacterIconUI::Create({ 1010.0f,80.0f + ((m_LobbyPlayerList.size() - 1) * 120.0f),0.0f }, COLOR_WHITE);
+            My::CPlayer::Create(
+                new My::CActiveScenePlayer, 
+                VEC3_RESET_ZERO,
+                VEC3_RESET_ZERO,
+                m_LobbyPlayerList.size() - 1);
+
+            // 変えますpart2[managerで管理]
+            m_IconUI[m_LobbyPlayerList.size() - 1] = My::CLobbyCharacterIconUI::Create({ 1010.0f,80.0f + ((m_LobbyPlayerList.size() - 1) * 120.0f),0.0f }, { 160.0f, 120.0f }, COLOR_BLUE,0);
+            m_IconUI[m_LobbyPlayerList.size() - 1 + 4 ] = My::CLobbyCharacterIconUI::Create({ 1020.0f,80.0f + ((m_LobbyPlayerList.size() - 1) * 120.0f),0.0f }, { 30.0f, 30.0f }, COLOR_WHITE, 2);
         }
 
         ++nLap; //インクリメント
@@ -179,14 +200,16 @@ void CClient_Lobby::Delete(RakNet::Packet* packet)
         {
             iter->SetPlayerIdx(iter->GetPlayerIdx() - 1);
 
-			//m_IconUI[iter->GetPlayerIdx()]->SetPos({ 1010.0f,80.0f + ((nStart)* 120.0f),0.0f });
+			m_IconUI[iter->GetPlayerIdx()]->SetPos({ 1010.0f,80.0f + ((nStart)* 120.0f),0.0f });
+			m_IconUI[iter->GetPlayerIdx()+4]->SetPos({ 1010.0f,80.0f + ((nStart)* 120.0f),0.0f });
         }
         else if (iter->GetPlayerIdx() == nStart)
         {//消える番号と一致したプレイヤーは削除
             iter->SetisDelete(true);
             My::CActiveSceneManager::GetInstance()->GetEnemyManager()->Remove(iter);
 
-			//m_IconUI[nStart]->SetisDelete(true);
+			m_IconUI[nStart]->SetisDelete(true);
+			m_IconUI[nStart+4]->SetisDelete(true);
             
         }
     }
@@ -198,7 +221,8 @@ void CClient_Lobby::Delete(RakNet::Packet* packet)
 
         if (player->GetPlayerIdx() > nStart)
         {
-            //m_IconUI[player->GetPlayerIdx()]->SetPos({ 1010.0f,80.0f + (nStart * 120.0f),0.0f });
+            m_IconUI[player->GetPlayerIdx()]->SetPos({ 1010.0f,80.0f + (nStart * 120.0f),0.0f });
+            m_IconUI[player->GetPlayerIdx()+4]->SetPos({ 1010.0f,80.0f + (nStart * 120.0f),0.0f });
             player->SetPlayerIdx(player->GetPlayerIdx() - 1);
         }
     }
@@ -316,6 +340,7 @@ void CClient_Lobby::ReceiveReady(RakNet::Packet* packet)
         //代入
         iter.isReady = isReady;
         CheckTarget(nCount, isReady);
+		m_IconUI[nCount + 4]->SwitchKindTexture(isReady);
 
         //カウントアップ
         nCount++;
