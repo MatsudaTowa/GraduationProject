@@ -74,7 +74,7 @@ void My::CEnemy::Update()
 void My::CEnemy::Draw()
 {
 	//親クラスのモーション用の描画を呼ぶ
-	MotionDraw();
+//	MotionDraw();
 }
 
 //=============================================

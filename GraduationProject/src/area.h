@@ -21,7 +21,7 @@ namespace My
 	class CArea : public CObject2D_Triangle
 	{
 	public:
-		static constexpr int PRIORITY = 25;  //!<描画順
+		static constexpr int PRIORITY = 27;  //!<描画順
 
 		/**
 		 * @brief コンストラクタ

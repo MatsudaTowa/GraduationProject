@@ -69,7 +69,7 @@ void My::CPlayer::Update()
 void My::CPlayer::Draw()
 {
 	//親クラスのモーション用の描画を呼ぶ
-	MotionDraw();
+	//MotionDraw();
 
 	//プレイヤーのデバッグ表示
 	Debug();

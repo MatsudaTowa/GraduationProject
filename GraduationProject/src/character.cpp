@@ -19,7 +19,6 @@ m_nKeySetCnt(INT_ZERO),											//キーの個数
 m_Motion(INT_ZERO),												//モーション情報
 m_isLoopFinish(),												//ループが終わったか
 m_motion_data(),												//モーション設定
-m_pShadow(),													//影のポインタ
 m_ShadowSize(VEC3_RESET_ZERO),									//影のサイズ
 m_TAG(My::CCharacter::TAG_PLAYER)								//識別タグ
 {//イニシャライザーでプライオリティ設定、各メンバ変数初期化
@@ -37,14 +36,6 @@ My::CCharacter::~CCharacter()
 //=============================================
 HRESULT My::CCharacter::Init()
 {
-	if (m_pShadow == nullptr)
-	{
-		m_pShadow = CShadow::Create({ GetPos().x,SHADOW_POS_Y,GetPos().z }, m_ShadowSize);
-
-		//影のサイズ設定
-		m_pShadow->SetSize({ m_ShadowSize });
-	}
-
 	if (m_pMotionFrameCnt == nullptr)
 	{
 		m_pMotionFrameCnt = new CCount;
@@ -94,16 +85,6 @@ void My::CCharacter::Uninit()
 //=============================================
 void My::CCharacter::Update()
 {
-	if (m_pShadow != nullptr)
-	{
-		m_pShadow->SetisDraw(GetisDraw());
-
-		//影のサイズ設定
-		m_pShadow->SetSize(m_ShadowSize);
-		//影の位置設定
-		m_pShadow->SetPos({ GetPos().x,SHADOW_POS_Y,GetPos().z });
-	}
-
 	for (int nCnt = 0; nCnt < m_PartsCnt; nCnt++)
 	{
 		m_apModel[nCnt]->SetOldPos({ m_apModel[nCnt]->GetMtxWorld()._41,m_apModel[nCnt]->GetMtxWorld()._42,m_apModel[nCnt]->GetMtxWorld()._43 });

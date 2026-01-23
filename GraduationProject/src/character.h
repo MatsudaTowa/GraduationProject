@@ -159,15 +159,6 @@ namespace My
 		}
 
 		/**
-		 * @brief 影取得
-		 * @return 現在のジャンプ数
-		 */
-		inline CShadow* GetShadow()
-		{
-			return m_pShadow;
-		}
-
-		/**
 		 * @brief パーツ取得
 		 * @param [in]パーツ番号
 		 * @return モデルパーツのポインタ
