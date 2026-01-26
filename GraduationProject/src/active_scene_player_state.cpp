@@ -238,7 +238,7 @@ void My::CPlayerDuelState::CreateDuelUI(CActiveScenePlayer* player)
 	if (player->GetPlayerUI()->GetDecDrawButton() == nullptr)
 	{
 		CButtonDeckDraw* pButtonDrawDeck = CButtonDeckDraw::Create(
-			{ screen_pos.x * 0.4f ,screen_pos.y * 0.59f,0.0f } ,
+			{ screen_pos.x * 0.4f ,screen_pos.y * 0.68f,0.0f } ,
 			{ 80,40 });
 
 		player->GetPlayerUI()->SetDeckDrawButton(pButtonDrawDeck);
