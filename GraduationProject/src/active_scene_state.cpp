@@ -258,6 +258,8 @@ My::CDuel::CDuel()
 		m_pCountDown = new CCountdown_Start_Offline;
 	}
 
+	//対戦時のタイマーを開始
+	My::CDuel_Manager::GetInstance()->GetDuelTimer().Start();
 }
 
 //=============================================

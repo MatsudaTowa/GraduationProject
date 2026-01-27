@@ -298,7 +298,7 @@ void My::CPlayerDuelState::EnergyUp(CActiveScenePlayer* player)
 	}
 	else
 	{
-		m_fEnergyUpCount += 0.017f;	//オフライン用
+		m_fEnergyUpCount += My::CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime();	//オフライン用
 	}
 
 	//エナジーの更新時間を超えているなら繰り返す

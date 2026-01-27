@@ -13,7 +13,9 @@
 //=============================================
 My::CCountdown_Start_Offline::CCountdown_Start_Offline()
 {
-	
+	//開始時間と開始設定
+	SetCountStartTime(0);
+	SetIsStartCountdown(true);
 }
 
 //=============================================
@@ -21,7 +23,5 @@ My::CCountdown_Start_Offline::CCountdown_Start_Offline()
 //=============================================
 void My::CCountdown_Start_Offline::Init()
 {
-	//開始時間と開始設定
-	SetCountStartTime(0);
-	SetIsStartCountdown(true);
+	
 }

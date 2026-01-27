@@ -62,7 +62,7 @@ void My::CDamageNumberUI::Update()
 	}
 	else
 	{
-		m_fLife -= 0.017f;	//オフライン用
+		m_fLife -= My::CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime();	//オフライン用
 	}
 
 	//0以下なら破棄

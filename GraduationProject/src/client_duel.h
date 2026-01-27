@@ -63,6 +63,7 @@ private:
 
 	//関数
 	bool CheckEnemyCreate(int id, int max);	//敵を生成するか
+	//void ReceivePlayer()
 
 	//変数
 	std::list<DuelPlayerParam> m_DuelPlayerList;	//ロビープレイヤーリスト
