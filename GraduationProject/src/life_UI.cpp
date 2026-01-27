@@ -110,7 +110,7 @@ void My::CLife_UI::SetLifeNumber(int life)
 		fMinTexU = pos_texU[nCnt] * 0.1f;
 		fMaxTexU = fMinTexU + 0.1f;
 
-		m_pNumber[nCnt]->SetNumber(fMinTexU, fMaxTexU, COLOR_WHITE);
+		m_pNumber[nCnt]->SetNumber(fMinTexU, fMaxTexU, COLOR_BLACK);
 	}
 
 	pos_texU.clear();

@@ -110,7 +110,7 @@ void My::CEnergy_UI::SetEnergyNumber(int energy)
 		fMinTexU = pos_texU[nCnt] * 0.1f;
 		fMaxTexU = fMinTexU + 0.1f;
 
-		m_pNumber[nCnt]->SetNumber(fMinTexU, fMaxTexU, COLOR_WHITE);
+		m_pNumber[nCnt]->SetNumber(fMinTexU, fMaxTexU, COLOR_BLACK);
 	}
 
 	pos_texU.clear();
