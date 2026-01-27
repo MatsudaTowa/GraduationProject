@@ -64,8 +64,6 @@ void My::CNumber_2D::Update()
 	//親クラスの更新
 	CObject2D::Update();
 
-	SetColor(COLOR_BLACK);
-
 	//頂点生成
 	NumberVtx();
 }

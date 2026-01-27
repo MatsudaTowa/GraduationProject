@@ -169,6 +169,15 @@
     <ClCompile Include="src\countdown_start_offline.cpp" />
     <ClCompile Include="src\countdown_start_online.cpp" />
     <ClCompile Include="src\sound.cpp" />
+    <ClCompile Include="src\zone_num_UI.cpp">
+      <Filter>ZoneNumInfoUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\zone_num_UI_manager.cpp">
+      <Filter>ZoneNumInfoUI</Filter>
+    </ClCompile>
+    <ClCompile Include="src\cemetery_num_UI.cpp">
+      <Filter>ZoneNumInfoUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -354,6 +363,15 @@
     <ClInclude Include="src\countdown_start_offline.h" />
     <ClInclude Include="src\countdown_start_online.h" />
     <ClInclude Include="src\sound.h" />
+    <ClInclude Include="src\zone_num_UI.h">
+      <Filter>ZoneNumInfoUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\zone_num_UI_manager.h">
+      <Filter>ZoneNumInfoUI</Filter>
+    </ClInclude>
+    <ClInclude Include="src\cemetery_num_UI.h">
+      <Filter>ZoneNumInfoUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GraduationProject.rc" />
@@ -367,6 +385,9 @@
     </Filter>
     <Filter Include="Result_UI">
       <UniqueIdentifier>{87079a91-688e-4be4-ab75-3269ff93ec16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ZoneNumInfoUI">
+      <UniqueIdentifier>{46a501a5-5309-489d-a015-df5d5878c516}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

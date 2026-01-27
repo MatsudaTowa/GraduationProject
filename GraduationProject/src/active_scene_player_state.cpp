@@ -243,6 +243,11 @@ void My::CPlayerDuelState::CreateDuelUI(CActiveScenePlayer* player)
 
 		player->GetPlayerUI()->SetDeckDrawButton(pButtonDrawDeck);
 	}
+
+	if (player->GetZoneManager() == nullptr)
+	{
+		player->CreateZoneNumUI();
+	}
 }
 
 
