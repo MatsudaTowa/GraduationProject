@@ -22,6 +22,10 @@ public:
 		SOUND_LABEL_BGM_LOBBY,			//ロビーBGM
 		SOUND_LABEL_BGM_DUEL,			//デュエルBGM
 		SOUND_LABEL_BGM_RESULT,			//リザルトBGM
+		SOUND_LABEL_SE_CARD_SHUFFL,		//カードシャッフル
+		SOUND_LABEL_SE_CARD_DRAW,		//カードドロー
+		SOUND_LABEL_CAST_FAIL,			//キャスト失敗
+		SOUND_LABEL_CAST_CANCEL,		//キャストキャンセル
 		SOUND_LABEL_MAX,				//最大値
 	}SOUND_LABEL;
 
@@ -52,6 +56,7 @@ private:
 	IXAudio2SourceVoice* m_apSourceVoice[SOUND_LABEL_MAX] = {};	// ソースボイス
 	BYTE* m_apDataAudio[SOUND_LABEL_MAX] = {};					// オーディオデータ
 	DWORD m_aSizeAudio[SOUND_LABEL_MAX] = {};					// オーディオデータサイズ
+	WAVEFORMATEX m_aWfx[SOUND_LABEL_MAX];
 };
 
 #endif

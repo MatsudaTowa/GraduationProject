@@ -14,11 +14,16 @@ HRESULT ReadChunkData(HANDLE hFile, void* pBuffer, DWORD dwBuffersize, DWORD dwB
 
 // サウンドの情報
 const CSound::SOUNDINFO CSound::SOUND_INFO[CSound::SOUND_LABEL_MAX] =
-{
+{// SEの場合は第2引数を0にする第3引数は0～1.0f
 	{"data\\SOUND\\BGM\\title000.wav", -1, 0.5f},			//タイトルBGM
 	{"data\\SOUND\\BGM\\lobby000.wav", -1, 0.5f},			//ロビーBGM
 	{"data\\SOUND\\BGM\\duel000.wav", -1, 0.5f},			//デュエルBGM
 	{"data\\SOUND\\BGM\\result000.wav", -1, 0.5f},			//リザルトBGM
+	{"data\\SOUND\\SE\\shuffling_cards.wav", 0, 1.0f},		//カードシャッフルSE
+	{"data\\SOUND\\SE\\Draw_a_card.wav", 0, 1.0f},			//カードドローSE
+	{"data\\SOUND\\SE\\Incorrect.wav", 0, 1.0f},			//キャスト失敗SE
+	{"data\\SOUND\\SE\\Cutting_through.wav", 0, 1.0f},		//キャストキャンセルSE
+	
 };
 
 //=============================================================================
@@ -173,6 +178,7 @@ HRESULT CSound::Init(HWND hWnd)
 		// オーディオバッファの登録
 		m_apSourceVoice[nCntSound]->SubmitSourceBuffer(&buffer);
 
+		m_aWfx[nCntSound] = wfx.Format;
 		// ファイルをクローズ
 		CloseHandle(hFile);
 	}
@@ -223,36 +229,79 @@ void CSound::Uninit(void)
 //=============================================================================
 HRESULT CSound::PlaySound(SOUND_LABEL label)
 {
-	XAUDIO2_VOICE_STATE xa2state;
-	XAUDIO2_BUFFER buffer;
+	//XAUDIO2_VOICE_STATE xa2state;
+	//XAUDIO2_BUFFER buffer;
 
-	// バッファの値設定
-	memset(&buffer, 0, sizeof(XAUDIO2_BUFFER));
+	//// バッファの値設定
+	//memset(&buffer, 0, sizeof(XAUDIO2_BUFFER));
+	//buffer.AudioBytes = m_aSizeAudio[label];
+	//buffer.pAudioData = m_apDataAudio[label];
+	//buffer.Flags = XAUDIO2_END_OF_STREAM;
+	//buffer.LoopCount = SOUND_INFO[label].nCntLoop;
+
+	//// 状態取得
+	//m_apSourceVoice[label]->GetState(&xa2state);
+
+	//// 音量取得
+	//m_apSourceVoice[label]->SetVolume(SOUND_INFO[label].Volume);
+
+	//if (xa2state.BuffersQueued != 0)
+	//{// 再生中
+	//	// 一時停止
+	//	m_apSourceVoice[label]->Stop(0);
+
+	//	// オーディオバッファの削除
+	//	m_apSourceVoice[label]->FlushSourceBuffers();
+	//}
+
+	//// オーディオバッファの登録
+	//m_apSourceVoice[label]->SubmitSourceBuffer(&buffer);
+
+	//// 再生
+	//m_apSourceVoice[label]->Start(0);
+
+	//return S_OK;
+
+	// SEの複数再生用
+	XAUDIO2_BUFFER buffer = {};
 	buffer.AudioBytes = m_aSizeAudio[label];
 	buffer.pAudioData = m_apDataAudio[label];
 	buffer.Flags = XAUDIO2_END_OF_STREAM;
 	buffer.LoopCount = SOUND_INFO[label].nCntLoop;
 
-	// 状態取得
-	m_apSourceVoice[label]->GetState(&xa2state);
+	if (SOUND_INFO[label].nCntLoop == 0)
+	{// SEの場合毎回SourceVoiceを作る
+		IXAudio2SourceVoice* pVoice = nullptr;
 
-	// 音量取得
-	m_apSourceVoice[label]->SetVolume(SOUND_INFO[label].Volume);
+		// 新規SourceVoice
+		HRESULT hr = m_pXAudio2->CreateSourceVoice(&pVoice, &m_aWfx[label]);
+		if (FAILED(hr))
+		{
+			return hr;
+		}
+		pVoice->SetVolume(SOUND_INFO[label].Volume);
+		pVoice->SubmitSourceBuffer(&buffer);
+		pVoice->Start(0);
 
-	if (xa2state.BuffersQueued != 0)
-	{// 再生中
-		// 一時停止
-		m_apSourceVoice[label]->Stop(0);
-
-		// オーディオバッファの削除
-		m_apSourceVoice[label]->FlushSourceBuffers();
+		return S_OK;
 	}
 
-	// オーディオバッファの登録
-	m_apSourceVoice[label]->SubmitSourceBuffer(&buffer);
+	// ループ再生するものは変更なし
+	IXAudio2SourceVoice* pVoice = m_apSourceVoice[label];
 
-	// 再生
-	m_apSourceVoice[label]->Start(0);
+	XAUDIO2_VOICE_STATE state;
+	pVoice->GetState(&state);
+
+	pVoice->SetVolume(SOUND_INFO[label].Volume);
+
+	if (state.BuffersQueued != 0)
+	{
+		pVoice->Stop(0);
+		pVoice->FlushSourceBuffers();
+	}
+
+	pVoice->SubmitSourceBuffer(&buffer);
+	pVoice->Start(0);
 
 	return S_OK;
 }

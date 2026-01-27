@@ -94,6 +94,9 @@ void My::CButtonDeckDraw::ButtonTrigger(CPlayerDuelState* state)
 {
 	if (GET_INPUT_MOUSE->GetTrigger(0))
 	{
+		// TODO : 音の鳴らすタイミングを考える
+		CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_CARD_DRAW);
+
 		CHand* pHand = state->GetHand();
 		pHand->DeckDraw(state);
 	}
