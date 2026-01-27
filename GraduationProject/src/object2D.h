@@ -75,6 +75,8 @@ namespace My
 		//’¸“_À•W(ŠgkA‰ñ“])‚Ì‘ã“ü
 		void SetVtx(float fAngle, float fLength);
 
+		void SetTexVtx();
+
 		void SetGaugeVtx();
 
 		//pos‚Ìæ“¾

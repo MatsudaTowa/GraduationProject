@@ -35,6 +35,8 @@ HRESULT My::CDamageNumberUI::Init()
 	SetColor(COLOR_RED);
 	SetDivision(10);
 
+	SetColor({ GetColor().r,GetColor().g,GetColor().b,0.0f });
+
 	SetVtx();
 	return S_OK;
 }
@@ -53,7 +55,17 @@ void My::CDamageNumberUI::Uninit()
 void My::CDamageNumberUI::Update()
 {
 	//CObject2D::Update();
-	//SetVtx();
+	SetTexVtx();
+
+	// ­‚µã‚ÉˆÚ“®
+	D3DXVECTOR3 pos = GetPos();
+	pos.y -= 0.5f;
+	SetPos(pos);
+
+	//“§–¾“x‚ğã‚°‚é
+	D3DXCOLOR col = GetColor();
+	col.a += 0.05f;
+	SetColor(col);
 
 	//Œo‰ßŠÔ‚ğæ“¾
 	if (CRakNet::GetInstance()->GetOnline())
