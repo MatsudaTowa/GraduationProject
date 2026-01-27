@@ -581,6 +581,9 @@ void CDuel_Data::SendCastCard(RakNet::RakPeerInterface* peer, My::CCard* castcar
 
     //全クライアントにブロードキャスト
     peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+
+    //ステータス送信
+    CRakNet_Server::GetInstance()->SendStatus();
 }
 
 //=====================================
@@ -672,6 +675,7 @@ void CDuel_Data::UpdateDuelPlayer(int delta)
     //1人でもエナジーの更新があれば送信
     if (isSend)
     {
+        //ステータス送信
         CRakNet_Server::GetInstance()->SendStatus();
     }
 }

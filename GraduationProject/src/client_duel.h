@@ -62,8 +62,8 @@ public:
 private:
 
 	//関数
-	bool CheckEnemyCreate(int id, int max);	//敵を生成するか
-	//void ReceivePlayer()
+	bool CheckEnemyCreate(int id, int max);				//敵を生成するか
+	void ReceivePlayerStatus(RakNet::BitStream* bsin);	//ステータスの受信
 
 	//変数
 	std::list<DuelPlayerParam> m_DuelPlayerList;	//ロビープレイヤーリスト

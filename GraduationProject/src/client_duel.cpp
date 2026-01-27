@@ -734,3 +734,29 @@ void CClient_Duel::ReceiveGameSet(RakNet::Packet* packet)
     //終章フラグを立てる
     My::CActiveSceneManager::GetInstance()->SetFinish(true);
 }
+
+//=====================================
+//ステータスの受信
+//=====================================
+void CClient_Duel::ReceivePlayerStatus(RakNet::BitStream* bsin)
+{
+    //格納用
+    My::CActiveSceneCharacter::Status Status;    //ステータス
+
+    //リストを取得してソートする
+    std::list<My::CActiveSceneCharacter*> SortList = My::CActiveSceneManager::GetInstance()->GetCharacterList();
+    SortList.sort([](My::CActiveSceneCharacter* a, My::CActiveSceneCharacter* b)
+        {
+            return a->GetPlayerIdx() < b->GetPlayerIdx();
+        });
+
+    //番号順に周回
+    for (auto& iter : SortList)
+    {
+        int nLife = iter->GetStatus().life;
+
+        //ステータスの読み込み
+        bsin->Read(Status);
+        iter->SetStatus(Status);
+    }
+}
