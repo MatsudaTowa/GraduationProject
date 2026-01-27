@@ -385,6 +385,9 @@ bool My::CCardDeffence::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharac
 		//エナジーが不足しているなら抜ける
 		if (player->GetEnergy() < GetBaseStatus().nCost)
 		{
+			// キャスト失敗時のSEを鳴らす
+			CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_CAST_FAIL);
+
 			// 通常状態にする
 			ChangeState(CCardState::CARD_NEUTRAL, duel);
 			CActiveSceneManager::GetInstance()->ChangeState(new CDuel);

@@ -54,9 +54,10 @@ namespace My
 		 */
 		static CDamageNumberUI* Create(D3DXVECTOR3 pos, int num);
 	private:
-		static constexpr float SIZE = 25.0f;
+		static constexpr float SIZE = 30.0f;
 		static const std::string TEX_NAME;
 		float m_fLife;
+		float m_num;
 	};
 }
 

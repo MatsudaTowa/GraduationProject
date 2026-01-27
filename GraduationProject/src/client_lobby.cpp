@@ -89,7 +89,7 @@ void CClient_Lobby::Regist(RakNet::Packet* packet)
             My::CCharacterLobbyUIManager*charalobbymanager = My::CCharacterLobbyUIManager::GetInstance();
 
             My::CEnemy::Create(
-                VEC3_RESET_ZERO,
+                { 50.0f+(50.0f * i),0.0f,0.0f } ,
                 VEC3_RESET_ZERO, 
                 i);
 
