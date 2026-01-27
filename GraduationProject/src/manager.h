@@ -18,6 +18,7 @@
 #include "scene.h"
 #include "fade.h"
 #include "font_manager.h"
+#include "sound.h"
 
 /** @brief My 名前空間 */
 namespace My
@@ -193,6 +194,15 @@ namespace My
 			return m_ElapsedTime;
 		}
 
+		/**
+		 * @brief サウンドポインタの取得
+		 * @return サウンドクラスのポインタ
+		 */
+		CSound* GetSound()
+		{
+			return m_pSound;
+		}
+
 
 	private:
 
@@ -217,6 +227,7 @@ namespace My
 		HWND m_hWnd;
 		DWORD m_ElapsedTime;		//経過時間
 		DWORD m_OldElapsedTime;		//過去の時間
+		CSound* m_pSound;			//サウンド
 	};
 }
 

@@ -56,6 +56,7 @@ namespace My
 		CDuel_Timer& GetDuelTimer() { return m_DuelTimer; }					//対戦時のタイマー
 		CCardInfoUI* GetCardInfoUI() { return m_CardInfoUI; }				//カード情報UIの取得
 		void SetCardInfoUI(CCardInfoUI* infoUI) { m_CardInfoUI = infoUI; }	//カード情報UIの設定
+		void SetRankMap(std::map<int, int> map) { m_RankMap = map; }		//順位マップの設定
 		std::map<int, int>& GetRankMap() { return m_RankMap; }				//順位マップの取得
 		void SetIsStratBattle(bool start) { m_isStartBattle = start; }		//対戦開始フラグの設定
 		bool GetIsStartBattle() { return m_isStartBattle; }					//対戦開始フラグの取得

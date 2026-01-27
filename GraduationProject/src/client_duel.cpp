@@ -717,6 +717,10 @@ void CClient_Duel::ReceiveGameSet(RakNet::Packet* packet)
     unsigned char messageId;    //メッセージ
     int nPlayerIndex = 0;       //プレイヤーの番号
     int nRank = 0;              //順位
+    std::map<int, int> RankMap; //順位マップ
+
+    //マップの初期化
+    RankMap.clear();
     
     //読み込み
     bsIn.Read(messageId); //メッセージ
@@ -728,11 +732,12 @@ void CClient_Duel::ReceiveGameSet(RakNet::Packet* packet)
         bsIn.Read(nRank);        //順位
 
         //マップに追加
-        My::CDuel_Manager::GetInstance()->GetRankMap()[nPlayerIndex] = nRank;
+        RankMap[nPlayerIndex] = nRank;
     }
 
     //終章フラグを立てる
     My::CActiveSceneManager::GetInstance()->SetFinish(true);
+    My::CDuel_Manager::GetInstance()->SetRankMap(RankMap);
 }
 
 //=====================================

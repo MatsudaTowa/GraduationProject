@@ -43,6 +43,9 @@ HRESULT My::CTitle::Init()
 
     CTitle_Screen::Create({ SCREEN_WIDTH * 0.5f,250.0f,0.0f });
 
+    //BGMの設定
+    CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_BGM_TITLE);
+
     return S_OK;
 }
 
@@ -51,6 +54,9 @@ HRESULT My::CTitle::Init()
 //=============================================
 void My::CTitle::Uninit()
 {
+    //BGMを止める
+    CManager::GetInstance()->GetSound()->Stop(CSound::SOUND_LABEL_BGM_TITLE);
+
 	//オブジェクトを破棄
     CObject::ReleaseAll();
 }

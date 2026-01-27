@@ -168,6 +168,7 @@
     <ClCompile Include="src\countdown_start.cpp" />
     <ClCompile Include="src\countdown_start_offline.cpp" />
     <ClCompile Include="src\countdown_start_online.cpp" />
+    <ClCompile Include="src\sound.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -352,6 +353,7 @@
     <ClInclude Include="src\countdown_start.h" />
     <ClInclude Include="src\countdown_start_offline.h" />
     <ClInclude Include="src\countdown_start_online.h" />
+    <ClInclude Include="src\sound.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GraduationProject.rc" />

@@ -294,6 +294,7 @@
     <ClCompile Include="src\selectable_zone.cpp" />
     <ClCompile Include="src\selection_range.cpp" />
     <ClCompile Include="src\shadow.cpp" />
+    <ClCompile Include="src\sound.cpp" />
     <ClCompile Include="src\stay_number.cpp" />
     <ClCompile Include="src\wait.cpp" />
     <ClCompile Include="src\target_arrow.cpp" />
@@ -445,6 +446,7 @@
     <ClInclude Include="src\selectable_zone.h" />
     <ClInclude Include="src\selection_range.h" />
     <ClInclude Include="src\shadow.h" />
+    <ClInclude Include="src\sound.h" />
     <ClInclude Include="src\status_icon.h" />
     <ClInclude Include="src\stay_number.h" />
     <ClInclude Include="src\wait.h" />

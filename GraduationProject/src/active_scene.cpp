@@ -117,6 +117,9 @@ void My::CActiveScene::Uninit()
 	//	CJson::GetJson() = nullptr;
 	//}
 
+	//BGMの終了
+	CManager::GetInstance()->GetSound()->Stop(CSound::SOUND_LABEL_BGM_DUEL);
+
 	if (m_pDelayCnt != nullptr)
 	{
 		delete m_pDelayCnt;
@@ -157,8 +160,7 @@ void My::CActiveScene::Update()
 	}
 	else
 	{
-		//ステート初期化
-		CActiveSceneManager::GetInstance()->ChangeState(new CLobby);
+		//リザルト遷移
 		GET_FADE->SetFade(CScene::MODE::MODE_RESULT);
 	}
 
@@ -167,7 +169,7 @@ void My::CActiveScene::Update()
 		return;
 	}
 	//ステート初期化
-	CActiveSceneManager::GetInstance()->ChangeState(new CLobby);
+	//CActiveSceneManager::GetInstance()->ChangeState(new CLobby);
 	GET_FADE->SetFade(CScene::MODE::MODE_RESULT);
 }
 

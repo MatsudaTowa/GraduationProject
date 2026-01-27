@@ -29,7 +29,8 @@ m_pFontManager(nullptr),
 m_pEffectManager(nullptr),		// エフェクトマネージャー
 m_CurrentViewCamera(INT_ZERO),	//映すカメラ番号
 m_ElapsedTime(0),				//経過時間
-m_OldElapsedTime(0)				//過去の経過時間
+m_OldElapsedTime(0),				//過去の経過時間
+m_pSound(nullptr)		//サウンドポインタ
 {
 	
 }
@@ -145,6 +146,12 @@ HRESULT My::CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 		m_pFontManager->Init();
 	}
 
+	if (m_pSound == nullptr)
+	{
+		m_pSound = new CSound;
+		m_pSound->Init(hWnd);
+	}
+
 	CCard_Client::GetInstance()->Init();
 
 	SetMode(CScene::MODE::MODE_TITLE);
@@ -223,6 +230,15 @@ void My::CManager::Uninit()
 	{
 		m_pEffectManager->Uninit();
 		m_pEffectManager = nullptr;
+	}
+
+	//サウンドのインスタンスを使用中なら
+	if (m_pSound != nullptr)
+	{
+		//終了処理後に開放
+		m_pSound->Uninit();
+		delete m_pSound;
+		m_pSound = nullptr;
 	}
 
 	CObject::ReleaseAll();

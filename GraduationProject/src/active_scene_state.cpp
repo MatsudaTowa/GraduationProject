@@ -28,6 +28,9 @@ My::CLobby::CLobby()
 {
 	GET_CAMERA(GET_CAMERA_IDX)->ChangeCameraState(new CBirdView);
 	GET_CAMERA(GET_CAMERA_IDX)->SetCamera();
+
+	//BGMの設定
+	CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_BGM_LOBBY);
 }
 
 //=============================================
@@ -42,6 +45,12 @@ My::CLobby::~CLobby()
 
 	//終了フラグを初期化
 	My::CActiveSceneManager::GetInstance()->SetFinish(false);
+
+	//BGMの終了
+	CManager::GetInstance()->GetSound()->Stop(CSound::SOUND_LABEL_BGM_LOBBY);
+
+	//BGMの設定
+	CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_BGM_DUEL);
 }
 
 //=============================================
@@ -257,9 +266,6 @@ My::CDuel::CDuel()
 	{
 		m_pCountDown = new CCountdown_Start_Offline;
 	}
-
-	//対戦時のタイマーを開始
-	My::CDuel_Manager::GetInstance()->GetDuelTimer().Start();
 }
 
 //=============================================

@@ -42,6 +42,9 @@ HRESULT My::CResult::Init()
     CScene::Init();
     CREATE_CAMERA(new CResultCamera);
 
+    //BGMの設定
+    CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_BGM_RESULT);
+
     //地面生成
     CField::Create(VEC3_RESET_ZERO, FIELD_SIZE, new CField);
 
@@ -54,14 +57,15 @@ HRESULT My::CResult::Init()
         //****************************
         // TODO : 仮で順位を設定している
         //****************************
-        int nPlayerNum = MAX_RANKING_COUNT - 1;             // プレイヤー番号 0 = 1p
-        int nRunking[MAX_RANKING_COUNT]/* = { 0, 1, 2, 3 }*/;   // ランキング
-        int nCount = 0;                                     // 周回カウント
-
+        int nPlayerNum = MAX_RANKING_COUNT - 1;                                     // プレイヤー番号 0 = 1p
+        int nRunking[MAX_RANKING_COUNT] = { 0, 1, 2, 3 };                       // ランキング
+        int nCount = 0;                                                             // 周回カウント
+        std::map<int, int> RankMap = My::CDuel_Manager::GetInstance()->GetRankMap();// 順位マップ
+           
         //順位の周回
         for (int i = 0; i < MAX_RANKING_COUNT; i++)
         {
-            for (auto iter : My::CDuel_Manager::GetInstance()->GetRankMap())
+            for (auto iter : RankMap)
             {
                 //確認したい順位のプレイヤーの番号を見つけて代入
                 if (i == iter.second)
@@ -92,6 +96,10 @@ void My::CResult::Uninit()
         delete m_pUIManager;
         m_pUIManager = nullptr;
     }
+
+    //BGMの設定
+    CManager::GetInstance()->GetSound()->Stop(CSound::SOUND_LABEL_BGM_RESULT);
+
     CObject::ReleaseAll();
 }
 
