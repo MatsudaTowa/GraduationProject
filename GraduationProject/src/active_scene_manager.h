@@ -23,22 +23,6 @@ namespace My
 	{
 	public:
 
-		//キャストカード情報
-		struct CastCardInfo
-		{
-			int nCardID = 0;			//カードID
-			int nUsePlayer = -1;		//使用者
-			std::vector<int> Target;	//ターゲット
-		};
-
-		//キャスト守備カード情報
-		struct CastDiffenceCardInfo
-		{
-			int nCardID = 0;				//カードID
-			int nUsePlayer = -1;			//使用者
-			std::vector<My::CCardDeffence::DiffenceTarget> DiffenceTarget;	//守備対象
-		};
-
 		/**
 		 * @brief コンストラクタ
 		 */

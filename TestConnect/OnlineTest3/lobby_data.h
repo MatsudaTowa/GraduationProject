@@ -32,6 +32,7 @@ public:
 	void SendStartMember(RakNet::RakPeerInterface* peer) override {}								//開始メンバーの送信
 	bool CheckStartBattle(RakNet::Packet* packet) override { return false; }						//対戦を開始するか
 	void StartBattle(RakNet::RakPeerInterface* peer) override {}									//対戦の開始
+	void ReceiveCountDown(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override {}		//カウントダウン可能メッセージの受信
 	void SendStatus(RakNet::Packet* /*packet*/, RakNet::RakPeerInterface* /*peer*/) override {}		//ステータスを送る
 	void AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;					//CPUの追加
 	void ReceiveStatus(RakNet::Packet* /*packet*/, RakNet::RakPeerInterface* /*peer*/) override {}	//ステータスを受信

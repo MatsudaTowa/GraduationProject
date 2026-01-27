@@ -16,6 +16,8 @@
 #include "zone_manager.h"
 #include "card_attack.h"
 #include "duel_manager.h"
+#include "countdown_start_offline.h"
+#include "countdown_start_online.h"
 
 int My::CLobby::m_characterIdx = -1;
 
@@ -34,6 +36,12 @@ My::CLobby::CLobby()
 My::CLobby::~CLobby()
 {
 	m_characterIdx = -1;
+
+	//デュエル情報の初期化
+	CDuel_Manager::GetInstance()->Init();
+
+	//終了フラグを初期化
+	My::CActiveSceneManager::GetInstance()->SetFinish(false);
 }
 
 //=============================================
@@ -237,22 +245,19 @@ My::CDuel::CDuel()
 	GET_CAMERA(GET_CAMERA_IDX)->ChangeCameraState(new CBirdView);
 	GET_CAMERA(GET_CAMERA_IDX)->SetCamera();
 
-	//デュエル情報の初期化
-	CDuel_Manager::GetInstance()->Init();
+	//オンラインなら
+	if (CRakNet::GetInstance()->GetOnline())
+	{
+		m_pCountDown = new CCountdown_Start_Online;
 
-	//終了フラグを初期化
-	My::CActiveSceneManager::GetInstance()->SetFinish(false);
+		//カウントダウンの合図を送る
+		CRakNet::GetInstance()->SendCountdown();
+	}
+	else
+	{
+		m_pCountDown = new CCountdown_Start_Offline;
+	}
 
-	//std::list<CCard*> card_list = CCardManager::GetInstance()->GetUseCardList();
-	//for (auto& itr : card_list)
-	//{
-	//	if (itr == nullptr) { continue; }
-	//	const char* c = itr->GetBaseStatus().name.c_str();
-	//	wchar_t* text_000 = NULL;
-	//	mbstowcs(text_000, c, sizeof(c));
-	//	GET_FONT_MANAGER->Regist(text_000, { 100.0f,500.0f,0.0f }, 50.0f, 80, 0, 5);
-	//	return;
-	//}
 }
 
 //=============================================
@@ -260,6 +265,12 @@ My::CDuel::CDuel()
 //=============================================
 My::CDuel::~CDuel()
 {
+	//中身の破棄
+	if (m_pCountDown != nullptr)
+	{
+		delete m_pCountDown;
+		m_pCountDown = nullptr;
+	}
 }
 
 //=============================================
@@ -267,6 +278,9 @@ My::CDuel::~CDuel()
 //=============================================
 void My::CDuel::Duel(CActiveScene* game)
 {
+	//カウントダウン処理
+	CountDown();
+
 	//オブジェクトのアップデートを許可する
 	game->StopObject(false);
 
@@ -299,6 +313,18 @@ void My::CDuel::Duel(CActiveScene* game)
 		game->ResetPauseCnt();
 		CActiveSceneManager::GetInstance()->ChangeState(new CPause);
 		return;
+	}
+}
+
+//=============================================
+// カウントダウン
+//=============================================
+void My::CDuel::CountDown()
+{
+	//カウントダウンが終了していないなら
+	if (!m_pCountDown->GetIsEndCountDown())
+	{
+		m_pCountDown->Update();
 	}
 }
 

@@ -7,6 +7,7 @@
 
 //ヘッダーのインクルード
 #include "duel_timer.h"
+#include "duel_manager.h"
 
 //=====================================
 //コンストラクタ
@@ -53,6 +54,12 @@ void CDuel_Timer::Update()
 	m_OldElapsedTime = m_ElapsedTime;				//前回の経過時間を保存
 	m_ElapsedTime = RakNetTime - m_StartTime;		//経過時間を算出
 	m_deltaTime = m_ElapsedTime - m_OldElapsedTime;	//デルタタイムを算出
+
+	//3秒後にタイマーを開始
+	if (m_ElapsedTime > 3000)
+	{
+		CDuel_Manager::GetInstance()->SetIsStratBattle(true);
+	}
 }
 
 //=====================================

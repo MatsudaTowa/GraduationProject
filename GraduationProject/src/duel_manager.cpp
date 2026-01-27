@@ -11,6 +11,9 @@
 //==============================================
 void My::CDuel_Manager::Init()
 {
+	//対戦の合図を初期化
+	m_isStartBattle - false;
+
 	//タイマーのリセット
 	m_DuelTimer.Reset();
 

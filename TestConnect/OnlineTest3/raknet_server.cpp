@@ -206,7 +206,8 @@ void CRakNet_Server::Communication(RakNet::RakPeerInterface* peer)
                 
                 break;
 
-            case CRakNet_Data::GameMessages::ID_DUEL_MESSAGE_CLIENT_START:
+                //スタートの合図
+            case CRakNet_Data::GameMessages::ID_DUEL_MESSAGE_CLIENT_START: 
 
                 //バトルを開始するか確認
                 if (m_pRakNetData->CheckStartBattle(packet))
@@ -214,6 +215,14 @@ void CRakNet_Server::Communication(RakNet::RakPeerInterface* peer)
                     m_pRakNetData->StartBattle(peer);
                 }
                 
+                break;
+
+                //カウントダウンの合図
+            case CRakNet_Data::GameMessages::ID_DUEL_MESSAGE_COUNTDOWN:
+
+                //カウントダウンの受信
+                m_pRakNetData->ReceiveCountDown(packet, peer);
+
                 break;
 
             /*case CRakNet_Data::GameMessages::ID_DUEL_MESSAGE_SEND_STATUS:

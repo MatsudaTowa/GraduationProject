@@ -372,8 +372,6 @@ void CClient_Duel::StartBattle(RakNet::Packet* packet)
     bsIn.Read(messageId);
     bsIn.Read(StartTime);
 
-    //対戦時のタイマーを開始
-    My::CDuel_Manager::GetInstance()->GetDuelTimer().Start();
     //My::CDuel_Manager::GetInstance()->GetDuelTimer().SetStartTime(StartTime);
 
     //ロビーから対戦に遷移
@@ -385,6 +383,41 @@ void CClient_Duel::StartBattle(RakNet::Packet* packet)
     if (Lobby != nullptr)
     {
         Lobby->SetBattleSign(true);
+    }
+}
+
+//=====================================
+//カウントダウンの受信
+//=====================================
+void CClient_Duel::ReceiveCountdown(RakNet::Packet* packet)
+{
+    //データを取得
+    unsigned char messageId;    //メッセージ
+    int StartTime = 0;          //開始時間
+    int nCountStartTime = RakNet::GetTimeMS();    //カウント開始時間
+
+    //受信側
+    RakNet::BitStream bsIn(packet->data, packet->length, false);
+
+    //読み込み
+    bsIn.Read(messageId);
+    bsIn.Read(StartTime);
+
+    //開始時間を算出して設定
+    nCountStartTime = RakNet::GetTimeMS() - StartTime;
+
+    //一時的にダウンキャストを行い、遷移の合図を送る
+    My::CDuel* pDuel = nullptr;
+    pDuel = dynamic_cast<My::CDuel*>(My::CActiveSceneManager::GetInstance()->GetState());
+
+    //キャストが成功していたならカウントダウンの合図を送る
+    if (pDuel != nullptr)
+    {
+        pDuel->GetCountDoun()->SetCountStartTime(static_cast<float>(nCountStartTime * 0.001f));
+        pDuel->GetCountDoun()->SetIsStartCountdown(true);
+
+        //対戦時のタイマーを開始
+        My::CDuel_Manager::GetInstance()->GetDuelTimer().Start();
     }
 }
 

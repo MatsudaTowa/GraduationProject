@@ -122,7 +122,7 @@ void My::CActiveSceneManager::DuelConnect()
 	if (!CRakNet::GetInstance()->GetOnline()) return;
 
 	//自身のステータスを送る
-	CRakNet::GetInstance()->SendMyStatus();
+	//CRakNet::GetInstance()->SendMyStatus();
 
 	//全体との更新を合わせる
 	//while (!CRakNet::GetInstance()->GetIsUpdate())

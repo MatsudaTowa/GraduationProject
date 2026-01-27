@@ -21,9 +21,8 @@
 CDuel_Data::CDuel_Data() :
     m_DuelPlayerList(),							//対戦プレイヤーのリスト
     m_isCheckStart{ false,false,false,false },	//開始の合図
-    m_nReceiveNum(0),							//受信した値
-    m_CastCardList(),							//キャストカードのリスト
-    m_CastDiffenceCardVector()					//キャストされたディフェンスカードのベクター
+    m_nCountDownPlayerNum(0)                    //カウントダウン待機中のプレイヤー数
+    //m_nReceiveNum(0),							//受信した値
 {
    
 }
@@ -97,10 +96,10 @@ void CDuel_Data::DisConnection(RakNet::Packet* packet, RakNet::RakPeerInterface*
     }*/
 
     //更新の合図を出すか確認
-    if (IsDisconnectionSendUpdate())
+   /* if (IsDisconnectionSendUpdate())
     {
         SendUpdateSign(peer);
-    }
+    }*/
 }
 
 //=====================================
@@ -376,9 +375,6 @@ bool CDuel_Data::CheckStartBattle(RakNet::Packet* packet)
 //=====================================
 void CDuel_Data::StartBattle(RakNet::RakPeerInterface* peer)
 {
-    //対戦時のタイマーを開始
-    CDuel_Manager::GetInstance()->GetDuelTimer().Start();
-
     //データの作成
     RakNet::BitStream bsOut;
     bsOut.Write((RakNet::MessageID)GameMessages::ID_DUEL_MESSAGE_START);        //メッセージ
@@ -389,6 +385,53 @@ void CDuel_Data::StartBattle(RakNet::RakPeerInterface* peer)
 
     //デッキ内容の送信
     SendDeck(peer);
+}
+
+//=====================================
+//カウントダウン可能メッセージの受信
+//=====================================
+void CDuel_Data::ReceiveCountDown(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
+{
+    //データの受信
+    RakNet::BitStream bsIn(packet->data, packet->length, false);
+    bsIn.IgnoreBytes(sizeof(RakNet::MessageID));    //受信したメッセージを飛ばす
+    int nPlayerNum = 0;
+
+    //カウントダウン準備中のプレイヤー数
+    m_nCountDownPlayerNum++;
+
+     //プレイヤーの人数確認
+    for (const auto& iter : m_DuelPlayerList)
+    {
+        //プレイヤーならカウント
+        if (iter->GetTag() == CPlayer::TAG_PLAYER)
+        {
+            nPlayerNum++;
+        }
+    }
+
+    //プレイヤーの人数分受信出来ていたらメッセージを送信
+    if (m_nCountDownPlayerNum >= nPlayerNum)
+    {
+        SendCountDown(peer);    //カウントダウンの送信
+    }
+}
+
+//=====================================
+//カウントダウン可能メッセージの送信
+//=====================================
+void CDuel_Data::SendCountDown(RakNet::RakPeerInterface* peer)
+{
+    //対戦時のタイマーを開始
+    CDuel_Manager::GetInstance()->GetDuelTimer().Start();
+
+    //データの作成
+    RakNet::BitStream bsOut;
+    bsOut.Write((RakNet::MessageID)GameMessages::ID_DUEL_MESSAGE_COUNTDOWN);        //メッセージ
+    bsOut.Write(RakNet::GetTimeMS());                                               //時間の取得
+   
+    //全クライアントにブロードキャスト
+    peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
 }
 
 //=====================================
@@ -441,57 +484,10 @@ void CDuel_Data::SendStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* pe
 void CDuel_Data::ReceiveStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer)
 {
     //送信するかの確認
-    if (!IsSendUpdate(packet)) return;
+    //if (!IsSendUpdate(packet)) return;
 
     //更新の合図を送る
-    SendUpdateSign(peer);
-}
-
-//=====================================
-//更新の許可を出すかの確認
-//=====================================
-bool CDuel_Data::IsSendUpdate(RakNet::Packet* packet)
-{
-    //データの受信
-    RakNet::BitStream bsIn(packet->data, packet->length, false);
-   
-    //読み取り
-    bsIn.IgnoreBytes(sizeof(RakNet::MessageID));    //メッセージの読み込み
-    My::CDuel_Player::DuelData Data;                    //データの読み込み
-    bsIn.Read(Data);
-
-    //同じ番号のステータスに反映
-    for (auto& iter : m_DuelPlayerList)
-    {
-        //番号を確認
-        if (iter->GetIndex() == Data.BaceData.nIndex)
-        {
-            //ステータスを代入
-            iter->SetStatus(Data.Status);
-            break;
-        }
-    }
-
-    //受信数のカウント
-    m_nReceiveNum++;
-
-    //プレイヤーの人数を確認
-    int PlayerNum = 0;
-    for (auto iter : m_DuelPlayerList)
-    {
-        if (iter->GetTag() == CPlayer::TAG_PLAYER)
-        {
-            PlayerNum++;
-        }
-    }
-
-    //テスト
-    //::cout << PlayerNum << "/" << m_nReceiveNum << "\n";
-
-    //プレイヤーの数だけ受信できていないなら許可しない
-    if (m_nReceiveNum != PlayerNum) return false;
-
-    return true;
+    //SendUpdateSign(peer);
 }
 
 //=====================================
@@ -592,70 +588,7 @@ void CDuel_Data::SendCastCard(RakNet::RakPeerInterface* peer, My::CCard* castcar
 //=====================================
 void CDuel_Data::SendCastCard(RakNet::BitStream* bsout)
 {
-    ////return; //TODO : 作業中の為return
-
-    ////ログ
-    //std::cout << "カードの送信\n";
-
-    ////キャストされたカード枚数
-    //bsout->Write((int)m_CastCardList.size());
-
-    ////キャストカード情報の送信
-    //for (auto& iter : m_CastCardList)
-    //{
-    //    bsout->Write(iter.nCardID);     //カード番号
-    //    bsout->Write(iter.nPlayerID);   //プレイヤーID
-
-    //    bsout->Write((int)iter.m_TargetIDList.size());   //対象の数
-
-    //    //対象の数だけ周回
-    //    for (auto iter : iter.m_TargetIDList)
-    //    {
-    //        bsout->Write(iter); //対象の番号
-    //    }
-
-    //    //対象者のリストをクリア
-    //    iter.m_TargetIDList.clear();
-    //}
-
-    //m_CastCardList.clear();
-}
-
-//=====================================
-//キャスト守備カードの受信
-//=====================================
-void CDuel_Data::ReceiveCastDefCard(RakNet::Packet* packet)
-{
-    ////ログ
-    //std::cout << "守備カードの受信\n";
-
-    ////データの受信
-    //RakNet::BitStream bsIn(packet->data, packet->length, false);
-
-    ////読み取り
-    //bsIn.IgnoreBytes(sizeof(RakNet::MessageID));    //メッセージの読み込み
-    //CastDiffenceCardInfo CastInfo = {};             //データの読み込み
-    //int nTargetNum = 0;                             //ターゲット数
-
-    ////カード情報の読み込み
-    //bsIn.Read(CastInfo.nCardID);        //カード情報
-    //bsIn.Read(CastInfo.nUsePlayer);     //使用者番号
-
-    //bsIn.Read(nTargetNum);              //ターゲット数
-
-    ////ターゲット数だけ周回
-    //for (int i = 0; i < nTargetNum; i++)
-    //{
-    //    DiffenceTarget Target;
-
-    //    bsIn.Read(Target.nAttackCardUserId);           //読み込み
-    //    bsIn.Read(Target.nTargetCard);                 //読み込み
-
-    //    CastInfo.DiffenceTarget.push_back(Target);  //リストに追加
-    //}
-
-    ////カード情報を保存
-    //m_CastDiffenceCardVector.push_back(CastInfo);
+   
 }
 
 //=====================================
@@ -663,32 +596,7 @@ void CDuel_Data::ReceiveCastDefCard(RakNet::Packet* packet)
 //=====================================
 void CDuel_Data::SendCastDeffenceCard(RakNet::BitStream* bsout)
 {
-    ////ログ
-    //std::cout << "カードの送信\n";
-
-    ////キャストされたカード枚数
-    //bsout->Write((int)m_CastDiffenceCardVector.size());
-
-    ////キャストカード情報の送信
-    //for (auto& iter : m_CastDiffenceCardVector)
-    //{
-    //    bsout->Write(iter.nCardID);     //カード番号
-    //    bsout->Write(iter.nUsePlayer);  //プレイヤーID
-
-    //    bsout->Write((int)iter.DiffenceTarget.size());   //対象の数
-
-    //    //対象の数だけ周回
-    //    for (auto iter : iter.DiffenceTarget)
-    //    {
-    //        bsout->Write(iter.nAttackCardUserId);   //対象カードの使用者の番号
-    //        bsout->Write(iter.nTargetCard);         //対象カードのベクターの番号
-    //    }
-
-    //    //対象者のリストをクリア
-    //    iter.DiffenceTarget.clear();
-    //}
-
-    //m_CastDiffenceCardVector.clear();
+  
 }
 
 //=====================================
@@ -696,56 +604,9 @@ void CDuel_Data::SendCastDeffenceCard(RakNet::BitStream* bsout)
 //=====================================
 void CDuel_Data::SendUpdateSign(RakNet::RakPeerInterface* peer)
 {
-    ////受信数の初期化
-    //m_nReceiveNum = 0;
-
-    ////データの作成
-    //RakNet::BitStream bsOut;
-    //bsOut.Write((RakNet::MessageID)GameMessages::ID_DUEL_MESSAGE_STATUS);
-
-    ////書き出し
-    //for (auto iter : m_DuelPlayerList)
-    //{
-    //    //送信用のデータをまとめる
-    //    My::CDuel_Player::DuelData SendData;
-    //    SendData.BaceData.RakNetID = iter->GetRakNetID();   //識別番号
-    //    SendData.BaceData.nIndex = iter->GetIndex();        //番号
-    //    SendData.BaceData.Tag = iter->GetTag();             //タグ
-    //    SendData.Status = iter->GetStatus();                //ステータス
-    //    bsOut.Write(SendData);
-    //}
-
-    ////キャストされたカードを送信
-    ////SendCastCard(&bsOut);           //通常カード
-    ////SendCastDeffenceCard(&bsOut);   //守備カード
-
-    ////全クライアントにブロードキャスト
-    //peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+   
 }
 
-//=====================================
-//クライアントの切断時に更新の合図を送るか
-//=====================================
-bool CDuel_Data::IsDisconnectionSendUpdate()
-{
-    //プレイヤーの人数を確認
-    int PlayerNum = 0;
-    for (auto iter : m_DuelPlayerList)
-    {
-        if (iter->GetTag() == CPlayer::TAG_PLAYER)
-        {
-            PlayerNum++;
-        }
-    }
-
-    //テスト
-    //std::cout << PlayerNum << "/" << m_nReceiveNum << "\n";
-
-    //プレイヤーの数だけ受信できていないなら許可しない
-    if (m_nReceiveNum != PlayerNum) return false;
-
-    return true;
-}
 
 //======================================
 //シーンの更新

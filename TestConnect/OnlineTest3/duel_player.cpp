@@ -9,6 +9,7 @@
 #include "duel_player.h"
 #include "duel_player_manager.h"
 #include "card.h"
+#include "duel_manager.h"
 
 //=====================================
 //コンストラクタ
@@ -31,6 +32,8 @@ My::CDuel_Player::CDuel_Player() :
 //=====================================
 bool My::CDuel_Player::UpdateEnergy(int deltatime)
 {
+	if (!CDuel_Manager::GetInstance()->GetIsStartBattle()) return false;
+	
 	//エナジーが最大なら更新しない
 	if (m_Status.energy >= 99)
 	{

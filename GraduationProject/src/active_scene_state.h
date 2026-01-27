@@ -7,7 +7,8 @@
 #ifndef _GAME_STATE_H_
 #define _GAME_STATE_H_
 
-#include "card_deffence.h"
+//ヘッダーのインクルード
+#include "countdown_start.h"
 
 /** @brief My 名前空間 */
 namespace My
@@ -113,8 +114,8 @@ namespace My
 		 */
 		void OnlineChangeToDuel();
 
-		static int m_characterIdx; //ID TODO:サーバーから自身のID取得するから疑似的にオフラインで再現するためにstaticにしてます。
-		bool m_isBattle = false;
+		static int m_characterIdx;		//ID TODO:サーバーから自身のID取得するから疑似的にオフラインで再現するためにstaticにしてます。
+		bool m_isBattle = false;		//対戦開始のフラグ
 	};
 
 	/** @brief デュエルクラス */
@@ -124,7 +125,7 @@ namespace My
 
 		CDuel();
 		~CDuel() override;
-		static constexpr int SPECIAL_TIME = 30;	//必殺技状態に移る時間
+		
 		/**
 		* @brief デュエル処理
 		* @param [in]ゲームプレイヤーポインタ
@@ -135,6 +136,12 @@ namespace My
 		* @param [in]ゲームポインタ
 		*/
 		void Connect(CActiveScene* game) override;
+
+		/**
+		* @brief カウントダウンの取得
+		* @return カウントダウン
+		*/
+		My::CCountdown_Start* GetCountDoun() { return m_pCountDown; }
 
 	private:
 		/**
@@ -150,6 +157,14 @@ namespace My
 		 * @return エリア
 		 */
 		CInputMouse::AREA CharacterArea(float angle);
+
+		/**
+		 * @brief カウントダウン処理
+		 */
+		void CountDown();
+
+		//変数
+		My::CCountdown_Start* m_pCountDown = nullptr;
 	};
 
 	/** @brief ポーズ状態処理クラス */

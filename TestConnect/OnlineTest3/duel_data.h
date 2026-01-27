@@ -31,11 +31,12 @@ public:
 	void SendStartMember(RakNet::RakPeerInterface* peer) override;								//開始メンバーの送信
 	bool CheckStartBattle(RakNet::Packet* packet) override;										//対戦を開始するか
 	void StartBattle(RakNet::RakPeerInterface* peer) override;									//対戦の開始
+	void ReceiveCountDown(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;		//カウントダウン可能メッセージの受信
 	void SendStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;			//ステータスを送る
 	void AddCPU(RakNet::Packet* /*packet*/, RakNet::RakPeerInterface* /*peer*/) override {}		//CPUの追加
 	void ReceiveStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;		//ステータスを受信
 	void ReceiveCastCard(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;		//キャストカードの受信
-	void ReceiveCastDefCard(RakNet::Packet* packet) override;									//キャスト守備カードの受信
+	void ReceiveCastDefCard(RakNet::Packet* packet) override {};								//キャスト守備カードの受信
 	void UpdateScene(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;			//シーンの更新
 	bool ReceiveDeck(RakNet::Packet* packet) override;											//デッキの受信
 	void ReceiveDrawCard(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;		//カードのドロー処理の受信
@@ -75,15 +76,14 @@ private:
 
 	//関数
 	void SendPlayerNum(RakNet::RakPeerInterface* peer, GameMessages message);	//プレイヤー数を送信する関数
-	bool IsSendUpdate(RakNet::Packet* packet);									//更新の許可を出すか
 	void SendCastCard(RakNet::BitStream* bsout);								//キャストカードの送信
 	void SendCastCard(RakNet::RakPeerInterface* peer, My::CCard* castcard);										//キャストカードの送信
 	void SendCastDeffenceCard(RakNet::BitStream* bsout);						//キャスト守備カードの送信
 	void SendUpdateSign(RakNet::RakPeerInterface* peer);						//更新の合図を送る
-	bool IsDisconnectionSendUpdate();											//クライアントが切断時に更新の合図を送信するか
 	void SendDeck(RakNet::RakPeerInterface* peer);								//デッキの送信
 	void SendDrawCard(RakNet::RakPeerInterface* peer, int userid);				//カードのドロー情報を送る
 	bool CheckDrawCard(int playerid);											//引数のプレイヤーがドローができるか確認
+	void SendCountDown(RakNet::RakPeerInterface* peer);							//カウントダウン可能メッセージの受信
 
 	//設定と取得
 	bool IsPlayerExist() override;	//プレイヤーが存在するか
@@ -95,10 +95,8 @@ private:
 	//変数
 	std::list<My::CDuel_Player*> m_DuelPlayerList;				//ロビープレイヤー保管用変数
 	bool m_isCheckStart[MAX_CLIENT];							//開始するかのフラグ
-	int m_nReceiveNum;											//ステータスを受信した数
-	std::list<CastCardInfo> m_CastCardList;						//キャストカードのリスト
-	std::vector<CastDiffenceCardInfo> m_CastDiffenceCardVector;	//キャスト守備カードのリスト
 	int m_nGameSetPlayerNum;									//ゲームを終了したプレイヤーの数
+	int m_nCountDownPlayerNum;									//カウントダウン待機中の人数
 };
 
 #endif

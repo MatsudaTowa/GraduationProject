@@ -177,14 +177,16 @@ void CRakNet::Communication(RakNet::RakPeerInterface* peer)
             m_Client->StartBattle(packet);
             break;
 
+        case ID_DUEL_MESSAGE_COUNTDOWN:
+            m_Client->ReceiveCountdown(packet);
+            break;
+
         case ID_DUEL_MESSAGE_DRAW:
             m_Client->ReceiveDrawCard(packet);
-            //m_isUpdate = true;
             break;
 
         case ID_DUEL_MESSAGE_STATUS:
             m_Client->ReceiveStatus(packet);
-            //m_isUpdate = true;
             break;
 
         case ID_DUEL_MESSAGE_CAST_CARD:
@@ -443,5 +445,27 @@ void CRakNet::RequestDefCastCard(My::CCardDeffence* castcard)
             bsOut.Write(iter.nTargetCardId);      //カード番号
             bsOut.Write(iter.nTargetCardSameId);  //同種の何番目のカードか
         }
+    }
+}
+
+//=====================================
+//カウントダウンの合図を送信
+//=====================================
+void CRakNet::SendCountdown()
+{
+    //データの作成
+    RakNet::BitStream bsOut;   //送信用変数
+
+     //書き出し
+    bsOut.Write((RakNet::MessageID)CRakNet::GameMessages::ID_DUEL_MESSAGE_COUNTDOWN);   //メッセージ
+
+    //アドレスを取得
+    RakNet::SystemAddress server_address = m_pPeer->GetSystemAddressFromIndex(0);
+
+    //サーバーの確認
+    if (server_address != RakNet::UNASSIGNED_SYSTEM_ADDRESS)
+    {
+        // 全クライアントにブロードキャスト
+        m_pPeer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, m_pPeer->GetSystemAddressFromIndex(0), false);
     }
 }

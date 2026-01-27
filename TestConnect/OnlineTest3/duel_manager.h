@@ -48,16 +48,20 @@ public:
 	CDuel_Timer& GetDuelTimer() { return m_DuelTimer; }				//対戦時のタイマー
 	std::map<int, int>& GetRankMap() { return m_RankMap; }			//順位のマップ取得
 	void SetRankMap(std::map<int, int> map) { m_RankMap = map; }	//順位のマップ設定
+	void SetIsStratBattle(bool start) { m_isStartBattle = start; }	//対戦開始フラグの設定
+	bool GetIsStartBattle() { return m_isStartBattle; }				//対戦開始フラグの取得
 
 private:
 
 	//関数
-	CDuel_Manager() : m_DuelRuleParam(), m_DuelTimer(), m_RankMap(){}		//コンストラクタ
+	CDuel_Manager() : m_DuelRuleParam(), m_DuelTimer(), m_RankMap(), m_isStartBattle(false){}		//コンストラクタ
 
 	//変数
 	DuelRuleParam m_DuelRuleParam;				//対戦のルールパラメータ
 	CDuel_Timer m_DuelTimer;					//対戦時に扱うタイマー
 	std::map<int, int> m_RankMap;				//順位のマップ(番号、順位)
+	bool m_isStartBattle;						//対戦開始フラグ
+
 };
 
 #endif

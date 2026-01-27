@@ -44,8 +44,8 @@ public:
 		ID_LOBY_MESSAGE_REQUEST_DECK,	//デッキ要求のメッセージ
 		ID_DUEL_MESSAGE_CLIENT_START,	//クライアントが対戦用に変わったことを通知
 		ID_DUEL_MESSAGE_START,			//対戦の開始を通知
+		ID_DUEL_MESSAGE_COUNTDOWN,		//カウントダウン通知
 		ID_DUEL_MESSAGE_DECK,			//デッキのメッセージ
-		//ID_DUEL_MESSAGE_SEND_STATUS,	//ステータスを送る
 		ID_DUEL_MESSAGE_DRAW,			//カードを引くメッセージ
 		ID_DUEL_MESSAGE_STATUS,			//ステータスの通知
 		ID_DUEL_MESSAGE_CAST_CARD,		//キャストカードを通知
@@ -69,6 +69,7 @@ public:
 	virtual void SendStartMember(RakNet::RakPeerInterface* peer) = 0;									//開始メンバーの送信
 	virtual bool CheckStartBattle(RakNet::Packet* packet) = 0;											//対戦を開始するか
 	virtual void StartBattle(RakNet::RakPeerInterface* peer) = 0;										//対戦の開始
+	virtual void ReceiveCountDown(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) = 0;			//カウントダウン可能メッセージｎ受信
 	virtual void SendStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) = 0;				//ステータスを送る
 	virtual void AddCPU(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) = 0;					//CPUの追加
 	virtual void ReceiveStatus(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) = 0;				//ステータスを受信

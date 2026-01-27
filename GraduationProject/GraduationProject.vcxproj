@@ -206,6 +206,9 @@
     <ClCompile Include="src\client_lobby.cpp" />
     <ClCompile Include="src\colision.cpp" />
     <ClCompile Include="src\condition.cpp" />
+    <ClCompile Include="src\countdown_start.cpp" />
+    <ClCompile Include="src\countdown_start_offline.cpp" />
+    <ClCompile Include="src\countdown_start_online.cpp" />
     <ClCompile Include="src\damage_number_UI.cpp" />
     <ClCompile Include="src\damage_number_UI_factory.cpp" />
     <ClCompile Include="src\death_icon.cpp" />
@@ -357,6 +360,9 @@
     <ClInclude Include="src\colision.h" />
     <ClInclude Include="src\condition.h" />
     <ClInclude Include="src\count.h" />
+    <ClInclude Include="src\countdown_start.h" />
+    <ClInclude Include="src\countdown_start_offline.h" />
+    <ClInclude Include="src\countdown_start_online.h" />
     <ClInclude Include="src\damage_number_UI.h" />
     <ClInclude Include="src\damage_number_UI_factory.h" />
     <ClInclude Include="src\death_icon.h" />

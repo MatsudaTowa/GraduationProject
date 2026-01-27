@@ -290,7 +290,11 @@ void My::CPlayerDuelState::EnergyUp(CActiveScenePlayer* player)
 	//Œo‰ßŽžŠÔ‚ðŽæ“¾
 	if (CRakNet::GetInstance()->GetOnline())
 	{
-		m_fEnergyUpCount += My::CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime();
+		//‡}‚ª‚ ‚Á‚½‚çXV
+		if (My::CDuel_Manager::GetInstance()->GetIsStartBattle())
+		{
+			m_fEnergyUpCount += My::CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime();
+		}
 	}
 	else
 	{

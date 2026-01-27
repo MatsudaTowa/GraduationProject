@@ -8,6 +8,7 @@
 #include "character_lobby_UI_manager.h"
 #include "card_manager.h"
 #include "zone_manager.h"
+#include "duel_manager.h"
 
 //===============================================================================
 // コンストラクタ
@@ -82,11 +83,6 @@ void My::CDuelCharacter::Duel(CActiveSceneCharacter* character)
 		m_pCemetery->Update(this, character);
 	}
 
-	//描画を行いたいゾーンのみ更新
-	//m_pZoneManager->GetCastPreviewZone()->Update(this);		//キャスト
-	//m_pZoneManager->GetHandZone()->Update(this);			//手札
-	//m_pZoneManager->GetWaitZone()->Update(this);			//守備待機ゾーン
-	//m_pZoneManager->GetCemetery()->Update(this);			//墓地ゾーン
 }
 
 //===============================================================================

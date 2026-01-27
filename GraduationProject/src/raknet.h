@@ -22,14 +22,6 @@ class CRakNet
 public:
 
 	//列挙
-	//enum GameMessages
-	//{
-	//	ID_GAME_MESSAGE_1 = ID_USER_PACKET_ENUM + 1,
-	//	ID_CONNECT_MESSAGE_1,   //自分が接続時
-	//	ID_CONNECT_MESSAGE_2,   //他人が接続時
-	//};
-
-	//列挙
 	enum GameMessages
 	{
 		ID_GAME_MESSAGE_1 = ID_USER_PACKET_ENUM + 1,
@@ -43,9 +35,9 @@ public:
 		ID_LOBY_MESSAGE_REQUEST_DECK,	//デッキ要求のメッセージ
 		ID_DUEL_MESSAGE_CLIENT_START,	//クライアントが対戦用に変わったことを通知
 		ID_DUEL_MESSAGE_START,			//対戦の開始を通知
+		ID_DUEL_MESSAGE_COUNTDOWN,		//カウントダウン通知
 		ID_DUEL_MESSAGE_DECK,			//デッキのメッセージ
 		ID_DUEL_MESSAGE_DRAW,			//カードを引くメッセージ
-		//ID_DUEL_MESSAGE_SEND_STATUS,	//ステータスを送る
 		ID_DUEL_MESSAGE_STATUS,			//ステータスの通知
 		ID_DUEL_MESSAGE_CAST_CARD,		//キャストカードを通知
 		ID_DUEL_MESSAGE_CAST_DEFCARD,	//キャスト守備カードを通知
@@ -71,6 +63,7 @@ public:
 	void SendDeck();										//デッキの内容を送信
 	void SendStatus();										//ステータスの送信
 	void SendAddEnemy();									//敵の追加を送信
+	void SendCountdown();									//カウントダウンの合図を送信
 
 	//設定と取得
 	RakNet::RakPeerInterface* GetPeer() { return m_pPeer; }	//ピアの取得
