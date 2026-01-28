@@ -51,7 +51,7 @@ namespace My
 		 * @param [in]É_ÉÅÅ[ÉWêî
 		 * @return
 		 */
-		void Create(D3DXVECTOR3 pos, KIND_OF_COUNTDOWN_UI ui);
+		void Create(D3DXVECTOR3 pos, KIND_OF_COUNTDOWN_UI ui, float start);
 	private:
 
 		/**

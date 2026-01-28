@@ -27,24 +27,32 @@ My::CCountdownUIFactory::~CCountdownUIFactory()
 //=============================================
 // ¶¬
 //=============================================
-void My::CCountdownUIFactory::Create(D3DXVECTOR3 pos, KIND_OF_COUNTDOWN_UI ui)
+void My::CCountdownUIFactory::Create(D3DXVECTOR3 pos, KIND_OF_COUNTDOWN_UI ui, float start)
 {
+	My::CCountdownUI* pUI = nullptr;
+
 	switch (ui)
 	{
 	case KIND_OF_COUNTDOWN_UI::ONE:
-		CCountdownNumberUI::Create(pos, CCountdownNumberUI::NUMBER::ONE);
+		pUI = CCountdownNumberUI::Create(pos, CCountdownNumberUI::NUMBER::ONE);
 		break;
 
 	case KIND_OF_COUNTDOWN_UI::TWO:
-		CCountdownNumberUI::Create(pos, CCountdownNumberUI::NUMBER::TWO);
+		pUI = CCountdownNumberUI::Create(pos, CCountdownNumberUI::NUMBER::TWO);
 		break;
 
 	case KIND_OF_COUNTDOWN_UI::THREE:
-		CCountdownNumberUI::Create(pos, CCountdownNumberUI::NUMBER::THREE);
+		pUI = CCountdownNumberUI::Create(pos, CCountdownNumberUI::NUMBER::THREE);
 		break;
 
 	case KIND_OF_COUNTDOWN_UI::START:
-		CCountdownStartUI::Create(pos);
+		pUI = CCountdownStartUI::Create(pos);
 		break;
 	}
+
+	//’†g‚ª–³‚¢‚È‚ç”²‚¯‚é
+	if (!pUI) return;
+
+	//õ–½‚ğİ’è
+	pUI->SetLife(start);
 }

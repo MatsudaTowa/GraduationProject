@@ -22,7 +22,7 @@ namespace My
 		/**
 		 * @brief コンストラクタ
 		 */
-		CCountdown_Start() : m_isStartCountdown(false), m_fCountStartTime(0.0f), m_fElapsedTime(0.0f), m_isEndCountDown(false) {};
+		CCountdown_Start() : m_isStartCountdown(false), m_fCountStartTime(0.0f), m_fElapsedTime(0.0f), m_isEndCountDown(false), m_isCreateFirst(false){};
 
 		/**
 		 * @brief デストラクタ
@@ -84,6 +84,7 @@ namespace My
 		float m_fCountStartTime;	//カウントダウン開始の時刻
 		float m_fElapsedTime;		//経過時間
 		bool m_isEndCountDown;		//カウントダウンが終了したか
+		bool m_isCreateFirst;		//最初のクリエイトを行ったか
 	};
 }
 #endif

@@ -53,7 +53,7 @@ namespace My
 		 * @brief õ–½‚Ìİ’è
 		 * @param [in]õ–½
 		 */
-		void SetLife(float life) { m_fLife = life; }
+		virtual void SetLife(float life) { m_fLife = life; }
 
 		/**
 		 * @brief ¶¬

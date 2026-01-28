@@ -51,6 +51,25 @@ namespace My
 		 * @return
 		 */
 		static CCountdownStartUI* Create(D3DXVECTOR3 pos);
+
+		/**
+		 * @brief 引数に応じてサイズを変更
+		 * @param [in]寿命
+		 */
+		void SetLife(float life) override
+		{
+			//変数
+			float fCurrentSize = GetSize().x;
+
+			//進行時間分サイズを加算
+			fCurrentSize += life;
+
+			//サイズの設定
+			SetSize({ fCurrentSize, fCurrentSize });
+
+			CCountdownUI::SetLife(life);
+		}
+
 	private:
 
 		//定数
