@@ -92,6 +92,18 @@ auto Rundom(auto min, auto max)
 	return min + ((float)rand() / (float)RAND_MAX) * (max - min);
 }
 
+int IntRundom(int min, int max)
+{
+	// 現在時刻をシード値として使用
+	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+	// メルセンヌ・ツイスターの32ビット版
+	std::mt19937 gen(seed);
+
+	std::uniform_int_distribution<> random(min, max);
+
+	return random(gen);
+}
+
 /**
 * @brief スクリーン座標をワールド座標に変換
 * @param [in][out]交点のポインタ
