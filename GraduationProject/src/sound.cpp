@@ -17,7 +17,7 @@ const CSound::SOUNDINFO CSound::SOUND_INFO[CSound::SOUND_LABEL_MAX] =
 {// SEの場合は第2引数を0にする第3引数は0～1.0f
 	{"data\\SOUND\\BGM\\title000.wav", -1, 0.5f},			//タイトルBGM
 	{"data\\SOUND\\BGM\\lobby000.wav", -1, 0.5f},			//ロビーBGM
-	{"data\\SOUND\\BGM\\duel000.wav", -1, 0.5f},			//デュエルBGM
+	{"data\\SOUND\\BGM\\duel\\duel000.wav", -1, 0.5f},		//デュエルBGM
 	{"data\\SOUND\\BGM\\winner.wav", -1, 0.5f},				//勝者BGM
 	{"data\\SOUND\\BGM\\loser.wav", -1, 0.5f},				//リザルトBGM
 	{"data\\SOUND\\SE\\movelobby.wav", 0, 1.0f},			//ロビー入出SE
