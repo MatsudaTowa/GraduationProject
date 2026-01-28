@@ -127,7 +127,7 @@ void CClient_Lobby::Regist(RakNet::Packet* packet)
         ++nLap; //インクリメント
     }
 
-    // TODO : SEを追加(ロビー入出音)
+    // SEを追加(ロビー入出音)
     My::CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_INLOBBY);
 
 }
@@ -260,14 +260,14 @@ void CClient_Lobby::SendReady(RakNet::Packet* /*packet*/, RakNet::RakPeerInterfa
         //準備フラグの取得
         isRaedy = pState->GetIsReady();  //代入
 
-         //プレイヤーの数だけ周回
-        for (auto& iter : m_LobbyPlayerList)
-        {
-            if (iter.Param.nIndex == nID)
-            {
-                iter.isReady = isRaedy;
-            }
-        }
+        // //プレイヤーの数だけ周回
+        //for (auto& iter : m_LobbyPlayerList)
+        //{
+        //    if (iter.Param.nIndex == nID)
+        //    {
+        //        iter.isReady = isRaedy;
+        //    }
+        //}
     }
 
     bsOut.Write(isRaedy);   //準備フラグ
@@ -351,6 +351,12 @@ void CClient_Lobby::ReceiveReady(RakNet::Packet* packet)
         bsIn.Read(isReady);
 
         //代入
+        if (!iter.isReady && isReady)
+        {
+            // SEを追加(準備OK音)
+            My::CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_READY);
+
+        }
         iter.isReady = isReady;
         CheckTarget(nCount, isReady);
 

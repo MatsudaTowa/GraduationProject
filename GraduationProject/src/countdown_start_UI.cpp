@@ -86,6 +86,14 @@ My::CCountdownStartUI* My::CCountdownStartUI::Create(D3DXVECTOR3 pos)
 	
 	CCountdownStartUI* pUI = new CCountdownStartUI;
 	if (pUI == nullptr) { return nullptr; }
+
+	// SE(DUEL)’Ç‰Á
+	My::CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_DUEL);
+
+	//TODO : ƒ‰ƒ“ƒ_ƒ€‚ÌƒAƒ‹ƒSƒŠƒYƒ€‚ðì‚é
+	//BGM‚ÌÝ’è
+	CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_BGM_DUEL);
+
 	pUI->SetPos(pos);
 	pUI->BindTexture(GET_TEXTURE->GetAddress(GET_TEXTURE->Regist(CCountdownStartUI::TEX_NAME)));
 	pUI->Init();

@@ -49,9 +49,6 @@ My::CLobby::~CLobby()
 	//BGMの終了
 	CManager::GetInstance()->GetSound()->Stop(CSound::SOUND_LABEL_BGM_LOBBY);
 
-	//TODO : ランダムのアルゴリズムを作る
-	//BGMの設定
-	CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_BGM_DUEL);
 }
 
 //=============================================

@@ -89,6 +89,10 @@ My::CCountdownNumberUI* My::CCountdownNumberUI::Create(D3DXVECTOR3 pos, NUMBER n
 
 	CCountdownNumberUI* pUI = new CCountdownNumberUI;
 	if (pUI == nullptr) { return nullptr; }
+
+	// SE(3E2E1)’Ç‰Á
+	My::CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_COUNT_DOWN);
+
 	pUI->SetPos(pos);
 	pUI->BindTexture(GET_TEXTURE->GetAddress(GET_TEXTURE->Regist(CCountdownNumberUI::TEX_NAME)));
 	pUI->Init();

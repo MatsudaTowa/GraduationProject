@@ -59,6 +59,9 @@ void My::CTitle::Uninit()
 
 	//オブジェクトを破棄
     CObject::ReleaseAll();
+
+    // TODO : タイトルからロビーに遷移するときの音追加
+    CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_MOVELOBBY);
 }
 
 //=============================================
