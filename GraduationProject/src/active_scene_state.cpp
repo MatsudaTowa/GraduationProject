@@ -257,8 +257,11 @@ My::CDuel::CDuel()
 	{
 		m_pCountDown = new CCountdown_Start_Online;
 
-		//カウントダウンの合図を送る
-		CRakNet::GetInstance()->SendCountdown();
+		if (!My::CDuel_Manager::GetInstance()->GetIsStartBattle())
+		{
+			//カウントダウンの合図を送る
+			CRakNet::GetInstance()->SendCountdown();
+		}
 	}
 	else
 	{
