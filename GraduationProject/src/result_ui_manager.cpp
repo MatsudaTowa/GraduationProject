@@ -384,6 +384,9 @@ HRESULT My::CResultUIManager::Init()
 			// Å‰ºˆÊ‚È‚ç
 			if (idx == MAX_RANKING_COUNT - 1)
 			{
+				// TODO : ”s–kŽÒ‚ÌBGM‚ðÝ’è
+				CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_BGM_LOSER);
+
 				// Å‰ºˆÊ‚È‚ç
 				m_pWinOrLoseObject->BindTexture(pTexture->GetAddress(pTexture->Regist(LOSE.texture)));
 				m_pWinOrLoseObject->SetPos		(LOSE.start.pos);	// ˆÊ’u
@@ -406,6 +409,9 @@ HRESULT My::CResultUIManager::Init()
 			// Å‰ºˆÊ‚Å‚È‚¯‚ê‚Î
 			else
 			{
+				// TODO : ŸŽÒ‚ÌBGM‚ðÝ’è
+				CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_BGM_WINNER);
+
 				// Å‰ºˆÊ‚È‚ç
 				m_pWinOrLoseObject->BindTexture(pTexture->GetAddress(pTexture->Regist(WIN.texture)));
 				m_pWinOrLoseObject->SetPos		(WIN.start.pos);	// ˆÊ’u
@@ -469,6 +475,10 @@ HRESULT My::CResultUIManager::Init()
 //=============================================
 void My::CResultUIManager::Uninit()
 {
+	//BGM‚ðŽ~‚ß‚é
+	CManager::GetInstance()->GetSound()->Stop(CSound::SOUND_LABEL_BGM_LOSER);
+
+	CManager::GetInstance()->GetSound()->Stop(CSound::SOUND_LABEL_BGM_WINNER);
 }
 
 //=============================================
