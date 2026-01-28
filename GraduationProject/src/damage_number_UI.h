@@ -12,6 +12,8 @@
 
 namespace My
 {
+	class DamageNumberState;
+
 	//=============================================
 	//ダメージ数UIクラス
 	//=============================================
@@ -46,6 +48,10 @@ namespace My
 		 * @brief 描画
 		 */
 		void Draw()override;
+
+		void Start();
+		void Wait();
+		void End();
 		/**
 		 * @brief 生成
 		 * @param [in]位置
@@ -53,11 +59,62 @@ namespace My
 		 * @return
 		 */
 		static CDamageNumberUI* Create(D3DXVECTOR3 pos, int num);
+
+		void SetState(DamageNumberState* state)
+		{
+			if (m_pState != nullptr)
+			{
+				delete m_pState;
+			}
+			m_pState = state;
+		}
+
+		DamageNumberState* GetState()
+		{
+			return m_pState;
+		}
 	private:
 		static constexpr float SIZE = 30.0f;
 		static const std::string TEX_NAME;
 		float m_fLife;
 		float m_num;
+
+		DamageNumberState* m_pState;
+	};
+
+	
+}
+
+namespace My
+{
+	class DamageNumberState
+	{
+	public:
+		virtual void Update(CDamageNumberUI* ui) = 0;
+	};
+
+	class Start : public DamageNumberState
+	{
+	public:
+		void Update(CDamageNumberUI* ui) override;
+
+	private:
+		static constexpr float MAX_SIZE = 45.0f;
+	};
+
+	class Wait : public DamageNumberState
+	{
+	public:
+		void Update(CDamageNumberUI* ui) override;
+
+	private:
+		float m_fWaitTime = 0.3f;
+	};
+
+	class End : public DamageNumberState
+	{
+	public:
+		void Update(CDamageNumberUI* ui) override;
 	};
 }
 
