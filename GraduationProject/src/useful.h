@@ -92,7 +92,7 @@ auto Rundom(auto min, auto max)
 	return min + ((float)rand() / (float)RAND_MAX) * (max - min);
 }
 
-int IntRundom(int min, int max)
+inline int IntRandom(int min, int max)
 {
 	// 現在時刻をシード値として使用
 	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
