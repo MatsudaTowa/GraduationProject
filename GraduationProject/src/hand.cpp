@@ -235,6 +235,9 @@ void My::CHand::DeckDraw(CPlayerDuelState* state)
 	if (status.energy > 0 && m_TotalNum < MAX_HANDSCARD && !state->GetZoneManager()->GetDeck()->GetList().empty())
 	{// 消費できるエナジーがなかったらドローできない
 
+		// TODO : 音の鳴らすタイミングを考える
+		CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_CARD_DRAW);
+
 		HandDraw(1, state);
 		--status.energy;
 		CActiveSceneManager::GetInstance()->GetPlayer()->SetStatus(status);
