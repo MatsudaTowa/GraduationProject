@@ -42,9 +42,6 @@ HRESULT My::CResult::Init()
     CScene::Init();
     CREATE_CAMERA(new CResultCamera);
 
-    //BGM‚ÌÝ’è
-    CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_BGM_RESULT);
-
     //’n–Ê¶¬
     CField::Create(VEC3_RESET_ZERO, FIELD_SIZE, new CField);
 
@@ -96,9 +93,6 @@ void My::CResult::Uninit()
         delete m_pUIManager;
         m_pUIManager = nullptr;
     }
-
-    //BGM‚ÌÝ’è
-    CManager::GetInstance()->GetSound()->Stop(CSound::SOUND_LABEL_BGM_RESULT);
 
     CObject::ReleaseAll();
 }

@@ -384,6 +384,9 @@ HRESULT My::CResultUIManager::Init()
 			// 最下位なら
 			if (idx == MAX_RANKING_COUNT - 1)
 			{
+				// TODO : 敗北者のBGMを設定
+				CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_BGM_LOSER);
+
 				// 最下位なら
 				m_pWinOrLoseObject->BindTexture(pTexture->GetAddress(pTexture->Regist(LOSE.texture)));
 				m_pWinOrLoseObject->SetPos		(LOSE.start.pos);	// 位置
@@ -406,6 +409,9 @@ HRESULT My::CResultUIManager::Init()
 			// 最下位でなければ
 			else
 			{
+				// TODO : 勝者のBGMを設定
+				CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_BGM_WINNER);
+
 				// 最下位なら
 				m_pWinOrLoseObject->BindTexture(pTexture->GetAddress(pTexture->Regist(WIN.texture)));
 				m_pWinOrLoseObject->SetPos		(WIN.start.pos);	// 位置
@@ -469,6 +475,10 @@ HRESULT My::CResultUIManager::Init()
 //=============================================
 void My::CResultUIManager::Uninit()
 {
+	//BGMを止める
+	CManager::GetInstance()->GetSound()->Stop(CSound::SOUND_LABEL_BGM_LOSER);
+
+	CManager::GetInstance()->GetSound()->Stop(CSound::SOUND_LABEL_BGM_WINNER);
 }
 
 //=============================================
@@ -484,6 +494,13 @@ void My::CResultUIManager::Update()
 		// 出現開始時間が経過していたら
 		else
 		{
+			// TODO : UIと同タイミングでSEを鳴らす
+			if (m_PlayerIDsElapsedTime[nCnt] == RANKINGS[nCnt].elapsedTime)
+			{
+				//BGMの設定
+				CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_RANKING);
+			}
+
 			// 出現時間が経過していなかったら
 			if (m_RankingsElapsedTime[nCnt] > 0)
 			{

@@ -18,7 +18,8 @@ const CSound::SOUNDINFO CSound::SOUND_INFO[CSound::SOUND_LABEL_MAX] =
 	{"data\\SOUND\\BGM\\title000.wav", -1, 0.5f},			//タイトルBGM
 	{"data\\SOUND\\BGM\\lobby000.wav", -1, 0.5f},			//ロビーBGM
 	{"data\\SOUND\\BGM\\duel000.wav", -1, 0.5f},			//デュエルBGM
-	{"data\\SOUND\\BGM\\result000.wav", -1, 0.5f},			//リザルトBGM
+	{"data\\SOUND\\BGM\\winner.wav", -1, 0.5f},				//勝者BGM
+	{"data\\SOUND\\BGM\\loser.wav", -1, 0.5f},				//リザルトBGM
 	{"data\\SOUND\\SE\\movelobby.wav", 0, 1.0f},			//ロビー入出SE
 	{"data\\SOUND\\SE\\inlobby000.wav", 0, 1.0f},			//ロビー入出SE
 	{"data\\SOUND\\SE\\lobbyready000.wav", 0, 1.0f},		//準備完了SE
@@ -28,6 +29,7 @@ const CSound::SOUNDINFO CSound::SOUND_INFO[CSound::SOUND_LABEL_MAX] =
 	{"data\\SOUND\\SE\\Draw_a_card.wav", 0, 1.0f},			//カードドローSE
 	{"data\\SOUND\\SE\\Incorrect.wav", 0, 1.0f},			//キャスト失敗SE
 	{"data\\SOUND\\SE\\Cutting_through.wav", 0, 1.0f},		//キャストキャンセルSE
+	{"data\\SOUND\\SE\\appear.wav", 0, 1.0f},				//ランキングSE
 	
 };
 
