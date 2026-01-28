@@ -8,6 +8,7 @@
 #define _ZONE_NUM_UI_H_
 #include "main.h"
 #include "object2D.h"
+#include "zone_num.h"
 
 /** @brief My –¼‘O‹óŠÔ */
 namespace My
@@ -54,7 +55,7 @@ namespace My
 			return m_num_pos;
 		}
 
-		inline std::vector<CNumber_2D*> GetNumVector()
+		inline std::vector<CZoneNum*> GetNumVector()
 		{
 			return  m_pNumber;
 		}
@@ -76,7 +77,7 @@ namespace My
 		void EraseDigit(std::vector<int> pos_texU, int& num_digit);
 
 		D3DXVECTOR3 m_num_pos;					//”š‚ÌˆÊ’u
-		std::vector<CNumber_2D*> m_pNumber;		//”š
+		std::vector<CZoneNum*> m_pNumber;		//”š
 	};
 }
 

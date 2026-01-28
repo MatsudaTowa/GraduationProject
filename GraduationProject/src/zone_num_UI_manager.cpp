@@ -10,7 +10,9 @@
 //=============================================
 // コンストラクタ
 //=============================================
-My::CZoneNumUIManager::CZoneNumUIManager():m_pCemeteryUI(nullptr)
+My::CZoneNumUIManager::CZoneNumUIManager():
+	m_pCemeteryUI(nullptr),
+	m_pZoneNumBG(nullptr)
 {
 }
 
@@ -31,6 +33,10 @@ HRESULT My::CZoneNumUIManager::Init(CActiveSceneCharacter* character)
 		m_pCemeteryUI = new CCemeteryNumUI;
 		m_pCemeteryUI->Init();
 	}
+	if (m_pZoneNumBG == nullptr)
+	{
+		m_pZoneNumBG = CZoneNumUI_BG::Create(VEC3_RESET_ZERO, { 80.0f,40.0f });
+	}
 	return S_OK;
 }
 
@@ -39,6 +45,11 @@ HRESULT My::CZoneNumUIManager::Init(CActiveSceneCharacter* character)
 //=============================================
 void My::CZoneNumUIManager::Uninit()
 {
+	if (m_pZoneNumBG != nullptr)
+	{
+		m_pZoneNumBG->Uninit();
+		m_pZoneNumBG = nullptr;
+	}
 	if (m_pCemeteryUI != nullptr)
 	{
 		m_pCemeteryUI->Uninit();
@@ -60,7 +71,8 @@ void My::CZoneNumUIManager::SetCurrentCharacter_UI(D3DXVECTOR3 screen_pos, CActi
 		CPlayerDuelState* duel_state = dynamic_cast<CPlayerDuelState*>(state);
 		int cemetery_size = duel_state->GetZoneManager()->GetCemetery()->GetList().size();
 		m_pCemeteryUI->SetNumber(cemetery_size);
-
+		D3DXVECTOR3 life_pos = { 1170.0f,630.0f,0.0f };
+		m_pCemeteryUI->SetNumPos(life_pos);
 		// スクリーン座標に数字を描画
 		int i = INT_ZERO;
 		for (auto& itr : m_pCemeteryUI->GetNumVector())
@@ -69,19 +81,21 @@ void My::CZoneNumUIManager::SetCurrentCharacter_UI(D3DXVECTOR3 screen_pos, CActi
 
 			if (player == character)
 			{
-				D3DXVECTOR3 life_pos = { 300.0f,600.0f,0.0f };
-
 				// TODO: 30.0fは桁ずらし値 取得できるように変更予定
-				itr->SetPos({ life_pos.x - (i * 30.0f),life_pos.y,life_pos.z });
+				itr->SetPos({ life_pos.x - (i * 12.0f),life_pos.y,life_pos.z });
 			}
 			else
 			{
 				// TODO: 30.0fは桁ずらし値 取得できるように変更予定
-				itr->SetPos({ screen_pos.x - (i * 30.0f),screen_pos.y,screen_pos.z });
+				itr->SetPos({ screen_pos.x - (i * 12.0f),screen_pos.y,screen_pos.z });
 			}
 
 			//桁ずらす
 			++i;
 		}
+	}
+	if (m_pZoneNumBG != nullptr)
+	{
+		m_pZoneNumBG->SetPos({ 1190.0f,650.0f,0.0f });
 	}
 }

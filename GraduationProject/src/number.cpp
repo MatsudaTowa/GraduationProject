@@ -7,15 +7,11 @@
 #include "number.h"
 #include "manager.h"
 
-namespace
+const std::string My::CNumber_2D::TEXTURE_NAME[NUM_TEXTURE]
 {
-	const int NUM_TEXTURE = 2;
-	const std::string TEXTURE_NAME[NUM_TEXTURE]
-	{
-		 "data\\TEXTURE\\number.png",
-		 "data\\TEXTURE\\number.png"
-	};
-}
+	 "data\\TEXTURE\\number000.png",
+	 "data\\TEXTURE\\number.png"
+};
 
 //=============================================
 //コンストラクタ

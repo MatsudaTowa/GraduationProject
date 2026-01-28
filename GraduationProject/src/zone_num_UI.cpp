@@ -9,8 +9,7 @@
 namespace
 {
 	const int NUM_DIGIT = 1;										//桁数
-	const float DIGIT_SHIFT = 30.0f;								//桁ごとに座標をずらす
-	const D3DXVECTOR2 NUMBER_SIZE = D3DXVECTOR2(20.0f, 30.0f);		//数字のサイズ
+	const D3DXVECTOR2 NUMBER_SIZE = D3DXVECTOR2(8.0f, 15.0f);		//数字のサイズ
 }
 
 My::CZoneNumUI::CZoneNumUI():
@@ -27,11 +26,8 @@ HRESULT My::CZoneNumUI::Init()
 {
 	for (int nCnt = 0; nCnt < NUM_DIGIT; nCnt++)
 	{
-		CNumber_2D* pNumber = CNumber_2D::Create(m_num_pos, NUMBER_SIZE, CNumber_2D::TEX_001);
+		CZoneNum* pNumber = CZoneNum::Create(m_num_pos, NUMBER_SIZE, CNumber_2D::TEX_001);
 		m_pNumber.push_back(pNumber);
-
-		//座標をずらす
-		m_num_pos.x -= DIGIT_SHIFT;
 	}
 	return S_OK;
 }
@@ -80,7 +76,7 @@ void My::CZoneNumUI::SetNumber(int num)
 		fMinTexU = pos_texU[nCnt] * 0.1f;
 		fMaxTexU = fMinTexU + 0.1f;
 
-		m_pNumber[nCnt]->SetNumber(fMinTexU, fMaxTexU, COLOR_WHITE);
+		m_pNumber[nCnt]->SetNumber(fMinTexU, fMaxTexU, COLOR_BLACK);
 	}
 
 	pos_texU.clear();
@@ -94,11 +90,9 @@ void My::CZoneNumUI::AddDigit(std::vector<int>& pos_texU, int& num_digit, int nu
 		{
 			return;
 		}
-		CNumber_2D* pNumber;
+		CZoneNum* pNumber;
 
-		pNumber = CNumber_2D::Create(m_num_pos, NUMBER_SIZE, 1);
-		//座標をずらす
-		m_num_pos.x -= DIGIT_SHIFT;
+		pNumber = CZoneNum::Create(m_num_pos, NUMBER_SIZE, 1);
 		m_pNumber.push_back(pNumber);
 
 		++num_digit;
@@ -123,8 +117,6 @@ void My::CZoneNumUI::EraseDigit(std::vector<int> pos_texU, int& num_digit)
 		{
 			return;
 		}
-		//座標をずらす
-		m_num_pos.x += DIGIT_SHIFT;
 		CNumber_2D* pNumber = m_pNumber[num_digit - 1];
 		pNumber->Uninit();
 		pNumber = nullptr;

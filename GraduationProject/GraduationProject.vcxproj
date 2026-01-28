@@ -312,7 +312,9 @@
     <ClCompile Include="src\wait_zone_bg.cpp" />
     <ClCompile Include="src\zone.cpp" />
     <ClCompile Include="src\zone_manager.cpp" />
+    <ClCompile Include="src\zone_num.cpp" />
     <ClCompile Include="src\zone_num_UI.cpp" />
+    <ClCompile Include="src\zone_num_UI_BG.cpp" />
     <ClCompile Include="src\zone_num_UI_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -468,7 +470,9 @@
     <ClInclude Include="src\wait_zone_bg.h" />
     <ClInclude Include="src\zone.h" />
     <ClInclude Include="src\zone_manager.h" />
+    <ClInclude Include="src\zone_num.h" />
     <ClInclude Include="src\zone_num_UI.h" />
+    <ClInclude Include="src\zone_num_UI_BG.h" />
     <ClInclude Include="src\zone_num_UI_manager.h" />
     <ClInclude Include="thirdparty\EffekseerForDXLib\DxCompileConfig.h" />
     <ClInclude Include="thirdparty\EffekseerForDXLib\DxDataType.h" />

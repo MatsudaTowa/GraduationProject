@@ -9,6 +9,7 @@
 #include "main.h"
 #include "player_number_UI.h"
 #include "cemetery_num_UI.h"
+#include "zone_num_UI_BG.h"
 
 namespace My
 {
@@ -65,6 +66,7 @@ namespace My
 
 	private:
 		CCemeteryNumUI* m_pCemeteryUI;
+		CZoneNumUI_BG* m_pZoneNumBG;
 	};
 }
 

@@ -70,7 +70,7 @@ void My::CTitle::Update()
     CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;
     CInputMouse* pMouse = GET_INPUT_MOUSE;
 
-    if (pKeyboard->GetTrigger(DIK_RETURN) || pMouse->GetTrigger(0))
+    if (pKeyboard->GetTrigger(DIK_LSHIFT))
     {
         CRakNet::GetInstance()->SetOnline(false);
 
@@ -86,7 +86,7 @@ void My::CTitle::Update()
     }
 
     //左シフト押したらオンライン
-    if (pKeyboard->GetTrigger(DIK_LSHIFT))
+    if (pKeyboard->GetTrigger(DIK_RETURN) || pMouse->GetTrigger(0))
     {
         //オンライン
         CRakNet::GetInstance()->SetOnline(true);

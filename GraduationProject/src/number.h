@@ -18,7 +18,9 @@ namespace My
 	{
 	public:
 		static const int NUMBER_PRIORITY = 28;  //ï`âÊèá
+		static const int NUM_TEXTURE = 2;
 
+		static const std::string TEXTURE_NAME[NUM_TEXTURE];
 		enum TEX_TYPE
 		{
 			TEX_000 = 0,
