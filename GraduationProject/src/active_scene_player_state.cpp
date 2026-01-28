@@ -18,6 +18,7 @@
 #include "zone_manager.h"
 #include "button_deckdraw.h"
 #include "card_frame.h"
+#include "cemetery_num_UI.h"
 
 //=============================================
 // コンストラクタ
@@ -221,7 +222,11 @@ void My::CPlayerDuelState::CreateDuelUI(CActiveScenePlayer* player)
 	{
 		CCemeteryButton* pCemeteryButton = CCemeteryButton::Create(screen_pos, player);
 		player->GetPlayerUI()->SetCemeteryButton(pCemeteryButton);
-
+	}
+	if (player->GetPlayerUI()->GetCemeteryNumUI() == nullptr)
+	{
+		player->GetPlayerUI()->SetCemeteryNum(new CCemeteryNumUI);
+		player->GetPlayerUI()->GetCemeteryNumUI()->Init();
 	}
 	if (player->GetPlayerUI()->GetLifeUI() == nullptr)
 	{

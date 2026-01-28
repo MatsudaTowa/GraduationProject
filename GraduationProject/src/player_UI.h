@@ -11,6 +11,7 @@
 #include "active_scene_character.h"
 #include "cemetery_button.h"
 #include "button_deckdraw.h"
+#include "cemetery_num_UI.h"
 
 namespace My
 {
@@ -82,6 +83,16 @@ namespace My
 		}
 
 		/**
+		 * @brief 墓地の設定
+		 * @param [in]ボタンののポインタ
+		 */
+		inline void SetCemeteryNum(CCemeteryNumUI* pCemeteryNum)
+		{
+			m_pCemeteryNum = pCemeteryNum;
+		}
+
+
+		/**
 		 * @brief デッキドローボタンの設定
 		 * @param [in]デッキドローボタンのポインタ
 		 */
@@ -118,6 +129,15 @@ namespace My
 		}
 
 		/**
+		 * @brief 墓地数値の取得
+		 * @return [in]墓地ボタンのポインタ
+		 */
+		inline CCemeteryNumUI* GetCemeteryNumUI()
+		{
+			return m_pCemeteryNum;
+		}
+
+		/**
 		 * @brief デッキドローボタン取得
 		 * @return [in]デッキドローボタンのポインタ
 		 */
@@ -131,6 +151,7 @@ namespace My
 		CEnergy_UI* m_pEneryUI;					//!<エナジーUI TODO:UIのインスタンスをキャラクターで持たせないように改良
 		CCemeteryButton* m_pCemeteryButton;		//!<墓地ボタン
 		CButtonDeckDraw* m_pDeckDrawButton;		// デッキドローボタン
+		CCemeteryNumUI* m_pCemeteryNum;
 	};
 }
 

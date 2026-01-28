@@ -132,6 +132,11 @@ void My::CEnemyDuelState::CreateDuelUI(CEnemy* enemy)
 		CCemeteryButton* pCemeteryButton = CCemeteryButton::Create(screen_pos, enemy);
 		enemy->GetPlayerUI()->SetCemeteryButton(pCemeteryButton);
 	}
+	if (enemy->GetPlayerUI()->GetCemeteryNumUI() == nullptr)
+	{
+		enemy->GetPlayerUI()->SetCemeteryNum(new CCemeteryNumUI);
+		enemy->GetPlayerUI()->GetCemeteryNumUI()->Init();
+	}
 	if (enemy->GetPlayerUI()->GetLifeUI() == nullptr)
 	{
 		CLife_UI* pLifeUI = CLife_UI::Create(screen_pos);

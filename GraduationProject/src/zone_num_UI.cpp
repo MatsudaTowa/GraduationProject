@@ -9,7 +9,7 @@
 namespace
 {
 	const int NUM_DIGIT = 1;										//桁数
-	const D3DXVECTOR2 NUMBER_SIZE = D3DXVECTOR2(8.0f, 15.0f);		//数字のサイズ
+	const D3DXVECTOR2 NUMBER_SIZE = D3DXVECTOR2(15.0f, 20.0f);		//数字のサイズ
 }
 
 My::CZoneNumUI::CZoneNumUI():
@@ -26,7 +26,7 @@ HRESULT My::CZoneNumUI::Init()
 {
 	for (int nCnt = 0; nCnt < NUM_DIGIT; nCnt++)
 	{
-		CZoneNum* pNumber = CZoneNum::Create(m_num_pos, NUMBER_SIZE, CNumber_2D::TEX_001);
+		CZoneNum* pNumber = CZoneNum::Create(m_num_pos, NUMBER_SIZE, CNumber_2D::TEX_000);
 		m_pNumber.push_back(pNumber);
 	}
 	return S_OK;
@@ -76,7 +76,7 @@ void My::CZoneNumUI::SetNumber(int num)
 		fMinTexU = pos_texU[nCnt] * 0.1f;
 		fMaxTexU = fMinTexU + 0.1f;
 
-		m_pNumber[nCnt]->SetNumber(fMinTexU, fMaxTexU, COLOR_BLACK);
+		m_pNumber[nCnt]->SetNumber(fMinTexU, fMaxTexU, COLOR_WHITE);
 	}
 
 	pos_texU.clear();
@@ -84,15 +84,12 @@ void My::CZoneNumUI::SetNumber(int num)
 
 void My::CZoneNumUI::AddDigit(std::vector<int>& pos_texU, int& num_digit, int num)
 {
-	if (pos_texU[num_digit - 1] == INT_ZERO)
-	{//桁を増やす
-		if (num_digit <= 0 || num <= 0)
-		{
-			return;
-		}
+	//弾く条件
+	if (num < 10) return;						//エナジーが10未満なら抜ける
+	if (num_digit <= 0 || num_digit > 1) return;	//桁数が0以下、2桁以上なら抜ける
 		CZoneNum* pNumber;
 
-		pNumber = CZoneNum::Create(m_num_pos, NUMBER_SIZE, 1);
+		pNumber = CZoneNum::Create(m_num_pos, NUMBER_SIZE, CNumber_2D::TEX_000);
 		m_pNumber.push_back(pNumber);
 
 		++num_digit;
@@ -106,7 +103,6 @@ void My::CZoneNumUI::AddDigit(std::vector<int>& pos_texU, int& num_digit, int nu
 			//桁を進める
 			nDigit *= 10;
 		}
-	}
 }
 
 void My::CZoneNumUI::EraseDigit(std::vector<int> pos_texU, int& num_digit)

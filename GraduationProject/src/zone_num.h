@@ -17,7 +17,7 @@ namespace My
 	class CZoneNum :public CNumber_2D
 	{
 	public:
-		static const int NUMBER_PRIORITY = 9;  //描画順
+		static const int NUMBER_PRIORITY = 25;  //描画順
 
 		/**
 		 * @brief コンストラクタ

@@ -128,7 +128,7 @@ void My::CEnergy_UI::AddDigit(std::vector<int>& pos_texU, int& num_digit, int en
 
 	CNumber_2D* pNumber;
 
-	pNumber = CNumber_2D::Create(m_num_pos, NUMBER_SIZE, 1);
+	pNumber = CNumber_2D::Create(m_num_pos, NUMBER_SIZE, CNumber_2D::TEX_001);
 	//ç¿ïWÇÇ∏ÇÁÇ∑
 	m_num_pos.x -= DIGIT_SHIFT;
 	m_pNumber.push_back(pNumber);

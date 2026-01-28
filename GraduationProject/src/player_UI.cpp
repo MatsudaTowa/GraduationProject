@@ -6,8 +6,9 @@
 //=============================================
 #include "player_UI.h"
 #include "active_scene_player_state.h"
+#include "enemy_state.h"
 #include "active_scene_manager.h"
-
+#include "zone_manager.h"
 //=============================================
 // コンストラクタ
 //=============================================
@@ -51,6 +52,11 @@ void My::CPlayerUI::Uninit()
 	{
 		m_pCemeteryButton->Uninit();
 		m_pCemeteryButton = nullptr;
+	}
+	if (m_pCemeteryNum != nullptr)
+	{
+		m_pCemeteryNum->Uninit();
+		m_pCemeteryNum = nullptr;
 	}
 	if (m_pNumberUI != nullptr)
 	{
@@ -177,17 +183,63 @@ void My::CPlayerUI::SetCurrentCharacter_UI(D3DXVECTOR3 screen_pos, CActiveSceneC
 		// プレイヤーと他の敵でずらす位置を変える TODO:いるエリアに応じてずらしたほうが綺麗
 		if (player == character)
 		{
-			D3DXVECTOR2 ShiftSize{ 60.0f,60.0f };
+			D3DXVECTOR2 ShiftSize{ 38.0f,38.0f };
 			m_pCemeteryButton->SetSize(ShiftSize);
 			ShiftPos = { -400.0f,-100.0f };
 		}
 		else
 		{
-			ShiftPos = { -70.0f,-80.0f };
+			ShiftPos = { -75.0f,-80.0f };
 		}
 
 		m_pCemeteryButton->SetPos({ screen_pos.x + ShiftPos.x,screen_pos.y + ShiftPos.y,screen_pos.z });
 		m_pCemeteryButton->ProcessMouseEvent();
+	}
+	if (m_pCemeteryNum == nullptr)
+	{
+		return;
+	}
+
+	int cemetery_size = 0;
+	D3DXVECTOR3 basePos = VEC3_RESET_ZERO;
+
+	bool isDraw;
+	if (player == character)
+	{
+		CPlayerDuelState* duel_state = dynamic_cast<CPlayerDuelState*>(player->GetState());
+		cemetery_size = duel_state->GetZoneManager()->GetCemetery()->GetList().size();
+
+		basePos = { 248.0f, 580.0f, 0.0f };
+
+		//墓地を見てないときに数字を表示する
+		isDraw = !duel_state->GetIsCemeteryView();
+	}
+	else
+	{
+		CEnemyDuelState* duel_state =dynamic_cast<CEnemyDuelState*>(character->GetState());
+		cemetery_size = duel_state->GetZoneManager()->GetCemetery()->GetList().size();
+
+		// いくつずらすか
+		D3DXVECTOR2 ShiftPos = VEC2_RESET_ZERO;
+		ShiftPos = { -70.0f,-80.0f };
+
+		basePos = { screen_pos.x + ShiftPos.x,screen_pos.y + ShiftPos.y,screen_pos.z };
+
+		//墓地を見てないときに数字を表示する
+		isDraw = !duel_state->GetIsCemeteryView();
+	}
+
+	// 数字設定
+	m_pCemeteryNum->SetNumber(cemetery_size);
+	m_pCemeteryNum->SetNumPos(basePos);
+
+	// 桁ずらし描画
+	int i = 0;
+	for (auto& itr : m_pCemeteryNum->GetNumVector())
+	{
+		itr->SetPos({basePos.x - (i * 20.0f),basePos.y,basePos.z});
+		itr->SetisDraw(isDraw);
+		++i;
 	}
 }
 
