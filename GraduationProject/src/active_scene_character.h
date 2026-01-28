@@ -14,7 +14,6 @@
 #include "condition.h"
 #include "player_UI.h"
 #include "target_arrow_manager.h"
-#include "zone_num_UI_manager.h"
 /** @brief My 名前空間 */
 namespace My
 {
@@ -270,11 +269,6 @@ namespace My
 			return m_pPlayerUI;
 		}
 
-		inline CZoneNumUIManager* GetZoneManager()
-		{
-			return m_zoneNumUIManager;
-		}
-
 		inline CInputMouse::AREA GetArea()
 		{
 			return m_area;
@@ -312,8 +306,6 @@ namespace My
 
 		int m_playerIdx = -1;		//!自分自身のID(接続順)
 		bool m_isHost = false;		//!ホストかどうか
-
-		CZoneNumUIManager* m_zoneNumUIManager;
 
 		CActiveSceneCharacterState* m_pState;	//!ステート
 		std::list<CCondition*> m_ConditionList;	//コンディションリスト

@@ -172,13 +172,7 @@
     <ClCompile Include="src\zone_num_UI.cpp">
       <Filter>ZoneNumInfoUI</Filter>
     </ClCompile>
-    <ClCompile Include="src\zone_num_UI_manager.cpp">
-      <Filter>ZoneNumInfoUI</Filter>
-    </ClCompile>
     <ClCompile Include="src\cemetery_num_UI.cpp">
-      <Filter>ZoneNumInfoUI</Filter>
-    </ClCompile>
-    <ClCompile Include="src\zone_num_UI_BG.cpp">
       <Filter>ZoneNumInfoUI</Filter>
     </ClCompile>
     <ClCompile Include="src\zone_num.cpp">
@@ -376,13 +370,7 @@
     <ClInclude Include="src\zone_num_UI.h">
       <Filter>ZoneNumInfoUI</Filter>
     </ClInclude>
-    <ClInclude Include="src\zone_num_UI_manager.h">
-      <Filter>ZoneNumInfoUI</Filter>
-    </ClInclude>
     <ClInclude Include="src\cemetery_num_UI.h">
-      <Filter>ZoneNumInfoUI</Filter>
-    </ClInclude>
-    <ClInclude Include="src\zone_num_UI_BG.h">
       <Filter>ZoneNumInfoUI</Filter>
     </ClInclude>
     <ClInclude Include="src\zone_num.h">

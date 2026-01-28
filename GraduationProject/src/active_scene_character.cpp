@@ -18,7 +18,6 @@ m_status(),
 m_isHost(false),
 m_playerIdx(-1),
 m_pPlayerUI(nullptr),
-m_zoneNumUIManager(nullptr),
 m_area(),
 m_Deck()
 {
@@ -70,15 +69,6 @@ HRESULT My::CActiveSceneCharacter::Init()
 	return S_OK;
 }
 
-void My::CActiveSceneCharacter::CreateZoneNumUI()
-{
-	if (m_zoneNumUIManager == nullptr)
-	{
-		m_zoneNumUIManager = new CZoneNumUIManager;
-		m_zoneNumUIManager->Init(this);
-	}
-}
-
 //=============================================
 // I—¹
 //=============================================
@@ -94,12 +84,6 @@ void My::CActiveSceneCharacter::Uninit()
 		m_pPlayerUI->Uninit();
 		delete m_pPlayerUI;
 		m_pPlayerUI = nullptr;
-	}
-	if (m_zoneNumUIManager != nullptr)
-	{
-		m_zoneNumUIManager->Uninit();
-		delete m_zoneNumUIManager;
-		m_zoneNumUIManager = nullptr;
 	}
 
 	CCharacter::Uninit();
@@ -140,10 +124,6 @@ void My::CActiveSceneCharacter::UpdateUI()
 	if (m_pPlayerUI != nullptr)
 	{
 		m_pPlayerUI->SetCurrentCharacter_UI({screen_pos},this);
-	}
-	if (m_zoneNumUIManager != nullptr)
-	{
-		m_zoneNumUIManager->SetCurrentCharacter_UI({ screen_pos }, this);
 	}
 }
 
