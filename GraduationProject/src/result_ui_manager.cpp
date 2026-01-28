@@ -484,6 +484,13 @@ void My::CResultUIManager::Update()
 		// 出現開始時間が経過していたら
 		else
 		{
+			// TODO : UIと同タイミングでSEを鳴らす
+			if (m_PlayerIDsElapsedTime[nCnt] == RANKINGS[nCnt].elapsedTime)
+			{
+				//BGMの設定
+				CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_RANKING);
+			}
+
 			// 出現時間が経過していなかったら
 			if (m_RankingsElapsedTime[nCnt] > 0)
 			{
