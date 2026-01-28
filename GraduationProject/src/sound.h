@@ -10,6 +10,28 @@
 
 //ヘッダーのインクルード
 #include "main.h"
+#include <functional>
+#include <xaudio2.h>
+
+// コールバッククラス
+class CSoundCallBack : public IXAudio2VoiceCallback
+{
+public:
+	std::function<void()>onFinish;
+	void STDMETHODCALLTYPE OnBufferEnd(void* pBufferContext)override
+	{
+		if (onFinish)
+		{
+			onFinish();
+		}
+	}
+	void STDMETHODCALLTYPE OnStreamEnd() override {} 
+	void STDMETHODCALLTYPE OnVoiceProcessingPassEnd() override {} 
+	void STDMETHODCALLTYPE OnVoiceProcessingPassStart(UINT32) override {} 
+	void STDMETHODCALLTYPE OnBufferStart(void*) override {} 
+	void STDMETHODCALLTYPE OnLoopEnd(void*) override {} 
+	void STDMETHODCALLTYPE OnVoiceError(void*, HRESULT) override {}
+};
 
 //サウンドクラス
 class CSound
@@ -48,8 +70,10 @@ public:
 	HRESULT Init(HWND hWnd);				//初期化
 	void Uninit(void);						//終了処理
 	HRESULT PlaySound(SOUND_LABEL label);	//サウンドを流す
+	HRESULT PlaySound(SOUND_LABEL label, std::function<void()>onFinish);
 	void Stop(SOUND_LABEL label);			//サウンドを一つを止める
 	void Stop(void);						//全てのサウンドを止める
+	bool IsPlaySound(SOUND_LABEL label);	//音が鳴り終わったか判断
 private:
 	IXAudio2* m_pXAudio2 = NULL;								// XAudio2オブジェクトへのインターフェイス
 	IXAudio2MasteringVoice* m_pMasteringVoice = NULL;			// マスターボイス
