@@ -14,6 +14,7 @@
 #include "active_scene_player_state.h"
 #include "lobby_character_icon_UI.h"
 #include "character_lobby_UI_manager.h"
+#include "manager.h"
 
 //=====================================
 //コンストラクタ
@@ -125,6 +126,10 @@ void CClient_Lobby::Regist(RakNet::Packet* packet)
 
         ++nLap; //インクリメント
     }
+
+    // TODO : SEを追加(ロビー入出音)
+    My::CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_INLOBBY);
+
 }
 
 //=====================================
