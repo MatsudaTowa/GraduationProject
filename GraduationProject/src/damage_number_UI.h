@@ -49,9 +49,6 @@ namespace My
 		 */
 		void Draw()override;
 
-		void Start();
-		void Wait();
-		void End();
 		/**
 		 * @brief 生成
 		 * @param [in]位置
@@ -60,15 +57,25 @@ namespace My
 		 */
 		static CDamageNumberUI* Create(D3DXVECTOR3 pos, int num);
 
+		/**
+		* @brief ステートの設定
+		* @param [in]ステートのポインタ
+		*/
 		void SetState(DamageNumberState* state)
 		{
+			// 古いステートを削除
 			if (m_pState != nullptr)
 			{
 				delete m_pState;
 			}
+			// 新しいステートを設定
 			m_pState = state;
 		}
 
+		/**
+		* @brief ステートの取得
+		* @return ステートのポインタ
+		*/
 		DamageNumberState* GetState()
 		{
 			return m_pState;
@@ -79,6 +86,9 @@ namespace My
 		float m_fLife;
 		float m_num;
 
+		/**
+		* UI表記のステート
+		*/
 		DamageNumberState* m_pState;
 	};
 
@@ -87,30 +97,44 @@ namespace My
 
 namespace My
 {
+	//=============================================
+	// ダメージUIのステート基底クラス
+	//=============================================
 	class DamageNumberState
 	{
 	public:
 		virtual void Update(CDamageNumberUI* ui) = 0;
 	};
 
+	//=============================================
+	// ダメージUIのステート：開始時
+	//=============================================
 	class Start : public DamageNumberState
 	{
 	public:
 		void Update(CDamageNumberUI* ui) override;
 
 	private:
+		// 最大サイズ
 		static constexpr float MAX_SIZE = 45.0f;
 	};
 
+	//=============================================
+	// ダメージUIのステート：待機時
+	//=============================================
 	class Wait : public DamageNumberState
 	{
 	public:
 		void Update(CDamageNumberUI* ui) override;
 
 	private:
+		// 待機時間
 		float m_fWaitTime = 0.3f;
 	};
 
+	//=============================================
+	// ダメージUIのステート：終了時
+	//=============================================
 	class End : public DamageNumberState
 	{
 	public:
