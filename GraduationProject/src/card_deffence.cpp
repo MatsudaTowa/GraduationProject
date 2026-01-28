@@ -373,7 +373,7 @@ bool My::CCardDeffence::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharac
 			if (GET_COLISION->Check2DPolygonColision(GET_INPUT_MOUSE->GetMousePos(), { 3.0f,3.0f }, { pRange->GetPos() }, pRange->GetSize()))
 			{
 				// キャストキャンセルのSEを鳴らす
-				CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_CAST_CANCEL);
+				CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_CAST_CANCEL);
 
 				//通常状態にする
 				ChangeState(CCardState::CARD_NEUTRAL, duel);
@@ -389,7 +389,7 @@ bool My::CCardDeffence::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharac
 		if (player->GetEnergy() < GetBaseStatus().nCost)
 		{
 			// キャスト失敗時のSEを鳴らす
-			CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_CAST_FAIL);
+			CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_CAST_FAIL);
 
 			// 通常状態にする
 			ChangeState(CCardState::CARD_NEUTRAL, duel);
