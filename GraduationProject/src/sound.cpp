@@ -190,6 +190,8 @@ HRESULT CSound::Init(HWND hWnd)
 		CloseHandle(hFile);
 	}
 
+	LoadDuelBGMList();
+
 	return S_OK;
 }
 
@@ -269,12 +271,33 @@ HRESULT CSound::PlaySound(SOUND_LABEL label)
 
 	//return S_OK;
 
+	if (label == SOUND_LABEL_BGM_DUEL)
+	{// デュエルBGMを鳴らしたいときだけ鳴らすものを抽選
+		if (!m_DuelBGMList.empty())
+		{
+			int index = IntRandom(0, m_DuelBGMList.size());
+			const char* filename = m_DuelBGMList[index].c_str();
+
+			// ランダムで選ばれたファイルを再生
+			return PlaySoundFromFile(filename, SOUND_INFO[label].Volume, SOUND_INFO[label].nCntLoop);
+		}
+	}
 	// SEの複数再生用
 	XAUDIO2_BUFFER buffer = {};
 	buffer.AudioBytes = m_aSizeAudio[label];
 	buffer.pAudioData = m_apDataAudio[label];
 	buffer.Flags = XAUDIO2_END_OF_STREAM;
 	buffer.LoopCount = SOUND_INFO[label].nCntLoop;
+
+	if (label == SOUND_LABEL_BGM_DUEL)
+	{
+		if (!m_DuelBGMList.empty())
+		{
+			int index = IntRandom(0, m_DuelBGMList.size());
+			const char* filename = m_DuelBGMList[index].c_str();
+
+		}
+	}
 
 	if (SOUND_INFO[label].nCntLoop == 0)
 	{// SEの場合毎回SourceVoiceを作る
@@ -359,6 +382,19 @@ HRESULT CSound::PlaySound(SOUND_LABEL label, std::function<void()> onFinish)
 //=============================================================================
 void CSound::Stop(SOUND_LABEL label)
 {
+	// デュエルBGM専用処理
+	if (label == SOUND_LABEL_BGM_DUEL)
+	{
+		if (m_pDuelBGMVoice)
+		{
+			m_pDuelBGMVoice->Stop(0);
+			m_pDuelBGMVoice->FlushSourceBuffers();
+			m_pDuelBGMVoice->DestroyVoice();
+			m_pDuelBGMVoice = nullptr;
+		}
+		return;
+	}
+
 	XAUDIO2_VOICE_STATE xa2state;
 
 	// 状態取得
@@ -391,6 +427,8 @@ void CSound::Stop(void)
 			m_apSourceVoice[nCntSound]->Stop(0);
 		}
 	}
+
+
 }
 
 //=============================================================================
@@ -407,6 +445,121 @@ bool CSound::IsPlaySound(SOUND_LABEL label)
 	m_apSourceVoice[label]->GetState(&state);
 
 	return (state.BuffersQueued > 0);
+}
+
+//=============================================================================
+// 戦闘用BGMリスト読み込み
+//=============================================================================
+void CSound::LoadDuelBGMList()
+{
+	WIN32_FIND_DATAA fd;
+	HANDLE hFind = FindFirstFileA("data\\SOUND\\BGM\\duel\\*.wav", &fd);
+
+	if (hFind != INVALID_HANDLE_VALUE)
+	{
+		do
+		{
+			m_DuelBGMList.push_back(std::string("data\\SOUND\\BGM\\duel\\") + fd.cFileName);
+		} while (FindNextFileA(hFind, &fd));
+
+		FindClose(hFind);
+	}
+}
+
+//=============================================================================
+// 音声再生処理
+//=============================================================================
+HRESULT CSound::PlaySoundFromFile(const char* filename, float volume, int loopCount)
+{
+	HANDLE hFile;
+	DWORD dwChunkSize = 0;
+	DWORD dwChunkPosition = 0;
+	DWORD dwFiletype;
+
+	WAVEFORMATEXTENSIBLE wfx;
+	XAUDIO2_BUFFER buffer;
+
+	memset(&wfx, 0, sizeof(WAVEFORMATEXTENSIBLE));
+	memset(&buffer, 0, sizeof(XAUDIO2_BUFFER));
+
+	hFile = CreateFile(filename, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
+	if (hFile == INVALID_HANDLE_VALUE)
+	{
+		return HRESULT_FROM_WIN32(GetLastError());
+	}
+
+	if (SetFilePointer(hFile, 0, NULL, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
+	{
+		return HRESULT_FROM_WIN32(GetLastError());
+	}
+
+	// RIFFチャンク
+	HRESULT hr = CheckChunk(hFile, 'FFIR', &dwChunkSize, &dwChunkPosition);
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+
+	hr = ReadChunkData(hFile, &dwFiletype, sizeof(DWORD), dwChunkPosition);
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+
+	if (dwFiletype != 'EVAW')
+	{
+		return S_FALSE;
+	}
+
+	// fmtチャンク
+	hr = CheckChunk(hFile, ' tmf', &dwChunkSize, &dwChunkPosition);
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+
+	hr = ReadChunkData(hFile, &wfx, dwChunkSize, dwChunkPosition);
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+
+	// dataチャンク
+	DWORD audioSize = 0;
+	hr = CheckChunk(hFile, 'atad', &audioSize, &dwChunkPosition);
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+
+	BYTE* audioData = (BYTE*)malloc(audioSize);
+	hr = ReadChunkData(hFile, audioData, audioSize, dwChunkPosition);
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+
+	CloseHandle(hFile);
+
+	// SourceVoice作成
+	IXAudio2SourceVoice* pVoice = nullptr;
+	hr = m_pXAudio2->CreateSourceVoice(&pVoice, &(wfx.Format));
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+
+	buffer.AudioBytes = audioSize;
+	buffer.pAudioData = audioData;
+	buffer.Flags = XAUDIO2_END_OF_STREAM;
+	buffer.LoopCount = loopCount;
+
+	pVoice->SetVolume(volume);
+	pVoice->SubmitSourceBuffer(&buffer);
+	pVoice->Start(0);
+
+	m_pDuelBGMVoice = pVoice;	// デュエル専用のため保存
+	return S_OK;
 }
 
 //=============================================================================

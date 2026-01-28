@@ -81,6 +81,10 @@ public:
 	void Stop(SOUND_LABEL label);			//サウンドを一つを止める
 	void Stop(void);						//全てのサウンドを止める
 	bool IsPlaySound(SOUND_LABEL label);	//音が鳴り終わったか判断
+
+	void LoadDuelBGMList();	// 戦闘用BGM読み込み処理
+
+	HRESULT PlaySoundFromFile(const char* filename, float volume, int loopCount);
 private:
 	IXAudio2* m_pXAudio2 = NULL;								// XAudio2オブジェクトへのインターフェイス
 	IXAudio2MasteringVoice* m_pMasteringVoice = NULL;			// マスターボイス
@@ -88,6 +92,8 @@ private:
 	BYTE* m_apDataAudio[SOUND_LABEL_MAX] = {};					// オーディオデータ
 	DWORD m_aSizeAudio[SOUND_LABEL_MAX] = {};					// オーディオデータサイズ
 	WAVEFORMATEX m_aWfx[SOUND_LABEL_MAX];
+	std::vector<std::string>m_DuelBGMList;
+	IXAudio2SourceVoice* m_pDuelBGMVoice = nullptr;	// デュエルBGM専用のソースボイス
 };
 
 #endif
