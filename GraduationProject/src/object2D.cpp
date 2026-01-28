@@ -60,6 +60,52 @@ void My::CObject2D::Uninit()
  */
 void My::CObject2D::Update()
 {
+	CRenderer* pRender = GET_RENDERER;
+
+	LPDIRECT3DDEVICE9 pDevice = pRender->GetDevice();
+	if (m_pVtxBuff == nullptr)
+	{
+		pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4, D3DUSAGE_WRITEONLY, FVF_VERTEX_2D, D3DPOOL_MANAGED, &m_pVtxBuff, NULL);
+	}
+	VERTEX_2D* pVtx;
+	//頂点バッファをロックし頂点情報へのポインタを取得
+
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	// 対角線の角度を算出する
+	float angle = atan2f(m_size.x, m_size.y);
+	// 対角線の長さを算出する
+	float leng = sqrtf(m_size.x * m_size.x + m_size.y * m_size.y);
+
+	//頂点座標の設定
+	pVtx[0].pos = D3DXVECTOR3(
+		m_pos.x + sinf(m_rot.z + (D3DX_PI + angle)) * leng,
+		m_pos.y + cosf(m_rot.z + (D3DX_PI + angle)) * leng,
+		0.0f);
+
+	pVtx[1].pos = D3DXVECTOR3(
+		m_pos.x + sinf(m_rot.z + (D3DX_PI - angle)) * leng,
+		m_pos.y + cosf(m_rot.z + (D3DX_PI - angle)) * leng,
+		0.0f);
+
+	pVtx[2].pos = D3DXVECTOR3(
+		m_pos.x + sinf(m_rot.z + (-angle)) * leng,
+		m_pos.y + cosf(m_rot.z + (-angle)) * leng,
+		0.0f);
+
+	pVtx[3].pos = D3DXVECTOR3(
+		m_pos.x + sinf(m_rot.z + (angle)) * leng,
+		m_pos.y + cosf(m_rot.z + (angle)) * leng,
+		0.0f);
+
+	//頂点カラーの設定
+	pVtx[0].col =
+		pVtx[1].col =
+		pVtx[2].col =
+		pVtx[3].col = m_col;
+
+	//アンロック
+	m_pVtxBuff->Unlock();
 }
 
 /**

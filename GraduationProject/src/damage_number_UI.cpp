@@ -123,6 +123,9 @@ My::CDamageNumberUI* My::CDamageNumberUI::Create(D3DXVECTOR3 pos, int num)
 	return pUI;
 }
 
+//=============================================
+// UI状態：Start更新
+//=============================================
 void My::Start::Update(CDamageNumberUI* ui)
 {
 	// サイズを大きくする
@@ -145,9 +148,12 @@ void My::Start::Update(CDamageNumberUI* ui)
 
 }
 
+//=============================================
+// UI状態：Wait更新
+//=============================================
 void My::Wait::Update(CDamageNumberUI* ui)
 {
-	//経過時間を取得
+	// 経過時間を取得
 	if (CRakNet::GetInstance()->GetOnline())
 	{
 		m_fWaitTime -= My::CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime();
@@ -157,20 +163,24 @@ void My::Wait::Update(CDamageNumberUI* ui)
 		m_fWaitTime -= My::CDuel_Manager::GetInstance()->GetDuelTimer().GetdeltaTime();	//オフライン用
 	}
 
-	//待機時間が過ぎたらEnd状態に移行
+	// 待機時間が過ぎたらEnd状態に移行
 	if (m_fWaitTime <= 0.0f)
 	{
 		ui->SetState(new My::End);
 	}
 }
 
+//=============================================
+// UI状態：End更新
+//=============================================
 void My::End::Update(CDamageNumberUI* ui)
 {
-	//透明度を上げる
+	// 透明度を下げる
 	D3DXCOLOR col = ui->GetColor();
-	col.a -= 0.01f;
+	col.a -= 0.03f;
 	ui->SetColor(col);
 
+	// 透明になったら消す
 	if(col.a <= 0.0f)
 	{
 		ui->Uninit();

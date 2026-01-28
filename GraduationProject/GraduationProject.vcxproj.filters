@@ -184,6 +184,10 @@
     <ClCompile Include="src\zone_num.cpp">
       <Filter>ZoneNumInfoUI</Filter>
     </ClCompile>
+    <ClCompile Include="src\countdown_number_UI.cpp" />
+    <ClCompile Include="src\countdown_start_UI.cpp" />
+    <ClCompile Include="src\countdown_UI.cpp" />
+    <ClCompile Include="src\countdown_UI_factory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -384,6 +388,10 @@
     <ClInclude Include="src\zone_num.h">
       <Filter>ZoneNumInfoUI</Filter>
     </ClInclude>
+    <ClInclude Include="src\countdown_number_UI.h" />
+    <ClInclude Include="src\countdown_start_UI.h" />
+    <ClInclude Include="src\countdown_UI.h" />
+    <ClInclude Include="src\countdown_UI_factory.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GraduationProject.rc" />

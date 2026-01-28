@@ -19,6 +19,7 @@ const CSound::SOUNDINFO CSound::SOUND_INFO[CSound::SOUND_LABEL_MAX] =
 	{"data\\SOUND\\BGM\\lobby000.wav", -1, 0.5f},			//ロビーBGM
 	{"data\\SOUND\\BGM\\duel000.wav", -1, 0.5f},			//デュエルBGM
 	{"data\\SOUND\\BGM\\result000.wav", -1, 0.5f},			//リザルトBGM
+	{"data\\SOUND\\SE\\inlobby000.wav", 0, 1.0f},			//カードシャッフルSE
 	{"data\\SOUND\\SE\\shuffling_cards.wav", 0, 1.0f},		//カードシャッフルSE
 	{"data\\SOUND\\SE\\Draw_a_card.wav", 0, 1.0f},			//カードドローSE
 	{"data\\SOUND\\SE\\Incorrect.wav", 0, 1.0f},			//キャスト失敗SE
@@ -307,6 +308,47 @@ HRESULT CSound::PlaySound(SOUND_LABEL label)
 }
 
 //=============================================================================
+// セグメント再生(再生中なら停止)
+//=============================================================================
+HRESULT CSound::PlaySound(SOUND_LABEL label, std::function<void()> onFinish)
+{
+	XAUDIO2_BUFFER buffer = {};
+	buffer.AudioBytes = m_aSizeAudio[label];
+	buffer.pAudioData = m_apDataAudio[label];
+	buffer.Flags = XAUDIO2_END_OF_STREAM;
+
+	if (SOUND_INFO[label].nCntLoop == 0)
+	{// SEの時にだけコールバックする
+		CSoundCallBack* callback = new CSoundCallBack();
+		callback->onFinish = onFinish;
+
+		IXAudio2SourceVoice* pVoice = nullptr;
+
+		HRESULT hr = m_pXAudio2->CreateSourceVoice(
+			&pVoice,
+			&m_aWfx[label],
+			0,
+			XAUDIO2_DEFAULT_FREQ_RATIO,
+			callback
+		);
+
+		if (FAILED(hr))
+		{
+			delete callback;
+			return hr;
+		}
+
+		pVoice->SubmitSourceBuffer(&buffer);
+		pVoice->Start(0);
+
+		return S_OK;
+	}
+
+	// BGMなど繰り返し再生するもの
+	return PlaySound(label);
+}
+
+//=============================================================================
 // セグメント停止(ラベル指定)
 //=============================================================================
 void CSound::Stop(SOUND_LABEL label)
@@ -343,6 +385,22 @@ void CSound::Stop(void)
 			m_apSourceVoice[nCntSound]->Stop(0);
 		}
 	}
+}
+
+//=============================================================================
+// 音が鳴り終わったか判断(全て)
+//=============================================================================
+bool CSound::IsPlaySound(SOUND_LABEL label)
+{
+	if (m_apSourceVoice[label] == nullptr)
+	{
+		return false;
+	}
+
+	XAUDIO2_VOICE_STATE state;
+	m_apSourceVoice[label]->GetState(&state);
+
+	return (state.BuffersQueued > 0);
 }
 
 //=============================================================================
