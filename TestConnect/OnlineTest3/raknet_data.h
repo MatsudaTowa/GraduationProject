@@ -58,7 +58,7 @@ public:
 
 	//関数
 	CRakNet_Data()/* : m_PlayerParamList()*/ { /*m_PlayerParamList.clear();*/ } 		//コンストラクタ
-	~CRakNet_Data() {}	//デストラクタ
+	virtual ~CRakNet_Data() {}	//デストラクタ
 
 	//送受信の処理
 	virtual void NewConnection(RakNet::Packet* packet, RakNet::RakPeerInterface* peer);					//新しく接続する処理
@@ -88,6 +88,7 @@ public:
 	virtual void SetData(std::list<CPlayer::ChangeData> data) = 0;	//設定
 	virtual std::list<CPlayer::ChangeData> GetData() = 0;			//取得
 	virtual bool ReceiveDeck(RakNet::Packet* packet);				//デッキの受信
+	virtual void DeletePlayer() = 0;								//プレイヤーの削除
 
 private:
 

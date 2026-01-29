@@ -17,6 +17,7 @@
 My::CCardManager::CCardManager()
 {
 	m_CardVector.clear();
+	m_DuelCardVector.clear();
 }
 
 //================================
@@ -25,6 +26,7 @@ My::CCardManager::CCardManager()
 My::CCardManager::~CCardManager()
 {
 	m_CardVector.clear();
+	m_DuelCardVector.clear();
 }
 
 //================================
@@ -151,4 +153,19 @@ CCard_Client::Param My::CCardManager::GetCardParam(int id)
 
 	//引数のIDのカードを返す
 	return m_CardVector[id - 1];
+}
+
+//================================
+//対戦時に使ったカードリストの削除
+//================================
+void My::CCardManager::ResetDuelCards()
+{
+	for (auto& iter : m_DuelCardVector)
+	{
+		if (iter == nullptr) continue;
+		delete iter;
+		iter = nullptr;
+	}
+
+	m_DuelCardVector.clear();
 }

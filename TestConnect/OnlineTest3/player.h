@@ -42,7 +42,7 @@ public:
 	
 	//関数
 	CPlayer() : m_nIndex(-1), m_RakNetID(), m_Tag(TAG_PLAYER), m_Deck(){} 	//コンストラクタ
-	~CPlayer() {}								//デストラクタ
+	virtual ~CPlayer() {}								//デストラクタ
 
 	//設定と取得
 

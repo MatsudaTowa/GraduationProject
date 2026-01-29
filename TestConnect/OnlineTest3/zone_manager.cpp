@@ -27,12 +27,41 @@ My::CZoneManager::CZoneManager():
 */
 My::CZoneManager::~CZoneManager()
 {
-	m_pDeck = nullptr;
-	m_pCemetery = nullptr;
-	m_pFieldZone = nullptr;
-	m_pHandZone = nullptr;
-	m_pWaitZone = nullptr;
-	m_pCastPreviewZone = nullptr;
+	if (m_pDeck != nullptr)
+	{
+		delete m_pDeck;
+		m_pDeck = nullptr;
+	}
+
+	if (m_pCemetery != nullptr)
+	{
+		delete m_pCemetery;
+		m_pCemetery = nullptr;
+	}
+
+	if (m_pFieldZone != nullptr)
+	{
+		delete m_pFieldZone;
+		m_pFieldZone = nullptr;
+	}
+
+	if (m_pHandZone != nullptr)
+	{
+		delete m_pHandZone;
+		m_pHandZone = nullptr;
+	}
+
+	if (m_pWaitZone != nullptr)
+	{
+		delete m_pWaitZone;
+		m_pWaitZone = nullptr;
+	}
+
+	if (m_pCastPreviewZone != nullptr)
+	{
+		delete m_pCastPreviewZone;
+		m_pCastPreviewZone = nullptr;
+	}
 }
 
 /**

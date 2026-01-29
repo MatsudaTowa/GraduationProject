@@ -38,8 +38,8 @@ namespace My
 		};
 
 		//関数
-		CDuel_Player(); 	//コンストラクタ
-		~CDuel_Player() {}	//デストラクタ
+		CDuel_Player(); 			//コンストラクタ
+		~CDuel_Player() override;	//デストラクタ
 
 		//エナジーの更新
 		bool UpdateEnergy(int deltatime);	//エナジーの更新

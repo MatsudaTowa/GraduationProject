@@ -449,3 +449,21 @@ bool CLobby_Data::IsPlayerExist()
 {
     return !m_LobbyPlayerList.empty();
 }
+
+//======================================
+//ƒvƒŒƒCƒ„[‚Ìíœ
+//======================================
+void CLobby_Data::DeletePlayer()
+{
+  for (auto& iter : m_LobbyPlayerList)
+  {
+      //”jŠü‚Ìˆ—
+      if (iter != nullptr)
+      {
+          delete iter;
+          iter = nullptr;
+      }
+  }
+
+  m_LobbyPlayerList.clear();
+}

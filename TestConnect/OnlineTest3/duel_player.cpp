@@ -28,6 +28,19 @@ My::CDuel_Player::CDuel_Player() :
 }
 
 //=====================================
+//デストラクタ
+//=====================================
+My::CDuel_Player::~CDuel_Player()
+{
+	if (m_ZoneManager != nullptr)
+	{
+		delete m_ZoneManager;
+		m_ZoneManager = nullptr;
+	}
+}
+
+
+//=====================================
 //エナジーの更新
 //=====================================
 bool My::CDuel_Player::UpdateEnergy(int deltatime)

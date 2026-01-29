@@ -14,6 +14,7 @@
 #include "duel_player_manager.h"
 #include "duel_player.h"
 #include "duel_manager.h"
+#include <conio.h>
 
 //静的変数の宣言
 CRakNet_Data* CRakNet_Server::m_pRakNetData = nullptr;
@@ -43,6 +44,8 @@ CRakNet_Server::~CRakNet_Server()
         delete m_pRakNetData;
         m_pRakNetData = nullptr;
     }
+
+    m_pPeer = nullptr;
 }
 
 //=====================================
@@ -67,8 +70,7 @@ bool CRakNet_Server::Init(int nPortNum, RakNet::RakPeerInterface* peer)
 
     //カード初期化
     CCard_Client::GetInstance()->Init();
-    //CCard_Client::GetInstance()->RequestAllCard();
-
+    
 	return true;
 }
 
@@ -286,15 +288,26 @@ void CRakNet_Server::Communication(RakNet::RakPeerInterface* peer)
 
         //シーンの更新
         m_pRakNetData->UpdateScene(packet, peer);
+
+        //キーが入力されているなら
+        if (_kbhit())
+        {
+            bool isEnd = false;
+            //キーによって処理変更
+            switch (_getch())
+            {
+            case 'z':
+                isEnd = true;
+                break;
+            }
+
+            if (isEnd)
+            {
+                Reset();
+                break;
+            }
+        }
     }
-}
-
-//=====================================
-//特定のクライアントとの通信処理
-//=====================================
-void CRakNet_Server::Communication0(RakNet::RakPeerInterface* peer, RakNet::Packet* packet)
-{
-
 }
 
 //=====================================
@@ -474,6 +487,9 @@ bool CRakNet_Server::IsSendGameSet()
 //=====================================
 void CRakNet_Server::Reset()
 {
+    //プレイヤーの削除
+    m_pRakNetData->DeletePlayer();
+
     //データの中身を確認
     if (m_pRakNetData != nullptr)
     {
@@ -486,6 +502,9 @@ void CRakNet_Server::Reset()
 
     //プレイヤーのリストを削除
     My::CDuel_Player_Manager::GetInstance()->Uninit();
+
+    //対戦時に使ったカードの破棄
+    My::CCardManager::GetInstance()->ResetDuelCards();
 
     //対戦時のタイマーを開始
     CDuel_Manager::GetInstance()->GetDuelTimer().Stop();

@@ -17,8 +17,7 @@ CCard_Client::CCard_Client() :
     m_pPacket(nullptr),	//パケット
     m_pPeer(nullptr)    //ピア
 {
-    //動的確保
-    //m_pRakNetData = new CLobby_Data;
+   
 }
 
 //=====================================
@@ -26,7 +25,8 @@ CCard_Client::CCard_Client() :
 //=====================================
 CCard_Client::~CCard_Client()
 {
-    
+    m_pPeer = nullptr;
+    m_pPacket = nullptr;
 }
 
 //=====================================

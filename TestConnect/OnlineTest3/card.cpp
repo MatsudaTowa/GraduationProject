@@ -8,6 +8,7 @@
 //ヘッダーのインクルード
 #include "card.h"
 #include "duel_player.h"
+#include "card_manager.h"
 
 //=====================================
 //コンストラクタ
@@ -28,6 +29,9 @@ My::CCard::CCard() :
 	m_CastDestination(NONE)				//キャスト先
 {
 	m_TargetIdVector.clear();
+
+	//カードの登録
+	My::CCardManager::GetInstance()->RegistDuelCard(this);
 }
 
 //=====================================
@@ -35,7 +39,31 @@ My::CCard::CCard() :
 //=====================================
 My::CCard::~CCard()
 {
+	// 削除
+	if (m_pState != nullptr)
+	{
+		delete m_pState;
+		m_pState = nullptr;
+	}
 
+	//ストラテジーの削除
+	for (auto& itr : m_PreCalculateStrategy)
+	{
+		if (itr == nullptr) { continue; }
+		delete itr;
+		itr = nullptr;
+	}
+
+	m_PreCalculateStrategy.clear();
+
+	for (auto& itr : m_PostCalculateStrategy)
+	{
+		if (itr == nullptr) { continue; }
+		delete itr;
+		itr = nullptr;
+	}
+
+	m_PostCalculateStrategy.clear();
 }
 
 //=====================================

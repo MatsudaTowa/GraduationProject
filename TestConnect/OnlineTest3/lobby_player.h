@@ -26,7 +26,7 @@ public:
 
 	//関数
 	CLobby_Player() : m_isReady(false){} 	//コンストラクタ
-	~CLobby_Player() {}						//デストラクタ
+	~CLobby_Player() override {}			//デストラクタ
 
 	//設定と取得
 	void SetReady(bool ready) { m_isReady = ready; }	//設定

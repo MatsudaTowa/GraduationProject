@@ -30,8 +30,7 @@ public:
 
 	//静的
 	void Communication(RakNet::RakPeerInterface* peer);								//通信処理
-	void Communication0(RakNet::RakPeerInterface* peer, RakNet::Packet* packet);	//特定のクライアントの通信処理
-
+	
 	//シングルトン
 	static CRakNet_Server* GetInstance()
 	{

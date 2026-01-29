@@ -870,3 +870,21 @@ bool CDuel_Data::ReceiveGameSet(RakNet::Packet* packet)
 
     return false;
 }
+
+//======================================
+//ƒvƒŒƒCƒ„[‚Ìíœ
+//======================================
+void CDuel_Data::DeletePlayer()
+{
+    for (auto& iter : m_DuelPlayerList)
+    {
+        //”jŠü‚Ìˆ—
+        if (iter != nullptr)
+        {
+            delete iter;
+            iter = nullptr;
+        }
+    }
+
+    m_DuelPlayerList.clear();
+}

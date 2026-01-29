@@ -46,9 +46,11 @@ namespace My
 		void ResetCardList();
 
 		//リストの関数
-		void RegistCardList(CCard_Client::Param card);									//登録
-		void RemoveCardList(CCard_Client::Param card);									//削除
+		void RegistCardList(CCard_Client::Param card);										//登録
+		void RemoveCardList(CCard_Client::Param card);										//削除
 		inline std::vector<CCard_Client::Param> GetUseCardVector() { return m_CardVector; }	//取得
+		void RegistDuelCard(CCard* card) { m_DuelCardVector.push_back(card); }				//登録処理
+		void ResetDuelCards();																//リセット処理
 
 		/**
 		 * @brief 引数のIDのカード情報を取得
@@ -66,7 +68,8 @@ namespace My
 	private:
 
 		//メンバ変数
-		std::vector<CCard_Client::Param> m_CardVector; //このゲームで使うカードのリスト
+		std::vector<CCard_Client::Param> m_CardVector;	//このゲームで使うカードのリスト
+		std::vector<CCard*> m_DuelCardVector;			//対戦時に使うカードのベクター
 	};
 }
 

@@ -20,7 +20,11 @@ public:
 
 	//関数
 	CDuel_Data();			//コンストラクタ
-	~CDuel_Data() {}		//デストラクタ
+	~CDuel_Data() override
+	{
+		DeletePlayer();
+		m_DuelPlayerList.clear();
+	}		//デストラクタ
 
 	//送受信の処理
 	void NewConnection(RakNet::Packet* packet, RakNet::RakPeerInterface* peer) override;		//新しく接続する処理
@@ -45,6 +49,7 @@ public:
 	//プレイヤーのデータリスト
 	void SetData(std::list<CPlayer::ChangeData> data) override;	//設定
 	std::list<CPlayer::ChangeData> GetData() override;			//取得
+	void DeletePlayer() override;								//プレイヤーの削除
 
 private:
 
