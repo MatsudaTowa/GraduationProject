@@ -520,12 +520,6 @@ void My::CResultUIManager::Update()
 	// 出現開始時間が経過していたら
 	else
 	{
-		// 敗北していたらアニメーション中にSEを鳴らす
-		if (m_isWin == false &&  m_nWinOrLoseMoveDelay == 0)
-		{
-			// TODO : 敗北の表示時にSEを鳴らす 
-			CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_LOSE);
-		}
 		// 出現時間が経過していなかったら
 		if (m_nWinOrLoseMoveDuration > 0)
 		{
@@ -544,6 +538,14 @@ void My::CResultUIManager::Update()
 				// TODO : 勝利の表示時にSEを鳴らす
 				CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_WIN);
 			}
+
+			// 敗北していたらアニメーション中にSEを鳴らす
+			if (m_isWin == false && m_nWinOrLoseMoveDuration == 0)
+			{
+				// TODO : 敗北の表示時にSEを鳴らす 
+				CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_LOSE);
+			}
+
 		}
 	}
 	// 全体経過時間
