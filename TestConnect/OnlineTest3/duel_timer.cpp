@@ -39,6 +39,7 @@ void CDuel_Timer::Reset()
 	//経過時間のリセット
 	m_ElapsedTime = 0;
 	m_OldElapsedTime = 0;
+	m_deltaTime = 0;
 }
 
 //=====================================
@@ -53,12 +54,16 @@ void CDuel_Timer::Update()
 	RakNet::Time RakNetTime = RakNet::GetTime();	//現在の時間を取得
 	m_OldElapsedTime = m_ElapsedTime;				//前回の経過時間を保存
 	m_ElapsedTime = RakNetTime - m_StartTime;		//経過時間を算出
-	m_deltaTime = m_ElapsedTime - m_OldElapsedTime;	//デルタタイムを算出
 
 	//3秒後にタイマーを開始
 	if (m_ElapsedTime > 3000)
 	{
-		CDuel_Manager::GetInstance()->SetIsStratBattle(true);
+		m_deltaTime = m_ElapsedTime - m_OldElapsedTime;	//デルタタイムを算出
+
+		if (!CDuel_Manager::GetInstance()->GetIsStartBattle())
+		{
+			CDuel_Manager::GetInstance()->SetIsStratBattle(true);
+		}
 	}
 }
 

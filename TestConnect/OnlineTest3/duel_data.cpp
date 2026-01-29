@@ -424,7 +424,7 @@ void CDuel_Data::SendCountDown(RakNet::RakPeerInterface* peer)
 {
     //対戦時のタイマーを開始
     CDuel_Manager::GetInstance()->GetDuelTimer().Start();
-    int nTime = RakNet::GetTimeMS();
+    int64_t nTime = RakNet::GetTimeMS();
 
     //データの作成
     RakNet::BitStream bsOut;

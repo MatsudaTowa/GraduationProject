@@ -396,7 +396,7 @@ void CClient_Duel::ReceiveCountdown(RakNet::Packet* packet)
 {
     //データを取得
     unsigned char messageId;    //メッセージ
-    int StartTime = 0;          //開始時間
+    int64_t StartTime = 0;          //開始時間
     int nCountStartTime = RakNet::GetTimeMS();    //カウント開始時間
    
     //受信側
@@ -432,6 +432,19 @@ void CClient_Duel::ReceiveCountdown(RakNet::Packet* packet)
 
         //対戦時のタイマーを開始
         My::CDuel_Manager::GetInstance()->GetDuelTimer().Start();
+    }
+
+    My::CActiveSceneCharacter* pPlayer = My::CActiveSceneManager::GetInstance()->GetPlayer();
+
+    if (pPlayer == nullptr) return;
+
+    My::CPlayerDuelState* pPlayerState = nullptr;
+    pPlayerState = dynamic_cast<My::CPlayerDuelState*>(pPlayer->GetState());
+
+    //ずれた分だけカウントを進める
+    if (pPlayerState != nullptr)
+    {
+        pPlayerState->SetEnergyUpCount(static_cast<float>(e * 0.001f));
     }
 }
 
@@ -509,7 +522,7 @@ void CClient_Duel::ReceiveStatus(RakNet::Packet* packet)
             if (iter->GetPlayerIdx() == id)
             {
                 //TODO二重のダメージを防ぐための処理良くない処理
-                param.Status.life = iter->GetStatus().life;
+                //param.Status.life = iter->GetStatus().life;
 
                 iter->SetStatus(param.Status);
                 return;

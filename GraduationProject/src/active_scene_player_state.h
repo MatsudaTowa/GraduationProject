@@ -149,6 +149,11 @@ namespace My
 		{
 			m_isWaitView = isView;
 		}
+
+		inline void SetEnergyUpCount(float count)
+		{
+			m_fEnergyUpCount = count;
+		}
 	private:
 
 		/**

@@ -34,7 +34,7 @@ namespace My
 		struct DuelData
 		{
 			Data BaceData;							//基本のクライアントデータ
-			Status Status = { 40, 0, 0, 0, 10 };	//ステータス
+			Status Status = { 40, 0, 0, 2, 20 };	//ステータス
 		};
 
 		//関数
@@ -73,7 +73,7 @@ namespace My
 		static constexpr int MAX_HAND_CARD{ 10 };		//手札の枚数
 
 		//変数
-		Status m_Status = { 40, 0, 0, 2, 20 };	//ステータス
+		Status m_Status = { 40, 0, 0, 92, 20 };	//ステータス
 		RakNet::Time m_ElapsedTime;				//経過時間
 
 		//TODOここに対戦中に受け取る変数を追加
