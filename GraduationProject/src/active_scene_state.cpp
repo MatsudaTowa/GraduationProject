@@ -19,6 +19,7 @@
 #include "countdown_start_offline.h"
 #include "countdown_start_online.h"
 #include "load_texture.h"
+#include "card_battle_anim_manager.h"
 
 int My::CLobby::m_characterIdx = -1;
 
@@ -256,6 +257,11 @@ My::CDuel::CDuel()
 	GET_CAMERA(GET_CAMERA_IDX)->ChangeCameraState(new CBirdView);
 	GET_CAMERA(GET_CAMERA_IDX)->SetCamera();
 
+	if (CDuel_Manager::GetInstance()->GetDuelAnimManager() == nullptr)
+	{
+		CDuel_Manager::GetInstance()->SetDuelAnimManager(new CCardBattleAnimManager);
+		CDuel_Manager::GetInstance()->GetDuelAnimManager()->Init();
+	}
 	//オンラインなら
 	if (CRakNet::GetInstance()->GetOnline())
 	{
@@ -300,6 +306,11 @@ void My::CDuel::Duel(CActiveScene* game)
 	CActiveSceneManager::GetInstance()->GetTargetArrowManager()->Remove();
 
 	ArrangePlayerClockwise(VEC3_RESET_ZERO, 200.0f);
+	CCardBattleAnimManager* anim_manager = CDuel_Manager::GetInstance()->GetDuelAnimManager();
+	if (anim_manager != nullptr)
+	{
+		anim_manager->Update();
+	}
 
 	//入力デバイス取得
 	CInputKeyboard* pKeyboard = GET_INPUT_KEYBOARD;
@@ -317,6 +328,13 @@ void My::CDuel::Duel(CActiveScene* game)
 
 	if (CActiveSceneManager::GetInstance()->GetFinish())
 	{
+		CCardBattleAnimManager* anim_manager = CDuel_Manager::GetInstance()->GetDuelAnimManager();
+		if (anim_manager != nullptr)
+		{
+			anim_manager->Uninit();
+			anim_manager = nullptr;
+			CDuel_Manager::GetInstance()->SetDuelAnimManager(anim_manager);
+		}
 		GET_FADE->SetFade(CScene::MODE::MODE_RESULT);
 	}
 

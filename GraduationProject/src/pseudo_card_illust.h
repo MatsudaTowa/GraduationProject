@@ -16,7 +16,7 @@ namespace My
 	 * @brief リザルトUIクラス
 	 * @copydoc CObject2D
 	 */
-	class CWaitNextIllust : public CObject2D
+	class CPaseudoCardIllust : public CObject2D
 	{
 	public:
 		static constexpr int PRIORITY = 25;	//!<描画順
@@ -25,12 +25,12 @@ namespace My
 		 * @brief コンストラクタ
 		 * @param プライオリティ
 		 */
-		CWaitNextIllust(int nPriority = PRIORITY);
+		CPaseudoCardIllust(int nPriority = PRIORITY);
 
 		/**
 		 * @brief デストラクタ
 		 */
-		~CWaitNextIllust()override;
+		~CPaseudoCardIllust()override;
 
 		/**
 		 * @brief 初期化処理
@@ -58,7 +58,7 @@ namespace My
 		 * @param [in] 位置
 		 * @return UIのポインタ
 		 */
-		static CWaitNextIllust* Create(D3DXVECTOR3 pos,D3DXVECTOR2 size);
+		static CPaseudoCardIllust* Create(D3DXVECTOR3 pos,D3DXVECTOR2 size);
 	private:
 	};
 }
