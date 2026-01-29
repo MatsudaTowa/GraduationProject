@@ -208,10 +208,13 @@ void My::CManager::Uninit()
 
 	//キーボードの終了処理
 	m_pKeyboard->Uninit();
+	m_pKeyboard = nullptr;
 	//マウスの終了処理
 	m_pMouse->Uninit();
+	m_pMouse = nullptr;
 	//Padの終了処理
 	m_pPad->Uninit();
+	m_pPad = nullptr;
 
 	if (m_pFade != nullptr)
 	{

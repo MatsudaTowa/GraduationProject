@@ -41,7 +41,7 @@ bool CCard_Client::Init()
     m_pPeer = RakNet::RakPeerInterface::GetInstance();
 
     //ピアの取得
-    RakNet::SocketDescriptor sd;
+    RakNet::SocketDescriptor sd(0, 0);
     m_pPeer->Startup(1, &sd, 1);
 
     // ブロードキャストでサーバーを探す

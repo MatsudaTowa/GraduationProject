@@ -46,7 +46,7 @@ bool CRakNet::Init()
     m_pPeer = RakNet::RakPeerInterface::GetInstance();
 
     //ƒsƒA‚Ìæ“¾
-    RakNet::SocketDescriptor sd(0, 0);;
+    RakNet::SocketDescriptor sd(0, 0);
     m_pPeer->Startup(1, &sd, 1);
 
     //­‚µ‘Ò‚Â

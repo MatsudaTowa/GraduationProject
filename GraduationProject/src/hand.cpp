@@ -164,7 +164,7 @@ void My::CHand::Select(CPlayerDuelState* state)
 void My::CHand::Cast(CDuelCharacter* character, CActiveSceneCharacter* player)
 {
 	//合図があったら更新
-	//if (!My::CDuel_Manager::GetInstance()->GetIsStartBattle()) return;
+	if (!My::CDuel_Manager::GetInstance()->GetIsStartBattle()) return;
 
 	CSelectionRange* pRange = character->GetZoneManager()->GetHandZone()->GetSelectionRange();
 	bool is_hit_area = GET_COLISION->Check2DPolygonColision(GET_INPUT_MOUSE->GetMousePos(), { 3.0f,3.0f }, { pRange->GetPos().x,pRange->GetPos().y,0.0f }, pRange->GetSize());
@@ -229,6 +229,9 @@ My::CCard* My::CHand::SearchHandList(CDuelCharacter* character,int num)
 //===========================================================================================================
 void My::CHand::DeckDraw(CPlayerDuelState* state)
 {
+	//合図があったら更新
+	if (!My::CDuel_Manager::GetInstance()->GetIsStartBattle()) return;
+
 	// ステータス取得
 	CActiveSceneCharacter::Status status = CActiveSceneManager::GetInstance()->GetPlayer()->GetStatus();
 
