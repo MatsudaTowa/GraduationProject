@@ -31,9 +31,10 @@ const CSound::SOUNDINFO CSound::SOUND_INFO[CSound::SOUND_LABEL_MAX] =
 	{"data\\SOUND\\SE\\wait_shield.wav", 0, 1.0f},			//守備カード設置SE
 	{"data\\SOUND\\SE\\Incorrect.wav", 0, 1.0f},			//キャスト失敗SE
 	{"data\\SOUND\\SE\\Cutting_through.wav", 0, 1.0f},		//キャストキャンセルSE
+	{"data\\SOUND\\SE\\damage.wav", 0, 1.0f},				//ダメージSE
 	{"data\\SOUND\\SE\\appear.wav", 0, 1.0f},				//ランキングSE
-	{"data\\SOUND\\SE\\win.wav", 0, 1.0f},				//勝利SE
-	{"data\\SOUND\\SE\\lose.wav", 0, 1.0f},				//敗北SE
+	{"data\\SOUND\\SE\\win.wav", 0, 1.0f},					//勝利SE
+	{"data\\SOUND\\SE\\lose.wav", 0, 1.0f},					//敗北SE
 	{"data\\SOUND\\SE\\click.wav", 0, 1.0f},				//クリックしたときのSE
 	
 };

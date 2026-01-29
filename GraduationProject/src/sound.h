@@ -56,6 +56,7 @@ public:
 		SOUND_LABEL_SE_WAIT_SHIELD,		//守備カード設置
 		SOUND_LABEL_SE_CAST_FAIL,		//キャスト失敗
 		SOUND_LABEL_SE_CAST_CANCEL,		//キャストキャンセル
+		SOUND_LABEL_SE_DAMAGE,			//ダメージSE
 		SOUND_LABEL_SE_RANKING,			//ランキング出現
 		SOUND_LABEL_SE_WIN,				//勝利出現
 		SOUND_LABEL_SE_LOSE,			//敗北出現
