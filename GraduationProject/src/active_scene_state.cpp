@@ -18,6 +18,7 @@
 #include "duel_manager.h"
 #include "countdown_start_offline.h"
 #include "countdown_start_online.h"
+#include "load_texture.h"
 
 int My::CLobby::m_characterIdx = -1;
 
@@ -67,6 +68,9 @@ void My::CLobby::Lobby(CActiveScene* /*game*/)
 	OfflineChangeToDuel();
 	//オンラインの対戦開始処理
 	OnlineChangeToDuel();
+
+	//テクスチャの読み込み
+	CLoadTexture::GetInstance()->Load();
 }
 
 //=============================================

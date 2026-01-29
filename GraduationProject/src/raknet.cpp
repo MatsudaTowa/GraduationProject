@@ -11,6 +11,7 @@
 #include "client_duel.h"
 #include "active_scene_manager.h"
 #include "GetTime.h"
+#include "RakSleep.h"
 
 //静的変数宣言
 CClient* CRakNet::m_Client = nullptr;
@@ -45,10 +46,21 @@ bool CRakNet::Init()
     m_pPeer = RakNet::RakPeerInterface::GetInstance();
 
     //ピアの取得
-    RakNet::SocketDescriptor sd;
+    RakNet::SocketDescriptor sd(0, 0);;
     m_pPeer->Startup(1, &sd, 1);
+
+    //少し待つ
+    //RakSleep(100);
+
+    // 1秒間、数回ブロードキャスト
+    for (int i = 0; i < 5; ++i)
+    {
+        m_pPeer->Ping("255.255.255.255", PORT, false);
+        RakSleep(200);
+    }
+
     // ブロードキャストでサーバーを探す
-    m_pPeer->Ping("255.255.255.255", PORT, false);
+    //m_pPeer->Ping("255.255.255.255", PORT, false);
     
     //クライアントクラスの作成
     if (m_Client == nullptr)

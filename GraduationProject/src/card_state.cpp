@@ -295,8 +295,6 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 	//位置の指定
 	SetCardPos(cpy);
 
-	cpy->Stay();
-
 	//カウントを始めないか
 	if (!cpy->IsCreatStayCount()) return;
 
@@ -343,6 +341,8 @@ void My::CCardStateStay::Update(CCard* cpy, CDuelCharacter* duel)
 	//倍率
 	float mag = 5.0f; static float a = 0;
 	cpy->SetSize({ mag * 1.2f,mag,mag });
+
+	cpy->Stay();
 
 	//ディフェンスカードはカウントダウンを始めない
 	if (!cpy->IsCreatStayCount()) return;

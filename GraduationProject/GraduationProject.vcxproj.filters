@@ -188,6 +188,8 @@
     <ClCompile Include="src\deck_num_UI_bg.cpp">
       <Filter>ZoneNumInfoUI</Filter>
     </ClCompile>
+    <ClCompile Include="src\total_damage_UI.cpp" />
+    <ClCompile Include="src\load_texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -392,6 +394,8 @@
     <ClInclude Include="src\deck_num_UI_bg.h">
       <Filter>ZoneNumInfoUI</Filter>
     </ClInclude>
+    <ClInclude Include="src\total_damage_UI.h" />
+    <ClInclude Include="src\load_texture.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GraduationProject.rc" />
