@@ -494,12 +494,6 @@ void My::CResultUIManager::Update()
 		// 出現開始時間が経過していたら
 		else
 		{
-			// TODO : UIと同タイミングでSEを鳴らす
-			if (m_PlayerIDsElapsedTime[nCnt] == RANKINGS[nCnt].elapsedTime)
-			{
-				//BGMの設定
-				CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_RANKING);
-			}
 
 			// 出現時間が経過していなかったら
 			if (m_RankingsElapsedTime[nCnt] > 0)
@@ -511,6 +505,14 @@ void My::CResultUIManager::Update()
 				m_pRankingsObject[nCnt]->AddSize	(-m_RankingsAnimation[nCnt].size);	// 大きさ
 				m_pRankingsObject[nCnt]->AddColor	(-m_RankingsAnimation[nCnt].col );	// 色
 				m_pRankingsObject[nCnt]->SetVtx();	// 頂点の設定
+
+				if (m_PlayerIDsElapsedTime[nCnt] == 0)
+				{
+					// TODO : UIの移動が終わってからSEを鳴らす
+					// SEの設定
+					CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_RANKING);
+				}
+
 			}
 			// 出現時間が経過していたら自プレイヤーを強調表示する
 			else if (nCnt == m_nPlayer)
