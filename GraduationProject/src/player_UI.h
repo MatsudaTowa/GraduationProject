@@ -12,9 +12,10 @@
 #include "cemetery_button.h"
 #include "button_deckdraw.h"
 #include "cemetery_num_UI.h"
-
+#include "deck_num_UI.h"
 namespace My
 {
+	class CActiveScenePlayer;
 	//=============================================
 	//プレイヤーのUIクラス
 	//=============================================
@@ -49,6 +50,10 @@ namespace My
  		 * @param [in]キャラクターのポインタ
 		 */
 		void SetCurrentCharacter_UI(D3DXVECTOR3 screen_pos, CActiveSceneCharacter* character);
+
+		void SetCemeteryNumUI(My::CActiveScenePlayer* player, My::CActiveSceneCharacter* character, D3DXVECTOR3& screen_pos);
+
+		void SetDeckNumUI(My::CActiveScenePlayer* player, My::CActiveSceneCharacter* character);
 
 		/**
 		 * @brief リセット
@@ -91,6 +96,15 @@ namespace My
 			m_pCemeteryNum = pCemeteryNum;
 		}
 
+
+		/**
+		 * @brief 墓地の設定
+		 * @param [in]ボタンののポインタ
+		 */
+		inline void SetDeckNum(CDeckNumUI* pDeckNum)
+		{
+			m_pDeckNum = pDeckNum;
+		}
 
 		/**
 		 * @brief デッキドローボタンの設定
@@ -138,6 +152,15 @@ namespace My
 		}
 
 		/**
+		 * @brief デッキ数値の取得
+		 * @return [in]デッキのポインタ
+		 */
+		inline CDeckNumUI* GetDeckNumUI()
+		{
+			return m_pDeckNum;
+		}
+
+		/**
 		 * @brief デッキドローボタン取得
 		 * @return [in]デッキドローボタンのポインタ
 		 */
@@ -152,6 +175,7 @@ namespace My
 		CCemeteryButton* m_pCemeteryButton;		//!<墓地ボタン
 		CButtonDeckDraw* m_pDeckDrawButton;		// デッキドローボタン
 		CCemeteryNumUI* m_pCemeteryNum;
+		CDeckNumUI* m_pDeckNum;
 	};
 }
 

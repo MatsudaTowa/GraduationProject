@@ -218,6 +218,8 @@
     <ClCompile Include="src\damage_number_UI_factory.cpp" />
     <ClCompile Include="src\death_icon.cpp" />
     <ClCompile Include="src\debuff.cpp" />
+    <ClCompile Include="src\deck_num_UI.cpp" />
+    <ClCompile Include="src\deck_num_UI_bg.cpp" />
     <ClCompile Include="src\deck_zone.cpp" />
     <ClCompile Include="src\duel_manager.cpp" />
     <ClCompile Include="src\duel_timer.cpp" />
@@ -380,6 +382,8 @@
     <ClInclude Include="src\damage_number_UI_factory.h" />
     <ClInclude Include="src\death_icon.h" />
     <ClInclude Include="src\debuff.h" />
+    <ClInclude Include="src\deck_num_UI.h" />
+    <ClInclude Include="src\deck_num_UI_bg.h" />
     <ClInclude Include="src\deck_zone.h" />
     <ClInclude Include="src\duel_manager.h" />
     <ClInclude Include="src\duel_timer.h" />

@@ -19,6 +19,7 @@
 #include "button_deckdraw.h"
 #include "card_frame.h"
 #include "cemetery_num_UI.h"
+#include "deck_num_UI.h"
 
 //=============================================
 // コンストラクタ
@@ -227,6 +228,11 @@ void My::CPlayerDuelState::CreateDuelUI(CActiveScenePlayer* player)
 	{
 		player->GetPlayerUI()->SetCemeteryNum(new CCemeteryNumUI);
 		player->GetPlayerUI()->GetCemeteryNumUI()->Init();
+	}
+	if (player->GetPlayerUI()->GetDeckNumUI() == nullptr)
+	{
+		player->GetPlayerUI()->SetDeckNum(new CDeckNumUI);
+		player->GetPlayerUI()->GetDeckNumUI()->Init();
 	}
 	if (player->GetPlayerUI()->GetLifeUI() == nullptr)
 	{

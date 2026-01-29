@@ -16,7 +16,9 @@ My::CPlayerUI::CPlayerUI():m_pNumberUI(nullptr),
 m_pCemeteryButton(nullptr),
 m_pEneryUI(nullptr),
 m_pLifeUI(nullptr),
-m_pDeckDrawButton(nullptr)
+m_pDeckDrawButton(nullptr),
+m_pDeckNum(nullptr),
+m_pCemeteryNum(nullptr)
 {
 }
 
@@ -57,6 +59,11 @@ void My::CPlayerUI::Uninit()
 	{
 		m_pCemeteryNum->Uninit();
 		m_pCemeteryNum = nullptr;
+	}
+	if (m_pDeckNum != nullptr)
+	{
+		m_pDeckNum->Uninit();
+		m_pDeckNum = nullptr;
 	}
 	if (m_pNumberUI != nullptr)
 	{
@@ -195,6 +202,17 @@ void My::CPlayerUI::SetCurrentCharacter_UI(D3DXVECTOR3 screen_pos, CActiveSceneC
 		m_pCemeteryButton->SetPos({ screen_pos.x + ShiftPos.x,screen_pos.y + ShiftPos.y,screen_pos.z });
 		m_pCemeteryButton->ProcessMouseEvent();
 	}
+
+	SetDeckNumUI(player, character);
+
+	SetCemeteryNumUI(player, character, screen_pos);
+}
+
+//=============================================
+// 墓地のUI設定
+//=============================================
+void My::CPlayerUI::SetCemeteryNumUI(My::CActiveScenePlayer* player, My::CActiveSceneCharacter* character, D3DXVECTOR3& screen_pos)
+{
 	if (m_pCemeteryNum == nullptr)
 	{
 		return;
@@ -216,7 +234,7 @@ void My::CPlayerUI::SetCurrentCharacter_UI(D3DXVECTOR3 screen_pos, CActiveSceneC
 	}
 	else
 	{
-		CEnemyDuelState* duel_state =dynamic_cast<CEnemyDuelState*>(character->GetState());
+		CEnemyDuelState* duel_state = dynamic_cast<CEnemyDuelState*>(character->GetState());
 		cemetery_size = duel_state->GetZoneManager()->GetCemetery()->GetList().size();
 
 		// いくつずらすか
@@ -237,8 +255,48 @@ void My::CPlayerUI::SetCurrentCharacter_UI(D3DXVECTOR3 screen_pos, CActiveSceneC
 	int i = 0;
 	for (auto& itr : m_pCemeteryNum->GetNumVector())
 	{
-		itr->SetPos({basePos.x - (i * 20.0f),basePos.y,basePos.z});
+		itr->SetPos({ basePos.x - (i * 20.0f),basePos.y,basePos.z });
 		itr->SetisDraw(isDraw);
+		++i;
+	}
+}
+
+//=============================================
+// デッキのUI設定
+//=============================================
+void My::CPlayerUI::SetDeckNumUI(My::CActiveScenePlayer* player, My::CActiveSceneCharacter* character)
+{
+	if (m_pDeckNum == nullptr)
+	{
+		return;
+	}
+
+	int deck_size = 0;
+	D3DXVECTOR3 basePos = VEC3_RESET_ZERO;
+
+	if (player == character)
+	{
+		CPlayerDuelState* duel_state = dynamic_cast<CPlayerDuelState*>(player->GetState());
+		deck_size = duel_state->GetZoneManager()->GetDeck()->GetList().size();
+
+		basePos = { 248.0f, 665.0f, 0.0f };
+	}
+
+	D3DXVECTOR3 bg_pos = basePos;
+
+	bg_pos.x = basePos.x - 5.0f;
+
+	m_pDeckNum->GetBG()->SetPos(bg_pos);
+
+	// 数字設定
+	m_pDeckNum->SetNumber(deck_size);
+	m_pDeckNum->SetNumPos(basePos);
+
+	// 桁ずらし描画
+	int i = 0;
+	for (auto& itr : m_pDeckNum->GetNumVector())
+	{
+		itr->SetPos({ basePos.x - (i * 20.0f),basePos.y,basePos.z });
 		++i;
 	}
 }
