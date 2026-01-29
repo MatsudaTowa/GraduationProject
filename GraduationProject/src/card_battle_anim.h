@@ -38,11 +38,15 @@ namespace My
 			std::string tex_pass;
 		};
 
-		void SetPsendCardFrame(CCard* card, PSEND_CARD_TYPE type);
+		void SetPsendCardFrame(CCard* card, PSEND_CARD_TYPE type,bool isDamage);
 		void DrawPasend();
 
 		PseundCard m_pPseundCard[PSEND_CARD_TYPE::MAX];
 		CPaseudoCardIllust* m_pCardIllust[PSEND_CARD_TYPE::MAX];
+
+		bool m_isBack;
+		bool m_isDamage;
+		bool m_isHit;
 	};
 }
 
