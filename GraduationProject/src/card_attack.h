@@ -170,6 +170,11 @@ namespace My
 		//ステイ時間を表示するか
 		bool IsCreatStayCount() override { return m_isTopCastCard; }
 
+		/**
+		 * @brief ダメージの追加
+		 * @param 増やすダメージ数
+		 */
+		void AddDamage(int damage);
 		
 	private:
 
