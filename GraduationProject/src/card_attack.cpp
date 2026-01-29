@@ -9,6 +9,7 @@
 #include "raknet.h"
 #include "zone_manager.h"
 #include "card_deffence.h"
+#include "total_damage_UI.h"
 
 My::CCardAttack::CCardAttack(int nPriority):CCard(nPriority),
 m_AttackType(),
@@ -17,7 +18,8 @@ m_DefCardVector(),
 m_StackedCardsList(),
 m_isTopCastCard(true),
 m_pStackCard(nullptr),
-m_DamageInfo()
+m_DamageInfo(),
+m_pTotalDamageUI(nullptr)
 {
 	m_DamageInfo.clear();
 	m_DefCardVector.clear();
@@ -62,6 +64,14 @@ void My::CCardAttack::Uninit()
 //===========================================================================================================
 void My::CCardAttack::Update()
 {
+	if (m_pTotalDamageUI != nullptr)
+	{
+		// ダメージUIの位置更新
+		D3DXVECTOR3 pos = GetPos();
+		pos.y += 100.0f;
+		m_pTotalDamageUI->SetPos(ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), pos));
+	}
+	
 	CCard::Update();
 }
 
@@ -389,6 +399,9 @@ void My::CCardAttack::ReceiveTrigger()
 		iter->SetCurrentZone(CCard::CEMETERY);
 	}
 
+	// ダメージUIの終了
+	m_pTotalDamageUI->Uninit();
+
 	//カードクリア
 	m_StackedCardsList.clear();
 
@@ -475,6 +488,13 @@ void My::CCardAttack::LoadCardInfo(RakNet::BitStream* bsin)
 
 		//一番上のフラグを立てる
 		m_isTopCastCard = true;
+
+		if (m_pTotalDamageUI == nullptr)
+		{
+			//ダメージUIの生成
+			m_pTotalDamageUI = CTotalDamageUI::Create(ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), GetPos()), m_nAttackValue);
+		}
+		
 	}
 
 	break;
@@ -521,6 +541,12 @@ void My::CCardAttack::LoadCardInfo(RakNet::BitStream* bsin)
 		//キャスト状態に変更(NOTE : 重ねているカードはキャストしなくても良いかも)
 		//ChangeState(My::CCardState::CARD_CAST, pDuelState);
 
+		// 攻撃カードが重なったときの合計攻撃力表示更新
+		if (StackAttackCard->GetTotalDamageUI() != nullptr)
+		{
+			StackAttackCard->GetTotalDamageUI()->SetTexPos({ (StackAttackCard->GetAttackValue() + m_nAttackValue) * 0.1f,1.0f });
+		}
+		
 		break;
 	}
 

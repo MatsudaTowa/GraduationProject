@@ -317,9 +317,9 @@ void My::CObject2D::SetTexVtx()
 
 	//頂点カラーの設定
 	pVtx[0].col =
-		pVtx[1].col =
-		pVtx[2].col =
-		pVtx[3].col = m_col;
+	pVtx[1].col =
+	pVtx[2].col =
+	pVtx[3].col = m_col;
 
 	//アンロック
 	m_pVtxBuff->Unlock();

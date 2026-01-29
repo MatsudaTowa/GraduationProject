@@ -12,6 +12,8 @@
 
 namespace My
 {
+	class CTotalDamageUI;
+
 	class CCardAttack :public CCard
 	{
 	public:
@@ -169,6 +171,8 @@ namespace My
 
 		//ステイ時間を表示するか
 		bool IsCreatStayCount() override { return m_isTopCastCard; }
+
+		CTotalDamageUI* GetTotalDamageUI() { return m_pTotalDamageUI; }
 	private:
 
 		AttackType m_AttackType;						// 攻撃の種類
@@ -178,6 +182,7 @@ namespace My
 		std::list<CCardAttack*> m_StackedCardsList;		// 重なっているカード
 		bool m_isTopCastCard;							// 一番上のカードか
 		CCardAttack* m_pStackCard;						// 重ねたカード
+		CTotalDamageUI* m_pTotalDamageUI;				// トータルダメージUI
 	};
 }
 

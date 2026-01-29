@@ -137,7 +137,7 @@ void My::Start::Update(CDamageNumberUI* ui)
 	
 	//“§–¾“x‚ðã‚°‚é
 	D3DXCOLOR col = ui->GetColor();
-	col.a += 0.05f;
+	col.a += 0.07f;
 	ui->SetColor(col);
 
 	if (ui->GetSize().x >= MAX_SIZE && ui->GetColor().a > 1.0f)

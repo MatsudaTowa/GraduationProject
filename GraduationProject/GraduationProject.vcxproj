@@ -303,6 +303,7 @@
     <ClCompile Include="src\shadow.cpp" />
     <ClCompile Include="src\sound.cpp" />
     <ClCompile Include="src\stay_number.cpp" />
+    <ClCompile Include="src\total_damage_UI.cpp" />
     <ClCompile Include="src\wait.cpp" />
     <ClCompile Include="src\target_arrow.cpp" />
     <ClCompile Include="src\target_arrow_manager.cpp" />
@@ -465,6 +466,7 @@
     <ClInclude Include="src\sound.h" />
     <ClInclude Include="src\status_icon.h" />
     <ClInclude Include="src\stay_number.h" />
+    <ClInclude Include="src\total_damage_UI.h" />
     <ClInclude Include="src\wait.h" />
     <ClInclude Include="src\target_arrow.h" />
     <ClInclude Include="src\target_arrow_manager.h" />

@@ -91,8 +91,6 @@ namespace My
 		*/
 		DamageNumberState* m_pState;
 	};
-
-	
 }
 
 namespace My

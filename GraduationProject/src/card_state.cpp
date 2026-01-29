@@ -12,6 +12,7 @@
 #include "duel_manager.h"
 #include "raknet.h"
 #include "object2D_trianglefan.h"
+#include "total_damage_UI.h"
 
 //===========================================================================================================
 // 
@@ -270,6 +271,7 @@ namespace
 My::CCardStateStay::CCardStateStay() : 
 	m_fStaycount(0.0f),			//ƒXƒeƒCŽžŠÔ
 	m_pFan(nullptr)
+
 {
 	
 }
@@ -312,8 +314,6 @@ void My::CCardStateStay::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 		m_pFan->SetPos(ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), cpy->GetPos()));
 		m_pFan->Init();
 	}
-
-
 }
 
 //=======================================================================================

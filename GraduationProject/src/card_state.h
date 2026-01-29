@@ -16,6 +16,7 @@ namespace My
 	// 前方宣言
 	class CCard;
 	class CObject2D_TriangleFan;
+	class CTotalDamageUI;
 
 	/** 
 	* @brief カードのステートクラス 
