@@ -56,6 +56,8 @@ void My::CObject2D_TriangleFan::Update()
 {
     m_Divisionnum--;
 
+    SetVtx();
+
     if (m_Divisionnum < 0)
         Uninit();
 
@@ -107,7 +109,7 @@ void My::CObject2D_TriangleFan::SetVtx()
     // 三角形は頂点3つ
     if (vtxBuff == nullptr)
     {
-        pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * (m_Divisionnum * 2) + 1, D3DUSAGE_WRITEONLY, FVF_VERTEX_2D, D3DPOOL_MANAGED, &vtxBuff, NULL);
+        pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * (m_OriginalDivisionnum * 2) + 1, D3DUSAGE_WRITEONLY, FVF_VERTEX_2D, D3DPOOL_MANAGED, &vtxBuff, NULL);
     }
 
     VERTEX_2D* pVtx;
@@ -122,7 +124,7 @@ void My::CObject2D_TriangleFan::SetVtx()
     //float a = 0.0f;
 
 	// 分割数分だけ頂点を生成
-    for (int i = 0; i <= m_Divisionnum; ++i)
+    for (int i = 0; i <= m_OriginalDivisionnum; ++i)
     {
 		// 中心点
         if (i == 0)
@@ -146,9 +148,9 @@ void My::CObject2D_TriangleFan::SetVtx()
             pVtx[i].pos = D3DXVECTOR3(m_CenterPos.x + x, m_CenterPos.y + y, 0.0f);
 
 			// 最後の頂点は最初の頂点(中心点じゃない)と同じ位置にする
-            if(i == m_Divisionnum)
+            if(i == m_OriginalDivisionnum)
             {
-                pVtx[i].pos = D3DXVECTOR3(m_CenterPos.x + r, m_CenterPos.y, 0.0f);
+                pVtx[i].pos = D3DXVECTOR3(m_CenterPos.x, m_CenterPos.y + r, 0.0f);
 			}
 
             pVtx[i].rhw = 1.0f;
@@ -156,7 +158,7 @@ void My::CObject2D_TriangleFan::SetVtx()
             pVtx[i].tex = D3DXVECTOR2(u, v); // テクスチャ使わない
 
             // 角度を次の頂点に進める
-            angle += (2.0f * D3DX_PI) / m_Divisionnum;
+            angle += (2.0f * D3DX_PI) / m_OriginalDivisionnum;
         }
     }
 

@@ -402,7 +402,9 @@ void My::CCardAttack::ReceiveTrigger(RakNet::BitStream* bsin)
 		iter->SetCurrentZone(CCard::CEMETERY);
 	}
 
-	//if (this->GetTotalDamageUI() != nullptr);
+	//CTotalDamageUI* pTotalDamageUI = nullptr;
+	//pTotalDamageUI = GetTotalDamageUI();
+	//if (pTotalDamageUI != nullptr);
 	//{
 	//	// ダメージUIの終了
 	//	GetTotalDamageUI()->Uninit();

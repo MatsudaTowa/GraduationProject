@@ -33,7 +33,8 @@ m_OldZone(ZONE::NONE_ZONE),
 m_PreCalculateStrategy(),
 m_PostCalculateStrategy(),
 m_nUserId(-1),
-m_CastDestination(NONE)
+m_CastDestination(NONE),
+m_pTotalDamageUI(nullptr)
 {
 	m_pTargetPlayerList.clear();
 	m_PreCalculateStrategy.clear();
@@ -74,6 +75,8 @@ HRESULT My::CCard::Init()
 	m_pState->Init();
 	m_StateNum = CCardState::CARD_NEUTRAL;
 	m_OldStateNum = CCardState::CARD_NEUTRAL;
+
+	m_pTotalDamageUI = nullptr;
 
 	// カードフレーム生成
 	for (int i = 0; i < CCardFrame::FRAMETYPE_MAX; i++)
