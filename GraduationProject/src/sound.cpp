@@ -30,6 +30,7 @@ const CSound::SOUNDINFO CSound::SOUND_INFO[CSound::SOUND_LABEL_MAX] =
 	{"data\\SOUND\\SE\\Incorrect.wav", 0, 1.0f},			//キャスト失敗SE
 	{"data\\SOUND\\SE\\Cutting_through.wav", 0, 1.0f},		//キャストキャンセルSE
 	{"data\\SOUND\\SE\\appear.wav", 0, 1.0f},				//ランキングSE
+	{"data\\SOUND\\SE\\click.wav", 0, 1.0f},				//クリックしたときのSE
 	
 };
 
@@ -275,7 +276,7 @@ HRESULT CSound::PlaySound(SOUND_LABEL label)
 	{// デュエルBGMを鳴らしたいときだけ鳴らすものを抽選
 		if (!m_DuelBGMList.empty())
 		{
-			int index = IntRandom(0, m_DuelBGMList.size());
+			int index = IntRandom(0, m_DuelBGMList.size() - 1);
 			const char* filename = m_DuelBGMList[index].c_str();
 
 			// ランダムで選ばれたファイルを再生

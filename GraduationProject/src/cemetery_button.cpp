@@ -130,6 +130,7 @@ void My::CCemeteryButton::ButtonTrigger()
 		duel_state->SetIsWaitView(false);
 	}
 
+	CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_CLICK);
 }
 
 //=============================================

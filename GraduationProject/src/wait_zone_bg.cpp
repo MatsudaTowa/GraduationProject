@@ -231,6 +231,9 @@ void My::CWaitZoneBG::ButtonTrigger()
 
 		zone->GetSelectionRange()->SetisDraw(isView);
 	}
+
+	// ƒNƒŠƒbƒNSE‚ð–Â‚ç‚·
+	My::CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_CLICK);
 }
 
 bool My::CWaitZoneBG::ProcessMouseEvent()
