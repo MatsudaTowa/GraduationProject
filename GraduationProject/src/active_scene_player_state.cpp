@@ -167,7 +167,6 @@ void My::CPlayerDuelState::Duel(CActiveSceneCharacter* character)
 	//UIが生成されてなければ生成される
 	CreateDuelUI(player);
 	//モーション設定
-	player->SetMotion(CPlayer::MOTION_NEUTRAL);
 
 	/*
 		* @brief 開始

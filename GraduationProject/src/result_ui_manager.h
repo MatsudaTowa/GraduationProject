@@ -96,6 +96,7 @@ namespace My {
 		RenderTransform m_pWinOrLoseAnimation;	// 勝敗のアニメーション情報格納
 		int m_nWinOrLoseMoveDelay;				// 勝敗の出現開始時間
 		int m_nWinOrLoseMoveDuration;			// 勝敗の出現時間
+		bool m_isWin;							// 勝利しているか
 
 		// 全体
 		int m_nEffectCount;	// 全体のエフェクトカウント

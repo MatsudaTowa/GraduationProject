@@ -57,6 +57,8 @@ public:
 		SOUND_LABEL_SE_CAST_FAIL,		//キャスト失敗
 		SOUND_LABEL_SE_CAST_CANCEL,		//キャストキャンセル
 		SOUND_LABEL_SE_RANKING,			//ランキング出現
+		SOUND_LABEL_SE_WIN,				//勝利出現
+		SOUND_LABEL_SE_LOSE,			//敗北出現
 		SOUND_LABEL_SE_CLICK,			//クリックしたときのSE
 		SOUND_LABEL_MAX,				//最大値
 	}SOUND_LABEL;

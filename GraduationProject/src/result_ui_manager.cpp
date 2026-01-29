@@ -44,6 +44,7 @@ My::CResultUIManager::CResultUIManager():
 	m_pWinOrLoseAnimation{},		// 勝敗アニメーション
 	m_nWinOrLoseMoveDelay(0),		// アニメーションするまでの時間
 	m_nWinOrLoseMoveDuration(0),	// アニメーションに掛かる時間
+	m_isWin(false),
 	// 全体
 	m_nEffectCount(INT_ZERO)
 {
@@ -296,9 +297,9 @@ HRESULT My::CResultUIManager::Init()
 			// 最下位なら
 			if (idx == MAX_RANKING_COUNT - 1)
 			{
-				// TODO : 敗北者のBGMを設定
+				// 敗北者のBGMを設定
 				CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_BGM_LOSER);
-
+				
 				// 最下位なら
 				m_pWinOrLoseObject->BindTexture(pTexture->GetAddress(pTexture->Regist(LOSE.texture)));
 				m_pWinOrLoseObject->SetPos		(LOSE.start.pos);	// 位置
@@ -317,11 +318,13 @@ HRESULT My::CResultUIManager::Init()
 					m_pWinOrLoseAnimation.size= (LOSE.start.size- LOSE.end.size) / static_cast<float>(LOSE.elapsedTime);	// 大きさ
 					m_pWinOrLoseAnimation.col = (LOSE.start.col - LOSE.end.col ) / static_cast<float>(LOSE.elapsedTime);	// 色
 				}
+				// 敗者であることを保存
+				m_isWin = false;
 			}
 			// 最下位でなければ
 			else
 			{
-				// TODO : 勝者のBGMを設定
+				// 勝者のBGMを設定
 				CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_BGM_WINNER);
 
 				// 最下位なら
@@ -342,6 +345,8 @@ HRESULT My::CResultUIManager::Init()
 					m_pWinOrLoseAnimation.size= (WIN.start.size- WIN.end.size) / static_cast<float>(WIN.elapsedTime);	// 大きさ
 					m_pWinOrLoseAnimation.col = (WIN.start.col - WIN.end.col ) / static_cast<float>(WIN.elapsedTime);	// 色
 				}
+				// 勝者であることを保存
+				m_isWin = true;
 			}
 
 			m_pWinOrLoseObject->SetVtx();	// 頂点の設定
@@ -420,7 +425,7 @@ void My::CResultUIManager::Update()
 
 				if (m_RankingsElapsedTime[nCnt] == 0)
 				{
-					// TODO : UIの移動が終わってからSEを鳴らす
+					// UIの移動が終わってからSEを鳴らす
 					// SEの設定
 					CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_RANKING);
 				}
@@ -515,6 +520,12 @@ void My::CResultUIManager::Update()
 	// 出現開始時間が経過していたら
 	else
 	{
+		// 敗北していたらアニメーション中にSEを鳴らす
+		if (m_isWin == false &&  m_nWinOrLoseMoveDelay == 0)
+		{
+			// TODO : 敗北の表示時にSEを鳴らす 
+			CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_LOSE);
+		}
 		// 出現時間が経過していなかったら
 		if (m_nWinOrLoseMoveDuration > 0)
 		{
@@ -527,7 +538,12 @@ void My::CResultUIManager::Update()
 			m_pWinOrLoseObject->AddSize		(-m_pWinOrLoseAnimation.size);	// 大きさ
 			m_pWinOrLoseObject->AddColor	(-m_pWinOrLoseAnimation.col );		// 色
 			m_pWinOrLoseObject->SetVtx();	// 頂点の設定
-
+			// 勝利していたらアニメーション後にSEを鳴らす
+			if (m_isWin == true && m_nWinOrLoseMoveDuration == 0)
+			{
+				// TODO : 勝利の表示時にSEを鳴らす
+				CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_WIN);
+			}
 		}
 	}
 	// 全体経過時間
