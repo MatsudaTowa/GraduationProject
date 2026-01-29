@@ -55,7 +55,7 @@ namespace My
 		 * @param [in]数
 		 * @return
 		 */
-		static CDamageNumberUI* Create(D3DXVECTOR3 pos, int num);
+		static CDamageNumberUI* Create(D3DXVECTOR3 pos, int num,int allnum);
 
 		/**
 		* @brief ステートの設定
@@ -80,6 +80,10 @@ namespace My
 		{
 			return m_pState;
 		}
+
+		void SetNum(int num) { m_num = num; }
+
+		int GetNum() { return m_num; }
 	private:
 		static constexpr float SIZE = 30.0f;
 		static const std::string TEX_NAME;

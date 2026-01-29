@@ -43,7 +43,7 @@ namespace My
 	private:
 
 		//定数
-		static constexpr float SPACE{ 25.0f };
+		static constexpr float SPACE{ 50.0f };
 
 		/**
 		 * @brief コンストラクタ

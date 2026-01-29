@@ -112,7 +112,7 @@ void My::CDamageNumberUI::Draw()
 //=============================================
 // 生成
 //=============================================
-My::CDamageNumberUI* My::CDamageNumberUI::Create(D3DXVECTOR3 pos, int num)
+My::CDamageNumberUI* My::CDamageNumberUI::Create(D3DXVECTOR3 pos, int num,int allnum)
 {
 	CDamageNumberUI* pUI = new CDamageNumberUI;
 	if (pUI == nullptr) { return nullptr; }
@@ -120,6 +120,7 @@ My::CDamageNumberUI* My::CDamageNumberUI::Create(D3DXVECTOR3 pos, int num)
 	pUI->BindTexture(GET_TEXTURE->GetAddress(GET_TEXTURE->Regist(CDamageNumberUI::TEX_NAME)));
 	pUI->Init();
 	pUI->SetTexPos({ num * 0.1f, 1.0f });
+	pUI->SetNum(allnum);
 	return pUI;
 }
 
@@ -128,8 +129,16 @@ My::CDamageNumberUI* My::CDamageNumberUI::Create(D3DXVECTOR3 pos, int num)
 //=============================================
 void My::Start::Update(CDamageNumberUI* ui)
 {
+	float uinum = ui->GetNum();
+
+	if (uinum > 10)
+	{
+		uinum = 10;
+	}
+	float maxsize = MAX_SIZE * ((uinum * 0.1f) + 1.0f);
+
 	// サイズを大きくする
-	if (ui->GetSize().x < MAX_SIZE)
+	if (ui->GetSize().x < maxsize)
 	{
 		float size = ui->GetSize().x + 5.0f;
 		ui->SetSize({ size,size });
@@ -140,7 +149,7 @@ void My::Start::Update(CDamageNumberUI* ui)
 	col.a += 0.07f;
 	ui->SetColor(col);
 
-	if (ui->GetSize().x >= MAX_SIZE && ui->GetColor().a > 1.0f)
+	if (ui->GetSize().x >= maxsize && ui->GetColor().a > 1.0f)
 	{
 		// サイズが最大になったらWait状態に移行
 		ui->SetState(new My::Wait);

@@ -30,6 +30,7 @@ void My::CDamageNumberUIFactory::Create(D3DXVECTOR3 pos, int damage)
 	int nDigitNum = 1;		//桁数
 	int nDamage = damage;	//桁を調べる用に数値をコピー
 	float fSpace = 0.0f;	//中心値から右に動かす値
+	int maxdamage = damage;
 
 	//桁を確認
 	while (nDamage >= 10)
@@ -49,7 +50,7 @@ void My::CDamageNumberUIFactory::Create(D3DXVECTOR3 pos, int damage)
 		damage /= 10;			//桁を減らす
 
 		//ダメージ数値UIの生成
-		CDamageNumberUI::Create({ pos.x + fSpace, pos.y, pos.z }, nNum);
+		CDamageNumberUI::Create({ pos.x + fSpace, pos.y, pos.z }, nNum, maxdamage);
 
 		//数字の隙間分左に動かす
 		fSpace -= SPACE;
