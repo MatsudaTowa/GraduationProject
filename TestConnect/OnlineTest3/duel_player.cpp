@@ -32,7 +32,9 @@ My::CDuel_Player::CDuel_Player() :
 //=====================================
 bool My::CDuel_Player::UpdateEnergy(int deltatime)
 {
+	//更新を行うか
 	if (!CDuel_Manager::GetInstance()->GetIsStartBattle()) return false;
+	if (m_Status.life <= 0) return false;
 	
 	//エナジーが最大なら更新しない
 	if (m_Status.energy >= 99)
