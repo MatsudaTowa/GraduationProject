@@ -52,6 +52,8 @@ public:
 		SOUND_LABEL_SE_COUNT_DOWN,		//カウントダウン
 		SOUND_LABEL_SE_DUEL,			//デュエル
 		SOUND_LABEL_SE_CARD_DRAW,		//カードドロー
+		SOUND_LABEL_SE_CARD_CAST,		//カードキャスト
+		SOUND_LABEL_SE_WAIT_SHIELD,		//守備カード設置
 		SOUND_LABEL_SE_CAST_FAIL,		//キャスト失敗
 		SOUND_LABEL_SE_CAST_CANCEL,		//キャストキャンセル
 		SOUND_LABEL_SE_RANKING,			//ランキング出現

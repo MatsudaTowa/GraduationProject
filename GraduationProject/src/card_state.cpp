@@ -390,6 +390,9 @@ void My::CCardStateStay::Update(CCard* cpy, CDuelCharacter* duel)
 //=======================================================================================
 void My::CCardStateWait::Init(CCard* cpy, CDuelCharacter* /*duel*/)
 {
+	// SE‚ð–Â‚ç‚·
+	CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_WAIT_SHIELD);
+
 	//ŽŽ‚µ‚É‰æ–ÊŠO‚É”ò‚Î‚·
 	cpy->SetPos({ -1000.0f, 0.0f, 0.0f });
 }

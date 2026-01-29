@@ -27,6 +27,8 @@ const CSound::SOUNDINFO CSound::SOUND_INFO[CSound::SOUND_LABEL_MAX] =
 	{"data\\SOUND\\SE\\countdown.wav", 0, 1.0f},			//カウントダウンSE
 	{"data\\SOUND\\SE\\duel000.wav", 0, 0.8f},				//デュエルSE
 	{"data\\SOUND\\SE\\Draw_a_card.wav", 0, 1.0f},			//カードドローSE
+	{"data\\SOUND\\SE\\card_cast.wav", 0, 1.0f},			//カードキャストSE
+	{"data\\SOUND\\SE\\wait_shield.wav", 0, 1.0f},			//守備カード設置SE
 	{"data\\SOUND\\SE\\Incorrect.wav", 0, 1.0f},			//キャスト失敗SE
 	{"data\\SOUND\\SE\\Cutting_through.wav", 0, 1.0f},		//キャストキャンセルSE
 	{"data\\SOUND\\SE\\appear.wav", 0, 1.0f},				//ランキングSE

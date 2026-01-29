@@ -413,6 +413,9 @@ bool My::CCard::CardCastToMouse(CDuelCharacter* duel, CActiveSceneCharacter* pla
 
 		if (IsCast(duel, Area))
 		{
+			// カードキャストのSEを鳴らす
+			CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_CARD_CAST);
+
 			//キャスト先
 			//m_CastDestination = AREA;	//エリア
 
