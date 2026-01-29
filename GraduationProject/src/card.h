@@ -22,6 +22,7 @@ namespace My
 	class CActiveScenePlayer;
 	class CDuelCharacter;
 	class CZone;
+	class CTotalDamageUI;
 
 	class CCard :public CObject3D
 	{
@@ -358,6 +359,11 @@ namespace My
 		//ステイ時間を表示するか
 		virtual bool IsCreatStayCount() = 0;
 
+		// トータルダメージUIの設定
+		void SetTotalDamageUI(CTotalDamageUI* ui) { m_pTotalDamageUI = ui; }
+
+		// トータルダメージUIの取得
+		CTotalDamageUI* GetTotalDamageUI() { return m_pTotalDamageUI; }
 	private:
 
 		//次の列挙から過去のゾーンのポインタを返す
@@ -455,6 +461,11 @@ namespace My
 		* キャスト先
 		*/
 		CastDestination m_CastDestination;
+
+		/**
+		* @brief 総ダメージUI
+		*/
+		CTotalDamageUI* m_pTotalDamageUI;
 	};
 };
 

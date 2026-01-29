@@ -18,8 +18,7 @@ m_DefCardVector(),
 m_StackedCardsList(),
 m_isTopCastCard(true),
 m_pStackCard(nullptr),
-m_DamageInfo(),
-m_pTotalDamageUI(nullptr)
+m_DamageInfo()
 {
 	m_DamageInfo.clear();
 	m_DefCardVector.clear();
@@ -64,12 +63,12 @@ void My::CCardAttack::Uninit()
 //===========================================================================================================
 void My::CCardAttack::Update()
 {
-	if (m_pTotalDamageUI != nullptr)
+	if (GetTotalDamageUI() != nullptr)
 	{
 		// ダメージUIの位置更新
 		D3DXVECTOR3 pos = GetPos();
 		pos.y += 100.0f;
-		m_pTotalDamageUI->SetPos(ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), pos));
+		GetTotalDamageUI()->SetPos(ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), pos));
 	}
 	
 	CCard::Update();
@@ -400,7 +399,7 @@ void My::CCardAttack::ReceiveTrigger()
 	}
 
 	// ダメージUIの終了
-	m_pTotalDamageUI->Uninit();
+	GetTotalDamageUI()->Uninit();
 
 	//カードクリア
 	m_StackedCardsList.clear();
@@ -489,10 +488,10 @@ void My::CCardAttack::LoadCardInfo(RakNet::BitStream* bsin)
 		//一番上のフラグを立てる
 		m_isTopCastCard = true;
 
-		if (m_pTotalDamageUI == nullptr)
+		if (GetTotalDamageUI() == nullptr)
 		{
 			//ダメージUIの生成
-			m_pTotalDamageUI = CTotalDamageUI::Create(ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), GetPos()), m_nAttackValue);
+			SetTotalDamageUI(CTotalDamageUI::Create(ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), GetPos()), m_nAttackValue));
 		}
 		
 	}
