@@ -23,7 +23,8 @@ m_DefCardVector(),
 m_StackedCardsList(),
 m_isTopCastCard(true),
 m_pStackCard(nullptr),
-m_DamageInfo()
+m_DamageInfo(),
+m_isDamage(false)
 {
 	m_DamageInfo.clear();
 	m_DefCardVector.clear();
@@ -154,6 +155,7 @@ void My::CCardAttack::Trigger()
 		if (Damage.second > 0)
 		{
 			pPlayer->ReceiveDamage(Damage.second);
+			m_isDamage = true;	//ダメージを与えたフラグを立てる
 		}
 	}
 
@@ -188,7 +190,7 @@ void My::CCardAttack::Trigger()
 void My::CCardAttack::SendTriggerData(RakNet::BitStream* bsout)
 {
 	//カードの書き出し
-	//bsout->Write(m_StackedCardsList.size());	//重ねているカードの数
+	bsout->Write(m_isDamage);	//重ねているカードの数
 
 	return;
 

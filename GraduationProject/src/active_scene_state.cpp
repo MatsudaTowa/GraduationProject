@@ -31,6 +31,9 @@ My::CLobby::CLobby()
 
 	//BGMの設定
 	CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_BGM_LOBBY);
+
+	//デュエル情報の初期化
+	CDuel_Manager::GetInstance()->Init();
 }
 
 //=============================================
@@ -39,9 +42,6 @@ My::CLobby::CLobby()
 My::CLobby::~CLobby()
 {
 	m_characterIdx = -1;
-
-	//デュエル情報の初期化
-	CDuel_Manager::GetInstance()->Init();
 
 	//終了フラグを初期化
 	My::CActiveSceneManager::GetInstance()->SetFinish(false);

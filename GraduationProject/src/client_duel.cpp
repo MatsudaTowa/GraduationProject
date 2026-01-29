@@ -691,7 +691,7 @@ void CClient_Duel::ReceiveTriggerCard([[maybe_unused]] RakNet::Packet* packet)
     }
     
     //トリガー受信時の処理
-    TriggerCard->ReceiveTrigger();
+    TriggerCard->ReceiveTrigger(&bsIn);
 
     //リストを取得してソートする
     std::list<My::CActiveSceneCharacter*> SortList = My::CActiveSceneManager::GetInstance()->GetCharacterList();

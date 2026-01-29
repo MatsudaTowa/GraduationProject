@@ -689,7 +689,7 @@ My::CZone* My::CCard::CastToZone(ZONE zone, CDuelCharacter* duel)
 //===========================================================================================================
 //トリガーを受信した際の処理
 //===========================================================================================================
-void My::CCard::ReceiveTrigger()
+void My::CCard::ReceiveTrigger(RakNet::BitStream* /*bsin*/)
 {
 	//使用者を見つけゾーンの位置を変更
 	CActiveSceneCharacter* pUsedPlayer = CActiveSceneManager::GetInstance()->GetCharacter(GetUserId());

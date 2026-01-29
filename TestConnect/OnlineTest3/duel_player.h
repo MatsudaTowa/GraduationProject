@@ -73,7 +73,7 @@ namespace My
 		static constexpr int MAX_HAND_CARD{ 10 };		//手札の枚数
 
 		//変数
-		Status m_Status = { 40, 0, 0, 92, 10 };	//ステータス
+		Status m_Status = { 40, 0, 0, 2, 20 };	//ステータス
 		RakNet::Time m_ElapsedTime;				//経過時間
 
 		//TODOここに対戦中に受け取る変数を追加

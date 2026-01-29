@@ -185,6 +185,7 @@ namespace My
 		std::list<CCardAttack*> m_StackedCardsList;		// 重なっているカード
 		bool m_isTopCastCard;							// 一番上のカードか
 		CCardAttack* m_pStackCard;						// 重ねたカード
+		bool m_isDamage;								// ダメージが発生したか
 	};
 }
 

@@ -345,7 +345,7 @@ namespace My
 		float GetStartCastTime() { return m_fCastStartTime; }
 
 		//トリガーを受信した際の処理
-		virtual void ReceiveTrigger();
+		virtual void ReceiveTrigger(RakNet::BitStream* bsin);
 
 		//カード情報の送信
 		virtual void SendCardInfo(RakNet::BitStream* bsout) = 0;

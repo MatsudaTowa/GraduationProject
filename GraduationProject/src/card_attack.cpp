@@ -364,8 +364,12 @@ void My::CCardAttack::Trigger()
 //===========================================================================================================
 //トリガー受信時の処理
 //===========================================================================================================
-void My::CCardAttack::ReceiveTrigger()
+void My::CCardAttack::ReceiveTrigger(RakNet::BitStream* bsin)
 {
+	//ダメージを与えたか受信
+	bool isDamage = false;
+	bsin->Read(isDamage);
+
 	//守備カード周回
 	for (auto& iter : m_DefCardVector)
 	{
@@ -405,7 +409,7 @@ void My::CCardAttack::ReceiveTrigger()
 	m_StackedCardsList.clear();
 
 	//親の処理
-	My::CCard::ReceiveTrigger();
+	My::CCard::ReceiveTrigger(bsin);
 }
 
 //===========================================================================================================

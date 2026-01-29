@@ -153,7 +153,7 @@ namespace My
 		std::map<int, int>& GetDamageInfo() { return m_DamageInfo; }
 
 		//トリガーを受信した際の処理
-		void ReceiveTrigger() override;
+		void ReceiveTrigger(RakNet::BitStream* bsin) override;
 
 		//カード情報の送信
 		void SendCardInfo(RakNet::BitStream* bsout) override;
