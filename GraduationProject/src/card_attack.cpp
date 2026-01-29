@@ -380,11 +380,11 @@ void My::CCardAttack::ReceiveTrigger(RakNet::BitStream* bsin)
 			{
 				CCardBattleAnim* pAnim = new CCardBattleAnim;
 				anim_manager->Regist(pAnim);
-				pAnim->SetPsendCardFrame(this,CCardBattleAnim::ATTACK);
+				pAnim->SetPsendCardFrame(this, CCardBattleAnim::ATTACK, isDamage);
 				CCardDeffence* pDefence = *m_DefCardVector.begin();
 				if (pDefence != nullptr)
 				{
-					pAnim->SetPsendCardFrame(pDefence, CCardBattleAnim::DEFFENCE);
+					pAnim->SetPsendCardFrame(pDefence, CCardBattleAnim::DEFFENCE, isDamage);
 				}
 			}
 		}
@@ -567,7 +567,6 @@ void My::CCardAttack::LoadCardInfo(RakNet::BitStream* bsin)
 		m_isTopCastCard = false;				//一番上のフラグを下す
 		StackAttackCard->AddStackCards(this);	//重ね先のカードの重ねカードに自身を追加
 		m_pStackCard = StackAttackCard;			//重ね先の登録
-		StackAttackCard->AddDamage(m_nAttackValue);	//攻撃力を加算
 
 		//ステイ時間の初期化
 		CCardStateStay* StayState = dynamic_cast<CCardStateStay*>(GetState());
@@ -579,7 +578,7 @@ void My::CCardAttack::LoadCardInfo(RakNet::BitStream* bsin)
 		// 攻撃カードが重なったときの合計攻撃力表示更新
 		if (StackAttackCard->GetTotalDamageUI() != nullptr)
 		{
-			StackAttackCard->GetTotalDamageUI()->SetTexPos({ (/*StackAttackCard->GetAttackValue() + m_nAttackValue*/GetDamageInfo()[0]) * 0.1f,1.0f });
+			StackAttackCard->GetTotalDamageUI()->SetTexPos({ (StackAttackCard->GetAttackValue() + m_nAttackValue) * 0.1f,1.0f });
 		}
 		
 		break;
@@ -605,16 +604,4 @@ void My::CCardAttack::LoadCardInfo(RakNet::BitStream* bsin)
 bool My::CCardAttack::IsSetUpStay()
 {
 	return m_isTopCastCard;
-}
-
-//===========================================================================================================
-//ダメージの追加
-//===========================================================================================================
-void My::CCardAttack::AddDamage(int damage)
-{
-	//現在のダメージを追加
-	for (auto& Damage : m_DamageInfo)
-	{
-		Damage.second += damage;
-	}
 }

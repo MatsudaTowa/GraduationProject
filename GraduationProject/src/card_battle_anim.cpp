@@ -9,12 +9,13 @@
 namespace
 {
 	const float ILLUST_SHIFT_Y = -32.5f;
+	const float SPEED = 15.0f;
 }
 
 //===========================================================================================================================================================
 // 
 //===========================================================================================================================================================
-My::CCardBattleAnim::CCardBattleAnim():m_pCardIllust(),m_pPseundCard()
+My::CCardBattleAnim::CCardBattleAnim():m_pCardIllust(),m_pPseundCard(), m_isBack(true), m_isDamage(false),m_isHit(false)
 {
 }
 
@@ -49,7 +50,7 @@ void My::CCardBattleAnim::Uninit()
 bool My::CCardBattleAnim::DuelAnim()
 {
 	DrawPasend();
-	bool isbattle_finish;
+	bool isbattle_finish = false;
 
 	//プレイヤーの位置への方向情報
 	D3DXVECTOR3 Vector = m_pPseundCard[DEFFENCE].card_pos  - m_pPseundCard[ATTACK].card_pos;
@@ -63,19 +64,28 @@ bool My::CCardBattleAnim::DuelAnim()
 		m_pPseundCard[ATTACK].card_frame[i]->SetisDraw(true);
 		m_pPseundCard[DEFFENCE].card_frame[i]->SetisDraw(true);
 	}
-	if (distance > CCardFrame::CARD_WIDTH * 1.75f)
+	if (distance > CCardFrame::CARD_WIDTH * 1.75f && !m_isHit)
 	{
 		D3DXVECTOR3 dir = Vector;
 		D3DXVec3Normalize(&dir, &dir);
 
-		D3DXVECTOR3 move = dir * 10.0f;
+		D3DXVECTOR3 move = dir * SPEED;
 
-		m_pPseundCard[ATTACK].card_pos += move;
-		m_pPseundCard[ATTACK].card_move = move;
+		if (distance < CCardFrame::CARD_WIDTH * 5.75 && m_isBack)
+		{
+			m_pPseundCard[ATTACK].card_pos -= move;
+			m_pPseundCard[ATTACK].card_move = move;
+			m_pCardIllust[ATTACK]->SetPos(m_pCardIllust[ATTACK]->GetPos() - move);
+		}
+		else
+		{
+			m_isBack = false;
+			m_pPseundCard[ATTACK].card_pos += move * 2.0f;
+			m_pPseundCard[ATTACK].card_move = move * 2.0f;
+			m_pCardIllust[ATTACK]->SetPos(m_pCardIllust[ATTACK]->GetPos() + move * 2.0f);
+		}
 
-		m_pCardIllust[ATTACK]->SetPos(
-			m_pCardIllust[ATTACK]->GetPos() + move
-		);
+
 
 		for (int i = 0; i < CCardFrame::FRAMETYPE_MAX; ++i)
 		{
@@ -86,17 +96,65 @@ bool My::CCardBattleAnim::DuelAnim()
 	}
 	else
 	{
-		m_pPseundCard[ATTACK].card_move = VEC3_RESET_ZERO;
-		isbattle_finish = true;
+		m_isHit = true;
+		D3DXVECTOR3 dir = Vector;
+		D3DXVec3Normalize(&dir, &dir);
+
+		float knockSpeed = SPEED * 2.0f;
+
+		if (m_isDamage)
+		{
+			// 守備カードを正方向に吹き飛ばす
+			D3DXVECTOR3 move = dir * knockSpeed;
+			m_pPseundCard[ATTACK].card_move = VEC3_RESET_ZERO;
+
+			m_pPseundCard[DEFFENCE].card_pos += move;
+			m_pPseundCard[DEFFENCE].card_move = move;
+
+			m_pCardIllust[DEFFENCE]->SetPos(m_pCardIllust[DEFFENCE]->GetPos() + move);
+
+			for (int i = 0; i < CCardFrame::FRAMETYPE_MAX; ++i)
+			{
+				m_pPseundCard[DEFFENCE].card_frame[i]->SetPos(m_pPseundCard[DEFFENCE].card_pos);
+			}
+
+			// 画面外に出たら終了
+			if (m_pPseundCard[DEFFENCE].card_pos.x - CCardFrame::CARD_WIDTH > SCREEN_WIDTH)
+			{
+				isbattle_finish = true;
+			}
+		}
+		else
+		{
+			// 攻撃カードを逆方向に吹き飛ばす
+			D3DXVECTOR3 move = -dir * knockSpeed;
+
+			m_pPseundCard[ATTACK].card_pos += move;
+			m_pPseundCard[ATTACK].card_move = move;
+
+			m_pCardIllust[ATTACK]->SetPos(
+				m_pCardIllust[ATTACK]->GetPos() + move
+			);
+
+			for (int i = 0; i < CCardFrame::FRAMETYPE_MAX; ++i)
+			{
+				m_pPseundCard[ATTACK].card_frame[i]->SetPos(m_pPseundCard[ATTACK].card_pos);
+			}
+
+			if (m_pPseundCard[ATTACK].card_pos.x+ CCardFrame::CARD_WIDTH < 0.0f)
+			{
+				isbattle_finish = true;
+			}
+		}
 	}
 
 	return isbattle_finish;
 }
 
-void My::CCardBattleAnim::SetPsendCardFrame(CCard* card, PSEND_CARD_TYPE type)
+void My::CCardBattleAnim::SetPsendCardFrame(CCard* card, PSEND_CARD_TYPE type, bool isDamage)
 {
 	D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), card->GetPos()); //スクリーン座標に変換
-
+	m_isDamage = isDamage;
 	m_pPseundCard[type].card_pos = screen_pos;
 
 	for (int i = 0; i < CCardFrame::FRAMETYPE_MAX; ++i)
