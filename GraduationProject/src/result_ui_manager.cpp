@@ -506,7 +506,7 @@ void My::CResultUIManager::Update()
 				m_pRankingsObject[nCnt]->AddColor	(-m_RankingsAnimation[nCnt].col );	// 色
 				m_pRankingsObject[nCnt]->SetVtx();	// 頂点の設定
 
-				if (m_PlayerIDsElapsedTime[nCnt] == 0)
+				if (m_RankingsElapsedTime[nCnt] == 0)
 				{
 					// TODO : UIの移動が終わってからSEを鳴らす
 					// SEの設定
@@ -615,6 +615,7 @@ void My::CResultUIManager::Update()
 			m_pWinOrLoseObject->AddSize		(-m_pWinOrLoseAnimation.size);	// 大きさ
 			m_pWinOrLoseObject->AddColor	(-m_pWinOrLoseAnimation.col );		// 色
 			m_pWinOrLoseObject->SetVtx();	// 頂点の設定
+
 		}
 	}
 	// 全体経過時間
