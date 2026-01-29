@@ -370,6 +370,12 @@ void My::CCardAttack::ReceiveTrigger(RakNet::BitStream* bsin)
 	bool isDamage = false;
 	bsin->Read(isDamage);
 
+	if (!isDamage)
+	{// 攻撃を防ぎ切ったとき
+		// ガードSE追加
+		CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_GUARD);
+	}
+
 	//守備カード周回
 	for (auto& iter : m_DefCardVector)
 	{

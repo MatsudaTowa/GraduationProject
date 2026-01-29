@@ -725,7 +725,7 @@ void CClient_Duel::ReceiveTriggerCard([[maybe_unused]] RakNet::Packet* packet)
         //体力に変動があればUIを表示
         if (nLife - Status.life > 0)
         {
-            // TODO : ダメージSEを追加
+            // ダメージSEを追加
             My::CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_DAMAGE);
             D3DXVECTOR3 screen_pos = ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), iter->GetPos()); //スクリーン座標に変換
             My::CDamageNumberUIFactory::GetInstance()->Create(screen_pos, nLife - Status.life);

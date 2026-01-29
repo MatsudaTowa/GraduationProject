@@ -32,6 +32,7 @@ const CSound::SOUNDINFO CSound::SOUND_INFO[CSound::SOUND_LABEL_MAX] =
 	{"data\\SOUND\\SE\\Incorrect.wav", 0, 1.0f},			//キャスト失敗SE
 	{"data\\SOUND\\SE\\Cutting_through.wav", 0, 1.0f},		//キャストキャンセルSE
 	{"data\\SOUND\\SE\\damage.wav", 0, 1.0f},				//ダメージSE
+	{"data\\SOUND\\SE\\guard.wav", 0, 1.0f},				//ガードSE
 	{"data\\SOUND\\SE\\appear.wav", 0, 1.0f},				//ランキングSE
 	{"data\\SOUND\\SE\\win.wav", 0, 1.0f},					//勝利SE
 	{"data\\SOUND\\SE\\lose.wav", 0, 1.0f},					//敗北SE
