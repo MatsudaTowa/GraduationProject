@@ -237,9 +237,15 @@ void My::CHand::DeckDraw(CPlayerDuelState* state)
 
 		CManager::GetInstance()->GetSound()->PlaySound(CSound::SOUND_LABEL_SE_CARD_DRAW);
 
+		//ドロー処理
 		HandDraw(1, state);
-		--status.energy;
-		CActiveSceneManager::GetInstance()->GetPlayer()->SetStatus(status);
+		
+		//オフライン時のみエナジーを自身で減らす
+		if (!CRakNet::GetInstance()->GetOnline())
+		{
+			--status.energy;
+			CActiveSceneManager::GetInstance()->GetPlayer()->SetStatus(status);
+		}
 	}
 }
 

@@ -70,6 +70,7 @@ namespace My
 
 		//定数
 		static constexpr int ENERGY_UP_TIME{ 3000 };
+		static constexpr int MAX_HAND_CARD{ 10 };		//手札の枚数
 
 		//変数
 		Status m_Status = { 40, 0, 0, 92, 10 };	//ステータス

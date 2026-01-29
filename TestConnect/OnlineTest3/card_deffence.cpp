@@ -152,6 +152,14 @@ bool My::CCardDeffence::LoadCastInfo(RakNet::BitStream* bsin, CastDestination de
 	{
 	case CastDestination::AREA:	//エリアの場合
 
+	{
+		My::CDuel_Player* pPlayer = nullptr;
+
+		//番号が一致するプレイヤーの取得
+		pPlayer = My::CDuel_Player_Manager::GetInstance()->GetDuelPlayer(GetUserId());
+		if (pPlayer->GetZoneManager()->GetWaitZone()->GetList().size() >= My::CWaitZone::MAX_CARD) return false;
+	}
+		
 		//キャスト状態に変更
 		SetStartCastTime(CDuel_Manager::GetInstance()->GetDuelTimer().GetElapsedTime());
 		ChangeState(My::CCardState::CARD_CAST, CDuel_Player_Manager::GetInstance()->GetDuelPlayer(GetUserId()));

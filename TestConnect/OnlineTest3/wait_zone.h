@@ -20,6 +20,10 @@ namespace My
 	class CWaitZone : public CZone
 	{
 	public:
+
+		//定数
+		static constexpr int MAX_CARD = 6;
+
 		/**
 		* @brief コンストラクタ
 		*/

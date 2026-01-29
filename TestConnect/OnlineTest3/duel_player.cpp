@@ -79,11 +79,18 @@ bool My::CDuel_Player::DrawCard()
 		return false;
 	}
 
+	//最大手札枚数ではないか
+	if (m_ZoneManager->GetHandZone()->GetList().size() >= MAX_HAND_CARD)
+	{
+		return false;
+	}
+
 	//エナジーを消費
 	GetStatus().energy--;
 
 	//カードの移動
 	CCard* pCard = m_ZoneManager->GetDeck()->GetTopCard();
+	pCard->SetCurrentZone(CCard::ZONE::HAND);
 	m_ZoneManager->MoveZone(pCard, m_ZoneManager->GetDeck(), m_ZoneManager->GetHandZone(), false);
 
 	//ステータスに反映

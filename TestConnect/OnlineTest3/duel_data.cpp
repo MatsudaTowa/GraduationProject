@@ -825,6 +825,9 @@ void CDuel_Data::SendDrawCard(RakNet::RakPeerInterface* peer, int userid)
 
         //全クライアントにブロードキャスト
         peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);
+
+        //ステータス送信
+        CRakNet_Server::GetInstance()->SendStatus();
     }
 }
 
