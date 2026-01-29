@@ -65,94 +65,6 @@ HRESULT My::CResultUIManager::Init()
 	HWND hWnd = GET_MANAGER->GetHwnd();
 
 	json j;
-#if SaveJson
-	// ランキング
-	for (int nCnt = 0; nCnt < 4; nCnt++)
-	{
-		std::string key = "PL_" + std::to_string(nCnt + 1);	// PL番号
-															//テクスチャ
-		j["Ranking"][key]["Texture"] = RANKINGS[nCnt].texture;
-		// 開始設定
-		j["Ranking"][key]["Start"]["Pos" ] = json::array({ RANKINGS[nCnt].start.pos.x, RANKINGS[nCnt].start.pos.y, RANKINGS[nCnt].start.pos.z });								// 位置
-		j["Ranking"][key]["Start"]["Rot" ] = json::array({ RANKINGS[nCnt].start.rot.x, RANKINGS[nCnt].start.rot.y, RANKINGS[nCnt].start.rot.z });								// 向き
-		j["Ranking"][key]["Start"]["Size"] = json::array({ RANKINGS[nCnt].start.size.x,RANKINGS[nCnt].start.size.y });															// 大きさ
-		j["Ranking"][key]["Start"]["Col" ] = json::array({ RANKINGS[nCnt].start.col.r, RANKINGS[nCnt].start.col.g, RANKINGS[nCnt].start.col.b, RANKINGS[nCnt].start.col.b });	// 色
-		// 終了設定
-		j["Ranking"][key]["End"]["Pos" ] = json::array({ RANKINGS[nCnt].end.pos.x, RANKINGS[nCnt].end.pos.y, RANKINGS[nCnt].end.pos.z });								// 位置
-		j["Ranking"][key]["End"]["Rot" ] = json::array({ RANKINGS[nCnt].end.rot.x, RANKINGS[nCnt].end.rot.y, RANKINGS[nCnt].end.rot.z });								// 向き
-		j["Ranking"][key]["End"]["Size"] = json::array({ RANKINGS[nCnt].end.size.x,RANKINGS[nCnt].end.size.y });														// 大きさ
-		j["Ranking"][key]["End"]["Col" ] = json::array({ RANKINGS[nCnt].end.col.r, RANKINGS[nCnt].end.col.g, RANKINGS[nCnt].end.col.b, RANKINGS[nCnt].end.col.a });		// 色
-		// 時間
-		j["Ranking"][key]["DelayTime"] = RANKINGS[nCnt].delayTime;		// 開始までの時間
-		j["Ranking"][key]["ElapsedTime"] = RANKINGS[nCnt].elapsedTim	// 終了までの時間
-	}
-	// プレイヤーID
-	for (int nCnt = 0; nCnt < MAX_RANKING_COUNT; nCnt++)
-	{
-		std::string key = "PL_" + std::to_string(nCnt + 1);	// PL番号
-															//テクスチャ
-		j["PlayerIDs"][key]["Texture"] = PLAYER_IDS[nCnt].texture;
-		// 開始設定
-		j["PlayerIDs"][key]["Start"]["Pos" ] = json::array({ PLAYER_IDS[nCnt].start.pos.x, PLAYER_IDS[nCnt].start.pos.y, PLAYER_IDS[nCnt].start.pos.z });									// 位置
-		j["PlayerIDs"][key]["Start"]["Rot" ] = json::array({ PLAYER_IDS[nCnt].start.rot.x, PLAYER_IDS[nCnt].start.rot.y, PLAYER_IDS[nCnt].start.rot.z });									// 向き
-		j["PlayerIDs"][key]["Start"]["Size"] = json::array({ PLAYER_IDS[nCnt].start.size.x,PLAYER_IDS[nCnt].start.size.y });																// 大きさ
-		j["PlayerIDs"][key]["Start"]["Col" ] = json::array({ PLAYER_IDS[nCnt].start.col.r, PLAYER_IDS[nCnt].start.col.g, PLAYER_IDS[nCnt].start.col.b, PLAYER_IDS[nCnt].start.col.b });		// 色
-		// 終了設定
-		j["PlayerIDs"][key]["End"]["Pos" ] = json::array({ PLAYER_IDS[nCnt].end.pos.x, PLAYER_IDS[nCnt].end.pos.y, PLAYER_IDS[nCnt].end.pos.z });									// 位置
-		j["PlayerIDs"][key]["End"]["Rot" ] = json::array({ PLAYER_IDS[nCnt].end.rot.x, PLAYER_IDS[nCnt].end.rot.y, PLAYER_IDS[nCnt].end.rot.z });									// 向き
-		j["PlayerIDs"][key]["End"]["Size"] = json::array({ PLAYER_IDS[nCnt].end.size.x,PLAYER_IDS[nCnt].end.size.y });																// 大きさ
-		j["PlayerIDs"][key]["End"]["Col" ] = json::array({ PLAYER_IDS[nCnt].end.col.r, PLAYER_IDS[nCnt].end.col.g, PLAYER_IDS[nCnt].end.col.b, PLAYER_IDS[nCnt].end.col.b });		// 色
-		// 時間
-		j["PlayerIDs"][key]["DelayTime"] = PLAYER_IDS[nCnt].delayTime;		// 開始までの時間
-		j["PlayerIDs"][key]["ElapsedTime"] = PLAYER_IDS[nCnt].elapsedTime;	// 終了までの時間
-	}
-	// 勝敗
-	{
-		// 勝利
-		{
-			//テクスチャ
-			j["Win"]["Texture"] = WIN.texture;
-			// 開始設
-			j["Win"]["Start"]["Pos" ] = json::array({WIN.start.pos.x, WIN.start.pos.y, WIN.start.pos.z });						// 位置
-			j["Win"]["Start"]["Rot" ] = json::array({WIN.start.rot.x, WIN.start.rot.y, WIN.start.rot.z });						// 向き
-			j["Win"]["Start"]["Size"] = json::array({WIN.start.size.x,WIN.start.size.y });										// 大きさ
-			j["Win"]["Start"]["Col" ] = json::array({WIN.start.col.r, WIN.start.col.g, WIN.start.col.b,WIN.start.col.a });		// 色
-			// 終了設
-			j["Win"]["End"]["Pos" ] = json::array({WIN.end.pos.x, WIN.end.pos.y, WIN.end.pos.z });
-			j["Win"]["End"]["Rot" ] = json::array({WIN.end.rot.x, WIN.end.rot.y, WIN.end.rot.z });
-			j["Win"]["End"]["Size"] = json::array({WIN.end.size.x,WIN.end.size.y });
-			j["Win"]["End"]["Col" ] = json::array({WIN.end.col.r, WIN.end.col.g, WIN.end.col.b,WIN.end.col.a });
-			// 時間
-			j["Win"]["DelayTime"] = WIN.delayTime;		// 開始までの時間
-			j["Win"]["ElapsedTime"] = WIN.elapsedTime;	// 終了までの時間
-		}
-		// 敗北
-		{
-			//テクスチャ
-			j["Lose"]["Texture"] = LOSE.texture;
-			// 開始設
-			j["Lose"]["Start"]["Pos" ] = json::array({LOSE.start.pos.x, LOSE.start.pos.y, LOSE.start.pos.z });					// 位置
-			j["Lose"]["Start"]["Rot" ] = json::array({LOSE.start.rot.x, LOSE.start.rot.y, LOSE.start.rot.z });					// 向き
-			j["Lose"]["Start"]["Size"] = json::array({LOSE.start.size.x,LOSE.start.size.y });									// 大きさ
-			j["Lose"]["Start"]["Col" ] = json::array({LOSE.start.col.r, LOSE.start.col.g, LOSE.start.col.b,LOSE.start.col.b });	// 色
-			// 終了設
-			j["Lose"]["End"]["Pos" ] = json::array({LOSE.end.pos.x, LOSE.end.pos.y, LOSE.end.pos.z });					// 位置
-			j["Lose"]["End"]["Rot" ] = json::array({LOSE.end.rot.x, LOSE.end.rot.y, LOSE.end.rot.z });					// 向き
-			j["Lose"]["End"]["Size"] = json::array({LOSE.end.size.x,LOSE.end.size.y });									// 大きさ
-			j["Lose"]["End"]["Col" ] = json::array({LOSE.end.col.r, LOSE.end.col.g, LOSE.end.col.b,LOSE.end.col.a });	// 色
-			// 時間
-			j["Lose"]["DelayTime"] = LOSE.delayTime;		// 開始までの時間
-			j["Lose"]["ElapsedTime"] = LOSE.elapsedTime;	// 終了までの時間
-		}
-	}
-	// 強調表示
-	{
-		j["MY_PLAYER_BLINK"] = MY_PLAYER_BLINK;
-		j["MY_PLAYER_BLINK_LIGHT_INTENSITY"] = MY_PLAYER_BLINK_LIGHT_INTENSITY;
-	}
-	// 保存
-	SaveAnimation(ANIMATION_DATA_FILE_PATH, j);
-#endif // SaveJson
 #if Json
 	// 読み込み処理
 	j = LoadAnimation(ANIMATION_DATA_FILE_PATH);
@@ -687,7 +599,7 @@ void My::CResultUIManager::Update()
 //=============================================
 /// <param name="nRanking">順位</param>
 /// <param name="nPlayer">プレイヤーの順位</param>
-void My::CResultUIManager::SetRanking(_In_ int nRanking[MAX_RANKING_COUNT],_In_ int nPlayer)
+void My::CResultUIManager::SetRanking(_In_ int nRanking[MAX_RANKING_COUNT])
 {
 	// 順位をコピー
 	for (int nCnt = 0; nCnt < MAX_RANKING_COUNT; nCnt++)
@@ -746,10 +658,10 @@ void My::CResultUIManager::SaveAnimation(const std::string& path, const json& j)
 /// <param name="nRanking">順位</param>
 /// <param name="nPlayer">プレイヤーの順位</param>
 /// <returns>生成に成功したらポインターを返す</returns>
-My::CResultUIManager* My::CResultUIManager::Create(_In_ int nRanking[MAX_RANKING_COUNT],_In_ int nPlayer)
+My::CResultUIManager* My::CResultUIManager::Create(_In_ int nRanking[MAX_RANKING_COUNT])
 {
 	CResultUIManager* pResultUIManager= new CResultUIManager();
-	pResultUIManager->SetRanking(nRanking, nPlayer);
+	pResultUIManager->SetRanking(nRanking);
 
 	// 初期化
 	if (FAILED(pResultUIManager->Init()))

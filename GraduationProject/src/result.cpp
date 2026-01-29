@@ -54,7 +54,6 @@ HRESULT My::CResult::Init()
         //****************************
         // TODO : 仮で順位を設定している
         //****************************
-        int nPlayerNum = MAX_RANKING_COUNT - 1;                                     // プレイヤー番号 0 = 1p
         int nRunking[MAX_RANKING_COUNT] = { 0, 1, 2, 3 };                       // ランキング
         int nCount = 0;                                                             // 周回カウント
         std::map<int, int> RankMap = My::CDuel_Manager::GetInstance()->GetRankMap();// 順位マップ
@@ -73,7 +72,7 @@ HRESULT My::CResult::Init()
             }
         }
 
-        if (m_pUIManager = CResultUIManager::Create(nRunking, nPlayerNum); m_pUIManager == nullptr)
+        if (m_pUIManager = CResultUIManager::Create(nRunking); m_pUIManager == nullptr)
         {
             return E_UNEXPECTED;
         } 
