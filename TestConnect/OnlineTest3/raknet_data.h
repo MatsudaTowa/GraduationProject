@@ -53,6 +53,7 @@ public:
 		ID_DUEL_MESSAGE_TRIGGER,		//カードのトリガーを通知
 		ID_DUEL_MESSAGE_GAMESET,		//ゲームの終了の通知
 		ID_DUEL_MESSAGE_1,				//対戦時のメッセージ
+		ID_TIME_SYNC_REQUEST			//時間の同期のリクエスト
 	};
 
 	//関数

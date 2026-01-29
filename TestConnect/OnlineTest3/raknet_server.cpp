@@ -274,6 +274,9 @@ void CRakNet_Server::Communication(RakNet::RakPeerInterface* peer)
                     Reset();
                 }
                 
+            case CRakNet_Data::GameMessages::ID_TIME_SYNC_REQUEST:
+                ReceiveTime(packet);
+                break;
 
             default:
                 std::cout << "Message with identifier " << (int)packet->data[0] << " has arrived.\n";
@@ -487,4 +490,32 @@ void CRakNet_Server::Reset()
     //対戦時のタイマーを開始
     CDuel_Manager::GetInstance()->GetDuelTimer().Stop();
     CDuel_Manager::GetInstance()->GetDuelTimer().Reset();
+}
+
+//=====================================
+//時間の受信処理
+//=====================================
+void CRakNet_Server::ReceiveTime(RakNet::Packet* packet)
+{
+    //送信時の時間
+    uint64_t t0 = 0;
+
+    //データの受信
+    RakNet::BitStream bsIn(packet->data, packet->length, false);
+    bsIn.IgnoreBytes(sizeof(RakNet::MessageID));    //受信したメッセージを飛ばす
+    bsIn.Read(t0);
+
+    // t1: サーバー受信時刻
+    uint64_t t1 = RakNet::GetTime(); // ミリ秒（実装に合わせて）
+    // ...（オプションでクライアントの送信時刻 t0 をエコーで読み出す）
+    RakNet::BitStream bsOut;
+    bsOut.Write((RakNet::MessageID)CRakNet_Data::GameMessages::ID_TIME_SYNC_REQUEST);
+    bsOut.Write(t1);
+    // もし処理に短い遅延があるなら t2 を別に取る（ここではほぼ即時送信なので同じでも可）
+    uint64_t t2 = RakNet::GetTime();
+    bsOut.Write(t2);
+    // さらにオプション：リクエスト中にクライアントが送った t0 をそのまま返す
+    bsOut.Write(t0);
+
+    m_pPeer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
 }

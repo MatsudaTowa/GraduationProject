@@ -384,6 +384,9 @@ void CClient_Duel::StartBattle(RakNet::Packet* packet)
     {
         Lobby->SetBattleSign(true);
     }
+
+    //オフセットの時間を取得
+    CRakNet::GetInstance()->SendTimeSyncRequest();
 }
 
 //=====================================
@@ -395,7 +398,7 @@ void CClient_Duel::ReceiveCountdown(RakNet::Packet* packet)
     unsigned char messageId;    //メッセージ
     int StartTime = 0;          //開始時間
     int nCountStartTime = RakNet::GetTimeMS();    //カウント開始時間
-
+   
     //受信側
     RakNet::BitStream bsIn(packet->data, packet->length, false);
 
@@ -403,8 +406,19 @@ void CClient_Duel::ReceiveCountdown(RakNet::Packet* packet)
     bsIn.Read(messageId);
     bsIn.Read(StartTime);
 
+    int64_t a = StartTime + CRakNet::GetInstance()->GetOffsetTime();
+    int64_t b = StartTime - CRakNet::GetInstance()->GetOffsetTime();
+    int64_t c = nCountStartTime + CRakNet::GetInstance()->GetOffsetTime();
+    int64_t d = nCountStartTime - CRakNet::GetInstance()->GetOffsetTime();
+    int64_t e = c - StartTime;
+
     //開始時間を算出して設定
-    nCountStartTime = RakNet::GetTimeMS() - StartTime;
+    nCountStartTime = nCountStartTime - StartTime;
+
+    {
+        nCountStartTime = CRakNet::GetInstance()->GetOffsetTime();
+        if (e <= 0) e *= -1;
+    }
 
     //一時的にダウンキャストを行い、遷移の合図を送る
     My::CDuel* pDuel = nullptr;
@@ -413,7 +427,7 @@ void CClient_Duel::ReceiveCountdown(RakNet::Packet* packet)
     //キャストが成功していたならカウントダウンの合図を送る
     if (pDuel != nullptr)
     {
-        pDuel->GetCountDoun()->SetCountStartTime(static_cast<float>(nCountStartTime * 0.001f));
+        pDuel->GetCountDoun()->SetCountStartTime(static_cast<float>(e * 0.001f));
         pDuel->GetCountDoun()->SetIsStartCountdown(true);
 
         //対戦時のタイマーを開始

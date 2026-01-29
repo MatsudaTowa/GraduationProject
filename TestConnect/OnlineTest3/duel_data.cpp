@@ -424,11 +424,12 @@ void CDuel_Data::SendCountDown(RakNet::RakPeerInterface* peer)
 {
     //対戦時のタイマーを開始
     CDuel_Manager::GetInstance()->GetDuelTimer().Start();
+    int nTime = RakNet::GetTimeMS();
 
     //データの作成
     RakNet::BitStream bsOut;
     bsOut.Write((RakNet::MessageID)GameMessages::ID_DUEL_MESSAGE_COUNTDOWN);        //メッセージ
-    bsOut.Write(RakNet::GetTimeMS());                                               //時間の取得
+    bsOut.Write(nTime);                                                                 //時間の取得
    
     //全クライアントにブロードキャスト
     peer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_RAKNET_GUID, true);

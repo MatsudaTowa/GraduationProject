@@ -10,6 +10,7 @@
 #include "client_lobby.h"
 #include "client_duel.h"
 #include "active_scene_manager.h"
+#include "GetTime.h"
 
 //静的変数宣言
 CClient* CRakNet::m_Client = nullptr;
@@ -20,7 +21,8 @@ CClient* CRakNet::m_Client = nullptr;
 CRakNet::CRakNet() :
     m_pPacket(nullptr),	 //パケット
     m_pPeer(nullptr),    //ピア
-    m_isOnline(false)   //オンラインか
+    m_isOnline(false),   //オンラインか
+    m_nOffsetTime(0)     //遅延を補正するためのオフセットの時間
 {
    
 }
@@ -225,6 +227,10 @@ void CRakNet::Communication(RakNet::RakPeerInterface* peer)
             std::cout << "Connecting to " << serverAddress.ToString() << "...\n";
             break;
         }
+
+        case GameMessages::ID_TIME_SYNC_REQUEST:
+            ReceiveTime(packet);
+            break;
 
         default:
             std::cout << "Message with identifier " << (int)packet->data[0] << " has arrived.\n";
@@ -468,4 +474,43 @@ void CRakNet::SendCountdown()
         // 全クライアントにブロードキャスト
         m_pPeer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, m_pPeer->GetSystemAddressFromIndex(0), false);
     }
+}
+
+//=====================================
+//時間のリクエスト送信
+//=====================================
+void CRakNet::SendTimeSyncRequest()
+{
+    RakNet::BitStream bsOut;
+    bsOut.Write((RakNet::MessageID)ID_TIME_SYNC_REQUEST);
+    uint64_t t0 = RakNet::GetTime();
+    bsOut.Write(t0); // 送信時刻も送ると NTP 式が使いやすくなる
+    m_pPeer->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, m_pPeer->GetSystemAddressFromIndex(0), false);
+}
+
+//=====================================
+//時間の受信
+//=====================================
+void CRakNet::ReceiveTime(RakNet::Packet* packet)
+{
+    RakNet::BitStream bs(packet->data, packet->length, false);
+    bs.IgnoreBytes(sizeof(RakNet::MessageID));
+    uint64_t t1, t2, echoed_t0;
+    bs.Read(t1);
+    bs.Read(t2);
+    // もしサーバーが client の t0 をエコーしていればそれも読む
+    bs.Read(echoed_t0); // あれば true、無ければ省く実装にする
+
+    uint64_t t3 = RakNet::GetTime();
+    uint64_t t0 = echoed_t0; // もしくは自分で保持していた t0 を使う
+
+    // NTP 式による推定
+    int64_t offset = (((int64_t)(t1 - t0)) + ((int64_t)(t2 - t3))) / 2.0;
+    offset = (int64_t)((int64_t)((t1 - t0) + (int64_t)(t2 - t3))) / 2;
+    int64_t rtt = ((int64_t)(t3 - t0)) - ((int64_t)(t2 - t1));
+
+    m_nOffsetTime = offset;
+
+    // offset を滑らかに適用する（突発補正は見た目のジャンプになるので補間）
+    //RakNet::ApplyOffsetSample(offset, rtt);
 }

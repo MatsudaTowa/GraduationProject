@@ -44,6 +44,7 @@ public:
 		ID_DUEL_MESSAGE_TRIGGER,		//カードのトリガーを通知
 		ID_DUEL_MESSAGE_GAMESET,		//ゲームの終了の通知
 		ID_DUEL_MESSAGE_1,				//対戦時のメッセージ
+		ID_TIME_SYNC_REQUEST			//時間の同期のリクエスト
 	};
 
 	//シングルトン
@@ -86,18 +87,27 @@ public:
 	void RequestCastCard(My::CCard* castcard);									//通常カードのキャスト
 	void RequestDefCastCard(My::CCardDeffence* castcard);						//守備カードのキャスト
 
+	//オフセット時間の設定
+	void SetOffsetTime(uint64_t time) { m_nOffsetTime = time; }
+	uint64_t GetOffsetTime() { return m_nOffsetTime; }
+
+	//時間のリクエスト送信
+	void SendTimeSyncRequest();
+
 private:
 
 	//定数
 	static constexpr int PORT{ 22333 };	//ポート番号
 
 	//関数
-	CRakNet();			//コンストラクタ
+	CRakNet();									//コンストラクタ
+	void ReceiveTime(RakNet::Packet* packet);	//時間の受信
 
 	//メンバ変数
 	RakNet::Packet* m_pPacket;			//パケット
 	RakNet::RakPeerInterface* m_pPeer;	//ピア(接続用)
 	bool m_isOnline;					//オンラインか
+	int64_t m_nOffsetTime;				//オフセットの時間
 	
 	//静的変数
 	static CClient* m_Client;			//クライアントクラス

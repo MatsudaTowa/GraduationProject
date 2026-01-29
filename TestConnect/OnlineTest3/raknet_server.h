@@ -55,6 +55,7 @@ private:
 	static void ChangeData(CRakNet_Data* data);	//データの変更
 	bool IsSendGameSet();						//終了の合図を送るか
 	void Reset();								//サーバーの状態をリセット
+	void ReceiveTime(RakNet::Packet* packet);	//時間の受信
 
 	//メンバ変数
 	RakNet::Packet* m_pPacket;				//パケット
