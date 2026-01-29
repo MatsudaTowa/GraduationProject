@@ -72,7 +72,7 @@ HRESULT My::CWaitZoneBG::Init()
 
 			if (m_pNextIllust == nullptr)
 			{
-				m_pNextIllust = CWaitNextIllust::Create({UI_POS.x,UI_POS.y + ILLUST_SHIFT_Y ,UI_POS.z}, { 35.0f,30.0f });
+				m_pNextIllust = CPaseudoCardIllust::Create({UI_POS.x,UI_POS.y + ILLUST_SHIFT_Y ,UI_POS.z}, { 35.0f,30.0f });
 			}
 		}
 	}

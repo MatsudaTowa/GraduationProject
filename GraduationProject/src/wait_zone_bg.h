@@ -9,7 +9,7 @@
 
 #include "button.h"
 #include "pseudo_card_frame.h"
-#include "wait_next_illust.h"
+#include "pseudo_card_illust.h"
 /** @brief My –¼‘O‹óŠÔ */
 namespace My
 {
@@ -85,7 +85,7 @@ namespace My
 		};
 		PseundCard m_pPseundCard[NUM_CARD];
 
-		CWaitNextIllust* m_pNextIllust;
+		CPaseudoCardIllust* m_pNextIllust;
 	};
 }
 

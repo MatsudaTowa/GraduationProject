@@ -161,7 +161,6 @@
     <ClCompile Include="src\wait_next_UI.cpp" />
     <ClCompile Include="src\selectable_zone.cpp" />
     <ClCompile Include="src\pseudo_card_frame.cpp" />
-    <ClCompile Include="src\wait_next_illust.cpp" />
     <ClCompile Include="src\ready_check.cpp" />
     <ClCompile Include="src\lobby_character_icon_UI.cpp" />
     <ClCompile Include="src\hand_range.cpp" />
@@ -190,6 +189,9 @@
     </ClCompile>
     <ClCompile Include="src\total_damage_UI.cpp" />
     <ClCompile Include="src\load_texture.cpp" />
+    <ClCompile Include="src\card_battle_anim.cpp" />
+    <ClCompile Include="src\card_battle_anim_manager.cpp" />
+    <ClCompile Include="src\pseudo_card_illust.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -367,7 +369,6 @@
     <ClInclude Include="src\wait_next_UI.h" />
     <ClInclude Include="src\selectable_zone.h" />
     <ClInclude Include="src\pseudo_card_frame.h" />
-    <ClInclude Include="src\wait_next_illust.h" />
     <ClInclude Include="src\ready_check.h" />
     <ClInclude Include="src\lobby_character_icon_UI.h" />
     <ClInclude Include="src\hand_range.h" />
@@ -396,6 +397,9 @@
     </ClInclude>
     <ClInclude Include="src\total_damage_UI.h" />
     <ClInclude Include="src\load_texture.h" />
+    <ClInclude Include="src\card_battle_anim.h" />
+    <ClInclude Include="src\card_battle_anim_manager.h" />
+    <ClInclude Include="src\pseudo_card_illust.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GraduationProject.rc" />

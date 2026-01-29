@@ -11,6 +11,7 @@
 //ヘッダーのインクルード
 #include "duel_timer.h"
 #include "card_info_UI.h"
+#include "card_battle_anim_manager.h"
 namespace My
 {
 	//デュエルマネージャークラス
@@ -36,7 +37,11 @@ namespace My
 				m_CardInfoUI->Uninit(); 
 				m_CardInfoUI = nullptr;
 			} 
-
+			if (m_pCardBattleAnimManager != nullptr)
+			{
+				m_pCardBattleAnimManager->Uninit();
+				m_pCardBattleAnimManager = nullptr;
+			}
 			//順位のクリア
 			m_RankMap.clear();
 		}							//デストラクタ
@@ -56,6 +61,8 @@ namespace My
 		CDuel_Timer& GetDuelTimer() { return m_DuelTimer; }					//対戦時のタイマー
 		CCardInfoUI* GetCardInfoUI() { return m_CardInfoUI; }				//カード情報UIの取得
 		void SetCardInfoUI(CCardInfoUI* infoUI) { m_CardInfoUI = infoUI; }	//カード情報UIの設定
+		CCardBattleAnimManager* GetDuelAnimManager() { return m_pCardBattleAnimManager; }				//カード情報UIの取得
+		void SetDuelAnimManager(CCardBattleAnimManager* manager) { m_pCardBattleAnimManager = manager; }	//カード情報UIの設定
 		void SetRankMap(std::map<int, int> map) { m_RankMap = map; }		//順位マップの設定
 		std::map<int, int>& GetRankMap() { return m_RankMap; }				//順位マップの取得
 		void SetIsStratBattle(bool start) { m_isStartBattle = start; }		//対戦開始フラグの設定
@@ -64,12 +71,13 @@ namespace My
 	private:
 
 		//関数
-		CDuel_Manager() : m_DuelRuleParam(), m_DuelTimer(), m_CardInfoUI(nullptr), m_RankMap(), m_isStartBattle(false){}		//コンストラクタ
+		CDuel_Manager() : m_DuelRuleParam(), m_DuelTimer(), m_CardInfoUI(nullptr), m_RankMap(), m_isStartBattle(false),m_pCardBattleAnimManager(nullptr){}		//コンストラクタ
 
 		//変数
 		DuelRuleParam m_DuelRuleParam;				//対戦のルールパラメータ
 		CDuel_Timer m_DuelTimer;					//対戦時に扱うタイマー
 		CCardInfoUI* m_CardInfoUI = nullptr;		//!<UI
+		CCardBattleAnimManager* m_pCardBattleAnimManager;
 		std::map<int, int> m_RankMap;				//順位のマップ(番号、順位)
 		bool m_isStartBattle;						//対戦開始フラグ
 	};

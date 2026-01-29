@@ -10,6 +10,7 @@
 #include "zone_manager.h"
 #include "card_deffence.h"
 #include "total_damage_UI.h"
+#include "duel_manager.h"
 
 My::CCardAttack::CCardAttack(int nPriority):CCard(nPriority),
 m_AttackType(),
@@ -370,6 +371,24 @@ void My::CCardAttack::ReceiveTrigger(RakNet::BitStream* bsin)
 	bool isDamage = false;
 	bsin->Read(isDamage);
 
+	//if (isDamage)
+	{
+		CCardBattleAnimManager* anim_manager = CDuel_Manager::GetInstance()->GetDuelAnimManager();
+		if (anim_manager != nullptr)
+		{
+			if (m_DefCardVector.size() != 0)
+			{
+				CCardBattleAnim* pAnim = new CCardBattleAnim;
+				anim_manager->Regist(pAnim);
+				pAnim->SetPsendCardFrame(this,CCardBattleAnim::ATTACK);
+				CCardDeffence* pDefence = *m_DefCardVector.begin();
+				if (pDefence != nullptr)
+				{
+					pAnim->SetPsendCardFrame(pDefence, CCardBattleAnim::DEFFENCE);
+				}
+			}
+		}
+	}
 	if (!isDamage)
 	{// UŒ‚‚ğ–h‚¬Ø‚Á‚½‚Æ‚«
 		// ƒK[ƒhSE’Ç‰Á
