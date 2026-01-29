@@ -402,8 +402,12 @@ void My::CCardAttack::ReceiveTrigger(RakNet::BitStream* bsin)
 		iter->SetCurrentZone(CCard::CEMETERY);
 	}
 
-	// ダメージUIの終了
-	GetTotalDamageUI()->Uninit();
+	//if (this->GetTotalDamageUI() != nullptr);
+	//{
+	//	// ダメージUIの終了
+	//	GetTotalDamageUI()->Uninit();
+	//}
+	
 
 	//カードクリア
 	m_StackedCardsList.clear();
@@ -495,7 +499,7 @@ void My::CCardAttack::LoadCardInfo(RakNet::BitStream* bsin)
 		if (GetTotalDamageUI() == nullptr)
 		{
 			//ダメージUIの生成
-			SetTotalDamageUI(CTotalDamageUI::Create(ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), GetPos()), m_nAttackValue));
+			//SetTotalDamageUI(CTotalDamageUI::Create(ConvertToScreenPos(GET_CAMERA(GET_CAMERA_IDX), GetPos()), m_nAttackValue));
 		}
 		
 	}

@@ -11,6 +11,7 @@
 #include "raknet.h"
 #include "zone_manager.h"
 #include "card_attack.h"
+#include "total_damage_UI.h"
 
 //===========================================================================================================
 // コンストラクタ
@@ -495,6 +496,12 @@ void My::CCardDeffence::LoadCardInfo(RakNet::BitStream* bsin)
 		My::CActiveSceneCharacter* pCharacter = My::CActiveSceneManager::GetInstance()->GetCharacter(GetUserId());
 		My::CDuelCharacter* pDuelState = dynamic_cast<My::CDuelCharacter*>(pCharacter->GetState());
 		ChangeState(My::CCardState::CARD_CAST, pDuelState);
+
+		//// 合計ダメージUIの生成
+		//if (GetTotalDamageUI() == nullptr)
+		//{
+		//	SetTotalDamageUI(CTotalDamageUI::Create(GetPos(), m_nDefenceValue));
+		//}
 	}
 		
 		break;
@@ -554,6 +561,11 @@ void My::CCardDeffence::LoadCardInfo(RakNet::BitStream* bsin)
 		My::CActiveSceneCharacter* pPlayer = My::CActiveSceneManager::GetInstance()->GetCharacter(GetUserId());
 		My::CDuelCharacter* pPlayerDuelState = dynamic_cast<My::CDuelCharacter*>(pPlayer->GetState());
 		ChangeState(My::CCardState::CARD_STAY, pPlayerDuelState);
+
+		if(GetTotalDamageUI() == nullptr)
+		{
+			
+		}
 	}
 
 		break;
