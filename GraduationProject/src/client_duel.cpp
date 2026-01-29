@@ -418,6 +418,11 @@ void CClient_Duel::ReceiveCountdown(RakNet::Packet* packet)
     {
         nCountStartTime = CRakNet::GetInstance()->GetOffsetTime();
         if (e <= 0) e *= -1;
+
+        if (e > 3000 && e < -3000)
+        {
+            e = 0;
+        }
     }
 
     //一時的にダウンキャストを行い、遷移の合図を送る
