@@ -101,20 +101,6 @@
         {
             "Pack ID": 1,
             "Card ID": 8,
-            "Card Name": "盾看板",
-            "Card Name Ruby": "",
-            "image": "tatekannbann.png",
-            "cost": 3,
-            "rarity": 1,
-            "type": 2,
-            "addeffect": 0,
-            "target": false,
-            "defensetype": 2,
-            "guard": 2
-        },
-        {
-            "Pack ID": 1,
-            "Card ID": 9,
             "Card Name": "デーモンベーコン",
             "Card Name Ruby": "",
             "image": "demon_becon.png",
@@ -128,7 +114,7 @@
         },
         {
             "Pack ID": 1,
-            "Card ID": 10,
+            "Card ID": 9,
             "Card Name": "インビジブルブル",
             "Card Name Ruby": "",
             "image": "innbiziburuburu.png",
@@ -142,7 +128,7 @@
         },
         {
             "Pack ID": 1,
-            "Card ID": 11,
+            "Card ID": 10,
             "Card Name": "たて突く盾",
             "Card Name Ruby": "",
             "image": "tatetuku_tate.png",
@@ -157,7 +143,7 @@
         },
         {
             "Pack ID": 1,
-            "Card ID": 12,
+            "Card ID": 11,
             "Card Name": "裁かれるサバ",
             "Card Name Ruby": "",
             "image": "sabakarerusaba.png",
@@ -168,6 +154,20 @@
             "target": false,
             "defensetype": 2,
             "guard": 2
+        },
+        {
+            "Pack ID": 1,
+            "Card ID": 12,
+            "Card Name": "ジャックザニッパー",
+            "Card Name Ruby": "",
+            "image": "zyakkuzanippa.png",
+            "cost": 8,
+            "rarity": 1,
+            "type": 1,
+            "addeffect": 0,
+            "target": false,
+            "attacktype": 2,
+            "power": 5
         }
     ]
 }
