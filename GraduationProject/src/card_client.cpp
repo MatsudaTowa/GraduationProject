@@ -11,6 +11,7 @@
 #include "card_attack.h"
 #include "card_deffence.h"
 #include "card_manager.h"
+#include "RakSleep.h"
 
 //=====================================
 //コンストラクタ
@@ -46,6 +47,13 @@ bool CCard_Client::Init()
 
     // ブロードキャストでサーバーを探す
     m_pPeer->Ping("255.255.255.255", PORT, false);
+
+    // 1秒間、数回ブロードキャスト
+    for (int i = 0; i < 5; ++i)
+    {
+        m_pPeer->Ping("255.255.255.255", PORT, false);
+        RakSleep(100);
+    }
 
     return true;
 }
