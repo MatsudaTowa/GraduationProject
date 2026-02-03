@@ -18,7 +18,7 @@ namespace My
 	class CPlayerNumberUI : public CObject2D
 	{
 	public:
-		static const int PRIORITY = 28;  //描画順
+		static const int PRIORITY = 20;  //描画順
 
 		/**
 		 * @brief コンストラクタ
