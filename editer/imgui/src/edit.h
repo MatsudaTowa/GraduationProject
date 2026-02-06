@@ -122,17 +122,17 @@ namespace My
 	{// カードの構造体
 		std::string name;							// カード名
 		std::string ruby;							// フリガナ
-		int cost;									// カードコスト
-		int damage;									// ダメージ数
-		int guard;									// ガード値
-		int counter;								// 反撃値
-		int heal;									// 回復値
-		bool isOneTime;								// 効果の発動時間(true = 単発,false = 単発じゃない)
-		int time;									// 発動時間
-		bool target;								// 参照の有無
+		int cost = 0;								// カードコスト
+		int damage = 0;								// ダメージ数
+		int guard = 0;								// ガード値
+		int counter = 0;							// 反撃値
+		int heal = 0;								// 回復値
+		bool isOneTime = false;						// 効果の発動時間(true = 単発,false = 単発じゃない)
+		int time = 0;								// 発動時間
+		bool target = false;						// 参照の有無
 
-		int changePackID;							// 変化先のカードのパック番号
-		int changeCardID;							// 変化先のカードのカード番号
+		int changePackID = 0;						// 変化先のカードのパック番号
+		int changeCardID = 0;						// 変化先のカードのカード番号
 
 		CardType maintype;							// カードの種類
 		AddEffect addeffect;						// カードの追加効果
