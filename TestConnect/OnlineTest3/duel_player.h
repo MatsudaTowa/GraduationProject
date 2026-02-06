@@ -61,6 +61,8 @@ namespace My
 		 */
 		void ReceiveDamage(int damage);
 
+		void ReceiveHeal(int heal);
+
 		//İ’è‚Ææ“¾
 		//€–Sƒtƒ‰ƒO
 		void SetIsDeath(bool death) { m_isDeath = death; }	//İ’è

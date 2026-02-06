@@ -70,8 +70,9 @@ My::CHeal::~CHeal()
 //===============================================================================
 // ヒール処理
 //===============================================================================
-void My::CHeal::Strategy(CDuel_Player* /*duel*/, CCard* card)
+void My::CHeal::Strategy(CDuel_Player* duel, CCard* card)
 {
+	duel->ReceiveHeal(card->GetParam().nHeal);
 	////登録されているキャラクターを取得
 	//std::list<CDuel_Player*> List = CDuel_Player_Manager::GetInstance()->GetList();
 	//int life;

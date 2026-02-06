@@ -66,7 +66,7 @@ namespace My
 		~CHeal() override;
 		/**
 		* @brief 回復処理
-		* @param [in]キャラクターポインタ
+		* @param [in]対象のキャラクター
 		* @param [in]カードポインタ
 		*/
 		void Strategy(CDuel_Player* duel, CCard* card) override;

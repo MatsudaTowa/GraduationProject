@@ -138,3 +138,11 @@ void My::CDuel_Player::ReceiveDamage(int damage)
 		m_Status.life = 0;
 	}
 }
+
+//=====================================
+//‰ñ•œ‚ğó‚¯‚éˆ—
+//=====================================
+void My::CDuel_Player::ReceiveHeal(int heal)
+{
+	m_Status.life += heal;
+}

@@ -9,6 +9,8 @@
 #include "card_assist.h"
 #include "card_strategy.h"
 #include "raknet_server.h"
+#include "duel_player_manager.h"
+#include "duel_manager.h"
 
 //===========================================================================================================
 // コンストラクタ
@@ -34,7 +36,7 @@ HRESULT My::CCardAssist::Init()
 	CCard::Init();
 
 	//トリガー時のストラテジーを代入TODO : 仮代入
-	AddPostCalculateStrategy(new CEnergyAdjust);
+	AddPostCalculateStrategy(new CHeal);
 	return S_OK;
 }
 
@@ -78,12 +80,44 @@ void My::CCardAssist::Trigger()
 	//ステイ後に起動
 	//クライアントにトリガー情報を送信
 	CRakNet_Server::GetInstance()->SendTriggerCard(this);
+
+
+	for (auto& calculate_itr : GetPostCalculateVector())
+	{
+		if (calculate_itr == nullptr) { continue; }
+
+		for (auto& target_itr : GetTargetIdVector())
+		{
+			calculate_itr->Strategy(CDuel_Player_Manager::GetInstance()->GetDuelPlayer(target_itr), this);
+		}
+	}
+	if (isOneTime)
+	{
+		//状態とゾーンの変更
+		ChangeState(CCardState::CARD_CEMETERY, CDuel_Player_Manager::GetInstance()->GetDuelPlayer(GetUserId()));
+		CDuel_Player_Manager::GetInstance()->GetDuelPlayer(GetUserId())->GetZoneManager()->MoveZone(this, CastToZone(GetCurrentZone(), CDuel_Player_Manager::GetInstance()->GetDuelPlayer(GetUserId())), CDuel_Player_Manager::GetInstance()->GetDuelPlayer(GetUserId())->GetZoneManager()->GetCemetery(), true);
+		SetCurrentZone(CCard::CEMETERY);
+	}
 }
 
 //===========================================================================================================
 //キャストカードの読み込み処理
 //===========================================================================================================
-bool My::CCardAssist::LoadCastInfo(RakNet::BitStream* /*bsin*/, CastDestination /*destination*/)
+bool My::CCardAssist::LoadCastInfo(RakNet::BitStream* bsin, CastDestination destination)
 {
+	int nTargetNum = 0;
+	bsin->Read(nTargetNum);
+
+	//周回
+	for (int i = 0; i < nTargetNum; i++)
+	{
+		int nId = 0;
+		bsin->Read(nId);
+		AddTargetIdVector(nId);
+	}
+
+	//キャスト状態に変更
+	SetStartCastTime(CDuel_Manager::GetInstance()->GetDuelTimer().GetElapsedTime());
+	ChangeState(My::CCardState::CARD_CAST, CDuel_Player_Manager::GetInstance()->GetDuelPlayer(GetUserId()));
 	return true;
 }

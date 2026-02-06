@@ -77,6 +77,7 @@ namespace My
 		bool IsStayCountDown() override { return true; }
 
 	private:
+		bool isOneTime = false; //Œø‰Ê‚ªˆê“x‚«‚è‚©‚Ç‚¤‚©
 		CCard_Client::AssistType m_AssistType;
 	};
 }
