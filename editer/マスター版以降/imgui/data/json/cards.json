@@ -156,7 +156,7 @@
             "target": false,
             "isOneTime": true,
             "assisttype": 1,
-            "healtype": 5,
+            "healtype": 2,
             "heal": 5
         }
     ]
