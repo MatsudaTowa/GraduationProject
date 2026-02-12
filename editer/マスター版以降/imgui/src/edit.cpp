@@ -566,209 +566,15 @@ void My::CEdit::SavePackName()
 /**
 * @brief ロード処理
 */
-//void My::CEdit::Load()
-//{
-//	const std::string relPath = "data\\json\\cards.cbor";
-//
-//	// 暗号化されたCBORファイルをバイナリで読み込む
-//	std::ifstream ifs(relPath, std::ios::binary);
-//	if (!ifs.is_open())
-//	{// ファイルが開けなかった場合
-//		MessageBox(m_hWnd, L"暗号化ファイルが存在しません", L"エラー", MB_OK);
-//		std::cout << "Failed to open: " << relPath << "\n";
-//		return;
-//	}
-//
-//	std::vector<uint8_t> encrypted((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
-//	ifs.close();
-//
-//	// 鍵とIV（Save関数と同じ値を使う）
-//	std::vector<uint8_t> key(32, 0x01);
-//	std::vector<uint8_t> iv(16, 0x02);
-//
-//	// AES-256-CBC 復号
-//	std::vector<uint8_t> decrypted = AES_Decrypt(encrypted, key, iv);
-//
-//	std::cout << "Decrypted size: " << decrypted.size() << "\n";
-//	for (size_t i = 0; i < std::min<size_t>(decrypted.size(), 64); ++i)
-//	{
-//		std::cout << std::hex << std::setw(2) << std::setfill('0') << (int)decrypted[i] << " ";
-//	}
-//	std::cout << std::dec << "\n";
-//
-//	// CBOR → JSON に変換
-//	ordered_json Json;
-//
-//	try
-//	{// 変換に成功した場合
-//		Json = ordered_json::from_cbor(decrypted);
-//	}
-//	catch (const std::exception& e)
-//	{// 変換に失敗した場合
-//		MessageBox(m_hWnd, L"CBOR の復号またはパースに失敗しました", L"エラー", MB_OK);
-//		std::cout << "CBOR parse error: " << e.what() << "\n";
-//		return;
-//	}
-//
-//	// カードキーを探す
-//	std::string cardKey;
-//	if (Json.contains(u8"カード"))
-//	{
-//		cardKey = u8"カード";
-//		std::cout << "Exact key u8\"カード\" found via contains()\n";
-//	}
-//	else if (Json.is_object())
-//	{
-//		for (auto it = Json.begin(); it != Json.end(); ++it)
-//		{
-//			const std::string k = it.key();
-//			if (k == u8"カード")
-//			{
-//				cardKey = k;
-//				break;
-//			}
-//			if (k.find(u8"カード") != std::string::npos)
-//			{
-//				cardKey = k;
-//				break;
-//			}
-//		}
-//	}
-//
-//	ordered_json cardNode;
-//	if (!cardKey.empty()) cardNode = Json[cardKey];
-//	else if (Json.is_array()) cardNode = Json;
-//
-//	if (cardNode.is_null())
-//	{
-//		MessageBox(m_hWnd, L"\"カード\"キーが存在しません", L"エラー", MB_OK);
-//		std::cout << "\"カード\" key not found after scanning\n";
-//		return;
-//	}
-//
-//	m_Pack.clear();
-//
-//	auto ProcessCardJson = [this](const ordered_json& j)
-//	{
-//		int packID = j.value("Pack ID", 1);
-//		size_t packIndex = (packID > 0) ? static_cast<size_t>(packID - 1) : 0;
-//
-//		// データ設定（パック数を拡張）
-//		while (m_Pack.size() <= packIndex)
-//		{
-//			Pack pack;
-//			pack.Packname = "Pack" + std::to_string(m_Pack.size() + 1);
-//			m_Pack.push_back(pack);
-//		}
-//
-//		Card card;
-//		card.name = j.value("Card Name", j.value("CardName", "名前なし"));              // カード名
-//		card.ruby = j.value("Card Name Ruby", j.value("Card Name Ruby", "名前なし"));   // カードの読み方
-//		card.imagePath = trim_copy(j.value("image", j.value("Card Img", "")));          // イラスト画像
-//		card.cost = j.value("cost", 0);                                                 // コスト
-//		card.raritytype = static_cast<My::RARITY>(j.value("rarity", 0));                // レアリティ
-//		card.maintype = static_cast<My::CardType>(j.value("type", 0));                  // メインタイプ
-//		card.isOneTime = j.value("isOneTime", false);                                   // 単発かどうか
-//		card.target = (j.value("target", 0) != 0);
-//
-//
-//		if (card.isOneTime == false)
-//		{// 単発じゃないとき
-//			card.time = j.value("time", 0); // 発動時間
-//		}
-//
-//		switch (card.maintype)
-//		{
-//		case ATTACK:    // 攻撃の場合
-//			card.attacktype = static_cast<My::AttackType>(j.value("attacktype", 0));    // 攻撃対象
-//			card.damage = j.value("power", 0);  // 攻撃力
-//			break;
-//		case DEFENSE:   // 守備の場合
-//			card.defensetype = static_cast<My::DefenseType>(j.value("defensetype", 0)); // カウンターの有無
-//			card.guard = j.value("guard", 0);   // ガード値
-//			if (card.defensetype == COUNTER)
-//			{// カウンターする場合
-//				card.counter = j.value("counter", 0);   // カウンター値
-//			}
-//			break;
-//		case ASSIST:    // アシストの場合
-//			card.assisttype = static_cast<My::AssistType>(j.value("assisttype", 0));    // アシストの種類
-//			if (card.assisttype == HEAL)
-//			{// アシストで回復の場合
-//				card.healtype = static_cast<My::HealType>(j.value("healtype", 0));  // 回復対象
-//				card.heal = j.value("heal", 0); // 回復値
-//			}
-//			break;
-//		}
-//
-//		// 変化先パック/カード番号の復元（保存時は 1 始まりで保存している想定）
-//		card.changePackID = j.value("change_target_pack", 0);
-//		card.changeCardID = j.value("change_target_card", 0);
-//
-//		// references 配列があれば復元
-//		if (j.contains("references") && j["references"].is_array())
-//		{
-//			for (const auto& rj : j["references"])
-//			{
-//				if (rj.is_object())
-//				{
-//					Reference r = Reference::FromJson(rj);
-//					card.references.push_back(r);
-//				}
-//			}
-//		}
-//
-//		// カードをパックに追加
-//		m_Pack[packIndex].cards.push_back(card);
-//	};
-//
-//	if (cardNode.is_array())
-//	{
-//		for (const auto& j : cardNode)
-//		{
-//			if (j.is_object())
-//			{
-//				ProcessCardJson(j);
-//			}
-//		}
-//	}
-//	else if (cardNode.is_object())
-//	{
-//		for (auto it = cardNode.begin(); it != cardNode.end(); ++it)
-//		{
-//			const ordered_json& j = it.value();
-//			if (j.is_object())
-//			{
-//				ProcessCardJson(j);
-//			}
-//		}
-//	}
-//	else
-//	{
-//		MessageBox(m_hWnd, L"\"カード\"の形式が不正です", L"エラー", MB_OK);
-//		return;
-//	}
-//
-//	// テクスチャ読み込み（カード本体）
-//	for (size_t p = 0; p < m_Pack.size(); ++p)
-//	{
-//		for (size_t c = 0; c < m_Pack[p].cards.size(); ++c)
-//		{
-//			SetLoadTexture(m_Pack[p].cards[c]);
-//
-//		}
-//	}
-//
-//	MessageBox(m_hWnd, L"カードデータの読み込みに成功しました！", L"読み込み完了", MB_OK);
-//}
-
 void My::CEdit::Load()
 {
+	// 読み込むファイル設定
 	const std::string relPath = "data\\json\\cards.cbor";
 
 	std::ifstream ifs(relPath, std::ios::binary);
+
 	if (!ifs.is_open())
-	{
+	{// 開けなかった場合
 		MessageBox(m_hWnd, L"暗号化ファイルが存在しません", L"エラー", MB_OK);
 		return;
 	}
@@ -816,18 +622,18 @@ void My::CEdit::Load()
 		while (m_Pack.size() <= packIndex)
 		{
 			Pack pack;
-			pack.Packname = "Pack" + std::to_string(m_Pack.size() + 1);
+			pack.Packname = "Pack" + std::to_string(m_Pack.size() + 1);	// パック名
 			m_Pack.push_back(pack);
 		}
 
 		Card card;
-		card.name = j.value("Card Name", "名前なし");
-		card.ruby = j.value("Card Name Ruby", "名前なし");
-		card.imagePath = trim_copy(j.value("image", ""));
-		card.cost = j.value("cost", 0);
-		card.raritytype = (RARITY)j.value("rarity", 0);
-		card.maintype = (CardType)j.value("type", 0);
-		card.isOneTime = j.value("isOneTime", false);
+		card.name = j.value("Card Name", "名前なし");	// カード名
+		card.ruby = j.value("Card Name Ruby", "名前なし");	// カードの読み方
+		card.imagePath = trim_copy(j.value("image", ""));	// 仕様イラスト
+		card.cost = j.value("cost", 0);	// コスト
+		card.raritytype = (RARITY)j.value("rarity", 0);	// レアリティ
+		card.maintype = (CardType)j.value("type", 0);	// カードの種類
+		card.isOneTime = j.value("isOneTime", false);	// 効果が単発かどうか
 		card.target = (j.value("target", 0) != 0);
 
 		if (!card.isOneTime)
@@ -858,9 +664,7 @@ void My::CEdit::Load()
 		card.changePackID = j.value("change_target_pack", 0);
 		card.changeCardID = j.value("change_target_card", 0);
 
-		// -----------------------------
-		// references の復元
-		// -----------------------------
+		// 参照先の設定
 		if (j.contains("references") && j["references"].is_array())
 		{
 			for (const auto& rj : j["references"])
@@ -873,9 +677,7 @@ void My::CEdit::Load()
 			}
 		}
 
-		// -----------------------------
-		// ★★★ effects（複数効果）の復元 ★★★
-		// -----------------------------
+		// 効果追加の設定
 		if (j.contains("effects") && j["effects"].is_array())
 		{
 			for (const auto& ej : j["effects"])
