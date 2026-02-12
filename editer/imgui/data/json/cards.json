@@ -174,7 +174,7 @@
             "Card ID": 13,
             "Card Name": "ヒールビール",
             "Card Name Ruby": "名前なし",
-            "image": "illust\\healbeer.png",
+            "image": "healbeer.png",
             "cost": 4,
             "rarity": 5,
             "type": 3,

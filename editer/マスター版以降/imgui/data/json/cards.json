@@ -143,6 +143,21 @@
             "defensetype": 1,
             "guard": 3,
             "counter": 1
+        },
+        {
+            "Pack ID": 1,
+            "Card ID": 12,
+            "Card Name": "ヒールビール",
+            "Card Name Ruby": "",
+            "image": "healbeer.png",
+            "cost": 4,
+            "rarity": 3,
+            "type": 3,
+            "target": false,
+            "isOneTime": true,
+            "assisttype": 1,
+            "healtype": 5,
+            "heal": 5
         }
     ]
 }
